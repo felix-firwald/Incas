@@ -1,0 +1,42 @@
+﻿<Window x:Class="Incubator_2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Incubator_2"
+        mc:Ignorable="d"
+        Title="Инкубатор 2" Height="900" Width="1300" 
+        Background="#2F3239" WindowState="Maximized">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" MinWidth="230" MaxWidth="450"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" MinWidth="150" MaxWidth="450" Background="#393C43">
+            <Label x:Name="Incubator" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="0,25,0,0">Наименование инкубатора</Label>
+            <Image Height="120" Width="120" Source="/Views/Logo.png" UseLayoutRounding="False" Stretch="Fill" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant"/>
+            <Label x:Name="Surname" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Фамилия</Label>
+            <Label x:Name="Fullname" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White">Имя, отчество</Label>
+            <Label x:Name="Post" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#A7ABB7" Margin="0,0,0,25">Должность</Label>
+            <Rectangle Stroke="#43464D" StrokeThickness="2" />
+            <Rectangle Stroke="#43464D" StrokeThickness="2" />
+            <Menu Height="auto" FlowDirection="LeftToRight">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Vertical"></VirtualizingStackPanel>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
+                <MenuItem Header="Главная"></MenuItem>
+                <MenuItem Header="Шаблонизатор"></MenuItem>
+                <MenuItem Header="Задачи">Задачи</MenuItem>
+            </Menu>
+        </StackPanel>
+        
+        <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Width="640" Background="Black"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="0,489,0,0" VerticalAlignment="Top" Width="5" ResizeDirection="Columns"/>
+    </Grid>
+    
+</Window>

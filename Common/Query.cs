@@ -1,0 +1,334 @@
+﻿using DatabaseRequests;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+
+namespace Incubator.Classes.Models
+{
+    public sealed class Query
+    {
+        public readonly string Table;
+        public string Result { get; private set; }
+        private bool isWhereAlready = false;
+        private bool isUpdateAlready = false;
+        public Query(string table) 
+        {
+            this.Table = table;
+        }
+        public override string ToString()
+        {
+            return Table;
+        }
+        public void Clear()
+        {
+            isWhereAlready = false;
+            isUpdateAlready = false;
+            Result = "";
+        }
+        public Query AddCustomRequest(string text)
+        {
+            Result += $"\n{text}";
+            return this;
+        }
+        #region Select
+        /// <summary>
+        /// SELECT selection FROM Table
+        /// </summary>
+        /// <returns></returns>
+        public Query Select(string selection = "*")
+        {
+            string resulting;
+            resulting = $"SELECT {selection}\nFROM {Table}\n";
+            Result = resulting;
+            return this;
+        }
+
+        /// <summary>
+        /// SELECT DISTINCT selection FROM Table
+        /// </summary>
+        /// <returns></returns>
+        public Query SelectUnique(string selection = "*")
+        {
+            Select($"DISTINCT {selection}");
+            return this;
+        }
+        /// <summary>
+        /// SELECT Count(selection) FROM Table
+        /// </summary>
+        /// <returns></returns>
+        public Query Count(string selection = "*")
+        {
+            Select($"Count({selection}) AS count");
+            return this;
+        }
+        #endregion
+
+        #region Limit
+        public Query Limit(int limit)
+        {
+            Result += $"\nLIMIT {limit}";
+            return this;
+        }
+        #endregion
+
+        #region Insert Update Delete
+        public Query Insert(Dictionary<string, string> dict)
+        {
+            Result = $"INSERT INTO {Table} ({string.Join(", ", dict.Keys)})\nVALUES ({string.Join(", ", dict.Values)})";
+            return this;
+        }
+        public Query Update(string cell, string value, bool isStr = true)
+        {
+            string c = "'";
+            //if (!isStr) { c = ""; }
+            if (isUpdateAlready)
+            {
+                Result += $",\n" +
+                $"{cell} = {c}{value}{c}";
+            }
+            else
+            {
+                Result += $"UPDATE {Table}\n" +
+                $"SET {cell} = {c}{value}{c}";
+                isUpdateAlready = true;
+            }
+            return this;
+        }
+        public Query Delete()
+        {
+            Result += $"DELETE FROM {Table}\n";
+            return this;
+        }
+        #endregion
+
+        #region Join
+        public Query InnerJoin(string innerTable, string fieldBaseTable, string fieldJoinedTable)
+        {
+            string resulting;
+            resulting = Result + $"INNER JOIN {innerTable}\nON {Table}.{fieldBaseTable}={innerTable}.{fieldJoinedTable}\n";
+            Result = resulting;
+            return this;
+        }
+        #endregion
+
+        #region Where
+        private Query Where(string cell, string comparator, string value, bool isStr)
+        {
+            string resulting;
+            string c = "";
+            if (isStr)
+            {
+                c = "'";
+            }
+            if (isWhereAlready)
+            {
+                resulting = Result + $"\nAND {cell} {comparator} {c}{value}{c}\n";
+                Result = resulting;
+                return this;
+            }
+            else
+            {
+                isWhereAlready = true;
+                resulting = Result + $"\nWHERE {cell} {comparator} {c}{value}{c}\n";
+                Result = resulting;
+                return this;
+            }
+
+        }
+        /// <summary>
+        /// Where A is not NULL
+        /// </summary>
+        /// <returns></returns>
+        public Query WhereNotNULL(string cell)
+        {
+            return Where(cell, "is not", "NULL", false);
+        }
+
+        /// <summary>
+        /// Where A (left arg) = B (right arg)
+        /// </summary>
+        /// <returns></returns>
+        public Query WhereEqual(string cell, string value, bool isStr = true)
+        {
+            return Where(cell, "=", value, isStr);
+        }
+
+        /// <summary>
+        /// Where A (left arg) != B (right arg)
+        /// </summary>
+        /// <returns></returns>
+        public Query WhereNotEqual(string cell, string value, bool isStr = true)
+        {
+            return Where(cell, "<>", value, isStr);
+        }
+
+        /// <summary>
+        /// Where A (left arg) < B (right arg)
+        /// </summary>
+        /// <returns></returns>
+        public Query WhereLess(string cell, string value, bool isStr = true)
+        {
+            return Where(cell, "<", value, isStr);
+        }
+
+        /// <summary>
+        /// Where A (left arg) > B (right arg)
+        /// </summary>
+        /// <returns></returns>
+        public Query WhereMore(string cell, string value, bool isStr = true)
+        {
+            return Where(cell, ">", value, isStr);
+        }
+
+        /// <summary>
+        /// Where A (left arg) BETWEEN B (central arg) AND C (right arg)
+        /// </summary>
+        /// <returns></returns>
+        public Query WhereBetween(string cell, string left, string right, bool isStr = true)
+        {
+            return Where(cell, "BETWEEN", $"{left} AND {right}", isStr);
+        }
+
+        /// <summary>
+        /// Where A (left arg) IN (args)
+        /// </summary>
+        /// <returns></returns>
+        public Query WhereIn(string cell, string[] args)
+        {
+            String resultingString = "(";
+            if (args.Length == 1)
+            {
+                resultingString += $"'{args[0]}'";
+            }
+            else
+            {
+                int count = 0;
+                foreach (var arg in args)
+                {
+                    if (count != 0)
+                    {
+                        resultingString += ", ";
+                    }
+                    count++;
+                    resultingString += $"'{arg}'";
+                }
+            }
+            resultingString += ")\n";
+            return Where(cell, "IN", resultingString, false);
+        }
+        #endregion
+
+        #region Order By
+        private Query OrderBy(string columns, string type)
+        {
+            Result += $"\nORDER BY {columns} {type}";
+            return this;
+        }
+
+        /// <summary>
+        /// ORDER BY column ASC
+        /// </summary>
+        /// <param name="column"></param>
+        /// <returns></returns>
+        public Query OrderByASC(string column)
+        {
+            OrderBy(column, "ASC");
+            return this;
+        }
+
+        /// <summary>
+        /// ORDER BY column DESC
+        /// </summary>
+        /// <param name="column"></param>
+        /// <returns></returns>
+        public Query OrderByDESC(string column)
+        {
+            OrderBy(column, "DESC");
+            return this;
+        }
+        public Query OrderByDateASC(string column)
+        {
+            OrderBy($"date({column})", "ASC");
+            return this;
+        }
+        public Query OrderByDateDESC(string column)
+        {
+            OrderBy($"date({column})", "DESC");
+            return this;
+        }
+        #endregion
+
+        private static SQLiteConnection GetConnection()
+        {
+            return new SQLiteConnection($"Data source={ProgramState.DatabasePath}; Version=3; UseUTF16Encoding=True", true);
+        }
+        private string GetRequest(bool clear = true)
+        {
+            string tmp = Result;
+            Console.WriteLine($"[{DateTime.Now}] {tmp}");
+            if (clear)
+            {
+                Clear();
+            }
+            return tmp;
+        }
+        public DataTable Execute()
+        {
+            try
+            {
+                using (SQLiteConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    SQLiteCommand cmd = conn.CreateCommand();
+                    cmd.CommandText = GetRequest();
+                    SQLiteDataReader sqlreader = cmd.ExecuteReader();
+                    DataTable objDataTable = new DataTable();
+                    objDataTable.Load(sqlreader);
+                    return objDataTable;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
+                    $"\nПроверьте правильность данных.",
+                    "Ошибка выполнения запроса",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return new DataTable();
+            }
+        }
+        public void ExecuteVoid()
+        {
+            try
+            {
+                using (SQLiteConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    SQLiteCommand cmd = conn.CreateCommand();
+                    cmd.CommandText = GetRequest();
+                    cmd.ExecuteNonQuery();
+                    return;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
+                    $"\nПроверьте правильность данных.",
+                    "Ошибка выполнения запроса",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+        }
+    }
+}
