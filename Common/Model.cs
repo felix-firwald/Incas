@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Data.SQLite;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using Incubator.Classes;
-using Incubator.Classes.Models;
+using Models;
 //using Microsoft.Office.Core;
 
-namespace DatabaseRequests
+namespace Common
 {
     public enum DatabasePermissions
     {

@@ -1,14 +1,12 @@
-﻿using DatabaseRequests;
-using Incubator.Classes.Models;
+﻿using Models;
 using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Linq;
-using System.Security.AccessControl;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Incubator.Classes
+namespace Common
 {
     public class LockedException : Exception
     {
@@ -37,7 +35,7 @@ namespace Incubator.Classes
         #endregion
         public static string User { get; set; }
 
-        public static ModelSessions CurrentSession { get; set; }
+        public static Session CurrentSession { get; set; }
         public static string SystemName = Environment.UserName;
 
         #region Path and init
@@ -104,7 +102,7 @@ namespace Incubator.Classes
             inc.SetValue("computer", result);
             inc.CreateSubKey("TemplatesData");
             inc.Close();
-            using (ModelComputers mc = new ModelComputers())
+            using (Computer mc = new Computer())
             {
                 mc.authId = result;
                 mc.name = SystemName;
@@ -129,7 +127,7 @@ namespace Incubator.Classes
 
         public static void RegisterComputer()
         {
-            using (ModelComputers mc = new ModelComputers())
+            using (Computer mc = new Computer())
             {
                 mc.authId = GetComputerId();
                 mc.blocked = false;
@@ -159,9 +157,9 @@ namespace Incubator.Classes
             }
             return false;
         }
-        public static ModelUsers GetCurrentUser()
+        public static User GetCurrentUser()
         {
-            ModelUsers user = new ModelUsers();
+            User user = new User();
             user.username = User;
             return user.GetUserByName();
         }        
@@ -180,16 +178,16 @@ namespace Incubator.Classes
         }
 
         #region Incubator
-        public static ModelIncubator GetIncubatorInfo()
+        public static Models.Incubator GetIncubatorInfo()
         {
-            using (ModelIncubator mi = new ModelIncubator())
+            using (Models.Incubator mi = new Models.Incubator())
             {
                 return mi.GetIncubator();
             }
         }
         public static void SetIncubatorOpened(bool opened)
         {
-            ModelIncubator mi = GetIncubatorInfo();
+            Models.Incubator mi = GetIncubatorInfo();
             mi.opened = opened;
             mi.UpdateIncubator();
         }
@@ -199,7 +197,7 @@ namespace Incubator.Classes
         }
         public static void SetIncubatorLocked(bool locked)
         {
-            ModelIncubator mi = GetIncubatorInfo();
+            Models.Incubator mi = GetIncubatorInfo();
             mi.locked = locked;
             mi.UpdateIncubator();
         }
@@ -209,13 +207,13 @@ namespace Incubator.Classes
         }
         public static void RenameIncubator(string newName)
         {
-            ModelIncubator mi = GetIncubatorInfo();
+            Models.Incubator mi = GetIncubatorInfo();
             mi.name = newName;
             mi.UpdateIncubator();
         }
         public static void SetRepositoryEnabled(bool enabled)
         {
-            ModelIncubator mi = GetIncubatorInfo();
+            Models.Incubator mi = GetIncubatorInfo();
             mi.repositoryEnabled = enabled;
             mi.UpdateIncubator();
         }
@@ -241,7 +239,7 @@ namespace Incubator.Classes
         }
         public static void LoadUserStatus()
         {
-            using (ModelUsers mu = new ModelUsers())
+            using (User mu = new User())
             {
                 mu.username = User;
                 Permission.CurrentUserPermission = mu.GetUserByName().status;
@@ -253,11 +251,11 @@ namespace Incubator.Classes
             if (Permission.CurrentUserPermission != PermissionGroup.Admin)
             {
                 string searchingPath = $"{ProceduralPath}\\kill_{CurrentSession.id}.incproc";
-                await Task.Run(() =>
+                await System.Threading.Tasks.Task.Run(() =>
                 {
                     while (true)
                     {
-                        Task.Delay(3000).Wait();
+                        System.Threading.Tasks.Task.Delay(3000).Wait();
                         if (File.Exists(searchingPath) && File.ReadAllText(searchingPath) == GetComputerId())
                         {
                             File.Delete(searchingPath);
@@ -278,7 +276,7 @@ namespace Incubator.Classes
         }
         public static void OpenSession()
         {
-            using (ModelSessions ms = new ModelSessions())
+            using (Session ms = new Session())
             {
                 ms.AddSession();
             }   

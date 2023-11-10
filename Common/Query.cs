@@ -1,15 +1,10 @@
-﻿using DatabaseRequests;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
-namespace Incubator.Classes.Models
+namespace Common
 {
     public sealed class Query
     {
