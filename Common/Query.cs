@@ -34,6 +34,12 @@ namespace Common
                 FKField = fkf;
                 Constraint = constraint;
             }
+            else
+            {
+                FKTable = "";
+                FKField = "";
+                Constraint = OnDeleteUpdate.CASCADE;
+            }
 
         }
         private string GetNotNull()
@@ -306,7 +312,7 @@ namespace Common
         }
         #endregion
 
-        public Query CreateTable(string tab, )
+        public Query CreateTable(string tab, Field[] fields)
         {
             Result = $"CREATE TABLE {tab}";
             return this;

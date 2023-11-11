@@ -180,6 +180,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\Reusable\TemplateElement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\UC_TemplateElement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -197,6 +205,12 @@
     <Compile Include="Common\WordTemplator.cs" />
     <Compile Include="Forms\OneInstance\UC_Templator.xaml.cs">
       <DependentUpon>UC_Templator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Reusable\TemplateElement.xaml.cs">
+      <DependentUpon>TemplateElement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UC_TemplateElement.xaml.cs">
+      <DependentUpon>UC_TemplateElement.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\Computer.cs" />
     <Compile Include="Models\Constant.cs" />
@@ -247,9 +261,7 @@
   <ItemGroup>
     <Resource Include="Logo.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Forms\Reusable\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8.1">
       <Visible>False</Visible>

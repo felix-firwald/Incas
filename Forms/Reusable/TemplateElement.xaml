@@ -1,0 +1,26 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incubator_2.Forms.Reusable"
+             xmlns:fa="http://schemas.fontawesome.io/icons/" x:Class="Incubator_2.Forms.Reusable.TemplateElement"
+             mc:Ignorable="d" 
+             d:DesignHeight="45" d:DesignWidth="600" Background="#FF3E444A">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="1" Content="Название не определено" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="White" x:Name="NameOfTemplate"/>
+
+        <fa:FontAwesome Grid.Column="0" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Icon="PlusCircle" FontSize="22" Margin="10,12,10,12">
+            <fa:FontAwesome.Foreground>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkDarkColorKey}}"/>
+            </fa:FontAwesome.Foreground>
+        </fa:FontAwesome>
+
+    </Grid>
+</UserControl>
