@@ -22,6 +22,8 @@ namespace Models
         public string value { get; set; }
         public string constant { get; set; }
         public string enumeration { get; set; }
+        public int parent { get; set; }
+        public bool required { get; set; }
         public Tag() 
         {
             tableName = "Tags";

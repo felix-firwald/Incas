@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.VariantTypes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -6,6 +7,52 @@ using System.Windows;
 
 namespace Common
 {
+    public enum OnDeleteUpdate
+    {
+        CASCADE,
+        NO_ACTION,
+        SET_NULL,
+        SET_DEFAULT,
+        RESTRICT 
+    }
+    public struct Field
+    {
+        public string Name;
+        public string Type;
+        public bool NotNull;
+        public string FKTable;
+        public string FKField;
+        public OnDeleteUpdate Constraint;
+        public Field(string name, string type, bool notnull=false, string fkt=null, string fkf="id", OnDeleteUpdate constraint=OnDeleteUpdate.CASCADE)
+        {
+            Name = name;
+            Type = type;
+            NotNull = notnull;
+            if (fkt != null)
+            {
+                FKTable = fkt;
+                FKField = fkf;
+                Constraint = constraint;
+            }
+
+        }
+        private string GetNotNull()
+        {
+            return NotNull ? " NOT NULL" : "";
+        }
+        private string GetFK()
+        {
+            if (!string.IsNullOrEmpty(FKTable))
+            {
+                return $" REFERENCES {FKTable} ({FKField})";
+            }
+            return "";
+        }
+        public override string ToString()
+        {
+            return $"{Name} {Type}{GetFK()}{GetNotNull()}";
+        }
+    }
     public sealed class Query
     {
         public readonly string Table;
@@ -259,6 +306,13 @@ namespace Common
         }
         #endregion
 
+        public Query CreateTable(string tab, )
+        {
+            Result = $"CREATE TABLE {tab}";
+            return this;
+        }
+
+        #region Connection and Request
         private static SQLiteConnection GetConnection()
         {
             return new SQLiteConnection($"Data source={ProgramState.DatabasePath}; Version=3; UseUTF16Encoding=True", true);
@@ -325,5 +379,6 @@ namespace Common
                 return;
             }
         }
+        #endregion
     }
 }
