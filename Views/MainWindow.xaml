@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Incubator_2.Forms" x:Class="Incubator_2.MainWindow"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" x:Class="Incubator_2.MainWindow"
         mc:Ignorable="d"
         Title="Инкубатор 2" Height="900" Width="1300" 
         Background="#2F3239" WindowState="Maximized">
@@ -13,32 +13,22 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" MinWidth="230" MaxWidth="450"/>
+            <ColumnDefinition Width="300" MinWidth="120" MaxWidth="400"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" MinWidth="150" MaxWidth="450" Background="#393C43">
-            <Label x:Name="Incubator" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="0,25,0,0" Content="Наименование инкубатора"/>
-            <Image Height="120" Width="120" Source="/Views/Logo.png" UseLayoutRounding="False" Stretch="Fill" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant"/>
+        <StackPanel Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="#393C43">
+            <Label x:Name="Incubator" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="0,25,0,0" Content="Наименование"/>
+            <Image Height="auto" Width="auto" Source="/Views/Logo.png" UseLayoutRounding="False" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill"/>
             <Label x:Name="Surname" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Content="Фамилия"/>
             <Label x:Name="Fullname" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Content="Имя, отчество"/>
             <Label x:Name="Post" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#A7ABB7" Margin="0,0,0,25" Content="Должность"/>
-            <Rectangle Stroke="#43464D" StrokeThickness="2" />
-            <Rectangle Stroke="#43464D" StrokeThickness="2" />
-            <Menu Height="auto" FlowDirection="LeftToRight">
-                <Menu.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Vertical"/>
-                    </ItemsPanelTemplate>
-                </Menu.ItemsPanel>
-                <MenuItem Header="Главная"/>
-                <MenuItem Header="Шаблонизатор"/>
-                <MenuItem Header="Задачи">
-                    <System:String>Задачи</System:String>
-                </MenuItem>
-            </Menu>
+            <Rectangle Stroke="#43464D" StrokeThickness="8" />
+            <RadioButton Style="{DynamicResource MenuButton}" Content="Документы" IsChecked="True"/>
+            <RadioButton Style="{DynamicResource MenuButton}" Content="Задачи"/>
+            <RadioButton Style="{DynamicResource MenuButton}" Content="База данных"/>
         </StackPanel>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="0,489,0,0" VerticalAlignment="Top" Width="5" ResizeDirection="Columns"/>
-        <Forms:UC_TemplateElement HorizontalAlignment="Left" Margin="185,396,0,0" VerticalAlignment="Top" Width="555" Grid.Column="1"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Height="200" Margin="0,0,0,0" VerticalAlignment="Center" Width="5" ResizeDirection="Columns" Background="#32353c"/>
+        <Forms:UC_Templator Grid.Column="1" Margin="10,0,0,0"/>
     </Grid>
 
 </Window>

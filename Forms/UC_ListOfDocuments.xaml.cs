@@ -1,5 +1,4 @@
-﻿using Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,19 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Incubator_2.Forms.Reusable
+namespace Incubator_2.Forms
 {
     /// <summary>
-    /// Логика взаимодействия для TemplateElement.xaml
+    /// Логика взаимодействия для UC_ListOfDocuments.xaml
     /// </summary>
-    public partial class TemplateElement : UserControl
+    public partial class UC_ListOfDocuments : UserControl
     {
-        Template template;
-        public TemplateElement(Template t)
+        public UC_ListOfDocuments()
         {
             InitializeComponent();
-            template = t;
-            this.NameOfTemplate.Content = template.name;
         }
     }
 }

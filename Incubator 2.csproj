@@ -180,7 +180,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Forms\Reusable\TemplateElement.xaml">
+    <Page Include="Forms\UC_ListOfDocuments.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -206,8 +206,8 @@
     <Compile Include="Forms\OneInstance\UC_Templator.xaml.cs">
       <DependentUpon>UC_Templator.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Reusable\TemplateElement.xaml.cs">
-      <DependentUpon>TemplateElement.xaml</DependentUpon>
+    <Compile Include="Forms\UC_ListOfDocuments.xaml.cs">
+      <DependentUpon>UC_ListOfDocuments.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\UC_TemplateElement.xaml.cs">
       <DependentUpon>UC_TemplateElement.xaml</DependentUpon>
@@ -261,7 +261,9 @@
   <ItemGroup>
     <Resource Include="Logo.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Windows\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8.1">
       <Visible>False</Visible>

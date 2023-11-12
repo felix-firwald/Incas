@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Incubator_2.Forms
+namespace Forms
 {
     /// <summary>
     /// Логика взаимодействия для UC_TemplateElement.xaml

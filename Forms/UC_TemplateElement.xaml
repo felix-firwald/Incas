@@ -1,11 +1,12 @@
-﻿<UserControl xmlns:fa="http://schemas.fontawesome.io/icons/"  x:Class="Incubator_2.Forms.UC_TemplateElement"
+﻿<UserControl xmlns:fa="http://schemas.fontawesome.io/icons/"  x:Class="Forms.UC_TemplateElement"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Incubator_2.Forms"
+             xmlns:local="clr-namespace:Forms"
              mc:Ignorable="d" 
-             d:DesignHeight="45" d:DesignWidth="600" Background="#FF3E444A">
+             d:DesignHeight="45" d:DesignWidth="600" Background="#393c43">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40"/>
@@ -13,7 +14,7 @@
             <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;"/>
         <Label Grid.Column="1" Content="Название не определено" VerticalAlignment="Center" HorizontalAlignment="Left">
             <Label.Foreground>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>
@@ -21,5 +22,14 @@
         </Label>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="2" Icon="Pencil" FontSize="18" Margin="12,14,12,14" Cursor="Hand"/>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="MinusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand"/>
+        <Grid.Style>
+            <Style TargetType="{x:Type Grid}">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#43464d"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
     </Grid>
 </UserControl>
