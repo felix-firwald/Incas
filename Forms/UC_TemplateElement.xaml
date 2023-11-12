@@ -14,7 +14,7 @@
             <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick"/>
         <Label Grid.Column="1" Content="Название не определено" VerticalAlignment="Center" HorizontalAlignment="Left">
             <Label.Foreground>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlDarkColorKey}}"/>

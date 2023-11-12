@@ -1,5 +1,4 @@
-﻿using Incubator_2.Windows;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,25 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Forms
+namespace Incubator_2.Windows
 {
     /// <summary>
-    /// Логика взаимодействия для UC_TemplateElement.xaml
+    /// Логика взаимодействия для UseTemplate.xaml
     /// </summary>
-    public partial class UC_TemplateElement : UserControl
+    public partial class UseTemplate : Window
     {
-        public UC_TemplateElement()
+        public UseTemplate()
         {
             InitializeComponent();
         }
 
-        private void AddClick(object sender, MouseButtonEventArgs e)
+        private void CreateFileClick(object sender, RoutedEventArgs e)
         {
-            UseTemplate ut = new UseTemplate();
-            ut.Show();
+
         }
     }
 }
