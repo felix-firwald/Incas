@@ -126,6 +126,20 @@ namespace Common
         }
         #endregion
 
+        #region Standart Requests
+        protected DataTable GetAll()
+        {
+            return StartCommand().Select().Execute();
+        }
+        protected DataRow GetById(int id)
+        {
+            return StartCommand().Select().WhereEqual("id", id.ToString()).Execute().Rows[0];
+        }
+        protected void DeleteById(int id)
+        {
+            StartCommand().Delete().WhereEqual("id", id.ToString()).ExecuteVoid();
+        }
+        #endregion
 
         #region Connection, Request and Permission
         /// <summary>
