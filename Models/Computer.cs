@@ -17,10 +17,10 @@ namespace Models
                 "name STRING NOT NULL,\n" +
                 "blocked BOOLEAN NOT NULL DEFAULT (0)";
         }
-        public List<Computer> GetAll()
+        public List<Computer> GetAllComputers()
         {
             List<Computer> results = new List<Computer>();
-            DataTable dt = StartCommand().Select().Execute();
+            DataTable dt = GetAll();
             foreach (DataRow dr in dt.Rows)
             {
                 Computer mc = new Computer();

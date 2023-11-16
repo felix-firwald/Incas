@@ -26,7 +26,7 @@ namespace Incubator_2.Windows
 
         private void CreateFileClick(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }

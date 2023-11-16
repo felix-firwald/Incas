@@ -22,6 +22,18 @@
             </Grid.RowDefinitions>
             <Button Style="{StaticResource ButtonGray}" Grid.Row="4" Content="Создать файл по шаблону" Click="CreateFileClick"/>
             <TextBox Style="{DynamicResource TextBoxMain}" HorizontalAlignment="Left" Margin="70,0,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Center" Width="120"/>
+            <DataGrid 
+                Grid.Row="3"
+                x:Name="DGV">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Header="Имя файла"
+                        MinWidth="100">
+                        
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+               
+            </DataGrid>
         </Grid>
     </Border>
 </Window>

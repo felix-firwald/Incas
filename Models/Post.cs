@@ -22,11 +22,9 @@ namespace Models
                 "rights STRING NOT NULL";
         }
         #region GET
-        public List<Post> GetAll()
+        public List<Post> GetAllPost()
         {
-            DataTable dt = StartCommand()
-                                .Select()
-                                .Execute();
+            DataTable dt = GetAll();
             List<Post> posts = new List<Post>();
             foreach (DataRow dr in dt.Rows)
             {

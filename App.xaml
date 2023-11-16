@@ -159,6 +159,63 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="CategoryButton" TargetType="{x:Type RadioButton}">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="#FFA7ABB7"/>
+            <Setter Property="Foreground" Value="#FFA7ABB7"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="3,3,3,3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Border Name="bor" Grid.Column="1" Background="#393c43" BorderThickness="1" BorderBrush="DimGray" Margin="0,0,0,0">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0.100" To="#43464d" Storyboard.TargetName="bor" Storyboard.TargetProperty="Background.Color"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0.350" To="#393c43" Storyboard.TargetName="bor" Storyboard.TargetProperty="Background.Color"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0.100" To="#8B00FF" Storyboard.TargetProperty="Foreground.Color"/>
+                                            <ThicknessAnimation Duration="0:0:0.100" To="2" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderThickness"/>
+                                            <ColorAnimation Duration="0:0:0.100" To="#8B00FF" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0.250" To="#FFA7ABB7" Storyboard.TargetProperty="Foreground.Color"/>
+                                            <ThicknessAnimation Duration="0:0:0.300" To="1" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderThickness"/>
+                                            <ColorAnimation Duration="0:0:0.350" To="DimGray" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <SolidColorBrush x:Key="MenuItem.Highlight.Background" Color="#3D26A0DA"/>
         <SolidColorBrush x:Key="MenuItem.Highlight.Border" Color="#FF26A0DA"/>
         <SolidColorBrush x:Key="MenuItem.Highlight.Disabled.Background" Color="#0A000000"/>

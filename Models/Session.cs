@@ -36,7 +36,7 @@ namespace Models
             //}
             return false;
         }
-        public List<Session> GetAll()
+        public List<Session> GetAllSessions()
         {
             DataTable dt = StartCommand()
                 .Select()

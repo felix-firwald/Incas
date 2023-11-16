@@ -314,7 +314,9 @@ namespace Common
 
         public Query CreateTable(string tab, Field[] fields)
         {
-            Result = $"CREATE TABLE {tab}";
+            Result = $"CREATE TABLE {tab} (\n";
+            Result += string.Join(",\n", fields.ToString());
+            Result += ")";
             return this;
         }
 
