@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,19 @@ namespace Incubator_2.Forms
         public UC_ListOfDocuments()
         {
             InitializeComponent();
+            LoadCategories();
+        }
+        private void LoadCategories()
+        {
+            Template mt = new Template();
+            mt.GetCategories().ForEach(c =>
+            {
+                Console.WriteLine(c);
+                RadioButton rb = new RadioButton();
+                rb.Style = FindResource("CategoryButton") as Style;
+                rb.Content = c;
+                this.Categories.Children.Add(rb);
+            });
         }
     }
 }

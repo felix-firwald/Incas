@@ -21,10 +21,8 @@
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.AppWorkspaceColorKey}}"/>
             </Label.Foreground>
         </Label>
-        <StackPanel Grid.Row="1" Grid.Column="0">
-            <RadioButton Style="{StaticResource CategoryButton}" Content="Без категории"/>
-            <RadioButton Style="{StaticResource CategoryButton}" Content="Приказы"/>
-            <RadioButton Style="{StaticResource CategoryButton}" Content="Заявления"/>
+        <StackPanel x:Name="Categories" Grid.Row="1" Grid.Column="0">
+            <RadioButton Style="{StaticResource CategoryButton}" Content="Без категории" IsChecked="True"/>
         </StackPanel>
 
         <ScrollViewer Style="{DynamicResource MainScroll}" Grid.Column="1"  Grid.Row="1">
