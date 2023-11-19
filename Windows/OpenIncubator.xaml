@@ -10,9 +10,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        
-        <Button Style="{StaticResource ButtonGray}" Content="Войти в инкубатор" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="410" Height="30" Click="LogInClicked"/>
+        <TextBox Style="{StaticResource TextBoxMain}" Grid.Row="1" Tag="Путь к инкубатору" HorizontalContentAlignment="Left" />
+        <TextBox Style="{StaticResource TextBoxMain}" Grid.Row="2" Tag="Пароль для входа" />
+        <Button Style="{StaticResource ButtonMain}" Content="Войти в инкубатор" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="410" Height="30" Click="LogInClicked"/>
+        <ComboBox Style="{StaticResource ComboBoxMain}" HorizontalAlignment="Left" Margin="295,69,0,0" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>

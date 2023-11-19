@@ -1,0 +1,83 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="TextBoxMain" TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="{DynamicResource Black}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Light}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
+        <Setter Property="Padding" Value="10 3"/>
+        <Setter Property="Margin" Value="5,5,5,5"/>
+        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="MaxHeight" Value="30"/>
+        <Setter Property="Cursor" Value="IBeam"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="Border" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="6,6,6,6" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <Grid>
+                            <ScrollViewer 
+                                x:Name="PART_ContentHost" 
+                                Focusable="False" 
+                                HorizontalScrollBarVisibility="Hidden" 
+                                VerticalScrollBarVisibility="Hidden"/>
+                            <Label 
+                                x:Name="WaterMarkerLabel" 
+                                Content="{TemplateBinding Tag}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Visibility="Collapsed"
+                                Foreground="{TemplateBinding BorderBrush}"
+                                Padding="{TemplateBinding Padding}"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Text" Value=""/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="WaterMarkerLabel" Value="Visible"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.250" To="#43464d" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="2" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.250" To="#43464d" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="{DynamicResource LightBlack}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
