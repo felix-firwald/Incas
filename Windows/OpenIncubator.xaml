@@ -12,11 +12,21 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <TextBox Style="{StaticResource TextBoxMain}" Grid.Row="1" Tag="Путь к инкубатору" HorizontalContentAlignment="Left" />
-        <TextBox Style="{StaticResource TextBoxMain}" Grid.Row="2" Tag="Пароль для входа" />
-        <Button Style="{StaticResource ButtonMain}" Content="Войти в инкубатор" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="410" Height="30" Click="LogInClicked"/>
-        <ComboBox Style="{StaticResource ComboBoxMain}" HorizontalAlignment="Left" Margin="295,69,0,0" VerticalAlignment="Top" Width="120"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="375"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBox Style="{StaticResource TextBoxMain}" Grid.Row="2"  Tag="Путь к инкубатору" HorizontalContentAlignment="Left" />
+        <TextBox Style="{StaticResource TextBoxMain}" Grid.Row="3" Grid.ColumnSpan="2" Tag="Пароль для входа" />
+        <Button Style="{StaticResource ButtonMain}" Grid.Row="4" Grid.ColumnSpan="2" Content="Войти в инкубатор"  VerticalAlignment="Center" Click="LogInClicked"/>
+        <Button Style="{StaticResource ButtonMain}" Content="..." Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Click="PathReview" Height="30"/>
+        <ComboBox Style="{StaticResource ComboBoxMain}" Grid.Row="1" HorizontalAlignment="Left"  VerticalAlignment="Center" Width="195" Margin="5,0,0,0">
+            <ComboBoxItem Content="Тонкий клиент"/>
+            <ComboBoxItem Content="Толстый клиент"/>
+        </ComboBox>
+        <CheckBox Style="{StaticResource Toggle}" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,37,0,0"/>
 
     </Grid>
 </Window>

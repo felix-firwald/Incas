@@ -43,11 +43,11 @@
                             <Setter Property="BorderBrush" TargetName="border" Value="DodgerBlue"/>
                             <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="White"/>
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
+                        <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" TargetName="border" Value="#1873CC"/>
                             <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="White"/>
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
+                        <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Background" TargetName="border" Value="#2D2D30"/>
                             <Setter Property="BorderBrush" TargetName="border" Value="DimGray"/>
                             <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="DimGray"/>

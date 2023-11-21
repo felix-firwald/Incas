@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Themes/Button.xaml" />
                 <ResourceDictionary Source="Themes/TextBox.xaml" />
                 <ResourceDictionary Source="Themes/ComboBox.xaml" />
+                <ResourceDictionary Source="Themes/CheckBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <Style x:Key="FocusVisual">

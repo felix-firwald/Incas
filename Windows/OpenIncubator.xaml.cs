@@ -34,5 +34,10 @@ namespace Incubator_2.Windows
         {
             Application.Current.Shutdown();
         }
+
+        private void PathReview(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
