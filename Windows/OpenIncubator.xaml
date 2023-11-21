@@ -24,9 +24,11 @@
         <Button Style="{StaticResource ButtonMain}" Content="..." Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Click="PathReview" Height="30"/>
         <ComboBox Style="{StaticResource ComboBoxMain}" Grid.Row="1" HorizontalAlignment="Left"  VerticalAlignment="Center" Width="195" Margin="5,0,0,0">
             <ComboBoxItem Content="Тонкий клиент"/>
+            <Separator/>
             <ComboBoxItem Content="Толстый клиент"/>
         </ComboBox>
-        <CheckBox Style="{StaticResource Toggle}" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,37,0,0"/>
+        <CheckBox Style="{StaticResource Toggle}" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="True" Grid.Column="1" Grid.Row="1"/>
+        <CheckBox Style="{StaticResource CheckBoxMain}" Content="CheckBox" HorizontalAlignment="Left" Margin="300,0,0,0" Grid.Row="1" VerticalAlignment="Center" IsChecked="True"/>
 
     </Grid>
 </Window>
