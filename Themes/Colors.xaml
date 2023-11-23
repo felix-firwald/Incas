@@ -12,6 +12,7 @@
     <SolidColorBrush x:Key="GrayLight" Color="#A7ABB7"/>
     <SolidColorBrush x:Key="Light" Color="#D3D5DB"/>
     <!--Цвета исключительно для контролов-->
+    <SolidColorBrush x:Key="Error" Color="#FF0033"/>
     <SolidColorBrush x:Key="DarkPurple" Color="#6600BA"/>
     <SolidColorBrush x:Key="Purple" Color="#8B00FF"/>
     <SolidColorBrush x:Key="LightPurple" Color="#B255FF"/>

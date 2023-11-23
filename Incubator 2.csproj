@@ -178,6 +178,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CustomControls\TextBoxMain.cs" />
+    <Compile Include="Windows\Error.xaml.cs">
+      <DependentUpon>Error.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\OpenIncubator.xaml.cs">
       <DependentUpon>OpenIncubator.xaml</DependentUpon>
     </Compile>
@@ -263,6 +266,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Windows\Error.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\OpenIncubator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

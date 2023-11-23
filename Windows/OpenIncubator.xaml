@@ -1,34 +1,33 @@
-﻿<Window x:Class="Incubator_2.Windows.OpenIncubator"
+﻿<Window xmlns:fa="http://schemas.fontawesome.io/icons/"  x:Class="Incubator_2.Windows.OpenIncubator"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
         mc:Ignorable="d"
-        Title="Выбор инкубатора" Height="250" Width="450" MinHeight="250" MinWidth="400" MaxHeight="250" MaxWidth="450" WindowStartupLocation="CenterScreen" WindowState="Minimized" Background="#2F3239" ResizeMode="NoResize" Icon="/Windows/Logo.png" Closing="OnClose" Topmost="True">
+        Title="Выбор инкубатора" Height="350" Width="450" MinHeight="350" MinWidth="400" MaxHeight="250" MaxWidth="450" WindowStartupLocation="CenterScreen" WindowState="Minimized" Background="#2F3239" ResizeMode="NoResize" Icon="/Windows/Logo.png" Closing="OnClose" Topmost="True">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="107*"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="57*"/>
+            <RowDefinition Height="50*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="375"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox Style="{StaticResource TextBoxMain}" Grid.Row="2"  Tag="Путь к инкубатору" HorizontalContentAlignment="Left" />
-        <TextBox Style="{StaticResource TextBoxMain}" Grid.Row="3" Grid.ColumnSpan="2" Tag="Пароль для входа" />
-        <Button Style="{StaticResource ButtonMain}" Grid.Row="4" Grid.ColumnSpan="2" Content="Войти в инкубатор"  VerticalAlignment="Center" Click="LogInClicked"/>
-        <Button Style="{StaticResource ButtonMain}" Content="..." Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Click="PathReview" Height="30"/>
-        <ComboBox Style="{StaticResource ComboBoxMain}" Grid.Row="1" HorizontalAlignment="Left"  VerticalAlignment="Center" Width="195" Margin="5,0,0,0">
-            <ComboBoxItem Content="Тонкий клиент"/>
-            <Separator/>
-            <ComboBoxItem Content="Толстый клиент"/>
-        </ComboBox>
-        <CheckBox Style="{StaticResource Toggle}" Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="True" Grid.Column="1" Grid.Row="1"/>
-        <CheckBox Style="{StaticResource CheckBoxMain}" Content="CheckBox" HorizontalAlignment="Left" Margin="300,0,0,0" Grid.Row="1" VerticalAlignment="Center" IsChecked="True"/>
+        <fa:FontAwesome Icon="User" FontSize="48" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource Element}" Margin="208,0,0,0" />
+        <Button Style="{StaticResource ButtonMain}" Content=". . ." Grid.Row="1" Grid.Column="1"  VerticalAlignment="Center" Click="PathReview" Height="30" Margin="5,0,5,0"/>
+        <TextBox x:Name="cpath" Style="{StaticResource TextBoxMain}" Grid.Row="1" Grid.ColumnSpan="1" Tag="Путь к инкубатору" HorizontalContentAlignment="Left" Margin="5,5,5,5" />
+        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Grid.Row="2" Grid.ColumnSpan="2" Tag="Пароль для входа" MaxLength="5" MaxLines="1" Margin="5,5,5,5" />
+        <TextBox Grid.Row="3" Grid.ColumnSpan="2" Text="Для продолжения необходимо указать путь к папке, где лежит база данных инкубатора и файл с расширением .INIT, а также ввести пароль для пользователя, под которым вы хотите авторизироваться" IsManipulationEnabled="True" TextWrapping="WrapWithOverflow" IsReadOnly="True" Background="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="{DynamicResource DarkLight}" BorderBrush="{x:Null}" IsEnabled="False" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <TextBox Grid.Row="4" Grid.ColumnSpan="2" Text="Если в выбраной папке не будет найден файл INIT, будет создан новый инкубатор" IsManipulationEnabled="True" TextWrapping="WrapWithOverflow" IsReadOnly="True" Background="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="{DynamicResource DarkLight}" BorderBrush="{x:Null}" IsEnabled="False" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <Button Style="{StaticResource ButtonMain}" Grid.Row="5" Grid.ColumnSpan="2" Content="Войти в инкубатор"  VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0"/>
+
 
     </Grid>
 </Window>

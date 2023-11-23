@@ -17,12 +17,15 @@ namespace Incubator_2
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup(e);
             OpenIncubator oi = new OpenIncubator();
+            this.MainWindow = new MainWindow();
             if (oi.ShowDialog() == false)
             {
                 Current.Shutdown();
             }
-            base.OnStartup(e);
+            
+            //this.MainWindow.Show();
 
         }
     }

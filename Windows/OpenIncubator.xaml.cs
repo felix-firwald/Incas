@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -22,22 +25,38 @@ namespace Incubator_2.Windows
         public OpenIncubator()
         {
             InitializeComponent();
-            
+            ProgramState.LoadUserData();
+            this.cpath.Text = ProgramState.CommonPath;
         }
 
         private void LogInClicked(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            if (string.IsNullOrEmpty(this.cpath.Text) || string.IsNullOrEmpty(this.pwd.Text)) {
+                System.Windows.Forms.MessageBox.Show("Одно из полей пустое!", "Ошибка");
+            }
+            else
+            {
+                ProgramState.SetCommonPath(this.cpath.Text);
+                ProgramState.GetInitFile();
+                ProgramState.SaveUserData();
+                DialogResult = true;
+                this.Close();
+            }
+            
         }
 
         private void OnClose(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Application.Current.Shutdown();
+            //System.Windows.Application.Current.Shutdown();
         }
 
         private void PathReview(object sender, RoutedEventArgs e)
         {
-
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                this.cpath.Text = folderDialog.SelectedPath;
+            }
         }
     }
 }

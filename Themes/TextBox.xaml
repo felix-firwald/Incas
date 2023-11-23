@@ -75,6 +75,9 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Background" Value="{DynamicResource LightBlack}"/>
                         </Trigger>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Error}"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
