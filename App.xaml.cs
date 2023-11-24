@@ -18,11 +18,24 @@ namespace Incubator_2
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            OpenIncubator oi = new OpenIncubator();
-            this.MainWindow = new MainWindow();
-            if (oi.ShowDialog() == false)
+            try
             {
-                Current.Shutdown();
+                OpenIncubator oi = new OpenIncubator();
+                MainWindow mw = new MainWindow();
+                this.MainWindow = mw;
+                if (oi.ShowDialog() == false)
+                {
+                    Current.Shutdown();
+                }
+                mw.LoadBio();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox
+                    .Show($"В инкубаторе возникли неполадки:\n\n{ex.Message}\n\nПрограмма будет закрыта.",
+                        "Критическая ошибка",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
             }
             
             //this.MainWindow.Show();

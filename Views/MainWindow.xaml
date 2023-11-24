@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Incubator_2"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" x:Class="Incubator_2.MainWindow"
         mc:Ignorable="d" Height="900" Width="1300" 
-        Background="{StaticResource Basic}" WindowState="Maximized" Topmost="True" Title="Инкубатор" Icon="/Views/Logo.png">
+        Background="{StaticResource Basic}" WindowState="Maximized" Topmost="True" Title="Инкубатор" Icon="/Views/Logo.png" Closed="OnClosed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

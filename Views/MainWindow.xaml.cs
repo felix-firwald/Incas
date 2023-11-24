@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Common;
+using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +26,21 @@ namespace Incubator_2
         {
             InitializeComponent();
             //this.ContentControl.Children.Add(this);
+            
+        }
+        public void LoadBio()
+        {
+            using (User user = ProgramState.GetCurrentUser())
+            {
+                this.Surname.Content = user.surname;
+                this.Fullname.Content = user.fullname;
+                this.Post.Content = user.post;
+            }
+        }
+
+        private void OnClosed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }
