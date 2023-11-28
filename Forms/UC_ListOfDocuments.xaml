@@ -16,11 +16,7 @@
             <ColumnDefinition Width="200" MinWidth="100" MaxWidth="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.ColumnSpan="2" Content="ШАБЛОНЫ ДОКУМЕНТОВ" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" FontFamily="Segoe UI Black">
-            <Label.Foreground>
-                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.AppWorkspaceColorKey}}"/>
-            </Label.Foreground>
-        </Label>
+        <Label Style="{StaticResource LabelPrimary}" Grid.Row="0" Grid.ColumnSpan="2" Content="ШАБЛОНЫ ДОКУМЕНТОВ" HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Center" />
         <StackPanel x:Name="Categories" Grid.Row="1" Grid.Column="0">
             <RadioButton Style="{StaticResource CategoryButton}" Content="Без категории" IsChecked="True"/>
         </StackPanel>

@@ -1,4 +1,5 @@
 ﻿using Common;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,9 +41,32 @@ namespace Incubator_2.Windows
                 ProgramState.GetInitFile();
                 ProgramState.SaveUserData();
                 DialogResult = true;
+                if (Directory.Exists(this.cpath.Text))
+                {
+                    CheckPassword();
+                }
+                
                 this.Close();
             }
             
+        }
+
+        private void CheckPassword()
+        {
+            using (User user = new User())
+            {
+                if (user.IsPasswordExists(this.pwd.Text))
+                {
+                    ProgramState.User = user.username;
+                    Permission.CurrentUserPermission = user.status;
+                    this.Close();
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Пароль введен неверно.", "Неправильный пароль");
+                    this.pwd.Text = "";
+                }
+            }
         }
 
         private void OnClose(object sender, System.ComponentModel.CancelEventArgs e)

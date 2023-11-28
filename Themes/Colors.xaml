@@ -8,6 +8,7 @@
     <SolidColorBrush x:Key="Area" Color="#393c43"/>
     <SolidColorBrush x:Key="Focus" Color="#3E4148"/>
     <SolidColorBrush x:Key="Element" Color="#43464d"/>
+    <SolidColorBrush x:Key="Icon" Color="#60636B"/>
     <SolidColorBrush x:Key="DarkLight" Color="#7D8089"/>
     <SolidColorBrush x:Key="GrayLight" Color="#A7ABB7"/>
     <SolidColorBrush x:Key="Light" Color="#D3D5DB"/>

@@ -18,7 +18,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>D:\Dev\1. BUILDS\Incubator 2\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -28,9 +28,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -38,10 +39,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -51,9 +53,31 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Logo.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>173479A22F8A970010E5D9533E658733A55AB229</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Incubator 2_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Incubator_2.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClosedXML, Version=0.102.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
@@ -219,6 +243,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Themes\Label.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\RadioButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -297,7 +325,41 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-BoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-ExtraBold.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-ExtraBoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-ExtraLight.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-Italic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-Light.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-LightItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-Medium.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-MediumItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-Regular.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-SemiBold.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-Thin.ttf" />
+    <Resource Include="Fonts\JetBrainsMono-ThinItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Bold.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-BoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-ExtraBold.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-ExtraBoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-ExtraLight.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Italic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Light.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-LightItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Medium.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-MediumItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Regular.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-SemiBold.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-Thin.ttf" />
+    <Resource Include="Fonts\JetBrainsMonoNL-ThinItalic.ttf" />
+    <None Include="Incubator 2_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

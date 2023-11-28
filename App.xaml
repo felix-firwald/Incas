@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="Themes/TextBox.xaml" />
                 <ResourceDictionary Source="Themes/ComboBox.xaml" />
                 <ResourceDictionary Source="Themes/CheckBox.xaml" />
+                <ResourceDictionary Source="Themes/Label.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <Style x:Key="FocusVisual">
@@ -374,10 +375,10 @@
             </Style>
             <Style x:Key="IconButton" TargetType="{x:Type fa:FontAwesome}">
                 <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Foreground" Value="#FF696969"/>
+                <Setter Property="Foreground" Value="{StaticResource Icon}"/>
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Foreground" Value="#7D8089"/>
+                        <Setter Property="Foreground" Value="{StaticResource Element}"/>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Trigger.EnterActions>
@@ -390,7 +391,7 @@
                         <Trigger.ExitActions>
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <ColorAnimation Duration="0:0:0.250" To="#7D8089" Storyboard.TargetProperty="Foreground.Color"/>
+                                    <ColorAnimation Duration="0:0:0.250" To="#60636B" Storyboard.TargetProperty="Foreground.Color"/>
                                 </Storyboard>
                             </BeginStoryboard>
                         </Trigger.ExitActions>

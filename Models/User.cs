@@ -60,6 +60,18 @@ namespace Models
             this.status = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), dr["status"].ToString());
             return this;
         }
+        public User GetUserByPassword()
+        {
+            DataRow dr = GetOne(
+                StartCommand()
+                    .Select()
+                    .WhereEqual("password", password)
+                    .Execute()
+            );
+            this.Serialize(dr);
+            this.status = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), dr["status"].ToString());
+            return this;
+        }
         public void UpdatePassword()
         {
             StartCommand()

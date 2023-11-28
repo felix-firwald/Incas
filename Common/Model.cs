@@ -135,6 +135,10 @@ namespace Common
         {
             return StartCommand().Select().WhereEqual("id", id.ToString()).Execute().Rows[0];
         }
+        protected DataTable GetByField(string field, string value)
+        {
+            return StartCommand().Select().WhereEqual(field, value).Execute();
+        }
         protected void DeleteById(int id)
         {
             StartCommand().Delete().WhereEqual("id", id.ToString()).ExecuteVoid();
