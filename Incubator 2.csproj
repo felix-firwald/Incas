@@ -47,6 +47,7 @@
   <PropertyGroup>
     <StartupObject>Incubator_2.App</StartupObject>
     <PackageIcon>Logo.png</PackageIcon>
+    <PackageId>FirwaldTechnologies.Incubator</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
