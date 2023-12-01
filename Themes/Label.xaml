@@ -4,6 +4,10 @@
         <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
         <Setter Property="TextElement.FontWeight" Value="ExtraBold"/>
     </Style>
+    <Style x:Key="TextBlockImportant" TargetType="{x:Type TextBlock}">
+        <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
+        <Setter Property="TextElement.FontWeight" Value="ExtraLight"/>
+    </Style>
     <Style x:Key="LabelPrimary" TargetType="{x:Type Label}">
         <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
         <Setter Property="TextElement.FontWeight" Value="ExtraLight"/>

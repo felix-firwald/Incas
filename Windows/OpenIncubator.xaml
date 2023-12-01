@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
         mc:Ignorable="d"
-        Title="Выбор инкубатора" Height="350" Width="450" MinHeight="350" MinWidth="400" MaxHeight="250" MaxWidth="450" WindowStartupLocation="CenterScreen" WindowState="Minimized" Background="#2F3239" Icon="/Windows/Logo.png" Closing="OnClose" Topmost="True" ResizeMode="NoResize">
+        Title="Выбор инкубатора" Height="350" Width="450" MinHeight="350" MinWidth="400" MaxHeight="250" MaxWidth="450" WindowStartupLocation="CenterScreen" WindowState="Minimized" Background="#2F3239" Icon="/Windows/Logo.png" Topmost="True" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="107*"/>

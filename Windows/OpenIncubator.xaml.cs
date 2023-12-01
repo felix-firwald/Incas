@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.ViewModels;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -45,8 +46,11 @@ namespace Incubator_2.Windows
                 {
                     CheckPassword();
                 }
-                
-                this.Close();
+                MV_MainWindow context = new MV_MainWindow();
+                context.LoadInfo();
+                MainWindow mw = new MainWindow();
+                mw.Show();
+                //this.Hide();
             }
             
         }
@@ -67,11 +71,6 @@ namespace Incubator_2.Windows
                     this.pwd.Text = "";
                 }
             }
-        }
-
-        private void OnClose(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            //System.Windows.Application.Current.Shutdown();
         }
 
         private void PathReview(object sender, RoutedEventArgs e)

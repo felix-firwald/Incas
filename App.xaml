@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Incubator_2"
              StartupUri="Views/MainWindow.xaml"
-    xmlns:fa="http://schemas.fontawesome.io/icons/">
+    xmlns:fa="http://schemas.fontawesome.io/icons/" ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

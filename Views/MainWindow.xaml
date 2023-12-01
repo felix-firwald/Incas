@@ -4,9 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" x:Name="window" x:Class="Incubator_2.MainWindow"
+        xmlns:vm="clr-namespace:Incubator_2.ViewModels"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" x:Name="window" x:Class="Incubator_2.MainWindow"
         mc:Ignorable="d" Height="900" Width="1300" 
-        Background="{StaticResource Basic}" WindowState="Maximized" Topmost="True" Title="Инкубатор" Icon="/Views/Logo.png" Closed="OnClosed">
+    
+        Background="{StaticResource Basic}" WindowState="Maximized" Topmost="True" Title="{Binding IncubatorName}" Icon="/Views/Logo.png" Closed="OnClosed">
+
+    <Window.DataContext>
+        <vm:MV_MainWindow/>
+    </Window.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -15,16 +22,16 @@
             <ColumnDefinition Width="300" MinWidth="120" MaxWidth="400"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}">
-            <Label x:Name="Incubator" Style="{StaticResource LabelPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="0,25,0,0" Content="Наименование"/>
+        <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize">
+            <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,15" Text="{Binding IncubatorName}" TextWrapping="Wrap"/>
             <Image x:Name="Logo" Height="auto" Width="auto" Source="/Views/Logo.png" UseLayoutRounding="False" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill">
                 <Image.Effect>
                     <DropShadowEffect x:Name="Shadow" ShadowDepth="5" BlurRadius="100" Color="DodgerBlue" Direction="90" RenderingBias="Quality" Opacity="0"/>
                 </Image.Effect>
             </Image>
-            <TextBlock x:Name="LSurname" Foreground="White" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True"/>
-            <TextBlock Foreground="White" Text="{Binding Fullname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock Foreground="{StaticResource Light}" Margin="0,0,0,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock x:Name="LSurname" Foreground="White" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True"/>
+            <TextBlock x:Name="LFullname" Foreground="White" Text="{Binding Fullname}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock x:Name="LPost" Foreground="{StaticResource Light}" Margin="0,0,0,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <Rectangle Stroke="#43464D" StrokeThickness="8" />
             <RadioButton Style="{StaticResource MenuButton}" Content="Документы" IsChecked="True"/>
 

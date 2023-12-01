@@ -1,4 +1,5 @@
-﻿using Incubator_2.Windows;
+﻿using Incubator_2.ViewModels;
+using Incubator_2.Windows;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,13 +22,18 @@ namespace Incubator_2
             try
             {
                 OpenIncubator oi = new OpenIncubator();
-                MainWindow mw = new MainWindow();
-                this.MainWindow = mw;
+                
+                
                 if (oi.ShowDialog() == false)
                 {
-                    Current.Shutdown();
+                    //Current.Shutdown();
                 }
-                mw.LoadBio();
+                //MV_MainWindow context = new MV_MainWindow();
+                //context.LoadInfo();
+                MainWindow mw = new MainWindow();
+                this.MainWindow = mw;
+                
+                //mw.LoadBio();
             }
             catch (Exception ex)
             {
