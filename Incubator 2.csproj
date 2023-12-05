@@ -19,8 +19,8 @@
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+    <UseWPF>True</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
@@ -48,6 +48,7 @@
     <StartupObject>Incubator_2.App</StartupObject>
     <PackageIcon>Logo.png</PackageIcon>
     <PackageId>FirwaldTechnologies.Incubator</PackageId>
+    <SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
   </PropertyGroup>
   <ItemGroup>
     <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
@@ -132,5 +133,8 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CustomControls\" />
   </ItemGroup>
 </Project>

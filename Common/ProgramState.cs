@@ -3,8 +3,8 @@ using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Incubator_2.Windows;
+
 
 namespace Common
 {
@@ -67,19 +67,14 @@ namespace Common
             string fileFullName = getInitFilePath();
             if (!File.Exists(fileFullName))
             {
-                if (MessageBox.Show(
-                    "Инкубатор не найден по указанному пути.\nСоздать новый инкубатор?",
-                    "Инкубатор не найден",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                ) == DialogResult.Yes)
-                {
-                    Initialize();
-                }
-                else
-                {
-                    Application.Restart();
-                }
+                new Dialog("По указанному пути инкубатор не обнаружен.\nБудет создан новый инкубатор.", "Инкубатор не найден");
+
+                Initialize();
+
+                //else
+                //{
+                //    Application.Restart();
+                //}
                 
             }
             return File.ReadAllText(fileFullName);
@@ -221,10 +216,7 @@ namespace Common
         {
             if (!ProgramState.IsIncubatorOpened())
             {
-                MessageBox.Show("Действия по добавлению, " +
-                "изменению или удалению информации " +
-                "из базы данных недоступны, пока инкубатор находится в статусе \"Закрыт\".",
-                "Инкубатор закрыт", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                new Dialog("Действия по добавлению, изменению или удалению информации из базы данных недоступны, пока инкубатор находится в статусе \"Закрыт\"", "Инкубатор закрыт");
                 return false;
             }
             return true;
@@ -259,7 +251,7 @@ namespace Common
                         if (File.Exists(searchingPath) && File.ReadAllText(searchingPath) == GetComputerId())
                         {
                             File.Delete(searchingPath);
-                            Application.Exit();
+                            throw new Exception("Сессия принудительно завершена администратором инкубатора");
                         }
                     }
                 });

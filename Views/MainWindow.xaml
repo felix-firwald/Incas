@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2"
         xmlns:vm="clr-namespace:Incubator_2.ViewModels"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" x:Name="window" x:Class="Incubator_2.MainWindow"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" xmlns:fa="http://schemas.fontawesome.io/icons/" x:Name="window" x:Class="Incubator_2.MainWindow"
         mc:Ignorable="d" Height="900" Width="1300" 
     
         Background="{StaticResource Basic}" WindowState="Maximized" Topmost="True" Title="{Binding IncubatorName}" Icon="/Views/Logo.png" Closed="OnClosed">
@@ -17,17 +17,28 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" MinWidth="120" MaxWidth="400"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize">
+        <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.RowSpan="1" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize">
             <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,15" Text="{Binding IncubatorName}" TextWrapping="Wrap"/>
             <Image x:Name="Logo" Height="auto" Width="auto" Source="/Views/Logo.png" UseLayoutRounding="False" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill">
                 <Image.Effect>
                     <DropShadowEffect x:Name="Shadow" ShadowDepth="5" BlurRadius="100" Color="DodgerBlue" Direction="90" RenderingBias="Quality" Opacity="0"/>
                 </Image.Effect>
+                <Image.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <!--<Trigger Property="IsMouseCaptured" Value="True">
+                                
+                            </Trigger>-->
+                            
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
             </Image>
             <TextBlock x:Name="LSurname" Foreground="White" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True"/>
             <TextBlock x:Name="LFullname" Foreground="White" Text="{Binding Fullname}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -45,6 +56,13 @@
         </StackPanel>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Height="200" Margin="0,0,0,0" VerticalAlignment="Center" Width="5" ResizeDirection="Columns" Background="#32353c"/>
         <Forms:UC_Templator Grid.Column="1" Margin="10,0,0,0"/>
+        <StackPanel MinHeight="60" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Background="{StaticResource LightBlack}">
+            <Label Content="f" Foreground="{DynamicResource Icon}" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Harlow Solid Italic" FontSize="14" MinWidth="64" FontStyle="Italic"/>
+            
+            <Button Style="{DynamicResource DashboardButton}" Content="Управление файлами" Width="120"/>
+            <Button Style="{DynamicResource DashboardButton}" Content="Редактировать документы" Width="120"/>
+            <Button Style="{DynamicResource DashboardButton}" Content="Буфер обмена" Width="120"/>
+        </StackPanel>
     </Grid>
 
 </Window>

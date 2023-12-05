@@ -25,7 +25,7 @@ namespace Forms
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
             UseTemplate ut = new UseTemplate();
-            ut.Show();
+            ut.ShowDialog();
         }
     }
 }
