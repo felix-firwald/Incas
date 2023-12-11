@@ -1,4 +1,5 @@
 ﻿using Incubator_2.Windows;
+using Incubator_2.Windows.ToolBar;
 using System;
 using System.Windows;
 
@@ -14,6 +15,8 @@ namespace Incubator_2
             base.OnStartup(e);
             try
             {
+                FilesManager fm = new FilesManager();
+                fm.ShowDialog();
                 OpenIncubator oi = new OpenIncubator();
                 
                 if (oi.ShowDialog() == false)
@@ -22,9 +25,10 @@ namespace Incubator_2
                 }
                 //MV_MainWindow context = new MV_MainWindow();
                 //context.LoadInfo();
+                
                 MainWindow mw = new MainWindow();
                 this.MainWindow = mw;
-                
+
                 //mw.LoadBio();
             }
             catch (Exception ex)
