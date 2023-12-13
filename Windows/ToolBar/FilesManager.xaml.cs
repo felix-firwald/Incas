@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Common;
+using Incubator_2.Forms;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,6 +17,7 @@ namespace Incubator_2.Windows.ToolBar
         public FilesManager()
         {
             InitializeComponent();
+            RegistryData.SaveSettingForFM("default", new FilesManagerSetting());
         }
 
         private void GetSelection(string path)
@@ -75,6 +78,11 @@ namespace Incubator_2.Windows.ToolBar
                 GetSelection(this.Directory.Text);
             }
             
+        }
+
+        private void AddChangeValuePairs(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.ChangeValue.Children.Add(new UC_ReplaceFileName());
         }
     }
 }

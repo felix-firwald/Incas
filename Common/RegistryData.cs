@@ -5,17 +5,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#pragma warning disable CA1416 // Проверка совместимости платформы
 namespace Common
 {
+    struct FilesManagerSetting
+    {
+        public string preffered_path = "";
+        public bool filter_start_cb = false;
+        public string filter_start_tb = "";
+        public bool filter_end_cb = false;
+
+        public bool filter_ignore_extension_cb = true;
+        public string filter_end_tb = "";
+        public bool filter_contains_cb = false;
+        public string filter_contains_tb = "";
+        public bool subfolders_cb = false;
+
+        public FilesManagerSetting()
+        {
+
+        }
+    }
     static class RegistryData
     {
         public static RegistryKey GetRoot()
         {
             return Registry.CurrentUser.OpenSubKey("Incubator", true);
         }
+        #region Templates
         public static RegistryKey GetTemplatesData() 
         {
+
             return GetRoot().OpenSubKey("TemplatesData", true);
+
         }
         public static RegistryKey AddTemplate(string name, string prPath, string prPrefix, string prPostfix)
         {
@@ -47,5 +69,47 @@ namespace Common
         {
             return GetTemplate(template).GetValue("preferred_postfix").ToString();
         }
+        #endregion
+
+        private static RegistryKey GetTools()
+        {
+            return GetRoot().CreateSubKey("Tools", true);
+        }
+        #region FilesManager
+        private static RegistryKey GetFilesManager()
+        {
+            return GetTools().CreateSubKey("FilesManager", true);
+        }
+        public static string[] GetSettingsOfFM()
+        {
+            return GetFilesManager().GetSubKeyNames();
+        }
+        public static void SaveSettingForFM(string name, FilesManagerSetting setting)
+        {
+            RegistryKey rk = GetFilesManager().CreateSubKey(name, true);
+            rk.SetValue("preffered_path", setting.preffered_path);
+            rk.SetValue("filter_start_cb", setting.filter_start_cb);
+            rk.SetValue("filter_start_tb", setting.filter_start_tb);
+            rk.SetValue("filter_end_cb", setting.filter_end_cb);
+
+            rk.SetValue("filter_ignore_extension_cb", setting.filter_ignore_extension_cb);
+            rk.SetValue("filter_end_tb", setting.filter_end_tb);
+            rk.SetValue("filter_contains_cb", setting.filter_contains_cb);
+            rk.SetValue("filter_contains_tb", setting.filter_contains_tb);
+
+            rk.SetValue("subfolders_cb", setting.subfolders_cb);
+            rk.Close();
+        }
+        public static FilesManagerSetting GetSettingByNameFM(string name)
+        {
+            FilesManagerSetting setting = new FilesManagerSetting();
+            return setting;
+        }
+        #endregion
+        private static RegistryKey GetDocumentsEditor()
+        {
+            return GetTools().CreateSubKey("DocumentsEditor", true);
+        }
     }
 }
+#pragma warning restore CA1416 // Проверка совместимости платформы

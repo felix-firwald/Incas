@@ -13,7 +13,9 @@
                 <ResourceDictionary Source="Themes/TextBox.xaml" />
                 <ResourceDictionary Source="Themes/ComboBox.xaml" />
                 <ResourceDictionary Source="Themes/CheckBox.xaml" />
+                <ResourceDictionary Source="Themes/GroupBox.xaml" />
                 <ResourceDictionary Source="Themes/Label.xaml" />
+                <ResourceDictionary Source="Themes/Scroll.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <Style x:Key="FocusVisual">
@@ -29,9 +31,27 @@
                 <Setter Property="BorderThickness" Value="0"/>
             </Style>
             <Style TargetType="{x:Type RepeatButton}">
-                <Setter Property="Visibility" Value="Collapsed"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="Transparent"/>
+                <Setter Property="Visibility" Value="Hidden"/>
+                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                <Setter Property="Focusable" Value="false"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RepeatButton}">
+                            <Border Name="Border" Margin="1" CornerRadius="2" Background="{StaticResource Dark}" BorderBrush="{StaticResource DarkLight}" BorderThickness="1">
+                                <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{StaticResource Dark}" Data="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsPressed" Value="true">
+                                    <Setter TargetName="Border" Property="Background" Value="{StaticResource Basic}" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{StaticResource Area}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
             <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
             <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
@@ -318,63 +338,10 @@
                 </ControlTemplate.Triggers>
             </ControlTemplate>
         
-            <Style x:Key="MainScrollBar" TargetType="{x:Type ScrollBar}">
-                <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="#43464d"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ScrollBar}">
-                            <Grid x:Name="GridRoot" Width="10" Background="{x:Null}">
-                                <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true" Focusable="False">
-                                    <Track.Thumb>
-                                        <Thumb x:Name="Thumb" Background="{TemplateBinding Foreground}" 
-                                                   Style="{DynamicResource ThumbMain}"/>
-                                    </Track.Thumb>
-                                    <Track.IncreaseRepeatButton>
-                                        <RepeatButton x:Name="PageUp" Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="False"/>
-                                    </Track.IncreaseRepeatButton>
-                                    <Track.DecreaseRepeatButton>
-                                        <RepeatButton x:Name="PageDown" Command="ScrollBar.PageUpCommand" Opacity="0" Focusable="False"/>
-                                    </Track.DecreaseRepeatButton>
-                                </Track>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="MainScroll" TargetType="{x:Type ScrollViewer}">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                            <Grid x:Name="Grid" Background="Transparent">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="10"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Rectangle x:Name="Corner" Grid.Column="1" Fill="Black" Grid.Row="1"/>
-                                <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" CanHorizontallyScroll="False" ContentTemplate="{TemplateBinding ContentTemplate}" CanVerticallyScroll="False" Grid.Column="0" Content="{TemplateBinding Content}" CanContentScroll="{TemplateBinding CanContentScroll}" Margin="{TemplateBinding Padding}" Grid.Row="0"/>
-                                <ScrollBar Style="{StaticResource MainScrollBar}" x:Name="PART_VerticalScrollBar" AutomationProperties.AutomationId="VerticalScrollBar" Cursor="Arrow" Grid.Column="1" Maximum="{TemplateBinding ScrollableHeight}" Minimum="0" Grid.Row="0" Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" ViewportSize="{TemplateBinding ViewportHeight}" Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
-                                <ScrollBar Style="{StaticResource MainScrollBar}" x:Name="PART_HorizontalScrollBar" AutomationProperties.AutomationId="HorizontalScrollBar" Cursor="Arrow" Grid.Column="0" Maximum="{TemplateBinding ScrollableWidth}" Minimum="0" Orientation="Horizontal" Grid.Row="1" Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" ViewportSize="{TemplateBinding ViewportWidth}" Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"/>
-                            </Grid>
-                        
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsEnabled" Value="false">
-                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
+            
             <Style x:Key="IconButton" TargetType="{x:Type fa:FontAwesome}">
                 <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="FontSize" Value="18"/>
                 <Setter Property="Foreground" Value="{StaticResource Icon}"/>
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
