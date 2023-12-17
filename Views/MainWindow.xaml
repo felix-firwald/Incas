@@ -8,13 +8,13 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" xmlns:fa="http://schemas.fontawesome.io/icons/" x:Name="window" x:Class="Incubator_2.MainWindow"
         mc:Ignorable="d" Height="900" Width="1300" 
     
-        Background="{StaticResource Basic}" WindowState="Maximized" Topmost="True" Title="{Binding IncubatorName}" Icon="/Views/Logo.png" Closed="OnClosed">
+        Style="{DynamicResource WindowBase}" WindowState="Maximized" Topmost="True" Title="{Binding IncubatorName}" Icon="/Views/Logo.png" Closed="OnClosed">
 
     <Window.DataContext>
         <vm:MV_MainWindow/>
     </Window.DataContext>
 
-    <Grid>
+    <Grid Background="{DynamicResource Basic}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="60"/>
@@ -55,7 +55,9 @@
             <RadioButton Style="{DynamicResource MenuButton}" Content="Настройки"/>
         </StackPanel>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Height="200" Margin="0,0,0,0" VerticalAlignment="Center" Width="5" ResizeDirection="Columns" Background="#32353c"/>
-        <Forms:UC_Templator Grid.Column="1" Margin="10,0,0,0"/>
+        <Border Margin="8" Grid.Column="1">
+            <Forms:UC_Templator />
+        </Border>
         <StackPanel MinHeight="60" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Background="{StaticResource LightBlack}">
             <Label Content="f" Foreground="{DynamicResource Icon}" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Harlow Solid Italic" FontSize="14" MinWidth="64" FontStyle="Italic"/>
             

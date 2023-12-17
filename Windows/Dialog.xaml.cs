@@ -14,50 +14,21 @@ using System.Windows.Shapes;
 
 namespace Incubator_2.Windows
 {
-    public enum DialogType
-    {
-        Error,
-        Warning,
-        Information,
-        Question
-    } 
     /// <summary>
     /// Логика взаимодействия для Error.xaml
     /// </summary>
     public partial class Dialog : Window
     {
-        private DialogType typeDialog;
-        private Dictionary<DialogType, string> icons = new Dictionary<DialogType, string> {
-            { DialogType.Error, "ExclamationCircle" },
-            { DialogType.Warning, "ExclamationTriangle" },
-            { DialogType.Information, "InfoCircle" },
-            { DialogType.Question, "QuestionCircle" }
-        };
-        public Dialog(string text, string title="Неизвестная ошибка", DialogType dialog=DialogType.Error)
+        public Dialog(string text, string title="Неизвестная ошибка")
         {
             InitializeComponent();
             this.Title.Content = title;
             this.Description.Text = text;
-            this.typeDialog = dialog;
-            switch (dialog)
-            {
-                case DialogType.Warning:
-                    SetAsWarning();
-                    break;
-                case DialogType.Information:
-                    SetAsInformation();
-                    break;
-                default:
-                    break;
-            }
         }
-        private void SetAsWarning()
-        {
-            
-        }
-        private void SetAsInformation()
-        {
 
+        private void Yes_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

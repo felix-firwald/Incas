@@ -1,8 +1,11 @@
-﻿using Models;
+﻿using Incubator_2.Properties;
+using Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 
 using System.Data.SQLite;
+using System.Windows;
 using System.Windows.Markup;
 
 namespace Common
@@ -29,60 +32,10 @@ namespace Common
 
         public static bool CreateTables(string path)
         {
-            SQLiteConnection.CreateFile(path);
-            using (Models.Incubator i = new Models.Incubator())
-            {
-                i.CreateDefinition();
-                i.InitializeIncubator();
-            }
-            using (Post p = new Post())
-            {
-                p.CreateDefinition();
-                p.name = "Администратор инкубатора";
-                p.permission = PermissionGroup.Admin;
-                p.rights = "ALL";
-            }
-            using (User s = new User())
-            {
-                s.CreateDefinition();
-                s.username = "admin";
-                s.password = "1234";
-                s.post = "Администратор инкубатора";
-                s.status = PermissionGroup.Admin;
-                s.AddUser();
-            }
-            using (Computer s = new Computer())
-            {
-                s.CreateDefinition();
-            }
-            using (Session s = new Session())
-            {
-                s.CreateDefinition();
-            }
-            using (Task s = new Task())
-            {
-                s.CreateDefinition();
-            }
-            using (Subtask s = new Subtask())
-            {
-                s.CreateDefinition();
-            }
-            using (Enumeration s = new Enumeration())
-            {
-                s.CreateDefinition();
-            }
-            using (Template s = new Template())
-            {
-                s.CreateDefinition();
-            }
-            using (Tag s = new Tag())
-            {
-                s.CreateDefinition();
-            }
-            using (Constant s = new Constant())
-            {
-                s.CreateDefinition();
-            }
+            //SQLiteConnection.CreateFile(path);
+            //new Field(Field, )
+            //new Query("").CreateTable()
+            
             return true;
         }
 

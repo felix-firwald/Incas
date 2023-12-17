@@ -15,9 +15,9 @@
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick"/>
-        <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center" HorizontalAlignment="Left"></Label>
+        <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center"/>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="2" Icon="Pencil" FontSize="18" Margin="12,14,12,14" Cursor="Hand"/>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="MinusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="MinusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand" MouseDown="RemoveClick"/>
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>

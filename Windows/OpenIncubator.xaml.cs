@@ -22,23 +22,20 @@ namespace Incubator_2.Windows
         private void LogInClicked(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(this.cpath.Text) || string.IsNullOrEmpty(this.pwd.Text)) {
-                System.Windows.Forms.MessageBox.Show("Одно из полей пустое!", "Ошибка");
+                Dialog d = new Dialog("Одно из обязательных полей не заполнено!", "Вход невозможен");
+                d.ShowDialog();
             }
             else
             {
                 ProgramState.SetCommonPath(this.cpath.Text);
                 ProgramState.GetInitFile();
                 ProgramState.SaveUserData();
-                DialogResult = true;
+                
                 if (Directory.Exists(this.cpath.Text))
                 {
                     CheckPassword();
                 }
-                MV_MainWindow context = new MV_MainWindow();
-                context.LoadInfo();
-                MainWindow mw = new MainWindow();
-                mw.Show();
-                //this.Hide();
+
             }
             
         }
@@ -51,11 +48,13 @@ namespace Incubator_2.Windows
                 {
                     ProgramState.User = user.username;
                     Permission.CurrentUserPermission = user.status;
+                    DialogResult = true;
                     this.Close();
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show("Пароль введен неверно.", "Неправильный пароль");
+                    Dialog d = new Dialog("Пароль введен неверно (пользователь с таким паролем не найден в рабочем пространстве).", "Вход невозможен");
+                    d.ShowDialog();
                     this.pwd.Text = "";
                 }
             }

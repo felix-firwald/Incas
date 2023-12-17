@@ -15,33 +15,35 @@ namespace Incubator_2
             base.OnStartup(e);
             try
             {
-                FilesManager fm = new FilesManager();
-                fm.ShowDialog();
+                //if (TestFunc())
+                //{
+
+                //}
+                
                 OpenIncubator oi = new OpenIncubator();
                 
                 if (oi.ShowDialog() == false)
                 {
                     //Current.Shutdown();
                 }
-                //MV_MainWindow context = new MV_MainWindow();
-                //context.LoadInfo();
                 
-                MainWindow mw = new MainWindow();
-                this.MainWindow = mw;
-
-                //mw.LoadBio();
+                //MainWindow mw = new MainWindow();
+                //this.MainWindow = mw;
             }
             catch (Exception ex)
             {
-                //System.Windows.Forms.MessageBox
-                //    .Show($"В инкубаторе возникли неполадки:\n\n{ex.Message}\n\nПрограмма будет закрыта.",
-                //        "Критическая ошибка",
-                //        MessageBoxButtons.OK,
-                //        MessageBoxIcon.Error);
+                Dialog d = new Dialog($"{ex.Message}\nПрограмма будет немедленно закрыта.", "Возникла критическая ошибка");
+                d.ShowDialog();
+                App.Current.Shutdown();
             }
-            
-            //this.MainWindow.Show();
 
+        }
+
+        private bool TestFunc()
+        {
+            DialogQuestion test = new DialogQuestion("Инкубатор не найден по указанному пути", "Создать новое рабочее пространство?", "Создать", "Закрыть программу");
+            test.ShowDialog();
+            return true;
         }
     }
 }

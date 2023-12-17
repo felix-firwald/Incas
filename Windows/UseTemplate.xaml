@@ -5,13 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
         mc:Ignorable="d"
-        Title="Создать документы по шаблону" Height="450" Width="800" Background="{x:Null}" MinWidth="500" MinHeight="450" Topmost="True" Uid="8">
-    <Window.Style>
-        <Style>
+        Title="Создать документы по шаблону" Height="450" Width="800" Style="{DynamicResource WindowBase}" MinWidth="500" MinHeight="450" Topmost="True" Uid="8">
 
-        </Style>
-    </Window.Style>
-    <Border Background="#FF2F3239">
+    <Border>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50*"/>
@@ -36,14 +32,17 @@
             <ComboBox Style="{DynamicResource ComboBoxMain}" Grid.Row="2" Grid.Column="2" Margin="5,5,5,5" >
                 <ComboBoxItem IsSelected="True" Content="Основной"/>
             </ComboBox>
-            <DataGrid 
+            <DataGrid Style="{DynamicResource DataGridMain}" 
                 Grid.Row="3"
-                x:Name="DGV" Grid.ColumnSpan="3">
+                x:Name="DGV" Grid.ColumnSpan="3" SelectionMode="Single">
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Header="Имя файла"
                         MinWidth="100">
-
+                    </DataGridTextColumn>
+                    <DataGridTextColumn
+                        Header="Профиль"
+                        MinWidth="100">
                     </DataGridTextColumn>
                 </DataGrid.Columns>
 

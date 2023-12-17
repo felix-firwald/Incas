@@ -4,15 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
-        mc:Ignorable="d"
-        Title="Выбор инкубатора" Height="350" Width="450" MinHeight="350" MinWidth="400" MaxHeight="250" MaxWidth="450" WindowStartupLocation="CenterScreen" WindowState="Minimized" Background="#2F3239" Icon="/Windows/Logo.png" Topmost="True" ResizeMode="NoResize">
+        mc:Ignorable="d" Style="{DynamicResource Dialog}"
+        Title="Выбор рабочего пространства" Height="350" Width="450" MinHeight="350" MinWidth="400" MaxHeight="250" MaxWidth="450" WindowStartupLocation="CenterScreen" WindowState="Minimized" Icon="/Windows/Logo.png">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="107*"/>
+            <RowDefinition Height="100*"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="57*"/>
-            <RowDefinition Height="50*"/>
+            <RowDefinition Height="60*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -21,12 +20,11 @@
         </Grid.ColumnDefinitions>
         <fa:FontAwesome Icon="User" FontSize="48" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource Element}" Margin="208,0,0,0" />
         <Button Style="{StaticResource ButtonMain}" Content=". . ." Grid.Row="1" Grid.Column="1"  VerticalAlignment="Center" Click="PathReview" Height="30" Margin="5,0,5,0"/>
-        <TextBox x:Name="cpath" Style="{StaticResource TextBoxMain}" Grid.Row="1" Grid.ColumnSpan="1" Tag="Путь к инкубатору" HorizontalContentAlignment="Left" Margin="5,5,5,5" />
+        <TextBox x:Name="cpath" Style="{StaticResource TextBoxMain}" Grid.Row="1" Grid.ColumnSpan="1" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" />
         <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Grid.Row="2" Grid.ColumnSpan="2" Tag="Пароль для входа" MaxLength="5" MaxLines="1" Margin="5,5,5,5" />
-        <TextBox Grid.Row="3" Grid.ColumnSpan="2" Text="Для продолжения необходимо указать путь к папке, где лежит база данных инкубатора и файл с расширением .INIT, а также ввести пароль для пользователя, под которым вы хотите авторизироваться" IsManipulationEnabled="True" TextWrapping="WrapWithOverflow" IsReadOnly="True" Background="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="{DynamicResource DarkLight}" BorderBrush="{x:Null}" IsEnabled="False" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <TextBox Grid.Row="4" Grid.ColumnSpan="2" Text="Если в выбраной папке не будет найден файл INIT, будет создан новый инкубатор" IsManipulationEnabled="True" TextWrapping="WrapWithOverflow" IsReadOnly="True" Background="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="{DynamicResource DarkLight}" BorderBrush="{x:Null}" IsEnabled="False" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
-
-        <Button Style="{StaticResource ButtonMain}" Grid.Row="5" Grid.ColumnSpan="2" Content="Войти в инкубатор"  VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0"/>
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Для продолжения необходимо указать путь к папке рабочего пространства, где лежит база данных и файл с расширением .INIT, а также ввести пароль для пользователя, под которым вы хотите авторизироваться" IsManipulationEnabled="True" TextWrapping="WrapWithOverflow" Background="{x:Null}" Foreground="{DynamicResource DarkLight}" IsEnabled="False" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        
+        <Button Style="{StaticResource ButtonMain}" Grid.Row="5" Grid.ColumnSpan="2" Content="Войти в рабочее пространство"  VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0"/>
 
 
     </Grid>

@@ -1,4 +1,6 @@
-﻿using Models;
+﻿using Forms;
+using Incubator_2.Forms.OneInstance;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,18 +27,51 @@ namespace Incubator_2.Forms
         {
             InitializeComponent();
             LoadCategories();
+            LoadTemplatesByCategory("");
         }
         private void LoadCategories()
         {
             Template mt = new Template();
             mt.GetCategories().ForEach(c =>
             {
-                Console.WriteLine(c);
-                RadioButton rb = new RadioButton();
-                rb.Style = FindResource("CategoryButton") as Style;
-                rb.Content = c;
-                this.Categories.Children.Add(rb);
+                if (!string.IsNullOrEmpty(c))
+                {
+                    RadioButton rb = new RadioButton();
+                    rb.Style = FindResource("CategoryButton") as Style;
+                    rb.Content = c;
+                    rb.Click += new RoutedEventHandler(this.SelectCategory);
+                    this.Categories.Children.Add(rb);
+                }
+                
             });
+        }
+        private void LoadTemplatesByCategory(string category)
+        {
+            this.TemplatesArea.Children.Clear();
+            Template mt = new Template();
+            mt.GetWordTemplates(category).ForEach(c =>
+            {
+                this.TemplatesArea.Children.Add(new UC_TemplateElement(c));
+            });
+            if (this.TemplatesArea.Children.Count == 0)
+            {
+                this.TemplatesArea.Children.Add(new NoContent());
+            }
+        }
+
+        private void SelectCategory(object sender, RoutedEventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            string text = rb.Content.ToString();
+            if (text != "Без категории")
+            {
+                LoadTemplatesByCategory(text);
+            }
+            else
+            {
+                LoadTemplatesByCategory("");
+            }
+            
         }
     }
 }

@@ -4,6 +4,8 @@ using System;
 using System.IO;
 using System.Linq;
 using Incubator_2.Windows;
+using Incubator_2;
+using System.Windows;
 
 
 namespace Common
@@ -26,6 +28,7 @@ namespace Common
         public static string CommonPath { get; private set; }
         public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incubator";
         public static string DatabasePath { get; private set; }
+        public static string CustomDatabasePath { get; private set; }
         public static string ProceduralPath { get; private set; }
 
         #region Templates
@@ -42,7 +45,8 @@ namespace Common
         public static void SetCommonPath(string path)
         {
             CommonPath = path;
-            DatabasePath = path + @"\data.db";
+            DatabasePath = path + @"\data.dbinc";
+            CustomDatabasePath = path + @"\custom.dbinc";
             TemplatesPath = path + @"\Templates";
             ProceduralPath = path + @"\procedural";
             Directory.CreateDirectory(TemplatesPath);
@@ -67,15 +71,18 @@ namespace Common
             string fileFullName = getInitFilePath();
             if (!File.Exists(fileFullName))
             {
-                new Dialog("По указанному пути инкубатор не обнаружен.\nБудет создан новый инкубатор.", "Инкубатор не найден");
-
-                Initialize();
-
-                //else
-                //{
-                //    Application.Restart();
-                //}
-                
+                DialogQuestion q = new DialogQuestion("По указанному пути рабочее пространство не обнаружено.\n" +
+                "Проверьте правильность введенного пути или создайте новое рабочее пространство " +
+                "(будет открыт конструктор нового рабочего пространства)", "Рабочее пространство не обнаружено", "Создать новое", "Не создавать");
+                q.ShowDialog();
+                if (q.status == DialogStatus.Yes)
+                {
+                    Initialize();
+                }
+                else
+                {
+                    Application.Current.Run();
+                }
             }
             return File.ReadAllText(fileFullName);
         }

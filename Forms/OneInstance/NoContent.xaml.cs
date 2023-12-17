@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,25 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Incubator_2.Windows
+namespace Incubator_2.Forms.OneInstance
 {
     /// <summary>
-    /// Логика взаимодействия для UseTemplate.xaml
+    /// Логика взаимодействия для NoContent.xaml
     /// </summary>
-    public partial class UseTemplate : Window
+    public partial class NoContent : UserControl
     {
-        public UseTemplate()
+        public NoContent()
         {
             InitializeComponent();
-            //DataTable dataTable = new DataTable();
-            //dataTable.Columns.Add();
-        }
-
-        private void CreateFileClick(object sender, RoutedEventArgs e)
-        {
-            
         }
     }
 }

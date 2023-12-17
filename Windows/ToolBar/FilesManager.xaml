@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Incubator_2.Windows.ToolBar" xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:Forms="clr-namespace:Incubator_2.Forms" x:Class="Incubator_2.Windows.ToolBar.FilesManager"
         mc:Ignorable="d"
-        Title="Управление файлами" Height="750" Width="800" Background="{DynamicResource Basic}" MinHeight="450" MinWidth="600">
+        Title="Управление файлами" Height="750" Width="800" Style="{DynamicResource WindowBase}" MinHeight="450" MinWidth="600">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40*"/>
@@ -16,7 +16,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
 
-            <RowDefinition Height="480"/>
+            <RowDefinition Height="135*"/>
             <RowDefinition Height="135*"/>
         </Grid.RowDefinitions>
 
@@ -24,9 +24,9 @@
         <TextBox x:Name="Directory" Style="{DynamicResource TextBoxMain}" TextWrapping="Wrap" Tag="Путь к каталогу где нужно провести действия по условию" Margin="5,5,5,5" Grid.ColumnSpan="2" HorizontalContentAlignment="Left"/>
         <Button Style="{DynamicResource ButtonMain}" Grid.Column="2" Content="Обзор" VerticalAlignment="Center" Margin="5,0,5,0"/>
         <Button Style="{DynamicResource ButtonMain}" Grid.Column="2" Content="Применить" Grid.Row="2" VerticalAlignment="Bottom" Margin="5,100,5,5"/>
-        <Border Grid.Row="1" Margin="5,5,5,5" Background="{DynamicResource Area}" CornerRadius="5,5,5,5" Grid.RowSpan="1">
+        <GroupBox Style="{DynamicResource MainGroupBox}" Grid.Row="1" Margin="5,5,5,5" Background="{DynamicResource Area}" Grid.RowSpan="1" Header="Условия">
+            <ScrollViewer>
             <StackPanel>
-                <Label Style="{DynamicResource LabelPrimary}" Content="Условия" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <CheckBox x:Name="FilesStartWithCheck" Style="{DynamicResource CheckBoxMain}" Content="Все файлы, начинающиеся со значения" IsChecked="False"/>
                 <TextBox x:Name="StartsWithValue" Style="{DynamicResource TextBoxMain}" Tag="С какого значения должны начинаться файлы" IsEnabled="{Binding IsChecked, ElementName=FilesStartWithCheck}"/>
                 <Rectangle Height="2" Fill="{DynamicResource Element}"/>
@@ -42,10 +42,10 @@
                 <CheckBox x:Name="SubdirCheck" Style="{DynamicResource CheckBoxMain}" Content="Учитывать файлы в подпапках" IsChecked="False"/>
                 <Button Style="{DynamicResource ButtonMain}" Content="Сформировать выборку файлов" Click="Selection_Click"/>
             </StackPanel>
-        </Border>
-        <Border BorderThickness="1" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" Background="{DynamicResource Area}" CornerRadius="5,5,5,5" Grid.RowSpan="2">
+            </ScrollViewer>
+        </GroupBox>
+        <GroupBox Style="{DynamicResource MainGroupBox}" BorderThickness="1" Grid.Column="1" Grid.Row="1" Margin="5,5,5,5" Grid.RowSpan="2" Header="Действия">
             <StackPanel>
-                <Label Style="{DynamicResource LabelPrimary}" Content="Действия" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <CheckBox Style="{DynamicResource CheckBoxMain}" Content="Заменить в названиях файлов значения по шаблону" IsChecked="True"/>
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" HorizontalAlignment="Left" Margin="10,0,0,0" MouseDown="AddChangeValuePairs" Text="&#xF055;"/>
                 <ScrollViewer Style="{DynamicResource MainScrollViewer}" MinHeight="80" MaxHeight="80">
@@ -55,24 +55,17 @@
                     </StackPanel>
                 </ScrollViewer>
                 <Rectangle Height="2" Fill="{DynamicResource Element}"/>
-                <CheckBox Style="{DynamicResource CheckBoxMain}" IsChecked="True">
+                <CheckBox Style="{DynamicResource CheckBoxMain}" IsChecked="True" Content="Удалить файлы"/>
 
-                </CheckBox>
+
                 <TextBox Style="{DynamicResource TextBoxMain}" Tag="Значение перед исходным названием"/>
 
             </StackPanel>
-        </Border>
-        <Border BorderThickness="1" Margin="5,5,5,5" Background="{DynamicResource Area}" CornerRadius="5,5,5,5" Grid.Row="3">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Label Grid.Row="0" Style="{DynamicResource LabelPrimary}" Content="Выборка" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <ScrollViewer Margin="5,5,5,5" Grid.Row="1" Style="{DynamicResource MainScrollViewer}" >
-                    <ListView x:Name="ListSelection" Background="{DynamicResource Area}" BorderBrush="{x:Null}" Foreground="{DynamicResource GrayLight}" />
-                </ScrollViewer>
-            </Grid>
-        </Border>
+        </GroupBox>
+        <GroupBox Style="{DynamicResource MainGroupBox}" Header="Выборка" BorderThickness="1" Margin="5,5,5,5" Background="{DynamicResource Area}" Grid.Row="3">
+            <ScrollViewer Margin="5,5,5,5" Grid.Row="1" Style="{DynamicResource MainScrollViewer}" >
+                <ListView x:Name="ListSelection" Background="{DynamicResource Area}" BorderBrush="{x:Null}" Foreground="{DynamicResource GrayLight}" />
+            </ScrollViewer>
+        </GroupBox>
     </Grid>
 </Window>

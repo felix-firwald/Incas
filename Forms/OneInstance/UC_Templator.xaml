@@ -34,12 +34,9 @@
                 </fa:FontAwesome.Foreground>
             </fa:FontAwesome>
         </Grid>
-        <Border BorderThickness="0" CornerRadius="8" Grid.Row="1" Grid.Column="0"  Background="#393c43" Grid.ColumnSpan="1" Margin="10,10,10,10" MinWidth="100">
-            <Forms:UC_ListOfDocuments Margin="10,10,10,10"/>
-        </Border>
-        <Border BorderThickness="0" CornerRadius="8" Grid.Row="1" Grid.Column="1"  Background="#393c43" Grid.ColumnSpan="1" Margin="10,10,10,10" MinWidth="100">
-            <Forms:UC_ListOfDocuments Margin="10,10,10,10"/>
-        </Border>
+        <Forms:UC_ListOfDocuments Grid.Row="1"/>
+        <Forms:UC_ListOfDocuments Grid.Row="1" Grid.Column="1"/>
+        
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,0" Grid.Row="1" Width="5" Background="#32353c" Height="200" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

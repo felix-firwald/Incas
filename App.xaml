@@ -8,6 +8,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/Colors.xaml" />
+                <ResourceDictionary Source="Themes/Window.xaml" />
                 <ResourceDictionary Source="Themes/RadioButton.xaml" />
                 <ResourceDictionary Source="Themes/Button.xaml" />
                 <ResourceDictionary Source="Themes/TextBox.xaml" />
@@ -16,6 +17,7 @@
                 <ResourceDictionary Source="Themes/GroupBox.xaml" />
                 <ResourceDictionary Source="Themes/Label.xaml" />
                 <ResourceDictionary Source="Themes/Scroll.xaml" />
+                <ResourceDictionary Source="Themes/DataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <Style x:Key="FocusVisual">
@@ -53,17 +55,6 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
-            <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
-            <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
-            
-            <SolidColorBrush x:Key="Menu.Static.Background" Color="#FFF0F0F0"/>
-            <SolidColorBrush x:Key="Menu.Static.Border" Color="#FF999999"/>
-            <SolidColorBrush x:Key="Menu.Static.Foreground" Color="#FF212121"/>
-            <SolidColorBrush x:Key="Menu.Static.Separator" Color="#FFD7D7D7"/>
-            <SolidColorBrush x:Key="Menu.Disabled.Foreground" Color="#FF707070"/>
-            <SolidColorBrush x:Key="MenuItem.Selected.Background" Color="#3D26A0DA"/>
-            <SolidColorBrush x:Key="MenuItem.Selected.Border" Color="#FF26A0DA"/>
             <Style x:Key="FocusVisual2">
                 <Setter Property="Control.Template">
                     <Setter.Value>
@@ -366,7 +357,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            
+
             <Style x:Key="FocusVisual1">
                 <Setter Property="Control.Template">
                     <Setter.Value>
@@ -376,8 +367,6 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <SolidColorBrush x:Key="Button.Static.Background1" Color="#FFDDDDDD"/>
-            <SolidColorBrush x:Key="Button.Static.Border1" Color="#FF707070"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

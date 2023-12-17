@@ -30,7 +30,7 @@ namespace Models
                 "type STRING NOT NULL,\n" +
                 "hidden BOOLEAN NOT NULL DEFAULT (False)";
         }
-        private List<string> GetAllTemplatesBy(TemplateType tt, string cat)
+        private List<Template> GetAllTemplatesBy(TemplateType tt, string cat)
         {
             DataTable dt = StartCommand()
                 .Select()
@@ -39,13 +39,13 @@ namespace Models
                 .WhereNotEqual("hidden", "True")
                 .OrderByASC("name")
                 .Execute();
-            List<string> resulting = new List<string>();
+            List<Template> resulting = new List<Template>();
             foreach (DataRow dr in dt.Rows)
             {
                 Template mt = new Template();
                 mt.Serialize(dr);
-                //mt.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
-                resulting.Add(mt.name);
+                mt.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
+                resulting.Add(mt);
             }
             return resulting;
         }
@@ -79,11 +79,11 @@ namespace Models
             this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dt["type"].ToString());
             return this;
         }
-        public List<string> GetWordTemplates(string category)
+        public List<Template> GetWordTemplates(string category)
         {
             return GetAllTemplatesBy(TemplateType.Word, category);
         }
-        public List<string> GetExcelTemplates()
+        public List<Template> GetExcelTemplates()
         {
             return GetAllTemplatesBy(TemplateType.Excel, "");
         }
