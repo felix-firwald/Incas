@@ -178,60 +178,74 @@ namespace Common
         {
             return DatabaseManager.CreateTables(DatabasePath);
         }
-        public static Parameter GetParameter(ParameterType type, string name)
+        public static Parameter GetParameter(ParameterType type, string name, string defaultValue="0", bool createIfNot = true)
         {
             Parameter par = new Parameter();
-            par.GetParameter(type, name);
+            par.GetParameter(type, name, defaultValue, createIfNot);
             return par;
         }
 
         #region Incubator
         public static void InitWorkspace(string workspaceName)
         {
-            Parameter par = new Parameter();
-            par.type = ParameterType.INCUBATOR;
-            par.name = "ws_name";
-            par.value = workspaceName;
-            par.CreateParameter();
-            par.name = "ws_opened";
-            par.WriteBoolValue(true);
-            par.CreateParameter();
-            par.name = "ws_locked";
-            par.WriteBoolValue(false);
-            par.CreateParameter();
+            using (Parameter par = new Parameter())
+            {
+                par.type = ParameterType.INCUBATOR;
+                par.name = "ws_name";
+                par.value = workspaceName;
+                par.CreateParameter();
+                par.name = "ws_opened";
+                par.WriteBoolValue(true);
+                par.CreateParameter();
+                par.name = "ws_locked";
+                par.WriteBoolValue(false);
+                par.CreateParameter();
+            }  
         }
         public static string GetWorkspaceName()
         {
-            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name");
-            return par.value;
+            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name", "Рабочая область"))
+            {
+                return par.value;
+            }
         }
         public static void SetWorkspaceName(string name)
         {
-            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name");
-            par.value = name;
-            par.UpdateValue();
+            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name", "Рабочая область"))
+            {
+                par.value = name;
+                par.UpdateValue();
+            }
         }
         public static void SetWorkspaceOpened(bool opened)
         {
-            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened");
-            par.WriteBoolValue(opened);
-            par.UpdateValue();
+            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1"))
+            {
+                par.WriteBoolValue(opened);
+                par.UpdateValue();
+            }
         }
         public static bool IsWorkspaceOpened()
         {
-            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened");
-            return par.GetValueAsBool();
+            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1"))
+            {
+                return par.GetValueAsBool();
+            }
         }
         public static void SetWorkspaceLocked(bool locked)
         {
-            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked");
-            par.WriteBoolValue(locked);
-            par.UpdateValue();
+            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked"))
+            {
+                par.WriteBoolValue(locked);
+                par.UpdateValue();
+            } 
         }
         public static bool IsWorkspaceLocked()
         {
-            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked");
-            return par.GetValueAsBool();
+            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked"))
+            {
+                return par.GetValueAsBool();
+            }
         }
         
         public static bool CheckWorkspaceOpened()

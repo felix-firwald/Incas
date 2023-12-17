@@ -1,0 +1,25 @@
+﻿<Window x:Class="Incubator_2.Windows.AdminPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Title="Панель администратора" Style="{DynamicResource WindowBase}" Height="650" Width="900">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="100*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <fa:FontAwesome Icon="UserCircle" MinHeight="50" FontSize="36" VerticalAlignment="Center" Margin="0,10,0,0"/>
+            <Label Style="{DynamicResource LabelIncubator}" Content="Панель администратора" Foreground="{DynamicResource Light}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+            <Rectangle Height="4" Fill="{DynamicResource Element}" />
+            <RadioButton Style="{DynamicResource MenuButton}" Content="Рабочее пространство" IsChecked="True"/>
+            <RadioButton Style="{DynamicResource MenuButton}" Content="Пользователи"/>
+            <RadioButton Style="{DynamicResource MenuButton}" Content="Сессии"/>
+            <RadioButton Style="{DynamicResource MenuButton}" Content="Шаблоны и теги"/>
+            <RadioButton Style="{DynamicResource MenuButton}" Content="Управление базой данных"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO.Compression;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Incubator_2.Models
@@ -11,6 +12,11 @@ namespace Incubator_2.Models
         INCUBATOR,
         DATABASE,
         MISC
+    }
+    public class DBParamNotFound : Exception
+    {
+        public DBParamNotFound(string message) : base(message)
+        { }
     }
     class Parameter : Model
     {
@@ -24,15 +30,26 @@ namespace Incubator_2.Models
             tableName = "Parameters";
             type = ParameterType.MISC;
         }
-        public Parameter GetParameter(ParameterType type, string name)
+        public Parameter GetParameter(ParameterType typeOf, string nameOf, string defaultValue = "0", bool createIfNotExists=true)
         {
-            DataRow dr = GetOne(
-                    StartCommand()
+            DataTable dt = StartCommand()
                         .Select()
-                        .WhereEqual("type", type.ToString())
-                        .WhereEqual("name", name)
-                        .Execute()
-                );
+                        .WhereEqual("type", typeOf.ToString())
+                        .WhereEqual("name", nameOf)
+                        .OrderByASC("id")
+                        .Execute();
+            if (dt.Rows.Count < 1)
+            {
+                this.type = typeOf;
+                this.name = nameOf;
+                this.value = defaultValue;
+                if (createIfNotExists)
+                {
+                    this.CreateParameter();
+                }
+                return this;
+            }
+            DataRow dr = GetOne(dt);
             this.Serialize(dr);
             this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
             return this;

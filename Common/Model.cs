@@ -166,7 +166,7 @@ namespace Common
             {
                 try
                 {
-                    Console.WriteLine($"[{this.GetType()}] {property.Name} = {dr[property.Name]}, ТИП: {property.PropertyType}");
+                    //Console.WriteLine($"[{this.GetType()}] {property.Name} = {dr[property.Name]}, ТИП: {property.PropertyType}");
                     property.SetValue(this, Convert.ChangeType(dr[property.Name], property.PropertyType)); // берет из datarow по названию переменной столбец и устанавливает значение к свойству
                 }
                 catch (Exception ex)
