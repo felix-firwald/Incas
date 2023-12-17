@@ -6,6 +6,7 @@ using System.Linq;
 using Incubator_2.Windows;
 using Incubator_2;
 using System.Windows;
+using Incubator_2.Models;
 
 
 namespace Common
@@ -177,52 +178,67 @@ namespace Common
         {
             return DatabaseManager.CreateTables(DatabasePath);
         }
+        public static Parameter GetParameter(ParameterType type, string name)
+        {
+            Parameter par = new Parameter();
+            par.GetParameter(type, name);
+            return par;
+        }
 
         #region Incubator
-        public static Models.Incubator GetIncubatorInfo()
+        public static void InitWorkspace(string workspaceName)
         {
-            using (Models.Incubator mi = new Models.Incubator())
+            Parameter par = new Parameter();
+            par.type = ParameterType.INCUBATOR;
+            par.name = "ws_name";
+            par.value = workspaceName;
+            par.CreateParameter();
+            par.name = "ws_opened";
+            par.WriteBoolValue(true);
+            par.CreateParameter();
+            par.name = "ws_locked";
+            par.WriteBoolValue(false);
+            par.CreateParameter();
+        }
+        public static string GetWorkspaceName()
+        {
+            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name");
+            return par.value;
+        }
+        public static void SetWorkspaceName(string name)
+        {
+            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name");
+            par.value = name;
+            par.UpdateValue();
+        }
+        public static void SetWorkspaceOpened(bool opened)
+        {
+            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened");
+            par.WriteBoolValue(opened);
+            par.UpdateValue();
+        }
+        public static bool IsWorkspaceOpened()
+        {
+            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened");
+            return par.GetValueAsBool();
+        }
+        public static void SetWorkspaceLocked(bool locked)
+        {
+            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked");
+            par.WriteBoolValue(locked);
+            par.UpdateValue();
+        }
+        public static bool IsWorkspaceLocked()
+        {
+            Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked");
+            return par.GetValueAsBool();
+        }
+        
+        public static bool CheckWorkspaceOpened()
+        {
+            if (!ProgramState.IsWorkspaceOpened())
             {
-                return mi.GetIncubator();
-            }
-        }
-        public static void SetIncubatorOpened(bool opened)
-        {
-            Models.Incubator mi = GetIncubatorInfo();
-            mi.opened = opened;
-            mi.UpdateIncubator();
-        }
-        public static bool IsIncubatorOpened()
-        {
-            return GetIncubatorInfo().opened;
-        }
-        public static void SetIncubatorLocked(bool locked)
-        {
-            Models.Incubator mi = GetIncubatorInfo();
-            mi.locked = locked;
-            mi.UpdateIncubator();
-        }
-        public static bool IsIncubatorLocked()
-        {
-            return GetIncubatorInfo().locked;
-        }
-        public static void RenameIncubator(string newName)
-        {
-            Models.Incubator mi = GetIncubatorInfo();
-            mi.name = newName;
-            mi.UpdateIncubator();
-        }
-        public static void SetRepositoryEnabled(bool enabled)
-        {
-            Models.Incubator mi = GetIncubatorInfo();
-            mi.repositoryEnabled = enabled;
-            mi.UpdateIncubator();
-        }
-        public static bool CheckIncubatorOpened()
-        {
-            if (!ProgramState.IsIncubatorOpened())
-            {
-                new Dialog("Действия по добавлению, изменению или удалению информации из базы данных недоступны, пока инкубатор находится в статусе \"Закрыт\"", "Инкубатор закрыт");
+                new Dialog("Действия по добавлению, изменению или удалению информации из базы данных недоступны, пока рабочая область находится в статусе \"Закрыта\"", "Рабочая область закрыта");
                 return false;
             }
             return true;
@@ -230,7 +246,7 @@ namespace Common
         #endregion
         public static void CheckLocked()
         {
-            if (IsIncubatorLocked() && Permission.CurrentUserPermission != PermissionGroup.Admin)
+            if (IsWorkspaceLocked() && Permission.CurrentUserPermission != PermissionGroup.Admin)
             {
                 throw new LockedException();
             }

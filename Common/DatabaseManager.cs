@@ -1,4 +1,5 @@
-﻿using Incubator_2.Properties;
+﻿using Incubator_2.Models;
+using Incubator_2.Properties;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -32,12 +33,13 @@ namespace Common
 
         public static bool CreateTables(string path)
         {
-            //SQLiteConnection.CreateFile(path);
+            SQLiteConnection.CreateFile(path);
             //new Field(Field, )
             //new Query("").CreateTable()
             
             return true;
         }
+        
 
         private static string[] GetIncubatorDefinition()
         {

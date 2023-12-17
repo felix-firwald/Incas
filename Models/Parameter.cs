@@ -37,6 +37,29 @@ namespace Incubator_2.Models
             this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
             return this;
         }
+        public bool GetValueAsBool()
+        {
+            if (string.IsNullOrEmpty(this.value) || this.value == "0")
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        public Parameter WriteBoolValue(bool b)
+        {
+            if (b) 
+            {
+                this.value = "1";
+            }
+            else
+            {
+                this.value = "0";
+            }
+            return this;
+        }
         public Parameter CreateParameter()
         {
             StartCommand()

@@ -120,7 +120,7 @@ namespace Models
         }
         public void SafetyRemoveTemplate()
         {
-            if (ProgramState.CheckIncubatorOpened())
+            if (ProgramState.CheckWorkspaceOpened())
             {
                 StartCommand()
                     .Update("hidden", "True")
@@ -130,7 +130,7 @@ namespace Models
         }
         public void RemoveTemplate()
         {
-            if (ProgramState.CheckIncubatorOpened())
+            if (ProgramState.CheckWorkspaceOpened())
             {
                 StartCommand()
                     .Delete()

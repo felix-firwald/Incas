@@ -10,7 +10,7 @@ namespace Incubator_2.ViewModels
         private string _surname = "Фамилия";
         private string _fullname = "Имя";
         private string _post = "Должность";
-        private string _incubatorname = "Имя инкубатора";
+        private string _workspaceName = "Имя инкубатора";
 
         public MV_MainWindow()
         {
@@ -64,15 +64,15 @@ namespace Incubator_2.ViewModels
         //    IncubatorName = incubatorName;
         //}
 
-        public string IncubatorName
+        public string WorkspaceName
         {
-            get { return _incubatorname; }
+            get { return _workspaceName; }
             set
             {
-                if (_incubatorname != value)
+                if (_workspaceName != value)
                 {
-                    _incubatorname = value;
-                    OnPropertyChanged("IncubatorName");
+                    _workspaceName = value;
+                    OnPropertyChanged("WorkspaceName");
                 }
             }
         }
@@ -90,8 +90,8 @@ namespace Incubator_2.ViewModels
                 this.Fullname = user.fullname;
                 this.Surname = user.surname;
                 this.Post = user.post;
-                this.IncubatorName = ProgramState.GetIncubatorInfo().name;
             }
+            this.WorkspaceName = ProgramState.GetWorkspaceName();
         }
 
     }
