@@ -170,7 +170,6 @@ namespace Common
         {
             string fileFullName = getInitFilePath();
             File.WriteAllText(fileFullName, SystemName);
-            Console.WriteLine(DatabasePath);
             Permission.CurrentUserPermission = PermissionGroup.Admin;
             return CreateTablesInDatabase();
         }
