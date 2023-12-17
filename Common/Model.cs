@@ -34,7 +34,6 @@ namespace Common
     {
         private bool disposed = false;
         protected string tableName { get; set; }
-        protected string definition { get; set; }
 
         #region Procedural Context
         private string result;
@@ -97,34 +96,6 @@ namespace Common
         {
             return new Query(this.tableName);
         }
-
-        #region Create
-        public string CreateDefinition()
-        {
-            string resulting = $"CREATE TABLE {tableName} (";
-            //if (string.IsNullOrEmpty(def))
-            //{
-            //    throw new InvalidIstructionException($"Empty definition for {tableName} [{MethodBase.GetCurrentMethod().DeclaringType.Name}]");
-            //}
-            if (definition.Contains("CREATE TABLE"))
-            {
-                throw new InvalidIstructionException(
-                    $"Command 'CREATE TABLE' " +
-                    $"can't be in definition of table {tableName}"
-                );
-            }
-            resulting += definition;
-            resulting += ");";
-            using (SQLiteConnection conn = GetConnection())
-            {
-                conn.Open();
-                SQLiteCommand cmd = conn.CreateCommand();
-                cmd.CommandText = resulting;
-                cmd.ExecuteNonQuery();
-            }
-            return resulting;
-        }
-        #endregion
 
         #region Standart Requests
         protected DataTable GetAll()

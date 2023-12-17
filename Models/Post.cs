@@ -16,10 +16,6 @@ namespace Models
         public Post()
         {
             tableName = "Posts";
-            definition = "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "name STRING UNIQUE ON CONFLICT ROLLBACK NOT NULL DEFAULT [Администратор инкубатора],\n" +
-                "permission STRING NOT NULL,\n" +
-                "rights STRING NOT NULL";
         }
         #region GET
         public List<Post> GetAllPost()

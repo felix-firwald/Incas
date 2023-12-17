@@ -27,13 +27,6 @@ namespace Models
         public Tag() 
         {
             tableName = "Tags";
-            definition = "id INTEGER PRIMARY KEY ASC AUTOINCREMENT,\n" +
-                "template INTEGER  REFERENCES Templates (id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,\n" +
-                "name     STRING  NOT NULL,\n" +
-                "type     STRING  NOT NULL,\n" +
-                "value    STRING,\n" +
-                "constant STRING REFERENCES Constants (name),\n" +
-                "enumeration STRING  REFERENCES Enumerations (name) ON DELETE CASCADE ON UPDATE CASCADE";
         }
 
         public List<Tag> GetAllTagsByTemplate(int templ, int parent = 0)

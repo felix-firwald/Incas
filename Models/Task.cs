@@ -16,13 +16,6 @@ namespace Models
         public Task()
         {
             tableName = "Tasks";
-            definition = "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "name STRING NOT NULL,\n" +
-                "text TEXT,\n" +
-                "passed BOOLEAN NOT NULL DEFAULT (0),\n" +
-                "dateStarted TEXT NOT NULL,\n" +
-                "dateFinished TEXT NOT NULL,\n" +
-                "hidden BOOLEAN NOT NULL DEFAULT (0)";
         }
 
         public void GetAbsolutelyAllTasks()

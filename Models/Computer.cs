@@ -13,9 +13,6 @@ namespace Models
         public Computer() 
         {
             tableName = "Computers";
-            definition = "authId STRING UNIQUE ON CONFLICT ROLLBACK NOT NULL,\n" +
-                "name STRING NOT NULL,\n" +
-                "blocked BOOLEAN NOT NULL DEFAULT (0)";
         }
         public List<Computer> GetAllComputers()
         {

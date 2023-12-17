@@ -14,10 +14,6 @@ namespace Models
         public Constant() 
         {
             tableName = "Constants";
-            definition = "name STRING UNIQUE NOT NULL,\n" +
-                "content STRING NOT NULL,\n" +
-                "category STRING,\n" +
-                "hidden BOOLEAN NOT NULL DEFAULT (False)";
         }
         public List<Constant> GetAllConstants()
         {

@@ -22,13 +22,6 @@ namespace Models
         public Template()
         {
             tableName = "Templates";
-            definition = "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "name STRING NOT NULL UNIQUE,\n" +
-                "path STRING NOT NULL,\n" +
-                "parent INTEGER REFERENCES Templates (id) ON UPDATE CASCADE ON DELETE SET NULL,\n" +
-                "suggestedPath STRING,\n" +
-                "type STRING NOT NULL,\n" +
-                "hidden BOOLEAN NOT NULL DEFAULT (False)";
         }
         private List<Template> GetAllTemplatesBy(TemplateType tt, string cat)
         {

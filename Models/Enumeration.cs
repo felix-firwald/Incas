@@ -11,9 +11,6 @@ namespace Models
         public Enumeration() 
         {
             tableName = "Enumerations";
-            definition = "name STRING UNIQUE ON CONFLICT ROLLBACK NOT NULL,\n" +
-                "content STRING NOT NULL,\n" +
-                "hidden BOOLEAN NOT NULL DEFAULT (False)";
         }
         public string[] GetValues()
         {

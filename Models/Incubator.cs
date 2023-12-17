@@ -15,11 +15,6 @@ namespace Models
         public Incubator() 
         {
             tableName = "Incubator";
-            definition = "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "name STRING NOT NULL,\n" +
-                "opened BOOLEAN NOT NULL DEFAULT (True),\n" +
-                "locked BOOLEAN NOT NULL DEFAULT (False),\n" +
-                "repositoryEnabled BOOLEAN NOT NULL DEFAULT (False)";
         }
         public void InitializeIncubator()
         {

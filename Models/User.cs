@@ -19,13 +19,6 @@ namespace Models
         public User() 
         {
             tableName = "Users";
-            definition = "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "username STRING UNIQUE ON CONFLICT ROLLBACK NOT NULL,\n" +
-                "fullname STRING,\n" +
-                "surname STRING,\n" +
-                "post INTEGER REFERENCES Posts (id),\n" +
-                "password STRING UNIQUE ON CONFLICT ROLLBACK NOT NULL,\n" +
-                "status STRING NOT NULL\n";
         }
         public List<User> GetAllUsers()
         {

@@ -16,12 +16,6 @@ namespace Models
         public Session() 
         {
             tableName = "Sessions";
-            definition = "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "user STRING REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,\n" +
-                "timeStarted TEXT NOT NULL DEFAULT ('01.01.2001 0:00:00'),\n" +
-                "timeFinished TEXT NOT NULL DEFAULT ('01.01.2001 0:00:00'),\n" +
-                "computer STRING REFERENCES Computers (authId) NOT NULL,\n" +
-                "active BOOLEAN NOT NULL DEFAULT (0)";
         }
 
         public bool DoesUserHaveNotClosedSessions()
