@@ -16,11 +16,11 @@ namespace Incubator_2
             base.OnStartup(e);
             try
             {
-                //if (TestFunc())
-                //{
+                if (TestFunc())
+                {
 
-                //}
-                
+                }
+
                 OpenIncubator oi = new OpenIncubator();
                 
                 if (oi.ShowDialog() == false)
@@ -50,7 +50,7 @@ namespace Incubator_2
 
         private bool TestFunc()
         {
-            DialogQuestion test = new DialogQuestion("Инкубатор не найден по указанному пути", "Создать новое рабочее пространство?", "Создать", "Закрыть программу");
+            UseTemplate test = new UseTemplate();
             test.ShowDialog();
             return true;
         }

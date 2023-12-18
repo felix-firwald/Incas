@@ -1,17 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DocumentFormat.OpenXml.Office2021.PowerPoint.Designer;
+using Models;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace Incubator_2.Windows
 {
@@ -20,11 +12,18 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class UseTemplate : Window
     {
-        public UseTemplate()
+        Template template;
+        public UseTemplate(Template t)
         {
             InitializeComponent();
-            //DataTable dataTable = new DataTable();
-            //dataTable.Columns.Add();
+            this.template = t;
+            
+            
+        }
+        private void LoadTags()
+        {
+            Tag t = new Tag();
+            t.GetAllTagsByTemplate(template.id);
         }
 
         private void CreateFileClick(object sender, RoutedEventArgs e)

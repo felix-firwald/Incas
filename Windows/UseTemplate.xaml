@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Incubator_2.Windows"
+        xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="Создать документы по шаблону" Height="450" Width="800" Style="{DynamicResource WindowBase}" MinWidth="500" MinHeight="450" Topmost="True" Uid="8">
 
@@ -26,27 +26,22 @@
                 <RowDefinition Height="40"/>
                 <!--кнопка создания файла или печати-->
             </Grid.RowDefinitions>
-            <Button Style="{StaticResource ButtonMain}" Grid.Row="4" Content="Создать файл по шаблону" Click="CreateFileClick" Grid.ColumnSpan="3" Margin="5,5,5,5"/>
             <TextBox Style="{DynamicResource TextBoxMain}" Margin="5,5,5,5" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Префикс к имени файла"/>
+            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowsH" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <TextBox Style="{DynamicResource TextBoxMain}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Постфикс к имени файла" Grid.Column="2"/>
+            <Button Style="{StaticResource ButtonMain}" Grid.Row="4" Content="Создать файл по шаблону" Click="CreateFileClick" Grid.ColumnSpan="3" Margin="5,5,5,5"/>
             <ComboBox Style="{DynamicResource ComboBoxMain}" Grid.Row="2" Grid.Column="2" Margin="5,5,5,5" >
                 <ComboBoxItem IsSelected="True" Content="Основной"/>
             </ComboBox>
-            <DataGrid Style="{DynamicResource DataGridMain}" 
-                Grid.Row="3"
-                x:Name="DGV" Grid.ColumnSpan="3" SelectionMode="Single">
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Header="Имя файла"
-                        MinWidth="100">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn
-                        Header="Профиль"
-                        MinWidth="100">
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-
-            </DataGrid>
+            <WrapPanel Grid.Row="3" Grid.ColumnSpan="3" Orientation="Vertical">
+                <TextBox Style="{DynamicResource TextBoxMain}" Width="200" Tag="Префикс к имени файла"/>
+                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
+                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
+                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
+                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
+                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
+                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
+            </WrapPanel>
 
         </Grid>
     </Border>
