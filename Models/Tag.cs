@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.Windows;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -34,7 +35,7 @@ namespace Models
             string req = $"SELECT * FROM Tags\nWHERE template = {templ}";
             if (parent != 0)
             {
-                req += $" OR template = '{parent}'";
+                req += $" OR template = {parent}";
             }
             DataTable dt = this.StartCommand()
                 .AddCustomRequest(req)

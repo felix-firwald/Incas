@@ -10,9 +10,10 @@
     <Border>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="25*"/>
                 <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="18*"/>
+                <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -26,23 +27,23 @@
                 <RowDefinition Height="40"/>
                 <!--кнопка создания файла или печати-->
             </Grid.RowDefinitions>
-            <TextBox Style="{DynamicResource TextBoxMain}" Margin="5,5,5,5" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Префикс к имени файла"/>
-            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowsH" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <TextBox Style="{DynamicResource TextBoxMain}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Постфикс к имени файла" Grid.Column="2"/>
-            <Button Style="{StaticResource ButtonMain}" Grid.Row="4" Content="Создать файл по шаблону" Click="CreateFileClick" Grid.ColumnSpan="3" Margin="5,5,5,5"/>
-            <ComboBox Style="{DynamicResource ComboBoxMain}" Grid.Row="2" Grid.Column="2" Margin="5,5,5,5" >
-                <ComboBoxItem IsSelected="True" Content="Основной"/>
-            </ComboBox>
-            <WrapPanel Grid.Row="3" Grid.ColumnSpan="3" Orientation="Vertical">
-                <TextBox Style="{DynamicResource TextBoxMain}" Width="200" Tag="Префикс к имени файла"/>
-                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
-                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
-                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
-                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
-                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
-                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Префикс к имени файла"/>
-            </WrapPanel>
+            <TextBox Style="{DynamicResource TextBoxMain}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Конечная папка" Grid.Column="0" Grid.ColumnSpan="3"/>
+            <Button Style="{StaticResource ButtonMain}" Content="Обзор" Click="CreateFileClick" Grid.Row="0" Grid.Column="3" />
+            
+            <TextBox Style="{DynamicResource TextBoxMain}" Margin="5,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Grid.Row="1" Tag="Префикс к имени файла"/>
+            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowsH" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" />
+            <TextBox Style="{DynamicResource TextBoxMain}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Постфикс к имени файла" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="5,0,5,0"/>
 
+            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowsH" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <Border Grid.Row="3" Grid.ColumnSpan="4" CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" BorderThickness="1">
+                <ScrollViewer>
+                    <StackPanel x:Name="ContentPanel"/>
+                </ScrollViewer>
+            </Border>
+            <Button Style="{StaticResource ButtonMain}" Grid.Row="4" Content="Создать файлы по шаблону" Click="CreateFileClick" Grid.ColumnSpan="4" Margin="5,5,5,5"/>
         </Grid>
     </Border>
 </Window>

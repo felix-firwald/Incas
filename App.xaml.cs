@@ -16,10 +16,6 @@ namespace Incubator_2
             base.OnStartup(e);
             try
             {
-                if (TestFunc())
-                {
-
-                }
 
                 OpenIncubator oi = new OpenIncubator();
                 
@@ -48,11 +44,11 @@ namespace Incubator_2
 
         }
 
-        private bool TestFunc()
+        private void TestFunc()
         {
-            UseTemplate test = new UseTemplate();
-            test.ShowDialog();
-            return true;
+            //UseTemplate test = new UseTemplate(new Template());
+            //test.ShowDialog();
+            //return true;
         }
     }
 }

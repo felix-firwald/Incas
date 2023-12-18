@@ -32,7 +32,7 @@ namespace Forms
         {
             if (IsFileExists())
             {
-                UseTemplate ut = new UseTemplate();
+                UseTemplate ut = new UseTemplate(template);
                 ut.ShowDialog();
             }
             else

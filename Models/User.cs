@@ -45,8 +45,15 @@ namespace Models
         {
             DataRow dr = GetOne(
                 StartCommand()
-                    .Select()
-                    .WhereEqual("username", username)
+                    .AddCustomRequest("SELECT Users.id AS id, " +
+                    "Users.username AS username, " +
+                    "Users.fullname AS fullname, " +
+                    "Users.surname AS surname, " +
+                    "Users.password AS password, " +
+                    "Users.post AS post_id, Posts.name AS post, Users.status AS status " +
+                    "FROM Users JOIN Posts " +
+                    "ON post_id = Posts.id " +
+                    $"WHERE username = '{this.username}'")
                     .Execute()
             );
             this.Serialize(dr);
@@ -57,10 +64,18 @@ namespace Models
         {
             DataRow dr = GetOne(
                 StartCommand()
-                    .Select()
-                    .WhereEqual("password", password)
+                    .AddCustomRequest("SELECT Users.id AS id, " +
+                    "Users.username AS username, " +
+                    "Users.fullname AS fullname, " +
+                    "Users.surname AS surname, " +
+                    "Users.password AS password" +
+                    "Users.post AS post_id, Posts.name AS post, Users.status " +
+                    "FROM Users JOIN Posts " +
+                    "ON post_id = Posts.id " +
+                    $"WHERE password = '{this.password}'")
                     .Execute()
             );
+                
             this.Serialize(dr);
             this.status = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), dr["status"].ToString());
             return this;
