@@ -1,4 +1,5 @@
-﻿using Forms;
+﻿using Common;
+using Forms;
 using Incubator_2.Forms.OneInstance;
 using Models;
 using System;
@@ -31,18 +32,25 @@ namespace Incubator_2.Forms
         }
         private void LoadCategories()
         {
+            this.Categories.Children.Clear();
+            AddCategory("Без категории", true);
             Template mt = new Template();
             mt.GetCategories().ForEach(c =>
             {
                 if (!string.IsNullOrEmpty(c))
                 {
-                    RadioButton rb = new RadioButton();
-                    rb.Style = FindResource("CategoryButton") as Style;
-                    rb.Content = c;
-                    rb.Click += new RoutedEventHandler(this.SelectCategory);
-                    this.Categories.Children.Add(rb);
+                    AddCategory(c);
                 }
             });
+        }
+        private void AddCategory(string category, bool selected=false)
+        {
+            RadioButton rb = new RadioButton();
+            rb.Style = FindResource("CategoryButton") as Style;
+            rb.Content = category;
+            rb.Click += new RoutedEventHandler(this.SelectCategory);
+            rb.IsChecked = selected;
+            this.Categories.Children.Add(rb);
         }
         private void LoadTemplatesByCategory(string category)
         {
@@ -75,7 +83,13 @@ namespace Incubator_2.Forms
 
         private void AddFC_Click(object sender, MouseButtonEventArgs e)
         {
+            ProgramState.ShowErrorDialog("Данная функция ещё находится в разработке", "Функция недоступна");
+        }
 
+        private void Refresh_Click(object sender, MouseButtonEventArgs e)
+        {
+            LoadCategories();
+            LoadTemplatesByCategory("");
         }
     }
 }

@@ -31,6 +31,7 @@
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusSquare" Grid.Column="1" Grid.Row="1" Margin="15,5,5,5" MouseDown="AddFC_Click" ToolTip="Создать шаблон" Cursor="Hand" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Clipboard" Grid.Column="1" Grid.Row="1" Margin="15,5,5,5" MouseDown="AddFC_Click" ToolTip="Унаследовать шаблон" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Tag" Grid.Column="1" Grid.Row="1" Margin="15,5,5,5" MouseDown="AddFC_Click" ToolTip="Управление категориями" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" Grid.Column="1" Grid.Row="1" Margin="15,5,5,5" MouseDown="Refresh_Click" ToolTip="Обновить список" />
                 </StackPanel>
             </Border>
         </Grid>
