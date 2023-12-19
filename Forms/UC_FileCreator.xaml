@@ -6,22 +6,13 @@
              xmlns:local="clr-namespace:Incubator_2.Forms" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <!--<UserControl.Style>
-        <Style TargetType="{x:Type local:UC_FileCreator}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=ContentPanel, Path=IsEnabled}" Value="False">
-                    <Setter TargetName="MainBorder" />
 
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Style>-->
     <Border x:Name="MainBorder" Margin="5" CornerRadius="5" Background="{DynamicResource Dark}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="4"/>
-                <RowDefinition/>
+                <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -37,12 +28,12 @@
                 <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="Новый"/>
                 <Label Style="{DynamicResource LabelElement}" Content=".docx" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             </StackPanel>
-            <Border Grid.Row="2" Grid.Column="1" Background="{DynamicResource Black}" Margin="5" CornerRadius="5">
-                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <Border Grid.Row="2" Grid.Column="1" Background="{DynamicResource Black}" Margin="5" CornerRadius="5" MinHeight="130">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" MouseDown="Remove" ToolTip="Удалить файл" Cursor="Hand"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" VerticalAlignment="Center" FontSize="18" ToolTip="Предпросмотр (только текст и базовое форматирование)" Cursor="Hand"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Print" VerticalAlignment="Center" FontSize="18" ToolTip="Отправить файл на печать" Cursor="Hand"/>
-                </WrapPanel>
+                </StackPanel>
             </Border>
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
             <StackPanel x:Name="ContentPanel" Grid.Row="2">

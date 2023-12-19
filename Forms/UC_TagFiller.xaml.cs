@@ -28,6 +28,13 @@ namespace Incubator_2.Forms
                 default:
                     SetTextBoxMode();
                     this.Textbox.Text = this.tag.value;
+                    this.Textbox.MaxLength = 120;
+                    break;
+                case TypeOfTag.Text:
+                    SetTextBoxMode();
+                    this.Textbox.Text = this.tag.value;
+                    this.Textbox.Style = FindResource("TextBoxBig") as Style;
+                    this.Textbox.MaxLength = 1200;
                     break;
                 case TypeOfTag.LocalConstant:
                     this.Visibility = Visibility.Collapsed;

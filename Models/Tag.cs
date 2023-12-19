@@ -9,6 +9,7 @@ namespace Models
     public enum TypeOfTag
     {
         Variable,
+        Text,
         LocalConstant,
         GlobalEnumeration,
         LocalEnumeration,

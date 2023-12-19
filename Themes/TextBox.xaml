@@ -89,6 +89,8 @@
     </Style>
     <Style x:Key="TextBoxBig" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBoxBase}">
         <Setter Property="MinHeight" Value="60"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="AcceptsReturn" Value="True"/>
     </Style>
     <Style x:Key="TextBoxTransparent" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="Transparent"/>
@@ -112,6 +114,9 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="DodgerBlue"/>
+                        </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Trigger.EnterActions>
                                 <BeginStoryboard>

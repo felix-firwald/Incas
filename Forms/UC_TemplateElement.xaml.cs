@@ -55,5 +55,11 @@ namespace Forms
                 template.RemoveTemplate();
             }
         }
+
+        private void EditClick(object sender, MouseButtonEventArgs e)
+        {
+            CreateTemplateWord ctw = new CreateTemplateWord(this.template);
+            ctw.Show();
+        }
     }
 }

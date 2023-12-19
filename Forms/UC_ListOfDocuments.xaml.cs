@@ -1,6 +1,7 @@
 ﻿using Common;
 using Forms;
 using Incubator_2.Forms.OneInstance;
+using Incubator_2.Windows;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -83,7 +84,9 @@ namespace Incubator_2.Forms
 
         private void AddFC_Click(object sender, MouseButtonEventArgs e)
         {
-            ProgramState.ShowErrorDialog("Данная функция ещё находится в разработке", "Функция недоступна");
+            //ProgramState.ShowErrorDialog("Данная функция ещё находится в разработке", "Функция недоступна");
+            CreateTemplateWord ctw = new CreateTemplateWord();
+            ctw.Show();
         }
 
         private void Refresh_Click(object sender, MouseButtonEventArgs e)
