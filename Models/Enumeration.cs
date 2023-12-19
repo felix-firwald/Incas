@@ -27,7 +27,9 @@ namespace Models
             foreach (DataRow dr in dt.Rows)
             {
                 Enumeration en = new Enumeration();
-                en.Serialize(dr);            
+                en.id = int.Parse(dr["id"].ToString());
+                en.content = dr["content"].ToString();
+                en.name = dr["name"].ToString();
                 resulting.Add(en);
             }
             return resulting;
@@ -39,7 +41,9 @@ namespace Models
                                     .Select()
                                     .WhereEqual("name", withName)
                                     .Execute());
-            this.Serialize(dr);
+            this.id = int.Parse(dr["id"].ToString());
+            this.content = dr["content"].ToString();
+            this.name = dr["name"].ToString();
             return this;
         }
         public Enumeration GetEnumerationById(int pk)
