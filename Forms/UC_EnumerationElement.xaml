@@ -15,8 +15,8 @@
 
         <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="0" Content="Название не определено" VerticalAlignment="Center">
         </Label>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="1" Icon="Pencil" FontSize="18" Margin="12,14,12,14" Cursor="Hand" ToolTip="Редактировать шаблон" Tag="Да"/>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="2" Icon="Remove" FontSize="18" Margin="12,14,12,14" Cursor="Hand" ToolTip="Удалить шаблон"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="1" Icon="Pencil" FontSize="18" Margin="12,14,12,14" Cursor="Hand" ToolTip="Редактировать шаблон" Tag="Да" />
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="2" Icon="Remove" FontSize="18" Margin="12,14,12,14" Cursor="Hand" ToolTip="Удалить шаблон" MouseDown="RemoveElement"/>
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>

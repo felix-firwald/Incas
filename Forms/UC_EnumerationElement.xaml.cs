@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Common;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,23 @@ namespace Incubator_2.Forms
                 i++;
             }
             return res;
+        }
+
+        private void RemoveElement(object sender, MouseButtonEventArgs e)
+        {
+            if (ProgramState.IsWorkspaceOpened())
+            {
+                if (ProgramState.ShowQuestionDialog(
+                    "Это глобальное перечисление будет безвозвратно удалено, " +
+                    "но у тех шаблонов, которые уже его используют, " +
+                    "оно сохранится в качестве локального.",
+                    "Удалить перечисление?", "Удалить", "Не удалять") == Windows.DialogStatus.Yes)
+                {
+                    Tag t = new Tag();
+                    t.SwitchGlobalToLocalEnumeration(this.enumeration);
+                    this.enumeration.RemoveEnumeration();
+                }
+            }
         }
     }
 }

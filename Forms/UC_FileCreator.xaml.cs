@@ -32,8 +32,7 @@ namespace Incubator_2.Forms
             InitializeComponent();
             this.tags = tagsList;
             FillContentPanel();
-            ChildsChoice.Add("Основной");
-            this.ChildChoicer.ItemsSource = ChildsChoice;
+            this.ChildChoicer.ItemsSource = childs;
             this.ChildChoicer.SelectedIndex = 0;
         }
         private void FillContentPanel()

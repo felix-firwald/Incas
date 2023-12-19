@@ -85,5 +85,13 @@ namespace Models
                 .WhereEqual("template", templ.ToString())
                 .Execute();
         }
+        public void SwitchGlobalToLocalEnumeration(Enumeration enumer)
+        {
+            StartCommand()
+                .Update("value", enumer.content)
+                .Update("type", TypeOfTag.LocalEnumeration.ToString())
+                .WhereEqual("enumeration", enumer.id.ToString(), false)
+                .ExecuteVoid();
+        }
     }
 }

@@ -236,7 +236,16 @@ namespace Common
         {
             using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1"))
             {
-                return par.GetValueAsBool();
+                bool result = par.GetValueAsBool();
+                if (!result)
+                {
+                    ShowErrorDialog("Действия по добавлению, изменению " +
+                        "или удалению информации из базы данных недоступны, " +
+                        "пока рабочее пространство находится в статусе \"Закрыто\".\n" +
+                        "Рабочее пространство по-прежнему можно использовать, однако " +
+                        "только для чтения.", "Рабочее пространство закрыто");
+                }
+                return result;
             }
         }
         public static void SetWorkspaceLocked(bool locked)
@@ -255,15 +264,6 @@ namespace Common
             }
         }
         
-        public static bool CheckWorkspaceOpened()
-        {
-            if (!ProgramState.IsWorkspaceOpened())
-            {
-                new Dialog("Действия по добавлению, изменению или удалению информации из базы данных недоступны, пока рабочая область находится в статусе \"Закрыта\"", "Рабочая область закрыта");
-                return false;
-            }
-            return true;
-        }
         #endregion
         public static void CheckLocked()
         {
@@ -327,6 +327,12 @@ namespace Common
         {
             Dialog d = new Dialog(message, title);
             d.ShowDialog();
+        }
+        public static DialogStatus ShowQuestionDialog(string message, string title, string yesText="Да", string noText = "Нет")
+        {
+            DialogQuestion d = new DialogQuestion(message, title, yesText, noText);
+            d.ShowDialog();
+            return d.status;
         }
         #endregion
     }

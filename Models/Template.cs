@@ -18,7 +18,7 @@ namespace Models
         public string suggestedPath { get; set; }
         public int parent { get; set; }
         public TemplateType type { get; set; }
-        public bool hidden { get; set; }
+        public bool isAbstract { get; set; }
         public Template()
         {
             tableName = "Templates";
@@ -29,7 +29,7 @@ namespace Models
                 .Select()
                 .WhereEqual("type", tt.ToString())
                 .WhereEqual("suggestedPath", cat)
-                .WhereNotEqual("hidden", "True")
+                .WhereEqual("isAbstract", "0")
                 .OrderByASC("name")
                 .Execute();
             List<Template> resulting = new List<Template>();
@@ -47,7 +47,7 @@ namespace Models
             DataTable dt = StartCommand()
                 .Select()
                 .WhereEqual("type", "Word")
-                .WhereNotEqual("hidden", "True")
+                .WhereEqual("isAbstract", "True")
                 .OrderByASC("name")
                 .Execute();
             List<Template> resulting = new List<Template>();
@@ -84,7 +84,7 @@ namespace Models
         {
             DataTable dt = StartCommand()
                 .SelectUnique("suggestedPath")
-                .WhereEqual("hidden", "False")
+                .WhereEqual("isAbstract", "0")
                 .OrderByASC("suggestedPath")
                 .Execute();
             List<string> categories = new List<string>();
@@ -104,8 +104,8 @@ namespace Models
                     { "path", $"'{path}'" },
                     { "parent", isChild? $"'{parent}'" : "''" },
                     { "suggestedPath", isChild? "''" : $"'{suggestedPath}'" },
-                    { "hidden", isChild? "'True'": "'False'" },
-                    { "type", $"'{type}'" }
+                    { "isAbstract", BoolToInt(isAbstract).ToString() },
+                    { "type", $"'{type}'" } 
                 })
                 .ExecuteVoid();
             return int.Parse(
@@ -118,19 +118,10 @@ namespace Models
                     )["id"].ToString()
                 );
         }
-        public void SafetyRemoveTemplate()
-        {
-            if (ProgramState.CheckWorkspaceOpened())
-            {
-                StartCommand()
-                    .Update("hidden", "True")
-                    .WhereEqual("name", name)
-                    .Execute();
-            }
-        }
+
         public void RemoveTemplate()
         {
-            if (ProgramState.CheckWorkspaceOpened())
+            if (ProgramState.IsWorkspaceOpened())
             {
                 StartCommand()
                     .Delete()
@@ -138,6 +129,20 @@ namespace Models
                     .Execute();
             }
         }
-
+        public List<Template> GetChildren()
+        {
+            DataTable dt = StartCommand()
+                .Select()
+                .WhereEqual("parent", this.id.ToString())
+                .Execute();
+            List<Template> children = new List<Template>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                Template templ = new Template();
+                templ.Serialize(dr);
+                children.Add(templ);
+            }
+            return children;
+        }
     }
 }

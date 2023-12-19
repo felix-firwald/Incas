@@ -23,19 +23,30 @@
                 <RowDefinition Height="4"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="80"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" MouseDown="Minimize" ToolTip="Свернуть / Развернуть окно"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" />
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" Margin="15,0,15,0" MouseDown="Remove" ToolTip="Удалить файл" Cursor="Hand"/>
-                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,5,0"/>
+                
+
                 <ComboBox x:Name="ChildChoicer" MinWidth="150"  Style="{DynamicResource ComboBoxMain}"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,5,0"/>
                 <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="Новый"/>
                 <Label Style="{DynamicResource LabelElement}" Content=".docx" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             </StackPanel>
-            <Rectangle Grid.Row="1" Fill="{DynamicResource Element}"/>
-            <StackPanel x:Name="ContentPanel" Grid.Row="2" >
-                
+            <Border Grid.Row="2" Grid.Column="1" Background="{DynamicResource Black}" Margin="5" CornerRadius="5">
+                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" MouseDown="Remove" ToolTip="Удалить файл" Cursor="Hand"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" VerticalAlignment="Center" FontSize="18" ToolTip="Предпросмотр (только текст и базовое форматирование)" Cursor="Hand"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Print" VerticalAlignment="Center" FontSize="18" ToolTip="Отправить файл на печать" Cursor="Hand"/>
+                </WrapPanel>
+            </Border>
+            <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
+            <StackPanel x:Name="ContentPanel" Grid.Row="2">
+
             </StackPanel>
         </Grid>
     </Border>
