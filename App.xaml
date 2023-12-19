@@ -328,12 +328,36 @@
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
-        
+
+            <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="HasDropShadow" Value="True" />
+                <Setter Property="Foreground" Value="{DynamicResource LightPurple}"/>
+                <Setter Property="Margin" Value="8"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToolTip">
+                            <Border CornerRadius="5" BorderBrush="{TemplateBinding Foreground}" BorderThickness="1" Background="{DynamicResource Black}" Padding="8,8,8,8">
+                                <StackPanel>
+                                    <Label Content="Помощь" TextElement.FontFamily="/Fonts/#JetBrains Mono" TextElement.FontSize="11" TextElement.FontWeight="Bold" Foreground="{TemplateBinding Foreground}"/>
+                                    <ContentPresenter TextElement.Foreground="White" TextElement.FontFamily="/Fonts/#JetBrains Mono" TextElement.FontWeight="ExtraLight" TextElement.FontSize="11"/>
+                                </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             
             <Style x:Key="IconButton" TargetType="{x:Type fa:FontAwesome}">
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="FontSize" Value="18"/>
                 <Setter Property="Foreground" Value="{StaticResource Icon}"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="MaxHeight" Value="30"/>
+                <Setter Property="MaxWidth" Value="30"/>
+                <Setter Property="ToolTipService.InitialShowDelay" Value="250"/>
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
                         <Setter Property="Foreground" Value="{StaticResource Element}"/>

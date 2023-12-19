@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Incubator_2.Forms"
+             xmlns:local="clr-namespace:Incubator_2.Forms" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="630" Background="Transparent">
     <GroupBox Style="{DynamicResource MainGroupBox}" Header="ШАБЛОНЫ ДОКУМЕНТОВ">
@@ -12,19 +12,27 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" MinWidth="100" MaxWidth="300"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel x:Name="Categories" Grid.Row="0" Grid.Column="0">
-                <RadioButton Style="{StaticResource CategoryButton}" Content="Без категории" Click="SelectCategory" FontStyle="Italic" IsChecked="True"/>
-            </StackPanel>
-
-        <ScrollViewer Margin="5,0,0,0"  Style="{DynamicResource MainScrollViewer}" Grid.Column="1" Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" MinWidth="80" MaxWidth="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+            <ScrollViewer Grid.Row="0" Grid.Column="0">
+                <StackPanel x:Name="Categories" >
+                    <RadioButton Style="{StaticResource CategoryButton}" Content="Без категории" Click="SelectCategory" FontStyle="Italic" IsChecked="True"/>
+                </StackPanel>
+            </ScrollViewer>
+            <ScrollViewer Margin="5,0,0,0"  Style="{DynamicResource MainScrollViewer}" Grid.Column="1" Grid.Row="0">
             <StackPanel x:Name="TemplatesArea" Grid.Row="0" CanVerticallyScroll="True">
             </StackPanel>
         </ScrollViewer>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="0,0,0,0" Grid.Row="0" VerticalAlignment="Center" Width="5" Background="#FF2D2D30"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="0,0,0,0" Grid.Row="0" VerticalAlignment="Center" Width="5" Background="{DynamicResource Element}"/>
+            <Border Grid.Column="2" Grid.Row="1" Background="{DynamicResource Black}" CornerRadius="5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusSquare" Grid.Column="1" Grid.Row="1" Margin="15,5,5,5" MouseDown="AddFC_Click" ToolTip="Создать шаблон" Cursor="Hand" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Clipboard" Grid.Column="1" Grid.Row="1" Margin="15,5,5,5" MouseDown="AddFC_Click" ToolTip="Унаследовать шаблон" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Tag" Grid.Column="1" Grid.Row="1" Margin="15,5,5,5" MouseDown="AddFC_Click" ToolTip="Управление категориями" />
+                </StackPanel>
+            </Border>
         </Grid>
     </GroupBox>
 </UserControl>

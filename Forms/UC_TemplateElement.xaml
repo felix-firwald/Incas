@@ -13,13 +13,12 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick"/>
-        <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center"/>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="2" Icon="Search" FontSize="18" Margin="12,14,12,14" Cursor="Hand"/>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="Pencil" FontSize="18" Margin="12,14,12,14" Cursor="Hand"/>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="4" Icon="MinusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand" MouseDown="RemoveClick"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
+        <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center">
+        </Label>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="2" Icon="Pencil" FontSize="18" Margin="12,14,12,14" Cursor="Hand" ToolTip="Редактировать шаблон" Tag="Да"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="Remove" FontSize="18" Margin="12,14,12,14" Cursor="Hand" MouseDown="RemoveClick" ToolTip="Удалить шаблон"/>
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>

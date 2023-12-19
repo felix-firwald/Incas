@@ -24,12 +24,14 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" MouseDown="Minimize"/>
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" MouseDown="Minimize" ToolTip="Свернуть / Развернуть окно"/>
+                <Rectangle Width="1" Fill="{DynamicResource Element}" />
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" Margin="15,0,15,0" MouseDown="Remove" ToolTip="Удалить файл" Cursor="Hand"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,5,0"/>
-                <ComboBox MinWidth="150"  Style="{DynamicResource ComboBoxMain}"/>
+                <ComboBox x:Name="ChildChoicer" MinWidth="150"  Style="{DynamicResource ComboBoxMain}"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,5,0"/>
-                <TextBox Style="{DynamicResource TextBoxTransparent}" Text="Новый файл"/>
-                <Label Style="{DynamicResource LabelElement}" Content=".docx" VerticalAlignment="Center"/>
+                <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="Новый"/>
+                <Label Style="{DynamicResource LabelElement}" Content=".docx" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             </StackPanel>
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}"/>
             <StackPanel x:Name="ContentPanel" Grid.Row="2" >

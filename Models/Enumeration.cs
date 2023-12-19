@@ -6,6 +6,7 @@ namespace Models
 {
     public class Enumeration : Model
     {
+        public int id;
         public string name;
         public string content;
         public Enumeration() 
@@ -25,25 +26,32 @@ namespace Models
             List<Enumeration> resulting = new List<Enumeration>();
             foreach (DataRow dr in dt.Rows)
             {
-                //Console.WriteLine(dr["name"]);
-                //Console.WriteLine(dr["content"]);
                 Enumeration en = new Enumeration();
-                en.name = dr["name"].ToString();
-                en.content = dr["content"].ToString();
-                // en.Serialize(dr);
-                
+                en.Serialize(dr);            
                 resulting.Add(en);
             }
             return resulting;
         }
 
-        public Enumeration GetEnumerationByName()
+        public Enumeration GetEnumerationByName(string withName)
         {
-            DataRow dt = GetOne(StartCommand()
+            DataRow dr = GetOne(StartCommand()
                                     .Select()
-                                    .WhereEqual("name", name)
+                                    .WhereEqual("name", withName)
                                     .Execute());
-            this.content = dt["content"].ToString();
+            this.Serialize(dr);
+            return this;
+        }
+        public Enumeration GetEnumerationById(int pk)
+        {
+            DataRow dr = GetOne(StartCommand()
+                                    .Select()
+                                    .WhereEqual("id", pk.ToString())
+                                    .Execute());
+
+            this.id = int.Parse(dr["id"].ToString());
+            this.content = dr["content"].ToString();
+            this.name = dr["name"].ToString();
             return this;
         }
         public void AddEnumeration()

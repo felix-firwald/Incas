@@ -42,7 +42,6 @@ namespace Incubator_2.Forms
                     rb.Click += new RoutedEventHandler(this.SelectCategory);
                     this.Categories.Children.Add(rb);
                 }
-                
             });
         }
         private void LoadTemplatesByCategory(string category)
@@ -72,6 +71,11 @@ namespace Incubator_2.Forms
                 LoadTemplatesByCategory("");
             }
             
+        }
+
+        private void AddFC_Click(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

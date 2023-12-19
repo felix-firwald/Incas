@@ -165,7 +165,14 @@ namespace Common
             User user = new User();
             user.username = User;
             return user.GetUserByName();
-        }        
+        }
+        #endregion
+
+        #region WorkspaceFiles
+        public static string GetFullnameOfWordFile(string name)
+        {
+            return TemplatesSourcesWordPath + "\\" + name;
+        }
         #endregion
         private static bool Initialize()
         {
@@ -312,6 +319,14 @@ namespace Common
         public static void CloseSession() 
         {
             CurrentSession.CloseSession();
+        }
+        #endregion
+
+        #region ModalDialogs
+        public static void ShowErrorDialog(string message, string title = "Возникла неизвестная ошибка")
+        {
+            Dialog d = new Dialog(message, title);
+            d.ShowDialog();
         }
         #endregion
     }

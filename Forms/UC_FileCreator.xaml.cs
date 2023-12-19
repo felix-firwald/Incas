@@ -1,6 +1,8 @@
-﻿using Models;
+﻿using Common;
+using Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,18 +24,25 @@ namespace Incubator_2.Forms
     public partial class UC_FileCreator : UserControl
     {
         private bool IsCollapsed = false;
+        private List<string> ChildsChoice = new List<string>();
         List<Tag> tags;
-        public UC_FileCreator(List<Tag> tagsList)
+        List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
+        public UC_FileCreator(List<Tag> tagsList, List<string> childs = null)
         {
             InitializeComponent();
             this.tags = tagsList;
             FillContentPanel();
+            ChildsChoice.Add("Основной");
+            this.ChildChoicer.ItemsSource = ChildsChoice;
+            this.ChildChoicer.SelectedIndex = 0;
         }
         private void FillContentPanel()
         {
             this.tags.ForEach(t =>
             {
-                this.ContentPanel.Children.Add(new UC_TagFiller(t));
+                UC_TagFiller tf = new UC_TagFiller(t);
+                this.ContentPanel.Children.Add(tf);
+                TagFillers.Add(tf);
             });
         }
 
@@ -48,6 +57,34 @@ namespace Incubator_2.Forms
                 this.MainBorder.Height = 40;
             }
             this.IsCollapsed = !this.IsCollapsed;
+        }
+        private void Remove(object sender, MouseButtonEventArgs e)
+        {
+            Panel parentPanel = (Panel)this.Parent;
+            parentPanel.Children.Remove(this);
+        }
+        private string RemoveUnresolvedChars(string input)
+        {
+            return input
+                .Replace("/", "")
+                .Replace("\\", "")
+                .Replace(":", "")
+                .Replace("?", "")
+                .Replace("*", "")
+                .Replace("<", "")
+                .Replace(">", "")
+                .Replace("|", "")
+                .Replace("\"", "");
+        }
+        public void CreateFile(string newPath, string original)
+        {
+            string newFile = $"{newPath}\\{this.Filename.Text}.docx";
+            File.Copy(ProgramState.GetFullnameOfWordFile(original), newFile, true);
+            WordTemplator wt = new WordTemplator(newFile);
+            foreach (UC_TagFiller tf in TagFillers)
+            {
+                wt.Replace(tf.GetTagName(), tf.GetValue());
+            }
         }
     }
 }

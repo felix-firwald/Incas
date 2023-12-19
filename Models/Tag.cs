@@ -10,7 +10,6 @@ namespace Models
     {
         Variable,
         LocalConstant,
-        GlobalConstant,
         GlobalEnumeration,
         LocalEnumeration,
     }
@@ -21,8 +20,7 @@ namespace Models
         public string name { get; set; }
         public TypeOfTag type { get; set; }
         public string value { get; set; }
-        public string constant { get; set; }
-        public string enumeration { get; set; }
+        public int enumeration { get; set; }
         public int parent { get; set; }
         public bool required { get; set; }
         public Tag() 
@@ -59,8 +57,7 @@ namespace Models
                     { "name", $"'{name}'" },
                     { "type", $"'{type}'" },
                     { "value", $"'{value}'" },
-                    { "constant", $"'{constant}'" },
-                    { "enumeration", $"'{enumeration}'" },
+                    { "enumeration", enumeration.ToString() },
                 })
                 .ExecuteVoid();
         }
@@ -70,8 +67,7 @@ namespace Models
                 .Update("name", name)
                 .Update("type", type.ToString())
                 .Update("value", value)
-                .Update("constant", enumeration)
-                .Update("enumeration", enumeration)
+                .Update("enumeration", enumeration.ToString())
                 .WhereEqual("id", id.ToString())
                 .Execute();
         }

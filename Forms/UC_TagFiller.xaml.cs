@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Common;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,16 +25,30 @@ namespace Incubator_2.Forms
             switch (tag.type)
             {
                 case TypeOfTag.Variable:
-                case TypeOfTag.LocalConstant:
-                case TypeOfTag.GlobalConstant:
                 default:
                     SetTextBoxMode();
+                    this.Textbox.Text = this.tag.value;
+                    break;
+                case TypeOfTag.LocalConstant:
+                    this.Visibility = Visibility.Collapsed;
                     break;
                 case TypeOfTag.GlobalEnumeration:
+                    SetComboBoxMode();
+                    this.Combobox.ItemsSource = GetValuesOfGlobalEnum();
+                    this.Combobox.Text = this.tag.value;
+                    break;
                 case TypeOfTag.LocalEnumeration:
                     SetComboBoxMode();
+                    this.Combobox.ItemsSource = this.tag.value.Split('\n');
+                    this.Combobox.Text = this.tag.value;
                     break;
             }
+        }
+        private string[] GetValuesOfGlobalEnum()
+        {
+            Enumeration en = new Enumeration();
+            string content = en.GetEnumerationById(this.tag.enumeration).content;
+            return string.IsNullOrEmpty(content) ? Array.Empty<string>() : content.Split('\n');
         }
         private void SetTextBoxMode()
         {
@@ -60,7 +75,11 @@ namespace Incubator_2.Forms
                     return this.tag.value;
                 case TypeOfTag.GlobalEnumeration:
                 case TypeOfTag.LocalEnumeration:
-                    return this.Combobox.SelectedValue.ToString();
+                    if (this.Combobox.SelectedIndex != -1)
+                    {
+                        return this.Combobox.Items.GetItemAt(this.Combobox.SelectedIndex).ToString();
+                    }
+                    return "";
 
             }
         }
