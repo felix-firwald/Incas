@@ -114,9 +114,18 @@ namespace Models
                             .Select()
                             .WhereEqual("name", name)
                             .WhereEqual("path", path)
+                            .OrderByDESC("id")
                             .Execute()
                     )["id"].ToString()
                 );
+        }
+        public void UpdateTemplate()
+        {
+            StartCommand()
+                .Update("name", name)
+                .Update("path", path)
+                .Update("suggestedPath", suggestedPath)
+                .ExecuteVoid();
         }
 
         public void RemoveTemplate()

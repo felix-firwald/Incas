@@ -59,14 +59,19 @@ namespace Incubator_2.Windows
                 }
                 else
                 {
-                    result = fd.FileName;
+                    result = fd.SafeFileName;
                 }
-                this.sourceFile.Text = result;
+                this.template.path = result;
             }
         }
 
         private bool CheckForSave()
         {
+            if (!File.Exists(ProgramState.GetFullnameOfWordFile(template.path)))
+            {
+                ProgramState.ShowErrorDialog($"Файл ({template.path}) не найден","Сохранение прервано");
+                return false;
+            }
             return true;
         }
 
@@ -74,23 +79,43 @@ namespace Incubator_2.Windows
 
         private void saveClick(object sender, RoutedEventArgs e)
         {
-            ProgramState.ShowErrorDialog($"name: {this.template.name}\n" +
-                $"suggestedPath: {this.template.suggestedPath}\n" +
-                $"file: {this.template.path}", "Вот данные:");
+            if (CheckForSave())
+            {
+                if (isEdit)
+                {
+                    template.UpdateTemplate();
+                    SaveTags(true);
+                }
+                else
+                {
+                    template.AddTemplate(false);
+                    SaveTags(false);
+                }
+            }
+        }
+
+        private void SaveTags(bool isEdit)
+        {
+            foreach (TagCreator tag in this.ContentPanel.Children)
+            {
+                tag.SaveTag(template.id, isEdit);
+            }
         }
 
         private void AddTag(Tag tag = null)
         {
             Tag t = new Tag();
+            bool isNew = false;
             if (tag == null)
             {
                 t.name = "Новый";
+                isNew = true;
             }
             else
             {
                 t = tag;
             }
-            this.ContentPanel.Children.Add(new TagCreator(t));
+            this.ContentPanel.Children.Add(new TagCreator(t, isNew));
         }
 
         private void AddTagClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

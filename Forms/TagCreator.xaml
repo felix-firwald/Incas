@@ -23,7 +23,7 @@
             
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
             <StackPanel Grid.Row="2">
-                <ComboBox Style="{DynamicResource ComboBoxMain}" SelectedIndex="0">
+                <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="0">
                     <ComboBoxItem Content="Ручной ввод (короткий текст)"/>
                     <ComboBoxItem Content="Ручной ввод (многострочный текст)"/>
                     <ComboBoxItem Content="Константа"/>
