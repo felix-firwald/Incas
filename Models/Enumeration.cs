@@ -4,6 +4,12 @@ using System.Data;
 
 namespace Models
 {
+    public struct EnumerationView
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public EnumerationView() { }
+    }
     public class Enumeration : Model
     {
         public int id;
@@ -31,6 +37,19 @@ namespace Models
                 en.content = dr["content"].ToString();
                 en.name = dr["name"].ToString();
                 resulting.Add(en);
+            }
+            return resulting;
+        }
+        public Dictionary<int, string> GetAllEnumerationsView()
+        {
+            DataTable dt = StartCommand()
+                                .Select()
+                                .OrderByASC("name")
+                                .Execute();
+            Dictionary<int, string> resulting = new Dictionary<int, string>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                resulting.Add(int.Parse(dr["id"].ToString()), dr["name"].ToString());
             }
             return resulting;
         }

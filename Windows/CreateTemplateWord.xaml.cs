@@ -27,6 +27,7 @@ namespace Incubator_2.Windows
             else
             {
                 isEdit = true;
+                this.Title = $"Редактирование шаблона ({te.name})";
                 template = te;
                 GetTags();
             }
@@ -115,7 +116,8 @@ namespace Incubator_2.Windows
             {
                 t = tag;
             }
-            this.ContentPanel.Children.Add(new TagCreator(t, isNew));
+            Enumeration enumer = new Enumeration();
+            this.ContentPanel.Children.Add(new TagCreator(t, enumer.GetAllEnumerationsView(), isNew));
         }
 
         private void AddTagClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

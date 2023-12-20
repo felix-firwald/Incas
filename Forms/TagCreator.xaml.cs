@@ -1,7 +1,11 @@
-﻿using Models;
+﻿using Incubator_2.ViewModels;
+using Models;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 
 namespace Incubator_2.Forms
@@ -12,34 +16,23 @@ namespace Incubator_2.Forms
     public partial class TagCreator : UserControl
     {
         Tag tag;
-        private static Dictionary<TypeOfTag, int> typesOfTag = new Dictionary<TypeOfTag, int>
-        {
-            {TypeOfTag.Variable, 1},
-            {TypeOfTag.Text, 2},
-            {TypeOfTag.LocalConstant, 3},
-            {TypeOfTag.LocalEnumeration, 4},
-            {TypeOfTag.GlobalEnumeration, 5},
-        };
-        public TagCreator(Tag t, bool isNew = false)
+        private bool IsCollapsed = false;
+        public TagCreator(Tag t, Dictionary<int, string> enums, bool isNew = false)
         {
             InitializeComponent();
-            this.DataContext = t;
+            tag = t;
+            this.DataContext = new VM_Tag(t, enums);
             if (!isNew)
             {
-                DeserializeType();
+
             }
         }
-        private void DeserializeType()
-        {
-            this.ComboType.SelectedIndex = typesOfTag[tag.type];
-        }
-        private TypeOfTag SerializeType()
-        {
-            return typesOfTag.FirstOrDefault(x => x.Value == this.ComboType.SelectedIndex).Key;
-        }
+
+        
+
         public void SaveTag(int templ, bool isEdit=false)
         {
-            tag.type = SerializeType();
+            tag.template = templ;
             if (isEdit)
             {
                 tag.UpdateTag();
@@ -48,6 +41,19 @@ namespace Incubator_2.Forms
             {
                 tag.AddTag();
             }
+        }
+
+        private void Minimize(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (this.IsCollapsed)
+            {
+                this.MainBorder.Height = this.ContentPanel.Height + 40;
+            }
+            else
+            {
+                this.MainBorder.Height = 40;
+            }
+            this.IsCollapsed = !this.IsCollapsed;
         }
     }
 }

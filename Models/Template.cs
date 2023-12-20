@@ -95,7 +95,7 @@ namespace Models
             return categories;
         }
 
-        public int AddTemplate(bool isChild)
+        public void AddTemplate(bool isChild)
         {
             StartCommand()
                 .Insert(new Dictionary<string, string>
@@ -108,7 +108,7 @@ namespace Models
                     { "type", $"'{type}'" } 
                 })
                 .ExecuteVoid();
-            return int.Parse(
+            this.id = int.Parse(
                     GetOne(
                         StartCommand()
                             .Select()

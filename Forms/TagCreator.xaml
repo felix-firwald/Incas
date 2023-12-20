@@ -14,23 +14,39 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" ToolTip="Свернуть / Развернуть окно" Cursor="Hand"/>
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" ToolTip="Свернуть / Развернуть окно" Cursor="Hand" MouseDown="Minimize"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,5,0"/>
                 <Label Style="{DynamicResource LabelElement}" Content="Имя тега:" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="{Binding name}"/>
+                <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="{Binding NameOfTag, UpdateSourceTrigger=PropertyChanged}"/>
                 
             </StackPanel>
             
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
-            <StackPanel Grid.Row="2">
-                <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="0">
-                    <ComboBoxItem Content="Ручной ввод (короткий текст)"/>
-                    <ComboBoxItem Content="Ручной ввод (многострочный текст)"/>
-                    <ComboBoxItem Content="Константа"/>
-                    <ComboBoxItem Content="Локальное перечисление"/>
-                    <ComboBoxItem Content="Глобальное перечисление"/>
+            <StackPanel Grid.Row="2" x:Name="ContentPanel">
+                <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding TypeOfTagValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBoxItem >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Короткий текст" Style="{DynamicResource LabelElement}"/>
+                            <Label Content="Ручной ввод" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Многострочный текст" Style="{DynamicResource LabelElement}"/>
+                            <Label Content="Ручной ввод" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Константа" Style="{DynamicResource LabelElement}"/>
+                            <Label Content="Неизменяемое значение" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem Content="Локальное перечисление (выпадающий список)"/>
+                    <ComboBoxItem Content="Глобальное перечисление (выпадающий список)"/>
                 </ComboBox>
-                <TextBox Style="{DynamicResource TextBoxBig}" Tag="Значение по умолчанию" Text="{Binding value}"/>
+                <TextBox Style="{DynamicResource TextBoxBig}" Tag="Значение по умолчанию" Text="{Binding DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <ComboBox Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding enumerations}" DisplayMemberPath="Value" SelectedValuePath="Key"/>
             </StackPanel>
         </Grid>
     </Border>

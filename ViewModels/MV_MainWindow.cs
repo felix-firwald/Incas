@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace Incubator_2.ViewModels
 {
-    public class MV_MainWindow : INotifyPropertyChanged
+    public class MV_MainWindow : VM_Base
     {
         private string _surname = "Фамилия";
         private string _fullname = "Имя";
@@ -56,14 +56,6 @@ namespace Incubator_2.ViewModels
             }
         }
 
-        //public MV_MainWindow(string surname="NO DATA", string fullname = "NO DATA", string post = "NO DATA", string incubatorName = "NO DATA")
-        //{
-        //    Surname = surname;
-        //    Fullname = fullname;
-        //    Post = post;
-        //    IncubatorName = incubatorName;
-        //}
-
         public string WorkspaceName
         {
             get { return _workspaceName; }
@@ -77,11 +69,11 @@ namespace Incubator_2.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        //public event PropertyChangedEventHandler PropertyChanged;
+        //protected virtual void OnPropertyChanged(string propertyName)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        //}
 
         public void LoadInfo()
         {

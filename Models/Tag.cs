@@ -51,6 +51,11 @@ namespace Models
         }
         public void AddTag()
         {
+            ProgramState.ShowErrorDialog($"name: {name}\n" +
+                $"template: {template}\n" +
+                $"type: {type}\n" +
+                $"value: {value}\n" +
+                $"enumeration: {enumeration}", "Проверка!");
             StartCommand()
                 .Insert(new Dictionary<string, string>
                 {
