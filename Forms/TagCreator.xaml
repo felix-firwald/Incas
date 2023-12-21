@@ -14,12 +14,12 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" ToolTip="Свернуть / Развернуть окно" Cursor="Hand" MouseDown="Minimize"/>
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" ToolTip="Свернуть / Развернуть окно" Cursor="Hand" MouseDown="TurnSizeClick"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,5,0"/>
                 <CheckBox Style="{DynamicResource Selector}"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,0,5,0"/>
                 <Label Style="{DynamicResource LabelElement}" Content="Имя тега:" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="{Binding NameOfTag, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="{Binding NameOfTag, UpdateSourceTrigger=PropertyChanged}" MaxLength="25"/>
                 
             </StackPanel>
             
@@ -55,7 +55,7 @@
                         </StackPanel>
                     </ComboBoxItem>
                 </ComboBox>
-                <TextBox Style="{DynamicResource TextBoxBig}" Tag="Значение по умолчанию" Text="{Binding DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Style="{DynamicResource TextBoxBig}" Tag="Значение по умолчанию" Text="{Binding DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="500" TextWrapping="Wrap"/>
             </StackPanel>
         </Grid>
     </Border>

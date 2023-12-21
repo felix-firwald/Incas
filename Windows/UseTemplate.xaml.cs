@@ -88,5 +88,20 @@ namespace Incubator_2.Windows
                 this.dir.Text = fb.SelectedPath;
             }
         }
+        private void MinimizeAll(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            foreach (UC_FileCreator fc in this.ContentPanel.Children)
+            {
+                fc.Minimize();
+            }
+        }
+
+        private void MaximizeAll(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            foreach (UC_FileCreator fc in this.ContentPanel.Children)
+            {
+                fc.Maximize();
+            }
+        }
     }
 }

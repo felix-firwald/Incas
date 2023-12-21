@@ -44,18 +44,28 @@ namespace Incubator_2.Forms
                 TagFillers.Add(tf);
             });
         }
+        public void Maximize()
+        {
+            this.MainBorder.Height = this.ContentPanel.Height + 40;
+            this.IsCollapsed = !this.IsCollapsed;
+        }
+        public void Minimize()
+        {
+            this.MainBorder.Height = 40;
+            this.IsCollapsed = !this.IsCollapsed;
+        }
 
-        private void Minimize(object sender, MouseButtonEventArgs e)
+        private void ResizeClick(object sender, MouseButtonEventArgs e)
         {
             if (this.IsCollapsed)
             {
-                this.MainBorder.Height = this.ContentPanel.Height + 40;
+                Maximize();
             }
             else
             {
-                this.MainBorder.Height = 40;
+                Minimize();
             }
-            this.IsCollapsed = !this.IsCollapsed;
+            
         }
         private void Remove(object sender, MouseButtonEventArgs e)
         {

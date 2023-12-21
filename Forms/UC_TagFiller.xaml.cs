@@ -41,7 +41,7 @@ namespace Incubator_2.Forms
                     break;
                 case TypeOfTag.LocalEnumeration:
                     SetComboBoxMode();
-                    this.Combobox.ItemsSource = this.tag.value.Split('\n');
+                    this.Combobox.ItemsSource = this.tag.value.Split(';');
                     this.Combobox.Text = this.tag.value;
                     break;
             }

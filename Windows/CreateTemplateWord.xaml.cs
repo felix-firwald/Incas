@@ -122,5 +122,38 @@ namespace Incubator_2.Windows
         {
             AddTag();
         }
+
+        private void FindTagsInFile(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            string pathFile = ProgramState.GetFullnameOfWordFile(template.path);
+            if (!File.Exists(pathFile))
+            {
+                ProgramState.ShowErrorDialog($"Файл ({template.path}) не существует!\nТеги не могут быть обнаружены.", "Поиск невозможен");
+                return;
+            }
+            WordTemplator wt = new WordTemplator(pathFile);
+            foreach (string tagname in wt.FindAllTags())
+            {
+                Tag tag = new Tag();
+                tag.name = tagname;
+                AddTag(tag);
+            }
+        }
+
+        private void MinimizeAll(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            foreach (TagCreator tag in this.ContentPanel.Children)
+            {
+                tag.Minimize();
+            }
+        }
+
+        private void MaximizeAll(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            foreach (TagCreator tag in this.ContentPanel.Children)
+            {
+                tag.Maximize();
+            }
+        }
     }
 }

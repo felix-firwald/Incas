@@ -33,6 +33,9 @@
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="MailForward" Grid.Column="1" Grid.Row="1" MouseDown="AddFC_Click" ToolTip="Вытянуть в Excel" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="MailReply" Grid.Column="1" Grid.Row="1" MouseDown="AddFC_Click" ToolTip="Вытянуть из Excel" />
                     <Rectangle Fill="{DynamicResource Element}" Height="1"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" Grid.Column="1" Grid.Row="1" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAll" Margin="5,0,5,5" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" Grid.Column="1" Grid.Row="1" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAll" />
+                    <Rectangle Fill="{DynamicResource Element}" Height="1"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Calculator" Grid.Column="1" Grid.Row="1" MouseDown="AddFC_Click" ToolTip="Пересчитать имена файлов" />
                 </StackPanel>
             </Border>

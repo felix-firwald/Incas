@@ -19,7 +19,7 @@
                 <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" MouseDown="Minimize" ToolTip="Свернуть / Развернуть окно"/>
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" MouseDown="ResizeClick" ToolTip="Свернуть / Развернуть окно"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" />
                 
 

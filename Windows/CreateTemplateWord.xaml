@@ -28,8 +28,8 @@
                 <!--кнопка создания файла или печати-->
             </Grid.RowDefinitions>
             <TextBox x:Name="sourceFile" Style="{DynamicResource TextBoxMain}" Text="{Binding SourceFile}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Файл шаблона в формате .docx" Grid.Column="0" Margin="5,0,5,0" Grid.ColumnSpan="2"/>
-            <TextBox x:Name="category" Style="{DynamicResource TextBoxMain}" Text="{Binding Category}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Категория" Margin="5,0,5,0" Grid.Row="1"/>
-            <TextBox x:Name="nameOfTemplate" Style="{DynamicResource TextBoxMain}" Text="{Binding NameOfTemplate}" MinWidth="200" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Имя шаблона" Margin="5,0,5,0" Grid.Row="1" Grid.Column="1"/>
+            <TextBox x:Name="category" Style="{DynamicResource TextBoxMain}" Text="{Binding Category}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Категория" Margin="5,0,5,0" Grid.Row="1" MaxLength="25"/>
+            <TextBox x:Name="nameOfTemplate" Style="{DynamicResource TextBoxMain}" Text="{Binding NameOfTemplate}" MinWidth="200" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Имя шаблона" Margin="5,0,5,0" Grid.Row="1" Grid.Column="1" MaxLength="50"/>
 
 
             <Button Style="{StaticResource ButtonMain}" Content=". . ." Grid.Row="0" Grid.Column="2" Margin="5,5,5,5" Cursor="Hand" Click="reviewClick" />
@@ -37,8 +37,11 @@
             <Border Grid.Row="1" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="5" Grid.RowSpan="2">
                 <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" ToolTip="Добавить тег" MouseDown="AddTagClick" />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="SearchPlus" Grid.Column="1" Grid.Row="1" ToolTip="Обнаружить теги в выбранном файле" />
-                    <Rectangle Height="1" Fill="{DynamicResource Icon}"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="SearchPlus" Grid.Column="1" Grid.Row="1" ToolTip="Обнаружить теги в выбранном файле" MouseDown="FindTagsInFile" />
+                    <Rectangle Height="1" Fill="{DynamicResource Element}"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" Grid.Column="1" Grid.Row="1" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAll" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" Grid.Column="1" Grid.Row="1" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAll" />
+                    <Rectangle Height="1" Fill="{DynamicResource Element}"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ObjectGroup" Grid.Column="1" Grid.Row="1" ToolTip="Добавить группу" />
                 </StackPanel>
             </Border>

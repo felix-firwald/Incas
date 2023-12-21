@@ -15,7 +15,7 @@ namespace Incubator_2.ViewModels
     class VM_Tag : VM_Base
     {
         private Tag mainTag;
-        
+        // сделать проверку по id, если id есть, то update, если нет - add
         public VM_Tag(Tag tag)
         {
             this.mainTag = tag;

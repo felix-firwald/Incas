@@ -42,18 +42,27 @@ namespace Incubator_2.Forms
                 tag.AddTag();
             }
         }
+        public void Minimize()
+        {
+            this.MainBorder.Height = 40;
+            this.IsCollapsed = !this.IsCollapsed;
+        }
+        public void Maximize()
+        {
+            this.MainBorder.Height = this.ContentPanel.Height + 40;
+            this.IsCollapsed = !this.IsCollapsed;
+        }
 
-        private void Minimize(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void TurnSizeClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (this.IsCollapsed)
             {
-                this.MainBorder.Height = this.ContentPanel.Height + 40;
+                Maximize();
             }
             else
             {
-                this.MainBorder.Height = 40;
+                Minimize();
             }
-            this.IsCollapsed = !this.IsCollapsed;
         }
     }
 }
