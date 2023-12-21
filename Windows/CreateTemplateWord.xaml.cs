@@ -91,6 +91,7 @@ namespace Incubator_2.Windows
                     template.AddTemplate(false);
                     SaveTags(false);
                 }
+                this.Close();
             }
         }
 
