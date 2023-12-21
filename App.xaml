@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="Themes/Label.xaml" />
                 <ResourceDictionary Source="Themes/Scroll.xaml" />
                 <ResourceDictionary Source="Themes/DataGrid.xaml" />
+                <ResourceDictionary Source="Themes/ContextMenu.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <Style x:Key="FocusVisual">

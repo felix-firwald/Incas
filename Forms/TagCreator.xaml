@@ -54,16 +54,8 @@
                             <Label Content="Выпадающий список" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
                         </StackPanel>
                     </ComboBoxItem>
-                    <ComboBoxItem >
-                        <StackPanel Orientation="Horizontal">
-                            <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
-                            <Label Content="Глобальное перечисление" Style="{DynamicResource LabelElement}"/>
-                            <Label Content="Выпадающий список" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
-                        </StackPanel>
-                    </ComboBoxItem>
                 </ComboBox>
                 <TextBox Style="{DynamicResource TextBoxBig}" Tag="Значение по умолчанию" Text="{Binding DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <ComboBox x:Name="enumsList" Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding enumerations}" SelectedIndex="{Binding EnumerationValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Key" SelectedValuePath="Value"/>
             </StackPanel>
         </Grid>
     </Border>

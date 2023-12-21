@@ -34,8 +34,8 @@
                 </fa:FontAwesome.Foreground>
             </fa:FontAwesome>
         </Grid>
-        <Forms:UC_ListOfDocuments Grid.Row="1"/>
-        <Forms:UC_ListOfEnumerations Grid.Row="1" Grid.Column="1"/>
+        <Forms:UC_ListOfDocuments Grid.Row="1" Grid.ColumnSpan="2"/>
+       
         
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,0" Grid.Row="1" Width="5" Background="#32353c" Height="200" VerticalAlignment="Center"/>
     </Grid>

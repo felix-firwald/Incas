@@ -14,15 +14,10 @@ namespace Incubator_2.ViewModels
 {
     class VM_Tag : VM_Base
     {
-
         private Tag mainTag;
-        private Dictionary<string, int> _enumerations;
-        public Dictionary<string, int> enumerations { get { return _enumerations; } }
         
-
-        public VM_Tag(Tag tag, Dictionary<string, int> enums)
+        public VM_Tag(Tag tag)
         {
-            this._enumerations = enums;
             this.mainTag = tag;
         }
 
@@ -60,35 +55,8 @@ namespace Incubator_2.ViewModels
             }
         }
 
-        public string EnumerationValue
-        {
-            get 
-            {
-                return GetEnumerationById(mainTag.enumeration); 
-            }
-            set
-            {
-                this.mainTag.enumeration = int.Parse(value);
-                OnPropertyChanged(nameof(EnumerationValue));
-            }
-        }
+
         // может лучше по selected index?
-
-        private string GetEnumerationById(int id)
-        {
-            int counter = 0;
-            foreach (KeyValuePair<string, int> kv in this._enumerations)
-            {
-                if (kv.Value == id) 
-                {
-                    return counter.ToString();
-                }
-                counter++;
-            }
-            return "-";
-        }
-
-
         #region Not Standart Properties
         public TypeOfTag SerializeFromInput(string val)
         {
@@ -103,8 +71,6 @@ namespace Incubator_2.ViewModels
                     return TypeOfTag.LocalConstant;
                 case "3":
                     return TypeOfTag.LocalEnumeration;
-                case "4":
-                    return TypeOfTag.GlobalEnumeration;
             }
         }
         public string SerializeToInput(TypeOfTag tot)
@@ -120,8 +86,6 @@ namespace Incubator_2.ViewModels
                     return "2";
                 case TypeOfTag.LocalEnumeration:
                     return "3";
-                case TypeOfTag.GlobalEnumeration:
-                    return "4";
             }
         }
         #endregion

@@ -11,7 +11,6 @@ namespace Models
         Variable,
         Text,
         LocalConstant,
-        GlobalEnumeration,
         LocalEnumeration,
     }
     public class Tag : Model
@@ -21,7 +20,6 @@ namespace Models
         public string name { get; set; }
         public TypeOfTag type { get; set; }
         public string value { get; set; }
-        public int enumeration { get; set; }
         public int parent { get; set; }
         public bool required { get; set; }
         public Tag() 
@@ -58,7 +56,6 @@ namespace Models
                     { "name", $"'{name}'" },
                     { "type", $"'{type}'" },
                     { "value", $"'{value}'" },
-                    { "enumeration", enumeration.ToString() },
                 })
                 .ExecuteVoid();
         }
@@ -68,7 +65,6 @@ namespace Models
                 .Update("name", name)
                 .Update("type", type.ToString())
                 .Update("value", value)
-                .Update("enumeration", enumeration.ToString())
                 .WhereEqual("id", id.ToString())
                 .Execute();
         }
@@ -95,14 +91,6 @@ namespace Models
                             .WhereEqual("parent", id.ToString())
                             .Execute());
             this.Serialize(dr);
-        }
-        public void SwitchGlobalToLocalEnumeration(Enumeration enumer)
-        {
-            StartCommand()
-                .Update("value", enumer.content)
-                .Update("type", TypeOfTag.LocalEnumeration.ToString())
-                .WhereEqual("enumeration", enumer.id.ToString(), false)
-                .ExecuteVoid();
         }
     }
 }

@@ -115,8 +115,7 @@ namespace Incubator_2.Windows
             {
                 t = tag;
             }
-            Enumeration enumer = new Enumeration();
-            this.ContentPanel.Children.Add(new TagCreator(t, enumer.GetAllEnumerationsView(), isNew));
+            this.ContentPanel.Children.Add(new TagCreator(t, isNew));
         }
 
         private void AddTagClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

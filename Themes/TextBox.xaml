@@ -102,7 +102,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border x:Name="Border" BorderBrush="DodgerBlue" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                    <Border x:Name="Border" MinWidth="20" BorderBrush="DodgerBlue" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                         <Grid>
                             <ScrollViewer 
                                 x:Name="PART_ContentHost" 

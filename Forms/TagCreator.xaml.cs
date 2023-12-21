@@ -17,11 +17,11 @@ namespace Incubator_2.Forms
     {
         Tag tag;
         private bool IsCollapsed = false;
-        public TagCreator(Tag t, Dictionary<string, int> enums, bool isNew = false)
+        public TagCreator(Tag t, bool isNew = false)
         {
             InitializeComponent();
             tag = t;
-            this.DataContext = new VM_Tag(t, enums);
+            this.DataContext = new VM_Tag(t);
             if (!isNew)
             {
 

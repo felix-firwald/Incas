@@ -39,23 +39,12 @@ namespace Incubator_2.Forms
                 case TypeOfTag.LocalConstant:
                     this.Visibility = Visibility.Collapsed;
                     break;
-                case TypeOfTag.GlobalEnumeration:
-                    SetComboBoxMode();
-                    this.Combobox.ItemsSource = GetValuesOfGlobalEnum();
-                    this.Combobox.Text = this.tag.value;
-                    break;
                 case TypeOfTag.LocalEnumeration:
                     SetComboBoxMode();
                     this.Combobox.ItemsSource = this.tag.value.Split('\n');
                     this.Combobox.Text = this.tag.value;
                     break;
             }
-        }
-        private string[] GetValuesOfGlobalEnum()
-        {
-            Enumeration en = new Enumeration();
-            string content = en.GetEnumerationById(this.tag.enumeration).content;
-            return string.IsNullOrEmpty(content) ? Array.Empty<string>() : content.Split('\n');
         }
         private void SetTextBoxMode()
         {
@@ -80,7 +69,6 @@ namespace Incubator_2.Forms
                     return this.Textbox.Text;
                 case TypeOfTag.LocalConstant:
                     return this.tag.value;
-                case TypeOfTag.GlobalEnumeration:
                 case TypeOfTag.LocalEnumeration:
                     if (this.Combobox.SelectedIndex != -1)
                     {
