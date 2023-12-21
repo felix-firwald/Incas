@@ -59,6 +59,7 @@ namespace Incubator_2.Windows
                 }
                 result = fd.SafeFileName;
                 this.template.path = result;
+                this.sourceFile.Text = result;
             }
         }
 
