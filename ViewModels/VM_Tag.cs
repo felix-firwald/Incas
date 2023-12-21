@@ -76,13 +76,14 @@ namespace Incubator_2.ViewModels
 
         private string GetEnumerationById(int id)
         {
+            int counter = 0;
             foreach (KeyValuePair<string, int> kv in this._enumerations)
             {
                 if (kv.Value == id) 
                 {
-                    ProgramState.ShowErrorDialog(kv.Key);
-                    return kv.Key;
+                    return counter.ToString();
                 }
+                counter++;
             }
             return "-";
         }
