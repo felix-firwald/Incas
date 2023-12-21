@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.ViewModels;
 using Incubator_2.Windows;
 using Models;
 using System;
@@ -48,10 +49,10 @@ namespace Forms
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
-            DialogQuestion dialog = new DialogQuestion($"Шаблон \"{template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять");
-            dialog.ShowDialog();
-            if (dialog.status == DialogStatus.Yes)
+            if (ProgramState.ShowQuestionDialog($"Шаблон \"{template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
             {
+                Models.Tag tag = new Models.Tag();
+                tag.RemoveAllTagsByTemplate(template.id);
                 template.RemoveTemplate();
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incubator_2.Forms;
+using Incubator_2.ViewModels;
 using Models;
 using System.IO;
 using System.Security.Cryptography;
@@ -15,6 +16,7 @@ namespace Incubator_2.Windows
     public partial class CreateTemplateWord : Window
     {
         Template template;
+        private VM_Template VM_template;
         private readonly bool isEdit = false;
 
         public CreateTemplateWord(Template te = null)
@@ -31,7 +33,8 @@ namespace Incubator_2.Windows
                 template = te;
                 GetTags();
             }
-            this.DataContext = template;
+            VM_template = new VM_Template(this.template);
+            this.DataContext = VM_template;
         }
 
         private void GetTags()
@@ -58,8 +61,7 @@ namespace Incubator_2.Windows
                     File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesWordPath}\\{fd.SafeFileName}");
                 }
                 result = fd.SafeFileName;
-                this.template.path = result;
-                this.sourceFile.Text = result;
+                this.VM_template.SourceFile = result;
             }
         }
 
