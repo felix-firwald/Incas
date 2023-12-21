@@ -54,14 +54,10 @@ namespace Incubator_2.Windows
                 string result;
                 if (!fd.FileName.StartsWith(ProgramState.TemplatesSourcesWordPath))
                 {
-                    
-                    result = $"{ProgramState.TemplatesSourcesWordPath}\\{fd.SafeFileName}";
-                    File.Copy(fd.FileName, result);
+
+                    File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesWordPath}\\{fd.SafeFileName}");
                 }
-                else
-                {
-                    result = fd.SafeFileName;
-                }
+                result = fd.SafeFileName;
                 this.template.path = result;
             }
         }

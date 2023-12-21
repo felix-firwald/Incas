@@ -91,6 +91,16 @@ namespace Models
                 .WhereEqual("template", templ.ToString())
                 .Execute();
         }
+        // для работы функции ниже должен быть предварительно обновлен template
+        public void GetChild()
+        {
+            DataRow dr = GetOne(StartCommand()
+                            .Select()
+                            .WhereEqual("template", template.ToString())
+                            .WhereEqual("parent", id.ToString())
+                            .Execute());
+            this.Serialize(dr);
+        }
         public void SwitchGlobalToLocalEnumeration(Enumeration enumer)
         {
             StartCommand()
