@@ -1,6 +1,7 @@
 ﻿using Common;
 using DocumentFormat.OpenXml.Office2021.PowerPoint.Designer;
 using Incubator_2.Forms;
+using Incubator_2.ViewModels;
 using Models;
 using System.Collections.Generic;
 using System.Data;
@@ -44,7 +45,7 @@ namespace Incubator_2.Windows
             }
             return result;
         }
-        
+
         private void AddFileCreator()
         {
             UC_FileCreator fc = new UC_FileCreator(tags, GetChildrenChoice());
@@ -101,6 +102,26 @@ namespace Incubator_2.Windows
             foreach (UC_FileCreator fc in this.ContentPanel.Children)
             {
                 fc.Maximize();
+            }
+        }
+        private void RecalculateNamesClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            List<string> names = new List<string>();
+            foreach (Tag tag in tags)
+            {
+                if (tag.type != TypeOfTag.LocalConstant && tag.type != TypeOfTag.Text)
+                {
+                    names.Add(tag.name);
+                }
+            }
+            FilenamesRecalculator fr = new FilenamesRecalculator(names);
+            fr.ShowDialog();
+            if (fr.status == DialogStatus.Yes)
+            {
+                foreach (UC_FileCreator fc in this.creators)
+                {
+                    fc.RenameByTag(fr.SelectedTag, fr.Prefix, fr.Postfix);
+                }
             }
         }
     }

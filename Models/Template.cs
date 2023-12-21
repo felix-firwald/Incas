@@ -154,5 +154,16 @@ namespace Models
             }
             return children;
         }
+        public Template GetChild(string name)
+        {
+            DataRow dr = GetOne(StartCommand()
+                .Select()
+                .WhereEqual("parent", this.id.ToString())
+                .WhereEqual("name", name)
+                .Execute());
+            this.Serialize(dr);
+            return this;
+
+        }
     }
 }

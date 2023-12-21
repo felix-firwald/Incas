@@ -65,7 +65,7 @@ namespace Incubator_2.Forms
             {
                 Minimize();
             }
-            
+
         }
         private void Remove(object sender, MouseButtonEventArgs e)
         {
@@ -94,6 +94,19 @@ namespace Incubator_2.Forms
             {
                 wt.Replace(tf.GetTagName(), tf.GetValue());
             }
+        }
+        public void RenameByTag(string tag, string prefix = "", string postfix = "")
+        {
+            string result = "";
+            foreach (UC_TagFiller tf in TagFillers)
+            {
+                if (tf.GetTagName() == tag)
+                {
+                    result = tf.GetValue();
+                    break;
+                }
+            }
+            this.Filename.Text = $"{prefix}{result}{postfix}";
         }
     }
 }
