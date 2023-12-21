@@ -40,16 +40,16 @@ namespace Models
             }
             return resulting;
         }
-        public Dictionary<int, string> GetAllEnumerationsView()
+        public Dictionary<string, int> GetAllEnumerationsView()
         {
             DataTable dt = StartCommand()
                                 .Select()
                                 .OrderByASC("name")
                                 .Execute();
-            Dictionary<int, string> resulting = new Dictionary<int, string>();
+            Dictionary<string, int> resulting = new Dictionary<string, int>();
             foreach (DataRow dr in dt.Rows)
             {
-                resulting.Add(int.Parse(dr["id"].ToString()), dr["name"].ToString());
+                resulting.Add(dr["name"].ToString(), int.Parse(dr["id"].ToString()));
             }
             return resulting;
         }

@@ -125,6 +125,7 @@ namespace Models
                 .Update("name", name)
                 .Update("path", path)
                 .Update("suggestedPath", suggestedPath)
+                .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }
 

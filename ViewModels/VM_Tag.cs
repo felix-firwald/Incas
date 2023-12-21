@@ -1,11 +1,14 @@
-﻿using DocumentFormat.OpenXml.Office2010.CustomUI;
+﻿using Common;
+using DocumentFormat.OpenXml.Office2010.CustomUI;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Incubator_2.ViewModels
 {
@@ -13,12 +16,14 @@ namespace Incubator_2.ViewModels
     {
 
         private Tag mainTag;
-        public Dictionary<int, string> enumerations;
+        private Dictionary<string, int> _enumerations;
+        public Dictionary<string, int> enumerations { get { return _enumerations; } }
+        
 
-        public VM_Tag(Tag tag, Dictionary<int, string> enums)
+        public VM_Tag(Tag tag, Dictionary<string, int> enums)
         {
+            this._enumerations = enums;
             this.mainTag = tag;
-            this.enumerations = enums;
         }
 
         public string NameOfTag
@@ -57,12 +62,29 @@ namespace Incubator_2.ViewModels
 
         public string EnumerationValue
         {
-            get { return this.enumerations[mainTag.enumeration]; }
+            get 
+            {
+                return GetEnumerationById(mainTag.enumeration); 
+            }
             set
             {
-                mainTag.enumeration = int.Parse(value);
+                this.mainTag.enumeration = int.Parse(value);
                 OnPropertyChanged(nameof(EnumerationValue));
             }
+        }
+        // может лучше по selected index?
+
+        private string GetEnumerationById(int id)
+        {
+            foreach (KeyValuePair<string, int> kv in this._enumerations)
+            {
+                if (kv.Value == id) 
+                {
+                    ProgramState.ShowErrorDialog(kv.Key);
+                    return kv.Key;
+                }
+            }
+            return "-";
         }
 
 

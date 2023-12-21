@@ -17,7 +17,7 @@ namespace Incubator_2.Forms
     {
         Tag tag;
         private bool IsCollapsed = false;
-        public TagCreator(Tag t, Dictionary<int, string> enums, bool isNew = false)
+        public TagCreator(Tag t, Dictionary<string, int> enums, bool isNew = false)
         {
             InitializeComponent();
             tag = t;
