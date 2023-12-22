@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.ViewModels;
 using Models;
 using System.IO;
 using System.Windows;
@@ -15,7 +16,8 @@ namespace Incubator_2.Windows
         {
             InitializeComponent();
             ProgramState.LoadUserData();
-            this.cpath.Text = ProgramState.CommonPath;
+            this.DataContext = new VM_OpenWorkspace();
+            //this.cpath.Text = ProgramState.CommonPath;
         }
 
         private void LogInClicked(object sender, RoutedEventArgs e)

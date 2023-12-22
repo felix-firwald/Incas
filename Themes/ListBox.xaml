@@ -5,7 +5,7 @@
         <Setter Property="Margin" Value="5"/>
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
-    <Style x:Key="ListBoxItemMain" TargetType="{x:Type ListBoxItem}">
+    <Style TargetType="{x:Type ListBoxItem}">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Foreground" Value="White"/>

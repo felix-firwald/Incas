@@ -59,6 +59,14 @@ namespace Common
             rk.SetValue("password", "");
             return rk;
         }
+        public static string GetWorkspacePath(string name)
+        {
+            return GetWorkspaceByName(name).GetValue("path").ToString();
+        }
+        public static void SetWorkspacePath(string name, string path)
+        {
+            GetWorkspaceByName(name).SetValue("path", path);
+        }
 
         #endregion
         public static RegistryKey AddTemplate(string name, string prPath, string prPrefix, string prPostfix)
