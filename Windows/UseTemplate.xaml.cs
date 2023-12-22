@@ -1,11 +1,16 @@
-﻿using Common;
+﻿using ClosedXML.Excel;
+using Common;
 using DocumentFormat.OpenXml.Office2021.PowerPoint.Designer;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Incubator_2.Forms;
 using Incubator_2.ViewModels;
 using Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -125,5 +130,33 @@ namespace Incubator_2.Windows
             }
         }
 
+        private void GetFromExcel(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            //OpenFileDialog fd = new OpenFileDialog();
+            //fd.Filter = "MS Excel|*.xlsx";
+            //if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            //{
+            //    XLWorkbook wb = new XLWorkbook(fd.FileName);
+            //    IXLWorksheet ws = wb.Worksheet(1);
+            //    foreach (Tag tag in tags)
+            //    {
+            //        IXLCell colCell;
+            //        try
+            //        {
+            //            colCell = ws.Search(tag.name, CompareOptions.IgnoreCase).First();
+            //        }
+            //        catch (Exception)
+            //        {
+            //            continue;
+            //        }
+            //        int columnNumber = colCell.WorksheetColumn().ColumnNumber();
+            //        int rowNumber = colCell.WorksheetRow().RowNumber() + 1;
+            //        for (int i = rowNumber; i < ws.LastRowUsed().RowNumber(); i++)
+            //        {
+            //            string ValueToInsert = ws.Cell(i, columnNumber).Value.ToString();
+            //        }
+            //    }
+            //}
+        }
     }
 }

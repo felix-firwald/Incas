@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>", Scope = "member", Target = "~M:Incubator_2.Windows.UseTemplate.review_Click(System.Object,System.Windows.RoutedEventArgs)")]
+[assembly: SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>", Scope = "member", Target = "~M:Incubator_2.Windows.UseTemplate.GetFromExcel(System.Object,System.Windows.Input.MouseButtonEventArgs)")]

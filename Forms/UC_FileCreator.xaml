@@ -21,8 +21,8 @@
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" MouseDown="ResizeClick" ToolTip="Свернуть / Развернуть окно"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" />
-                
-
+                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,5,0"/>
+                <CheckBox Style="{DynamicResource Selector}"/>
                 <ComboBox x:Name="ChildChoicer" MinWidth="150"  Style="{DynamicResource ComboBoxMain}"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,5,0"/>
                 <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="Новый"/>

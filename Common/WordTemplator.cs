@@ -17,10 +17,14 @@ namespace Common
         {
             return $"[{tag}]";
         }
+        private DocX LoadFile()
+        {
+            return DocX.Load(this.Path);
+        }
 
         public void Replace(string tag, string value)
         {
-            DocX doc = DocX.Load(this.Path);
+            DocX doc = LoadFile();
             StringReplaceTextOptions options = new StringReplaceTextOptions();
             options.SearchValue = ConvertTag(tag);
             options.NewValue = value.Trim();
@@ -38,6 +42,18 @@ namespace Common
                 result.Add(match.Value.TrimStart('[').TrimEnd(']'));
             }
             return result;
+        }
+        public void GetTextOfFile()
+        {
+            DocX doc = LoadFile();
+            IList<Section> s = doc.GetSections();
+            string result = "";
+            foreach (Section section in s)
+            {
+                result = result + "\n" + section.ToString();
+                
+            }
+            ProgramState.ShowErrorDialog(doc.Text);
         }
     }
 }
