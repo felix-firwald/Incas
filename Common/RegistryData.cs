@@ -30,15 +30,37 @@ namespace Common
     {
         public static RegistryKey GetRoot()
         {
-            return Registry.CurrentUser.OpenSubKey("Incubator", true);
+            return Registry.CurrentUser.CreateSubKey("Incubator", true);
         }
         #region Templates
         public static RegistryKey GetTemplatesData() 
         {
-
-            return GetRoot().OpenSubKey("TemplatesData", true);
+            return GetRoot().CreateSubKey("TemplatesData", true);
 
         }
+        #region workspaces
+
+        public static RegistryKey GetWorkspaceData() 
+        {
+            return GetRoot().CreateSubKey("Workspaces", true);
+        }
+        public static List<string> GetWorkspaces()
+        {
+            return GetWorkspaceData().GetSubKeyNames().ToList();
+        }
+        public static RegistryKey GetWorkspaceByName(string name)
+        {
+            if (GetWorkspaceData().GetSubKeyNames().Contains(name))
+            {
+                return GetWorkspaceData().OpenSubKey(name, true);
+            }
+            RegistryKey rk = GetWorkspaceData().CreateSubKey(name, true);
+            rk.SetValue("path", "");
+            rk.SetValue("password", "");
+            return rk;
+        }
+
+        #endregion
         public static RegistryKey AddTemplate(string name, string prPath, string prPrefix, string prPostfix)
         {
             RegistryKey rk = GetTemplatesData().CreateSubKey(name, true);

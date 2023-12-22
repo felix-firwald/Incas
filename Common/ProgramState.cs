@@ -46,10 +46,10 @@ namespace Common
         public static void SetCommonPath(string path)
         {
             CommonPath = path;
-            DatabasePath = path + @"\data.dbinc";
-            CustomDatabasePath = path + @"\custom.dbinc";
-            TemplatesPath = path + @"\Templates";
-            ProceduralPath = path + @"\procedural";
+            DatabasePath = CommonPath + @"\data.dbinc";
+            CustomDatabasePath = CommonPath + @"\custom.dbinc";
+            TemplatesPath = CommonPath + @"\Templates";
+            ProceduralPath = CommonPath + @"\procedural";
             Directory.CreateDirectory(TemplatesPath);
             string sourcePath = TemplatesPath + @"\Sources";
 

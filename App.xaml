@@ -15,6 +15,7 @@
                 <ResourceDictionary Source="Themes/ComboBox.xaml" />
                 <ResourceDictionary Source="Themes/CheckBox.xaml" />
                 <ResourceDictionary Source="Themes/GroupBox.xaml" />
+                <ResourceDictionary Source="Themes/ListBox.xaml" />
                 <ResourceDictionary Source="Themes/Label.xaml" />
                 <ResourceDictionary Source="Themes/Scroll.xaml" />
                 <ResourceDictionary Source="Themes/DataGrid.xaml" />

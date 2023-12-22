@@ -5,28 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
         mc:Ignorable="d" Style="{DynamicResource Dialog}"
-        Title="Выбор рабочего пространства" Height="250" Width="450" MinHeight="250" MinWidth="450" MaxHeight="250" MaxWidth="450" WindowStartupLocation="CenterScreen" Icon="/Windows/Logo.png">
+        Title="Выбор рабочего пространства" Height="250" Width="550" WindowStartupLocation="CenterScreen" Icon="/Windows/Logo.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60*"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="60*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="375"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <fa:FontAwesome Icon="User" FontSize="40" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource Element}" Margin="208,0,0,0" />
-        <Button Style="{StaticResource ButtonMain}" Content=". . ." Grid.Row="1" Grid.Column="1"  VerticalAlignment="Center" Click="PathReview" Height="30" Margin="5,0,5,0"/>
-        <TextBox x:Name="cpath" Style="{StaticResource TextBoxMain}" Grid.Row="1" Grid.ColumnSpan="1" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" />
-        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Grid.Row="2" Grid.ColumnSpan="2" Tag="Пароль для входа" MaxLength="5" MaxLines="1" Margin="5,5,5,5" />
-        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Для продолжения необходимо указать путь к папке рабочего пространства, где лежит база данных и файл с расширением .INIT, а также ввести пароль для пользователя, под которым вы хотите авторизироваться" IsManipulationEnabled="True" TextWrapping="WrapWithOverflow" Background="{x:Null}" Foreground="{DynamicResource DarkLight}" IsEnabled="False" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,5,0" />
-        
-        
-        <Button Style="{StaticResource ButtonMain}" Grid.Row="5" Grid.ColumnSpan="2" Content="Войти в рабочее пространство"  VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0"/>
-
+        <fa:FontAwesome Icon="User" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Element}" Margin="18,0,0,0" Grid.Column="1" />
+        <Button Style="{StaticResource ButtonMain}" Content=". . ." Grid.Row="1" Grid.Column="2"  VerticalAlignment="Center" Click="PathReview" Height="30" Margin="5,0,5,0"/>
+        <TextBox x:Name="cpath" Style="{StaticResource TextBoxMain}" Grid.Row="1" Grid.ColumnSpan="2" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" Grid.Column="1" />
+        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Grid.Row="2" Tag="Пароль для входа" MaxLength="5" MaxLines="1" Margin="5,5,5,5" Grid.Column="1" Grid.ColumnSpan="2" />
+        <Border Grid.RowSpan="3" CornerRadius="5" Margin="6" Background="{DynamicResource Black}">
+            <ListBox Style="{DynamicResource ListBoxMain}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}">
+                
+            </ListBox>
+        </Border>
+        <Button Style="{StaticResource ButtonMain}" Grid.Row="3" Grid.ColumnSpan="1" Content="Добавить" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0"/>
+        <Button Style="{StaticResource ButtonMain}" Grid.Row="3" Grid.ColumnSpan="3" Content="Войти в рабочее пространство" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0" Grid.Column="1"/>
 
     </Grid>
 </Window>

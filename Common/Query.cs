@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace Common
@@ -14,6 +15,12 @@ namespace Common
         SET_NULL,
         SET_DEFAULT,
         RESTRICT 
+    }
+    public enum DBConnectionType
+    {
+        BASE,
+        CUSTOM,
+        OTHER
     }
     public struct Field
     {
@@ -65,9 +72,11 @@ namespace Common
         public string Result { get; private set; }
         private bool isWhereAlready = false;
         private bool isUpdateAlready = false;
-        public Query(string table) 
+        public DBConnectionType typeOfConnection { get; private set; }
+        public Query(string table, DBConnectionType type = DBConnectionType.BASE) 
         {
             this.Table = table;
+            this.typeOfConnection = type;
         }
         public override string ToString()
         {
@@ -321,9 +330,23 @@ namespace Common
         }
 
         #region Connection and Request
-        private static SQLiteConnection GetConnection()
+        private SQLiteConnection GetConnection(string connstring = "")
         {
-            return new SQLiteConnection($"Data source={ProgramState.DatabasePath}; Version=3; UseUTF16Encoding=True", true);
+            string path;
+            switch (typeOfConnection)
+            {
+                case DBConnectionType.BASE:
+                default:
+                    path = ProgramState.DatabasePath;
+                    break;
+                case DBConnectionType.CUSTOM:
+                    path = ProgramState.CustomDatabasePath;
+                    break;
+                case DBConnectionType.OTHER:
+                    path = connstring;
+                    break;
+            }
+            return new SQLiteConnection($"Data source={path}; Version=3; UseUTF16Encoding=True", true);
         }
         private string GetRequest(bool clear = true)
         {
