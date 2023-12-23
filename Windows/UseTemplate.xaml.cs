@@ -24,7 +24,6 @@ namespace Incubator_2.Windows
     public partial class UseTemplate : Window
     {
         Template template;
-        List<Template> children;
         List<Tag> tags;
         List<UC_FileCreator> creators = new List<UC_FileCreator>();
         public UseTemplate(Template t)
@@ -32,7 +31,6 @@ namespace Incubator_2.Windows
             InitializeComponent();
             this.template = t;
             LoadTags();
-            this.children = template.GetChildren();
             AddFileCreator();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
         }
@@ -41,19 +39,10 @@ namespace Incubator_2.Windows
             Tag t = new Tag();
             tags = t.GetAllTagsByTemplate(template.id);
         }
-        private List<string> GetChildrenChoice()
-        {
-            List<string> result = new List<string> { "Основной" };
-            foreach (Template item in this.children)
-            {
-                result.Add(item.name);
-            }
-            return result;
-        }
 
         private void AddFileCreator()
         {
-            UC_FileCreator fc = new UC_FileCreator(tags, GetChildrenChoice());
+            UC_FileCreator fc = new UC_FileCreator(tags);
             this.ContentPanel.Children.Add(fc);
             creators.Add(fc);
         }

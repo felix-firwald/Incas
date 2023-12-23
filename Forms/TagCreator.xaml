@@ -18,9 +18,9 @@
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,5,0"/>
                 <CheckBox Style="{DynamicResource Selector}"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,0,5,0"/>
-                <Label Style="{DynamicResource LabelElement}" Content="Имя тега:" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                 <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="{Binding NameOfTag, UpdateSourceTrigger=PropertyChanged}" MaxLength="25"/>
-                
+                <Label Style="{DynamicResource LabelElement}" Content="]" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             </StackPanel>
             
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
@@ -50,7 +50,7 @@
                     <ComboBoxItem >
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
-                            <Label Content="Локальное перечисление" Style="{DynamicResource LabelElement}"/>
+                            <Label Content="Перечисление" Style="{DynamicResource LabelElement}"/>
                             <Label Content="Выпадающий список" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
                         </StackPanel>
                     </ComboBoxItem>

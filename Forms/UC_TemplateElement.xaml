@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Forms"
              mc:Ignorable="d" 
-             d:DesignHeight="45" d:DesignWidth="600" Background="#393c43">
+             d:DesignHeight="120" d:DesignWidth="600" Background="Transparent">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -14,11 +14,18 @@
             <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Margin="12,14,12,14" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
         <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center">
         </Label>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="2" Icon="Pencil" FontSize="18" Margin="12,14,12,14" Cursor="Hand" MouseDown="EditClick" ToolTip="Редактировать шаблон" Tag="Да"/>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="Remove" FontSize="18" Margin="12,14,12,14" Cursor="Hand" MouseDown="RemoveClick" ToolTip="Удалить шаблон"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="2" Icon="Pencil" FontSize="16" Cursor="Hand" MouseDown="EditClick" ToolTip="Редактировать шаблон" Tag="Да"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="Remove" FontSize="18" Cursor="Hand" MouseDown="RemoveClick" ToolTip="Удалить шаблон"/>
+
+        <StackPanel x:Name="ChildPanel" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" />
+        <Rectangle Grid.Row="1" Width="2" Fill="{DynamicResource Element}"/>
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>

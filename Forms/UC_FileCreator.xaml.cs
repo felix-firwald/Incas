@@ -27,13 +27,11 @@ namespace Incubator_2.Forms
         private List<string> ChildsChoice = new List<string>();
         List<Tag> tags;
         List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
-        public UC_FileCreator(List<Tag> tagsList, List<string> childs = null)
+        public UC_FileCreator(List<Tag> tagsList)
         {
             InitializeComponent();
             this.tags = tagsList;
             FillContentPanel();
-            this.ChildChoicer.ItemsSource = childs;
-            this.ChildChoicer.SelectedIndex = 0;
         }
         private void FillContentPanel()
         {
@@ -83,11 +81,12 @@ namespace Incubator_2.Forms
                 .Replace("<", "")
                 .Replace(">", "")
                 .Replace("|", "")
-                .Replace("\"", "");
+                .Replace("\"", "")
+                .Trim();
         }
         public void CreateFile(string newPath, string original)
         {
-            string newFile = $"{newPath}\\{this.Filename.Text}.docx";
+            string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
             File.Copy(ProgramState.GetFullnameOfWordFile(original), newFile, true);
             WordTemplator wt = new WordTemplator(newFile);
             foreach (UC_TagFiller tf in TagFillers)

@@ -27,6 +27,7 @@ namespace Forms
             InitializeComponent();
             template = t;
             this.MainLabel.Content = template.name;
+            GetChilds();
         }
 
         private void AddClick(object sender, MouseButtonEventArgs e)
@@ -42,6 +43,13 @@ namespace Forms
                 d.ShowDialog();
             }
         }
+        private void GetChilds()
+        {
+            template.GetChildren().ForEach(c =>
+            {
+                this.ChildPanel.Children.Add(new UC_TemplateElement(c));
+            });
+        }
         private bool IsFileExists()
         {
             return File.Exists($"{ProgramState.TemplatesSourcesWordPath}\\{template.path}");
@@ -49,6 +57,11 @@ namespace Forms
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
+            if (this.ChildPanel.Children.Count > 0)
+            {
+                ProgramState.ShowErrorDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
+                return;
+            }
             if (ProgramState.ShowQuestionDialog($"Шаблон \"{template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
             {
                 Models.Tag tag = new Models.Tag();

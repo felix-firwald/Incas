@@ -61,12 +61,17 @@ namespace Models
         }
         public void UpdateTag()
         {
+            if (id is 0)
+            {
+                AddTag();
+                return;
+            }
             StartCommand()
                 .Update("name", name)
                 .Update("type", type.ToString())
                 .Update("value", value)
                 .WhereEqual("id", id.ToString())
-                .Execute();
+                .ExecuteVoid();
         }
         public void RemoveTag()
         {
