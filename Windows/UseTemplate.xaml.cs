@@ -37,7 +37,7 @@ namespace Incubator_2.Windows
         private void LoadTags()
         {
             Tag t = new Tag();
-            tags = t.GetAllTagsByTemplate(template.id);
+            tags = t.GetAllTagsByTemplate(template.id, template.parent);
         }
 
         private void AddFileCreator()
