@@ -10,7 +10,7 @@ namespace Incubator_2.ViewModels
 {
     class VM_OpenWorkspace : VM_Base
     {
-        private List<string> _workspace = RegistryData.GetWorkspaces();
+        private List<string> _workspaces = RegistryData.GetWorkspaces();
         private string _selectedWorkspace;
         public VM_OpenWorkspace() 
         {
@@ -18,10 +18,10 @@ namespace Incubator_2.ViewModels
         }
         public List<string> Workspaces
         {
-            get { return _workspace; }
+            get { return _workspaces; }
             set
             {
-                _workspace = value;
+                _workspaces = value;
                 OnPropertyChanged(nameof(Workspaces));
             }
         }
@@ -29,25 +29,38 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                return _selectedWorkspace;
+                return RegistryData.GetSelectedWorkspace();
             }
             set
             {
-                _selectedWorkspace = value;
+                RegistryData.SetSelectedWorkspace(value);
                 OnPropertyChanged(nameof(SelectedWorkspace));
                 OnPropertyChanged(nameof(Path));
+                OnPropertyChanged(nameof(Password));
             }
         }
         public string Path
         {
             get
             {
-                return RegistryData.GetWorkspacePath(_selectedWorkspace);
+                return RegistryData.GetWorkspacePath(SelectedWorkspace);
             }
             set
             {
-                RegistryData.SetWorkspacePath(_selectedWorkspace, value);
+                RegistryData.SetWorkspacePath(SelectedWorkspace, value);
                 OnPropertyChanged(nameof(Path));
+            }
+        }
+        public string Password
+        {
+            get
+            {
+                return RegistryData.GetWorkspacePassword(SelectedWorkspace);
+            }
+            set
+            {
+                RegistryData.SetWorkspacePassword(SelectedWorkspace, value);
+                OnPropertyChanged(nameof(Password));
             }
         }
     }

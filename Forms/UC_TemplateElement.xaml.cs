@@ -28,10 +28,16 @@ namespace Forms
             template = t;
             this.MainLabel.Content = template.name;
             GetChilds();
+            
         }
 
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
+            if (template.isAbstract)
+            {
+                ProgramState.ShowErrorDialog("Абстрактные шаблоны нельзя использовать напрямую.\nВместо этого, используйте одного из его наследников.", "Использование шаблона невозможно");
+                return;
+            }
             if (IsFileExists())
             {
                 UseTemplate ut = new UseTemplate(template);
@@ -39,8 +45,7 @@ namespace Forms
             }
             else
             {
-                Dialog d = new Dialog($"Файл шаблона \"{template.name}\" ({ProgramState.TemplatesSourcesWordPath}\\{template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно"); ; ;
-                d.ShowDialog();
+                ProgramState.ShowErrorDialog($"Файл шаблона \"{template.name}\" ({ProgramState.TemplatesSourcesWordPath}\\{template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
             }
         }
         private void GetChilds()
@@ -49,6 +54,10 @@ namespace Forms
             {
                 this.ChildPanel.Children.Add(new UC_TemplateElement(c));
             });
+            if (this.ChildPanel.Children.Count > 0)
+            {
+                this.MainLabel.Style = FindResource("LabelElementSpecial") as Style;
+            }
         }
         private bool IsFileExists()
         {

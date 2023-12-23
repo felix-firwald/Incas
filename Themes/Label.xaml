@@ -23,6 +23,9 @@
         <Setter Property="TextElement.FontWeight" Value="ExtraLight"/>
         <Setter Property="Foreground" Value="{StaticResource GrayLight}"/>
     </Style>
+    <Style x:Key="LabelElementSpecial" TargetType="{x:Type Label}" BasedOn="{StaticResource LabelElement}">
+        <Setter Property="Foreground" Value="{StaticResource LightPurple}"/>
+    </Style>
     <Style x:Key="WarningText" TargetType="{x:Type Label}">
         <Setter Property="MinHeight" Value="60"/>
         <Setter Property="MinWidth" Value="160"/>

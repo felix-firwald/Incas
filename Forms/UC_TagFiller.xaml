@@ -8,8 +8,8 @@
              d:DesignHeight="40" d:DesignWidth="600">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition MinWidth="150" MaxWidth="200" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Label x:Name="MainLabel" Style="{DynamicResource LabelElement}" Content="Имя тега:" VerticalAlignment="Top" Grid.Column="0" Margin="5,7,0,0" MaxHeight="30"/>
         <TextBox x:Name="Textbox" Style="{DynamicResource TextBoxMain}" Grid.Column="1" Visibility="Hidden"/>

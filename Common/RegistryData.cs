@@ -32,15 +32,9 @@ namespace Common
         {
             return Registry.CurrentUser.CreateSubKey("Incubator", true);
         }
-        #region Templates
-        public static RegistryKey GetTemplatesData() 
-        {
-            return GetRoot().CreateSubKey("TemplatesData", true);
-
-        }
         #region workspaces
 
-        public static RegistryKey GetWorkspaceData() 
+        public static RegistryKey GetWorkspaceData()
         {
             return GetRoot().CreateSubKey("Workspaces", true);
         }
@@ -48,6 +42,15 @@ namespace Common
         {
             return GetWorkspaceData().GetSubKeyNames().ToList();
         }
+        public static string GetSelectedWorkspace()
+        {
+            return GetRoot().GetValue("selected_workspace", "").ToString();
+        }
+        public static void SetSelectedWorkspace(string selected)
+        {
+            GetRoot().SetValue("selected_workspace", selected);
+        }
+
         public static RegistryKey GetWorkspaceByName(string name)
         {
             if (GetWorkspaceData().GetSubKeyNames().Contains(name))
@@ -67,8 +70,23 @@ namespace Common
         {
             GetWorkspaceByName(name).SetValue("path", path);
         }
+        public static string GetWorkspacePassword(string name)
+        {
+            return GetWorkspaceByName(name).GetValue("password", "").ToString();
+        }
+        public static void SetWorkspacePassword(string name, string password)
+        {
+            GetWorkspaceByName(name).SetValue("password", password);
+        }
 
         #endregion
+        #region Templates
+        public static RegistryKey GetTemplatesData() 
+        {
+            return GetRoot().CreateSubKey("TemplatesData", true);
+
+        }
+        
         public static RegistryKey AddTemplate(string name, string prPath, string prPrefix, string prPostfix)
         {
             RegistryKey rk = GetTemplatesData().CreateSubKey(name, true);

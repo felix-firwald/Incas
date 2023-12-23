@@ -206,6 +206,10 @@ namespace Common
         {
             return Where(cell, "is not", "NULL", false);
         }
+        public Query WhereNULL(string cell)
+        {
+            return Where(cell, "is ", "NULL", false);
+        }
 
         /// <summary>
         /// Where A (left arg) = B (right arg)

@@ -29,7 +29,7 @@ namespace Models
                 .Select()
                 .WhereEqual("type", tt.ToString())
                 .WhereEqual("suggestedPath", cat)
-                .WhereEqual("isAbstract", "0")
+                .WhereNULL("parent")
                 .OrderByASC("name")
                 .Execute();
             List<Template> resulting = new List<Template>();
@@ -47,7 +47,6 @@ namespace Models
             DataTable dt = StartCommand()
                 .Select()
                 .WhereEqual("type", "Word")
-                .WhereEqual("isAbstract", "True")
                 .OrderByASC("name")
                 .Execute();
             List<Template> resulting = new List<Template>();
@@ -102,7 +101,7 @@ namespace Models
                 {
                     { "name", $"'{name}'" },
                     { "path", $"'{path}'" },
-                    { "parent", isChild? $"'{parent}'" : "''" },
+                    { "parent", isChild? $"'{parent}'" : "null" },
                     { "suggestedPath", isChild? "''" : $"'{suggestedPath}'" },
                     { "isAbstract", BoolToInt(isAbstract).ToString() },
                     { "type", $"'{type}'" } 

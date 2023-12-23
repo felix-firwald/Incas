@@ -18,14 +18,14 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
+        <fa:FontAwesome x:Name="UseButton" Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
         <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center">
         </Label>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="2" Icon="Pencil" FontSize="16" Cursor="Hand" MouseDown="EditClick" ToolTip="Редактировать шаблон" Tag="Да"/>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="Remove" FontSize="18" Cursor="Hand" MouseDown="RemoveClick" ToolTip="Удалить шаблон"/>
 
         <StackPanel x:Name="ChildPanel" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" />
-        <Rectangle Grid.Row="1" Width="2" Fill="{DynamicResource Element}"/>
+        <Rectangle Grid.Row="1" Width="2" Fill="{DynamicResource LightPurple}" Cursor=""/>
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>

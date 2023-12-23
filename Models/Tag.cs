@@ -36,6 +36,7 @@ namespace Models
             }
             DataTable dt = this.StartCommand()
                 .AddCustomRequest(req)
+                .OrderByASC("id")
                 .Execute();
             List<Tag> resulting = new List<Tag>();
             foreach (DataRow dr in dt.Rows)
