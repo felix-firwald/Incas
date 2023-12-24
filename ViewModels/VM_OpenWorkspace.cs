@@ -4,18 +4,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Web.AtomPub;
 
 namespace Incubator_2.ViewModels
 {
     class VM_OpenWorkspace : VM_Base
     {
         private List<string> _workspaces = RegistryData.GetWorkspaces();
-        private string _selectedWorkspace;
         public VM_OpenWorkspace() 
         {
 
         }
+
+        public void Refresh()
+        {
+            _workspaces = RegistryData.GetWorkspaces();
+            OnPropertyChanged(nameof(Workspaces));
+            OnPropertyChanged(nameof(SelectedWorkspace));
+            OnPropertyChanged(nameof(Path));
+            OnPropertyChanged(nameof(Password));
+        }
+
+        public void RemoveSelected()
+        {
+            RegistryData.RemoveWorkspace(SelectedWorkspace);
+            RegistryData.SetSelectedWorkspace("");
+            Refresh();
+        }
+
+        #region Public Properties
         public List<string> Workspaces
         {
             get { return _workspaces; }
@@ -63,5 +79,6 @@ namespace Incubator_2.ViewModels
                 OnPropertyChanged(nameof(Password));
             }
         }
+        #endregion
     }
 }

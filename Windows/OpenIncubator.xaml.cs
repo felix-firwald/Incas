@@ -12,11 +12,13 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class OpenIncubator : Window
     {
+        VM_OpenWorkspace vm;
         public OpenIncubator()
         {
             InitializeComponent();
             ProgramState.LoadUserData();
-            this.DataContext = new VM_OpenWorkspace();
+            this.vm = new VM_OpenWorkspace();
+            this.DataContext = this.vm;
             //this.cpath.Text = ProgramState.CommonPath;
         }
 
@@ -68,6 +70,37 @@ namespace Incubator_2.Windows
             {
                 this.cpath.Text = folderDialog.SelectedPath;
             }
+        }
+
+        private void RefreshClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.vm.Refresh();
+        }
+
+        private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.vm.RemoveSelected();
+        }
+
+        private void EditClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DatabaseManager.TestCreation();
+        }
+
+        private void AddClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            switch (ProgramState.ShowQuestionDialog("Вы собираетесь добавить существующее рабочее пространство или хотите создать новое?", "Выбор добавления", "Создать новое", "Добавить существующее"))
+            {
+                case DialogStatus.Yes:
+                default:
+                    CreateWorkspace cw = new CreateWorkspace();
+                    cw.ShowDialog();
+                    break;
+                case DialogStatus.No:
+                    DefineExistingWorkspace dew = new DefineExistingWorkspace();
+                    dew.ShowDialog();
+                    break;
+            }    
         }
     }
 }

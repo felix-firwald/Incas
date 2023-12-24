@@ -1,4 +1,5 @@
-﻿using Incubator_2.Models;
+﻿using Incubator_2.Common;
+using Incubator_2.Models;
 using Incubator_2.Properties;
 using Models;
 using System;
@@ -35,140 +36,82 @@ namespace Common
         {
             SQLiteConnection.CreateFile(path);
             //new Field(Field, )
-            //new Query("").CreateTable()
-            
+            AutoTableCreator atc = new AutoTableCreator();
+            new Query("")
+                .AddCustomRequest(GetPostDefinition(atc))
+                .AddCustomRequest(GetUserDefinition(atc))
+                .AddCustomRequest(GetComputerDefinition(atc))
+                .AddCustomRequest(GetSessionDefinition(atc))
+                .AddCustomRequest(GetTaskDefinition(atc))
+                .AddCustomRequest(GetSubtaskDefinition(atc))
+                .AddCustomRequest(GetTemplateDefinition(atc))
+                .AddCustomRequest(GetTagDefinition(atc))
+                .ExecuteVoid();
+
+
             return true;
         }
-        
+        public static void TestCreation()
+        {
+            AutoTableCreator atc = new AutoTableCreator();
+            ProgramState.ShowErrorDialog(GetPostDefinition(atc));
+            ProgramState.ShowErrorDialog(GetUserDefinition(atc));
+            ProgramState.ShowErrorDialog(GetComputerDefinition(atc));
+            ProgramState.ShowErrorDialog(GetSessionDefinition(atc));
+            ProgramState.ShowErrorDialog(GetTemplateDefinition(atc));
+            ProgramState.ShowErrorDialog(GetTagDefinition(atc));
+        }
 
-        private static string[] GetIncubatorDefinition()
+        private static string GetPostDefinition(AutoTableCreator atc)
         {
-            return new string[] 
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "name STRING NOT NULL",
-                "opened BOOLEAN NOT NULL DEFAULT (1)",
-                "locked BOOLEAN NOT NULL DEFAULT (0)"
-            };
+            atc.Initialize(typeof(Post), "Posts");
+            atc.SetAsUnique("name");
+            return atc.GetQueryText();
         }
-        private static string[] GetPostDefinition()
+        private static string GetUserDefinition(AutoTableCreator atc)
         {
-            return new string[]
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "name STRING UNIQUE ON CONFLICT ROLLBACK NOT NULL DEFAULT [Администратор инкубатора]",
-                "permission STRING NOT NULL",
-                "rights STRING NOT NULL",
-            };
+            atc.Initialize(typeof(User), "Users");
+            atc.SetAsUnique("username");
+            atc.SetAsUnique("password");
+            atc.SetNotNull("fullname", false);
+            atc.SetNotNull("surname", false);
+            atc.SetNotNull("post", false);
+            atc.SetFK("post", "Posts", "id");
+            
+            return atc.GetQueryText();
         }
-        private static string[] GetUserDefinition()
+        private static string GetComputerDefinition(AutoTableCreator atc)
         {
-            return new string[]
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "username STRING UNIQUE ON CONFLICT ROLLBACK NOT NULL",
-                "fullname STRING",
-                "surname STRING",
-                "post INTEGER REFERENCES Posts (id)",
-                "password STRING UNIQUE ON CONFLICT ROLLBACK NOT NULL",
-                "status STRING NOT NULL",
-            };
+            atc.Initialize(typeof(Computer), "Computers");
+            atc.SetAsUnique("authId");
+            return atc.GetQueryText();
         }
-        private static string[] GetComputerDefinition()
+        private static string GetSessionDefinition(AutoTableCreator atc)
         {
-            return new string[]
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "authId STRING UNIQUE ON CONFLICT ROLLBACK NOT NULL",
-                "name STRING NOT NULL",
-                "blocked BOOLEAN NOT NULL DEFAULT (0)",
-            };
+            atc.Initialize(typeof(Session), "Sessions");
+            atc.SetFK("user", "Users", "username");
+            atc.SetFK("user", "Users", "username");
+            return atc.GetQueryText();
         }
-        private static string[] GetSessionDefinition()
+        private static string GetTaskDefinition(AutoTableCreator atc)
         {
-            return new string[]
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "user STRING REFERENCES Users (username) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL",
-                "timeStarted TEXT NOT NULL DEFAULT ('01.01.2001 0:00:00')",
-                "timeFinished TEXT NOT NULL DEFAULT ('01.01.2001 0:00:00')",
-                "computer STRING REFERENCES Computers (authId) NOT NULL",
-                "active BOOLEAN NOT NULL DEFAULT (0)"
-            };
+            atc.Initialize(typeof(Task), "Tasks");
+            return atc.GetQueryText();
         }
-        private static string[] GetTaskDefinition()
+        private static string GetSubtaskDefinition(AutoTableCreator atc)
         {
-            return new string[]
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "name STRING NOT NULL",
-                "text TEXT",
-                "passed BOOLEAN NOT NULL DEFAULT (0)",
-                "dateStarted TEXT NOT NULL DEFAULT ('01.01.2001 0:00:00')",
-                "dateFinished TEXT NOT NULL DEFAULT ('01.01.2001 0:00:00')",
-                "hidden BOOLEAN NOT NULL DEFAULT (0)"
-            };
+            atc.Initialize(typeof(Subtask), "Subtasks");
+            return atc.GetQueryText();
         }
-        private static string[] GetSubtaskDefinition()
+        private static string GetTemplateDefinition(AutoTableCreator atc)
         {
-            return new string[]
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "task INT REFERENCES Tasks (id) ON DELETE CASCADE ON UPDATE CASCADE",
-                "text TEXT NOT NULL",
-                "passed BOOLEAN NOT NULL DEFAULT (0)",
-                "performer STRING REFERENCES Users (username) NOT NULL"
-            };
+            atc.Initialize(typeof(Template), "Templates");
+            return atc.GetQueryText();
         }
-        private static string[] GetEnumerationDefinition()
+        private static string GetTagDefinition(AutoTableCreator atc)
         {
-            return new string[]
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "name STRING UNIQUE ON CONFLICT ROLLBACK NOT NULL",
-                "content STRING NOT NULL",
-                "hidden BOOLEAN NOT NULL DEFAULT (0)",
-            };
-        }
-        private static string[] GetTemplateDefinition()
-        {
-            return new string[]
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "name STRING NOT NULL UNIQUE",
-                "path STRING NOT NULL",
-                "suggestedPath STRING",
-                "type STRING NOT NULL",
-                "hidden BOOLEAN NOT NULL DEFAULT (0)",
-                "parent INTEGER REFERENCES Templates (id) ON DELETE SET NULL ON UPDATE CASCADE",
-            };
-        }
-        private static string[] GetTagDefinition()
-        {
-            return new string[]
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "template INTEGER REFERENCES Templates (id) ON DELETE CASCADE ON UPDATE CASCADE NOT NULL",
-                "name STRING NOT NULL",
-                "type STRING NOT NULL",
-                "value STRING",
-                "constant STRING REFERENCES Constants (id)",
-                "enumeration STRING REFERENCES Enumerations (id) ON DELETE CASCADE",
-                "parent INTEGER REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE",
-                "hidden BOOLEAN NOT NULL DEFAULT (0)",
-                "batch STRING"
-            };
-        }
-        private static string[] GetConstantDefinition()
-        {
-            return new string[]
-            {
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "name STRING UNIQUE NOT NULL",
-                "content STRING NOT NULL",
-                "category STRING",
-                "hidden BOOLEAN NOT NULL DEFAULT (0)",
-            };
+            atc.Initialize(typeof(Tag), "Tags");
+            return atc.GetQueryText();
         }
     }
 }

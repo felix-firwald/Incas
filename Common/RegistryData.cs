@@ -51,6 +51,11 @@ namespace Common
             GetRoot().SetValue("selected_workspace", selected);
         }
 
+        public static string GetSelectedWorkspacePath()
+        {
+            return GetWorkspacePath(GetSelectedWorkspace());
+        }
+
         public static RegistryKey GetWorkspaceByName(string name)
         {
             if (GetWorkspaceData().GetSubKeyNames().Contains(name))
@@ -61,6 +66,10 @@ namespace Common
             rk.SetValue("path", "");
             rk.SetValue("password", "");
             return rk;
+        }
+        public static void RemoveWorkspace(string name)
+        {
+            GetWorkspaceData().DeleteSubKeyTree(name, true);
         }
         public static string GetWorkspacePath(string name)
         {

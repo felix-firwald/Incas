@@ -118,7 +118,7 @@ namespace Common
         {
             if (IsRegistryContainsData()) 
             {
-                string result = Registry.CurrentUser.OpenSubKey("Incubator").GetValue("computer").ToString();  
+                string result = RegistryData.GetRoot().GetValue("computer").ToString();  
                 return result;
             }
             return GenerateComputerId();
@@ -155,7 +155,7 @@ namespace Common
             if (IsRegistryContainsData())
             {
                 //SetCommonPath(File.ReadAllText(UserPath + @"\path.incdat").Trim());
-                SetCommonPath(Registry.CurrentUser.OpenSubKey("Incubator").GetValue("path").ToString());
+                SetCommonPath(RegistryData.GetSelectedWorkspacePath());
                 return true;
             }
             return false;

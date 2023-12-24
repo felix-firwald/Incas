@@ -25,11 +25,15 @@
                 
             </ListBox>
         </Border>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="5,5,5,5" HorizontalAlignment="Center" >
-            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить новое рабочее пространство в список" />
-            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" ToolTip="Отредактировать выбранное рабочее пространство" />
-            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранное рабочее пространство" />
-        </StackPanel>
+        <Border Grid.Row="3" CornerRadius="5" Margin="6" Background="{DynamicResource Black}">
+            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" >
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить новое рабочее пространство в список" MouseDown="AddClick" />
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" ToolTip="Отредактировать выбранное рабочее пространство" MouseDown="EditClick" />
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранное рабочее пространство" MouseDown="RemoveClick"/>
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" ToolTip="Обновить список" MouseDown="RefreshClick" />
+            </StackPanel>
+        </Border>
+        
         <Button Style="{StaticResource ButtonMain}" IsDefault="True" Grid.Row="3" Grid.ColumnSpan="3" Content="Войти в рабочее пространство" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0" Grid.Column="1"/>
 
     </Grid>
