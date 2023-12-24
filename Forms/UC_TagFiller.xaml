@@ -12,7 +12,14 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Label x:Name="MainLabel" Style="{DynamicResource LabelElement}" Content="Имя тега:" VerticalAlignment="Top" Grid.Column="0" Margin="5,7,0,0" MaxHeight="30"/>
-        <TextBox x:Name="Textbox" Style="{DynamicResource TextBoxMain}" Grid.Column="1" Visibility="Hidden"/>
+        <TextBox x:Name="Textbox" Style="{DynamicResource TextBoxMain}" Grid.Column="1" Visibility="Hidden" Cursor="IBeam">
+            <TextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Копировать"/>
+                    <MenuItem Header="Вырезать"/>
+                </ContextMenu>
+            </TextBox.ContextMenu>
+        </TextBox>
         <ComboBox x:Name="Combobox" Style="{DynamicResource ComboBoxMain}" Grid.Column="1" Visibility="Hidden"/>
     </Grid>
 </UserControl>

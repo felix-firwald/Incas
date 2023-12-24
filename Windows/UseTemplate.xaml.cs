@@ -8,6 +8,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -66,6 +67,7 @@ namespace Incubator_2.Windows
                 {
                     fc.CreateFile(this.dir.Text, template.path);
                 }
+                Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", this.dir.Text);
             }
         }
 

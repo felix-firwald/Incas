@@ -33,9 +33,11 @@ namespace Common
         public static string ProceduralPath { get; private set; }
 
         #region Templates
-        public static string TemplatesPath { get; private set; }    // ...\Templates
+        private static string TemplatesPath { get; set; }    // ...\Templates
         public static string TemplatesSourcesWordPath { get; private set; }    // ...\Templates\Sources\Word
         public static string TemplatesSourcesExcelPath { get; private set; }    // ...\Templates\Sources\Excel
+        public static string TemplatesRuntime { get; private set; }    // ...\Templates\Runtime
+        public static string TemplatesGenerated { get; private set; }    // ...\Templates\Generated
         #endregion
         public static string User { get; set; }
 
@@ -49,15 +51,18 @@ namespace Common
             DatabasePath = CommonPath + @"\data.dbinc";
             CustomDatabasePath = CommonPath + @"\custom.dbinc";
             TemplatesPath = CommonPath + @"\Templates";
-            ProceduralPath = CommonPath + @"\procedural";
+            ProceduralPath = CommonPath + @"\Procedural";
             Directory.CreateDirectory(TemplatesPath);
             string sourcePath = TemplatesPath + @"\Sources";
-
             TemplatesSourcesWordPath = sourcePath + @"\Word";
             TemplatesSourcesExcelPath = sourcePath + @"\Excel";
+            TemplatesRuntime = TemplatesPath + @"\Runtime";
+            TemplatesGenerated = TemplatesPath + @"\Generated";
             Directory.CreateDirectory(TemplatesSourcesWordPath);
             Directory.CreateDirectory(TemplatesSourcesExcelPath);
             Directory.CreateDirectory(ProceduralPath);
+            Directory.CreateDirectory(TemplatesRuntime);
+            Directory.CreateDirectory(TemplatesGenerated);
         }
         public static bool IsCommonPathExists()
         {

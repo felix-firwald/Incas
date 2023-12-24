@@ -84,7 +84,12 @@ namespace Incubator_2.Windows
 
         private void EditClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            DatabaseManager.TestCreation();
+            VM_DefExistWorkspace vmedit = new VM_DefExistWorkspace();
+            vmedit.WorkspaceName = this.vm.SelectedWorkspace;
+            vmedit.WorkspacePath = this.vm.Path;
+            DefineExistingWorkspace dew = new DefineExistingWorkspace(vmedit);
+            dew.ShowDialog();
+            this.vm.Refresh();
         }
 
         private void AddClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

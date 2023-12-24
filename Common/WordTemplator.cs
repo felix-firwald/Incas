@@ -2,6 +2,12 @@
 using Xceed.Words.NET;
 using Xceed.Document.NET;
 using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using GroupDocs.Conversion;
+using GroupDocs.Conversion.Options.Convert;
+using System;
 
 namespace Common
 {
@@ -30,6 +36,13 @@ namespace Common
             options.NewValue = value.Trim();
             doc.ReplaceText(options);
             doc.Save();
+            
+        }
+        public void ConvertFileToXPS()
+        {
+            Converter conv = new Converter(Path);
+            var docxtoxpsOptions = conv.GetPossibleConversions()["xps"].ConvertOptions;
+            conv.Convert(ProgramState.TemplatesGenerated + $"\\{DateTime.Now}.xps", docxtoxpsOptions);
         }
         public List<string> FindAllTags()
         {

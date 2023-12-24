@@ -23,11 +23,21 @@ namespace Incubator_2.Windows
     public partial class DefineExistingWorkspace : Window
     {
         VM_DefExistWorkspace vm;
-        public DefineExistingWorkspace()
+        public DefineExistingWorkspace(VM_DefExistWorkspace vmedit = null)
         {
             InitializeComponent();
-            this.vm = new VM_DefExistWorkspace();
-            this.DataContext = this.vm;
+            
+            if (vm != null )
+            {
+                this.DataContext = vmedit;
+                this.name.IsEnabled = false;
+            }
+            else
+            {
+                this.vm = new VM_DefExistWorkspace();
+                this.DataContext = this.vm;
+            }
+            
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)

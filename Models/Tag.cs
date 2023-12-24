@@ -3,6 +3,7 @@ using Incubator_2.Windows;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Models
 {
@@ -38,15 +39,47 @@ namespace Models
                 .AddCustomRequest(req)
                 .OrderByASC("id")
                 .Execute();
-            List<Tag> resulting = new List<Tag>();
+            List<Tag> parentTags = new List<Tag>();
+            List<Tag> childrenTags = new List<Tag>();
             foreach (DataRow dr in dt.Rows)
             {
                 Tag mt = new Tag();
                 mt.Serialize(dr);
                 mt.type = (TypeOfTag)Enum.Parse(typeof(TypeOfTag), dr["type"].ToString());
-                resulting.Add(mt);
+                if (mt.template == parent)
+                {
+                    parentTags.Add(mt);
+                }
+                else
+                {
+                    childrenTags.Add(mt);
+                }
             }
-            return resulting;
+            if (parent == 0)    // если это теги НЕунаследованного шаблона
+            {
+                return childrenTags;
+            }
+            return ExludeTags(childrenTags, parentTags);
+        }
+        private List<Tag> ExludeTags(List<Tag> childs, List<Tag> parents)
+        {
+            foreach (Tag child in childs)   // для каждого тега
+            {
+                if (child.parent != 0) // если у него есть родитель
+                {
+                    for (int i = 0; i < parents.Count; i++) // проходим по родителям
+                    {
+                        if (parents[i].id == child.parent) // если родитель найден
+                        {
+                            child.name = parents[i].name; // присвоить имя родителя наследнику
+                            parents.RemoveAt(i); // удалить родителя (нахуй не нужон)
+                            break;
+                        }
+                    }
+                }
+            }
+            parents.AddRange(childs);
+            return parents;
         }
         public void AddTag()
         {

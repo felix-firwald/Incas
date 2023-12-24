@@ -37,29 +37,24 @@ namespace Common
             SQLiteConnection.CreateFile(path);
             //new Field(Field, )
             AutoTableCreator atc = new AutoTableCreator();
-            new Query("")
-                .AddCustomRequest(GetPostDefinition(atc))
-                .AddCustomRequest(GetUserDefinition(atc))
-                .AddCustomRequest(GetComputerDefinition(atc))
-                .AddCustomRequest(GetSessionDefinition(atc))
-                .AddCustomRequest(GetTaskDefinition(atc))
-                .AddCustomRequest(GetSubtaskDefinition(atc))
-                .AddCustomRequest(GetTemplateDefinition(atc))
-                .AddCustomRequest(GetTagDefinition(atc))
-                .ExecuteVoid();
-
-
+            Query q = new Query("");
+            q.AddCustomRequest(GetParameterDefinition(atc))
+             .AddCustomRequest(GetPostDefinition(atc))
+             .AddCustomRequest(GetUserDefinition(atc))
+             .AddCustomRequest(GetComputerDefinition(atc))
+             .AddCustomRequest(GetSessionDefinition(atc))
+             .AddCustomRequest(GetTaskDefinition(atc))
+             .AddCustomRequest(GetSubtaskDefinition(atc))
+             .AddCustomRequest(GetTemplateDefinition(atc))
+             .AddCustomRequest(GetTagDefinition(atc))
+             .ExecuteVoid();
             return true;
         }
-        public static void TestCreation()
+        private static string GetParameterDefinition(AutoTableCreator atc)
         {
-            AutoTableCreator atc = new AutoTableCreator();
-            ProgramState.ShowErrorDialog(GetPostDefinition(atc));
-            ProgramState.ShowErrorDialog(GetUserDefinition(atc));
-            ProgramState.ShowErrorDialog(GetComputerDefinition(atc));
-            ProgramState.ShowErrorDialog(GetSessionDefinition(atc));
-            ProgramState.ShowErrorDialog(GetTemplateDefinition(atc));
-            ProgramState.ShowErrorDialog(GetTagDefinition(atc));
+            atc.Initialize(typeof(Parameter), "Parameters");
+            atc.SetNotNull("value", false);
+            return atc.GetQueryText();
         }
 
         private static string GetPostDefinition(AutoTableCreator atc)

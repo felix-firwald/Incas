@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Incubator_2.Common
 {
@@ -49,14 +50,14 @@ namespace Incubator_2.Common
         {
             if (IsPK)
             {
-                return "INTEGER PRIMARY KEY AUTOINCREMENT";
+                return "id INTEGER PRIMARY KEY AUTOINCREMENT";
             }
-            return $"{Name} {TypeOf} {GetNull()} {GetFK()} {GetUniq()}";
+            return $"{Name} {TypeOf} {GetNull()} {GetFK()} {GetUniq()}".Trim();
         }
     }
     internal class AutoTableCreator
     {
-        private List<FieldCreator> definition = new List<FieldCreator>();
+        private Dictionary<string,FieldCreator> definition = new Dictionary<string, FieldCreator>();
         private string TableName;
         private Type modelClass;
         public AutoTableCreator()
@@ -75,12 +76,12 @@ namespace Incubator_2.Common
         {
             foreach (PropertyInfo prop in modelClass.GetProperties())
             {
-                FieldCreator fc = new FieldCreator(prop.Name, SwitchOnType(prop.DeclaringType));
+                FieldCreator fc = new FieldCreator(prop.Name, SwitchOnType(prop.PropertyType));
                 if (prop.Name == "id")
                 {
                     fc.IsPK = true;
                 }
-                definition.Add(fc);
+                definition[prop.Name] = fc;
             }
         }
         
@@ -88,12 +89,12 @@ namespace Incubator_2.Common
         public string GetQueryText()
         {
             string result = $"CREATE TABLE {TableName} (\n";
-            result += string.Join(", ", definition);
+            result += string.Join(",\n", definition.Values);
             result += "\n);";
             return result;
         }
 
-        private string SwitchOnType(Type type)
+        private static string SwitchOnType(Type type)
         {
             if (type == typeof(int))
             {
@@ -118,33 +119,24 @@ namespace Incubator_2.Common
         }
         #endregion
 
-        private FieldCreator GetField(string name)
-        {
-            foreach (FieldCreator fc in definition)
-            {
-                if (fc.Name == name)
-                {
-                    return fc;
-                }
-            }
-            return new FieldCreator();
-        }
-
         public void SetNotNull(string name, bool inNotNull)
         {
-            FieldCreator fc = GetField(name);
+            FieldCreator fc = definition[name];
             fc.NotNULL = inNotNull;
+            definition[name] = fc;
         }
         public void SetAsUnique(string name)
         {
-            FieldCreator fc = GetField(name);
+            FieldCreator fc = definition[name];
             fc.IsUNIQUE = true;
+            definition[name] = fc;
         }
         public void SetFK(string name, string table, string field)
         {
-            FieldCreator fc = GetField(name);
+            FieldCreator fc = definition[name];
             fc.FKtable = table;
             fc.FKfield = field;
+            definition[name] = fc;
         }
     }
 }
