@@ -260,26 +260,17 @@ namespace Common
         /// Where A (left arg) IN (args)
         /// </summary>
         /// <returns></returns>
-        public Query WhereIn(string cell, string[] args)
+        public Query WhereIn(string cell, List<string> args)
         {
-            String resultingString = "(";
-            if (args.Length == 1)
-            {
-                resultingString += $"'{args[0]}'";
-            }
-            else
-            {
-                int count = 0;
-                foreach (var arg in args)
-                {
-                    if (count != 0)
-                    {
-                        resultingString += ", ";
-                    }
-                    count++;
-                    resultingString += $"'{arg}'";
-                }
-            }
+            string resultingString = "(\"";
+            resultingString += string.Join("\", \"", args);
+            resultingString += "\")";
+            return Where(cell, "IN", resultingString, false);
+        }
+        public Query WhereIn(string cell, List<int> args)
+        {
+            string resultingString = "(";
+            string.Join(", ", args);
             resultingString += ")\n";
             return Where(cell, "IN", resultingString, false);
         }

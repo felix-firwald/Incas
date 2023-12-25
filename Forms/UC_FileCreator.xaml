@@ -30,7 +30,7 @@
             <Border Grid.Row="2" Grid.Column="1" Background="{DynamicResource Black}" Margin="5" CornerRadius="5" MinHeight="130">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" MouseDown="Remove" ToolTip="Удалить файл" Cursor="Hand"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" VerticalAlignment="Center" FontSize="18" ToolTip="Предпросмотр (только текст и базовое форматирование)" Cursor="Hand"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="FileWordOutline" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть в файле Word" Cursor="Hand" MouseDown="FontAwesome_MouseDown"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Print" VerticalAlignment="Center" FontSize="18" ToolTip="Отправить файл на печать" Cursor="Hand"/>
                 </StackPanel>
             </Border>

@@ -138,6 +138,21 @@ namespace Models
                     .Execute();
             }
         }
+        public List<Template> GetAllChildren(List<int> ids)
+        {
+            DataTable dt = StartCommand()
+                .Select()
+                .WhereEqual("parent", this.id.ToString())
+                .Execute();
+            List<Template> children = new List<Template>();
+            foreach (DataRow dr in dt.Rows)
+            {
+                Template templ = new Template();
+                templ.Serialize(dr);
+                children.Add(templ);
+            }
+            return children;
+        }
         public List<Template> GetChildren()
         {
             DataTable dt = StartCommand()

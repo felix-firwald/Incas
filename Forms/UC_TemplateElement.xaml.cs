@@ -29,7 +29,22 @@ namespace Forms
             template = t;
             this.MainLabel.Content = template.name;
             GetChilds();
-            
+            IsChild();
+        }
+        public void AddChild(Template t)
+        {
+            this.ChildPanel.Children.Add(new UC_TemplateElement(t));
+            if (this.ChildPanel.Children.Count > 0)
+            {
+                this.MainLabel.Style = FindResource("LabelElementSpecial") as Style;
+            }
+        }
+        private void IsChild()
+        {
+            if (this.template.parent != 0)
+            {
+                this.CreateChild.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void AddClick(object sender, MouseButtonEventArgs e)
@@ -82,8 +97,25 @@ namespace Forms
 
         private void EditClick(object sender, MouseButtonEventArgs e)
         {
-            CreateTemplateWord ctw = new CreateTemplateWord(this.template);
-            ctw.Show();
+            if (this.template.parent != 0)  // если это ребенок
+            {
+                VM_ChildTemplate vm = new VM_ChildTemplate(this.template.parent, this.template);
+                CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
+                cc.ShowDialog();
+            }
+            else
+            {
+                CreateTemplateWord ctw = new CreateTemplateWord(this.template);
+                ctw.Show();
+            }
+            
+        }
+
+        private void CreateChildClick(object sender, MouseButtonEventArgs e)
+        {
+            VM_ChildTemplate vm = new VM_ChildTemplate(this.template.id);
+            CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
+            cc.ShowDialog();
         }
     }
 }

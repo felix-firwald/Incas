@@ -56,15 +56,23 @@ namespace Incubator_2.Forms
         private void LoadTemplatesByCategory(string category)
         {
             this.TemplatesArea.Children.Clear();
-            Template mt = new Template();
-            mt.GetWordTemplates(category).ForEach(c =>
+            List<int> ids = new List<int>();
+            using (Template mt  = new Template())
             {
-                this.TemplatesArea.Children.Add(new UC_TemplateElement(c));
-            });
-            if (this.TemplatesArea.Children.Count == 0)
-            {
-                this.TemplatesArea.Children.Add(new NoContent());
+                mt.GetWordTemplates(category).ForEach(c =>
+                {
+                    this.TemplatesArea.Children.Add(new UC_TemplateElement(c));
+                    ids.Add(c.id);
+                });
+                if (this.TemplatesArea.Children.Count == 0)
+                {
+                    this.TemplatesArea.Children.Add(new NoContent());
+                }
             }
+        }
+        private void LoadChildrenForTemplates(string category)
+        {
+
         }
 
         private void SelectCategory(object sender, RoutedEventArgs e)

@@ -2,6 +2,7 @@
 using Incubator_2.Forms;
 using Incubator_2.ViewModels;
 using Models;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Windows;
@@ -31,6 +32,7 @@ namespace Incubator_2.Windows
                 isEdit = true;
                 this.Title = $"Редактирование шаблона ({te.name})";
                 template = te;
+                this.FindInFileButton.IsEnabled = false;
                 GetTags();
             }
             VM_template = new VM_Template(this.template);
@@ -69,9 +71,26 @@ namespace Incubator_2.Windows
         {
             if (!File.Exists(ProgramState.GetFullnameOfWordFile(template.path)))
             {
-                ProgramState.ShowErrorDialog($"Файл ({template.path}) не найден","Сохранение прервано");
+                ProgramState.ShowErrorDialog($"Файл ({template.path}) не найден.","Сохранение прервано");
                 return false;
             }
+            if (string.IsNullOrWhiteSpace(this.nameOfTemplate.Text))
+            {
+                ProgramState.ShowErrorDialog($"Неверное имя шаблона.", "Сохранение прервано");
+                return false;
+            }
+            List<string> names = new List<string>();
+            foreach (TagCreator tag in this.ContentPanel.Children)
+            {
+                if (names.Contains(tag.Filename.Text))
+                {
+                    ProgramState.ShowErrorDialog($"Найдено несколько тегов с именем [{tag.Filename.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
+                    return false;
+                }
+                names.Add(tag.Filename.Text);
+            }
+
+            
             return true;
         }
 
@@ -132,6 +151,7 @@ namespace Incubator_2.Windows
                 ProgramState.ShowErrorDialog($"Файл ({template.path}) не существует!\nТеги не могут быть обнаружены.", "Поиск невозможен");
                 return;
             }
+            this.ContentPanel.Children.Clear();
             WordTemplator wt = new WordTemplator(pathFile);
             foreach (string tagname in wt.FindAllTags())
             {

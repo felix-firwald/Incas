@@ -1,8 +1,11 @@
-﻿using Incubator_2.Models;
+﻿using Common;
+using Incubator_2.Models;
 using Incubator_2.Windows;
 using Incubator_2.Windows.ToolBar;
 using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace Incubator_2
 {
@@ -16,7 +19,6 @@ namespace Incubator_2
             base.OnStartup(e);
             try
             {
-
                 OpenIncubator oi = new OpenIncubator();
                 
                 if (oi.ShowDialog() == false)

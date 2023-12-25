@@ -107,5 +107,10 @@ namespace Incubator_2.Forms
             }
             this.Filename.Text = $"{prefix}{result}{postfix}";
         }
+
+        private void FontAwesome_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            
+        }
     }
 }

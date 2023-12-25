@@ -10,7 +10,8 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="29*"/>
+            <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
@@ -18,14 +19,15 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <fa:FontAwesome x:Name="UseButton" Style="{DynamicResource IconButton}" Grid.Column="0" Icon="PlusCircle" FontSize="18" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
-        <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center">
+        <fa:FontAwesome x:Name="UseButton" Style="{DynamicResource IconButton}" Icon="PlusCircle" FontSize="18" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
+        <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center" Grid.ColumnSpan="2">
         </Label>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="2" Icon="Pencil" FontSize="16" Cursor="Hand" MouseDown="EditClick" ToolTip="Редактировать шаблон" Tag="Да"/>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="Remove" FontSize="18" Cursor="Hand" MouseDown="RemoveClick" ToolTip="Удалить шаблон"/>
+        <fa:FontAwesome x:Name="CreateChild" Style="{DynamicResource IconButton}" Grid.Column="2" Icon="CodeFork" FontSize="16" Cursor="Hand" MouseDown="CreateChildClick" ToolTip="Создать наследника от этого шаблона" Tag="Да"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="Pencil" FontSize="16" Cursor="Hand" MouseDown="EditClick" ToolTip="Редактировать шаблон" Tag="Да"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="4" Icon="Remove" FontSize="18" Cursor="Hand" MouseDown="RemoveClick" ToolTip="Удалить шаблон"/>
 
-        <StackPanel x:Name="ChildPanel" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" />
-        <Rectangle Grid.Row="1" Width="2" Fill="{DynamicResource LightPurple}" Cursor=""/>
+        <StackPanel x:Name="ChildPanel" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" />
+        <Rectangle Grid.Row="1" Width="2" Fill="{DynamicResource LightPurple}" Cursor="" Margin="19,0,19,0"/>
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>
