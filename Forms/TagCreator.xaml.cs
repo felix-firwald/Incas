@@ -22,9 +22,10 @@ namespace Incubator_2.Forms
             InitializeComponent();
             tag = t;
             this.DataContext = new VM_Tag(t);
-            if (!isNew)
+            if (t.parent is not 0)
             {
-
+                this.OverridenLabel.Visibility = System.Windows.Visibility.Visible;
+                this.TagName.IsEnabled = false;
             }
         }
 

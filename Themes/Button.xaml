@@ -78,7 +78,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation Duration="0:0:0.100" To="#2D2D30" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="0,8,0,0" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="0,4,0,0" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>

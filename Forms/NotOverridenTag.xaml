@@ -12,8 +12,8 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Имя тега" Style="{DynamicResource LabelElement}" VerticalAlignment="Center" Margin="5,0,0,0"/>
-            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleRight" Grid.Column="1" ToolTip="Переопределить тег"/>
+            <Label x:Name="TagName" Content="Имя тега" Style="{DynamicResource LabelElement}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+            <fa:FontAwesome x:Name="Override" Style="{DynamicResource IconButton}" Icon="ArrowCircleRight" Grid.Column="1" ToolTip="Переопределить тег" MouseDown="OverrideClick" />
         </Grid>
     </Border>
 </UserControl>

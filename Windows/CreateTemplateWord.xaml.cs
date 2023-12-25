@@ -82,12 +82,12 @@ namespace Incubator_2.Windows
             List<string> names = new List<string>();
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
-                if (names.Contains(tag.Filename.Text))
+                if (names.Contains(tag.TagName.Text))
                 {
-                    ProgramState.ShowErrorDialog($"Найдено несколько тегов с именем [{tag.Filename.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
+                    ProgramState.ShowErrorDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
                     return false;
                 }
-                names.Add(tag.Filename.Text);
+                names.Add(tag.TagName.Text);
             }
 
             

@@ -379,7 +379,21 @@
                                 </Storyboard>
                             </BeginStoryboard>
                         </Trigger.ExitActions>
-                        <!--<Setter Property="Foreground" Value="DodgerBlue"/>-->
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="IconButtonBorder" BasedOn="{StaticResource IconButton}" TargetType="{x:Type fa:FontAwesome}">
+                <Setter Property="MinHeight" Value="30"/>
+                <Setter Property="MinWidth" Value="40"/>
+                <Setter Property="MaxHeight" Value="40"/>
+                <Setter Property="MaxWidth" Value="40"/>
+                <Setter Property="Margin" Value="0"/>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="{StaticResource Element}"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource Focus}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>

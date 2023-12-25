@@ -5,13 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Incubator_2.Windows;
+using Models;
 
 namespace Incubator_2.Forms
 {
@@ -20,9 +15,21 @@ namespace Incubator_2.Forms
     /// </summary>
     public partial class NotOverridenTag : UserControl
     {
-        public NotOverridenTag()
+        public delegate void MethodContainer(Tag t);
+        public event MethodContainer onOverride;
+        private Tag _tag;
+        public NotOverridenTag(Tag tag)
         {
             InitializeComponent();
+            _tag = tag;
+            this.TagName.Content = tag.name;
+        }
+
+        private void OverrideClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.IsEnabled = false;
+            this.Override.Visibility = Visibility.Collapsed;
+            onOverride(_tag);
         }
     }
 }

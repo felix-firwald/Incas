@@ -19,8 +19,9 @@
                 <CheckBox Style="{DynamicResource Selector}"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,0,5,0"/>
                 <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="{Binding NameOfTag, UpdateSourceTrigger=PropertyChanged}" MaxLength="25"/>
+                <TextBox x:Name="TagName" Style="{DynamicResource TextBoxTransparent}" Text="{Binding NameOfTag, UpdateSourceTrigger=PropertyChanged}" MaxLength="25"/>
                 <Label Style="{DynamicResource LabelElement}" Content="]" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <Label x:Name="OverridenLabel" Style="{DynamicResource LabelElementSpecial}" Content="(!)" VerticalAlignment="Center" HorizontalAlignment="Left" Visibility="Collapsed" ToolTip="Этот тег является переопределенным от шаблона-родителя (можно поменять тип и значение, имя же остается неизменным)" ToolTipService.InitialShowDelay="150" Cursor="Hand"/>
             </StackPanel>
             
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>

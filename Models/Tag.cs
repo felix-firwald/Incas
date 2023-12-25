@@ -112,14 +112,14 @@ namespace Models
             StartCommand()
                 .Delete()
                 .WhereEqual("id", id.ToString())
-                .Execute();
+                .ExecuteVoid();
         }
         public void RemoveAllTagsByTemplate(int templ)
         {
             StartCommand()
                 .Delete()
                 .WhereEqual("template", templ.ToString())
-                .Execute();
+                .ExecuteVoid();
         }
         // для работы функции ниже должен быть предварительно обновлен template
         public void GetChild()

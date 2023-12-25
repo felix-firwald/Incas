@@ -17,6 +17,7 @@ namespace Incubator_2
         public MainWindow()
         {
             InitializeComponent();
+            //this.MaxHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
         }
 
         private void OnClosed(object sender, EventArgs e)
@@ -40,6 +41,31 @@ namespace Incubator_2
                 this.LPost.Visibility = Visibility.Visible;
                 this.Incubator.Visibility = Visibility.Visible;
             }
+        }
+
+        private void WindowMinimize(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+        private void WindowMaximize(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+        }
+        private void WindowClose(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void WindowMove(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DragMove();
         }
     }
 }
