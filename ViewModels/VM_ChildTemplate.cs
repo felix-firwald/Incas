@@ -11,19 +11,21 @@ namespace Incubator_2.ViewModels
 {
     public class VM_ChildTemplate : VM_Base
     {
-        private Template _childTemplate;
+        public Template childTemplate;
         public List<Tag> parentTags;
         public List<Tag> childTags;
-        public VM_ChildTemplate(int parent, Template childTemplate = null)
+        public VM_ChildTemplate(int parent, Template child = null)
         {
-            if (childTemplate != null)
+            if (child != null)
             {
-                _childTemplate = childTemplate;
+                childTemplate = child;
+                childTemplate.parent = parent;
                 GetChildrenTag(childTemplate.id);
             }
             else
             {
-                _childTemplate = new Template();
+                childTemplate = new Template();
+                childTemplate.parent = parent;
                 childTags = new List<Tag>();
             }
             
@@ -60,25 +62,38 @@ namespace Incubator_2.ViewModels
             }
         }
 
+        public void SaveTemplate()
+        {
+            if (childTemplate.id != 0)
+            {
+                childTemplate.UpdateTemplate();
+            }
+            else
+            {
+                childTemplate.AddTemplate(true);
+            }
+            
+        }
+
 
         public string FilePath
         {
             get
             {
-                return _childTemplate.path;
+                return childTemplate.path;
             }
             set
             {
-                _childTemplate.path = value;
+                childTemplate.path = value;
                 OnPropertyChanged(nameof(FilePath));
             }
         }
         public string TemplateName
         {
-            get { return _childTemplate.name; }
+            get { return childTemplate.name; }
             set
             {
-                _childTemplate.name = value;
+                childTemplate.name = value;
                 OnPropertyChanged(nameof(TemplateName));
             }
         }

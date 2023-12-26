@@ -17,19 +17,29 @@ namespace Incubator_2.Forms
     {
         public delegate void MethodContainer(Tag t);
         public event MethodContainer onOverride;
-        private Tag _tag;
-        public NotOverridenTag(Tag tag)
+        public Tag tag;
+        public NotOverridenTag(Tag t)
         {
             InitializeComponent();
-            _tag = tag;
+            tag = t;
             this.TagName.Content = tag.name;
+        }
+
+        public void OverrideTag()
+        {
+            this.IsEnabled = false;
+            this.Override.Visibility = Visibility.Collapsed;
+            onOverride(tag);
+        }
+        public void DeOverrideTag()
+        {
+            this.IsEnabled = true;
+            this.Override.Visibility = Visibility.Visible;
         }
 
         private void OverrideClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.IsEnabled = false;
-            this.Override.Visibility = Visibility.Collapsed;
-            onOverride(_tag);
+            OverrideTag();
         }
     }
 }
