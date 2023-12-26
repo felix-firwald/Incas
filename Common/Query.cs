@@ -270,7 +270,7 @@ namespace Common
         public Query WhereIn(string cell, List<int> args)
         {
             string resultingString = "(";
-            string.Join(", ", args);
+            resultingString += string.Join(", ", args);
             resultingString += ")\n";
             return Where(cell, "IN", resultingString, false);
         }

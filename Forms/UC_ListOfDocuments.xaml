@@ -21,7 +21,7 @@
                     <RadioButton Style="{StaticResource CategoryButton}" Content="Без категории" Click="SelectCategory" FontStyle="Italic" IsChecked="True"/>
                 </StackPanel>
             </ScrollViewer>
-            <ScrollViewer Margin="5,0,0,0"  Style="{DynamicResource MainScrollViewer}" Grid.Column="1" Grid.Row="0">
+            <ScrollViewer Margin="5,0,0,0" Style="{DynamicResource MainScrollViewer}" Grid.Column="1" Grid.Row="0">
             <StackPanel x:Name="TemplatesArea" Grid.Row="0" CanVerticallyScroll="True">
             </StackPanel>
         </ScrollViewer>

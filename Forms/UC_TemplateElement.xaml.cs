@@ -22,13 +22,13 @@ namespace Forms
     /// </summary>
     public partial class UC_TemplateElement : UserControl
     {
-        Template template;
+        public Template template;
         public UC_TemplateElement(Template t)
         {
             InitializeComponent();
             template = t;
             this.MainLabel.Content = template.name;
-            GetChilds();
+            //GetChilds();
             IsChild();
         }
         public void AddChild(Template t)

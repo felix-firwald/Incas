@@ -1,4 +1,5 @@
 ﻿using Common;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Forms;
 using Incubator_2.Forms.OneInstance;
 using Incubator_2.Windows;
@@ -30,6 +31,7 @@ namespace Incubator_2.Forms
             InitializeComponent();
             LoadCategories();
             LoadTemplatesByCategory("");
+            //LoadChildrenForTemplates("");
         }
         private void LoadCategories()
         {
@@ -56,13 +58,11 @@ namespace Incubator_2.Forms
         private void LoadTemplatesByCategory(string category)
         {
             this.TemplatesArea.Children.Clear();
-            List<int> ids = new List<int>();
             using (Template mt  = new Template())
             {
                 mt.GetWordTemplates(category).ForEach(c =>
                 {
                     this.TemplatesArea.Children.Add(new UC_TemplateElement(c));
-                    ids.Add(c.id);
                 });
                 if (this.TemplatesArea.Children.Count == 0)
                 {
@@ -70,9 +70,34 @@ namespace Incubator_2.Forms
                 }
             }
         }
-        private void LoadChildrenForTemplates(string category)
+        private void LoadChildrenForTemplates()
         {
-
+            List<int> ids = new List<int>();
+            if (this.TemplatesArea.Children[0] is NoContent)
+            {
+                return;
+            }
+            foreach (UC_TemplateElement element in this.TemplatesArea.Children)
+            {
+                ids.Add(element.template.id);
+            }
+            if (ids.Count > 0)
+            {
+                using (Template mt = new Template())
+                {
+                    mt.GetAllChildren(ids).ForEach(c =>
+                    {
+                        foreach (UC_TemplateElement element in this.TemplatesArea.Children)
+                        {
+                            if (element.template.id == c.parent)
+                            {
+                                element.AddChild(c);
+                            }
+                        }
+                    });
+                }
+            }
+            
         }
 
         private void SelectCategory(object sender, RoutedEventArgs e)
@@ -82,10 +107,12 @@ namespace Incubator_2.Forms
             if (text != "Без категории")
             {
                 LoadTemplatesByCategory(text);
+                LoadChildrenForTemplates();
             }
             else
             {
                 LoadTemplatesByCategory("");
+                LoadChildrenForTemplates();
             }
             
         }

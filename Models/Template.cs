@@ -142,7 +142,7 @@ namespace Models
         {
             DataTable dt = StartCommand()
                 .Select()
-                .WhereEqual("parent", this.id.ToString())
+                .WhereIn("parent", ids)
                 .Execute();
             List<Template> children = new List<Template>();
             foreach (DataRow dr in dt.Rows)
