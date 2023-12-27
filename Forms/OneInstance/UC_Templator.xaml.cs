@@ -23,6 +23,7 @@ namespace Forms
         public UC_Templator()
         {
             InitializeComponent();
+
         }
     }
 }

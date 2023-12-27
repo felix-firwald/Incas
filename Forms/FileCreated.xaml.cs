@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Incubator_2.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,27 @@ namespace Incubator_2.Forms
     /// </summary>
     public partial class FileCreated : UserControl
     {
-        public FileCreated()
+        public readonly STemplateJSON record;
+        public delegate void SelectorNotify(FileCreated my);
+        public event SelectorNotify OnSelectorChecked;
+        public event SelectorNotify OnSelectorUnchecked;
+        public FileCreated(STemplateJSON rec)
         {
             InitializeComponent();
+            record = rec;
+            this.Filename.Content = record.file_name;
+            this.TemplateName.Content = record.template_name;
+            this.GenerationTime.Content = record.generated_time.ToString("f");
+        }
+
+        private void Selector_Checked(object sender, RoutedEventArgs e)
+        {
+            OnSelectorChecked(this);
+        }
+
+        private void Selector_Unchecked(object sender, RoutedEventArgs e)
+        {
+            OnSelectorUnchecked(this);
         }
     }
 }

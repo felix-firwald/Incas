@@ -2,6 +2,7 @@
 using Common;
 using DocumentFormat.OpenXml.Office2021.PowerPoint.Designer;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Incubator_2.Common;
 using Incubator_2.Forms;
 using Incubator_2.ViewModels;
 using Models;
@@ -43,7 +44,7 @@ namespace Incubator_2.Windows
 
         private void AddFileCreator()
         {
-            UC_FileCreator fc = new UC_FileCreator(template.id, tags);
+            UC_FileCreator fc = new UC_FileCreator(template, tags);
             this.ContentPanel.Children.Add(fc);
             creators.Add(fc);
         }
@@ -63,10 +64,12 @@ namespace Incubator_2.Windows
             if (ValidateContent())
             {
                 RegistryData.AddTemplate(this.template.id.ToString(), this.dir.Text, "", "");
+                RegistreCreatedJSON.GetRegistry();
                 foreach (UC_FileCreator fc in creators)
                 {
                     fc.CreateFile(this.dir.Text, template.path);
                 }
+                RegistreCreatedJSON.SaveRegistry();
                 Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", this.dir.Text);
             }
         }

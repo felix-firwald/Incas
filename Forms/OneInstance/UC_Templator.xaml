@@ -9,11 +9,11 @@
              d:DesignHeight="800" d:DesignWidth="1200">
     <Grid Background="#2f3239">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="151*" MinWidth="400"/>
+            <ColumnDefinition Width="120*" MinWidth="400"/>
             <ColumnDefinition Width="89*" MinWidth="200"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="75"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2">
@@ -23,7 +23,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.ColumnSpan="2"/>
-            <Label Grid.Column="1" Content="Документы" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Center" FontSize="18" FontWeight="Bold">
+            <Label Grid.Column="1" Style="{DynamicResource LabelPrimary}" Content="Документы" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Center" FontSize="18" FontWeight="Bold">
                 <Label.Foreground>
                     <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.AppWorkspaceColorKey}}"/>
                 </Label.Foreground>
@@ -34,9 +34,9 @@
                 </fa:FontAwesome.Foreground>
             </fa:FontAwesome>
         </Grid>
-        <Forms:UC_ListOfDocuments Grid.Row="1"/>
-       
-        
+        <Forms:UC_ListOfDocuments Grid.Row="1" Grid.Column="0"/>
+        <Forms:ListOfGenerations Grid.Row="1" Grid.Column="1" />
+
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,0" Grid.Row="1" Width="5" Background="#32353c" Height="200" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

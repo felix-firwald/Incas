@@ -30,7 +30,7 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" MinWidth="120" MaxWidth="400"/>
+            <ColumnDefinition Width="250" MinWidth="120" MaxWidth="400"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 

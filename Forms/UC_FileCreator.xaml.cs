@@ -25,15 +25,14 @@ namespace Incubator_2.Forms
     public partial class UC_FileCreator : UserControl
     {
         private bool IsCollapsed = false;
-        private int templateId;
-        private
-        List<Tag> tags;
+        private Template template;
+        private List<Tag> tags;
         List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
-        public UC_FileCreator(int template, List<Tag> tagsList)
+        public UC_FileCreator(Template templ, List<Tag> tagsList)
         {
             InitializeComponent();
             this.tags = tagsList;
-            this.templateId = template;
+            this.template = templ;
             FillContentPanel();
         }
         private void FillContentPanel()
@@ -101,8 +100,8 @@ namespace Incubator_2.Forms
                 wt.Replace(name, value);
                 filledTags.Add(id, value);
             }
-            TemplateJSON tjson = new TemplateJSON(this.templateId, this.Filename.Text, filledTags);
-            tjson.Convert();
+            RegistreCreatedJSON.AddRecord(new TemplateJSON(this.template.id, this.template.name, this.Filename.Text, filledTags));
+            
         }
         public void RenameByTag(string tag, string prefix = "", string postfix = "")
         {
