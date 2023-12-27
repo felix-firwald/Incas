@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.Common;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -24,13 +25,15 @@ namespace Incubator_2.Forms
     public partial class UC_FileCreator : UserControl
     {
         private bool IsCollapsed = false;
-        private List<string> ChildsChoice = new List<string>();
+        private int templateId;
+        private
         List<Tag> tags;
         List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
-        public UC_FileCreator(List<Tag> tagsList)
+        public UC_FileCreator(int template, List<Tag> tagsList)
         {
             InitializeComponent();
             this.tags = tagsList;
+            this.templateId = template;
             FillContentPanel();
         }
         private void FillContentPanel()
@@ -89,10 +92,17 @@ namespace Incubator_2.Forms
             string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
             File.Copy(ProgramState.GetFullnameOfWordFile(original), newFile, true);
             WordTemplator wt = new WordTemplator(newFile);
+            Dictionary<int, string> filledTags = new Dictionary<int, string>();
             foreach (UC_TagFiller tf in TagFillers)
             {
-                wt.Replace(tf.GetTagName(), tf.GetValue());
+                string name = tf.GetTagName();
+                int id = tf.GetId();
+                string value = tf.GetValue();
+                wt.Replace(name, value);
+                filledTags.Add(id, value);
             }
+            TemplateJSON tjson = new TemplateJSON(this.templateId, this.Filename.Text, filledTags);
+            tjson.Convert();
         }
         public void RenameByTag(string tag, string prefix = "", string postfix = "")
         {

@@ -78,5 +78,9 @@ namespace Incubator_2.Forms
 
             }
         }
+        public int GetId()
+        {
+            return this.tag.id;
+        }
     }
 }

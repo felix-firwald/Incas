@@ -43,7 +43,7 @@ namespace Incubator_2.Windows
 
         private void AddFileCreator()
         {
-            UC_FileCreator fc = new UC_FileCreator(tags);
+            UC_FileCreator fc = new UC_FileCreator(template.id, tags);
             this.ContentPanel.Children.Add(fc);
             creators.Add(fc);
         }
