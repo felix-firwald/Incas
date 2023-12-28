@@ -44,6 +44,21 @@ namespace Incubator_2.Forms
                 TagFillers.Add(tf);
             });
         }
+        public void ApplyRecord(TemplateJSON record)
+        {
+            this.Filename.Text = record.file_name;
+            foreach (KeyValuePair<int, string> tag in record.filled_tags)
+            {
+                foreach (UC_TagFiller tagfiller in TagFillers)
+                {
+                    if (tagfiller.tag.id == tag.Key)
+                    {
+                        tagfiller.SetValue(tag.Value);
+                        break;
+                    }
+                }
+            }
+        }
         public void Maximize()
         {
             this.MainBorder.Height = this.ContentPanel.Height + 40;
@@ -90,18 +105,20 @@ namespace Incubator_2.Forms
         {
             string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
             File.Copy(ProgramState.GetFullnameOfWordFile(original), newFile, true);
-            WordTemplator wt = new WordTemplator(newFile);
             Dictionary<int, string> filledTags = new Dictionary<int, string>();
-            foreach (UC_TagFiller tf in TagFillers)
+            WordTemplator wt = new WordTemplator(newFile);
+            this.Dispatcher.Invoke(() =>
             {
-                string name = tf.GetTagName();
-                int id = tf.GetId();
-                string value = tf.GetValue();
-                wt.Replace(name, value);
-                filledTags.Add(id, value);
-            }
+                foreach (UC_TagFiller tf in TagFillers)
+                {
+                    string name = tf.GetTagName();
+                    int id = tf.GetId();
+                    string value = tf.GetValue();
+                    wt.Replace(name, value);
+                    filledTags.Add(id, value);
+                }
+            });
             RegistreCreatedJSON.AddRecord(new TemplateJSON(this.template.id, this.template.name, this.Filename.Text, filledTags));
-            
         }
         public void RenameByTag(string tag, string prefix = "", string postfix = "")
         {

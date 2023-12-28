@@ -23,6 +23,10 @@ namespace Incubator_2.Common
             if (File.Exists(mainFile))
             {
                 generatedDocuments = Newtonsoft.Json.JsonConvert.DeserializeObject<List<STemplateJSON>>(File.ReadAllText(mainFile));
+                if (generatedDocuments == null )
+                {
+                    generatedDocuments = new List<STemplateJSON>();
+                }
             }
             else
             {
@@ -40,16 +44,20 @@ namespace Incubator_2.Common
         }
         public static void AddRecord(TemplateJSON record)
         {
-            if (generatedDocuments is null)
-            {
-                generatedDocuments = new List<STemplateJSON>();
-            }
             generatedDocuments.Add(record.Save(generatedDocuments.Count + 1));
+        }
+        private static string GetReference(string filename)
+        {
+            return ProgramState.TemplatesGenerated + "\\" + filename;
+        }
+        public static TemplateJSON LoadRecord(STemplateJSON refer)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<TemplateJSON>(File.ReadAllText(GetReference(refer.reference)));
         }
         public static void RemoveRecord(STemplateJSON record)
         {
             generatedDocuments.Remove(record);
-            File.Delete(record.reference);
+            File.Delete(GetReference(record.reference));
         }
     }
 }

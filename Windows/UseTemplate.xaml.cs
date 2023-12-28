@@ -8,11 +8,13 @@ using Incubator_2.ViewModels;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -36,17 +38,29 @@ namespace Incubator_2.Windows
             AddFileCreator();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
         }
+        public UseTemplate(Template t, List<TemplateJSON> records)
+        {
+            InitializeComponent();
+            this.template = t;
+            LoadTags();
+            this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
+            foreach (TemplateJSON item in records)
+            {
+                AddFileCreator().ApplyRecord(item);
+            }
+        }
         private void LoadTags()
         {
             Tag t = new Tag();
             tags = t.GetAllTagsByTemplate(template.id, template.parent);
         }
 
-        private void AddFileCreator()
+        private UC_FileCreator AddFileCreator()
         {
             UC_FileCreator fc = new UC_FileCreator(template, tags);
             this.ContentPanel.Children.Add(fc);
             creators.Add(fc);
+            return fc;
         }
 
         private bool ValidateContent()
@@ -63,14 +77,18 @@ namespace Incubator_2.Windows
         {
             if (ValidateContent())
             {
-                RegistryData.AddTemplate(this.template.id.ToString(), this.dir.Text, "", "");
-                RegistreCreatedJSON.GetRegistry();
-                foreach (UC_FileCreator fc in creators)
+                this.Dispatcher.Invoke(() =>
                 {
-                    fc.CreateFile(this.dir.Text, template.path);
-                }
-                RegistreCreatedJSON.SaveRegistry();
-                Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", this.dir.Text);
+                    RegistryData.AddTemplate(this.template.id.ToString(), this.dir.Text, "", "");
+                    RegistreCreatedJSON.GetRegistry();
+                    foreach (UC_FileCreator fc in creators)
+                    {
+                        fc.CreateFile(this.dir.Text, template.path);
+                        //fc.CreateFile(this.dir.Text, template.path);
+                    }
+                    RegistreCreatedJSON.SaveRegistry();
+                    Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", this.dir.Text);
+                });
             }
         }
 

@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <fa:FontAwesome Icon="User" FontSize="70" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Element}" Grid.Column="1" />
         <TextBox x:Name="cpath" Visibility="Collapsed" Text="{Binding Path}" Grid.Row="1" Grid.ColumnSpan="2" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" Grid.Column="1" />
-        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Grid.Row="2" Text="{Binding Password}" Tag="Пароль для входа" MaxLength="5" Margin="5,5,5,5" Grid.Column="1" Grid.ColumnSpan="2" Cursor="" >
+        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Grid.Row="2" Text="{Binding Password}" Tag="Пароль для входа" MaxLength="20" Margin="5,5,5,5" Grid.Column="1" Grid.ColumnSpan="2" Cursor="" >
         </TextBox>
         <Border Grid.RowSpan="3" CornerRadius="5" Margin="6" Background="{DynamicResource Black}">
             <ListBox Style="{DynamicResource ListBoxMain}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}">

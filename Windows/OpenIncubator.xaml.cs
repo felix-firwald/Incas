@@ -31,7 +31,7 @@ namespace Incubator_2.Windows
             else
             {
                 ProgramState.SetCommonPath(this.cpath.Text);
-                ProgramState.GetInitFile();
+                ProgramState.GetDBFile();
                 ProgramState.SaveUserData();
                 
                 if (Directory.Exists(this.cpath.Text))

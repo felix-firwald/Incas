@@ -23,6 +23,16 @@ namespace Models
         {
             tableName = "Templates";
         }
+        public Template GetTemplateById(int id)
+        {
+            DataRow dr = StartCommand()
+                .Select()
+                .WhereEqual("id", id.ToString())
+                .ExecuteOne();
+            this.Serialize(dr);
+            this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString(), true);
+            return this;
+        }
         private List<Template> GetAllTemplatesBy(TemplateType tt, string cat)
         {
             DataTable dt = StartCommand()
@@ -61,12 +71,10 @@ namespace Models
         }
         public Template GetTemplateByName(string nameOf)
         {
-            DataRow dt = GetOne(
-                StartCommand()
+            DataRow dt = StartCommand()
                     .Select()
                     .WhereEqual("name", nameOf)
-                    .Execute()
-            );
+                    .ExecuteOne();
             this.Serialize(dt);
             this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dt["type"].ToString());
             return this;
@@ -143,21 +151,7 @@ namespace Models
             DataTable dt = StartCommand()
                 .Select()
                 .WhereIn("parent", ids)
-                .Execute();
-            List<Template> children = new List<Template>();
-            foreach (DataRow dr in dt.Rows)
-            {
-                Template templ = new Template();
-                templ.Serialize(dr);
-                children.Add(templ);
-            }
-            return children;
-        }
-        public List<Template> GetChildren()
-        {
-            DataTable dt = StartCommand()
-                .Select()
-                .WhereEqual("parent", this.id.ToString())
+                .OrderByASC("name")
                 .Execute();
             List<Template> children = new List<Template>();
             foreach (DataRow dr in dt.Rows)

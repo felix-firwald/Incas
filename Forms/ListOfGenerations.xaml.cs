@@ -1,5 +1,8 @@
-﻿using Incubator_2.Common;
+﻿using Common;
+using Incubator_2.Common;
 using Incubator_2.Forms.OneInstance;
+using Incubator_2.Windows;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +59,7 @@ namespace Incubator_2.Forms
 
         private void UpdateClick(object sender, MouseButtonEventArgs e)
         {
+            Selection.Clear();
             UpdateList();
         }
 
@@ -68,6 +72,24 @@ namespace Incubator_2.Forms
                 RegistreCreatedJSON.RemoveRecord(fc.record);
             }
             RegistreCreatedJSON.SaveRegistry();
+        }
+
+        private void UseClick(object sender, MouseButtonEventArgs e)
+        {
+            if (Selection.Count > 0)
+            {
+                Template tm = new Template();
+                tm.GetTemplateById(Selection[0].record.template_id);
+                List<TemplateJSON> tj = new List<TemplateJSON>();
+                foreach (FileCreated fc in Selection)
+                {
+                    tj.Add(RegistreCreatedJSON.LoadRecord(fc.record));
+                }
+                UseTemplate ut = new UseTemplate(tm, tj);
+                ut.Show();
+            }
+
+            
         }
     }
 }

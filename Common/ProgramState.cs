@@ -68,29 +68,18 @@ namespace Common
         {
             return Directory.Exists(CommonPath);
         }
-        private static string getInitFilePath()
+        private static string getDBFilePath()
         {
-            return CommonPath + @"\init.incb";
+            return CommonPath + @"\data.dbinc";
         }
-        public static string GetInitFile()
+        public static void GetDBFile()
         {
-            string fileFullName = getInitFilePath();
-            if (!File.Exists(fileFullName))
+            if (!File.Exists(getDBFilePath()))
             {
-                DialogQuestion q = new DialogQuestion("По указанному пути рабочее пространство не обнаружено.\n" +
-                "Проверьте правильность введенного пути или создайте новое рабочее пространство " +
-                "(будет открыт конструктор нового рабочего пространства)", "Рабочее пространство не обнаружено", "Создать новое", "Не создавать");
+                Dialog q = new Dialog("По указанному пути рабочее пространство не обнаружено.\n" +
+                "Проверьте правильность введенного пути или создайте новое рабочее пространство.", "Рабочее пространство не обнаружено");
                 q.ShowDialog();
-                if (q.status == DialogStatus.Yes)
-                {
-                    Initialize();
-                }
-                else
-                {
-                    Application.Current.Run();
-                }
             }
-            return File.ReadAllText(fileFullName);
         }
         #endregion
 
@@ -181,7 +170,7 @@ namespace Common
         #endregion
         private static bool Initialize()
         {
-            string fileFullName = getInitFilePath();
+            string fileFullName = getDBFilePath();
             File.WriteAllText(fileFullName, SystemName);
             Permission.CurrentUserPermission = PermissionGroup.Admin;
             return CreateTablesInDatabase();

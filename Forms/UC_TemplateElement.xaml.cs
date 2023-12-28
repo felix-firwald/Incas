@@ -64,17 +64,6 @@ namespace Forms
                 ProgramState.ShowErrorDialog($"Файл шаблона \"{template.name}\" ({ProgramState.TemplatesSourcesWordPath}\\{template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
             }
         }
-        private void GetChilds()
-        {
-            template.GetChildren().ForEach(c =>
-            {
-                this.ChildPanel.Children.Add(new UC_TemplateElement(c));
-            });
-            if (this.ChildPanel.Children.Count > 0)
-            {
-                this.MainLabel.Style = FindResource("LabelElementSpecial") as Style;
-            }
-        }
         private bool IsFileExists()
         {
             return File.Exists($"{ProgramState.TemplatesSourcesWordPath}\\{template.path}");

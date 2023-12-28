@@ -16,7 +16,7 @@ namespace Incubator_2.Forms
     /// </summary>
     public partial class UC_TagFiller : UserControl
     {
-        private Tag tag;
+        public readonly Tag tag;
         public UC_TagFiller(Tag t)
         {
             InitializeComponent();
@@ -42,10 +42,29 @@ namespace Incubator_2.Forms
                 case TypeOfTag.LocalEnumeration:
                     SetComboBoxMode();
                     this.Combobox.ItemsSource = this.tag.value.Split(';');
-                    this.Combobox.Text = this.tag.value;
+                    //this.Combobox.Text = this.tag.value;
+                    this.Combobox.SelectedIndex = 0;
                     break;
             }
         }
+
+        public void SetValue(string value)
+        {
+            switch (tag.type)
+            {
+                case TypeOfTag.Variable:
+                case TypeOfTag.Text:
+                default:
+                    this.Textbox.Text = value;
+                    break;
+                case TypeOfTag.LocalConstant:
+                    return;
+                case TypeOfTag.LocalEnumeration:
+                    this.Combobox.SelectedValue = value;
+                    break;
+            }
+        }
+
         private void SetTextBoxMode()
         {
             this.Textbox.Visibility = Visibility.Visible;

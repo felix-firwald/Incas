@@ -371,13 +371,40 @@ namespace Common
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
+                ProgramState.ShowErrorDialog(
                     $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
                     $"\nПроверьте правильность данных.",
-                    "Ошибка выполнения запроса",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    "Ошибка выполнения запроса");
                 return new DataTable();
+            }
+        }
+        public DataRow ExecuteOne()
+        {
+            try
+            {
+                using (SQLiteConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    SQLiteCommand cmd = conn.CreateCommand();
+                    cmd.CommandText = GetRequest();
+                    SQLiteDataReader sqlreader = cmd.ExecuteReader();
+                    DataTable objDataTable = new DataTable();
+                    objDataTable.Load(sqlreader);
+                    if (objDataTable.Rows.Count > 0)
+                    {
+                        return objDataTable.Rows[0];
+                    }
+                    return null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog(
+                    $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
+                    $"\nПроверьте правильность данных.",
+                    "Ошибка выполнения запроса");
+                return null;
             }
         }
         public void ExecuteVoid()
@@ -396,13 +423,10 @@ namespace Common
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
+                ProgramState.ShowErrorDialog(
                     $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
                     $"\nПроверьте правильность данных.",
-                    "Ошибка выполнения запроса",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                return;
+                    "Ошибка выполнения запроса");
             }
         }
         #endregion

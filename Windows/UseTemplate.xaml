@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Создать документы по шаблону" Height="550" Width="800" Style="{DynamicResource WindowBase}" MinWidth="700" MinHeight="550" Topmost="True" Uid="8" Cursor="">
+        Title="Секвенсор" Height="550" Width="800" Style="{DynamicResource WindowBase}" MinWidth="700" MinHeight="550" Topmost="True" Uid="8" Cursor="">
 
     <Border>
         <Grid>
