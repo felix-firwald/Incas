@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2"
         xmlns:vm="clr-namespace:Incubator_2.ViewModels"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:tasks="clr-namespace:Incubator_2.Forms.Tasks" xmlns:database="clr-namespace:Incubator_2.Forms.Database" xmlns:usersettings="clr-namespace:Incubator_2.Forms.UserSettings" x:Name="window" x:Class="Incubator_2.MainWindow"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:tasks="clr-namespace:Incubator_2.Forms.Tasks" xmlns:database="clr-namespace:Incubator_2.Forms.Database" xmlns:usersettings="clr-namespace:Incubator_2.Forms.UserSettings" xmlns:handbook="clr-namespace:Incubator_2.Forms.Handbook" x:Name="window" x:Class="Incubator_2.MainWindow"
         mc:Ignorable="d"
         Height="900"
         Width="1300"
@@ -30,7 +30,7 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" MinWidth="120" MaxWidth="400"/>
+            <ColumnDefinition Width="250" MinWidth="140" MaxWidth="400"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -51,16 +51,17 @@
         
 
         <StackPanel x:Name="StackLeft" Grid.Row="1" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize">
-            <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,15" Text="{Binding WorkspaceName}" TextWrapping="Wrap"/>
+            <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,15" Text="{Binding WorkspaceName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
             <Image x:Name="Logo" Height="auto" Width="auto" Source="/Views/Logo.png" UseLayoutRounding="False" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" Cursor="Hand" ToolTip="Жми на меня и тебе откроется панель управления">
             </Image>
             <TextBlock x:Name="LSurname" Foreground="White" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True"/>
-            <TextBlock x:Name="LFullname" Foreground="White" Text="{Binding Fullname}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock x:Name="LPost" Foreground="{StaticResource Light}" Margin="0,0,0,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock x:Name="LFullname" TextWrapping="Wrap" Foreground="White" Text="{Binding Fullname}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock x:Name="LPost" TextWrapping="Wrap" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <Rectangle Stroke="#43464D" StrokeThickness="8" />
 
             <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}" Content="Документы" IsChecked="True"/>
             <RadioButton x:Name="TasksRadio" Style="{DynamicResource MenuButton}" Content="Задачи"/>
+            <RadioButton x:Name="HandbookRadio" Style="{DynamicResource MenuButton}" Content="Справочник"/>
             <RadioButton x:Name="DatabaseRadio" Style="{DynamicResource MenuButton}" Content="База данных"/>
             <Rectangle Stroke="#43464D" StrokeThickness="8" />
             <RadioButton x:Name="SettingsRadio" Style="{DynamicResource MenuButton}" Content="Настройки"/>
@@ -76,6 +77,9 @@
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=TasksRadio, Path=IsChecked}" Background="{x:Null}">
                     <tasks:TasksMain/>
+                </TabItem>
+                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=HandbookRadio, Path=IsChecked}" Background="{x:Null}">
+                    <handbook:HandbookMain/>
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=DatabaseRadio, Path=IsChecked}" Background="{x:Null}">
                     <database:CustomDatabaseMain/>

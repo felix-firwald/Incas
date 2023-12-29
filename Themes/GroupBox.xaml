@@ -11,30 +11,31 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="40" />
-                                <RowDefinition Height="4" />
+                                <RowDefinition Height="2" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            
+
                             <Border Grid.Row="0">
                                 <Label Foreground="{DynamicResource DarkLight}" Background="{DynamicResource Area}" FontSize="16" FontFamily="/Fonts/#JetBrains Mono" FontWeight="ExtraLight" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                     <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" />
+                                    <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" />
                                 </Label>
                             </Border>
-                            
-                            <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" />
+
+                            <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" >
+                            </Rectangle>
                             <Border Grid.Row="2" BorderThickness="0" BorderBrush="#25A0DA">
                                 <ContentPresenter Margin="4" />
                             </Border>
                         </Grid>
                     </Border>
                 </ControlTemplate>
-                
+
             </Setter.Value>
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="0.5"/>
-                
+
             </Trigger>
         </Style.Triggers>
     </Style>

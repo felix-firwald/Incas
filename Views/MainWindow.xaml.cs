@@ -27,7 +27,7 @@ namespace Incubator_2
 
         private void OnResize(object sender, SizeChangedEventArgs e)
         {
-            if (this.StackLeft.RenderSize.Width < 140)
+            if (this.StackLeft.RenderSize.Width < 150)
             {
                 this.LSurname.Visibility = Visibility.Collapsed;
                 this.LFullname.Visibility = Visibility.Collapsed;

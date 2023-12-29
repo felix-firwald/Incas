@@ -9,19 +9,22 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RadioButton}">
                     <Border Name="bor" Grid.Column="1" Background="Transparent" BorderBrush="DodgerBlue" BorderThickness="0,0,0,0"  Margin="0,0,0,0">
-                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter TextElement.FontFamily="/Fonts/#JetBrains Mono" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Column="0"></ContentPresenter>
+                            <Polygon x:Name="PolygonMain" Points="20, 10, 20, 30, 10, 20" Fill="{DynamicResource Basic}" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Right" Visibility="Collapsed"/>
+                        </Grid>
+                        
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter TargetName="bor" Property="Background" Value="#3E4148"/>
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
-
-                        </Trigger>
                         <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="PolygonMain" Property="Visibility" Value="Visible"/>
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
@@ -64,8 +67,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RadioButton}">
-                    <Border Name="bor" Grid.Column="1" Background="#393c43" BorderThickness="1" BorderBrush="{DynamicResource Element}" Margin="0,0,0,0">
-                        <ContentPresenter TextElement.FontFamily="/Fonts/#JetBrains Mono" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
+                    <Border Name="bor" Grid.Column="1" Background="#393c43" CornerRadius="3" BorderThickness="1" BorderBrush="{DynamicResource Element}" Margin="0,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Polygon x:Name="PolygonMain" Points="10, 20, 10, 0, 20, 10" Fill="{DynamicResource LightPurple}" Visibility="Collapsed" VerticalAlignment="Center" Margin="-10,0,0,0" Width="NaN" Height="NaN" Panel.ZIndex="-9"/>
+                            <ContentPresenter TextElement.FontFamily="/Fonts/#JetBrains Mono" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
+                        </StackPanel>
+                        
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -85,12 +92,14 @@
                             </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="PolygonMain" Property="Visibility" Value="Visible"/>
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation Duration="0:0:0.100" To="#B255FF" Storyboard.TargetProperty="Foreground.Color"/>
                                         <ThicknessAnimation Duration="0:0:0.100" To="2" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderThickness"/>
                                         <ColorAnimation Duration="0:0:0.100" To="#B255FF" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>

@@ -13,7 +13,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" MinWidth="80" MaxWidth="300"/>
+            <ColumnDefinition Width="240" MinWidth="120" MaxWidth="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
             <ScrollViewer Grid.Row="0" Grid.Column="0">
