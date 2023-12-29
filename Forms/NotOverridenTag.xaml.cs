@@ -25,11 +25,11 @@ namespace Incubator_2.Forms
             this.TagName.Content = tag.name;
         }
 
-        public void OverrideTag()
+        public void OverrideTag(bool notify = true)
         {
             this.IsEnabled = false;
             this.Override.Visibility = Visibility.Collapsed;
-            onOverride(tag);
+            if (notify) { onOverride(tag); }
         }
         public void DeOverrideTag()
         {

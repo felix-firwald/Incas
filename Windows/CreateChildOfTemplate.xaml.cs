@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Forms;
 using Common;
@@ -36,11 +37,21 @@ namespace Incubator_2.Windows
         }
         private void ParseChildTags()
         {
-            vm.childTags.ForEach(child =>    // для каждого тега родительского шаблона
+            vm.childTags.ForEach(child =>    // для каждого тега дитя шаблона
             {
-                TagCreator not = new TagCreator(child);
-                not.onDelete += DeleteTagFromMain;
-                this.ContentPanel.Children.Add(not);
+                TagCreator tc = new TagCreator(child);
+                tc.onDelete += DeleteTagFromMain;
+                this.ContentPanel.Children.Add(tc);
+                if (child.parent != 0)
+                {
+                    foreach (NotOverridenTag not in this.ParentTagPanel.Children)
+                    {
+                        if (not.tag.id == child.parent)
+                        {
+                            not.OverrideTag(false);
+                        }
+                    }
+                }
             });
         }
         private void AddOverriden(Tag t)
@@ -92,12 +103,14 @@ namespace Incubator_2.Windows
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
+            this.Close();
             this.vm.SaveTemplate();
-            
+            new Tag().RemoveAllTagsByTemplate(this.vm.childTemplate.id);
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
                 tag.SaveTag(this.vm.childTemplate.id);
             }
+            
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
