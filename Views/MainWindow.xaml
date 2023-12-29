@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2"
         xmlns:vm="clr-namespace:Incubator_2.ViewModels"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" xmlns:fa="http://schemas.fontawesome.io/icons/" x:Name="window" x:Class="Incubator_2.MainWindow"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:tasks="clr-namespace:Incubator_2.Forms.Tasks" x:Name="window" x:Class="Incubator_2.MainWindow"
         mc:Ignorable="d"
         Height="900"
         Width="1300"
@@ -66,7 +66,7 @@
             <RadioButton x:Name="SettingsRadio" Style="{DynamicResource MenuButton}" Content="Настройки"/>
         </StackPanel>
         
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Height="200" Margin="0,278,0,0" VerticalAlignment="Top" Width="5" ResizeDirection="Columns" Background="#32353c" Grid.Row="1"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="5" ResizeDirection="Columns" Background="Transparent" Grid.Row="1" Height="750"/>
         
         <Border Margin="8,8,8,8" Grid.Column="1" Grid.Row="1" Cursor="">
             <!--<Forms:UC_Templator />-->
@@ -75,7 +75,7 @@
                     <Forms:UC_Templator />
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=TasksRadio, Path=IsChecked}" Background="{x:Null}">
-                    
+                    <tasks:TasksMain/>
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=DatabaseRadio, Path=IsChecked}" Background="{x:Null}">
                     

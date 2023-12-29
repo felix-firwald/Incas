@@ -33,6 +33,6 @@
         <Forms:UC_ListOfDocuments Grid.Row="1" Grid.Column="0"/>
         <Forms:ListOfGenerations Grid.Row="1" Grid.Column="1" />
 
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,0" Grid.Row="1" Width="5" Background="#32353c" Height="200" VerticalAlignment="Center"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,0" Grid.Row="1" Width="5" Background="Transparent" Height="900" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

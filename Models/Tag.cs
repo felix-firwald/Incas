@@ -90,6 +90,7 @@ namespace Models
                     { "name", $"'{name}'" },
                     { "type", $"'{type}'" },
                     { "value", $"'{value}'" },
+                    { "parent", $"'{parent}'" },
                 })
                 .ExecuteVoid();
         }
