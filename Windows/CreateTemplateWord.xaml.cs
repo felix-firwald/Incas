@@ -100,6 +100,7 @@ namespace Incubator_2.Windows
         {
             if (CheckForSave())
             {
+                this.Close();
                 if (isEdit)
                 {
                     template.UpdateTemplate();
@@ -110,7 +111,7 @@ namespace Incubator_2.Windows
                     template.AddTemplate(false);
                     SaveTags(false);
                 }
-                this.Close();
+                
             }
         }
 
