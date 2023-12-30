@@ -5,14 +5,14 @@
         <Setter Property="Foreground" Value="{DynamicResource Light}"/>
     </Style>
     <ControlTemplate x:Key="WindowDialog" TargetType="{x:Type Window}">
-        <Border CornerRadius="6" BorderThickness="2" BorderBrush="{DynamicResource Element}" Background="{DynamicResource Area}">
+        <Border CornerRadius="6" BorderThickness="2" BorderBrush="{DynamicResource Element}" Background="{DynamicResource Basic}">
             <ContentPresenter/>
         </Border>
     </ControlTemplate>
 
     <Style x:Key="Dialog" TargetType="{x:Type Window}" BasedOn="{StaticResource WindowBase}">
         <Setter Property="WindowState" Value="Normal"/>
-        <Setter Property="Height" Value="150"/>
+        <Setter Property="Height" Value="250"/>
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="Topmost" Value="True"/>
         <Setter Property="Width" Value="450"/>

@@ -11,8 +11,9 @@ namespace Models
     {
         Variable,
         Text,
-        LocalConstant,
+        Relation,
         LocalEnumeration,
+        LocalConstant,
         Table
     }
     public class Tag : Model

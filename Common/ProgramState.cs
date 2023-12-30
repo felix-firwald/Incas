@@ -322,6 +322,11 @@ namespace Common
             Dialog d = new Dialog(message, title);
             d.ShowDialog();
         }
+        public static void ShowExlamationDialog(string message, string title = "Обратите внимание")
+        {
+            Dialog d = new Dialog(message, title, Dialog.DialogIcon.Exlamation);
+            d.ShowDialog();
+        }
         public static DialogStatus ShowQuestionDialog(string message, string title, string yesText="Да", string noText = "Нет")
         {
             DialogQuestion d = new DialogQuestion(message, title, yesText, noText);

@@ -68,10 +68,12 @@ namespace Incubator_2.ViewModels
                 case "1":
                     return TypeOfTag.Text;
                 case "2":
-                    return TypeOfTag.LocalConstant;
-                case "3":
                     return TypeOfTag.LocalEnumeration;
+                case "3":
+                    return TypeOfTag.Relation;
                 case "4":
+                    return TypeOfTag.LocalConstant;
+                case "5":
                     return TypeOfTag.Table;
             }
         }
@@ -84,12 +86,14 @@ namespace Incubator_2.ViewModels
                     return "0";
                 case TypeOfTag.Text:
                     return "1";
-                case TypeOfTag.LocalConstant:
-                    return "2";
                 case TypeOfTag.LocalEnumeration:
+                    return "2";
+                case TypeOfTag.Relation:
                     return "3";
-                case TypeOfTag.Table:
+                case TypeOfTag.LocalConstant:
                     return "4";
+                case TypeOfTag.Table:
+                    return "5";
             }
         }
         #endregion

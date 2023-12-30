@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="DialogQuestion" Style="{DynamicResource Dialog}" Height="150" WindowStartupLocation="CenterScreen" AllowsTransparency="True">
+        Title="DialogQuestion" Style="{DynamicResource Dialog}" Height="150" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>
@@ -15,17 +15,19 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <fa:FontAwesome x:Name="Icon" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Icon="QuestionCircle" FontSize="60" Foreground="{DynamicResource DarkYellow}" Grid.RowSpan="2">
 
         </fa:FontAwesome>
-        <Label x:Name="Title" Grid.Column="1" Grid.ColumnSpan="2" Content="Неизвестный вопрос" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" FontWeight="Bold" Grid.RowSpan="1" FontFamily="JetBrains Mono"/>
-        <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,5,5" >
+        <Label x:Name="Title" Grid.Column="1" Grid.ColumnSpan="2" Content="Неизвестный вопрос" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" FontWeight="Bold" FontFamily="JetBrains Mono"/>
+        <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,5,0" >
             <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="По умолчанию, такой текст обозначает неисправность в работе программы." Margin="5,0,10,0"/>
         </ScrollViewer>
-        <Button x:Name="Yes" Style="{DynamicResource ButtonMain}" Content="Да" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Top" Click="Yes_Click"/>
-        <Button x:Name="No" Style="{DynamicResource ButtonMain}" Content="Нет" Grid.Row="3" Grid.Column="2" VerticalAlignment="Top" Click="No_Click"/>
+        <Rectangle Fill="{DynamicResource Element}" Grid.Row="3" Grid.ColumnSpan="3"/>
+        <Button x:Name="Yes" Style="{DynamicResource ButtonMain}" Content="Да" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="Yes_Click" Margin="5,0,5,0"/>
+        <Button x:Name="No" Style="{DynamicResource ButtonMain}" Content="Нет" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Click="No_Click" Margin="5,0,5,0"/>
     </Grid>
 </Window>

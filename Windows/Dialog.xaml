@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Incubator_2.Windows"
         xmlns:fa="http://schemas.fontawesome.io/icons/" x:Class="Incubator_2.Windows.Dialog"
         mc:Ignorable="d"
-        Title="Ошибка" Style="{DynamicResource Dialog}" WindowStartupLocation="CenterScreen" AllowsTransparency="True">
+        Title="Ошибка" Style="{DynamicResource Dialog}" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>
@@ -15,18 +15,20 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <fa:FontAwesome x:Name="Icon" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Icon="ExclamationCircle" FontSize="60" Foreground="{DynamicResource Error}" Grid.RowSpan="2">
-            
-        </fa:FontAwesome>
-        <Label x:Name="Title" Grid.Column="1" Content="Возникла неизвестная ошибка" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" Width="240" FontWeight="Bold" Grid.RowSpan="1" FontFamily="JetBrains Mono"/>
-        <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="0,0,5,0" >
+        <fa:FontAwesome x:Name="IconError" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Icon="ExclamationCircle" FontSize="60" Foreground="{DynamicResource Error}" Grid.RowSpan="2" Visibility="Hidden"/>
+        <fa:FontAwesome x:Name="IconExlamation" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Icon="ExclamationTriangle" FontSize="50" Foreground="{DynamicResource Yellow}" Grid.RowSpan="2" Visibility="Hidden"/>
+
+        <Label x:Name="Title" Grid.Column="1" Content="Возникла неизвестная ошибка" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" Width="240" FontWeight="Bold" FontFamily="JetBrains Mono"/>
+        <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Margin="0,0,5,0" MaxHeight="400" >
             <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="По умолчанию, такой текст обозначает критическую неисправность в работе программы." Margin="5,0,10,0"/>
         </ScrollViewer>
-        <Button x:Name="Yes" Style="{DynamicResource ButtonMain}" Content="Хорошо" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Top" Click="Yes_Click"/>
+        <Rectangle Fill="{DynamicResource Element}" Grid.Row="3" Grid.ColumnSpan="2"/>
+        <Button x:Name="Yes" Style="{DynamicResource ButtonMain}" Content="Хорошо" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="Yes_Click" Margin="5,0,5,0"/>
 
     </Grid>
 </Window>

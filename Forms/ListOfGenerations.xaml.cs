@@ -65,13 +65,21 @@ namespace Incubator_2.Forms
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
-            RegistreCreatedJSON.GetRegistry();
-            foreach (FileCreated fc in Selection)
+            if (Selection.Count > 0)
             {
-                this.ContentPanel.Children.Remove(fc);
-                RegistreCreatedJSON.RemoveRecord(fc.record);
+                RegistreCreatedJSON.GetRegistry();
+                foreach (FileCreated fc in Selection)
+                {
+                    this.ContentPanel.Children.Remove(fc);
+                    RegistreCreatedJSON.RemoveRecord(fc.record);
+                }
+                RegistreCreatedJSON.SaveRegistry();
             }
-            RegistreCreatedJSON.SaveRegistry();
+            else
+            {
+                ProgramState.ShowExlamationDialog("Не выбрано ни одного элемента для удаления.\n" +
+                    "Используйте селекторы для выбора тех записей, которые нужно удалить.", "Действие невозможно");
+            }
         }
 
         private void UseClick(object sender, MouseButtonEventArgs e)
@@ -89,6 +97,11 @@ namespace Incubator_2.Forms
                     UseTemplate ut = new UseTemplate(tm, tj);
                     ut.Show();
                 }
+            }
+            else
+            {
+                ProgramState.ShowExlamationDialog("Не выбрано ни одного элемента для отправки в секвенсор.\n" +
+                    "Используйте селекторы для выбора тех записей, которые нужно открыть.", "Действие невозможно");
             }
         }
     }

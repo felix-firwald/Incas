@@ -19,11 +19,25 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class Dialog : Window
     {
-        public Dialog(string text, string title="Неизвестная ошибка")
+        public enum DialogIcon
+        {
+            Error,
+            Exlamation
+        }
+        public Dialog(string text, string title="Неизвестная ошибка", DialogIcon ic = DialogIcon.Error)
         {
             InitializeComponent();
             this.Title.Content = title;
             this.Description.Text = text;
+            switch (ic)
+            {
+                case DialogIcon.Error:
+                    this.IconError.Visibility = Visibility.Visible;
+                    break;
+                case DialogIcon.Exlamation:
+                    this.IconExlamation.Visibility = Visibility.Visible;
+                    break;
+            }
         }
 
         private void Yes_Click(object sender, RoutedEventArgs e)
