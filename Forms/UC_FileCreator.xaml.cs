@@ -1,4 +1,5 @@
 ﻿using Common;
+//using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
 using Incubator_2.Windows;
 using Models;
@@ -30,6 +31,7 @@ namespace Incubator_2.Forms
         private Template template;
         private List<Tag> tags;
         List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
+        List<string> xps = new List<string>();
         public UC_FileCreator(Template templ, List<Tag> tagsList)
         {
             InitializeComponent();
@@ -109,6 +111,9 @@ namespace Incubator_2.Forms
             File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
             Dictionary<int, string> filledTags = new Dictionary<int, string>();
             WordTemplator wt = new WordTemplator(newFile);
+
+            List<string> tagsToReplace = new List<string>();
+            List<string> values = new List<string>();
             this.Dispatcher.Invoke(() =>
             {
                 foreach (UC_TagFiller tf in TagFillers)
@@ -116,9 +121,11 @@ namespace Incubator_2.Forms
                     string name = tf.GetTagName();
                     int id = tf.GetId();
                     string value = tf.GetValue();
-                    wt.Replace(name, value);
                     filledTags.Add(id, value);
+                    tagsToReplace.Add(name);
+                    values.Add(value);
                 }
+                wt.Replace(tagsToReplace, values);
             });
             RegistreCreatedJSON.AddRecord(new TemplateJSON(this.template.id, this.template.name, this.Filename.Text, filledTags));
         }
@@ -138,18 +145,25 @@ namespace Incubator_2.Forms
 
         private void PreviewCLick(object sender, MouseButtonEventArgs e)
         {
-            string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyyyMMddHHmmss")}.docx";
+            string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.docx";
             File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
             WordTemplator wt = new WordTemplator(newFile);
+
+            List<string> tagsToReplace = new List<string>();
+            List<string> values = new List<string>();
             foreach (UC_TagFiller tf in TagFillers)
             {
-                string name = tf.GetTagName();
+                string nameOf = tf.GetTagName();
                 int id = tf.GetId();
                 string value = tf.GetValue();
-                wt.Replace(name, value);
+                tagsToReplace.Add(nameOf);
+                values.Add(value);
             }
-            PreviewWindow pr = new PreviewWindow(wt.TurnToXPS());
-            pr.Show();
+            wt.Replace(tagsToReplace, values);
+            string fileXPS = wt.TurnToXPS();
+            PreviewWindow pr = new PreviewWindow(fileXPS);
+            pr.ShowDialog();
+            xps.Add(fileXPS);
         }
     }
 }

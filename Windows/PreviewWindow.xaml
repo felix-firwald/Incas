@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
         mc:Ignorable="d"
-        Title="Предпросмотр" Height="720" Width="1080" Style="{DynamicResource WindowBase}" ShowInTaskbar="False" Topmost="True" WindowStartupLocation="CenterScreen">
+        Title="Предпросмотр" Height="720" Width="1080" Style="{DynamicResource WindowBase}" ShowInTaskbar="False" Topmost="True" WindowStartupLocation="CenterScreen" Closed="OnClosed">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>

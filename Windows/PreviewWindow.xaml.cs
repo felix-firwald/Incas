@@ -30,5 +30,10 @@ namespace Incubator_2.Windows
             XpsDocument document = new XpsDocument(XPSpath, FileAccess.Read);
             this.Preview.Document = document.GetFixedDocumentSequence();
         }
+
+        private void OnClosed(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

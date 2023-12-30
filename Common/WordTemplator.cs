@@ -4,6 +4,7 @@ using Xceed.Document.NET;
 using System.Text.RegularExpressions;
 using Spire.Doc;
 using System;
+using System.IO;
 
 namespace Common
 {
@@ -24,17 +25,16 @@ namespace Common
             return DocX.Load(this.Path);
         }
 
-        public void Replace(string tag, string value)
+        public void Replace(List<string> tags, List<string> values) // не Dictionary потому что важен порядок замены
         {
             DocX doc = LoadFile();
             StringReplaceTextOptions options = new StringReplaceTextOptions();
-            options.SearchValue = ConvertTag(tag);
-            options.NewValue = value.Trim();
-            doc.ReplaceText(options);
-            //foreach (Section sect in doc.GetSections())
-            //{
-            //    sect.
-            //}
+            for (int i = 0; i < tags.Count; i++)
+            {
+                options.SearchValue = ConvertTag(tags[i]);
+                options.NewValue = values[i].Trim(); // а нахуя Trim?
+                doc.ReplaceText(options);
+            }
             doc.Save();
             
         }
@@ -56,8 +56,9 @@ namespace Common
             //Create a Document class object and load the sample file
             Spire.Doc.Document doc = new Spire.Doc.Document(this.Path);
             //Save the Word file as XPS and run the generated document
-            string outputName = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyyyMMddHHmmss")}.xps";
+            string outputName = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.xps";
             doc.SaveToFile(outputName, FileFormat.XPS);
+            File.Delete(this.Path);
             return outputName;
         }
         public void GetTextOfFile()
