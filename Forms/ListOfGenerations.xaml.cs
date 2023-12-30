@@ -79,17 +79,17 @@ namespace Incubator_2.Forms
             if (Selection.Count > 0)
             {
                 Template tm = new Template();
-                tm.GetTemplateById(Selection[0].record.template_id);
-                List<TemplateJSON> tj = new List<TemplateJSON>();
-                foreach (FileCreated fc in Selection)
+                if (tm.GetTemplateById(Selection[0].record.template_id) != null)
                 {
-                    tj.Add(RegistreCreatedJSON.LoadRecord(fc.record));
+                    List<TemplateJSON> tj = new List<TemplateJSON>();
+                    foreach (FileCreated fc in Selection)
+                    {
+                        tj.Add(RegistreCreatedJSON.LoadRecord(fc.record));
+                    }
+                    UseTemplate ut = new UseTemplate(tm, tj);
+                    ut.Show();
                 }
-                UseTemplate ut = new UseTemplate(tm, tj);
-                ut.Show();
             }
-
-            
         }
     }
 }

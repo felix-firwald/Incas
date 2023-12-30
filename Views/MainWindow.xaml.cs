@@ -65,7 +65,14 @@ namespace Incubator_2
 
         private void WindowMove(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            DragMove();
+            try
+            {
+                DragMove();
+            }
+            catch
+            {
+                
+            }
         }
     }
 }

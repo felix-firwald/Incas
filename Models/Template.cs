@@ -29,9 +29,18 @@ namespace Models
                 .Select()
                 .WhereEqual("id", id.ToString())
                 .ExecuteOne();
-            this.Serialize(dr);
-            this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString(), true);
-            return this;
+            if (dr != null)
+            {
+                this.Serialize(dr);
+                this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString(), true);
+                return this;
+            }
+            else
+            {
+                ProgramState.ShowErrorDialog("Шаблон с таким идентификатором не был найден.", "Ошибка");
+                return null;
+            }
+            
         }
         private List<Template> GetAllTemplatesBy(TemplateType tt, string cat)
         {
@@ -115,14 +124,12 @@ namespace Models
                 })
                 .ExecuteVoid();
             this.id = int.Parse(
-                    GetOne(
                         StartCommand()
                             .Select()
                             .WhereEqual("name", name)
                             .WhereEqual("path", path)
                             .OrderByDESC("id")
-                            .Execute()
-                    )["id"].ToString()
+                            .ExecuteOne()["id"].ToString()
                 );
         }
         public void UpdateTemplate()
