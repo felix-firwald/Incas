@@ -2,7 +2,8 @@
 using Xceed.Words.NET;
 using Xceed.Document.NET;
 using System.Text.RegularExpressions;
-
+using Spire.Doc;
+using System;
 
 namespace Common
 {
@@ -30,6 +31,10 @@ namespace Common
             options.SearchValue = ConvertTag(tag);
             options.NewValue = value.Trim();
             doc.ReplaceText(options);
+            //foreach (Section sect in doc.GetSections())
+            //{
+            //    sect.
+            //}
             doc.Save();
             
         }
@@ -46,15 +51,23 @@ namespace Common
             }
             return result;
         }
+        public string TurnToXPS()
+        {
+            //Create a Document class object and load the sample file
+            Spire.Doc.Document doc = new Spire.Doc.Document(this.Path);
+            //Save the Word file as XPS and run the generated document
+            string outputName = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyyyMMddHHmmss")}.xps";
+            doc.SaveToFile(outputName, FileFormat.XPS);
+            return outputName;
+        }
         public void GetTextOfFile()
         {
             DocX doc = LoadFile();
-            IList<Section> s = doc.GetSections();
+            IList<Xceed.Document.NET.Section> s = doc.GetSections();
             string result = "";
-            foreach (Section section in s)
+            foreach (Xceed.Document.NET.Section section in s)
             {
                 result = result + "\n" + section.ToString();
-                
             }
             ProgramState.ShowErrorDialog(doc.Text);
         }

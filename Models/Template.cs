@@ -91,7 +91,6 @@ namespace Models
         {
             DataTable dt = StartCommand()
                 .SelectUnique("suggestedPath")
-                .WhereEqual("isAbstract", "0")
                 .OrderByASC("suggestedPath")
                 .Execute();
             List<string> categories = new List<string>();

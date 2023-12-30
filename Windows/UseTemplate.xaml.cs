@@ -83,7 +83,7 @@ namespace Incubator_2.Windows
                     RegistreCreatedJSON.GetRegistry();
                     foreach (UC_FileCreator fc in creators)
                     {
-                        fc.CreateFile(this.dir.Text, template.path);
+                        fc.CreateFile(this.dir.Text);
                         //fc.CreateFile(this.dir.Text, template.path);
                     }
                     RegistreCreatedJSON.SaveRegistry();

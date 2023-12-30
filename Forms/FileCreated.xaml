@@ -16,12 +16,12 @@
     
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <CheckBox Style="{DynamicResource Selector}" Grid.RowSpan="2" Grid.Column="2" Checked="Selector_Checked" Unchecked="Selector_Unchecked"/>
+        <CheckBox x:Name="Selector" Style="{DynamicResource Selector}" Grid.RowSpan="2" Grid.Column="2" Checked="Selector_Checked" Unchecked="Selector_Unchecked"/>
         <Label x:Name="Filename" Style="{DynamicResource LabelElement}" Content="Имя не определено" VerticalAlignment="Top" Grid.RowSpan="2" FontSize="11" VerticalContentAlignment="Bottom" Grid.ColumnSpan="2" Height="25" FontWeight="Bold"/>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Label x:Name="GenerationTime" Style="{DynamicResource LabelElement}" Content="Дата не определена" Grid.Row="1" FontSize="11" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="23"/>
             <Label Style="{DynamicResource LabelSecondary}" Content=">>>" Foreground="{DynamicResource DarkLight}"/>
-            <Label x:Name="TemplateName" Style="{DynamicResource LabelElement}" Content="Шаблон не определен" FontSize="11" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="22" Grid.Row="1" FontWeight="Normal" Foreground="{DynamicResource Success}"/>
+            <Label x:Name="TemplateName" Style="{DynamicResource LabelElement}" Content="Шаблон не определен" FontSize="11" VerticalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="1" FontWeight="Normal" Foreground="{DynamicResource Success}"/>
         </StackPanel>
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">
@@ -29,6 +29,7 @@
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="#43464d"></Setter>
                     </Trigger>
+
                 </Style.Triggers>
             </Style>
         </Grid.Style>

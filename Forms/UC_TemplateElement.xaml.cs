@@ -49,7 +49,7 @@ namespace Forms
 
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
-            if (template.isAbstract)
+            if (this.ChildPanel.Children.Count > 0)
             {
                 ProgramState.ShowErrorDialog("Абстрактные шаблоны нельзя использовать напрямую.\nВместо этого, используйте одного из его наследников.", "Использование шаблона невозможно");
                 return;

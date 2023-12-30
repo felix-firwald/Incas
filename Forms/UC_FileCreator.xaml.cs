@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incubator_2.Common;
+using Incubator_2.Windows;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Windows.Devices.Geolocation;
 
 namespace Incubator_2.Forms
 {
@@ -101,10 +103,10 @@ namespace Incubator_2.Forms
                 .Replace("\"", "")
                 .Trim();
         }
-        public void CreateFile(string newPath, string original)
+        public void CreateFile(string newPath)
         {
             string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
-            File.Copy(ProgramState.GetFullnameOfWordFile(original), newFile, true);
+            File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
             Dictionary<int, string> filledTags = new Dictionary<int, string>();
             WordTemplator wt = new WordTemplator(newFile);
             this.Dispatcher.Invoke(() =>
@@ -131,12 +133,23 @@ namespace Incubator_2.Forms
                     break;
                 }
             }
-            this.Filename.Text = $"{prefix}{result}{postfix}";
+            this.Filename.Text = $"{prefix} {result} {postfix}".Trim();
         }
 
-        private void FontAwesome_MouseDown(object sender, MouseButtonEventArgs e)
+        private void PreviewCLick(object sender, MouseButtonEventArgs e)
         {
-            
+            string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyyyMMddHHmmss")}.docx";
+            File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
+            WordTemplator wt = new WordTemplator(newFile);
+            foreach (UC_TagFiller tf in TagFillers)
+            {
+                string name = tf.GetTagName();
+                int id = tf.GetId();
+                string value = tf.GetValue();
+                wt.Replace(name, value);
+            }
+            PreviewWindow pr = new PreviewWindow(wt.TurnToXPS());
+            pr.Show();
         }
     }
 }
