@@ -13,6 +13,7 @@ namespace Models
         Text,
         LocalConstant,
         LocalEnumeration,
+        Table
     }
     public class Tag : Model
     {

@@ -71,6 +71,8 @@ namespace Incubator_2.ViewModels
                     return TypeOfTag.LocalConstant;
                 case "3":
                     return TypeOfTag.LocalEnumeration;
+                case "4":
+                    return TypeOfTag.Table;
             }
         }
         public string SerializeToInput(TypeOfTag tot)
@@ -86,6 +88,8 @@ namespace Incubator_2.ViewModels
                     return "2";
                 case TypeOfTag.LocalEnumeration:
                     return "3";
+                case TypeOfTag.Table:
+                    return "4";
             }
         }
         #endregion

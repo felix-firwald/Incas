@@ -5,6 +5,7 @@ using Incubator_2.Windows;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,7 @@ namespace Incubator_2.Forms
         private Template template;
         private List<Tag> tags;
         List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
-        List<string> xps = new List<string>();
+        List<TableFiller> Tables = new List<TableFiller>();
         public UC_FileCreator(Template templ, List<Tag> tagsList)
         {
             InitializeComponent();
@@ -43,9 +44,18 @@ namespace Incubator_2.Forms
         {
             this.tags.ForEach(t =>
             {
-                UC_TagFiller tf = new UC_TagFiller(t);
-                this.ContentPanel.Children.Add(tf);
-                TagFillers.Add(tf);
+                if (t.type != TypeOfTag.Table)
+                {
+                    UC_TagFiller tf = new UC_TagFiller(t);
+                    this.ContentPanel.Children.Add(tf);
+                    TagFillers.Add(tf);
+                }
+                else
+                {
+                    TableFiller tf = new TableFiller(t);
+                    this.ContentPanel.Children.Add(tf);
+                    Tables.Add(tf);
+                }
             });
         }
         public void ApplyRecord(TemplateJSON record)
@@ -126,6 +136,10 @@ namespace Incubator_2.Forms
                     values.Add(value);
                 }
                 wt.Replace(tagsToReplace, values);
+                foreach (TableFiller tab in Tables)
+                {
+                    wt.CreateTable(tab.tag.name, tab.DataTable);
+                }
             });
             RegistreCreatedJSON.AddRecord(new TemplateJSON(this.template.id, this.template.name, this.Filename.Text, filledTags));
         }
@@ -160,10 +174,13 @@ namespace Incubator_2.Forms
                 values.Add(value);
             }
             wt.Replace(tagsToReplace, values);
+            foreach (TableFiller tab in Tables)
+            {
+                wt.CreateTable(tab.tag.name, tab.DataTable);
+            }
             string fileXPS = wt.TurnToXPS();
             PreviewWindow pr = new PreviewWindow(fileXPS);
-            pr.ShowDialog();
-            xps.Add(fileXPS);
+            pr.ShowDialog();         
         }
     }
 }
