@@ -131,7 +131,7 @@ namespace Incubator_2.Windows
                     names.Add(tag.name);
                 }
             }
-            FilenamesRecalculator fr = new FilenamesRecalculator(names);
+            FilenamesRecalculator fr = new FilenamesRecalculator(this.template.id, names);
             fr.ShowDialog();
             if (fr.status == DialogStatus.Yes)
             {

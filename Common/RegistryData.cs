@@ -109,10 +109,10 @@ namespace Common
         {
             if (GetTemplatesData().GetSubKeyNames().Contains(name))
             {
-                return GetTemplatesData().OpenSubKey(name);
+                return GetTemplatesData().OpenSubKey(name, true);
             }
             AddTemplate(name, "", "", "");
-            return GetTemplatesData().OpenSubKey(name);
+            return GetTemplatesData().OpenSubKey(name, true);
         }
         public static string GetTemplatePreferredPath(string template)
         {
@@ -125,6 +125,14 @@ namespace Common
         public static string GetTemplatePreferredPostfix(string template)
         {
             return GetTemplate(template).GetValue("preferred_postfix").ToString();
+        }
+        public static void SetTemplatePreferredPrefix(string template, string prefix)
+        {
+            GetTemplate(template).SetValue("preferred_prefix", prefix);
+        }
+        public static void SetTemplatePreferredPostfix(string template, string postfix)
+        {
+            GetTemplate(template).SetValue("preferred_postfix", postfix);
         }
         #endregion
 

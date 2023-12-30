@@ -19,7 +19,9 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <fa:FontAwesome x:Name="UseButton" Style="{DynamicResource IconButton}" Icon="PlusCircle" FontSize="18" Cursor="Hand" AutomationProperties.HelpText="Нажмите для создания документа" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
+        <fa:FontAwesome x:Name="UseButton" Style="{DynamicResource IconButton}" Icon="PlusCircle" FontSize="18" Cursor="Hand" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
+        <fa:FontAwesome x:Name="ParentIcon" Icon="ArrowCircleDown" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Foreground="{DynamicResource LightPurple}" Cursor="" />
+
         <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center"/>
         <fa:FontAwesome x:Name="CreateChild" Style="{DynamicResource IconButton}" Grid.Column="2" Icon="CodeFork" FontSize="16" Cursor="Hand" MouseDown="CreateChildClick" ToolTip="Создать наследника от этого шаблона" Tag="Да"/>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Grid.Column="3" Icon="Pencil" FontSize="16" Cursor="Hand" MouseDown="EditClick" ToolTip="Редактировать шаблон" Tag="Да"/>

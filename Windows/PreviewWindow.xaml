@@ -10,6 +10,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <DocumentViewer x:Name="Preview" Grid.Row="1" />
+        <DocumentViewer x:Name="Preview" Grid.Row="1" Background="{DynamicResource Basic}" />
     </Grid>
 </Window>

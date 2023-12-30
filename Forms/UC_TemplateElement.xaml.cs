@@ -37,6 +37,8 @@ namespace Forms
             if (this.ChildPanel.Children.Count > 0)
             {
                 this.MainLabel.Style = FindResource("LabelElementSpecial") as Style;
+                this.UseButton.Visibility = Visibility.Hidden;
+                this.ParentIcon.Visibility = Visibility.Visible;
             }
         }
         private void IsChild()

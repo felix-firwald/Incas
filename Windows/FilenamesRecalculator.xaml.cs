@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,16 +33,22 @@ namespace Incubator_2.Windows
         {
             get { return this.postfixValue.Text; }
         }
+        private int template;
 
-        public FilenamesRecalculator(List<string> tags)
+        public FilenamesRecalculator(int templ, List<string> tags)
         {
             InitializeComponent();
+            this.template = templ;
+            this.prefixValue.Text = RegistryData.GetTemplatePreferredPrefix(this.template.ToString());
+            this.postfixValue.Text = RegistryData.GetTemplatePreferredPostfix(this.template.ToString());
             this.resultedTag.ItemsSource = tags;
             this.resultedTag.SelectedIndex = 0;
         }
 
         private void Apply(object sender, RoutedEventArgs e)
         {
+            RegistryData.SetTemplatePreferredPrefix(this.template.ToString(), this.prefixValue.Text);
+            RegistryData.SetTemplatePreferredPostfix(this.template.ToString(), this.postfixValue.Text);
             this.status = DialogStatus.Yes;
             this.Close();
         }
