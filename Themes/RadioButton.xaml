@@ -29,10 +29,6 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetProperty="Foreground.Color"/>
-                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
-                                            <SplineThicknessKeyFrame KeyTime="00:00:00" Value="0,0,0,0" />
-                                            <SplineThicknessKeyFrame KeyTime="0:0:0.100" Value="5,0,0,0" />
-                                        </ThicknessAnimationUsingKeyFrames>
                                         <ThicknessAnimation Duration="0:0:0.100" To="4,0,0,0" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderThickness"/>
                                     </Storyboard>
                                 </BeginStoryboard>
@@ -41,10 +37,6 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation Duration="0:0:0.250" To="#FFA7ABB7" Storyboard.TargetProperty="Foreground.Color"/>
-                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="Margin" BeginTime="00:00:00">
-                                            <SplineThicknessKeyFrame KeyTime="00:00:00" Value="5,0,0,0" />
-                                            <SplineThicknessKeyFrame KeyTime="0:0:0.200" Value="0,0,0,0" />
-                                        </ThicknessAnimationUsingKeyFrames>
                                         <ThicknessAnimation Duration="0:0:0.250" To="0,0,0,0" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderThickness"/>
                                     </Storyboard>
                                 </BeginStoryboard>

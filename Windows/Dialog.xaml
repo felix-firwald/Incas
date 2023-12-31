@@ -29,6 +29,6 @@
         </ScrollViewer>
         <Rectangle Fill="{DynamicResource Element}" Grid.Row="3" Grid.ColumnSpan="2"/>
         <Button x:Name="Yes" Style="{DynamicResource ButtonMain}" Content="Хорошо" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="Yes_Click" Margin="5,0,5,0"/>
-
+        
     </Grid>
 </Window>

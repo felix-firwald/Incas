@@ -54,18 +54,63 @@
             <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,15" Text="{Binding WorkspaceName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
             <Image x:Name="Logo" Height="auto" Width="auto" Source="/Views/Logo.png" UseLayoutRounding="False" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" Cursor="Hand" ToolTip="Жми на меня и тебе откроется панель управления">
             </Image>
-            <TextBlock x:Name="LSurname" Foreground="White" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True"/>
-            <TextBlock x:Name="LFullname" TextWrapping="Wrap" Foreground="White" Text="{Binding Fullname}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <TextBlock x:Name="LPost" TextWrapping="Wrap" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock x:Name="LSurname" Foreground="White" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis"/>
+            <TextBlock x:Name="LFullname" Foreground="White" Text="{Binding Fullname}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
+            <TextBlock x:Name="LPost" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
             <Rectangle Stroke="#43464D" StrokeThickness="8" />
 
-            <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}" Content="Документы" IsChecked="True"/>
-            <RadioButton x:Name="TasksRadio" Style="{DynamicResource MenuButton}" Content="Задачи"/>
-            <RadioButton x:Name="HandbookRadio" Style="{DynamicResource MenuButton}" Content="Справочник"/>
-            <RadioButton x:Name="DatabaseRadio" Style="{DynamicResource MenuButton}" Content="База данных"/>
+            <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}"  IsChecked="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="ColDR" Width="30"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <fa:FontAwesome Icon="FileText" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
+                    <TextBlock Text="Документы" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DocumentsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
+                </Grid>
+            </RadioButton>
+            <RadioButton x:Name="TasksRadio" Style="{DynamicResource MenuButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="ColTR" Width="30"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <fa:FontAwesome Icon="ThList" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
+                    <TextBlock Text="Задачи" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=TasksRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
+                </Grid>
+            </RadioButton>
+            <RadioButton x:Name="HandbookRadio" Style="{DynamicResource MenuButton}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="ColHR" Width="30"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <fa:FontAwesome Icon="InfoCircle" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
+                    <TextBlock Text="Справочник" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=HandbookRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
+                </Grid>
+            </RadioButton>
+            <RadioButton x:Name="DatabaseRadio" Style="{DynamicResource MenuButton}" Cursor="Hand">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="ColDBR" Width="30"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <fa:FontAwesome Icon="Server" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" Cursor="" />
+                    <TextBlock Text="База данных" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DatabaseRadio, Path=Foreground}" Cursor="" Grid.Column="1" TextTrimming="WordEllipsis" />
+                </Grid>
+            </RadioButton>
             <Rectangle Stroke="#43464D" StrokeThickness="8" />
-            <RadioButton x:Name="SettingsRadio" Style="{DynamicResource MenuButton}" Content="Настройки"/>
-            
+            <RadioButton x:Name="SettingsRadio" Style="{DynamicResource MenuButton}" ToolTip="Пользовательские настройки">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="ColSR" Width="30"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <fa:FontAwesome Icon="Gear" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
+                    <TextBlock Text="Настройки" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=SettingsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
+                </Grid>
+            </RadioButton>
+
         </StackPanel>
         
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="5" ResizeDirection="Columns" Background="Transparent" Grid.Row="1" Height="750"/>

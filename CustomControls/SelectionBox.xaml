@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Incubator_2.CustomControls.SelectionBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incubator_2.CustomControls" xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="350" MaxHeight="40">
+    <Border Grid.ColumnSpan="3" MinWidth="40" MinHeight="30" MaxHeight="30" Background="{DynamicResource Black}" BorderBrush="{DynamicResource Element}" BorderThickness="1,1,1,1" CornerRadius="6,6,6,6" Margin="5,5,5,5" Cursor="Hand">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="White" Text="567567567" VerticalAlignment="Center" Margin="8,0,8,0" IsReadOnly="True"/>
+            <Rectangle Fill="{DynamicResource Element}" Grid.Column="1"/>
+            <fa:FontAwesome Icon="EllipsisH" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2"/>
+        </Grid>
+
+    </Border>
+
+</UserControl>
