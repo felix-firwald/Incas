@@ -13,7 +13,7 @@
                 <ColumnDefinition Width="1"/>
                 <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <TextBox Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="White" Text="567567567" VerticalAlignment="Center" Margin="8,0,8,0" IsReadOnly="True"/>
+            <TextBox Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="White" Text="567567567" VerticalAlignment="Center" Margin="8,0,8,0" IsReadOnly="True" AutoWordSelection="True"/>
             <Rectangle Fill="{DynamicResource Element}" Grid.Column="1"/>
             <fa:FontAwesome Icon="EllipsisH" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2"/>
         </Grid>

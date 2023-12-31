@@ -5,18 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
         mc:Ignorable="d"
-        Title="CreateWorkspace" Height="550" Width="500" Style="{DynamicResource Dialog}">
+        Title="CreateWorkspace" Height="300" Width="500" Style="{DynamicResource Dialog}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="22*"/>
-            <RowDefinition Height="12*"/>
-            <RowDefinition Height="15*"/>
-            <RowDefinition Height="24*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="40"/>
+
         </Grid.RowDefinitions>
         <Label Style="{DynamicResource LabelIncubator}" Content="Создание нового рабочего пространства" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Purple}"/>
         <TextBox Grid.Row="1" Style="{DynamicResource TextBoxMain}" Tag="Введите имя рабочей области"/>
-        <TextBlock Margin="6" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="Будет автоматически создан первый пользователь admin с паролем '1234'" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="2" Style="{DynamicResource TextBoxMain}" Tag="Введите путь, где будет создана рабочая область"/>
+        <TextBlock Margin="6" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="Будет автоматически создан первый пользователь admin с паролем '1234'" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Button Grid.Row="4" Style="{DynamicResource ButtonMain}" Content="Создать рабочее пространство" />
     </Grid>
 </Window>
