@@ -18,15 +18,6 @@ namespace Incubator_2
         public MainWindow()
         {
             InitializeComponent();
-            switch (Permission.CurrentUserPermission)
-            {
-                case PermissionGroup.Admin:
-                    this.GlobalStatus.Content = "Администратор";
-                    break;
-                case PermissionGroup.Moderator:
-                    this.GlobalStatus.Content = "Модератор";
-                    break;
-            }
         }
 
         private void OnClosed(object sender, EventArgs e)
