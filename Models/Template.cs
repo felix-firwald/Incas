@@ -170,11 +170,11 @@ namespace Models
         }
         public Template GetChild(string name)
         {
-            DataRow dr = GetOne(StartCommand()
+            DataRow dr = StartCommand()
                 .Select()
                 .WhereEqual("parent", this.id.ToString())
                 .WhereEqual("name", name)
-                .Execute());
+                .ExecuteOne();
             this.Serialize(dr);
             return this;
 

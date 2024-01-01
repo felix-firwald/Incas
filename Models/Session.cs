@@ -61,12 +61,10 @@ namespace Models
         public int GetIdOfSession()
         {
             return int.Parse(
-                GetOne(
                     StartCommand()
                         .Select("id")
                         .WhereEqual("timeStarted", this.timeStarted.ToString())
-                        .Execute()
-                )["id"].ToString()
+                        .ExecuteOne()["id"].ToString()
             );
             // return int.Parse(GetOne(Execute())["id"].ToString());
         }
@@ -102,12 +100,10 @@ namespace Models
         }
         public bool IsSessionActive()
         {
-            DataRow dr = GetOne(
-                StartCommand()
+            DataRow dr = StartCommand()
                     .Select()
                     .WhereEqual("id", this.id.ToString(), false)
-                    .Execute()
-            );
+                    .ExecuteOne();
             Clear();
             this.Serialize(dr);
             if (this.active != true)

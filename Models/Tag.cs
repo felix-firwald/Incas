@@ -127,14 +127,13 @@ namespace Models
         // для работы функции ниже должен быть предварительно обновлен template
         public void GetChild()
         {
-            DataTable dt = StartCommand()
+            DataRow dr = StartCommand()
                             .Select()
                             .WhereEqual("template", template.ToString())
                             .WhereEqual("parent", id.ToString())
-                            .Execute();
-            if (dt != null)
+                            .ExecuteOne();
+            if (dr != null)
             {
-                DataRow dr = GetOne(dt);
                 this.Serialize(dr);
                 this.type = (TypeOfTag)Enum.Parse(typeof(TypeOfTag), dr["type"].ToString());
             }

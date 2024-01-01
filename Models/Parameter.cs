@@ -32,13 +32,13 @@ namespace Incubator_2.Models
         }
         public Parameter GetParameter(ParameterType typeOf, string nameOf, string defaultValue = "0", bool createIfNotExists=true)
         {
-            DataTable dt = StartCommand()
+            DataRow dr = StartCommand()
                         .Select()
                         .WhereEqual("type", typeOf.ToString())
                         .WhereEqual("name", nameOf)
                         .OrderByASC("id")
-                        .Execute();
-            if (dt.Rows.Count < 1)
+                        .ExecuteOne();
+            if (dr == null)
             {
                 this.type = typeOf;
                 this.name = nameOf;
@@ -49,7 +49,6 @@ namespace Incubator_2.Models
                 }
                 return this;
             }
-            DataRow dr = GetOne(dt);
             this.Serialize(dr);
             this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
             return this;

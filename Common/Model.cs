@@ -170,14 +170,14 @@ namespace Common
                 }
                 catch (Exception)
                 {
-                    property.SetValue(this, null);
+                    //property.SetValue(this, null);
                     continue;
                 }
             }
         }
         #endregion
         
-        protected DataRow GetOne(DataTable dt)
+        private DataRow GetOne(DataTable dt)
         {
             try
             {
