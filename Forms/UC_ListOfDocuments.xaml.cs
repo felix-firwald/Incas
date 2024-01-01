@@ -26,6 +26,7 @@ namespace Incubator_2.Forms
     /// </summary>
     public partial class UC_ListOfDocuments : UserControl
     {
+        private string selectedCategory = "";
         public UC_ListOfDocuments()
         {
             InitializeComponent();
@@ -62,7 +63,9 @@ namespace Incubator_2.Forms
             {
                 mt.GetWordTemplates(category).ForEach(c =>
                 {
-                    this.TemplatesArea.Children.Add(new UC_TemplateElement(c));
+                    UC_TemplateElement te = new UC_TemplateElement(c);
+                    te.OnUpdated += Refresh;
+                    this.TemplatesArea.Children.Add(te);
                 });
                 if (this.TemplatesArea.Children.Count == 0)
                 {
@@ -108,26 +111,51 @@ namespace Incubator_2.Forms
             {
                 LoadTemplatesByCategory(text);
                 LoadChildrenForTemplates();
+                this.selectedCategory = text;
             }
             else
             {
                 LoadTemplatesByCategory("");
                 LoadChildrenForTemplates();
+                this.selectedCategory = "";
             }
             
         }
 
         private void AddFC_Click(object sender, MouseButtonEventArgs e)
         {
-            //ProgramState.ShowErrorDialog("Данная функция ещё находится в разработке", "Функция недоступна");
             CreateTemplateWord ctw = new CreateTemplateWord();
+            ctw.OnCreated += Refresh;
             ctw.Show();
+        }
+        private void FindSelectedInRefreshedList()
+        {
+            foreach (RadioButton rb in this.Categories.Children)
+            {
+                if (rb.Content.ToString() == selectedCategory)
+                {
+                    rb.IsChecked = true;
+                    LoadTemplatesByCategory(selectedCategory);
+                    return;
+                }
+            }
+            RadioButton def = (RadioButton)this.Categories.Children[0];
+            def.IsChecked = true;
+            selectedCategory = "";
+            LoadTemplatesByCategory("");
+            return;
+        }
+
+        public void Refresh()
+        {
+            LoadCategories();
+            FindSelectedInRefreshedList();
+            LoadChildrenForTemplates();
         }
 
         private void Refresh_Click(object sender, MouseButtonEventArgs e)
         {
-            LoadCategories();
-            LoadTemplatesByCategory("");
+            Refresh();
         }
     }
 }

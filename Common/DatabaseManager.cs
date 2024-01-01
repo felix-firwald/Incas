@@ -39,7 +39,6 @@ namespace Common
             AutoTableCreator atc = new AutoTableCreator();
             Query q = new Query("");
             q.AddCustomRequest(GetParameterDefinition(atc))
-             .AddCustomRequest(GetPostDefinition(atc))
              .AddCustomRequest(GetUserDefinition(atc))
              .AddCustomRequest(GetComputerDefinition(atc))
              .AddCustomRequest(GetSessionDefinition(atc))
@@ -47,6 +46,7 @@ namespace Common
              .AddCustomRequest(GetSubtaskDefinition(atc))
              .AddCustomRequest(GetTemplateDefinition(atc))
              .AddCustomRequest(GetTagDefinition(atc))
+             .AddCustomRequest(GetCustomTableDefinition(atc))
              .ExecuteVoid();
             return true;
         }
@@ -57,12 +57,6 @@ namespace Common
             return atc.GetQueryText();
         }
 
-        private static string GetPostDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Post), "Posts");
-            atc.SetAsUnique("name");
-            return atc.GetQueryText();
-        }
         private static string GetUserDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(User), "Users");
@@ -70,9 +64,7 @@ namespace Common
             atc.SetAsUnique("password");
             atc.SetNotNull("fullname", false);
             atc.SetNotNull("surname", false);
-            atc.SetNotNull("post", false);
-            atc.SetFK("post", "Posts", "id");
-            
+            atc.SetNotNull("post", false);           
             return atc.GetQueryText();
         }
         private static string GetComputerDefinition(AutoTableCreator atc)
@@ -84,7 +76,6 @@ namespace Common
         private static string GetSessionDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Session), "Sessions");
-            atc.SetFK("user", "Users", "username");
             atc.SetFK("user", "Users", "username");
             return atc.GetQueryText();
         }
@@ -101,11 +92,24 @@ namespace Common
         private static string GetTemplateDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Template), "Templates");
+            atc.SetNotNull("suggestedPath", false);
+            atc.SetNotNull("parent", false);
+            atc.SetFK("parent", "Templates", "id");
             return atc.GetQueryText();
         }
         private static string GetTagDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Tag), "Tags");
+            atc.SetNotNull("value", false);
+            atc.SetNotNull("parent", false);
+            atc.SetNotNull("parameters", false);
+            atc.SetFK("template", "Templates", "id");
+            atc.SetFK("parent", "Tags", "id");
+            return atc.GetQueryText();
+        }
+        private static string GetCustomTableDefinition(AutoTableCreator atc)
+        {
+            atc.Initialize(typeof(Subtask), "CustomTables");
             return atc.GetQueryText();
         }
     }

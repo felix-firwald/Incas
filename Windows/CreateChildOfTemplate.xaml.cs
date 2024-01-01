@@ -16,6 +16,10 @@ namespace Incubator_2.Windows
     public partial class CreateChildOfTemplate : Window
     {
         VM_ChildTemplate vm;
+
+        public delegate void Base();
+        public event Base OnCreated;
+
         public CreateChildOfTemplate(VM_ChildTemplate templ)
         {
             InitializeComponent();
@@ -110,7 +114,7 @@ namespace Incubator_2.Windows
             {
                 tag.SaveTag(this.vm.childTemplate.id);
             }
-            
+            OnCreated?.Invoke();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

@@ -105,7 +105,8 @@ namespace Incubator_2.Windows
                     DefineExistingWorkspace dew = new DefineExistingWorkspace();
                     dew.ShowDialog();
                     break;
-            }    
+            }
+            this.vm.Refresh();
         }
     }
 }

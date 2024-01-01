@@ -43,38 +43,20 @@ namespace Models
         }
         public User GetUserByName()
         {
-            DataRow dr = GetOne(
-                StartCommand()
-                    .AddCustomRequest("SELECT Users.id AS id, " +
-                    "Users.username AS username, " +
-                    "Users.fullname AS fullname, " +
-                    "Users.surname AS surname, " +
-                    "Users.password AS password, " +
-                    "Users.post AS post_id, Posts.name AS post, Users.status AS status " +
-                    "FROM Users JOIN Posts " +
-                    "ON post_id = Posts.id " +
-                    $"WHERE username = '{this.username}'")
-                    .Execute()
-            );
+            DataRow dr = StartCommand()
+                    .Select()
+                    .WhereEqual("username", this.username)
+                    .ExecuteOne();
             this.Serialize(dr);
             this.status = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), dr["status"].ToString());
             return this;
         }
         public User GetUserByPassword()
         {
-            DataRow dr = GetOne(
-                StartCommand()
-                    .AddCustomRequest("SELECT Users.id AS id, " +
-                    "Users.username AS username, " +
-                    "Users.fullname AS fullname, " +
-                    "Users.surname AS surname, " +
-                    "Users.password AS password" +
-                    "Users.post AS post_id, Posts.name AS post, Users.status " +
-                    "FROM Users JOIN Posts " +
-                    "ON post_id = Posts.id " +
-                    $"WHERE password = '{this.password}'")
-                    .Execute()
-            );
+            DataRow dr = StartCommand()
+                    .Select()
+                    .WhereEqual("password", this.password)
+                    .ExecuteOne();
                 
             this.Serialize(dr);
             this.status = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), dr["status"].ToString());
@@ -109,6 +91,7 @@ namespace Models
                     { "fullname", $"'{fullname}'" },
                     { "password", $"'{password}'" },
                     { "status", $"'{status}'" },
+                    { "post", $"'{post}'" }
                 })
                 .ExecuteVoid();
         }

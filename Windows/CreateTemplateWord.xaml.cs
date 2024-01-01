@@ -20,6 +20,8 @@ namespace Incubator_2.Windows
         private VM_Template VM_template;
         private readonly bool isEdit = false;
 
+        public delegate void Base();
+        public event Base OnCreated;
         public CreateTemplateWord(Template te = null)
         {
             InitializeComponent();
@@ -111,7 +113,7 @@ namespace Incubator_2.Windows
                     template.AddTemplate(false);
                     SaveTags(false);
                 }
-                
+                OnCreated?.Invoke();
             }
         }
 

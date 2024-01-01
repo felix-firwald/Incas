@@ -24,7 +24,7 @@ namespace Models
         public TypeOfTag type { get; set; }
         public string value { get; set; }
         public int parent { get; set; }
-        public bool required { get; set; }
+        public string parameters { get; set; }
         public Tag() 
         {
             tableName = "Tags";

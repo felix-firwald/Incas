@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,18 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class CreateWorkspace : Window
     {
+        VM_CreateWorkspace vm;
         public CreateWorkspace()
         {
             InitializeComponent();
-
+            vm = new VM_CreateWorkspace();
+            this.DataContext = vm;
         }
-        public void CreateWorkspace()
+
+        private void SaveButton(object sender, RoutedEventArgs e)
         {
-            ProgramState.InitWorkspace();
+            vm.RunInitializing();
+            this.Close();
         }
     }
 }

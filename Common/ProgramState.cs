@@ -7,6 +7,7 @@ using Incubator_2.Windows;
 using Incubator_2;
 using System.Windows;
 using Incubator_2.Models;
+using System.Runtime.CompilerServices;
 
 
 namespace Common
@@ -23,13 +24,21 @@ namespace Common
     {
         public SessionBrokenException() { }
     }
+    struct FirstWorkspaceData
+    {
+        public string workspacePath;
+        public string workspaceName;
+        public string userSurname;
+        public string userFullname;
+        public string userPassword;
+    }
 
     static class ProgramState
     {
         public static string CommonPath { get; private set; }
         public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incubator";
-        public static string DatabasePath { get; private set; }
-        public static string CustomDatabasePath { get; private set; }
+        public static string DatabasePath { get { return CommonPath + @"\data.dbinc"; } }
+        public static string CustomDatabasePath { get { return CommonPath + @"\custom.dbinc"; } }
         public static string ProceduralPath { get; private set; }
 
         #region Templates
@@ -48,8 +57,6 @@ namespace Common
         public static void SetCommonPath(string path)
         {
             CommonPath = path;
-            DatabasePath = CommonPath + @"\data.dbinc";
-            CustomDatabasePath = CommonPath + @"\custom.dbinc";
             TemplatesPath = CommonPath + @"\Templates";
             ProceduralPath = CommonPath + @"\Procedural";
             Directory.CreateDirectory(TemplatesPath);
@@ -168,13 +175,6 @@ namespace Common
             return TemplatesSourcesWordPath + "\\" + name;
         }
         #endregion
-        private static bool Initialize()
-        {
-            string fileFullName = getDBFilePath();
-            File.WriteAllText(fileFullName, SystemName);
-            Permission.CurrentUserPermission = PermissionGroup.Admin;
-            return CreateTablesInDatabase();
-        }
         private static bool CreateTablesInDatabase()
         {
             return DatabaseManager.CreateTables(DatabasePath);
@@ -187,13 +187,17 @@ namespace Common
         }
 
         #region Incubator
-        public static void InitWorkspace(string workspaceName)
+        public static void InitWorkspace(FirstWorkspaceData data)
         {
+            Permission.CurrentUserPermission = PermissionGroup.Admin;
+            SetCommonPath(data.workspacePath);
+            CreateTablesInDatabase();
+            RegistryData.SetWorkspacePath(data.workspaceName, data.workspacePath);
             using (Parameter par = new Parameter())
             {
                 par.type = ParameterType.INCUBATOR;
                 par.name = "ws_name";
-                par.value = workspaceName;
+                par.value = data.workspaceName;
                 par.CreateParameter();
                 par.name = "ws_opened";
                 par.WriteBoolValue(true);
@@ -201,7 +205,18 @@ namespace Common
                 par.name = "ws_locked";
                 par.WriteBoolValue(false);
                 par.CreateParameter();
-            }  
+            }
+            using (User user = new User())
+            {
+                user.status = PermissionGroup.Admin;
+                user.username = "admin";
+                user.post = "Администратор рабочего пространства";
+                user.surname = data.userSurname;
+                user.fullname = data.userFullname;
+                user.password = data.userPassword;
+                user.AddUser();
+            }
+
         }
         public static string GetWorkspaceName()
         {

@@ -23,6 +23,9 @@ namespace Forms
     public partial class UC_TemplateElement : UserControl
     {
         public Template template;
+
+        public delegate void Base();
+        public event Base OnUpdated;
         public UC_TemplateElement(Template t)
         {
             InitializeComponent();
@@ -33,7 +36,9 @@ namespace Forms
         }
         public void AddChild(Template t)
         {
-            this.ChildPanel.Children.Add(new UC_TemplateElement(t));
+            UC_TemplateElement c = new UC_TemplateElement(t);
+            this.ChildPanel.Children.Add(c);
+            c.OnUpdated += UpdateList;
             if (this.ChildPanel.Children.Count > 0)
             {
                 this.MainLabel.Style = FindResource("LabelElementSpecial") as Style;
@@ -83,6 +88,7 @@ namespace Forms
                 Models.Tag tag = new Models.Tag();
                 tag.RemoveAllTagsByTemplate(template.id);
                 template.RemoveTemplate();
+                UpdateList();
             }
         }
 
@@ -92,21 +98,27 @@ namespace Forms
             {
                 VM_ChildTemplate vm = new VM_ChildTemplate(this.template.parent, this.template);
                 CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
+                cc.OnCreated += UpdateList;
                 cc.ShowDialog();
             }
             else
             {
                 CreateTemplateWord ctw = new CreateTemplateWord(this.template);
-                ctw.Show();
+                ctw.OnCreated += UpdateList;
+                ctw.ShowDialog();
             }
-            
         }
 
         private void CreateChildClick(object sender, MouseButtonEventArgs e)
         {
             VM_ChildTemplate vm = new VM_ChildTemplate(this.template.id);
             CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
+            cc.OnCreated += UpdateList;
             cc.ShowDialog();
+        }
+        private void UpdateList()
+        {
+            OnUpdated?.Invoke();
         }
     }
 }
