@@ -76,7 +76,6 @@ namespace Common
         private static string GetSessionDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Session), "Sessions");
-            atc.SetFK("user", "Users", "username");
             return atc.GetQueryText();
         }
         private static string GetTaskDefinition(AutoTableCreator atc)

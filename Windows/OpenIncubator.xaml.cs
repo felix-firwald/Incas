@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.Common;
 using Incubator_2.ViewModels;
 using Models;
 using System.IO;
@@ -60,6 +61,8 @@ namespace Incubator_2.Windows
                     }
                     else
                     {
+                        ProgramState.OpenSession();
+                        ServerProcessor.Listen();
                         DialogResult = true;
                         this.Close();
                     }

@@ -87,7 +87,7 @@ namespace Incubator_2.Windows
                         //fc.CreateFile(this.dir.Text, template.path);
                     }
                     RegistreCreatedJSON.SaveRegistry();
-                    Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", this.dir.Text);
+                    System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", this.dir.Text);
                 });
             }
         }

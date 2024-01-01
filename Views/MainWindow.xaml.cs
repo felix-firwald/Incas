@@ -22,6 +22,7 @@ namespace Incubator_2
 
         private void OnClosed(object sender, EventArgs e)
         {
+            ProgramState.CloseSession();
             Application.Current.Shutdown();
         }
 

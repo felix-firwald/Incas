@@ -26,22 +26,24 @@
             <RadioButton x:Name="rbTemplates" Style="{DynamicResource MenuButton}" Content="Шаблоны и теги"/>
             <RadioButton x:Name="rbCustomDB" Style="{DynamicResource MenuButton}" Content="База данных"/>
         </StackPanel>
-        <TabControl Background="{DynamicResource Basic}" BorderBrush="{x:Null}" Grid.Row="1" Grid.Column="1">
-            <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbWorkspace, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
-                <adminpanel:WorkspaceManager/>
-            </TabItem>
-            <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbUsers, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
+        <ScrollViewer Grid.Row="1" Grid.Column="1">
+            <TabControl Background="{DynamicResource Basic}" BorderBrush="{x:Null}" >
+                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbWorkspace, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
+                    <adminpanel:WorkspaceManager/>
+                </TabItem>
+                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbUsers, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
 
-            </TabItem>
-            <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbSessions, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
+                </TabItem>
+                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbSessions, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
 
-            </TabItem>
-            <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbTemplates, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
+                </TabItem>
+                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbTemplates, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
 
-            </TabItem>
-            <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbCustomDB, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
+                </TabItem>
+                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbCustomDB, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
 
-            </TabItem>
-        </TabControl>
+                </TabItem>
+            </TabControl>
+        </ScrollViewer>
     </Grid>
 </Window>

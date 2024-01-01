@@ -7,7 +7,7 @@ namespace Models
 {
     public class Session : Model
     {
-        public int id { get; set; }
+        public string slug { get; set; }
         public string user { get; set; }
         public DateTime timeStarted { get; set; }
         public DateTime timeFinished { get; set; }
@@ -47,7 +47,7 @@ namespace Models
         {
             DataTable dt = StartCommand()
                 .Select()
-                .WhereEqual("active", "True")
+                .WhereEqual("active", "1")
                 .Execute();
             List<Session> sessions = new List<Session>();
             foreach (DataRow dr in dt.Rows)
@@ -68,12 +68,17 @@ namespace Models
             );
             // return int.Parse(GetOne(Execute())["id"].ToString());
         }
+        private string GenerateSlug()
+        {
+            return DateTime.Now.ToString("yyMMddHHmmssffff");
+        }
         public void AddSession()
         {
-            if (DoesUserHaveNotClosedSessions())
-            {
-                throw new UserAlreadyOnlineException();
-            }
+            //if (DoesUserHaveNotClosedSessions())
+            //{
+            //    throw new UserAlreadyOnlineException();
+            //}
+            this.slug = GenerateSlug();
             this.user = ProgramState.User;
             this.timeStarted = DateTime.Now;
             this.computer = ProgramState.GetComputerId();
@@ -81,28 +86,27 @@ namespace Models
             StartCommand()
                 .Insert(new Dictionary<string, string>
                 {
+                    {"slug", $"'{slug}'" },
                     { "user", $"'{user}'" },
                     { "timeStarted", $"'{timeStarted}'" },
                     { "computer", $"'{computer}'" },
-                    { "active", $"'{active}'" },
+                    { "active", BoolToInt(active).ToString() },
                 })
                 .ExecuteVoid();
-            this.id = GetIdOfSession();
-            ProgramState.CurrentSession = this;
         }
         public void CloseSession()
         {
             StartCommand()
-                .Update("active", $"{false}")
+                .Update("active", $"0")
                 .Update("timeFinished", $"{DateTime.Now}")
-                .WhereEqual("id", this.id.ToString(), false)
+                .WhereEqual("slug", this.slug)
                 .ExecuteVoid();
         }
         public bool IsSessionActive()
         {
             DataRow dr = StartCommand()
                     .Select()
-                    .WhereEqual("id", this.id.ToString(), false)
+                    .WhereEqual("slug", this.slug)
                     .ExecuteOne();
             Clear();
             this.Serialize(dr);

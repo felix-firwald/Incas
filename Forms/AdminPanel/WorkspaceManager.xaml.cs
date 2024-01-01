@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Incubator_2.ViewModels.AdminPanel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,17 @@ namespace Incubator_2.Forms.AdminPanel
     /// </summary>
     public partial class WorkspaceManager : UserControl
     {
+        VM_WorkspaceParameters vm;
         public WorkspaceManager()
         {
             InitializeComponent();
+            this.vm = new VM_WorkspaceParameters();
+            this.DataContext = vm;
+        }
+
+        private void SaveClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.SaveParameters();
         }
     }
 }

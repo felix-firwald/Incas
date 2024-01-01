@@ -39,35 +39,30 @@ namespace Common
         public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incubator";
         public static string DatabasePath { get { return CommonPath + @"\data.dbinc"; } }
         public static string CustomDatabasePath { get { return CommonPath + @"\custom.dbinc"; } }
-        public static string ProceduralPath { get; private set; }
+        private static string Root { get { return CommonPath + @"\Root"; } }
+        public static string ServerProcesses { get { return Root + @"\ServerProccesses"; } } // ...\Root\ServerProccesses
 
         #region Templates
-        private static string TemplatesPath { get; set; }    // ...\Templates
-        public static string TemplatesSourcesWordPath { get; private set; }    // ...\Templates\Sources\Word
-        public static string TemplatesSourcesExcelPath { get; private set; }    // ...\Templates\Sources\Excel
-        public static string TemplatesRuntime { get; private set; }    // ...\Templates\Runtime
-        public static string TemplatesGenerated { get; private set; }    // ...\Templates\Generated
+
+        private static string TemplatesPath { get { return Root + @"\Templates"; } }    // ...\Root\Templates
+        public static string TemplatesSourcesWordPath { get { return TemplatesPath + @"\Sources\Word"; } }    // ...\Root\Templates\Sources\Word
+        public static string TemplatesSourcesExcelPath { get { return TemplatesPath + @"\Sources\Excel"; } }    // ...\Root\Templates\Sources\Excel
+        public static string TemplatesRuntime { get { return TemplatesPath + @"\Runtime"; } }    // ...\Root\Templates\Runtime
+        public static string TemplatesGenerated { get { return TemplatesPath + @"\Generated"; } }    // ...\Root\Templates\Generated
         #endregion
         public static string User { get; set; }
 
-        public static Session CurrentSession { get; set; }
+        public static Session CurrentSession { get; private set; }
         public static string SystemName = Environment.UserName;
 
         #region Path and init
         public static void SetCommonPath(string path)
         {
             CommonPath = path;
-            TemplatesPath = CommonPath + @"\Templates";
-            ProceduralPath = CommonPath + @"\Procedural";
             Directory.CreateDirectory(TemplatesPath);
-            string sourcePath = TemplatesPath + @"\Sources";
-            TemplatesSourcesWordPath = sourcePath + @"\Word";
-            TemplatesSourcesExcelPath = sourcePath + @"\Excel";
-            TemplatesRuntime = TemplatesPath + @"\Runtime";
-            TemplatesGenerated = TemplatesPath + @"\Generated";
             Directory.CreateDirectory(TemplatesSourcesWordPath);
             Directory.CreateDirectory(TemplatesSourcesExcelPath);
-            Directory.CreateDirectory(ProceduralPath);
+            Directory.CreateDirectory(ServerProcesses);
             Directory.CreateDirectory(TemplatesRuntime);
             Directory.CreateDirectory(TemplatesGenerated);
         }
@@ -290,28 +285,28 @@ namespace Common
             }
         }
         #region Session
-        public async static void CheckSession()
-        {
-            if (Permission.CurrentUserPermission != PermissionGroup.Admin)
-            {
-                string searchingPath = $"{ProceduralPath}\\kill_{CurrentSession.id}.incproc";
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    while (true)
-                    {
-                        System.Threading.Tasks.Task.Delay(3000).Wait();
-                        if (File.Exists(searchingPath) && File.ReadAllText(searchingPath) == GetComputerId())
-                        {
-                            File.Delete(searchingPath);
-                            throw new Exception("Сессия принудительно завершена администратором инкубатора");
-                        }
-                    }
-                });
-            }          
-        }
+        //public async static void CheckSession()
+        //{
+        //    if (Permission.CurrentUserPermission != PermissionGroup.Admin)
+        //    {
+        //        string searchingPath = $"{ServerProcesses}\\kill_{CurrentSession.id}.incproc";
+        //        await System.Threading.Tasks.Task.Run(() =>
+        //        {
+        //            while (true)
+        //            {
+        //                System.Threading.Tasks.Task.Delay(3000).Wait();
+        //                if (File.Exists(searchingPath) && File.ReadAllText(searchingPath) == GetComputerId())
+        //                {
+        //                    File.Delete(searchingPath);
+        //                    throw new Exception("Сессия принудительно завершена администратором инкубатора");
+        //                }
+        //            }
+        //        });
+        //    }          
+        //}
         public static void GenerateKillerFile(string sessionId, string computerId)
         {
-            string pathOfFile = $"{ProceduralPath}\\kill_{sessionId}.incproc";
+            string pathOfFile = $"{ServerProcesses}\\kill_{sessionId}.incproc";
             File.WriteAllText(pathOfFile, computerId);
         }
         public static void BrokeSession()
@@ -320,14 +315,16 @@ namespace Common
         }
         public static void OpenSession()
         {
-            using (Session ms = new Session())
-            {
-                ms.AddSession();
-            }   
+            Session ms = new Session();    
+            ms.AddSession();
+            CurrentSession = ms; 
         }
         public static void CloseSession() 
         {
-            CurrentSession.CloseSession();
+            if (CurrentSession != null && CurrentSession.active)
+            {
+                CurrentSession.CloseSession();
+            }
         }
         #endregion
 
