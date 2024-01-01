@@ -6,40 +6,45 @@
         <Setter Property="MaxHeight" Value="30"/>
         <Setter Property="Margin" Value="5,5,5,5"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Opacity" Value="1"/>
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CheckBox}">
                     <Grid>
-                        <Border x:Name="Bord" Background="{StaticResource Black}" BorderBrush="{StaticResource Element}" BorderThickness="1" CornerRadius="6" MinHeight="15" MaxHeight="15" MinWidth="40" MaxWidth="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Ellipse x:Name="Ellipse" Fill="{StaticResource Light}" Stroke="{StaticResource Element}" StrokeThickness="0" Width="18" Height="18" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                        <fa:FontAwesome x:Name="Fa" Foreground="White" Icon="Check" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="3,0,0,0"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <ContentPresenter TextElement.Foreground="{DynamicResource GrayLight}" TextElement.FontFamily="/Fonts/#JetBrains Mono" Grid.Column="0" TextElement.FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        <Border x:Name="Bord" Background="{StaticResource Black}" BorderBrush="{StaticResource Element}" BorderThickness="1" CornerRadius="6" MinHeight="15" MaxHeight="15" MinWidth="40" MaxWidth="40" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
+                        <Ellipse x:Name="Ellipse" Fill="{StaticResource Error}" Stroke="{StaticResource Element}" StrokeThickness="0" Width="18" Height="18" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="6,0,0,0"/>
+                        <fa:FontAwesome x:Name="Fa" Foreground="White" Icon="Check" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0" Grid.Column="1"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Bord" Property="Background" Value="{StaticResource Dark}"/>
-                            <Setter TargetName="Ellipse" Property="Fill" Value="{StaticResource Dark}"/>
-                            <Setter TargetName="Ellipse" Property="StrokeThickness" Value="1"/>
-                            <Setter TargetName="Fa" Property="Foreground" Value="{StaticResource Element}"/>
+                            <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Ellipse" Property="Fill" Value="{DynamicResource Success}"/>
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Fill.Color"/>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="25,0,0,0" Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Margin"/>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="28,0,0,0" Storyboard.TargetName="Fa" Storyboard.TargetProperty="Margin"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="37,0,0,0" Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Margin"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="40,0,0,0" Storyboard.TargetName="Fa" Storyboard.TargetProperty="Margin"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.100" To="#D3D5DB" Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Fill.Color"/>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="0,0,0,0" Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Margin"/>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="3,0,0,0" Storyboard.TargetName="Fa" Storyboard.TargetProperty="Margin"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="3,0,0,0" Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Margin"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="6,0,0,0" Storyboard.TargetName="Fa" Storyboard.TargetProperty="Margin"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource Focus}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

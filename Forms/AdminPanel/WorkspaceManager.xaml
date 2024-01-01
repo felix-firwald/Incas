@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="Incubator_2.Forms.AdminPanel.WorkspaceManager"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incubator_2.Forms.AdminPanel"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="410"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ПЕРВИЧНАЯ ИНФОРМАЦИЯ">
+            <StackPanel>
+                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Имя рабочего пространства"/>
+                <CheckBox Style="{DynamicResource Toggle}" Content="Рабочее пространство открыто" IsChecked="True"/>
+                <Label Style="{DynamicResource WarningText}">Если рабочее пространство будет закрыто, 
+                    никто, кроме администраторов, не сможет совершать действия по изменению, добавлению или удалению
+                    записей в это рабочее пространство.
+                    Действия по просмотру и использованию будут по-прежнему доступны.</Label>
+                <CheckBox x:Name="isLocked" Style="{DynamicResource Toggle}" Content="Рабочее пространство заблокировано"/>
+                <CheckBox Style="{DynamicResource Toggle}" Content="Прервать активные сессии в случае блокировки (все, кроме администраторов)" IsEnabled="{Binding ElementName=isLocked, Path=IsChecked}" Cursor="Hand"/>
+                <Label Style="{DynamicResource WarningText}" Cursor="">Если рабочее пространство будет заблокировано, 
+                    никто, кроме администраторов, не сможет в него войти.
+                    Все текущие активные сессии будут сброшены, если вы отметите галочку напротив пункта "Прервать активные сессии".</Label>
+                <Button Style="{DynamicResource ButtonMain}" Content="Сохранить изменения"/>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

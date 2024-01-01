@@ -3,23 +3,45 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:adminpanel="clr-namespace:Incubator_2.Forms.AdminPanel"
         mc:Ignorable="d"
-        Title="Панель администратора" Style="{DynamicResource WindowBase}" Height="650" Width="900">
+        Title="Панель управления" Style="{DynamicResource Dialog}" Height="650" Width="900" Topmost="True" WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="100*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
-            <fa:FontAwesome Icon="UserCircle" MinHeight="50" FontSize="36" VerticalAlignment="Center" Margin="0,10,0,0"/>
-            <Label Style="{DynamicResource LabelIncubator}" Content="Панель администратора" Foreground="{DynamicResource Light}" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+        <fa:FontAwesome Icon="Remove" Style="{DynamicResource IconButton}" Grid.Column="1" HorizontalAlignment="Right" Margin="5,5,15,5" MouseDown="CloseClick" Cursor="Hand" ToolTip="Закрыть панель управления"/>
+        <StackPanel Grid.Column="0" Background="{DynamicResource Area}" Grid.RowSpan="2">
+            <fa:FontAwesome Icon="UserSecret" MinHeight="50" FontSize="36" VerticalAlignment="Center" Margin="0,20,0,0"/>
+            <Label Style="{DynamicResource LabelIncubator}" Content="{Binding HeaderText, FallbackValue=Ошибка}" Foreground="{DynamicResource Light}" HorizontalAlignment="Center" Margin="0,0,0,5" FontWeight="Normal"/>
             <Rectangle Height="4" Fill="{DynamicResource Element}" />
-            <RadioButton Style="{DynamicResource MenuButton}" Content="Рабочее пространство" IsChecked="True"/>
-            <RadioButton Style="{DynamicResource MenuButton}" Content="Пользователи"/>
-            <RadioButton Style="{DynamicResource MenuButton}" Content="Сессии"/>
-            <RadioButton Style="{DynamicResource MenuButton}" Content="Шаблоны и теги"/>
-            <RadioButton Style="{DynamicResource MenuButton}" Content="Управление базой данных"/>
+            <RadioButton x:Name="rbWorkspace" Style="{DynamicResource MenuButton}" Content="Рабочее пространство"/>
+            <RadioButton x:Name="rbUsers" Style="{DynamicResource MenuButton}" Content="Пользователи"/>
+            <RadioButton x:Name="rbSessions" Style="{DynamicResource MenuButton}" Content="Сессии" IsChecked="True"/>
+            <RadioButton x:Name="rbTemplates" Style="{DynamicResource MenuButton}" Content="Шаблоны и теги"/>
+            <RadioButton x:Name="rbCustomDB" Style="{DynamicResource MenuButton}" Content="База данных"/>
         </StackPanel>
+        <TabControl Background="{DynamicResource Basic}" BorderBrush="{x:Null}" Grid.Row="1" Grid.Column="1">
+            <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbWorkspace, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
+                <adminpanel:WorkspaceManager/>
+            </TabItem>
+            <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbUsers, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
+
+            </TabItem>
+            <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbSessions, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
+
+            </TabItem>
+            <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbTemplates, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
+
+            </TabItem>
+            <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbCustomDB, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
+
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

@@ -49,10 +49,21 @@ namespace Incubator_2.Windows
             {
                 if (user.IsPasswordExists(this.pwd.Text))
                 {
+                    this.Visibility = Visibility.Hidden;
                     ProgramState.User = user.username;
                     Permission.CurrentUserPermission = user.status;
-                    DialogResult = true;
-                    this.Close();
+                    if (Permission.CurrentUserPermission != PermissionGroup.Admin && ProgramState.IsWorkspaceLocked())
+                    {
+                        Locked l = new Locked();
+                        l.ShowDialog();
+                        this.ShowDialog();
+                    }
+                    else
+                    {
+                        DialogResult = true;
+                        this.Close();
+                    }
+                    
                 }
                 else
                 {

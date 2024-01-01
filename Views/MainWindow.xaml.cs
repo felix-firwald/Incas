@@ -1,6 +1,7 @@
 ﻿using Common;
 using DocumentFormat.OpenXml.InkML;
 using Incubator_2.ViewModels;
+using Incubator_2.Windows;
 using Models;
 using System;
 using System.ComponentModel;
@@ -17,7 +18,15 @@ namespace Incubator_2
         public MainWindow()
         {
             InitializeComponent();
-            //this.MaxHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
+            switch (Permission.CurrentUserPermission)
+            {
+                case PermissionGroup.Admin:
+                    this.GlobalStatus.Content = "Администратор";
+                    break;
+                case PermissionGroup.Moderator:
+                    this.GlobalStatus.Content = "Модератор";
+                    break;
+            }
         }
 
         private void OnClosed(object sender, EventArgs e)
@@ -73,6 +82,23 @@ namespace Incubator_2
             {
                 
             }
+        }
+
+        private void Logo_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            switch (Permission.CurrentUserPermission)
+            {
+                case PermissionGroup.Admin:
+                case PermissionGroup.Moderator:
+                    AdminPanel adminPanel = new AdminPanel();
+                    adminPanel.Show();
+                    break;
+                case PermissionGroup.Operator:
+                default:
+                    ProgramState.ShowExlamationDialog("Данная функция доступна только администраторам и модераторам.", "Нет доступа");
+                    break;
+            }
+            
         }
     }
 }
