@@ -1,8 +1,10 @@
 ﻿using Common;
+using Incubator_2.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,15 +34,20 @@ namespace Incubator_2.Common
     }
     static class ServerProcessor
     {
-        private static void ToFile(Process process)
+        private async static void ToFile(Process process)
         {
-            string content = Newtonsoft.Json.JsonConvert.SerializeObject(process);
-            string filename = $"{ProgramState.ServerProcesses}\\{process.recipient}.procinc";
-            File.WriteAllTextAsync(filename, content);
+            await Task.Run(() =>
+            {
+                string content = Newtonsoft.Json.JsonConvert.SerializeObject(process);
+                string filename = $"{ProgramState.ServerProcesses}\\{process.recipient}.procinc";
+                File.WriteAllTextAsync(filename, Cryptographer.EncryptString(content));
+            });
         }
         private static Process FromFile(string filename)
         {
-            Process result = Newtonsoft.Json.JsonConvert.DeserializeObject<Process>(File.ReadAllText(filename));
+            Process result = new Process();
+            string output = Cryptographer.DecryptString(File.ReadAllText(filename));
+            result = Newtonsoft.Json.JsonConvert.DeserializeObject<Process>(output);
             File.Delete(filename);
             return result;
         }
@@ -69,32 +76,41 @@ namespace Incubator_2.Common
                     {
                         Switcher(FromFile(targetFileName));
                     }
-                    else
-                    {
-
-                        //Application.Current.Dispatcher.Invoke(() => 
-                        //{
-                        //    ProgramState.ShowExlamationDialog("Файл не найден!");
-                        //});
-                    }
                 }
             });
         }
         public async static void Switcher(Process process)
         {
-            if (process.type == ProcessType.QUERY)
+            await Task.Run(() =>
             {
-                switch (process.target)
+                if (process.type == ProcessType.QUERY)
                 {
-                    case ProcessTarget.TERMINATE:
-                        if (Permission.CurrentUserPermission != PermissionGroup.Admin)
-                        {
-                            ProgramState.CloseSession();
-                            Application.Current.Shutdown();
-                        }
-                        break;
+                    switch (process.target)
+                    {
+                        case ProcessTarget.TERMINATE:
+                            if (Permission.CurrentUserPermission != PermissionGroup.Admin)
+                            {
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    Application.Current.MainWindow.Hide();
+                                    ProgramState.CloseSession();
+                                    //Application.Current.Shutdown();
+                                    Application.Current.MainWindow = new SessionBroken();
+                                    SessionBroken b = new SessionBroken();
+                                    b.ShowDialog();
+                                });
+                            }
+                            break;
+                        case ProcessTarget.RESTART:
+                            if (Permission.CurrentUserPermission != PermissionGroup.Admin)
+                            {
+                                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                                Application.Current.Shutdown();
+                            }
+                            break;
+                    }
                 }
-            }
+            });
             
         }
     }

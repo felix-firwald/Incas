@@ -49,6 +49,10 @@
     <PackageIcon>Logo.png</PackageIcon>
     <PackageId>FirwaldTechnologies.Incubator</PackageId>
     <SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
+    <Product>Incubator</Product>
+    <Title>Инкубатор</Title>
+    <Description>Офисное приложение</Description>
+    <FileVersion>0.9.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
@@ -128,6 +132,17 @@
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Update="Static\Logo.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
