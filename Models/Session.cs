@@ -33,6 +33,8 @@ namespace Models
         {
             DataTable dt = StartCommand()
                 .Select()
+                .OrderByDESC("slug")
+                .Limit(50)
                 .Execute();
             List<Session> sessions = new List<Session>();
             foreach (DataRow dr in dt.Rows)

@@ -13,8 +13,9 @@
             <RowDefinition Height="6*"/>
 
         </Grid.RowDefinitions>
-        <fa:FontAwesome Icon="FrownOutline" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="{DynamicResource Icon}" FontSize="36"/>
-        <Label Style="{DynamicResource LabelElement}" Content="Сессия была принудительно завершена" HorizontalAlignment="Center" Grid.Row="1" Width="262" FontWeight="Bold" />
-        <Label Style="{DynamicResource LabelElement}" Content="Это окно закроется автоматически" HorizontalAlignment="Center" Grid.Row="2" Width="240" />
+        <fa:FontAwesome x:Name="IconTerminate" Icon="FrownOutline" HorizontalAlignment="Center" VerticalAlignment="Bottom" Foreground="{DynamicResource Icon}" FontSize="36"/>
+        <fa:FontAwesome x:Name="IconRestart" Icon="RotateRight" HorizontalAlignment="Center" VerticalAlignment="Bottom" Visibility="Hidden" Foreground="{DynamicResource Icon}" FontSize="36"/>
+        <TextBlock x:Name="Header" Style="{DynamicResource TextBlockMain}" Text="Сессия была принудительно завершена" HorizontalAlignment="Center" Grid.Row="1" FontWeight="Bold" Foreground="{DynamicResource Light}" VerticalAlignment="Center" />
+        <TextBlock x:Name="OtherText" Style="{DynamicResource TextBlockMain}" Text="Это окно закроется автоматически" HorizontalAlignment="Center" Grid.Row="2" Foreground="{DynamicResource GrayLight}" />
     </Grid>
 </Window>

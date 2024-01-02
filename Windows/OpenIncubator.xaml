@@ -5,36 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
         mc:Ignorable="d" Style="{DynamicResource Dialog}"
-        Title="Выбор рабочего пространства" Height="250" Width="550" WindowStartupLocation="CenterScreen" Icon="/Windows/Logo.png">
+        Title="Выбор рабочего пространства" Height="400" Width="400" WindowStartupLocation="CenterScreen" Icon="/Windows/Logo.png">
     <Grid FocusManager.FocusedElement="{Binding ElementName=pwd}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="60*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="8*"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="45"/>
         </Grid.ColumnDefinitions>
-        <fa:FontAwesome Icon="User" FontSize="70" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Element}" Grid.Column="1" />
-        <TextBox x:Name="cpath" Visibility="Collapsed" Text="{Binding Path}" Grid.Row="1" Grid.ColumnSpan="2" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" Grid.Column="1" />
-        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Grid.Row="2" Text="{Binding Password}" Tag="Пароль для входа" MaxLength="20" Margin="5,5,5,5" Grid.Column="1" Grid.ColumnSpan="2" Cursor="" >
-        </TextBox>
-        <Border Grid.RowSpan="3" CornerRadius="5" Margin="6" Background="{DynamicResource Black}">
+
+        <fa:FontAwesome Icon="User" FontSize="70" VerticalAlignment="Center" Foreground="{DynamicResource Element}" HorizontalAlignment="Center" Grid.ColumnSpan="2"  />
+
+        <Label Style="{DynamicResource LabelElement}" Content="Вход в рабочее пространство" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="24" Width="204" Grid.ColumnSpan="2"/>
+
+        <TextBox x:Name="cpath" Visibility="Collapsed" Text="{Binding Path}" Grid.Row="3" Grid.ColumnSpan="2" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" />
+        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Grid.Row="3" Text="{Binding Password}" Tag="Пароль для входа" MaxLength="20" Margin="5,5,5,5" Grid.ColumnSpan="2" Cursor="" />
+        <Border CornerRadius="5" Margin="6,6,6,6" Background="{DynamicResource Black}" Grid.Row="2" >
             <ListBox Style="{DynamicResource ListBoxMain}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}">
-                
+
             </ListBox>
         </Border>
-        <Border Grid.Row="3" CornerRadius="5" Margin="6" Background="{DynamicResource Black}">
-            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" >
+        <Border Grid.Row="2" CornerRadius="5" Margin="6,6,6,6" Background="{DynamicResource Black}" Grid.Column="1">
+            <StackPanel Orientation="Vertical" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить новое рабочее пространство в список" MouseDown="AddClick" FontSize="16" />
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранное рабочее пространство" MouseDown="RemoveClick"/>
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" ToolTip="Обновить список" MouseDown="RefreshClick" FontSize="16" />
             </StackPanel>
         </Border>
-        
-        <Button Style="{StaticResource ButtonMain}" IsDefault="True" Grid.Row="3" Grid.ColumnSpan="3" Content="Войти в рабочее пространство" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0" Grid.Column="1"/>
+
+        <Button Style="{StaticResource ButtonMain}" IsDefault="True" Grid.Row="4" Grid.ColumnSpan="2" Content="Войти" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0" Height="30"/>
 
     </Grid>
 </Window>

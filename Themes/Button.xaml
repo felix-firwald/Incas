@@ -20,9 +20,7 @@
                         <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsDefaulted" Value="True">
-                            <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                        </Trigger>
+
                         <Trigger Property="IsMouseOver" Value="True">
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
@@ -49,9 +47,6 @@
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="border" Property="Opacity" Value="0.6"/>
-                            <!--<Setter Property="Background" TargetName="border" Value="#2D2D30"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="DimGray"/>
-                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="DimGray"/>-->
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

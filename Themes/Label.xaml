@@ -26,6 +26,9 @@
     <Style x:Key="LabelElementSpecial" TargetType="{x:Type Label}" BasedOn="{StaticResource LabelElement}">
         <Setter Property="Foreground" Value="{StaticResource LightPurple}"/>
     </Style>
+    <Style x:Key="TextBlockMain" TargetType="{x:Type TextBlock}">
+        <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
+    </Style>
     <Style x:Key="LabelStatus" TargetType="{x:Type Label}">
         <Setter Property="MinHeight" Value="20"/>
         <Setter Property="MinWidth" Value="60"/>

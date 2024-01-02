@@ -13,7 +13,7 @@
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" Cursor="Hand" />
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" Cursor="Hand" MouseDown="RefreshClick" />
             </StackPanel>
             <StackPanel x:Name="SessionsList" Grid.Row="1">
 

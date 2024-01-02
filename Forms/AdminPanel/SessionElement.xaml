@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms.AdminPanel" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="400">
+             d:DesignHeight="40" d:DesignWidth="500">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -13,13 +13,15 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <Rectangle Fill="{DynamicResource Element}" Height="1" VerticalAlignment="Top" Grid.ColumnSpan="5"/>
+        <Rectangle Fill="{DynamicResource Element}" Height="1" VerticalAlignment="Top" Grid.ColumnSpan="6"/>
         <Label Style="{DynamicResource LabelElement}" Content="{Binding Username}" VerticalAlignment="Center"/>
         <Label Style="{DynamicResource LabelElement}" Content="{Binding StartTime}" Grid.Column="1" VerticalAlignment="Center"/>
-        <Label Style="{DynamicResource LabelElement}" Content="{Binding EndTime, FallbackValue=Не завершена}" Grid.Column="2" VerticalAlignment="Center"/>
+        <Label Style="{DynamicResource LabelElement}" Content="{Binding EndTime, FallbackValue=Ошибка}" Grid.Column="2" VerticalAlignment="Center"/>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="RotateRight" Grid.Column="3" IsEnabled="{Binding IsActive}" MouseDown="RestartClick" ToolTip="Перезапустить клиент"/>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="MinusSquare" Grid.Column="4" IsEnabled="{Binding IsActive}" MouseDown="TerminateClick" ToolTip="Прервать сессию"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Warning" Grid.Column="5" IsEnabled="{Binding IsActive}" MouseDown="ShowExplicitClick" ToolTip="Вывести пользователю сообщение-предупреждение"/>
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>

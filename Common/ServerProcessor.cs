@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incubator_2.Windows;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,8 +24,13 @@ namespace Incubator_2.Common
     {
         TERMINATE,
         RESTART,
-        MESSAGE,
+        EXPLICIT,
         FILE
+    }
+    public struct ExplicitMessage
+    {
+        public string header;
+        public string message;
     }
     struct Process
     {
@@ -36,6 +42,7 @@ namespace Incubator_2.Common
     }
     static class ServerProcessor
     {
+        #region Reusable Base Functionality
         private static string GetKeyByRecipient(string recipient)
         {
             string result = string.Join("e", recipient.ToCharArray().Reverse()) + "b";
@@ -54,7 +61,7 @@ namespace Incubator_2.Common
         {
             await Task.Run(() =>
             {
-                string content = Newtonsoft.Json.JsonConvert.SerializeObject(process);
+                string content = JsonConvert.SerializeObject(process);
                 string filename = $"{ProgramState.ServerProcesses}\\{process.recipient}.procinc";
                 File.WriteAllTextAsync(filename, Cryptographer.EncryptString(GetKeyByRecipient(process.recipient), content));
             });
@@ -65,7 +72,7 @@ namespace Incubator_2.Common
             try
             {
                 string output = Cryptographer.DecryptString(GetKeyByRecipient(ProgramState.CurrentSession.slug), File.ReadAllText(filename));
-                result = Newtonsoft.Json.JsonConvert.DeserializeObject<Process>(output);
+                result = JsonConvert.DeserializeObject<Process>(output);
             }
             catch (Exception ex)
             {
@@ -80,7 +87,8 @@ namespace Incubator_2.Common
             File.Delete(filename);
             return result;
         }
-        
+        #endregion
+
         public async static void Listen()
         {
             string targetFileName = $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession.slug}.procinc";
@@ -105,49 +113,85 @@ namespace Incubator_2.Common
                     switch (process.target)
                     {
                         case ProcessTarget.TERMINATE:
-                            if (Permission.CurrentUserPermission != PermissionGroup.Admin)
-                            {
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    Application.Current.MainWindow.Hide();
-                                    ProgramState.CloseSession();
-                                    //Application.Current.Shutdown();
-                                    Application.Current.MainWindow = new SessionBroken();
-                                    SessionBroken b = new SessionBroken();
-                                    b.ShowDialog();
-                                });
-                            }
+                            TerminateProcessHandle();
                             break;
                         case ProcessTarget.RESTART:
-                            if (Permission.CurrentUserPermission != PermissionGroup.Admin)
-                            {
-                                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                                Application.Current.Shutdown();
-                            }
+                            RestartProcessHandle();
+                            break;
+                        case ProcessTarget.EXPLICIT:
+                            ShowExplicitMessageProcessHandle(process.content);
                             break;
                     }
                 }
             });
             
         }
-        
+        #region Handling Queries
+        private static void TerminateProcessHandle()
+        {
+            if (Permission.CurrentUserPermission != PermissionGroup.Admin)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Application.Current.MainWindow.Hide();
+                    ProgramState.CloseSession();
+                    Application.Current.MainWindow = new SessionBroken();
+                    SessionBroken b = new SessionBroken();
+                    b.ShowDialog();
+                });
+            }
+        }
+        private static void RestartProcessHandle()
+        {
+            if (Permission.CurrentUserPermission != PermissionGroup.Admin)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Application.Current.MainWindow.Hide();
+                    ProgramState.CloseSession();
+                    Application.Current.MainWindow = new SessionBroken();
+                    SessionBroken b = new SessionBroken(BrokenType.Restart);
+                    b.ShowDialog();
+                    System.Windows.Forms.Application.Restart();
+                });
+            }
+        }
+        private static void ShowExplicitMessageProcessHandle(string content)
+        {
+            ExplicitMessage m = JsonConvert.DeserializeObject<ExplicitMessage>(content);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ProgramState.ShowExlamationDialog(m.message, m.header);
+            });
+        }
+        #endregion
+
         #region Sending
-        public static void SendTerminateProcess(string recipient)
+        private static Process GetProcessStruct(string recipient)
         {
             Process process = new Process();
             process.emitter = ProgramState.CurrentSession.slug;
             process.recipient = recipient;
             process.type = ProcessType.QUERY;
+            return process;
+        }
+        public static void SendTerminateProcess(string recipient)
+        {
+            Process process = GetProcessStruct(recipient);
             process.target = ProcessTarget.TERMINATE;
             ToFile(process);
         }
         public static void SendRestartProcess(string recipient)
         {
-            Process process = new Process();
-            process.emitter = ProgramState.CurrentSession.slug;
-            process.recipient = recipient;
-            process.type = ProcessType.QUERY;
+            Process process = GetProcessStruct(recipient);
             process.target = ProcessTarget.RESTART;
+            ToFile(process);
+        }
+        public static void SendExplicitProcess(ExplicitMessage message, string recipient)
+        {
+            Process process = GetProcessStruct(recipient);
+            process.target = ProcessTarget.EXPLICIT;
+            process.content = JsonConvert.SerializeObject(message);
             ToFile(process);
         }
         #endregion

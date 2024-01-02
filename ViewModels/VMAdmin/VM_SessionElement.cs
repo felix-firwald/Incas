@@ -1,4 +1,5 @@
 ﻿using Incubator_2.Common;
+using Incubator_2.Windows.AdminWindows;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -58,6 +59,14 @@ namespace Incubator_2.ViewModels.VMAdmin
         public void Restart()
         {
             ServerProcessor.SendRestartProcess(_session.slug);
+        }
+        public void ShowExplicit()
+        {
+            MakeExplicit d = new();
+            if (d.ShowDialog() == true)
+            {
+                ServerProcessor.SendExplicitProcess(d.message, _session.slug);
+            }
         }
     }
 }

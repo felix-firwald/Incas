@@ -39,5 +39,10 @@ namespace Incubator_2.Forms.AdminPanel
         {
             vm.Restart();
         }
+
+        private void ShowExplicitClick(object sender, MouseButtonEventArgs e)
+        {
+            vm.ShowExplicit();
+        }
     }
 }
