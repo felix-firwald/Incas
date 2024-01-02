@@ -32,7 +32,7 @@
                     <Label Content="Ограниченный доступ к управлению" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
                 </StackPanel>
             </ComboBoxItem>
-            <ComboBoxItem >
+            <ComboBoxItem>
                 <StackPanel Orientation="Horizontal">
                     <Ellipse Fill="{DynamicResource Error}" Width="5" Height="5"/>
                     <Label Content="Оператор" Style="{DynamicResource LabelElement}"/>
@@ -40,7 +40,7 @@
                 </StackPanel>
             </ComboBoxItem>
         </ComboBox>
-        <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Username}" MaxLength="20" Tag="Юзернейм (должен быть уникальным)" Grid.Row="1"/>
+        <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Username}" IsEnabled="{Binding UsernameEditable}" MaxLength="20" Tag="Юзернейм (должен быть уникальным)" Grid.Row="1"/>
         <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Surname}" MaxLength="30" Tag="Фамилия" Grid.Row="2"/>
         <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Fullname}" MaxLength="35" Tag="Имя (и отчество)" Grid.Row="3"/>
         <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Post}" MaxLength="35" Tag="Должность" Grid.Row="4"/>

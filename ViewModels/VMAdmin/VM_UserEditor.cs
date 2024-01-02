@@ -53,6 +53,13 @@ namespace Incubator_2.ViewModels.VMAdmin
                     return PermissionGroup.Operator;
             }
         }
+        public bool UsernameEditable
+        {
+            get
+            {
+                return _user.id == 0;
+            }
+        }
         public string Username
         {
             get
@@ -113,9 +120,14 @@ namespace Incubator_2.ViewModels.VMAdmin
                 OnPropertyChanged(nameof(Password));
             }
         }
-        public void Save()
+        public bool Save()
         {
-            _user.SaveUser();
+            if (!string.IsNullOrWhiteSpace(_user.username) && !string.IsNullOrWhiteSpace(_user.password) && !string.IsNullOrWhiteSpace(_user.surname))
+            {
+                _user.SaveUser();
+                return true;
+            }
+            return false;
         }
     }
 }

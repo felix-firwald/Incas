@@ -2,9 +2,11 @@
 using Incubator_2.Windows;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.Pkcs;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,13 +36,27 @@ namespace Incubator_2.Common
     }
     static class ServerProcessor
     {
+        private static string GetKeyByRecipient(string recipient)
+        {
+            string result = string.Join("e", recipient.ToCharArray().Reverse()) + "b";
+            if (result.Length < 32)
+            {
+                int multiplier = 32 - result.Length;
+                result += Enumerable.Repeat("a", multiplier);
+            }
+            else if (result.Length > 32)
+            {
+                result = result.Substring(0, 31);
+            }
+            return result;
+        }
         private async static void ToFile(Process process)
         {
             await Task.Run(() =>
             {
                 string content = Newtonsoft.Json.JsonConvert.SerializeObject(process);
                 string filename = $"{ProgramState.ServerProcesses}\\{process.recipient}.procinc";
-                File.WriteAllTextAsync(filename, Cryptographer.EncryptString(content));
+                File.WriteAllTextAsync(filename, Cryptographer.EncryptString(GetKeyByRecipient(process.recipient), content));
             });
         }
         private static Process FromFile(string filename)
@@ -48,7 +64,7 @@ namespace Incubator_2.Common
             Process result = new Process();
             try
             {
-                string output = Cryptographer.DecryptString(File.ReadAllText(filename));
+                string output = Cryptographer.DecryptString(GetKeyByRecipient(ProgramState.CurrentSession.slug), File.ReadAllText(filename));
                 result = Newtonsoft.Json.JsonConvert.DeserializeObject<Process>(output);
             }
             catch (Exception ex)
@@ -64,18 +80,6 @@ namespace Incubator_2.Common
             File.Delete(filename);
             return result;
         }
-        public static void SendTerminateProcess(string recipient)
-        {
-            if (Permission.CurrentUserPermission == PermissionGroup.Admin)
-            {
-                Process process = new Process();
-                process.emitter = ProgramState.CurrentSession.slug;
-                process.recipient = recipient;
-                process.type = ProcessType.QUERY;
-                process.target = ProcessTarget.TERMINATE;
-                ToFile(process);
-            }
-        }
         
         public async static void Listen()
         {
@@ -84,7 +88,7 @@ namespace Incubator_2.Common
             {
                 while (ProgramState.CurrentSession.active)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(750);
                     if (File.Exists(targetFileName))
                     {
                         Switcher(FromFile(targetFileName));
@@ -126,5 +130,26 @@ namespace Incubator_2.Common
             });
             
         }
+        
+        #region Sending
+        public static void SendTerminateProcess(string recipient)
+        {
+            Process process = new Process();
+            process.emitter = ProgramState.CurrentSession.slug;
+            process.recipient = recipient;
+            process.type = ProcessType.QUERY;
+            process.target = ProcessTarget.TERMINATE;
+            ToFile(process);
+        }
+        public static void SendRestartProcess(string recipient)
+        {
+            Process process = new Process();
+            process.emitter = ProgramState.CurrentSession.slug;
+            process.recipient = recipient;
+            process.type = ProcessType.QUERY;
+            process.target = ProcessTarget.RESTART;
+            ToFile(process);
+        }
+        #endregion
     }
 }

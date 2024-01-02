@@ -35,7 +35,7 @@
                     <adminpanel:UsersManager/>
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbSessions, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
-
+                    <adminpanel:SessionsManager/>
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbTemplates, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
 

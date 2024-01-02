@@ -1,4 +1,5 @@
-﻿using Incubator_2.ViewModels.VMAdmin;
+﻿using Common;
+using Incubator_2.ViewModels.VMAdmin;
 using Models;
 
 using System.Windows;
@@ -21,8 +22,15 @@ namespace Incubator_2.Windows
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            vm.Save();
-            this.Close();
+            if (vm.Save() == true)
+            {
+                this.Close();
+            }
+            else
+            {
+                ProgramState.ShowExlamationDialog("Одно или несколько обязательных полей не заполнены.", "Сохранение невозможно");
+            }
+            
         }
     }
 }
