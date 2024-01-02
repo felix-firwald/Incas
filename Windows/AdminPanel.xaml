@@ -32,7 +32,7 @@
                     <adminpanel:WorkspaceManager/>
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbUsers, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
-
+                    <adminpanel:UsersManager/>
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=rbSessions, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
 

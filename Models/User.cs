@@ -1,6 +1,7 @@
 ﻿using Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Xml.Linq;
 
@@ -69,7 +70,7 @@ namespace Models
                 .WhereEqual("username", username)
                 .ExecuteVoid();
         }
-        public void UpdateAll()
+        public void UpdateUser()
         {
             StartCommand()
                 .Update("password", password)
@@ -78,7 +79,7 @@ namespace Models
                 .Update("fullname", fullname)
                 .Update("post", post)
                 .Update("status", status.ToString())
-                .WhereEqual("username", username)
+                .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }
         public void AddUser()
@@ -94,6 +95,18 @@ namespace Models
                     { "post", $"'{post}'" }
                 })
                 .ExecuteVoid();
+            GetUserByName();
+        }
+        public void SaveUser()
+        {
+            if (id == 0)
+            {
+                AddUser();
+            }
+            else
+            {
+                UpdateUser();
+            }
         }
         public bool DoesUserExists(string username)
         {

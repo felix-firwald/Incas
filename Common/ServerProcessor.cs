@@ -46,8 +46,21 @@ namespace Incubator_2.Common
         private static Process FromFile(string filename)
         {
             Process result = new Process();
-            string output = Cryptographer.DecryptString(File.ReadAllText(filename));
-            result = Newtonsoft.Json.JsonConvert.DeserializeObject<Process>(output);
+            try
+            {
+                string output = Cryptographer.DecryptString(File.ReadAllText(filename));
+                result = Newtonsoft.Json.JsonConvert.DeserializeObject<Process>(output);
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ProgramState.ShowErrorDialog($"Файл процесса был поврежден или подделан.\nПроцесс не будет выполнен. Сведения:\n{ex}", "Ошибка выполнения процесса");
+                });
+                File.Delete(filename);
+                return new Process();
+            }
+            
             File.Delete(filename);
             return result;
         }

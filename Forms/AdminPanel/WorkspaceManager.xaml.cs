@@ -1,4 +1,4 @@
-﻿using Incubator_2.ViewModels.AdminPanel;
+﻿using Incubator_2.ViewModels.VMAdmin;
 using System;
 using System.Collections.Generic;
 using System.Linq;

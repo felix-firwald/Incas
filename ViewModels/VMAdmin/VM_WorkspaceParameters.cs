@@ -3,7 +3,7 @@ using Incubator_2.Models;
 using Models;
 
 
-namespace Incubator_2.ViewModels.AdminPanel
+namespace Incubator_2.ViewModels.VMAdmin
 {
     public class VM_WorkspaceParameters : VM_Base
     {
