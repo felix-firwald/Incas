@@ -22,7 +22,7 @@
             <Label Style="{DynamicResource LabelStatus}" Content="{Binding UserStatus,FallbackValue=Неизвестно}" VerticalAlignment="Center"/>
             <Label Style="{DynamicResource LabelElementSpecial}" Content="{Binding UserPost,FallbackValue=Неизвестно}" VerticalAlignment="Center" HorizontalContentAlignment="Stretch" MinWidth="300"/>
         </StackPanel>
-        <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" Grid.Column="2" MouseDown="RemoveClick"/>
+        <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" Grid.Column="2" MouseDown="RemoveClick" IsEnabled="{Binding IsRemovable}"/>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" Grid.Column="1" Grid.Row="0" MouseDown="EditClick"/>
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">

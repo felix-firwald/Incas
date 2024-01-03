@@ -17,7 +17,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
-        <ComboBox Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding PermissionStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <ComboBox Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding PermissionStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StatusEditable}">
             <ComboBoxItem >
                 <StackPanel Orientation="Horizontal">
                     <Ellipse Fill="{DynamicResource Success}" Width="5" Height="5"/>

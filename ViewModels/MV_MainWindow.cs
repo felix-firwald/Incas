@@ -20,38 +20,38 @@ namespace Incubator_2.ViewModels
 
         public string Surname
         {
-            get { return _surname; } 
+            get { return ProgramState.CurrentUser.surname; } 
             set
             {
-                if (_surname != value)
+                if (ProgramState.CurrentUser.surname != value)
                 {
-                    _surname = value;
-                    OnPropertyChanged("Surname");
+                    ProgramState.CurrentUser.surname = value;
+                    OnPropertyChanged(nameof(Surname));
                 }      
             }
         }
         public string Fullname
         {
-            get { return _fullname; }
+            get { return ProgramState.CurrentUser.fullname; }
             set
             {
-                if (_fullname != value)
+                if (ProgramState.CurrentUser.fullname != value)
                 {
-                    _fullname = value;
-                    OnPropertyChanged("Fullname");
+                    ProgramState.CurrentUser.fullname = value;
+                    OnPropertyChanged(nameof(Fullname));
                 }
             }
         }
 
         public string Post
         {
-            get { return _post; }
+            get { return ProgramState.CurrentUser.post; }
             set
             {
-                if (_post != value)
+                if (ProgramState.CurrentUser.post != value)
                 {
-                    _post = value;
-                    OnPropertyChanged("Post");
+                    ProgramState.CurrentUser.post = value;
+                    OnPropertyChanged(nameof(Post));
                 }
             }
         }
@@ -77,12 +77,6 @@ namespace Incubator_2.ViewModels
 
         public void LoadInfo()
         {
-            using (User user = ProgramState.GetCurrentUser())
-            {
-                this.Fullname = user.fullname;
-                this.Surname = user.surname;
-                this.Post = user.post;
-            }
             this.WorkspaceName = ProgramState.GetWorkspaceName();
         }
 

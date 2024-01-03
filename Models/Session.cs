@@ -81,7 +81,7 @@ namespace Models
             //    throw new UserAlreadyOnlineException();
             //}
             this.slug = GenerateSlug();
-            this.user = ProgramState.User;
+            this.user = $"{ProgramState.CurrentUser.surname} {ProgramState.CurrentUser.fullname} ({ProgramState.CurrentUser.username})";
             this.timeStarted = DateTime.Now;
             this.computer = ProgramState.GetComputerId();
             this.active = true;

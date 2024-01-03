@@ -53,6 +53,17 @@ namespace Incubator_2.ViewModels.VMAdmin
                     return PermissionGroup.Operator;
             }
         }
+        public bool StatusEditable
+        {
+            get
+            {
+                if (_user.id == 1 || _user.username == "admin") // если это первый админ
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
         public bool UsernameEditable
         {
             get

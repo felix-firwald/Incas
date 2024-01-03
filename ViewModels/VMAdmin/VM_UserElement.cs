@@ -54,6 +54,17 @@ namespace Incubator_2.ViewModels.VMAdmin
                 OnPropertyChanged(nameof(UserPost));
             }
         }
+        public bool IsRemovable
+        {
+            get
+            {
+                if (_user.id == 1 || _user.username == "admin")
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
         public void RemoveUser()
         {
             _user.RemoveUser();

@@ -50,7 +50,7 @@ namespace Common
         public static string TemplatesRuntime { get { return TemplatesPath + @"\Runtime"; } }    // ...\Root\Templates\Runtime
         public static string TemplatesGenerated { get { return TemplatesPath + @"\Generated"; } }    // ...\Root\Templates\Generated
         #endregion
-        public static string User { get; set; }
+        public static User CurrentUser { get; set; }
 
         public static Session CurrentSession { get; private set; }
         public static string SystemName = Environment.UserName;
@@ -156,12 +156,12 @@ namespace Common
             }
             return false;
         }
-        public static User GetCurrentUser()
-        {
-            User user = new User();
-            user.username = User;
-            return user.GetUserByName();
-        }
+        //public static User GetCurrentUser()
+        //{
+        //    User user = new User();
+        //    user.username = CurrentUser;
+        //    return user.GetUserByName();
+        //}
         #endregion
 
         #region WorkspaceFiles
@@ -276,14 +276,14 @@ namespace Common
                 throw new LockedException();
             }
         }
-        public static void LoadUserStatus()
-        {
-            using (User mu = new User())
-            {
-                mu.username = User;
-                Permission.CurrentUserPermission = mu.GetUserByName().status;
-            }
-        }
+        //public static void LoadUserStatus()
+        //{
+        //    using (User mu = new User())
+        //    {
+        //        mu.username = CurrentUser;
+        //        Permission.CurrentUserPermission = mu.GetUserByName().status;
+        //    }
+        //}
         #region Session
         //public async static void CheckSession()
         //{

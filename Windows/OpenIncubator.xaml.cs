@@ -51,7 +51,7 @@ namespace Incubator_2.Windows
                 if (user.IsPasswordExists(this.pwd.Text))
                 {
                     this.Visibility = Visibility.Hidden;
-                    ProgramState.User = user.username;
+                    ProgramState.CurrentUser = user;
                     Permission.CurrentUserPermission = user.status;
                     if (Permission.CurrentUserPermission != PermissionGroup.Admin && ProgramState.IsWorkspaceLocked())
                     {

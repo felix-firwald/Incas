@@ -34,6 +34,7 @@ namespace Incubator_2.Common
     }
     struct Process
     {
+        public string id;
         public string emitter;
         public string recipient;
         public ProcessType type;
@@ -96,7 +97,7 @@ namespace Incubator_2.Common
             {
                 while (ProgramState.CurrentSession.active)
                 {
-                    Thread.Sleep(750);
+                    Thread.Sleep(500);
                     if (File.Exists(targetFileName))
                     {
                         Switcher(FromFile(targetFileName));
@@ -112,15 +113,16 @@ namespace Incubator_2.Common
                 {
                     switch (process.target)
                     {
-                        case ProcessTarget.TERMINATE:
+                        case ProcessTarget.TERMINATE: // admin process
                             TerminateProcessHandle();
                             break;
-                        case ProcessTarget.RESTART:
+                        case ProcessTarget.RESTART: // admin process
                             RestartProcessHandle();
                             break;
-                        case ProcessTarget.EXPLICIT:
+                        case ProcessTarget.EXPLICIT: // admin process
                             ShowExplicitMessageProcessHandle(process.content);
                             break;
+                        default: break;
                     }
                 }
             });
@@ -167,9 +169,17 @@ namespace Incubator_2.Common
         #endregion
 
         #region Sending
-        private static Process GetProcessStruct(string recipient)
+        private static string GenerateId()
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            return DateTime.Now.ToString("HHmmssffff") + new string(Enumerable.Repeat(chars, 4).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        private static Process CreateProcessStruct(string recipient)
         {
             Process process = new Process();
+            
+            process.id = GenerateId();
             process.emitter = ProgramState.CurrentSession.slug;
             process.recipient = recipient;
             process.type = ProcessType.QUERY;
@@ -177,19 +187,19 @@ namespace Incubator_2.Common
         }
         public static void SendTerminateProcess(string recipient)
         {
-            Process process = GetProcessStruct(recipient);
+            Process process = CreateProcessStruct(recipient);
             process.target = ProcessTarget.TERMINATE;
             ToFile(process);
         }
         public static void SendRestartProcess(string recipient)
         {
-            Process process = GetProcessStruct(recipient);
+            Process process = CreateProcessStruct(recipient);
             process.target = ProcessTarget.RESTART;
             ToFile(process);
         }
         public static void SendExplicitProcess(ExplicitMessage message, string recipient)
         {
-            Process process = GetProcessStruct(recipient);
+            Process process = CreateProcessStruct(recipient);
             process.target = ProcessTarget.EXPLICIT;
             process.content = JsonConvert.SerializeObject(message);
             ToFile(process);

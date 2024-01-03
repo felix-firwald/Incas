@@ -137,8 +137,6 @@ namespace Models
             DataRow dr = dt.Rows[0];
             this.Serialize(dr);
             this.status = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), dr["status"].ToString());
-            ProgramState.User = this.username;
-            Permission.SetPermissionGroup(this.status);
             return true;
         }
         public void RemoveUser()

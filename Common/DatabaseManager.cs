@@ -76,6 +76,7 @@ namespace Common
         private static string GetSessionDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Session), "Sessions");
+            atc.SetNotNull("timeFinished", false);
             return atc.GetQueryText();
         }
         private static string GetTaskDefinition(AutoTableCreator atc)
