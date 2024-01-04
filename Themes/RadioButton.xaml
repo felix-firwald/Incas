@@ -59,7 +59,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RadioButton}">
-                    <Border Name="bor" Grid.Column="1" Background="#393c43" CornerRadius="3" BorderThickness="1" BorderBrush="{DynamicResource Element}" Margin="0,0,0,0">
+                    <Border Name="bor" Grid.Column="1" Background="{DynamicResource Area}" CornerRadius="3" BorderThickness="1" BorderBrush="{DynamicResource Element}" Margin="0,0,0,0">
                         <StackPanel Orientation="Horizontal">
                             <Polygon x:Name="PolygonMain" Points="10, 20, 10, 0, 20, 10" Fill="{DynamicResource LightPurple}" Visibility="Collapsed" VerticalAlignment="Center" Margin="-10,0,0,0" Width="NaN" Height="NaN" Panel.ZIndex="-9"/>
                             <ContentPresenter TextElement.FontFamily="/Fonts/#JetBrains Mono" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
@@ -71,14 +71,14 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.100" To="#43464d" Storyboard.TargetName="bor" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetName="bor" Storyboard.TargetProperty="Background.Color"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.350" To="#393c43" Storyboard.TargetName="bor" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.350" To="#FF393C46" Storyboard.TargetName="bor" Storyboard.TargetProperty="Background.Color"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>

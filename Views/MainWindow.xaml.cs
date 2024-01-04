@@ -18,6 +18,7 @@ namespace Incubator_2
         public MainWindow()
         {
             InitializeComponent();
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         }
 
         private void OnClosed(object sender, EventArgs e)
@@ -57,6 +58,7 @@ namespace Incubator_2
             else
             {
                 this.WindowState = WindowState.Maximized;
+                this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             }
         }
         private void WindowClose(object sender, System.Windows.Input.MouseButtonEventArgs e)

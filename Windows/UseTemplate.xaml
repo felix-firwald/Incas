@@ -5,22 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Секвенсор" Height="550" Width="800" Style="{DynamicResource WindowBase}" MinWidth="700" MinHeight="550" Topmost="True" Uid="8" Cursor="">
+        Title="Секвенсор" Height="550" Width="800" Style="{DynamicResource WindowBase}" MinWidth="700" MinHeight="550" Topmost="True" Uid="8" Cursor="" SnapsToDevicePixels="True">
 
     <Border>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100*"/>
-                
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <!--конечная папка и обзор-->
-
                 <RowDefinition Height="*"/>
                 <!--таблица с тегами-->
                 <RowDefinition Height="40"/>
+                <!--кнопка создания файла или печати-->
+                <RowDefinition Height="20"/>
                 <!--кнопка создания файла или печати-->
             </Grid.RowDefinitions>
             <TextBox x:Name="dir" Style="{DynamicResource TextBoxMain}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Конечная папка" Grid.Column="0" Margin="5,0,5,0"/>
@@ -43,7 +43,10 @@
                     <StackPanel x:Name="ContentPanel"/>
                 </ScrollViewer>
             </Border>
-            <Button Style="{StaticResource ButtonMain}" Grid.Row="3" Content="Создать файлы по шаблону" Click="CreateFilesClick" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+            <Button Style="{StaticResource ButtonMain}" Grid.Row="2" Content="Создать файлы по шаблону" Click="CreateFilesClick" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
+            <StackPanel Grid.Row="4" Grid.ColumnSpan="8" Background="{DynamicResource Black}" VerticalAlignment="Center">
+                <ProgressBar x:Name="ProgressCreation" Background="{DynamicResource Black}" BorderBrush="{x:Null}" />
+            </StackPanel>
         </Grid>
     </Border>
 </Window>

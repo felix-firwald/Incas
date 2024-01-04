@@ -4,11 +4,11 @@
     <SolidColorBrush x:Key="Black" Color="#1d1d1f"/>
     <SolidColorBrush x:Key="LightBlack" Color="#252528"/>
     <SolidColorBrush x:Key="Dark" Color="#2d2d30"/>
-    <SolidColorBrush x:Key="Basic" Color="#2f3239"/>
-    <SolidColorBrush x:Key="Area" Color="#393c43"/>
-    <SolidColorBrush x:Key="Focus" Color="#3E4148"/>
-    <SolidColorBrush x:Key="Element" Color="#43464d"/>
-    <SolidColorBrush x:Key="Icon" Color="#60636B"/>
+    <SolidColorBrush x:Key="Basic" Color="#FF2F323C"/>
+    <SolidColorBrush x:Key="Area" Color="#FF393C46"/>
+    <SolidColorBrush x:Key="Focus" Color="#FF3E414B"/>
+    <SolidColorBrush x:Key="Element" Color="#FF434650"/>
+    <SolidColorBrush x:Key="Icon" Color="#FF60636E"/>
     <SolidColorBrush x:Key="DarkLight" Color="#7D8089"/>
     <SolidColorBrush x:Key="GrayLight" Color="#A7ABB7"/>
     <SolidColorBrush x:Key="Light" Color="#D3D5DB"/>

@@ -1,22 +1,13 @@
-﻿using ClosedXML.Excel;
-using Common;
-using DocumentFormat.OpenXml.Office2021.PowerPoint.Designer;
-using DocumentFormat.OpenXml.Spreadsheet;
+﻿using Common;
 using Incubator_2.Common;
 using Incubator_2.Forms;
-using Incubator_2.ViewModels;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 
 
@@ -30,6 +21,8 @@ namespace Incubator_2.Windows
         Template template;
         List<Tag> tags;
         List<UC_FileCreator> creators = new List<UC_FileCreator>();
+        delegate void UpdateProgressBarDelegate(DependencyProperty dp, object value);
+        private readonly BackgroundWorker worker = new BackgroundWorker();
         public UseTemplate(Template t)
         {
             InitializeComponent();
@@ -77,19 +70,36 @@ namespace Incubator_2.Windows
         {
             if (ValidateContent())
             {
-                this.Dispatcher.Invoke(() =>
-                {
-                    RegistryData.AddTemplate(this.template.id.ToString(), this.dir.Text, "", "");
-                    RegistreCreatedJSON.GetRegistry();
-                    foreach (UC_FileCreator fc in creators)
-                    {
-                        fc.CreateFile(this.dir.Text);
-                        //fc.CreateFile(this.dir.Text, template.path);
-                    }
-                    RegistreCreatedJSON.SaveRegistry();
-                    System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", this.dir.Text);
-                });
+                worker.DoWork += CreateFiles;
+                //worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+                worker.ProgressChanged += OnProgressChanged;
+                worker.WorkerReportsProgress = true;
+                worker.RunWorkerAsync();
+                //CreateFiles();
             }
+        }
+        private void OnProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            this.ProgressCreation.Value = e.ProgressPercentage;
+        }
+
+        private void CreateFiles(object sender, DoWorkEventArgs e)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                RegistreCreatedJSON.GetRegistry();
+                int i = 1;
+                foreach (UC_FileCreator fc in creators)
+                {
+                    fc.CreateFile(this.dir.Text);
+                    int perc = i * 100 / creators.Count;
+                    worker.ReportProgress(perc);
+                    i++;
+                }
+                RegistreCreatedJSON.SaveRegistry();      
+            
+                System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", this.dir.Text);
+            });
         }
 
         private void AddFC_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)

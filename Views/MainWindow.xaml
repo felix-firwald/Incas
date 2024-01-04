@@ -13,19 +13,15 @@
         WindowState="Maximized"
         Title="{Binding WorkspaceName}"
         Icon="/Views/Logo.png"
-        Closed="OnClosed"
-        WindowStyle="None"
+        Closed="OnClosed"     
         MinHeight="500" MinWidth="700"
-        MaxHeight="{DynamicResource {x:Static SystemParameters.MaximizedPrimaryScreenHeightKey}}"
         MouseLeftButtonDown="WindowMove">
-
     <Window.DataContext>
         <vm:MV_MainWindow/>
     </Window.DataContext>
 
     <Grid Background="{DynamicResource Basic}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="395*"/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
@@ -33,33 +29,33 @@
             <ColumnDefinition Width="250" MinWidth="140" MaxWidth="400"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        <!--<DockPanel Grid.ColumnSpan="2">
+            <Border Background="{DynamicResource Black}">
+                <Grid Margin="5,5,5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="40" />
+                    </Grid.ColumnDefinitions>
 
-        <Border Grid.ColumnSpan="2" Background="{DynamicResource Black}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="40" />
-                    <ColumnDefinition Width="40" />
-                    <ColumnDefinition Width="40" />
-                </Grid.ColumnDefinitions>
+                    <Label Style="{DynamicResource LabelElement}" Content="ИНКУБАТОР" VerticalAlignment="Center" Margin="5,0,0,0"/>
 
-                <Label Style="{DynamicResource LabelElement}" Content="ИНКУБАТОР" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" Grid.Column="1" FontSize="12" MouseDown="WindowMinimize" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" Grid.Column="2" FontSize="12" MouseDown="WindowMaximize" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" Grid.Column="3" FontSize="14" Margin="0" MouseDown="WindowClose" Cursor="Hand"/>
+                </Grid>
+            </Border>
+        </DockPanel>-->
 
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" Grid.Column="1" FontSize="12" MouseDown="WindowMinimize" />
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" Grid.Column="2" FontSize="12"  MouseDown="WindowMaximize" />
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" Grid.Column="3" FontSize="14" Margin="0" MouseDown="WindowClose" Cursor="Hand"/>
-            </Grid>
-        </Border>
-        
-
-        <StackPanel x:Name="StackLeft" Grid.Row="1" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize">
+        <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize">
             <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,15" Text="{Binding WorkspaceName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
             <Image x:Name="Logo" Height="auto" Width="auto" Source="/Views/Logo.png" UseLayoutRounding="False" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" Cursor="Hand" ToolTip="Жми на меня и тебе откроется панель управления" MouseDown="Logo_MouseDown">
             </Image>
             <TextBlock x:Name="LSurname" Foreground="White" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis"/>
             <TextBlock x:Name="LFullname" Foreground="White" Text="{Binding Fullname}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
             <TextBlock x:Name="LPost" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
-            <Rectangle Stroke="#43464D" StrokeThickness="8" />
+            <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
 
             <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}"  IsChecked="True">
                 <Grid>
@@ -101,7 +97,7 @@
                     <TextBlock Text="База данных" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DatabaseRadio, Path=Foreground}" Cursor="" Grid.Column="1" TextTrimming="WordEllipsis" />
                 </Grid>
             </RadioButton>
-            <Rectangle Stroke="#43464D" StrokeThickness="8" />
+            <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
             <RadioButton x:Name="SettingsRadio" Style="{DynamicResource MenuButton}" ToolTip="Пользовательские настройки">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -115,9 +111,9 @@
 
         </StackPanel>
         
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="5" ResizeDirection="Columns" Background="Transparent" Grid.Row="1" Height="750"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="5" ResizeDirection="Columns" Background="Transparent" Grid.Row="0" Height="750"/>
         
-        <Border Margin="8,8,8,8" Grid.Column="1" Grid.Row="1" Cursor="">
+        <Border Margin="8,8,8,8" Grid.Column="1" Grid.Row="0" Cursor="">
             <!--<Forms:UC_Templator />-->
             <TabControl Background="{DynamicResource Basic}" BorderBrush="{x:Null}">
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=DocumentsRadio, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
