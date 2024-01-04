@@ -28,8 +28,9 @@
     <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
     <Style x:Key="RowMain" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="{DynamicResource Black}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource Area}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="MinHeight" Value="30"/>
         <Setter Property="SnapsToDevicePixels" Value="true"/>
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
         <Setter Property="ValidationErrorTemplate">
@@ -52,9 +53,9 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </SelectiveScrollingGrid.RowDefinitions>
-                            <DataGridCellsPresenter Grid.Column="1" ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <DataGridCellsPresenter Grid.Column="1" ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Foreground="White"/>
                             <DataGridDetailsPresenter Grid.Column="1" Grid.Row="1" SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, Converter={x:Static DataGrid.RowDetailsScrollingConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Visibility="{TemplateBinding DetailsVisibility}"/>
-                            <DataGridRowHeader Grid.RowSpan="2" SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Row}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                            <DataGridRowHeader Grid.RowSpan="2" SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Row}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Foreground="White"/>
                         </SelectiveScrollingGrid>
                     </Border>
                 </ControlTemplate>
@@ -84,7 +85,7 @@
                 <Setter Property="Foreground" Value="White"/>
             </Trigger>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource DarkLight}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
@@ -99,7 +100,7 @@
         </Style.Triggers>
     </Style>
     <Style x:Key="ColumnHeaderGripperStyle" TargetType="{x:Type Thumb}">
-        <Setter Property="Width" Value="8"/>
+        <Setter Property="Width" Value="0"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Cursor" Value="SizeWE"/>
         <Setter Property="Template">
@@ -148,6 +149,7 @@
         <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderMain}"/>
         <Setter Property="CellStyle" Value="{DynamicResource CellMain}"/>
         <Setter Property="RowStyle" Value="{DynamicResource RowMain}"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
         <Setter Property="Padding" Value="5"/> <!--это здесь выставлен внутренний отступ !!!!!!-->
         <Setter Property="Template">
             <Setter.Value>

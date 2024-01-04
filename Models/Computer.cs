@@ -28,7 +28,12 @@ namespace Models
         }
         public bool IsComputerExists(string id)
         {
-            if (ParseCount(StartCommand().Count().WhereEqual("authId", id).Execute()) == 0)
+            if (
+                ParseCount(
+                StartCommandToService()
+                    .Count()
+                    .WhereEqual("authId", id)
+                    .Execute()) == 0)
             {
                 return false;
             }
@@ -38,19 +43,19 @@ namespace Models
         {
             if (!IsComputerExists(authId)) 
             {
-                StartCommand()
+                StartCommandToService()
                     .Insert(new Dictionary<string, string>
                     {
                         { "authId", $"'{authId}'" },
                         { "name", $"'{name}'" },
-                        { "bloced", blocked.ToString() },
+                        { "blocked", blocked.ToString() },
                     })
                     .ExecuteVoid();
             }
         }
         public void UpdateComputer()
         {
-            StartCommand()
+            StartCommandToService()
                 .Update("name", name)
                 .Update("blocked", blocked.ToString())
                 .WhereEqual("authId", authId).ExecuteVoid();

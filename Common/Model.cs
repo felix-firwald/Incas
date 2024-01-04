@@ -96,6 +96,15 @@ namespace Common
         {
             return new Query(this.tableName);
         }
+        protected Query StartCommandToService()
+        {
+            return new Query(this.tableName, DBConnectionType.SERVICE);
+        }
+        protected Query StartCommandToCustom()
+        {
+            return new Query(this.tableName, DBConnectionType.CUSTOM);
+        }
+        
 
         #region Standart Requests
         protected DataTable GetAll()

@@ -70,11 +70,11 @@ namespace Incubator_2.Windows
             this.ContentPanel.Children.Add(tc);
         }
 
-        private void DeleteTagFromMain(Tag t)
+        private void DeleteTagFromMain(TagCreator t)
         {
             foreach (NotOverridenTag tagControl in this.ParentTagPanel.Children)
             {
-                if (tagControl.tag.id == t.parent)
+                if (tagControl.tag.id == t.tag.parent)
                 {
                     tagControl.DeOverrideTag();
                     break;

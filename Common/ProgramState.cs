@@ -39,6 +39,7 @@ namespace Common
         public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incubator";
         public static string DatabasePath { get { return CommonPath + @"\data.dbinc"; } }
         public static string CustomDatabasePath { get { return CommonPath + @"\custom.dbinc"; } }
+        public static string ServiceDatabasePath { get { return Root + @"\service.dbinc"; } }
         private static string Root { get { return CommonPath + @"\Root"; } }
         public static string ServerProcesses { get { return Root + @"\ServerProccesses"; } } // ...\Root\ServerProccesses
 
@@ -92,33 +93,6 @@ namespace Common
             return new string(Enumerable.Repeat(chars, len)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-        private static string GenerateComputerId()
-        {
-            Random random = new Random();
-            //const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            string result = GenerateSlug(20);
-            RegistryKey inc = Registry.CurrentUser.CreateSubKey("Incubator");
-            inc.SetValue("computer", result);
-            inc.CreateSubKey("TemplatesData");
-            inc.Close();
-            using (Computer mc = new Computer())
-            {
-                mc.authId = result;
-                mc.name = SystemName;
-                mc.blocked = false;
-                mc.AddComputer();
-            }
-            return result;
-        }
-        public static string GetComputerId()
-        {
-            if (IsRegistryContainsData()) 
-            {
-                string result = RegistryData.GetRoot().GetValue("computer").ToString();  
-                return result;
-            }
-            return GenerateComputerId();
-        }
         private static bool IsRegistryContainsData()
         {
             return Registry.CurrentUser.GetSubKeyNames().Contains("Incubator");
@@ -128,7 +102,7 @@ namespace Common
         {
             using (Computer mc = new Computer())
             {
-                mc.authId = GetComputerId();
+                mc.authId = RegistryData.GetComputer();
                 mc.blocked = false;
                 mc.AddComputer();
             }
@@ -136,32 +110,15 @@ namespace Common
         #endregion
 
         #region UserData
-        public static void SaveUserData()
-        {
-            if (!IsRegistryContainsData())
-            {
-                GenerateComputerId();
-            }
-            RegistryKey inc = Registry.CurrentUser.OpenSubKey("Incubator", true);
-            inc.SetValue("path", CommonPath);
-            inc.Close();
-        }
         public static bool LoadUserData() 
         {
             if (IsRegistryContainsData())
             {
-                //SetCommonPath(File.ReadAllText(UserPath + @"\path.incdat").Trim());
                 SetCommonPath(RegistryData.GetSelectedWorkspacePath());
                 return true;
             }
             return false;
         }
-        //public static User GetCurrentUser()
-        //{
-        //    User user = new User();
-        //    user.username = CurrentUser;
-        //    return user.GetUserByName();
-        //}
         #endregion
 
         #region WorkspaceFiles
@@ -172,7 +129,7 @@ namespace Common
         #endregion
         private static bool CreateTablesInDatabase()
         {
-            return DatabaseManager.CreateTables(DatabasePath);
+            return DatabaseManager.CreateTables();
         }
         public static Parameter GetParameter(ParameterType type, string name, string defaultValue="0", bool createIfNot = true)
         {
@@ -276,34 +233,9 @@ namespace Common
                 throw new LockedException();
             }
         }
-        //public static void LoadUserStatus()
-        //{
-        //    using (User mu = new User())
-        //    {
-        //        mu.username = CurrentUser;
-        //        Permission.CurrentUserPermission = mu.GetUserByName().status;
-        //    }
-        //}
+
         #region Session
-        //public async static void CheckSession()
-        //{
-        //    if (Permission.CurrentUserPermission != PermissionGroup.Admin)
-        //    {
-        //        string searchingPath = $"{ServerProcesses}\\kill_{CurrentSession.id}.incproc";
-        //        await System.Threading.Tasks.Task.Run(() =>
-        //        {
-        //            while (true)
-        //            {
-        //                System.Threading.Tasks.Task.Delay(3000).Wait();
-        //                if (File.Exists(searchingPath) && File.ReadAllText(searchingPath) == GetComputerId())
-        //                {
-        //                    File.Delete(searchingPath);
-        //                    throw new Exception("Сессия принудительно завершена администратором инкубатора");
-        //                }
-        //            }
-        //        });
-        //    }          
-        //}
+
         public static void GenerateKillerFile(string sessionId, string computerId)
         {
             string pathOfFile = $"{ServerProcesses}\\kill_{sessionId}.incproc";

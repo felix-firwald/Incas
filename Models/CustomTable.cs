@@ -55,38 +55,53 @@ namespace Incubator_2.Models
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this.fields);
         }
-        public CustomTable AddCustomTable()
+        //public CustomTable AddCustomTable()
+        //{
+        //    StartCommand().Insert(new Dictionary<string, string>
+        //    {
+        //        { "name", $"'{name}'" },
+        //        { "viewName", $"'{viewName}'" },
+        //        { "fields", $"'{SerializeFields()}'" },
+        //    }).ExecuteVoid();
+        //    return this;
+        //}
+        //public CustomTable Update()
+        //{
+        //    StartCommand()
+        //        .Update("viewName", name)
+        //        .Update("fields", SerializeFields())
+        //        .WhereEqual("id", id.ToString())
+        //        .ExecuteVoid();
+        //    return this;
+        //}
+        //public CustomTable GetCustomTableByName()
+        //{
+        //    DataRow dr = StartCommand()
+        //        .Select()
+        //        .WhereEqual("name", name)
+        //        .ExecuteOne();
+        //    Serialize(dr);
+        //    return this;
+        //}
+        //public void RemoveCustomTable()
+        //{
+        //    StartCommand().Delete().WhereEqual("id", id.ToString());
+        //}
+        public List<string> GetTablesList()
         {
-            StartCommand().Insert(new Dictionary<string, string>
+            DataTable dt = StartCommandToCustom()
+                .AddCustomRequest("SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%';")
+                .Execute();
+            List<string> result = new();
+            foreach (DataRow dr in dt.Rows)
             {
-                { "name", $"'{name}'" },
-                { "viewName", $"'{viewName}'" },
-                { "fields", $"'{SerializeFields()}'" },
-            }).ExecuteVoid();
-            return this;
+                result.Add(dr["name"].ToString());
+            }
+            return result;
         }
-        public CustomTable Update()
+        public DataTable GetTable(string tableName)
         {
-            StartCommand()
-                .Update("viewName", name)
-                .Update("fields", SerializeFields())
-                .WhereEqual("id", id.ToString())
-                .ExecuteVoid();
-            return this;
+            return StartCommandToCustom().AddCustomRequest($"SELECT * FROM {tableName};").Execute();
         }
-        public CustomTable GetCustomTableByName()
-        {
-            DataRow dr = StartCommand()
-                .Select()
-                .WhereEqual("name", name)
-                .ExecuteOne();
-            Serialize(dr);
-            return this;
-        }
-        public void RemoveCustomTable()
-        {
-            StartCommand().Delete().WhereEqual("id", id.ToString());
-        }
-        
     }
 }

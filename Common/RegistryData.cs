@@ -32,6 +32,17 @@ namespace Common
         {
             return Registry.CurrentUser.CreateSubKey("Incubator", true);
         }
+        public static string GetComputer()
+        {
+            string key = "computer";
+            if (GetRoot().GetValueNames().Contains(key))
+            {
+                return GetRoot().GetValue(key).ToString();
+            }
+            string slug = ProgramState.GenerateSlug(20);
+            GetRoot().SetValue(key, slug);
+            return slug;
+        }
         #region workspaces
 
         public static RegistryKey GetWorkspaceData()

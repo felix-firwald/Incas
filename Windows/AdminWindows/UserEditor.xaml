@@ -45,6 +45,6 @@
         <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Fullname}" MaxLength="35" Tag="Имя (и отчество)" Grid.Row="3"/>
         <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Post}" MaxLength="35" Tag="Должность" Grid.Row="4"/>
         <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Password}" MaxLength="12" Tag="Пароль" Grid.Row="5"/>
-        <Button Style="{DynamicResource ButtonMain}" Grid.Row="6" Content="Сохранить" Click="SaveClick"/>
+        <Button Style="{DynamicResource ButtonMain}" Grid.Row="6" Content="Сохранить" Click="SaveClick" IsDefault="True"/>
     </Grid>
 </Window>

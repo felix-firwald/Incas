@@ -61,7 +61,6 @@ namespace Incubator_2.Windows
                 string result;
                 if (!fd.FileName.StartsWith(ProgramState.TemplatesSourcesWordPath))
                 {
-
                     File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesWordPath}\\{fd.SafeFileName}");
                 }
                 result = fd.SafeFileName;
@@ -96,7 +95,10 @@ namespace Incubator_2.Windows
             return true;
         }
 
-        
+        private void RemoveTagFromList(TagCreator tag)
+        {
+            this.ContentPanel.Children.Remove(tag);
+        }
 
         private void saveClick(object sender, RoutedEventArgs e)
         {
@@ -138,7 +140,9 @@ namespace Incubator_2.Windows
             {
                 t = tag;
             }
-            this.ContentPanel.Children.Add(new TagCreator(t, isNew));
+            TagCreator tc = new(t, isNew);
+            tc.onDelete += RemoveTagFromList;
+            this.ContentPanel.Children.Add(tc);
         }
 
         private void AddTagClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -163,6 +167,7 @@ namespace Incubator_2.Windows
                 AddTag(tag);
             }
         }
+        #region Design
 
         private void MinimizeAll(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -179,5 +184,6 @@ namespace Incubator_2.Windows
                 tag.Maximize();
             }
         }
+        #endregion
     }
 }

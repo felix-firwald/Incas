@@ -16,9 +16,10 @@ namespace Incubator_2.Forms
     /// </summary>
     public partial class TagCreator : UserControl
     {
-        public delegate void MethodContainer(Tag t);
+        public delegate void MethodContainer(TagCreator t);
         public event MethodContainer onDelete;
-        Tag tag;
+        public Tag tag;
+
         private bool IsCollapsed = false;
         public TagCreator(Tag t, bool isNew = false)
         {
@@ -71,9 +72,8 @@ namespace Incubator_2.Forms
 
         private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            onDelete(this.tag);
-            Panel parentPanel = (Panel)this.Parent;
-            parentPanel.Children.Remove(this);
+            onDelete?.Invoke(this);
+            tag.RemoveTag();
         }
     }
 }

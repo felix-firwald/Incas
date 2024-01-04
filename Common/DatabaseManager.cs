@@ -14,9 +14,8 @@ namespace Common
 {
     public static class DatabaseManager // static cause server connection must be only one per session
     {
-        readonly public static string path = ProgramState.DatabasePath;
         public static SQLiteConnection connection;
-        public static void OpenConnection()
+        public static void OpenConnection(string path)
         {
             connection = new SQLiteConnection($"Data source={path}; Version=3; datetimeformat=CurrentCulture");
             if (connection.State != ConnectionState.Open)
@@ -32,21 +31,27 @@ namespace Common
             }
         }
 
-        public static bool CreateTables(string path)
+
+        public static bool CreateTables()
         {
-            SQLiteConnection.CreateFile(path);
+            SQLiteConnection.CreateFile(ProgramState.DatabasePath);
+            SQLiteConnection.CreateFile(ProgramState.ServiceDatabasePath);
+            SQLiteConnection.CreateFile(ProgramState.CustomDatabasePath);
             //new Field(Field, )
             AutoTableCreator atc = new AutoTableCreator();
             Query q = new Query("");
+            q.typeOfConnection = DBConnectionType.BASE;
             q.AddCustomRequest(GetParameterDefinition(atc))
              .AddCustomRequest(GetUserDefinition(atc))
-             .AddCustomRequest(GetComputerDefinition(atc))
-             .AddCustomRequest(GetSessionDefinition(atc))
              .AddCustomRequest(GetTaskDefinition(atc))
              .AddCustomRequest(GetSubtaskDefinition(atc))
              .AddCustomRequest(GetTemplateDefinition(atc))
              .AddCustomRequest(GetTagDefinition(atc))
              .AddCustomRequest(GetCustomTableDefinition(atc))
+             .ExecuteVoid();
+            q.typeOfConnection = DBConnectionType.SERVICE;
+            q.AddCustomRequest(GetComputerDefinition(atc))
+             .AddCustomRequest(GetSessionDefinition(atc))
              .ExecuteVoid();
             return true;
         }

@@ -21,6 +21,28 @@ namespace Incubator_2.ViewModels
             this.mainTag = tag;
         }
 
+        public string DescriptionText
+        {
+            get
+            {
+                switch(mainTag.type)
+                {
+                    case TypeOfTag.Variable:
+                    case TypeOfTag.Text:
+                    default:
+                        return "Значение по умолчанию";
+                    case TypeOfTag.LocalConstant:
+                        return "Значение константы";
+                    case TypeOfTag.LocalEnumeration:
+                        return "Предлагаемые значения (для разделения используйте символ \";\")";
+                    case TypeOfTag.Relation:
+                        return "Укажите таблицу и поле (например, Пользователи.Имя)";
+                    case TypeOfTag.Table:
+                        return "Укажите названия столбцов (для разделения используйте символ \";\")";
+                }
+            }
+        }
+
         public string NameOfTag
         {
             get { return mainTag.name; }
@@ -52,6 +74,7 @@ namespace Incubator_2.ViewModels
             {
                  mainTag.type = SerializeFromInput(value);
                  OnPropertyChanged(nameof(TypeOfTagValue));
+                 OnPropertyChanged(nameof(DescriptionText));
             }
         }
 

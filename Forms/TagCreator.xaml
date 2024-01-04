@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="600">
+             d:DesignHeight="200" d:DesignWidth="600">
     <Border x:Name="MainBorder" Margin="5" CornerRadius="5" Background="{DynamicResource Dark}">
         <Grid>
             <Grid.RowDefinitions>
@@ -14,12 +14,12 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" ToolTip="Свернуть / Развернуть окно" Cursor="Hand" MouseDown="TurnSizeClick"/>
-                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,5,0"/>
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" ToolTip="Свернуть / Развернуть окно" Cursor="Hand" MouseDown="TurnSizeClick"/>
+                <Rectangle Width="1" Fill="{DynamicResource Element}" />
                 <CheckBox Style="{DynamicResource Selector}"/>
-                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,0,5,0"/>
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="15,0,15,0" ToolTip="Удалить тег" Cursor="Hand" MouseDown="RemoveClick"/>
-                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,0,5,0"/>
+                <Rectangle Width="1" Fill="{DynamicResource Element}" />
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" ToolTip="Удалить тег" Cursor="Hand" MouseDown="RemoveClick"/>
+                <Rectangle Width="1" Fill="{DynamicResource Element}" />
                 <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                 <TextBox x:Name="TagName" Style="{DynamicResource TextBoxTransparent}" Text="{Binding NameOfTag, UpdateSourceTrigger=PropertyChanged}" MaxLength="25"/>
                 <Label Style="{DynamicResource LabelElement}" Content="]" VerticalAlignment="Center" HorizontalAlignment="Left"/>
@@ -72,7 +72,7 @@
                         </StackPanel>
                     </ComboBoxItem>
                 </ComboBox>
-                <TextBox Style="{DynamicResource TextBoxBig}" Tag="Значение по умолчанию" Text="{Binding DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="500" TextWrapping="Wrap"/>
+                <TextBox Style="{DynamicResource TextBoxBig}" Tag="{Binding DescriptionText}" Text="{Binding DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="500" TextWrapping="Wrap"/>
             </StackPanel>
         </Grid>
     </Border>

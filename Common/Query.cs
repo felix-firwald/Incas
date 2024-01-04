@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -19,6 +20,7 @@ namespace Common
     public enum DBConnectionType
     {
         BASE,
+        SERVICE,
         CUSTOM,
         OTHER
     }
@@ -72,7 +74,7 @@ namespace Common
         public string Result { get; private set; }
         private bool isWhereAlready = false;
         private bool isUpdateAlready = false;
-        public DBConnectionType typeOfConnection { get; private set; }
+        public DBConnectionType typeOfConnection { get; set; }
         public Query(string table, DBConnectionType type = DBConnectionType.BASE) 
         {
             this.Table = table;
@@ -334,6 +336,9 @@ namespace Common
                 default:
                     path = ProgramState.DatabasePath;
                     break;
+                case DBConnectionType.SERVICE:
+                    path = ProgramState.ServiceDatabasePath;
+                    break;
                 case DBConnectionType.CUSTOM:
                     path = ProgramState.CustomDatabasePath;
                     break;
@@ -341,7 +346,8 @@ namespace Common
                     path = connstring;
                     break;
             }
-            return new SQLiteConnection($"Data source={path}; Version=3; UseUTF16Encoding=True", true);
+            SQLiteConnection conn = new SQLiteConnection($"Data source={path}; Version=3; UseUTF16Encoding=True", true);
+            return conn;
         }
         private string GetRequest(bool clear = true)
         {

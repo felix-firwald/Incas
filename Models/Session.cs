@@ -18,20 +18,9 @@ namespace Models
             tableName = "Sessions";
         }
 
-        public bool DoesUserHaveNotClosedSessions()
-        {
-            //StartCommand().Count()
-            //.WhereEqual("user", user)
-            //.WhereEqual("active", "true")
-            //if (ParseCount(Execute(DatabasePermissions.All)) != 0)
-            //{
-            //    return true;
-            //}
-            return false;
-        }
         public List<Session> GetAllSessions()
         {
-            DataTable dt = StartCommand()
+            DataTable dt = StartCommandToService()
                 .Select()
                 .OrderByDESC("slug")
                 .Limit(50)
@@ -47,7 +36,7 @@ namespace Models
         }
         public List<Session> GetOpenedSessions()
         {
-            DataTable dt = StartCommand()
+            DataTable dt = StartCommandToService()
                 .Select()
                 .WhereEqual("active", "1")
                 .Execute();
@@ -63,12 +52,11 @@ namespace Models
         public int GetIdOfSession()
         {
             return int.Parse(
-                    StartCommand()
+                    StartCommandToService()
                         .Select("id")
                         .WhereEqual("timeStarted", this.timeStarted.ToString())
                         .ExecuteOne()["id"].ToString()
             );
-            // return int.Parse(GetOne(Execute())["id"].ToString());
         }
         private string GenerateSlug()
         {
@@ -76,16 +64,12 @@ namespace Models
         }
         public void AddSession()
         {
-            //if (DoesUserHaveNotClosedSessions())
-            //{
-            //    throw new UserAlreadyOnlineException();
-            //}
             this.slug = GenerateSlug();
             this.user = $"{ProgramState.CurrentUser.surname} {ProgramState.CurrentUser.fullname} ({ProgramState.CurrentUser.username})";
             this.timeStarted = DateTime.Now;
-            this.computer = ProgramState.GetComputerId();
+            this.computer = RegistryData.GetComputer();
             this.active = true;
-            StartCommand()
+            StartCommandToService()
                 .Insert(new Dictionary<string, string>
                 {
                     {"slug", $"'{slug}'" },
@@ -98,7 +82,7 @@ namespace Models
         }
         public void CloseSession()
         {
-            StartCommand()
+            StartCommandToService()
                 .Update("active", $"0")
                 .Update("timeFinished", $"{DateTime.Now}")
                 .WhereEqual("slug", this.slug)
@@ -106,7 +90,7 @@ namespace Models
         }
         public bool IsSessionActive()
         {
-            DataRow dr = StartCommand()
+            DataRow dr = StartCommandToService()
                     .Select()
                     .WhereEqual("slug", this.slug)
                     .ExecuteOne();

@@ -43,6 +43,7 @@ namespace Incubator_2.Common
     }
     static class ServerProcessor
     {
+        private static List<Process> WaitList = new();
         #region Reusable Base Functionality
         private static string GetKeyByRecipient(string recipient)
         {
@@ -88,6 +89,27 @@ namespace Incubator_2.Common
             File.Delete(filename);
             return result;
         }
+        private static void RemoveOldest()
+        {
+            try
+            {
+                string[] files = Directory.GetFiles(ProgramState.ServerProcesses);
+
+                foreach (string file in files)
+                {
+                    FileInfo fi = new FileInfo(file);
+                    if (fi.CreationTime < DateTime.Now.AddSeconds(-5))
+                    {
+                        fi.Delete();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+        }
         #endregion
 
         public async static void Listen()
@@ -102,6 +124,15 @@ namespace Incubator_2.Common
                     {
                         Switcher(FromFile(targetFileName));
                     }
+                    foreach (Process p in WaitList)
+                    {
+                        string targetAnswerFileName = $"{ProgramState.ServerProcesses}\\{p.id}.procinc";
+                        if (File.Exists(targetAnswerFileName))
+                        {
+                            Switcher(FromFile(targetAnswerFileName));
+                        }
+                    }
+                    RemoveOldest();
                 }
             });
         }
