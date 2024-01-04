@@ -56,11 +56,6 @@ namespace Forms
 
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
-            if (this.ChildPanel.Children.Count > 0)
-            {
-                ProgramState.ShowErrorDialog("Абстрактные шаблоны нельзя использовать напрямую.\nВместо этого, используйте одного из его наследников.", "Использование шаблона невозможно");
-                return;
-            }
             if (IsFileExists())
             {
                 UseTemplate ut = new UseTemplate(template);
@@ -78,43 +73,53 @@ namespace Forms
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
-            if (this.ChildPanel.Children.Count > 0)
+            if (ProgramState.IsWorkspaceOpened())
             {
-                ProgramState.ShowErrorDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
-                return;
+                if (this.ChildPanel.Children.Count > 0)
+                {
+                    ProgramState.ShowErrorDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
+                    return;
+                }
+                if (ProgramState.ShowQuestionDialog($"Шаблон \"{template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
+                {
+                    Models.Tag tag = new Models.Tag();
+                    tag.RemoveAllTagsByTemplate(template.id);
+                    template.RemoveTemplate();
+                    UpdateList();
+                }
             }
-            if (ProgramState.ShowQuestionDialog($"Шаблон \"{template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
-            {
-                Models.Tag tag = new Models.Tag();
-                tag.RemoveAllTagsByTemplate(template.id);
-                template.RemoveTemplate();
-                UpdateList();
-            }
+            
         }
 
         private void EditClick(object sender, MouseButtonEventArgs e)
         {
-            if (this.template.parent != 0)  // если это ребенок
+            if (ProgramState.IsWorkspaceOpened())
             {
-                VM_ChildTemplate vm = new VM_ChildTemplate(this.template.parent, this.template);
-                CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
-                cc.OnCreated += UpdateList;
-                cc.ShowDialog();
-            }
-            else
-            {
-                CreateTemplateWord ctw = new CreateTemplateWord(this.template);
-                ctw.OnCreated += UpdateList;
-                ctw.ShowDialog();
+                if (this.template.parent != 0)  // если это ребенок
+                {
+                    VM_ChildTemplate vm = new VM_ChildTemplate(this.template.parent, this.template);
+                    CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
+                    cc.OnCreated += UpdateList;
+                    cc.ShowDialog();
+                }
+                else
+                {
+                    CreateTemplateWord ctw = new CreateTemplateWord(this.template);
+                    ctw.OnCreated += UpdateList;
+                    ctw.ShowDialog();
+                }
             }
         }
 
         private void CreateChildClick(object sender, MouseButtonEventArgs e)
         {
-            VM_ChildTemplate vm = new VM_ChildTemplate(this.template.id);
-            CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
-            cc.OnCreated += UpdateList;
-            cc.ShowDialog();
+            if (ProgramState.IsWorkspaceOpened())
+            {
+                VM_ChildTemplate vm = new VM_ChildTemplate(this.template.id);
+                CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
+                cc.OnCreated += UpdateList;
+                cc.ShowDialog();
+            }
         }
         private void UpdateList()
         {

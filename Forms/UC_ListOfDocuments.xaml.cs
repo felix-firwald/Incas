@@ -124,9 +124,13 @@ namespace Incubator_2.Forms
 
         private void AddFC_Click(object sender, MouseButtonEventArgs e)
         {
-            CreateTemplateWord ctw = new CreateTemplateWord();
-            ctw.OnCreated += Refresh;
-            ctw.Show();
+            if (ProgramState.IsWorkspaceOpened())
+            {
+                CreateTemplateWord ctw = new CreateTemplateWord();
+                ctw.OnCreated += Refresh;
+                ctw.Show();
+            }
+            
         }
         private void FindSelectedInRefreshedList()
         {

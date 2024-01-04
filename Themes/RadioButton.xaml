@@ -21,7 +21,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="bor" Property="Background" Value="#3E4148"/>
+                            <Setter TargetName="bor" Property="Background" Value="{DynamicResource Element}"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="true">
                             <Setter TargetName="PolygonMain" Property="Visibility" Value="Visible"/>

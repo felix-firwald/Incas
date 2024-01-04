@@ -35,7 +35,7 @@
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#43464d"></Setter>
+                        <Setter Property="Background" Value="{DynamicResource Element}"></Setter>
                     </Trigger>
                 </Style.Triggers>
             </Style>

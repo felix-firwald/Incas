@@ -2,11 +2,12 @@
 using DocumentFormat.OpenXml.InkML;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
-using Models;
+
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using Windows.UI.Notifications;
 
 namespace Incubator_2
 {
@@ -19,6 +20,8 @@ namespace Incubator_2
         {
             InitializeComponent();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            
+            
         }
 
         private void OnClosed(object sender, EventArgs e)
@@ -94,5 +97,6 @@ namespace Incubator_2
             }
             
         }
+
     }
 }

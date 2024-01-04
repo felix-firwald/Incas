@@ -186,18 +186,25 @@ namespace Common
         }
         public static bool IsWorkspaceOpened()
         {
-            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1"))
+            if (Permission.CurrentUserPermission != PermissionGroup.Admin)
             {
-                bool result = par.GetValueAsBool();
-                if (!result)
+                using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1"))
                 {
-                    ShowErrorDialog("Действия по добавлению, изменению " +
-                        "или удалению информации из базы данных недоступны, " +
-                        "пока рабочее пространство находится в статусе \"Закрыто\".\n" +
-                        "Рабочее пространство по-прежнему можно использовать, однако " +
-                        "только для чтения.", "Рабочее пространство закрыто");
+                    bool result = par.GetValueAsBool();
+                    if (!result)
+                    {
+                        ShowErrorDialog("Действия по добавлению, изменению " +
+                            "или удалению информации из базы данных недоступны, " +
+                            "пока рабочее пространство находится в статусе \"Закрыто\".\n" +
+                            "Рабочее пространство по-прежнему можно использовать, однако " +
+                            "только для чтения.", "Рабочее пространство закрыто");
+                    }
+                    return result;
                 }
-                return result;
+            }
+            else
+            {
+                return true;
             }
         }
         public static void SetWorkspaceLocked(bool locked)

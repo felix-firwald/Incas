@@ -65,20 +65,23 @@ namespace Incubator_2.Forms
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
-            if (Selection.Count > 0)
+            if (ProgramState.IsWorkspaceOpened())
             {
-                RegistreCreatedJSON.GetRegistry();
-                foreach (FileCreated fc in Selection)
+                if (Selection.Count > 0)
                 {
-                    this.ContentPanel.Children.Remove(fc);
-                    RegistreCreatedJSON.RemoveRecord(fc.record);
+                    RegistreCreatedJSON.GetRegistry();
+                    foreach (FileCreated fc in Selection)
+                    {
+                        this.ContentPanel.Children.Remove(fc);
+                        RegistreCreatedJSON.RemoveRecord(fc.record);
+                    }
+                    RegistreCreatedJSON.SaveRegistry();
                 }
-                RegistreCreatedJSON.SaveRegistry();
-            }
-            else
-            {
-                ProgramState.ShowExlamationDialog("Не выбрано ни одного элемента для удаления.\n" +
-                    "Используйте селекторы для выбора тех записей, которые нужно удалить.", "Действие невозможно");
+                else
+                {
+                    ProgramState.ShowExlamationDialog("Не выбрано ни одного элемента для удаления.\n" +
+                        "Используйте селекторы для выбора тех записей, которые нужно удалить.", "Действие невозможно");
+                }
             }
         }
 

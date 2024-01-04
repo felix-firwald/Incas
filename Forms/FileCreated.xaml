@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="45" d:DesignWidth="400">
+             d:DesignHeight="45" d:DesignWidth="400" MouseDown="OnClick" Cursor="Hand">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -16,6 +16,7 @@
     
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
+        
         <CheckBox x:Name="Selector" Style="{DynamicResource Selector}" Grid.RowSpan="2" Grid.Column="2" Checked="Selector_Checked" Unchecked="Selector_Unchecked"/>
         <Label x:Name="Filename" Style="{DynamicResource LabelElement}" Content="Имя не определено" VerticalAlignment="Top" Grid.RowSpan="2" FontSize="11" VerticalContentAlignment="Bottom" Grid.ColumnSpan="2" Height="25" FontWeight="Bold"/>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
@@ -27,7 +28,7 @@
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#43464d"></Setter>
+                        <Setter Property="Background" Value="{DynamicResource Element}"></Setter>
                     </Trigger>
 
                 </Style.Triggers>
