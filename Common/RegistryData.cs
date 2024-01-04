@@ -103,7 +103,7 @@ namespace Common
         #region Templates
         public static RegistryKey GetTemplatesData() 
         {
-            return GetRoot().CreateSubKey("TemplatesData", true);
+            return GetWorkspaceByName(GetSelectedWorkspace()).CreateSubKey("TemplatesData", true);
 
         }
         

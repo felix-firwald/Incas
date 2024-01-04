@@ -50,8 +50,7 @@ namespace Common
              .AddCustomRequest(GetCustomTableDefinition(atc))
              .ExecuteVoid();
             q.typeOfConnection = DBConnectionType.SERVICE;
-            q.AddCustomRequest(GetComputerDefinition(atc))
-             .AddCustomRequest(GetSessionDefinition(atc))
+            q.AddCustomRequest(GetSessionDefinition(atc))
              .ExecuteVoid();
             return true;
         }
@@ -70,12 +69,6 @@ namespace Common
             atc.SetNotNull("fullname", false);
             atc.SetNotNull("surname", false);
             atc.SetNotNull("post", false);           
-            return atc.GetQueryText();
-        }
-        private static string GetComputerDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Computer), "Computers");
-            atc.SetAsUnique("authId");
             return atc.GetQueryText();
         }
         private static string GetSessionDefinition(AutoTableCreator atc)

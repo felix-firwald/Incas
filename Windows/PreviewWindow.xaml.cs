@@ -23,17 +23,19 @@ namespace Incubator_2.Windows
     public partial class PreviewWindow : Window
     {
         string XPSpath;
+        XpsDocument document;
         public PreviewWindow(string path)
         {
             InitializeComponent();
             XPSpath = path;
-            XpsDocument document = new XpsDocument(XPSpath, FileAccess.Read);
+            document = new XpsDocument(XPSpath, FileAccess.Read);
             this.Preview.Document = document.GetFixedDocumentSequence();
+            document.Close();
         }
 
         private void OnClosed(object sender, EventArgs e)
         {
-            
+            File.Delete(XPSpath);
         }
     }
 }

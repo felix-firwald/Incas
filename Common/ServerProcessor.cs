@@ -110,6 +110,10 @@ namespace Incubator_2.Common
             }
 
         }
+        private static void RuntimeCollector()
+        {
+
+        }
         #endregion
 
         public async static void Listen()

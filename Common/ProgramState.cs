@@ -98,15 +98,6 @@ namespace Common
             return Registry.CurrentUser.GetSubKeyNames().Contains("Incubator");
         }
 
-        public static void RegisterComputer()
-        {
-            using (Computer mc = new Computer())
-            {
-                mc.authId = RegistryData.GetComputer();
-                mc.blocked = false;
-                mc.AddComputer();
-            }
-        }
         #endregion
 
         #region UserData
@@ -278,5 +269,23 @@ namespace Common
             return d.status;
         }
         #endregion
+
+        public async static void ClearRuntimeFiles()
+        {
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                foreach (string item in Directory.GetFiles(ProgramState.TemplatesRuntime))
+                {
+                    try
+                    {
+                        File.Delete(item);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                }
+            });
+        }
     }
 }
