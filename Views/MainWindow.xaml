@@ -17,17 +17,7 @@
 
         MinHeight="500" MinWidth="700"
         MouseLeftButtonDown="WindowMove">
-    <!--<WindowChrome.WindowChrome>
-        <WindowChrome
-                    NonClientFrameEdges="None"
-                    GlassFrameThickness="0"
-                    ResizeBorderThickness="7"
-                    CaptionHeight="36"
-                />
-    </WindowChrome.WindowChrome>-->
-    <!--<Window.DataContext>
-        <vm:MV_MainWindow/>
-    </Window.DataContext>-->
+
 
     <Grid Background="{DynamicResource Basic}">
         <Grid.RowDefinitions>

@@ -33,7 +33,7 @@
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.250" To="#2D2D30" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.250" To="#FF2D2D33" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
                                         <ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>
                                     </Storyboard>
                                 </BeginStoryboard>

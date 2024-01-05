@@ -3,7 +3,7 @@
     <!--Цвета фона и текста-->
     <SolidColorBrush x:Key="Black" Color="#1d1d1f"/>
     <SolidColorBrush x:Key="LightBlack" Color="#252528"/>
-    <SolidColorBrush x:Key="Dark" Color="#2d2d30"/>
+    <SolidColorBrush x:Key="Dark" Color="#FF2D2D33"/>
     <SolidColorBrush x:Key="Basic" Color="#FF2F323C"/>
     <SolidColorBrush x:Key="Area" Color="#FF393C46"/>
     <SolidColorBrush x:Key="Focus" Color="#FF3E414B"/>
