@@ -17,7 +17,7 @@
                                 x:Name="PART_ContentHost" 
                                 Focusable="False" 
                                 HorizontalScrollBarVisibility="Hidden" 
-                                VerticalScrollBarVisibility="Hidden"/>
+                                VerticalScrollBarVisibility="Hidden" VerticalAlignment="Center" Margin="8,0,0,0"/>
                             <Label 
                                 x:Name="WaterMarkerLabel" 
                                 Content="{TemplateBinding Tag}"
@@ -29,6 +29,9 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="HorizontalContentAlignment" Value="Center">
+                            <Setter TargetName="PART_ContentHost" Property="Margin" Value="0"/>
+                        </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="Text" Value=""/>
@@ -111,7 +114,7 @@
                                 TextElement.FontFamily="/Fonts/#JetBrains Mono"
                                 
                                 HorizontalScrollBarVisibility="Hidden" 
-                                VerticalScrollBarVisibility="Hidden"/>
+                                VerticalScrollBarVisibility="Hidden" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>

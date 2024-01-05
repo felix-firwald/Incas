@@ -110,7 +110,7 @@
 
         </StackPanel>
         
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="5" ResizeDirection="Columns" Background="Transparent" Grid.Row="0" Height="750"/>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" ResizeDirection="Columns" Grid.Row="0" Margin="1,0,0,0" />
         
         <Border Margin="8,8,8,8" Grid.Column="1" Grid.Row="0" Cursor="">
             <!--<Forms:UC_Templator />-->

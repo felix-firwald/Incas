@@ -16,16 +16,16 @@
             <ColumnDefinition Width="240" MinWidth="120" MaxWidth="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-            <ScrollViewer Grid.Row="0" Grid.Column="0" Cursor="">
+            <ScrollViewer Grid.Row="0" Grid.Column="0" Margin="0,0,0,5">
                 <StackPanel x:Name="Categories" >
                     <RadioButton Style="{StaticResource CategoryButton}" Content="Без категории" Click="SelectCategory" FontStyle="Italic" IsChecked="True"/>
                 </StackPanel>
             </ScrollViewer>
-            <ScrollViewer Margin="5,0,0,0" Style="{DynamicResource MainScrollViewer}" Grid.Column="1" Grid.Row="0">
-            <StackPanel x:Name="TemplatesArea" Grid.Row="0" CanVerticallyScroll="True">
-            </StackPanel>
-        </ScrollViewer>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Height="100" Margin="0,0,0,0" Grid.Row="0" VerticalAlignment="Center" Width="5" Background="{DynamicResource Element}"/>
+            <ScrollViewer Margin="5,0,0,5" Grid.Column="1" Grid.Row="0">
+                <StackPanel x:Name="TemplatesArea" Grid.Row="0" ScrollViewer.CanContentScroll="True">
+                </StackPanel>
+            </ScrollViewer>
+        <GridSplitter Grid.Column="0" Grid.Row="0"/>
             <Border Grid.Column="0" Grid.Row="1" Background="{DynamicResource Black}" CornerRadius="5" Grid.ColumnSpan="2">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="">
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusSquare" Grid.Column="1" Grid.Row="1" Margin="15,5,5,5" MouseDown="AddFC_Click" ToolTip="Создать шаблон" Cursor="Hand" />
