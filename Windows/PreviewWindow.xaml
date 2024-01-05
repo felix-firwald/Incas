@@ -10,6 +10,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <DocumentViewer x:Name="Preview" Grid.Row="1" Background="{DynamicResource Basic}" />
+        <ScrollViewer>
+            <DocumentViewer x:Name="Preview" Grid.Row="1" Background="{DynamicResource Basic}" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" Zoom="80" />
+        </ScrollViewer>
     </Grid>
 </Window>

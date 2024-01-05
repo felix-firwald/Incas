@@ -5,6 +5,7 @@ using Incubator_2.Windows;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,16 +90,25 @@ namespace Incubator_2.Forms
         {
             if (Selection.Count > 0)
             {
-                Template tm = new Template();
-                if (tm.GetTemplateById(Selection[0].record.template_id) != null)
+                using (Template tm = new())
                 {
-                    List<TemplateJSON> tj = new List<TemplateJSON>();
-                    foreach (FileCreated fc in Selection)
+                    if (tm.GetTemplateById(Selection[0].record.template_id) != null)
                     {
-                        tj.Add(RegistreCreatedJSON.LoadRecord(fc.record));
+                        try
+                        {
+                            List<TemplateJSON> tj = new List<TemplateJSON>();
+                            foreach (FileCreated fc in Selection)
+                            {
+                                tj.Add(RegistreCreatedJSON.LoadRecord(fc.record));
+                            }
+                            UseTemplate ut = new UseTemplate(tm, tj);
+                            ut.Show();
+                        }
+                        catch (IOException ex)
+                        {
+                            ProgramState.ShowErrorDialog($"Один из файлов поврежден или удален. Пожалуйста, попробуйте ещё раз.\n{ex}");
+                        }
                     }
-                    UseTemplate ut = new UseTemplate(tm, tj);
-                    ut.Show();
                 }
             }
             else

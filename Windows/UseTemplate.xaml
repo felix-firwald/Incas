@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Секвенсор" Height="550" Width="800" Style="{DynamicResource WindowBase}" MinWidth="700" MinHeight="550" Topmost="True" Uid="8" Cursor="" SnapsToDevicePixels="True">
+        Title="Секвенсор" Height="700" MinHeight="600" Width="850" MinWidth="850" Style="{DynamicResource WindowBase}" Topmost="True" Uid="8" Cursor="" SnapsToDevicePixels="True" WindowStartupLocation="CenterScreen">
 
     <Border>
         <Grid>
@@ -28,19 +28,21 @@
             <Border Grid.Row="1" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="5">
                 <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" >
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" MouseDown="AddFC_Click" ToolTip="Добавить ещё один файл" />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowRight" Grid.Column="1" Grid.Row="1" MouseDown="AddFC_Click" ToolTip="Вытянуть в Excel" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowLeft" Grid.Column="1" Grid.Row="1" MouseDown="GetFromExcel" ToolTip="Вытянуть из Excel" />
-                    <Rectangle Fill="{DynamicResource Element}" Height="1"/>
+                    <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="4,2,4,2"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowRight" Grid.Column="1" Grid.Row="1" MouseDown="SendToExcel" ToolTip="Вытянуть в Excel" />
+                    <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" Grid.Column="1" Grid.Row="1" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAll" Margin="5,0,5,5" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" Grid.Column="1" Grid.Row="1" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAll" />
-                    <Rectangle Fill="{DynamicResource Element}" Height="1"/>
+                    <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Calculator" Grid.Column="1" Grid.Row="1" MouseDown="RecalculateNamesClick" ToolTip="Пересчитать имена файлов" />
-                    <Rectangle Fill="{DynamicResource Element}" Height="1"/>
-                    
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Percent" Grid.Column="1" Grid.Row="1" MouseDown="RecalculateNamesClick" ToolTip="Пересчитать поля по условиям" />
+
+
                 </StackPanel>
             </Border>
             <Border Grid.Row="1" CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" BorderThickness="1">
-                <ScrollViewer>
+                <ScrollViewer Style="{DynamicResource ScrollViewerBase}" Cursor="">
                     <StackPanel x:Name="ContentPanel" ScrollViewer.CanContentScroll="True"/>
                 </ScrollViewer>
             </Border>

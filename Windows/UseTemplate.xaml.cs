@@ -98,7 +98,11 @@ namespace Incubator_2.Windows
                 {
                     fc.CreateFile(this.dir.Text);
                     int perc = i * 100 / creators.Count;
-                    worker.ReportProgress(perc);
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        worker.ReportProgress(perc);
+                    });
+                    
                     i++;
                 }
                 RegistreCreatedJSON.SaveRegistry();      
@@ -209,6 +213,11 @@ namespace Incubator_2.Windows
                     fc.ApplyFromExcel(item);
                 }
             }
+        }
+
+        private void SendToExcel(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
         }
     }
 }
