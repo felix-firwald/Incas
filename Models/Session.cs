@@ -9,6 +9,7 @@ namespace Models
     {
         public string slug { get; set; }
         public string user { get; set; }
+        public int userId { get; set; }
         public DateTime timeStarted { get; set; }
         public DateTime timeFinished { get; set; }
         public string computer { get; set; }
@@ -23,7 +24,7 @@ namespace Models
             DataTable dt = StartCommandToService()
                 .Select()
                 .OrderByDESC("slug")
-                .Limit(50)
+                .Limit(40)
                 .Execute();
             List<Session> sessions = new List<Session>();
             foreach (DataRow dr in dt.Rows)
@@ -49,36 +50,44 @@ namespace Models
             }
             return sessions;
         }
-        public int GetIdOfSession()
+
+        public async void ClearOldestSessions()
         {
-            return int.Parse(
-                    StartCommandToService()
-                        .Select("id")
-                        .WhereEqual("timeStarted", this.timeStarted.ToString())
-                        .ExecuteOne()["id"].ToString()
-            );
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                StartCommandToService()
+                    .Delete()
+                    .WhereLess("timeFinished", DateTime.Now.AddDays(-7).ToString())
+                    .ExecuteVoid();
+            });
         }
+        
         private string GenerateSlug()
         {
             return DateTime.Now.ToString("yyMMddHHmmssffff");
         }
-        public void AddSession()
+        public async void AddSession()
         {
             this.slug = GenerateSlug();
             this.user = $"{ProgramState.CurrentUser.surname} {ProgramState.CurrentUser.fullname} ({ProgramState.CurrentUser.username})";
+            this.userId = ProgramState.CurrentUser.id;
             this.timeStarted = DateTime.Now;
             this.computer = RegistryData.GetComputer();
             this.active = true;
-            StartCommandToService()
-                .Insert(new Dictionary<string, string>
-                {
-                    {"slug", $"'{slug}'" },
-                    { "user", $"'{user}'" },
-                    { "timeStarted", $"'{timeStarted}'" },
-                    { "computer", $"'{computer}'" },
-                    { "active", BoolToInt(active).ToString() },
-                })
-                .ExecuteVoid();
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                StartCommandToService()
+                    .Insert(new Dictionary<string, string>
+                    {
+                        {"slug", $"'{slug}'" },
+                        { "user", $"'{user}'" },
+                        { "userId", $"'{userId}'" },
+                        { "timeStarted", $"'{timeStarted}'" },
+                        { "computer", $"'{computer}'" },
+                        { "active", BoolToInt(active).ToString() },
+                    })
+                    .ExecuteVoid();
+            });
         }
         public void CloseSession()
         {

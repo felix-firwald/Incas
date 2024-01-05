@@ -217,7 +217,9 @@ namespace Incubator_2.Windows
 
         private void SendToExcel(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
+            XLWorkbook wb = new XLWorkbook();
+            IXLWorksheet ws = wb.Worksheet(1);
+            
         }
     }
 }

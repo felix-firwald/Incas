@@ -18,7 +18,8 @@
         <Rectangle Fill="{DynamicResource Element}" Height="1" VerticalAlignment="Top" Grid.ColumnSpan="6"/>
         <Label Style="{DynamicResource LabelElement}" Content="{Binding Username}" VerticalAlignment="Center"/>
         <Label Style="{DynamicResource LabelElement}" Content="{Binding StartTime}" Grid.Column="1" VerticalAlignment="Center"/>
-        <Label Style="{DynamicResource LabelElement}" Content="{Binding EndTime, FallbackValue=Ошибка}" Grid.Column="2" VerticalAlignment="Center"/>
+        <Label Style="{DynamicResource LabelElement}" Content="{Binding EndTime, FallbackValue=Ошибка}" Grid.Column="2" VerticalAlignment="Center">
+        </Label>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="RotateRight" Grid.Column="3" IsEnabled="{Binding IsActive}" MouseDown="RestartClick" ToolTip="Перезапустить клиент"/>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PowerOff" Grid.Column="4" IsEnabled="{Binding IsActive}" MouseDown="TerminateClick" ToolTip="Прервать сессию"/>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ExclamationCircle" Grid.Column="5" IsEnabled="{Binding IsActive}" MouseDown="ShowExplicitClick" ToolTip="Вывести пользователю сообщение-предупреждение"/>

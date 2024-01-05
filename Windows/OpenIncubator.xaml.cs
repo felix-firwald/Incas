@@ -38,9 +38,7 @@ namespace Incubator_2.Windows
                 {
                     CheckPassword();
                 }
-
-            }
-            
+            }  
         }
 
         private void CheckPassword()
@@ -62,6 +60,7 @@ namespace Incubator_2.Windows
                     {
                         ProgramState.OpenSession();
                         ServerProcessor.Listen();
+                        
                         DialogResult = true;
                         this.Close();
                     }

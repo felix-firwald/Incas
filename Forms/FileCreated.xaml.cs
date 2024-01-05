@@ -38,12 +38,10 @@ namespace Incubator_2.Forms
         {
             if (this.Selector.IsChecked == true)
             {
-                OnSelectorUnchecked(this);
                 this.Selector.IsChecked = false;
             }
             else
             {
-                OnSelectorChecked(this);
                 this.Selector.IsChecked = true;
             }
         }

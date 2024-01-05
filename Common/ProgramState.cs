@@ -255,9 +255,12 @@ namespace Common
         }
         public static void OpenSession()
         {
-            Session ms = new Session();    
-            ms.AddSession();
-            CurrentSession = ms; 
+            using (Session ms = new Session())
+            {
+                ms.AddSession();
+                CurrentSession = ms;
+                ms.ClearOldestSessions();
+            }
         }
         public static void CloseSession() 
         {
