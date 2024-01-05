@@ -72,6 +72,7 @@ namespace Incubator_2.Forms
                     this.TemplatesArea.Children.Add(new NoContent());
                 }
             }
+            GC.Collect();
         }
         private void LoadChildrenForTemplates()
         {

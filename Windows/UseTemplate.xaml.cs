@@ -1,11 +1,14 @@
-﻿using Common;
+﻿using ClosedXML.Excel;
+using Common;
 using Incubator_2.Common;
 using Incubator_2.Forms;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -44,8 +47,10 @@ namespace Incubator_2.Windows
         }
         private void LoadTags()
         {
-            Tag t = new Tag();
-            tags = t.GetAllTagsByTemplate(template.id, template.parent);
+            using (Tag t = new())
+            {
+                tags = t.GetAllTagsByTemplate(template.id, template.parent);
+            } 
         }
 
         private UC_FileCreator AddFileCreator()
@@ -154,31 +159,56 @@ namespace Incubator_2.Windows
 
         private void GetFromExcel(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            //OpenFileDialog fd = new OpenFileDialog();
-            //fd.Filter = "MS Excel|*.xlsx";
-            //if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    XLWorkbook wb = new XLWorkbook(fd.FileName);
-            //    IXLWorksheet ws = wb.Worksheet(1);
-            //    foreach (Tag tag in tags)
-            //    {
-            //        IXLCell colCell;
-            //        try
-            //        {
-            //            colCell = ws.Search(tag.name, CompareOptions.IgnoreCase).First();
-            //        }
-            //        catch (Exception)
-            //        {
-            //            continue;
-            //        }
-            //        int columnNumber = colCell.WorksheetColumn().ColumnNumber();
-            //        int rowNumber = colCell.WorksheetRow().RowNumber() + 1;
-            //        for (int i = rowNumber; i < ws.LastRowUsed().RowNumber(); i++)
-            //        {
-            //            string ValueToInsert = ws.Cell(i, columnNumber).Value.ToString();
-            //        }
-            //    }
-            //} 
+            OpenFileDialog fd = new OpenFileDialog();
+            fd.Filter = "MS Excel|*.xlsx";
+            
+            if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                List<Dictionary<string, string>> pairs = new();    // список "файлов", где каждый элемент в списке - это список тегов и значений относящихся к файлу
+                IXLWorksheet ws;
+                try
+                {
+                    XLWorkbook wb = new XLWorkbook(fd.FileName);
+                    ws = wb.Worksheet(1);
+                }
+                catch (IOException)
+                {
+                    ProgramState.ShowErrorDialog("Файл занят другим процессом. Его использование невозможно.");
+                    return;
+                }
+                this.ContentPanel.Children.Clear();
+                foreach (Tag tag in tags)
+                {
+                    IXLCell colCell;
+                    try
+                    {
+                        colCell = ws.Search(tag.name, CompareOptions.IgnoreCase).First();   // ищем заголовок столбца с именем аналогичным тегу
+                        int columnNumber = colCell.WorksheetColumn().ColumnNumber();    // номер столбца в листе Excel
+                        int rowNumber = colCell.WorksheetRow().RowNumber() + 1; // номер строки в листе Excel
+                        int fileIndex = 0; // индекс в List
+                        for (int i = rowNumber; i <= ws.LastRowUsed().RowNumber(); i++)
+                        {
+                            if (pairs.Count < fileIndex + 1) // +1 поскольку счет индексов идет с нуля
+                            {
+                                pairs.Add(new());
+                            }
+                            string value = ws.Cell(i, columnNumber).Value.ToString();
+                            pairs[fileIndex].Add(tag.name, value);
+                            fileIndex++;
+                        }
+                        
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                }
+                foreach (Dictionary<string,string> item in pairs)
+                {
+                    var fc = AddFileCreator();
+                    fc.ApplyFromExcel(item);
+                }
+            }
         }
     }
 }

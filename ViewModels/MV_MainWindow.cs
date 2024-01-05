@@ -17,7 +17,6 @@ namespace Incubator_2.ViewModels
             LoadInfo();
         }
 
-
         public string Surname
         {
             get { return ProgramState.CurrentUser.surname; } 

@@ -158,13 +158,20 @@ namespace Incubator_2.Windows
                 ProgramState.ShowErrorDialog($"Файл ({template.path}) не существует!\nТеги не могут быть обнаружены.", "Поиск невозможен");
                 return;
             }
-            this.ContentPanel.Children.Clear();
-            WordTemplator wt = new WordTemplator(pathFile);
-            foreach (string tagname in wt.FindAllTags())
+            try
             {
-                Tag tag = new Tag();
-                tag.name = tagname;
-                AddTag(tag);
+                this.ContentPanel.Children.Clear();
+                WordTemplator wt = new WordTemplator(pathFile);
+                foreach (string tagname in wt.FindAllTags())
+                {
+                    Tag tag = new Tag();
+                    tag.name = tagname;
+                    AddTag(tag);
+                }
+            }
+            catch (IOException)
+            {
+                ProgramState.ShowErrorDialog("Файл занят другим процесом. Его использование невозможно.");
             }
         }
         #region Design

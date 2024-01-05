@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Windows.Devices.Geolocation;
 
 namespace Incubator_2.Forms
@@ -68,6 +70,20 @@ namespace Incubator_2.Forms
                     if (tagfiller.tag.id == tag.Key)
                     {
                         tagfiller.SetValue(tag.Value);
+                        break;
+                    }
+                }
+            }
+        }
+        public void ApplyFromExcel(Dictionary<string, string> pairs)
+        {
+            foreach (KeyValuePair<string, string> pair in pairs)
+            {
+                foreach (UC_TagFiller tf in this.ContentPanel.Children)
+                {
+                    if (tf.tag.name == pair.Key)
+                    {
+                        tf.SetValue(pair.Value);
                         break;
                     }
                 }
@@ -157,30 +173,40 @@ namespace Incubator_2.Forms
             this.Filename.Text = $"{prefix} {result} {postfix}".Trim();
         }
 
-        private void PreviewCLick(object sender, MouseButtonEventArgs e)
+        private async void PreviewCLick(object sender, MouseButtonEventArgs e)
         {
-            string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.docx";
-            File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
-            WordTemplator wt = new WordTemplator(newFile);
+            await System.Threading.Tasks.Task.Run(() =>
+            {
 
-            List<string> tagsToReplace = new List<string>();
-            List<string> values = new List<string>();
-            foreach (UC_TagFiller tf in TagFillers)
-            {
-                string nameOf = tf.GetTagName();
-                int id = tf.GetId();
-                string value = tf.GetValue();
-                tagsToReplace.Add(nameOf);
-                values.Add(value);
-            }
-            wt.Replace(tagsToReplace, values);
-            foreach (TableFiller tab in Tables)
-            {
-                wt.CreateTable(tab.tag.name, tab.DataTable);
-            }
-            string fileXPS = wt.TurnToXPS();
-            PreviewWindow pr = new PreviewWindow(fileXPS);
-            pr.ShowDialog();         
+                string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.docx";
+                File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
+                WordTemplator wt = new WordTemplator(newFile);
+
+                List<string> tagsToReplace = new List<string>();
+                List<string> values = new List<string>();
+                Application.Current.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Background,
+                    new Action(() => 
+                    {
+                        foreach (UC_TagFiller tf in TagFillers)
+                        {
+                            string nameOf = tf.GetTagName();
+                            string value = tf.GetValue();
+                            tagsToReplace.Add(nameOf);
+                            values.Add(value);
+                        }
+                        wt.Replace(tagsToReplace, values);
+                        foreach (TableFiller tab in Tables)
+                        {
+                            wt.CreateTable(tab.tag.name, tab.DataTable);
+                        }
+                        string fileXPS = wt.TurnToXPS();
+                        PreviewWindow pr = new PreviewWindow(fileXPS);
+                        pr.Show();
+                    })
+                );  
+            });
+            
         }
     }
 }

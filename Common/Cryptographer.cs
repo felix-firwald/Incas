@@ -2,12 +2,29 @@
 using System.Text;
 using System.Security.Cryptography;
 using System.IO;
+using System.Linq;
 
 namespace Incubator_2.Common
 {
     static class Cryptographer
     {
         private static string defaultKey = "b14ca5898a4e4133bbce2ea2315a1916"; // b14ca5898a4e4133bbce2ea2315a1916
+
+        public static string GenerateKey(string input)
+        {
+            string result = string.Join("е", input.ToCharArray().Reverse()) + "b";
+            if (result.Length < 32)
+            {
+                int multiplier = 32 - result.Length;
+                result += Enumerable.Repeat("q", multiplier);
+            }
+            else if (result.Length > 32)
+            {
+                result = result.Substring(0, 31);
+            }
+            return result;
+        }
+
         public static string EncryptString(string input)
         {
             return EncryptString(defaultKey, input);

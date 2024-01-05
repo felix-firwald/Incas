@@ -35,7 +35,14 @@ namespace Incubator_2.Windows
 
         private void OnClosed(object sender, EventArgs e)
         {
-            File.Delete(XPSpath);
+            try
+            {
+                File.Delete(XPSpath);
+            }
+            catch { }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
     }
 }

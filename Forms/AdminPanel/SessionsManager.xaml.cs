@@ -1,5 +1,6 @@
 ﻿
 using Models;
+using System;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,6 +29,7 @@ namespace Incubator_2.Forms.AdminPanel
                     this.SessionsList.Children.Add(element);
                 });
             }
+            GC.Collect();
         }
 
         private void RefreshClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

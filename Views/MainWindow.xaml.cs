@@ -19,9 +19,12 @@ namespace Incubator_2
         public MainWindow()
         {
             InitializeComponent();
+            if (!ProgramState.CheckSensitive())
+            {
+                Application.Current.Shutdown();
+            }
+            this.DataContext = new MV_MainWindow();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-            
-            
         }
 
         private void OnClosed(object sender, EventArgs e)

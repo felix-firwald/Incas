@@ -1,4 +1,5 @@
 ﻿using Incubator_2.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -25,6 +26,7 @@ namespace Incubator_2.Windows
         private void CloseClick(object sender, MouseButtonEventArgs e)
         {
             this.Close();
+            GC.Collect();
         }
     }
 }

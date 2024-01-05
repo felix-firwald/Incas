@@ -25,9 +25,9 @@
                     CaptionHeight="36"
                 />
     </WindowChrome.WindowChrome>-->
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <vm:MV_MainWindow/>
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Grid Background="{DynamicResource Basic}">
         <Grid.RowDefinitions>

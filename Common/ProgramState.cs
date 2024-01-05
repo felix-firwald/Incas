@@ -67,6 +67,21 @@ namespace Common
             Directory.CreateDirectory(TemplatesRuntime);
             Directory.CreateDirectory(TemplatesGenerated);
         }
+        public static void ClearDataForRestart()
+        {
+            CurrentUser = null;
+            CurrentSession = null;
+            CommonPath = null;
+            Permission.CurrentUserPermission = PermissionGroup.Operator;
+        }
+        public static bool CheckSensitive()
+        {
+            if (CurrentUser == null || CurrentSession == null)
+            {
+                return false;
+            }
+            return true;
+        }
         public static bool IsCommonPathExists()
         {
             return Directory.Exists(CommonPath);
@@ -234,11 +249,6 @@ namespace Common
 
         #region Session
 
-        public static void GenerateKillerFile(string sessionId, string computerId)
-        {
-            string pathOfFile = $"{ServerProcesses}\\kill_{sessionId}.incproc";
-            File.WriteAllText(pathOfFile, computerId);
-        }
         public static void BrokeSession()
         {
             throw new SessionBrokenException();

@@ -47,7 +47,7 @@ namespace Incubator_2.Common
         #region Reusable Base Functionality
         private static string GetKeyByRecipient(string recipient)
         {
-            string result = string.Join("e", recipient.ToCharArray().Reverse()) + "b";
+            string result = string.Join("a", recipient.ToCharArray().Reverse()) + "b";
             if (result.Length < 32)
             {
                 int multiplier = 32 - result.Length;
@@ -189,6 +189,7 @@ namespace Incubator_2.Common
                     Application.Current.MainWindow = new SessionBroken();
                     SessionBroken b = new SessionBroken(BrokenType.Restart);
                     b.ShowDialog();
+                    ProgramState.ClearDataForRestart();
                     System.Windows.Forms.Application.Restart();
                 });
             }
