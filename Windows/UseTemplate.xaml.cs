@@ -146,7 +146,7 @@ namespace Incubator_2.Windows
             List<string> names = new List<string>();
             foreach (Tag tag in tags)
             {
-                if (tag.type != TypeOfTag.LocalConstant && tag.type != TypeOfTag.Text)
+                if (tag.type != TypeOfTag.LocalConstant && tag.type != TypeOfTag.Text && tag.type != TypeOfTag.Table)
                 {
                     names.Add(tag.name);
                 }

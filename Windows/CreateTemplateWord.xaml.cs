@@ -75,17 +75,28 @@ namespace Incubator_2.Windows
                 ProgramState.ShowErrorDialog($"Файл ({template.path}) не найден.","Сохранение прервано");
                 return false;
             }
-            if (string.IsNullOrWhiteSpace(this.nameOfTemplate.Text))
+            if (!template.path.EndsWith(".docx"))
             {
-                ProgramState.ShowErrorDialog($"Неверное имя шаблона.", "Сохранение прервано");
+                ProgramState.ShowExlamationDialog($"Исходный файл шаблона должен быть с расширением .docx, любое другое расширение использовать нельзя.", "Сохранение прервано");
                 return false;
             }
+            if (string.IsNullOrWhiteSpace(this.nameOfTemplate.Text))
+            {
+                ProgramState.ShowExlamationDialog($"Неверное имя шаблона.", "Сохранение прервано");
+                return false;
+            }
+            if (this.ContentPanel.Children.Count == 0)
+            {
+                ProgramState.ShowExlamationDialog($"Шаблон без единого тега не является шаблоном.", "Сохранение прервано");
+                return false;
+            }
+
             List<string> names = new List<string>();
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
                 if (names.Contains(tag.TagName.Text))
                 {
-                    ProgramState.ShowErrorDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
+                    ProgramState.ShowExlamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
                     return false;
                 }
                 names.Add(tag.TagName.Text);
