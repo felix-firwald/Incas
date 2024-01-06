@@ -307,5 +307,9 @@ namespace Common
                 }
             });
         }
+        public static void OpenFolder(string path)
+        {
+            System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", path);
+        }
     }
 }

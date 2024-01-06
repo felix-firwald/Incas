@@ -1,4 +1,6 @@
 ﻿using Common;
+using DocumentFormat.OpenXml.Spreadsheet;
+
 //using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
 using Incubator_2.Windows;
@@ -171,6 +173,16 @@ namespace Incubator_2.Forms
                 }
             }
             this.Filename.Text = $"{prefix} {result} {postfix}".Trim();
+        }
+        public List<string> GetExcelRow()
+        {
+            List<string> output = new();
+            foreach (UC_TagFiller tf in TagFillers)
+            {
+                
+                output.Add(tf.GetValue());
+            }
+            return output;
         }
 
         private async void PreviewCLick(object sender, MouseButtonEventArgs e)

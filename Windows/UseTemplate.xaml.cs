@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Common;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Incubator_2.Common;
 using Incubator_2.Forms;
 using Models;
@@ -105,9 +106,9 @@ namespace Incubator_2.Windows
                     
                     i++;
                 }
-                RegistreCreatedJSON.SaveRegistry();      
-            
-                System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", this.dir.Text);
+                RegistreCreatedJSON.SaveRegistry();
+
+                ProgramState.OpenFolder(this.dir.Text);
             });
         }
 
@@ -159,6 +160,7 @@ namespace Incubator_2.Windows
                     fc.RenameByTag(fr.SelectedTag, fr.Prefix, fr.Postfix);
                 }
             }
+            
         }
 
         private void GetFromExcel(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -217,9 +219,29 @@ namespace Incubator_2.Windows
 
         private void SendToExcel(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            XLWorkbook wb = new XLWorkbook();
-            IXLWorksheet ws = wb.Worksheet(1);
-            
+            if (ValidateContent())
+            {
+                XLWorkbook wb = new XLWorkbook();
+                IXLWorksheet ws = wb.AddWorksheet("Из инкубатора");
+                for (int i = 0; i < tags.Count; i++) // columns
+                {
+                    IXLCell c = ws.Cell(1, i + 1).SetValue(tags[i].name);
+                    c.Style.Font.Bold = true;
+                }
+                int row = 2;
+                foreach (UC_FileCreator fc in this.ContentPanel.Children) // ряды
+                {
+                    int cell = 1;
+                    foreach (string item in fc.GetExcelRow()) // ячейки в рядах
+                    {
+                        ws.Cell(row, cell).SetValue(item);
+                        cell++;
+                    }
+                    row++;
+                }
+                wb.SaveAs(this.dir.Text + $"\\{this.template.name} {DateTime.Now.ToString("d")}.xlsx");
+                ProgramState.OpenFolder(this.dir.Text);
+            }
         }
     }
 }
