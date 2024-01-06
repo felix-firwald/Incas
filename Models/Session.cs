@@ -57,7 +57,7 @@ namespace Models
             {
                 StartCommandToService()
                     .Delete()
-                    .WhereLess("timeFinished", DateTime.Now.AddDays(-7).ToString())
+                    .WhereLess("slug", DateTime.Now.AddDays(-7).ToString("yyMMddHHmmssffff"), false)
                     .ExecuteVoid();
             });
         }
