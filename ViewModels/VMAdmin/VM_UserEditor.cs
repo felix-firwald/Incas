@@ -23,11 +23,15 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                return ParseFromEnum(_user.status);
+                if (_user.id == 1)
+                {
+                    return ParseFromEnum(PermissionGroup.Admin);
+                }
+                return ParseFromEnum(_userParameters.permission_group);
             }
             set
             {
-                _user.status = ParseToEnum(value);
+                _userParameters.permission_group = ParseToEnum(value);
                 OnPropertyChanged(nameof(PermissionStatus));
             }
         }
@@ -128,11 +132,11 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                return _user.password;
+                return _userParameters.startup_password;
             }
             set
             {
-                _user.password = value;
+                _userParameters.startup_password = value;
                 OnPropertyChanged(nameof(Password));
             }
         }
@@ -217,7 +221,7 @@ namespace Incubator_2.ViewModels.VMAdmin
 
         public bool Save()
         {
-            if (!string.IsNullOrWhiteSpace(_user.username) && !string.IsNullOrWhiteSpace(_user.password) && !string.IsNullOrWhiteSpace(_user.surname))
+            if (!string.IsNullOrWhiteSpace(_user.username) && !string.IsNullOrWhiteSpace(_userParameters.startup_password) && !string.IsNullOrWhiteSpace(_user.surname))
             {
                 _user.fullname = $"{_user.surname} {_user.secondName}";
                 _user.SaveUser();

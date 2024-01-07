@@ -16,7 +16,7 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                return $"{_user.surname} {_user.fullname}";
+                return _user.fullname;
             }
             set
             {
@@ -27,7 +27,7 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                switch (_user.status)
+                switch (_user.GetParametersContext().permission_group)
                 {
                     case PermissionGroup.Admin:
                         return "Администратор";

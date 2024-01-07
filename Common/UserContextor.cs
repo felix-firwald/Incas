@@ -27,7 +27,7 @@ namespace Incubator_2.Common
         public string password { get; set; }
         public PermissionGroup permission_group { get; set; }
 
-        public bool IsRightPassword(string input)
+        public bool IsRightPassword(string input) // всегда false потому что я еще не записывал в UserParameters через UserEditor пароль
         {
             if (string.IsNullOrEmpty(password))
             {

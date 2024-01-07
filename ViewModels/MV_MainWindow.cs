@@ -68,6 +68,39 @@ namespace Incubator_2.ViewModels
             }
         }
 
+        private Visibility VisibilityConverter(bool b)
+        {
+            switch (b)
+            {
+                case true:
+                    return Visibility.Visible;
+                case false:
+                    return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility TasksVisibility
+        {
+            get
+            {
+                return VisibilityConverter(ProgramState.CurrentUserParameters.tasks_visibility);
+            }
+        }
+        public Visibility CommunicationVisibility
+        {
+            get
+            {
+                return VisibilityConverter(ProgramState.CurrentUserParameters.communication_visibility);
+            }
+        }
+        public Visibility DatabaseVisibility
+        {
+            get
+            {
+                return VisibilityConverter(ProgramState.CurrentUserParameters.database_visibility);
+            }
+        }
+
         //public event PropertyChangedEventHandler PropertyChanged;
         //protected virtual void OnPropertyChanged(string propertyName)
         //{

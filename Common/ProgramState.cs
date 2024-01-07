@@ -8,6 +8,7 @@ using Incubator_2;
 using System.Windows;
 using Incubator_2.Models;
 using System.Runtime.CompilerServices;
+using Incubator_2.Common;
 
 
 namespace Common
@@ -56,7 +57,7 @@ namespace Common
         #endregion
 
         public static User CurrentUser { get; set; }
-
+        public static UserParameters CurrentUserParameters { get { return CurrentUser.GetParametersContext(); } }
         public static Session CurrentSession { get; private set; }
         public static string SystemName = Environment.UserName;
 
@@ -175,13 +176,18 @@ namespace Common
             }
             using (User user = new User())
             {
-                user.status = PermissionGroup.Admin;
                 user.username = "admin";
                 user.post = "Администратор рабочего пространства";
                 user.surname = data.userSurname;
                 user.fullname = data.userFullname;
-                user.password = data.userPassword;
                 user.AddUser();
+                UserParameters up = user.GetParametersContext();
+                up.permission_group = PermissionGroup.Admin;
+                up.tasks_visibility = true;
+                up.communication_visibility = true;
+                up.database_visibility = true;
+                up.password = data.userPassword;
+                UserContextor.SaveContext(up, user);
             }
 
         }

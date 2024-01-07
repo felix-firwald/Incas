@@ -23,7 +23,7 @@
 
         </fa:FontAwesome>
         <Label x:Name="Title" Grid.Column="1" Grid.ColumnSpan="2" Content="Неизвестный вопрос" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" FontWeight="Bold" FontFamily="JetBrains Mono"/>
-        <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,5,0" >
+        <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,5,5" >
             <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="По умолчанию, такой текст обозначает неисправность в работе программы." Margin="5,0,10,0"/>
         </ScrollViewer>
         <Rectangle Fill="{DynamicResource Element}" Grid.Row="3" Grid.ColumnSpan="3"/>

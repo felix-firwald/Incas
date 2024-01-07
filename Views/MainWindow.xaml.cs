@@ -25,6 +25,15 @@ namespace Incubator_2
             }
             this.DataContext = new MV_MainWindow();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            if (string.IsNullOrEmpty(ProgramState.CurrentUserParameters.password))
+            {
+                if (ProgramState.ShowQuestionDialog("Текущий пароль, использованный вами для входа, " +
+                    "является временным, потому известен администратору и может быть им изменен.\nРекомендуем вам придумать свой пароль. Его не сможет увидеть и изменить никто, кроме вас.", "Завершение активации", "Установить пароль", "Не сейчас") == DialogStatus.Yes)
+                {
+                    SetPassword windowSet = new();
+                    windowSet.ShowDialog();
+                }
+            }
         }
 
         private void OnClosed(object sender, EventArgs e)

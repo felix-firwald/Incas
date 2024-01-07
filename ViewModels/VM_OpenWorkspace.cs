@@ -106,6 +106,7 @@ namespace Incubator_2.ViewModels
             {
                 ProgramState.CurrentUser = value;
                 OnPropertyChanged(nameof(SelectedUser));
+
             }
         }
         public string Password

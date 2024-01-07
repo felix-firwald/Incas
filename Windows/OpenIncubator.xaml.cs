@@ -43,13 +43,12 @@ namespace Incubator_2.Windows
 
         private void CheckPassword()
         {
-            using (User user = new User())
+            if (ProgramState.CurrentUser != null)
             {
-                if (user.IsPasswordExists(this.pwd.Text))
+                if (ProgramState.CurrentUserParameters.IsRightPassword(this.pwd.Text)) // 
                 {
-                    this.Visibility = Visibility.Hidden;
-                    ProgramState.CurrentUser = user;
-                    Permission.CurrentUserPermission = user.status;
+                    //this.Visibility = Visibility.Hidden;
+                    Permission.CurrentUserPermission = ProgramState.CurrentUserParameters.permission_group;
                     if (Permission.CurrentUserPermission != PermissionGroup.Admin && ProgramState.IsWorkspaceLocked())
                     {
                         Locked l = new Locked();
@@ -60,19 +59,23 @@ namespace Incubator_2.Windows
                     {
                         ProgramState.OpenSession();
                         ServerProcessor.Listen();
-                        
+
                         DialogResult = true;
                         this.Close();
                     }
-                    
+
                 }
                 else
                 {
-                    Dialog d = new Dialog("Пароль введен неверно (пользователь с таким паролем не найден в рабочем пространстве).", "Вход невозможен");
-                    d.ShowDialog();
+                    ProgramState.ShowExlamationDialog("Пароль введен неверно.", "Вход невозможен");
                     this.pwd.Text = "";
                 }
             }
+            else
+            {
+                ProgramState.ShowExlamationDialog("Пользователь не выбран.", "Вход невозможен");
+            }
+            
         }
 
         private void PathReview(object sender, RoutedEventArgs e)

@@ -21,7 +21,6 @@ namespace Models
         public string secondName { get; set; }
         public string fullname { get; set; }
         public string post { get; set; }
-        public string password { get; set; }
 
         public User() 
         {
@@ -57,27 +56,19 @@ namespace Models
             this.Serialize(dr);
             return this;
         }
-        public User GetUserByPassword()
-        {
-            DataRow dr = StartCommand()
-                    .Select()
-                    .WhereEqual("password", this.password)
-                    .ExecuteOne();
+        //public User GetUserByPassword()
+        //{
+        //    DataRow dr = StartCommand()
+        //            .Select()
+        //            .WhereEqual("password", this.password)
+        //            .ExecuteOne();
                 
-            this.Serialize(dr);
-            return this;
-        }
-        public void UpdatePassword()
-        {
-            StartCommand()
-                .Update("password", password)
-                .WhereEqual("username", username)
-                .ExecuteVoid();
-        }
+        //    this.Serialize(dr);
+        //    return this;
+        //}
         public void UpdateUser()
         {
             StartCommand()
-                .Update("password", password)
                 .Update("surname", surname)
                 .Update("secondName", secondName)
                 .Update("fullname", fullname)
@@ -96,7 +87,6 @@ namespace Models
                     { "surname", $"'{surname}'" },
                     { "secondName", $"'{secondName}'" },
                     { "fullname", $"'{fullname}'" },
-                    { "password", $"'{password}'" },
                     { "post", $"'{post}'" }
                 })
                 .ExecuteVoid();
@@ -129,20 +119,20 @@ namespace Models
             }
             return false;
         }
-        public bool IsPasswordExists(string pwd)
-        {
-            DataTable dt = StartCommand()
-                .Select()
-                .WhereEqual("password", pwd)
-                .Execute();
-            if (dt.Rows.Count == 0)
-            {
-                return false;
-            }
-            DataRow dr = dt.Rows[0];
-            this.Serialize(dr);
-            return true;
-        }
+        //public bool IsPasswordExists(string pwd)
+        //{
+        //    DataTable dt = StartCommand()
+        //        .Select()
+        //        .WhereEqual("password", pwd)
+        //        .Execute();
+        //    if (dt.Rows.Count == 0)
+        //    {
+        //        return false;
+        //    }
+        //    DataRow dr = dt.Rows[0];
+        //    this.Serialize(dr);
+        //    return true;
+        //}
         public void RemoveUser()
         {
             StartCommand()
