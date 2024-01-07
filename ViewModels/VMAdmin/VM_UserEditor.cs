@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.Common;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,15 @@ using System.Threading.Tasks;
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
+    
     class VM_UserEditor : VM_Base
     {
         private User _user;
+        private UserParameters _userParameters;
         public VM_UserEditor(User user)
         {
             _user = user;
+            _userParameters = user.GetParametersContext();
         }
         public string PermissionStatus
         {
@@ -95,18 +99,19 @@ namespace Incubator_2.ViewModels.VMAdmin
                 OnPropertyChanged(nameof(Surname));
             }
         }
-        public string Fullname
+        public string SecondName
         {
             get
             {
-                return _user.fullname;
+                return _user.secondName;
             }
             set
             {
-                _user.fullname = value;
-                OnPropertyChanged(nameof(Fullname));
+                _user.secondName = value;
+                OnPropertyChanged(nameof(SecondName));
             }
         }
+
         public string Post
         {
             get
@@ -131,11 +136,92 @@ namespace Incubator_2.ViewModels.VMAdmin
                 OnPropertyChanged(nameof(Password));
             }
         }
+
+        private bool Serialize(PseudoBoolean b)
+        {
+            switch (b)
+            {
+                case PseudoBoolean.Yes: return true;
+                case PseudoBoolean.No: default: return false;
+            }
+        }
+        private PseudoBoolean Deserialize(bool b)
+        {
+            if (b)
+            {
+                return PseudoBoolean.Yes;
+            }
+            return PseudoBoolean.No;
+        }
+
+        public bool CanViewTasks
+        {
+            get
+            {
+                return _userParameters.tasks_visibility;
+            }
+            set
+            {
+                _userParameters.tasks_visibility = value;
+                OnPropertyChanged(nameof(CanViewTasks));
+            }
+        }
+        public bool CanViewCommunication
+        {
+            get
+            {
+                return _userParameters.communication_visibility;
+            }
+            set
+            {
+                _userParameters.communication_visibility = value;
+                OnPropertyChanged(nameof(CanViewCommunication));
+            }
+        }
+        public bool CanViewDatabase
+        {
+            get
+            {
+                return _userParameters.database_visibility;
+            }
+            set
+            {
+                _userParameters.database_visibility = value;
+                OnPropertyChanged(nameof(CanViewDatabase));
+            }
+        }
+        public bool CanCreateTemplates
+        {
+            get
+            {
+                return _userParameters.create_templates;
+            }
+            set
+            {
+                _userParameters.create_templates = value;
+                OnPropertyChanged(nameof(CanCreateTemplates));
+            }
+        }
+        public bool CanModifyTemplates
+        {
+            get
+            {
+                return _userParameters.modify_templates;
+            }
+            set
+            {
+                _userParameters.modify_templates = value;
+                OnPropertyChanged(nameof(CanModifyTemplates));
+            }
+        }
+
         public bool Save()
         {
             if (!string.IsNullOrWhiteSpace(_user.username) && !string.IsNullOrWhiteSpace(_user.password) && !string.IsNullOrWhiteSpace(_user.surname))
             {
+                _user.fullname = $"{_user.surname} {_user.secondName}";
                 _user.SaveUser();
+                UserContextor.SaveContext(_userParameters, _user);
                 return true;
             }
             return false;

@@ -14,7 +14,7 @@ namespace Incubator_2.Common
     {
         public string TypeOf;
         public string Name;
-        public bool NotNULL = true;
+        public bool NotNULL = false;
         public bool IsUNIQUE = false;
         public bool IsPK = false;
         public string FKtable = null;

@@ -29,15 +29,15 @@ namespace Incubator_2.ViewModels
                 }      
             }
         }
-        public string Fullname
+        public string SecondName
         {
-            get { return ProgramState.CurrentUser.fullname; }
+            get { return ProgramState.CurrentUser.secondName; }
             set
             {
-                if (ProgramState.CurrentUser.fullname != value)
+                if (ProgramState.CurrentUser.secondName != value)
                 {
-                    ProgramState.CurrentUser.fullname = value;
-                    OnPropertyChanged(nameof(Fullname));
+                    ProgramState.CurrentUser.secondName = value;
+                    OnPropertyChanged(nameof(SecondName));
                 }
             }
         }

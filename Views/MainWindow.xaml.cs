@@ -2,7 +2,7 @@
 using DocumentFormat.OpenXml.InkML;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
-
+using Incubator_2.Windows.ToolBar;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -101,5 +101,10 @@ namespace Incubator_2
             
         }
 
+        private void FilesManagerClick(object sender, RoutedEventArgs e)
+        {
+            FilesManager fm = new();
+            fm.Show();
+        }
     }
 }

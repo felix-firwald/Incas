@@ -11,6 +11,7 @@ namespace Incubator_2.Models
     {
         INCUBATOR,
         DATABASE,
+        CHAT,
         MISC
     }
     public class DBParamNotFound : Exception

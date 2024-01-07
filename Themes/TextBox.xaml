@@ -8,7 +8,7 @@
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="Padding" Value="10 3"/>
         <Setter Property="Opacity" Value="1"/>
-        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
@@ -137,6 +137,70 @@
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type PasswordBox}" x:Key="PasswordBoxMain">
+        <Setter Property="Background" Value="{DynamicResource Black}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Light}"/>
+        <Setter Property="MaxHeight" Value="30"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="200"/>
+        <Setter Property="ToolTip" Value="Необходимо ввести пароль для входа в рабочее пространство."/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
+        <Setter Property="Cursor" Value="IBeam"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type PasswordBox}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1.3" CornerRadius="5">
+                        <Grid>
+                            <ScrollViewer x:Name="PART_ContentHost" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!--#43464d-->
+                                        <ColorAnimation Duration="0:0:0.250" To="#43464d" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="2" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.250" To="#43464d" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <ThicknessAnimation Duration="0:0:0.250" To="1.3" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Error}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

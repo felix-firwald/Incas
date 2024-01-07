@@ -100,6 +100,10 @@ namespace Common
         {
             return new Query(this.tableName, DBConnectionType.SERVICE);
         }
+        protected Query StartCommandToChat(string path)
+        {
+            return new Query(this.tableName, path);
+        }
         protected Query StartCommandToCustom()
         {
             return new Query(this.tableName, DBConnectionType.CUSTOM);
@@ -179,11 +183,31 @@ namespace Common
                 }
                 catch (Exception)
                 {
-                    //property.SetValue(this, null);
                     continue;
                 }
             }
         }
+        //protected void Insert()
+        //{
+        //    Dictionary<string, string> pairs = new();
+        //    foreach (var property in this.GetType().GetProperties())
+        //    {
+        //        try
+        //        {
+        //            if (property.Name != "id")
+        //            {
+        //                pairs.Add(property.Name, property.GetValue(this).ToString()); // берет
+        //            }
+        //        }
+        //        catch (Exception)
+        //        {
+        //            continue;
+        //        }
+        //    }
+        //    string result = $"INSERT INTO {tableName} ({string.Join(", ", pairs.Keys)}) VALUES (";
+            
+        //    result += ")";
+        //}
         #endregion
         
         private DataRow GetOne(DataTable dt)

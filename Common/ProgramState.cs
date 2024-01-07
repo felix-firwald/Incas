@@ -42,30 +42,39 @@ namespace Common
         public static string ServiceDatabasePath { get { return Root + @"\service.dbinc"; } }
         private static string Root { get { return CommonPath + @"\Root"; } }
         public static string ServerProcesses { get { return Root + @"\ServerProccesses"; } } // ...\Root\ServerProccesses
+        public static string Messages { get { return Root + @"\Messages"; } } // папка еще не создана
+
+        public static string UsersContext { get { return Root + @"\UsersContext"; } }
 
         #region Templates
 
-        private static string TemplatesPath { get { return Root + @"\Templates"; } }    // ...\Root\Templates
-        public static string TemplatesSourcesWordPath { get { return TemplatesPath + @"\Sources\Word"; } }    // ...\Root\Templates\Sources\Word
-        public static string TemplatesSourcesExcelPath { get { return TemplatesPath + @"\Sources\Excel"; } }    // ...\Root\Templates\Sources\Excel
-        public static string TemplatesRuntime { get { return TemplatesPath + @"\Runtime"; } }    // ...\Root\Templates\Runtime
-        public static string TemplatesGenerated { get { return TemplatesPath + @"\Generated"; } }    // ...\Root\Templates\Generated
+        private static string Templates { get { return Root + @"\Templates"; } }    // ...\Root\Templates
+        public static string TemplatesSourcesWordPath { get { return Templates + @"\Sources\Word"; } }    // ...\Root\Templates\Sources\Word
+        public static string TemplatesSourcesExcelPath { get { return Templates + @"\Sources\Excel"; } }    // ...\Root\Templates\Sources\Excel
+        public static string TemplatesRuntime { get { return Templates + @"\Runtime"; } }    // ...\Root\Templates\Runtime
+        public static string TemplatesGenerated { get { return Templates + @"\Generated"; } }    // ...\Root\Templates\Generated
         #endregion
+
         public static User CurrentUser { get; set; }
 
         public static Session CurrentSession { get; private set; }
         public static string SystemName = Environment.UserName;
 
         #region Path and init
-        public static void SetCommonPath(string path)
+        public async static void SetCommonPath(string path)
         {
             CommonPath = path;
-            Directory.CreateDirectory(TemplatesPath);
-            Directory.CreateDirectory(TemplatesSourcesWordPath);
-            Directory.CreateDirectory(TemplatesSourcesExcelPath);
-            Directory.CreateDirectory(ServerProcesses);
-            Directory.CreateDirectory(TemplatesRuntime);
-            Directory.CreateDirectory(TemplatesGenerated);
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                Directory.CreateDirectory(Templates);
+                Directory.CreateDirectory(TemplatesSourcesWordPath);
+                Directory.CreateDirectory(TemplatesSourcesExcelPath);
+                Directory.CreateDirectory(ServerProcesses);
+                Directory.CreateDirectory(Messages);
+                Directory.CreateDirectory(UsersContext);
+                Directory.CreateDirectory(TemplatesRuntime);
+                Directory.CreateDirectory(TemplatesGenerated);
+            });
         }
         public static void ClearDataForRestart()
         {

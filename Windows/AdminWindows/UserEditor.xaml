@@ -5,19 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
         mc:Ignorable="d"
-        Title="UserEditor" Height="284" Width="400" Style="{DynamicResource Dialog}" WindowStartupLocation="CenterScreen">
+        Title="UserEditor" Height="400" Width="700" Style="{DynamicResource Dialog}" WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="16*"/>
+            <ColumnDefinition Width="19*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
-        <ComboBox Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding PermissionStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StatusEditable}">
+        <ComboBox Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding PermissionStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding StatusEditable}" Grid.ColumnSpan="2" Margin="5,5,5,5">
             <ComboBoxItem >
                 <StackPanel Orientation="Horizontal">
                     <Ellipse Fill="{DynamicResource Success}" Width="5" Height="5"/>
@@ -40,11 +40,21 @@
                 </StackPanel>
             </ComboBoxItem>
         </ComboBox>
-        <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Username}" IsEnabled="{Binding UsernameEditable}" MaxLength="20" Tag="Юзернейм (должен быть уникальным)" Grid.Row="1"/>
-        <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Surname}" MaxLength="30" Tag="Фамилия" Grid.Row="2"/>
-        <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Fullname}" MaxLength="35" Tag="Имя (и отчество)" Grid.Row="3"/>
-        <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Post}" MaxLength="35" Tag="Должность" Grid.Row="4"/>
-        <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Password}" MaxLength="12" Tag="Пароль" Grid.Row="5"/>
-        <Button Style="{DynamicResource ButtonMain}" Grid.Row="6" Content="Сохранить" Click="SaveClick" IsDefault="True"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">
+            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Username}" IsEnabled="{Binding UsernameEditable}" MaxLength="20" Tag="Юзернейм (должен быть уникальным)" Grid.Row="1" Margin="5,5,5,5"/>
+            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Surname}" MaxLength="30" Tag="Фамилия" Grid.Row="3" Margin="5,5,5,5"/>
+            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding SecondName}" MaxLength="60" Tag="Имя (и отчество)" Grid.Row="3" Margin="5,5,5,5"/>
+            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Post}" MaxLength="35" Tag="Должность" Grid.Row="4" Grid.ColumnSpan="2" Margin="5,5,5,5"/>
+            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Password}" MaxLength="12" Tag="Пароль" Grid.Row="5" Grid.ColumnSpan="2" Margin="5,5,5,5"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="3">
+            <CheckBox Style="{DynamicResource Toggle}" Grid.Row="1" Grid.Column="1" IsChecked="{Binding CanViewTasks}" Content="Видимость панели задач"/>
+            <CheckBox Style="{DynamicResource Toggle}" Grid.Row="2" Grid.Column="1" IsChecked="{Binding CanViewCommunication}" Content="Видимость панели коммуникации"/>
+            <CheckBox Style="{DynamicResource Toggle}" Grid.Row="3" Grid.Column="1" IsChecked="{Binding CanViewDatabase}" Content="Видимость панели базы данных"/>
+            <CheckBox Style="{DynamicResource Toggle}" Grid.Row="1" Grid.Column="1" IsChecked="{Binding CanCreateTemplates}" Content="Создание шаблонов"/>
+            <CheckBox Style="{DynamicResource Toggle}" Grid.Row="2" Grid.Column="1" IsChecked="{Binding CanModifyTemplates}" Content="Удаление или редактирование шаблонов"/>
+        </StackPanel>
+        <Button Style="{DynamicResource ButtonMain}" Grid.Row="6" Content="Сохранить" Click="SaveClick" IsDefault="True" Grid.ColumnSpan="2" Margin="5,5,5,5"/>
     </Grid>
 </Window>

@@ -75,10 +75,17 @@ namespace Common
         private bool isWhereAlready = false;
         private bool isUpdateAlready = false;
         public DBConnectionType typeOfConnection { get; set; }
+        public string DBPath { get; set; }
         public Query(string table, DBConnectionType type = DBConnectionType.BASE) 
         {
             this.Table = table;
             this.typeOfConnection = type;
+        }
+        public Query(string table, string path)
+        {
+            this.typeOfConnection = DBConnectionType.OTHER;
+            this.Table = table;
+            this.DBPath = path;
         }
         public override string ToString()
         {
@@ -276,6 +283,10 @@ namespace Common
             resultingString += ")\n";
             return Where(cell, "IN", resultingString, false);
         }
+        public Query WhereLike(string cell, string value)
+        {
+            return Where(cell, "LIKE", $"%{value}%", true);
+        }
         #endregion
 
         #region Order By
@@ -327,7 +338,7 @@ namespace Common
         }
 
         #region Connection and Request
-        private SQLiteConnection GetConnection(string connstring = "")
+        private SQLiteConnection GetConnection()
         {
             string path;
             switch (typeOfConnection)
@@ -343,7 +354,7 @@ namespace Common
                     path = ProgramState.CustomDatabasePath;
                     break;
                 case DBConnectionType.OTHER:
-                    path = connstring;
+                    path = this.DBPath;
                     break;
             }
             SQLiteConnection conn = new SQLiteConnection($"Data source={path}; Version=3; UseUTF16Encoding=True", true);

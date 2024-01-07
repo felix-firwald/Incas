@@ -1,26 +1,33 @@
 ﻿using Common;
+using Incubator_2.Common;
+using Newtonsoft.Json;
+using Spire.Doc.Documents.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data;
+using System.Linq.Expressions;
 using System.Xml.Linq;
 
 namespace Models
 {
+    
     public class User : Model
     {
         public int id { get; set; }
         public string username { get; set; }
+        public string sign { get; set; }
         public string surname { get; set; }
+        public string secondName { get; set; }
         public string fullname { get; set; }
         public string post { get; set; }
         public string password { get; set; }
-        public PermissionGroup status { get; set; }
 
         public User() 
         {
             tableName = "Users";
         }
+        #region Base
         public List<User> GetAllUsers()
         {
             List<User> output = new List<User>();
@@ -31,7 +38,6 @@ namespace Models
             {
                 User mu = new User();
                 mu.Serialize(dr);
-                mu.status = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), dr["status"].ToString());
                 output.Add(mu);
             }
             return output;
@@ -49,7 +55,6 @@ namespace Models
                     .WhereEqual("username", this.username)
                     .ExecuteOne();
             this.Serialize(dr);
-            this.status = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), dr["status"].ToString());
             return this;
         }
         public User GetUserByPassword()
@@ -60,7 +65,6 @@ namespace Models
                     .ExecuteOne();
                 
             this.Serialize(dr);
-            this.status = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), dr["status"].ToString());
             return this;
         }
         public void UpdatePassword()
@@ -75,23 +79,24 @@ namespace Models
             StartCommand()
                 .Update("password", password)
                 .Update("surname", surname)
-                .Update("username", username)
+                .Update("secondName", secondName)
                 .Update("fullname", fullname)
                 .Update("post", post)
-                .Update("status", status.ToString())
                 .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }
         public void AddUser()
         {
+            this.sign = ProgramState.GenerateSlug(12);
             StartCommand()
                 .Insert(new Dictionary<string, string>
                 {
                     { "username", $"'{username}'" },
+                    { "sign", $"'{sign}'" },
                     { "surname", $"'{surname}'" },
+                    { "secondName", $"'{secondName}'" },
                     { "fullname", $"'{fullname}'" },
                     { "password", $"'{password}'" },
-                    { "status", $"'{status}'" },
                     { "post", $"'{post}'" }
                 })
                 .ExecuteVoid();
@@ -136,7 +141,6 @@ namespace Models
             }
             DataRow dr = dt.Rows[0];
             this.Serialize(dr);
-            this.status = (PermissionGroup)Enum.Parse(typeof(PermissionGroup), dr["status"].ToString());
             return true;
         }
         public void RemoveUser()
@@ -145,6 +149,12 @@ namespace Models
                 .Delete()
                 .WhereEqual("username", username)
                 .ExecuteVoid();
+        }
+        #endregion
+
+        public UserParameters GetParametersContext()
+        {
+            return UserContextor.GetContext(this);
         }
     }
 }

@@ -69,7 +69,7 @@ namespace Models
         public async void AddSession()
         {
             this.slug = GenerateSlug();
-            this.user = $"{ProgramState.CurrentUser.surname} {ProgramState.CurrentUser.fullname} ({ProgramState.CurrentUser.username})";
+            this.user = $"{ProgramState.CurrentUser.fullname}";
             this.userId = ProgramState.CurrentUser.id;
             this.timeStarted = DateTime.Now;
             this.computer = RegistryData.GetComputer();

@@ -17,11 +17,13 @@ namespace Incubator_2.Common
 {
     enum ProcessType
     {
+        UNKNOWN,
         QUERY,
         RESPONSE
     }
     enum ProcessTarget
     {
+        UNKNOWN,
         TERMINATE,
         RESTART,
         EXPLICIT,
@@ -76,13 +78,12 @@ namespace Incubator_2.Common
                 string output = Cryptographer.DecryptString(GetKeyByRecipient(ProgramState.CurrentSession.slug), File.ReadAllText(filename));
                 result = JsonConvert.DeserializeObject<Process>(output);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    ProgramState.ShowErrorDialog($"Файл процесса был поврежден или подделан.\nПроцесс не будет выполнен. Сведения:\n{ex}", "Ошибка выполнения процесса");
-                });
-                File.Delete(filename);
+                //Application.Current.Dispatcher.Invoke(() =>
+                //{
+                //    ProgramState.ShowErrorDialog($"Файл процесса был поврежден или подделан.\nПроцесс не будет выполнен. Сведения:\n{ex}", "Ошибка выполнения процесса");
+                //});
                 return new Process();
             }
             
@@ -98,7 +99,7 @@ namespace Incubator_2.Common
                 foreach (string file in files)
                 {
                     FileInfo fi = new FileInfo(file);
-                    if (fi.CreationTime < DateTime.Now.AddSeconds(-5))
+                    if (fi.CreationTime < DateTime.Now.AddSeconds(-10))
                     {
                         fi.Delete();
                     }
@@ -157,6 +158,7 @@ namespace Incubator_2.Common
                         case ProcessTarget.EXPLICIT: // admin process
                             ShowExplicitMessageProcessHandle(process.content);
                             break;
+                        case ProcessTarget.UNKNOWN:
                         default: break;
                     }
                 }

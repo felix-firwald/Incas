@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2"
         xmlns:vm="clr-namespace:Incubator_2.ViewModels"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:tasks="clr-namespace:Incubator_2.Forms.Tasks" xmlns:database="clr-namespace:Incubator_2.Forms.Database" xmlns:usersettings="clr-namespace:Incubator_2.Forms.UserSettings" xmlns:handbook="clr-namespace:Incubator_2.Forms.Handbook" x:Name="window" x:Class="Incubator_2.MainWindow"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:tasks="clr-namespace:Incubator_2.Forms.Tasks" xmlns:database="clr-namespace:Incubator_2.Forms.Database" xmlns:usersettings="clr-namespace:Incubator_2.Forms.UserSettings" xmlns:handbook="clr-namespace:Incubator_2.Forms.Handbook" xmlns:communications="clr-namespace:Incubator_2.Forms.Communication"  x:Name="window" x:Class="Incubator_2.MainWindow"
         mc:Ignorable="d"
         Height="900"
         Width="1300"
@@ -15,8 +15,8 @@
         Icon="/Views/Logo.png"
         Closed="OnClosed"     
 
-        MinHeight="500" MinWidth="700"
-        MouseLeftButtonDown="WindowMove">
+        MinHeight="700" MinWidth="900"
+        MouseLeftButtonDown="WindowMove" Cursor="">
 
 
     <Grid Background="{DynamicResource Basic}">
@@ -52,7 +52,7 @@
             <Image x:Name="Logo" Height="auto" Width="auto" Source="/Views/Logo.png" UseLayoutRounding="False" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" Cursor="Hand" ToolTip="Жми на меня и тебе откроется панель управления" MouseDown="Logo_MouseDown">
             </Image>
             <TextBlock x:Name="LSurname" Foreground="White" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis"/>
-            <TextBlock x:Name="LFullname" Foreground="White" Text="{Binding Fullname}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
+            <TextBlock x:Name="LFullname" Foreground="White" Text="{Binding SecondName}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
             <TextBlock x:Name="LPost" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
             <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
 
@@ -84,6 +84,16 @@
                     </Grid.ColumnDefinitions>
                     <fa:FontAwesome Icon="InfoCircle" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
                     <TextBlock Text="Справочник" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=HandbookRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
+                </Grid>
+            </RadioButton>
+            <RadioButton x:Name="CommunicationsRadio" Style="{DynamicResource MenuButton}" Cursor="Hand">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="ColRR" Width="30"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <fa:FontAwesome Icon="Microphone" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
+                    <TextBlock Text="Внутренняя связь" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=CommunicationsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
             <RadioButton x:Name="DatabaseRadio" Style="{DynamicResource MenuButton}" Cursor="Hand">
@@ -124,6 +134,9 @@
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=HandbookRadio, Path=IsChecked}" Background="{x:Null}">
                     <handbook:HandbookMain/>
                 </TabItem>
+                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=CommunicationsRadio, Path=IsChecked}" Background="{x:Null}">
+                    <communications:CommunicationMain/>
+                </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=DatabaseRadio, Path=IsChecked}" Background="{x:Null}">
                     <database:CustomDatabaseMain/>
                 </TabItem>
@@ -136,7 +149,7 @@
         <StackPanel MinHeight="60" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Background="{StaticResource LightBlack}">
             <Label Content="f" Foreground="{DynamicResource Icon}" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Harlow Solid Italic" FontSize="14" MinWidth="64" FontStyle="Italic"/>
 
-            <Button Style="{DynamicResource DashboardButton}" Content="Управление файлами" Width="120"/>
+            <Button Style="{DynamicResource DashboardButton}" Content="Управление файлами" Width="120" Click="FilesManagerClick"/>
             <Button Style="{DynamicResource DashboardButton}" Content="Буфер обмена" Width="120"/>
         </StackPanel>
     </Grid>

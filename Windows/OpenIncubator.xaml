@@ -12,7 +12,7 @@
             <RowDefinition Height="3*"/>
             <RowDefinition Height="8*"/>
             <RowDefinition Height="40"/>
-
+            <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -25,9 +25,11 @@
         <Label Style="{DynamicResource LabelElement}" Content="Вход в рабочее пространство" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="24" Width="204" Grid.ColumnSpan="2"/>
 
         <TextBox x:Name="cpath" Visibility="Collapsed" Text="{Binding Path}" Grid.Row="3" Grid.ColumnSpan="2" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" />
-        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Grid.Row="3" Text="{Binding Password}" Tag="Пароль для входа" MaxLength="20" Margin="5,5,5,5" Grid.ColumnSpan="2" Cursor="" />
+
+        <ComboBox x:Name="user" Style="{StaticResource ComboBoxMain}" ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=true}" DisplayMemberPath="fullname" SelectedItem="{Binding SelectedUser}" Tag="Пользователь" Grid.Row="3"  Grid.ColumnSpan="2" />
+        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Text="{Binding Password}" Tag="Пароль для входа" Grid.Row="4" MaxLength="20" Grid.ColumnSpan="2" />
         <Border CornerRadius="5" Margin="6,6,6,6" Background="{DynamicResource Black}" Grid.Row="2" >
-            <ListBox Style="{DynamicResource ListBoxMain}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}">
+            <ListBox Style="{DynamicResource ListBoxMain}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}" Cursor="">
                 <!--<ListBoxItem Content="567567" IsSelected="True"/>
                 <ListBoxItem Content="567567"/>
                 <ListBoxItem Content="567567"/>
@@ -44,7 +46,7 @@
             </StackPanel>
         </Border>
 
-        <Button Style="{StaticResource ButtonMain}" IsDefault="True" Grid.Row="4" Grid.ColumnSpan="2" Content="Войти" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0" Height="30"/>
+        <Button Style="{StaticResource ButtonMain}" IsDefault="True" Grid.Row="5" Grid.ColumnSpan="2" Content="Войти" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0" Height="30"/>
 
     </Grid>
 </Window>

@@ -54,6 +54,31 @@ namespace Common
              .ExecuteVoid();
             return true;
         }
+        public static void CreateChatDatabase(string chat, int user1, int user2)
+        {
+            using (Parameter p = new())
+            {
+                p.name = $"{user1}-{user2}";
+                p.type = ParameterType.CHAT;
+                p.value = chat;
+                p.CreateParameter();
+            }
+            string db = ProgramState.Messages + $"\\{chat}.dbinc";
+            SQLiteConnection.CreateFile(db);
+            AutoTableCreator atc = new AutoTableCreator();
+            Query q = new Query("");
+            q.typeOfConnection = DBConnectionType.OTHER;
+            q.DBPath = db;
+            q.AddCustomRequest(GetMessageDefinition(atc))
+             .ExecuteVoid();
+        }
+
+        private static string GetMessageDefinition(AutoTableCreator atc)
+        {
+            atc.Initialize(typeof(Message), "Messages");
+            return atc.GetQueryText();
+        }
+
         private static string GetParameterDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Parameter), "Parameters");
@@ -66,15 +91,11 @@ namespace Common
             atc.Initialize(typeof(User), "Users");
             atc.SetAsUnique("username");
             atc.SetAsUnique("password");
-            atc.SetNotNull("fullname", false);
-            atc.SetNotNull("surname", false);
-            atc.SetNotNull("post", false);           
             return atc.GetQueryText();
         }
         private static string GetSessionDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Session), "Sessions");
-            atc.SetNotNull("timeFinished", false);
             return atc.GetQueryText();
         }
         private static string GetTaskDefinition(AutoTableCreator atc)
@@ -90,17 +111,12 @@ namespace Common
         private static string GetTemplateDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Template), "Templates");
-            atc.SetNotNull("suggestedPath", false);
-            atc.SetNotNull("parent", false);
             atc.SetFK("parent", "Templates", "id");
             return atc.GetQueryText();
         }
         private static string GetTagDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Tag), "Tags");
-            atc.SetNotNull("value", false);
-            atc.SetNotNull("parent", false);
-            atc.SetNotNull("parameters", false);
             atc.SetFK("template", "Templates", "id");
             atc.SetFK("parent", "Tags", "id");
             return atc.GetQueryText();

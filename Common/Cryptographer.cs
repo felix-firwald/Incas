@@ -13,16 +13,15 @@ namespace Incubator_2.Common
         public static string GenerateKey(string input)
         {
             string result = string.Join("е", input.ToCharArray().Reverse()) + "b";
+            byte[] bytes = Encoding.UTF8.GetBytes(result);
+            result = Convert.ToHexString(bytes);
             if (result.Length < 32)
             {
                 int multiplier = 32 - result.Length;
-                result += Enumerable.Repeat("q", multiplier);
+                result += Enumerable.Repeat("b", multiplier);
             }
-            else if (result.Length > 32)
-            {
-                result = result.Substring(0, 31);
-            }
-            return result;
+            
+            return result.Substring(0, 32);
         }
 
         public static string EncryptString(string input)
