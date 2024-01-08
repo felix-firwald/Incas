@@ -1,29 +1,14 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Spreadsheet;
-
-//using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
 using Incubator_2.Windows;
 using Models;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using Windows.Devices.Geolocation;
 
 namespace Incubator_2.Forms
 {
@@ -37,6 +22,9 @@ namespace Incubator_2.Forms
         private List<Tag> tags;
         List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
         List<TableFiller> Tables = new List<TableFiller>();
+
+        public delegate void TagAction(int tag, string value);
+        public event TagAction OnInsertRequested;
         public UC_FileCreator(Template templ, List<Tag> tagsList)
         {
             InitializeComponent();
@@ -51,6 +39,7 @@ namespace Incubator_2.Forms
                 if (t.type != TypeOfTag.Table)
                 {
                     UC_TagFiller tf = new UC_TagFiller(t);
+                    tf.OnInsert += OnInsert;
                     this.ContentPanel.Children.Add(tf);
                     TagFillers.Add(tf);
                 }
@@ -62,6 +51,29 @@ namespace Incubator_2.Forms
                 }
             });
         }
+        private void OnInsert(int tag, string value)
+        {
+            OnInsertRequested?.Invoke(tag, value);
+        }
+        public async void InsertTagValue(int tag, string value)
+        {
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                foreach (UC_TagFiller tf in TagFillers)
+                {
+                    if (tf.tag.id == tag)
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            tf.SetValue(value);
+                        });
+                        
+                        break;
+                    }
+                }
+            });
+        }
+        
         public void ApplyRecord(TemplateJSON record)
         {
             this.Filename.Text = record.file_name;

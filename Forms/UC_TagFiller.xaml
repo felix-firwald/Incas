@@ -15,8 +15,13 @@
         <TextBox x:Name="Textbox" Style="{DynamicResource TextBoxMain}" Grid.Column="1" Visibility="Hidden" Cursor="IBeam">
             <TextBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Копировать"/>
-                    <MenuItem Header="Вырезать"/>
+                    <MenuItem Header="Очистить" Click="ClearClick" Tag="Очистить поле"/>
+                    <MenuItem Header="Копировать" Click="CopyClick" Tag="Скопировать выделенный текст"/>
+                    <MenuItem Header="Копировать все" Click="CopyAllClick" Tag="Скопировать весь текст из этого поля"/>
+                    <MenuItem Header="Вставить" Click="PasteClick" Tag="Вставить скопированный текст"/>
+                    <Separator Background="{DynamicResource Element}"/>
+                    <MenuItem Header="Проставить во всех файлах" Click="InsertToOther" Tag="Значение этого тега будет скопировано в поля ввода этого же тега для других файлов."/>
+                    <MenuItem Header="Пересчитать имена по тегу" IsEnabled="False" />
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>

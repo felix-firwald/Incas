@@ -17,6 +17,8 @@ namespace Incubator_2.Forms
     public partial class UC_TagFiller : UserControl
     {
         public readonly Tag tag;
+        public delegate void StringAction(int tag, string text);
+        public event StringAction OnInsert;
         public UC_TagFiller(Tag t)
         {
             InitializeComponent();
@@ -100,6 +102,27 @@ namespace Incubator_2.Forms
         public int GetId()
         {
             return this.tag.id;
+        }
+        private void ClearClick(object sender, RoutedEventArgs e)
+        {
+            this.Textbox.Text = "";
+        }
+
+        private void CopyClick(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(this.Textbox.SelectedText);
+        }
+        private void CopyAllClick(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(this.Textbox.Text);
+        }
+        private void PasteClick(object sender, RoutedEventArgs e)
+        {
+            this.Textbox.Text = Clipboard.GetText();
+        }
+        private void InsertToOther(object sender, RoutedEventArgs e)
+        {
+            OnInsert?.Invoke(this.tag.id, this.Textbox.Text);
         }
     }
 }

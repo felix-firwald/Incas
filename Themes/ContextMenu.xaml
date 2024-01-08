@@ -35,10 +35,11 @@
         <Setter Property="MinWidth" Value="40"/>
         <Setter Property="Foreground" Value="{DynamicResource Light}"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Opacity" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
-                    <Grid ToolTip="{TemplateBinding Header}" Height="24" Background="{TemplateBinding Background}" Width="{TemplateBinding Width}">
+                    <Grid ToolTip="{TemplateBinding Tag}" Height="24" Background="{TemplateBinding Background}" Width="{TemplateBinding Width}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30" />
                             <ColumnDefinition Width="*" MinWidth="80"/>
@@ -67,7 +68,7 @@
                             <Setter TargetName="Arrow" Property="TextElement.Foreground" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter TargetName="_txt" Property="Foreground" Value="Gray"/>
+                            <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

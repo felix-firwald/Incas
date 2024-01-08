@@ -57,9 +57,18 @@ namespace Incubator_2.Windows
         private UC_FileCreator AddFileCreator()
         {
             UC_FileCreator fc = new UC_FileCreator(template, tags);
+            fc.OnInsertRequested += InsertValuesByTag;
             this.ContentPanel.Children.Add(fc);
             creators.Add(fc);
             return fc;
+        }
+
+        private void InsertValuesByTag(int tag, string value)
+        {
+            foreach (UC_FileCreator fc in creators)
+            {
+                fc.InsertTagValue(tag, value);
+            }
         }
 
         private bool ValidateContent()
