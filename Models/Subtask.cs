@@ -7,8 +7,8 @@ namespace Models
         public int id { get; set; }
         public int task { get; set; }
         public string text { get; set; }
-        public bool passed { get; set; }
-        public string performer { get; set; }
+        public bool done { get; set; }
+        public int performer { get; set; }
 
         public Subtask() 
         {

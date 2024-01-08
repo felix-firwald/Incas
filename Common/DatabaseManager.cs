@@ -90,6 +90,7 @@ namespace Common
         {
             atc.Initialize(typeof(User), "Users");
             atc.SetAsUnique("username");
+            atc.SetAsUnique("fullname");
             return atc.GetQueryText();
         }
         private static string GetSessionDefinition(AutoTableCreator atc)
@@ -105,6 +106,7 @@ namespace Common
         private static string GetSubtaskDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Subtask), "Subtasks");
+            atc.SetFK("task", "Tasks", "id");
             return atc.GetQueryText();
         }
         private static string GetTemplateDefinition(AutoTableCreator atc)

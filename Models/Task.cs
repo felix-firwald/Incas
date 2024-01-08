@@ -18,19 +18,13 @@ namespace Models
             tableName = "Tasks";
         }
 
-        public void GetAbsolutelyAllTasks()
+        public void GetAllTasks()
         {
             StartCommand()
                 .Select()
                 .Execute();
         }
-        public void GetEnabledTasks()
-        {
-            StartCommand()
-                .Select()
-                .WhereMore("dateStarted", DateTime.Now.ToString())
-                .Execute();
-        }
+
         public void GetPassedTasks()
         {
 

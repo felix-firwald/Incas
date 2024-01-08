@@ -18,7 +18,7 @@
                                 x:Name="PART_ContentHost" 
                                 Focusable="False" 
                                 HorizontalScrollBarVisibility="Hidden" 
-                                VerticalScrollBarVisibility="Hidden"  />
+                                VerticalScrollBarVisibility="Hidden" Foreground="{TemplateBinding Foreground}"  />
                             <Label 
                                 x:Name="WaterMarkerLabel" 
                                 Content="{TemplateBinding Tag}"
@@ -77,7 +77,7 @@
                             <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>
                         <Trigger Property="Validation.HasError" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Error}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource Error}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

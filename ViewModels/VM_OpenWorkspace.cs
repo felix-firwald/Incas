@@ -3,6 +3,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -151,6 +152,7 @@ namespace Incubator_2.ViewModels
                 OnPropertyChanged(nameof(Password));
             }
         }
+
         #endregion
     }
 }

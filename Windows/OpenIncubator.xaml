@@ -20,14 +20,22 @@
             <ColumnDefinition Width="45"/>
         </Grid.ColumnDefinitions>
 
-        <fa:FontAwesome Icon="User" FontSize="70" VerticalAlignment="Center" Foreground="{DynamicResource Element}" HorizontalAlignment="Center" Grid.ColumnSpan="2"  />
+        <fa:FontAwesome Icon="User" FontSize="70" VerticalAlignment="Bottom" Foreground="{DynamicResource Element}" HorizontalAlignment="Center" Grid.ColumnSpan="2"  />
 
         <Label Style="{DynamicResource LabelElement}" Content="Вход в рабочее пространство" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="24" Width="204" Grid.ColumnSpan="2"/>
 
         <TextBox x:Name="cpath" Visibility="Collapsed" Text="{Binding Path}" Grid.Row="3" Grid.ColumnSpan="2" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" />
 
         <ComboBox x:Name="user" Style="{StaticResource ComboBoxMain}" ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=true}" DisplayMemberPath="fullname" SelectedItem="{Binding SelectedUser, Mode=TwoWay, NotifyOnSourceUpdated=True}" Tag="Пользователь" Grid.Row="3"  Grid.ColumnSpan="2" />
-        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Text="{Binding Password}" Tag="Пароль для входа" Grid.Row="4" MaxLength="20" Grid.ColumnSpan="2" />
+        <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Text="{Binding Password}" Tag="Пароль для входа" Grid.Row="4" MaxLength="20" Grid.ColumnSpan="2" MouseRightButtonDown="OnRightClick">
+            <TextBox.ContextMenu>
+                <ContextMenu x:Name="ContextMenu">
+                    <MenuItem Header="Вырезать"/>
+                    <MenuItem Header="Скопировать"/>
+                    <MenuItem Header="Вставить"/>
+                </ContextMenu>
+            </TextBox.ContextMenu>
+        </TextBox>
         <Border CornerRadius="5" Margin="6,6,6,6" Background="{DynamicResource Black}" Grid.Row="2" >
             <ListBox Style="{DynamicResource ListBoxMain}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}" Cursor="">
                 <!--<ListBoxItem Content="567567" IsSelected="True"/>
