@@ -27,6 +27,7 @@
             <Trigger Property="UIElement.IsMouseOver" Value="True">
                 <Setter Property="Panel.Background" TargetName="ButtonBorder" Value="{DynamicResource Basic}"/>
                 <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource DarkLight}"/>
+                <Setter Property="Opacity" Value="1"/>
             </Trigger>
             <Trigger Property="ToggleButton.IsChecked" Value="True">
                 <Setter Property="Shape.Fill" TargetName="Arrow" Value="White"/>
@@ -97,7 +98,7 @@
                             <Grid Name="DropDown" SnapsToDevicePixels="True"
                                 MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
                                 MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
-                                <Border Name="DropDownBorder" Background="{StaticResource Black}" Margin="0, 1, 0, 0" CornerRadius="6" BorderThickness="1,1,1,1"  BorderBrush="{StaticResource Element}"/>
+                                <Border Name="DropDownBorder" Background="{StaticResource Black}" Margin="0, 1, 0, 0" CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource Element}"/>
                                 <ScrollViewer Margin="6" SnapsToDevicePixels="True">
                                     <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" Cursor="Hand" />
                                 </ScrollViewer>

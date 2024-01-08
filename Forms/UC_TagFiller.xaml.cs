@@ -172,7 +172,14 @@ namespace Incubator_2.Forms
         }
         private void WrapAsQuoteClick(object sender, RoutedEventArgs e)
         {
-            this.Textbox.SelectedText = $"«{this.Textbox.SelectedText}»";
+            if (IsAnythingSelected())
+            {
+                this.Textbox.SelectedText = $"«{this.Textbox.SelectedText}»";
+            }
+            else
+            {
+                this.Textbox.Text = $"«{this.Textbox.Text}»";
+            }
         }
 
         private void InsertToOther(object sender, RoutedEventArgs e)

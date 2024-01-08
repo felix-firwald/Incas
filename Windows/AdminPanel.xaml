@@ -23,8 +23,6 @@
             <RadioButton x:Name="rbWorkspace" Style="{DynamicResource MenuButton}" Content="Рабочее пространство"/>
             <RadioButton x:Name="rbUsers" Style="{DynamicResource MenuButton}" Content="Пользователи"/>
             <RadioButton x:Name="rbSessions" Style="{DynamicResource MenuButton}" Content="Сессии" IsChecked="True"/>
-            <RadioButton x:Name="rbTemplates" Style="{DynamicResource MenuButton}" Content="Шаблоны и теги"/>
-            <RadioButton x:Name="rbCustomDB" Style="{DynamicResource MenuButton}" Content="База данных"/>
         </StackPanel>
         <ScrollViewer Grid.Row="1" Grid.Column="1">
             <TabControl Background="{DynamicResource Basic}" BorderBrush="{x:Null}" >

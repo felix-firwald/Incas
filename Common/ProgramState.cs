@@ -41,7 +41,7 @@ namespace Common
         public static string DatabasePath { get { return CommonPath + @"\data.dbinc"; } }
         public static string CustomDatabasePath { get { return CommonPath + @"\custom.dbinc"; } }
         public static string ServiceDatabasePath { get { return Root + @"\service.dbinc"; } }
-        private static string Root { get { return CommonPath + @"\Root"; } }
+        public static string Root { get { return CommonPath + @"\Root"; } }
         public static string ServerProcesses { get { return Root + @"\ServerProccesses"; } } // ...\Root\ServerProccesses
         public static string Messages { get { return Root + @"\Messages"; } } // папка еще не создана
 
