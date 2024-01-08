@@ -32,6 +32,7 @@ namespace Models
             List<User> output = new List<User>();
             DataTable dt = StartCommand()
                 .Select()
+                .OrderByASC("fullname")
                 .Execute();
             foreach (DataRow dr in dt.Rows)
             {

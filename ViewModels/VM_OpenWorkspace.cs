@@ -15,6 +15,7 @@ namespace Incubator_2.ViewModels
         public VM_OpenWorkspace() 
         {
             UpdateUsers();
+            UpdateSelectedUser();
         }
 
         private void UpdateUsers()
@@ -24,6 +25,7 @@ namespace Incubator_2.ViewModels
                 _users.Clear();
                 _users = user.GetAllUsers();
             }
+            UpdateSelectedUser();
         }
 
         public void Refresh()
@@ -73,14 +75,17 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                return RegistryData.GetWorkspacePath(SelectedWorkspace);
+                try
+                {
+                    return RegistryData.GetWorkspacePath(SelectedWorkspace);
+                }
+                catch(Exception) { return ""; }
             }
             set
             {
                 RegistryData.SetWorkspacePath(SelectedWorkspace, value);
                 OnPropertyChanged(nameof(Path));
                 OnPropertyChanged(nameof(Users));
-                
             }
         }
         private List<User> _users = new();
@@ -96,6 +101,23 @@ namespace Incubator_2.ViewModels
                 OnPropertyChanged(nameof(Users));
             }
         }
+        public void UpdateSelectedUser()
+        {
+            try
+            {
+                string selected = RegistryData.GetWorkspaceSelectedUser(SelectedWorkspace);
+                foreach (User user in _users)
+                {
+                    if (user.id.ToString() == selected)
+                    {
+                        ProgramState.CurrentUser = user;
+                        OnPropertyChanged(nameof(SelectedUser));
+                        break;
+                    }
+                }
+            }
+            catch(Exception) { }
+        }
         public User SelectedUser
         {
             get
@@ -106,7 +128,15 @@ namespace Incubator_2.ViewModels
             {
                 ProgramState.CurrentUser = value;
                 OnPropertyChanged(nameof(SelectedUser));
-
+                try
+                {
+                    if (value != null)
+                    {
+                        RegistryData.SetWorkspaceSelectedUser(SelectedWorkspace, value.id.ToString());
+                    }
+                    
+                }
+                catch(Exception) { }
             }
         }
         public string Password

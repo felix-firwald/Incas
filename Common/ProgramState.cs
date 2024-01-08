@@ -179,9 +179,10 @@ namespace Common
                 user.username = "admin";
                 user.post = "Администратор рабочего пространства";
                 user.surname = data.userSurname;
-                user.fullname = data.userFullname;
+                user.secondName = data.userFullname;
+                user.fullname = $"{user.surname} {user.secondName}";
                 user.AddUser();
-                UserParameters up = user.GetParametersContext();
+                UserParameters up = new();
                 up.permission_group = PermissionGroup.Admin;
                 up.tasks_visibility = true;
                 up.communication_visibility = true;

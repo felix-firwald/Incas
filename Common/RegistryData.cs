@@ -90,6 +90,18 @@ namespace Common
         {
             GetWorkspaceByName(name).SetValue("path", path);
         }
+        public static string GetWorkspaceSelectedUser(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return "";
+            }
+            return GetWorkspaceByName(name).GetValue("user").ToString();
+        }
+        public static void SetWorkspaceSelectedUser(string name, string user)
+        {
+            GetWorkspaceByName(name).SetValue("user", user);
+        }
         public static string GetWorkspacePassword(string name)
         {
             return GetWorkspaceByName(name).GetValue("password", "").ToString();

@@ -42,7 +42,7 @@
         </ComboBox>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">
-            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Username}" IsEnabled="{Binding UsernameEditable}" MaxLength="20" Tag="Юзернейм (должен быть уникальным)" Grid.Row="1" Margin="5,5,5,5"/>
+            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Username}" IsEnabled="{Binding UsernameEditable}" MaxLength="20" Tag="Юзернейм (должен быть уникальным)" Grid.Row="1" Margin="5,5,5,5" CharacterCasing="Lower"/>
             <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Surname}" MaxLength="30" Tag="Фамилия" Grid.Row="3" Margin="5,5,5,5"/>
             <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding SecondName}" MaxLength="60" Tag="Имя (и отчество)" Grid.Row="3" Margin="5,5,5,5"/>
             <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Post}" MaxLength="35" Tag="Должность" Grid.Row="4" Grid.ColumnSpan="2" Margin="5,5,5,5"/>

@@ -20,7 +20,6 @@ namespace Incubator_2.Windows
             ProgramState.LoadUserData();
             this.vm = new VM_OpenWorkspace();
             this.DataContext = this.vm;
-            //this.cpath.Text = ProgramState.CommonPath;
         }
 
         private void LogInClicked(object sender, RoutedEventArgs e)
@@ -36,18 +35,17 @@ namespace Incubator_2.Windows
                 
                 if (Directory.Exists(this.cpath.Text))
                 {
-                    CheckPassword();
+                    TryAuthenticate();
                 }
             }  
         }
 
-        private void CheckPassword()
+        private void TryAuthenticate()
         {
             if (ProgramState.CurrentUser != null)
             {
-                if (ProgramState.CurrentUserParameters.IsRightPassword(this.pwd.Text)) // 
+                if (ProgramState.CurrentUserParameters.IsRightPassword(this.pwd.Text))
                 {
-                    //this.Visibility = Visibility.Hidden;
                     Permission.CurrentUserPermission = ProgramState.CurrentUserParameters.permission_group;
                     if (Permission.CurrentUserPermission != PermissionGroup.Admin && ProgramState.IsWorkspaceLocked())
                     {

@@ -50,9 +50,10 @@ namespace Incubator_2.Common
     {
         private static UserParameters FromFile(User user, string key)
         {
+            string path = $"{ProgramState.UsersContext}\\{user.sign}{user.id}.enic";
             try
             {
-                string path = $"{ProgramState.UsersContext}\\{user.sign}{user.id}.enic";
+                
                 string output = Cryptographer.DecryptString(key, File.ReadAllText(path));
                 return JsonConvert.DeserializeObject<UserParameters>(output);
             }

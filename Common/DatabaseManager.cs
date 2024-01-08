@@ -90,7 +90,6 @@ namespace Common
         {
             atc.Initialize(typeof(User), "Users");
             atc.SetAsUnique("username");
-            atc.SetAsUnique("password");
             return atc.GetQueryText();
         }
         private static string GetSessionDefinition(AutoTableCreator atc)

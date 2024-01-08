@@ -30,6 +30,6 @@
         <TextBox Grid.Row="4" Style="{DynamicResource TextBoxMain}" Tag="Введите вашу фамилию" Grid.ColumnSpan="1" Text="{Binding UserSurname}" />
         <TextBox Grid.Row="4" Style="{DynamicResource TextBoxMain}" Tag="Введите ваше имя (и отчество)" Grid.ColumnSpan="1" Grid.Column="1" Text="{Binding UserFullname}"/>
         <TextBox Grid.Row="5" Style="{DynamicResource TextBoxMain}" Tag="Введите ваш пароль для входа" Grid.ColumnSpan="2" Text="{Binding UserPassword}" />
-        <Button Grid.Row="6" Style="{DynamicResource ButtonMain}" Content="Создать рабочее пространство" Grid.ColumnSpan="2" Click="SaveButton" />
+        <Button Grid.Row="6" Style="{DynamicResource ButtonMain}" Content="Создать рабочее пространство" Grid.ColumnSpan="2" Click="SaveButton" IsDefault="True" />
     </Grid>
 </Window>
