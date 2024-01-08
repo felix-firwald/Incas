@@ -1,9 +1,10 @@
-﻿<UserControl x:Class="Incubator_2.Forms.UC_TagFiller"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms"
+             xmlns:fa="http://schemas.fontawesome.io/icons/" x:Class="Incubator_2.Forms.UC_TagFiller"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="600">
     <Grid>
@@ -12,7 +13,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Label x:Name="MainLabel" Style="{DynamicResource LabelElement}" Content="Имя тега:" VerticalAlignment="Top" Grid.Column="0" Margin="5,7,0,0" MaxHeight="30"/>
-        <TextBox x:Name="Textbox" Style="{DynamicResource TextBoxMain}" Grid.Column="1" Visibility="Hidden" Cursor="IBeam">
+        <TextBox x:Name="Textbox" Style="{DynamicResource TextBoxMain}" Grid.Column="1" Visibility="Hidden" Cursor="IBeam" AutoWordSelection="True" TextWrapping="WrapWithOverflow" SelectionBrush="{DynamicResource PrimaryMain}" SelectionTextBrush="{DynamicResource Light}">
             <TextBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Очистить" Click="ClearClick" Tag="Очистить поле"/>
@@ -21,7 +22,18 @@
                     <MenuItem Header="Вставить" Click="PasteClick" Tag="Вставить скопированный текст"/>
                     <Separator Background="{DynamicResource Element}"/>
                     <MenuItem Header="Проставить во всех файлах" Click="InsertToOther" Tag="Значение этого тега будет скопировано в поля ввода этого же тега для других файлов."/>
-                    <MenuItem Header="Пересчитать имена по тегу" IsEnabled="False" />
+                    <MenuItem Header="Пересчитать имена по тегу" Click="RecalculateNamesClick" Tag="Имена каждого файла будут пересчитаны по этому тегу (без префикса и постфикса)" />
+                    <Separator Background="{DynamicResource Element}"/>
+                    <MenuItem Header="Иные инструменты">
+                        <MenuItem Header="Каждое слово с заглавной буквы" Click="MakeTitleClick" />
+                        <MenuItem Header="Привести текст к верхнему регистру" Click="MakeUpperClick"/>
+                        <MenuItem Header="Привести текст к нижнему регистру" Click="MakeLowerClick" />
+                        <Separator Background="{DynamicResource Element}"/>
+                        <MenuItem Header="Удалить лишние пробелы" Click="RemoveWhitespacesClick" />
+                        <MenuItem Header="Заменить переносы пробелами" Click="RemoveLineBreaksClick" />
+                        <Separator Background="{DynamicResource Element}"/>
+                        <MenuItem Header="Обернуть фрагмент в кавычки" Click="WrapAsQuoteClick"/>
+                    </MenuItem>
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>

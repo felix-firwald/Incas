@@ -58,6 +58,7 @@ namespace Incubator_2.Windows
         {
             UC_FileCreator fc = new UC_FileCreator(template, tags);
             fc.OnInsertRequested += InsertValuesByTag;
+            fc.OnRenameRequested += SimpleRecalculateNames;
             this.ContentPanel.Children.Add(fc);
             creators.Add(fc);
             return fc;
@@ -170,6 +171,13 @@ namespace Incubator_2.Windows
                 }
             }
             
+        }
+        private void SimpleRecalculateNames(string tag)
+        {
+            foreach (UC_FileCreator fc in this.creators)
+            {
+                fc.RenameByTag(tag, "", "");
+            }
         }
 
         private void GetFromExcel(object sender, System.Windows.Input.MouseButtonEventArgs e)

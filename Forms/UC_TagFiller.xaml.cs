@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,6 +20,8 @@ namespace Incubator_2.Forms
         public readonly Tag tag;
         public delegate void StringAction(int tag, string text);
         public event StringAction OnInsert;
+        public delegate void StringActionRecalculate(string tag);
+        public event StringActionRecalculate OnRename;
         public UC_TagFiller(Tag t)
         {
             InitializeComponent();
@@ -120,9 +123,66 @@ namespace Incubator_2.Forms
         {
             this.Textbox.Text = Clipboard.GetText();
         }
+
+        private bool IsAnythingSelected()
+        {
+            return !string.IsNullOrEmpty(this.Textbox.SelectedText);
+        }
+        private void MakeTitleClick(object sender, RoutedEventArgs e)
+        {
+            if (IsAnythingSelected())
+            {
+                this.Textbox.SelectedText = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(this.Textbox.SelectedText.ToLower());
+            }
+            else
+            {
+                this.Textbox.Text = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(this.Textbox.Text.ToLower());
+            }
+        }
+        private void MakeUpperClick(object sender, RoutedEventArgs e)
+        {
+            if (IsAnythingSelected())
+            {
+                this.Textbox.SelectedText = this.Textbox.SelectedText.ToUpper();
+            }
+            else
+            {
+                this.Textbox.Text = this.Textbox.Text.ToUpper();
+            }
+        }
+        private void MakeLowerClick(object sender, RoutedEventArgs e)
+        {
+            if (IsAnythingSelected())
+            {
+                this.Textbox.SelectedText = this.Textbox.SelectedText.ToLower();
+            }
+            else
+            {
+                this.Textbox.Text = this.Textbox.Text.ToLower();
+            }
+            
+        }
+        private void RemoveWhitespacesClick(object sender, RoutedEventArgs e)
+        {
+            this.Textbox.Text = Regex.Replace(this.Textbox.Text, @"\s+", " ");
+        }
+        private void RemoveLineBreaksClick(object sender, RoutedEventArgs e)
+        {
+            this.Textbox.Text = this.Textbox.Text.Replace(System.Environment.NewLine, " ");
+        }
+        private void WrapAsQuoteClick(object sender, RoutedEventArgs e)
+        {
+            this.Textbox.SelectedText = $"«{this.Textbox.SelectedText}»";
+        }
+
         private void InsertToOther(object sender, RoutedEventArgs e)
         {
             OnInsert?.Invoke(this.tag.id, this.Textbox.Text);
         }
+        private void RecalculateNamesClick(object sender, RoutedEventArgs e)
+        {
+            OnRename?.Invoke(this.tag.name);
+        }
+        
     }
 }

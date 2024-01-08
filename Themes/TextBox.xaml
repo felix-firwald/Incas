@@ -33,6 +33,9 @@
                         <Trigger Property="HorizontalContentAlignment" Value="Center">
                             <Setter TargetName="PART_ContentHost" Property="Margin" Value="0"/>
                         </Trigger>
+                        <Trigger Property="ContextMenu.IsOpen" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="DodgerBlue"/>
+                        </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="Text" Value=""/>

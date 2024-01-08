@@ -25,6 +25,8 @@ namespace Incubator_2.Forms
 
         public delegate void TagAction(int tag, string value);
         public event TagAction OnInsertRequested;
+        public delegate void TagActionRecalculate(string tag);
+        public event TagActionRecalculate OnRenameRequested;
         public UC_FileCreator(Template templ, List<Tag> tagsList)
         {
             InitializeComponent();
@@ -40,6 +42,7 @@ namespace Incubator_2.Forms
                 {
                     UC_TagFiller tf = new UC_TagFiller(t);
                     tf.OnInsert += OnInsert;
+                    tf.OnRename += OnRename;
                     this.ContentPanel.Children.Add(tf);
                     TagFillers.Add(tf);
                 }
@@ -54,6 +57,10 @@ namespace Incubator_2.Forms
         private void OnInsert(int tag, string value)
         {
             OnInsertRequested?.Invoke(tag, value);
+        }
+        private void OnRename(string tag)
+        {
+            OnRenameRequested?.Invoke(tag);
         }
         public async void InsertTagValue(int tag, string value)
         {
