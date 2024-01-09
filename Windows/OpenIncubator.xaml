@@ -30,8 +30,8 @@
         <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Text="{Binding Password}" Tag="Пароль для входа" Grid.Row="4" MaxLength="20" Grid.ColumnSpan="2" MouseRightButtonDown="OnRightClick">
             <TextBox.ContextMenu>
                 <ContextMenu x:Name="ContextMenu">
-                    <MenuItem Header="Скопировать" IsEnabled="False"/>
-                    <MenuItem Header="Вставить" IsEnabled="False"/>
+                    <MenuItem Header="Скопировать" Command="ApplicationCommands.Copy" />
+                    <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>

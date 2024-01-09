@@ -88,5 +88,13 @@ namespace Incubator_2.Forms
         {
             this.vm.DefaultValue = "";
         }
+
+        private void AddVirtualTagClick(object sender, RoutedEventArgs e)
+        {
+            int start = this.vm.DefaultValue is not null? this.vm.DefaultValue.Length : 0;
+            this.vm.DefaultValue += "[Новый]";
+            this.MainTextBox.SelectionStart = start + 1;
+            this.MainTextBox.SelectionLength = 5;
+        }
     }
 }

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Incubator_2.Common
 {
@@ -102,7 +103,10 @@ namespace Incubator_2.Common
             //}
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"Данные о пользователе повреждены.\n{ex}");
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ProgramState.ShowErrorDialog($"Данные о пользователе повреждены.\n{ex}");
+                });
                 return new();
             }
         }
