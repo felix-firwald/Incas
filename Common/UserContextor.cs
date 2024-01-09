@@ -36,13 +36,25 @@ namespace Incubator_2.Common
             return input == password;
         }
 
-        public void ApplyStandartProperties()
+        public void ApplyStandartProperties(string pwd)
+        {
+            tasks_visibility = true;
+            communication_visibility = true;
+            database_visibility = false;
+            create_templates = false;
+            modify_templates = false;
+            startup_password = pwd;
+            permission_group = PermissionGroup.Operator;
+        }
+        public void ApplyAdminProperties(string pwd)
         {
             tasks_visibility = true;
             communication_visibility = true;
             database_visibility = true;
             create_templates = true;
             modify_templates = true;
+            startup_password = pwd;
+            permission_group = PermissionGroup.Admin;
         }
 
     }
@@ -53,10 +65,41 @@ namespace Incubator_2.Common
             string path = $"{ProgramState.UsersContext}\\{user.sign}{user.id}.enic";
             try
             {
-                
                 string output = Cryptographer.DecryptString(key, File.ReadAllText(path));
                 return JsonConvert.DeserializeObject<UserParameters>(output);
             }
+            catch (FileNotFoundException)
+            {
+                ProgramState.ShowErrorDialog($"Служебный файл пользователя не найден. " +
+                    $"Инкубатор попробует исправить ситуацию.", "Данные отсутствуют");
+                if (user.id == 1)
+                {
+                    UserParameters p = new();
+                    p.ApplyAdminProperties(ProgramState.GenerateSlug(4));
+                    ToFile(p, user, GetKey(user));
+                    ProgramState.ShowExlamationDialog($"Пароль для пользователя {user.fullname} был сброшен. Временный пароль: {p.startup_password}", "Пользователь восстановлен");
+                    return p;
+                }
+                else
+                {
+                    UserParameters p = new();
+                    p.ApplyStandartProperties(ProgramState.GenerateSlug(4));
+                    ToFile(p, user, GetKey(user));
+                    ProgramState.ShowExlamationDialog($"Пароль для пользователя {user.fullname} был сброшен. Статус установлен на \"оператор\". Временный пароль: {p.startup_password}", "Пользователь восстановлен");
+                    return p;
+                }
+            }
+            //catch (IOException ex)
+            //{
+            //    if (ProgramState.ShowQuestionDialog($"Возникла непредвиденная ошибка: {ex}.\nПопробовать снова?", "Возникла ошибка") == Windows.DialogStatus.Yes)
+            //    {
+            //        return FromFile(user, key);
+            //    }
+            //    else
+            //    {
+            //        return new();
+            //    }
+            //}
             catch (Exception ex)
             {
                 ProgramState.ShowErrorDialog($"Данные о пользователе повреждены.\n{ex}");

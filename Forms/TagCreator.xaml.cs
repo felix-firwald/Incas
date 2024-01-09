@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -19,13 +20,15 @@ namespace Incubator_2.Forms
         public delegate void MethodContainer(TagCreator t);
         public event MethodContainer onDelete;
         public Tag tag;
+        VM_Tag vm;
 
         private bool IsCollapsed = false;
         public TagCreator(Tag t, bool isNew = false)
         {
             InitializeComponent();
             tag = t;
-            this.DataContext = new VM_Tag(t);
+            vm = new(t);
+            this.DataContext = vm;
             if (t.parent is not 0)
             {
                 this.OverridenLabel.Visibility = System.Windows.Visibility.Visible;
@@ -74,6 +77,16 @@ namespace Incubator_2.Forms
         {
             onDelete?.Invoke(this);
             tag.RemoveTag();
+        }
+
+        private void CopyAllClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Clipboard.SetText(this.tag.value);
+        }
+
+        private void ClearClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.DefaultValue = "";
         }
     }
 }

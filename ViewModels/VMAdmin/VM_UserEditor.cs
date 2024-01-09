@@ -17,7 +17,14 @@ namespace Incubator_2.ViewModels.VMAdmin
         public VM_UserEditor(User user)
         {
             _user = user;
-            _userParameters = user.GetParametersContext();
+            if (user.id > 0 )
+            {
+                _userParameters = user.GetParametersContext();
+            }
+            else
+            {
+                _userParameters = new();
+            }
         }
         public string PermissionStatus
         {
@@ -224,8 +231,8 @@ namespace Incubator_2.ViewModels.VMAdmin
             if (!string.IsNullOrWhiteSpace(_user.username) && !string.IsNullOrWhiteSpace(_userParameters.startup_password) && !string.IsNullOrWhiteSpace(_user.surname))
             {
                 _user.fullname = $"{_user.surname} {_user.secondName}";
-                _user.SaveUser();
                 UserContextor.SaveContext(_userParameters, _user);
+                _user.SaveUser(); 
                 return true;
             }
             return false;

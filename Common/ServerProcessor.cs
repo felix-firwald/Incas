@@ -45,6 +45,7 @@ namespace Incubator_2.Common
     }
     static class ServerProcessor
     {
+        public static string Port { get { return $"{ProgramState.ServerProcesses}\\Port {ProgramState.CurrentSession.slug}"; } }
         private static List<Process> WaitList = new();
         #region Reusable Base Functionality
         private static string GetKeyByRecipient(string recipient)
@@ -66,7 +67,7 @@ namespace Incubator_2.Common
             await Task.Run(() =>
             {
                 string content = JsonConvert.SerializeObject(process);
-                string filename = $"{ProgramState.ServerProcesses}\\{process.recipient}.procinc";
+                string filename = $"{ProgramState.ServerProcesses}\\Port {process.recipient}\\{process.id}.procinc";
                 File.WriteAllTextAsync(filename, Cryptographer.EncryptString(GetKeyByRecipient(process.recipient), content));
             });
         }
@@ -80,10 +81,11 @@ namespace Incubator_2.Common
             }
             catch (Exception)
             {
-                //Application.Current.Dispatcher.Invoke(() =>
-                //{
-                //    ProgramState.ShowErrorDialog($"Файл процесса был поврежден или подделан.\nПроцесс не будет выполнен. Сведения:\n{ex}", "Ошибка выполнения процесса");
-                //});
+                try
+                {
+                    File.Delete(filename);
+                }
+                catch(Exception) { }
                 return new Process();
             }
             
@@ -94,14 +96,14 @@ namespace Incubator_2.Common
         {
             try
             {
-                string[] files = Directory.GetFiles(ProgramState.ServerProcesses);
+                string[] dirs = Directory.GetDirectories(ProgramState.ServerProcesses);
 
-                foreach (string file in files)
+                foreach (string dir in dirs)
                 {
-                    FileInfo fi = new FileInfo(file);
-                    if (fi.CreationTime < DateTime.Now.AddSeconds(-10))
+                    DirectoryInfo di = new DirectoryInfo(dir);
+                    if (di.CreationTime < DateTime.Now.AddDays(-1) || !di.Name.StartsWith("Port"))
                     {
-                        fi.Delete();
+                        di.Delete();
                     }
                 }
             }
@@ -119,25 +121,28 @@ namespace Incubator_2.Common
 
         public async static void Listen()
         {
-            string targetFileName = $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession.slug}.procinc";
+            RemoveOldest();
+            //string targetFileName = $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession.slug}.procinc";
             await Task.Run(() =>
             {
                 while (ProgramState.CurrentSession.active)
-                {
+                {                   
                     Thread.Sleep(500);
-                    if (File.Exists(targetFileName))
+                    if (!Directory.Exists(Port))
                     {
-                        Switcher(FromFile(targetFileName));
+                        Directory.CreateDirectory(Port);
                     }
-                    foreach (Process p in WaitList)
+                    foreach (string f in Directory.GetFiles(Port))
                     {
-                        string targetAnswerFileName = $"{ProgramState.ServerProcesses}\\{p.id}.procinc";
-                        if (File.Exists(targetAnswerFileName))
+                        if (f.EndsWith(".procinc"))
                         {
-                            Switcher(FromFile(targetAnswerFileName));
+                            Switcher(FromFile(f));
+                        }
+                        else
+                        {
+                            File.Delete(f);
                         }
                     }
-                    RemoveOldest();
                 }
             });
         }
@@ -145,7 +150,7 @@ namespace Incubator_2.Common
         {
             await Task.Run(() =>
             {
-                if (process.type == ProcessType.QUERY)
+                if (process.type == ProcessType.QUERY && process.recipient == ProgramState.CurrentSession.slug)
                 {
                     switch (process.target)
                     {
@@ -161,6 +166,10 @@ namespace Incubator_2.Common
                         case ProcessTarget.UNKNOWN:
                         default: break;
                     }
+                }
+                else if (process.type == ProcessType.RESPONSE)
+                {
+                    
                 }
             });
             

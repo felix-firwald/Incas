@@ -277,12 +277,17 @@ namespace Common
                 CurrentSession = ms;
                 ms.ClearOldestSessions();
             }
+            Directory.CreateDirectory(ServerProcessor.Port);
         }
         public static void CloseSession() 
         {
             if (CurrentSession != null && CurrentSession.active)
             {
                 CurrentSession.CloseSession();
+            }
+            if (Directory.Exists(ServerProcessor.Port))
+            {
+                Directory.Delete(ServerProcessor.Port, true);
             }
         }
         #endregion
