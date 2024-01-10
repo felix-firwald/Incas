@@ -24,10 +24,25 @@ namespace Incubator_2.Common
     enum ProcessTarget
     {
         UNKNOWN,
-        TERMINATE,
-        RESTART,
-        EXPLICIT,
-        FILE
+        // FROM ADMIN-MODER ONLY
+        TERMINATE = 101,
+        RESTART = 102,
+        EXPLICIT = 103,
+        QUESTION = 104,
+        GET_USER = 105,
+        // ALL USERS
+        OPEN_SEQUENCER = 201,
+        COPY_FILE = 202,
+        OPEN_WORD = 203,
+        OPEN_EXCEL = 204,
+        UPDATE_MAIN = 301,
+         
+    }
+    enum ResponseCode
+    {
+        UNKNOWN,
+        NO,
+        OK
     }
     public struct ExplicitMessage
     {
@@ -47,7 +62,22 @@ namespace Incubator_2.Common
     {
         public static string Port { get { return $"{ProgramState.ServerProcesses}\\Port {ProgramState.CurrentSession.slug}"; } }
         private static List<Process> WaitList = new();
+        private static bool StopCreating = false;
         #region Reusable Base Functionality
+        public static void StopPort()
+        {
+            StopCreating = true;
+            if (Directory.Exists(ServerProcessor.Port))
+            {
+                string[] files = Directory.GetFiles(ServerProcessor.Port);
+                foreach (string file in files)
+                {
+                    File.SetAttributes(file, FileAttributes.Normal);
+                    File.Delete(file);
+                }
+                Directory.Delete(ServerProcessor.Port);
+            }
+        }
         private static string GetKeyByRecipient(string recipient)
         {
             string result = string.Join("a", recipient.ToCharArray().Reverse()) + "b";
@@ -81,11 +111,6 @@ namespace Incubator_2.Common
             }
             catch (Exception)
             {
-                try
-                {
-                    File.Delete(filename);
-                }
-                catch(Exception) { }
                 return new Process();
             }
             
@@ -101,7 +126,7 @@ namespace Incubator_2.Common
                 foreach (string dir in dirs)
                 {
                     DirectoryInfo di = new DirectoryInfo(dir);
-                    if (di.CreationTime < DateTime.Now.AddDays(-1) || !di.Name.StartsWith("Port"))
+                    if (di.CreationTime < DateTime.Now.AddHours(-12) || !di.Name.StartsWith("Port"))
                     {
                         di.Delete();
                     }
@@ -121,27 +146,29 @@ namespace Incubator_2.Common
 
         public async static void Listen()
         {
+            
             RemoveOldest();
             //string targetFileName = $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession.slug}.procinc";
             await Task.Run(() =>
             {
                 while (ProgramState.CurrentSession.active)
-                {                   
-                    Thread.Sleep(500);
-                    if (!Directory.Exists(Port))
+                {
+                    try
                     {
-                        Directory.CreateDirectory(Port);
-                    }
-                    foreach (string f in Directory.GetFiles(Port))
-                    {
-                        if (f.EndsWith(".procinc"))
+                        if (!Directory.Exists(Port) && !StopCreating)
+                        {
+                            Directory.CreateDirectory(Port);
+                        }
+                        foreach (string f in Directory.GetFiles(Port))
                         {
                             Switcher(FromFile(f));
                         }
-                        else
-                        {
-                            File.Delete(f);
-                        }
+                        Thread.Sleep(200);
+                        ProgramState.ShowUserSelector("Выберите пользователя, с которым хотите начать общение");
+                    }
+                    catch(Exception)
+                    {
+                        continue;
                     }
                 }
             });
@@ -162,6 +189,9 @@ namespace Incubator_2.Common
                             break;
                         case ProcessTarget.EXPLICIT: // admin process
                             ShowExplicitMessageProcessHandle(process.content);
+                            break;
+                        case ProcessTarget.QUESTION:
+                            ShowQuestionMessageProcessHandle(process.content);
                             break;
                         case ProcessTarget.UNKNOWN:
                         default: break;
@@ -213,6 +243,14 @@ namespace Incubator_2.Common
                 ProgramState.ShowExlamationDialog(m.message, m.header);
             });
         }
+        private static void ShowQuestionMessageProcessHandle(string content)
+        {
+            ExplicitMessage m = JsonConvert.DeserializeObject<ExplicitMessage>(content);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ProgramState.ShowQuestionDialog(m.message, m.header);
+            });
+        }
         #endregion
 
         #region Sending
@@ -222,7 +260,21 @@ namespace Incubator_2.Common
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             return DateTime.Now.ToString("HHmmssffff") + new string(Enumerable.Repeat(chars, 4).Select(s => s[random.Next(s.Length)]).ToArray());
         }
-        private static Process CreateProcessStruct(string recipient)
+        private static void AddToWaitList(Process process)
+        {
+            WaitList.Add(process);
+        }
+        private static void RemoveFromWaitList(Process process)
+        {
+            WaitList.Remove(process);
+        }
+        private static Process CreateResponseProcess(Process process)
+        {
+            (process.emitter, process.recipient) = (process.recipient, process.emitter);
+            process.type = ProcessType.RESPONSE;
+            return process;
+        }
+        private static Process CreateQueryProcess(string recipient)
         {
             Process process = new Process();
             
@@ -230,25 +282,34 @@ namespace Incubator_2.Common
             process.emitter = ProgramState.CurrentSession.slug;
             process.recipient = recipient;
             process.type = ProcessType.QUERY;
+            WaitList.Add(process);
             return process;
         }
         public static void SendTerminateProcess(string recipient)
         {
-            Process process = CreateProcessStruct(recipient);
+            Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.TERMINATE;
             ToFile(process);
         }
         public static void SendRestartProcess(string recipient)
         {
-            Process process = CreateProcessStruct(recipient);
+            Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.RESTART;
             ToFile(process);
         }
         public static void SendExplicitProcess(ExplicitMessage message, string recipient)
         {
-            Process process = CreateProcessStruct(recipient);
+            Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.EXPLICIT;
             process.content = JsonConvert.SerializeObject(message);
+            ToFile(process);
+        }
+        public static void SendQuestionProcess(ExplicitMessage message, string recipient)
+        {
+            Process process = CreateQueryProcess(recipient);
+            process.target = ProcessTarget.QUESTION;
+            process.content = JsonConvert.SerializeObject(message);
+            AddToWaitList(process);
             ToFile(process);
         }
         #endregion

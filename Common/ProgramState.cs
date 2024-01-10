@@ -9,6 +9,8 @@ using System.Windows;
 using Incubator_2.Models;
 using System.Runtime.CompilerServices;
 using Incubator_2.Common;
+using System.Windows.Documents;
+using System.Collections.Generic;
 
 
 namespace Common
@@ -279,23 +281,27 @@ namespace Common
             }
             Directory.CreateDirectory(ServerProcessor.Port);
         }
+        public static List<Session> GetActiveSessions()
+        {
+            using (Session ms = new Session())
+            {
+                return ms.GetOpenedSessions();
+            }
+        }
         public static void CloseSession() 
         {
             if (CurrentSession != null && CurrentSession.active)
             {
                 CurrentSession.CloseSession();
             }
-            if (Directory.Exists(ServerProcessor.Port))
-            {
-                Directory.Delete(ServerProcessor.Port, true);
-            }
+            ServerProcessor.StopPort();
         }
         #endregion
 
         #region ModalDialogs
         public static void ShowErrorDialog(string message, string title = "Возникла неизвестная ошибка")
         {
-            Dialog d = new Dialog(message, title);
+            Dialog d = new Dialog(message, title, Dialog.DialogIcon.Error);
             d.ShowDialog();
         }
         public static void ShowExlamationDialog(string message, string title = "Обратите внимание")
@@ -303,11 +309,22 @@ namespace Common
             Dialog d = new Dialog(message, title, Dialog.DialogIcon.Exlamation);
             d.ShowDialog();
         }
+        public static void ShowInfoDialog(string message, string title = "Оповещение")
+        {
+            Dialog d = new Dialog(message, title, Dialog.DialogIcon.Info);
+            d.ShowDialog();
+        }
         public static DialogStatus ShowQuestionDialog(string message, string title, string yesText="Да", string noText = "Нет")
         {
             DialogQuestion d = new DialogQuestion(message, title, yesText, noText);
             d.ShowDialog();
             return d.status;
+        }
+        public static Session ShowUserSelector(string helpText)
+        {
+            ActiveUserSelector au = new(helpText);
+            au.ShowDialog();
+            return au.SelectedSession;
         }
         #endregion
 

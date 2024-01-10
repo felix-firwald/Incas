@@ -40,6 +40,9 @@ namespace Models
             DataTable dt = StartCommandToService()
                 .Select()
                 .WhereEqual("active", "1")
+                .GroupBy("userId")
+                .Having("MAX(slug)")
+                .OrderByASC("user")
                 .Execute();
             List<Session> sessions = new List<Session>();
             foreach (DataRow dr in dt.Rows)

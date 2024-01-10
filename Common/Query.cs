@@ -329,6 +329,19 @@ namespace Common
         }
         #endregion
 
+        #region Group By
+        public Query GroupBy(string column)
+        {
+            Result += $" GROUP BY {column}";
+            return this;
+        }
+        public Query Having(string condition)
+        {
+            Result += $" HAVING {condition}";
+            return this;
+        }
+        #endregion
+
         public Query CreateTable(string tab, Field[] fields)
         {
             Result = $"CREATE TABLE {tab} (\n";

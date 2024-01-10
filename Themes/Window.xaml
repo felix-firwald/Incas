@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:fa="http://schemas.fontawesome.io/icons/">
     <Style x:Key="WindowBase" TargetType="{x:Type Window}">
         <Setter Property="Background" Value="{DynamicResource Basic}"/>
         <Setter Property="Foreground" Value="{DynamicResource Light}"/>
@@ -7,6 +7,21 @@
     <ControlTemplate x:Key="WindowDialog" TargetType="{x:Type Window}">
         <Border CornerRadius="6" BorderThickness="2" BorderBrush="{DynamicResource Element}" Background="{DynamicResource Basic}">
             <ContentPresenter/>
+        </Border>
+    </ControlTemplate>
+    <ControlTemplate x:Key="WindowWithHeader" TargetType="{x:Type Window}">
+        <Border CornerRadius="6" BorderThickness="2" BorderBrush="{DynamicResource Element}" Background="{DynamicResource Black}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="2"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <!--<Rectangle Fill="{DynamicResource Element}" Grid.Row="0" Height="1" Margin="5,0,5,0"/>-->
+                <Label Style="{DynamicResource LabelElementSpecial}" Content="{TemplateBinding Title}" FontWeight="Bold" Foreground="{DynamicResource DarkLight}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Rectangle Fill="{DynamicResource Element}" Grid.Row="1" />
+                <ContentPresenter Grid.Row="2"/>
+            </Grid>
         </Border>
     </ControlTemplate>
 
@@ -19,5 +34,15 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="AllowsTransparency" Value="True"/>
         <Setter Property="Template" Value="{StaticResource WindowDialog}"/>
+    </Style>
+    <Style x:Key="CentralWindow" TargetType="{x:Type Window}" BasedOn="{StaticResource Dialog}">
+        <Setter Property="WindowState" Value="Normal"/>
+        <Setter Property="Height" Value="250"/>
+        <Setter Property="WindowStyle" Value="None"/>
+        <Setter Property="Topmost" Value="True"/>
+        <Setter Property="Width" Value="450"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="AllowsTransparency" Value="True"/>
+        <Setter Property="Template" Value="{StaticResource WindowWithHeader}"/>
     </Style>
 </ResourceDictionary>

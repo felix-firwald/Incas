@@ -81,26 +81,8 @@ namespace Incubator_2.Common
                     ProgramState.ShowExlamationDialog($"Пароль для пользователя {user.fullname} был сброшен. Временный пароль: {p.startup_password}", "Пользователь восстановлен");
                     return p;
                 }
-                else
-                {
-                    UserParameters p = new();
-                    p.ApplyStandartProperties(ProgramState.GenerateSlug(4));
-                    ToFile(p, user, GetKey(user));
-                    ProgramState.ShowExlamationDialog($"Пароль для пользователя {user.fullname} был сброшен. Статус установлен на \"оператор\". Временный пароль: {p.startup_password}", "Пользователь восстановлен");
-                    return p;
-                }
+                return new();
             }
-            //catch (IOException ex)
-            //{
-            //    if (ProgramState.ShowQuestionDialog($"Возникла непредвиденная ошибка: {ex}.\nПопробовать снова?", "Возникла ошибка") == Windows.DialogStatus.Yes)
-            //    {
-            //        return FromFile(user, key);
-            //    }
-            //    else
-            //    {
-            //        return new();
-            //    }
-            //}
             catch (Exception ex)
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -110,14 +92,11 @@ namespace Incubator_2.Common
                 return new();
             }
         }
-        private async static void ToFile(UserParameters parameters, User user, string key)
+        private static void ToFile(UserParameters parameters, User user, string key)
         {
-            await System.Threading.Tasks.Task.Run(() =>
-            {
-                string content = JsonConvert.SerializeObject(parameters);
-                string filename = $"{ProgramState.UsersContext}\\{user.sign}{user.id}.enic";
-                File.WriteAllTextAsync(filename, Cryptographer.EncryptString(key, content));
-            });
+            string content = JsonConvert.SerializeObject(parameters);
+            string filename = $"{ProgramState.UsersContext}\\{user.sign}{user.id}.enic";
+            File.WriteAllText(filename, Cryptographer.EncryptString(key, content));
         }
         private static string GetKey(User user)
         {
