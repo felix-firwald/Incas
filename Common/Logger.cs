@@ -26,14 +26,18 @@ namespace Incubator_2.Common
                 {
                     await System.Threading.Tasks.Task.Run(() =>
                     {
+                        string content = $"\n[{DateTime.Now.ToString("T")}]\t{type}:\t{text}";
                         try
                         {
-                            File.AppendAllText(loggerFile, $"\n[{DateTime.Now.ToString("T")}]\t{type}:\t{text}");
+                            File.AppendAllText(loggerFile, content);
                         }
-                        catch (IOException)
+                        catch (Exception)
                         {
-                            Thread.Sleep(100);
-                            WriteLog(text, type);
+                            try
+                            {
+                                File.AppendAllText(loggerFile + "_2", content);
+                            }
+                            catch (Exception) { }
                         }
                     });
                 }

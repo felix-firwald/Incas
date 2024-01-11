@@ -179,6 +179,10 @@ namespace Incubator_2.Common
                         Logger.WriteLog(e.Message, LogType.ERROR);
                         continue;
                     }
+                    if (ProgramState.CurrentUserParameters.write_listen_log)
+                    {
+                        Logger.WriteLog("Listen port");
+                    }
                     Thread.Sleep(200);
                 }
             });
@@ -219,6 +223,27 @@ namespace Incubator_2.Common
                 }
             });
             
+        }
+        private static Process GetProcessFromWaitList(string id)
+        {
+            foreach (Process process in WaitList)
+            {
+                if (process.id == id)
+                {
+                    return process;
+                }
+            }
+            return new Process();
+        }
+        private static void RemoveProcessFromWaitList(string id)
+        {
+            foreach (Process process in WaitList)
+            {
+                if (process.id == id)
+                {
+                    WaitList.Remove(process);
+                }
+            }
         }
         #region Handling Queries
         private static void TerminateProcessHandle()
@@ -276,6 +301,10 @@ namespace Incubator_2.Common
         #endregion
 
         #region Sending
+        private static void WriteLogSending(Process process)
+        {
+            Logger.WriteLog($"Process send: id {process.id}, type {process.type}, target {process.target}");
+        }
         private static string GenerateId()
         {
             Random random = new Random();
@@ -303,14 +332,14 @@ namespace Incubator_2.Common
         {
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.TERMINATE;
-            Logger.WriteLog($"Process send: {process.id} {process.target}");
+            WriteLogSending(process);
             ToFile(process);
         }
         public static void SendRestartProcess(string recipient)
         {
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.RESTART;
-            Logger.WriteLog($"Process send: {process.id} {process.target}");
+            WriteLogSending(process);
             ToFile(process);
         }
         public static void SendExplicitProcess(ExplicitMessage message, string recipient)
@@ -318,11 +347,11 @@ namespace Incubator_2.Common
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.EXPLICIT;
             process.content = JsonConvert.SerializeObject(message);
-            Logger.WriteLog($"Process send: {process.id} {process.target}");
-            if (message.message_type == AdminMessageType.QUESTION)
-            {
-                WaitList.Add(process);
-            }
+            WriteLogSending(process);
+            //if (message.message_type == AdminMessageType.QUESTION)
+            //{
+            //    WaitList.Add(process);
+            //}
             ToFile(process);
         }
 

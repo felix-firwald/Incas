@@ -237,6 +237,18 @@ namespace Incubator_2.ViewModels.VMAdmin
                 OnPropertyChanged(nameof(WritesLog));
             }
         }
+        public bool WritesListenLog
+        {
+            get
+            {
+                return _userParameters.write_listen_log;
+            }
+            set
+            {
+                _userParameters.write_listen_log = value;
+                OnPropertyChanged(nameof(WritesListenLog));
+            }
+        }
 
 
         public bool Save()
