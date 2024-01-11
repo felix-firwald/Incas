@@ -7,6 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <GroupBox Style="{DynamicResource MainGroupBox}" Header="ПОЛЬЗОВАТЕЛЬСКИЕ НАСТРОЙКИ">
-        <oneinstance:NoContent/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.ColumnSpan="2">
+                <Button Style="{DynamicResource ButtonMain}" Content="Сменить пароль" Click="SetPasswordClick"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                
+            </StackPanel>
+        </Grid>
     </GroupBox>
 </UserControl>

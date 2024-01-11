@@ -13,7 +13,8 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="23*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <TextBox x:Name="Header" Style="{DynamicResource TextBoxMain}" Tag="Заголовок предупреждения" Grid.ColumnSpan="2" Margin="5,5,5,5">
@@ -24,7 +25,14 @@
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>
-        <TextBox x:Name="MainText" Style="{DynamicResource TextBoxBig}" Tag="Текст предупреждения" Grid.Row="1" Grid.ColumnSpan="2" Margin="5,5,5,5">
+        <ComboBox x:Name="Combo" Grid.Row="1" Grid.ColumnSpan="2" Style="{DynamicResource ComboBoxMain}" SelectedIndex="0">
+            <ComboBox.Items>
+                <ComboBoxItem Content="Уведомление"/>
+                <ComboBoxItem Content="Предупреждение"/>
+                <ComboBoxItem Content="Вопрос"/>
+            </ComboBox.Items>
+        </ComboBox>
+        <TextBox x:Name="MainText" Style="{DynamicResource TextBoxBig}" Tag="Текст предупреждения" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,5,5,5" TextWrapping="WrapWithOverflow" MaxLength="1000">
             <TextBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -32,7 +40,7 @@
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>
-        <Button Style="{DynamicResource ButtonMain}" Content="Отправить" Grid.Row="2" Click="SendClick"/>
-        <Button Style="{DynamicResource ButtonMain}" Content="Отмена" Grid.Row="2" Grid.Column="1" Click="CloseClick"/>
+        <Button Style="{DynamicResource ButtonMain}" Content="Отправить" Grid.Row="3" Click="SendClick" IsDefault="True" Margin="5,5,5,5"/>
+        <Button Style="{DynamicResource ButtonMain}" Content="Отмена" Grid.Row="3" Grid.Column="1" Click="CloseClick" IsCancel="True" Margin="5,5,5,5"/>
     </Grid>
 </Window>

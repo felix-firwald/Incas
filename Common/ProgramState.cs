@@ -48,6 +48,7 @@ namespace Common
         public static string Messages { get { return Root + @"\Messages"; } } // папка еще не создана
 
         public static string UsersContext { get { return Root + @"\UsersContext"; } }
+        public static string LogData { get { return Root + @"\LogData"; } } // ...\Root\LogData
 
         #region Templates
 
@@ -59,7 +60,7 @@ namespace Common
         #endregion
 
         public static User CurrentUser { get; set; }
-        public static UserParameters CurrentUserParameters { get { return CurrentUser.GetParametersContext(); } }
+        public static UserParameters CurrentUserParameters { get; set; }
         public static Session CurrentSession { get; private set; }
         public static string SystemName = Environment.UserName;
 
@@ -74,6 +75,7 @@ namespace Common
                 Directory.CreateDirectory(TemplatesSourcesExcelPath);
                 Directory.CreateDirectory(ServerProcesses);
                 Directory.CreateDirectory(Messages);
+                Directory.CreateDirectory(LogData);
                 Directory.CreateDirectory(UsersContext);
                 Directory.CreateDirectory(TemplatesRuntime);
                 Directory.CreateDirectory(TemplatesGenerated);

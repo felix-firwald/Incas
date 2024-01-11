@@ -225,6 +225,19 @@ namespace Incubator_2.ViewModels.VMAdmin
                 OnPropertyChanged(nameof(CanModifyTemplates));
             }
         }
+        public bool WritesLog
+        {
+            get
+            {
+                return _userParameters.write_log;
+            }
+            set
+            {
+                _userParameters.write_log = value;
+                OnPropertyChanged(nameof(WritesLog));
+            }
+        }
+
 
         public bool Save()
         {

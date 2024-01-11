@@ -73,52 +73,72 @@ namespace Forms
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
-            if (ProgramState.IsWorkspaceOpened())
+            if (ProgramState.CurrentUserParameters.modify_templates)
             {
-                if (this.ChildPanel.Children.Count > 0)
+                if (ProgramState.IsWorkspaceOpened())
                 {
-                    ProgramState.ShowErrorDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
-                    return;
-                }
-                if (ProgramState.ShowQuestionDialog($"Шаблон \"{template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
-                {
-                    Models.Tag tag = new Models.Tag();
-                    tag.RemoveAllTagsByTemplate(template.id);
-                    template.RemoveTemplate();
-                    UpdateList();
+                    if (this.ChildPanel.Children.Count > 0)
+                    {
+                        ProgramState.ShowExlamationDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
+                        return;
+                    }
+                    if (ProgramState.ShowQuestionDialog($"Шаблон \"{template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
+                    {
+                        Models.Tag tag = new Models.Tag();
+                        tag.RemoveAllTagsByTemplate(template.id);
+                        template.RemoveTemplate();
+                        UpdateList();
+                    }
                 }
             }
-            
+            else
+            {
+                ProgramState.ShowExlamationDialog("Вам недоступна функция удаления шаблонов.", "Удаление прервано");
+            }
         }
 
         private void EditClick(object sender, MouseButtonEventArgs e)
         {
-            if (ProgramState.IsWorkspaceOpened())
+            if (ProgramState.CurrentUserParameters.modify_templates)
             {
-                if (this.template.parent != 0)  // если это ребенок
+                if (ProgramState.IsWorkspaceOpened())
                 {
-                    VM_ChildTemplate vm = new VM_ChildTemplate(this.template.parent, this.template);
-                    CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
-                    cc.OnCreated += UpdateList;
-                    cc.ShowDialog();
+                    if (this.template.parent != 0)  // если это ребенок
+                    {
+                        VM_ChildTemplate vm = new VM_ChildTemplate(this.template.parent, this.template);
+                        CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
+                        cc.OnCreated += UpdateList;
+                        cc.ShowDialog();
+                    }
+                    else
+                    {
+                        CreateTemplateWord ctw = new CreateTemplateWord(this.template);
+                        ctw.OnCreated += UpdateList;
+                        ctw.ShowDialog();
+                    }
                 }
-                else
-                {
-                    CreateTemplateWord ctw = new CreateTemplateWord(this.template);
-                    ctw.OnCreated += UpdateList;
-                    ctw.ShowDialog();
-                }
+            }
+            else
+            {
+                ProgramState.ShowExlamationDialog("Вам недоступна функция редактирования шаблонов.", "Редактирование прервано");
             }
         }
 
         private void CreateChildClick(object sender, MouseButtonEventArgs e)
         {
-            if (ProgramState.IsWorkspaceOpened())
+            if (ProgramState.CurrentUserParameters.create_templates)
             {
-                VM_ChildTemplate vm = new VM_ChildTemplate(this.template.id);
-                CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
-                cc.OnCreated += UpdateList;
-                cc.ShowDialog();
+                if (ProgramState.IsWorkspaceOpened())
+                {
+                    VM_ChildTemplate vm = new VM_ChildTemplate(this.template.id);
+                    CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
+                    cc.OnCreated += UpdateList;
+                    cc.ShowDialog();
+                }
+            }
+            else
+            {
+                ProgramState.ShowExlamationDialog("Вам недоступна функция создания шаблонов.", "Создание прервано");
             }
         }
         private void UpdateList()

@@ -54,6 +54,7 @@
             <CheckBox Style="{DynamicResource Toggle}" Grid.Row="3" Grid.Column="1" IsChecked="{Binding CanViewDatabase}" Content="Видимость панели базы данных"/>
             <CheckBox Style="{DynamicResource Toggle}" Grid.Row="1" Grid.Column="1" IsChecked="{Binding CanCreateTemplates}" Content="Создание шаблонов"/>
             <CheckBox Style="{DynamicResource Toggle}" Grid.Row="2" Grid.Column="1" IsChecked="{Binding CanModifyTemplates}" Content="Удаление или редактирование шаблонов"/>
+            <CheckBox Style="{DynamicResource Toggle}" Grid.Row="2" Grid.Column="1" IsChecked="{Binding WritesLog}" Content="Вести журнал логов"/>
         </StackPanel>
         <Button Style="{DynamicResource ButtonMain}" Grid.Row="6" Content="Сохранить" Click="SaveClick" IsDefault="True" Grid.ColumnSpan="2" Margin="5,5,5,5"/>
     </Grid>

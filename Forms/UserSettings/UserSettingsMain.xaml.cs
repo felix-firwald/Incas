@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Incubator_2.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,12 @@ namespace Incubator_2.Forms.UserSettings
         public UserSettingsMain()
         {
             InitializeComponent();
+        }
+
+        private void SetPasswordClick(object sender, RoutedEventArgs e)
+        {
+            SetPassword sp = new();
+            sp.ShowDialog();
         }
     }
 }

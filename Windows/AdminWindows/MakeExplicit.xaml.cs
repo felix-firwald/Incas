@@ -30,7 +30,21 @@ namespace Incubator_2.Windows.AdminWindows
         {
             message.header = this.Header.Text;
             message.message = this.MainText.Text;
+            message.message_type = GetEnumFromCombo();
             DialogResult = true;
+        }
+        private AdminMessageType GetEnumFromCombo()
+        {
+            switch(this.Combo.SelectedIndex)
+            {
+                case 0:
+                default:
+                    return AdminMessageType.NOTIFY;
+                case 1:
+                    return AdminMessageType.WARNING;
+                case 2:
+                    return AdminMessageType.QUESTION;
+            }
         }
 
         private void CloseClick(object sender, RoutedEventArgs e)

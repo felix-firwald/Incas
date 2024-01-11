@@ -1,4 +1,5 @@
 ﻿using Common;
+using DocumentFormat.OpenXml.Presentation;
 using Incubator_2.Windows;
 using Newtonsoft.Json;
 using System;
@@ -12,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Windows.ApplicationModel.Background;
 
 namespace Incubator_2.Common
 {
@@ -28,7 +30,6 @@ namespace Incubator_2.Common
         TERMINATE = 101,
         RESTART = 102,
         EXPLICIT = 103,
-        QUESTION = 104,
         GET_USER = 105,
         // ALL USERS
         OPEN_SEQUENCER = 201,
@@ -44,10 +45,17 @@ namespace Incubator_2.Common
         NO,
         OK
     }
+    public enum AdminMessageType
+    {
+        NOTIFY,
+        WARNING,
+        QUESTION
+    }
     public struct ExplicitMessage
     {
         public string header;
         public string message;
+        public AdminMessageType message_type;
     }
     struct Process
     {
@@ -60,22 +68,22 @@ namespace Incubator_2.Common
     }
     static class ServerProcessor
     {
-        public static string Port { get { return $"{ProgramState.ServerProcesses}\\Port {ProgramState.CurrentSession.slug}"; } }
+        public static string Port { get { return $"{ProgramState.ServerProcesses}\\Port_{ProgramState.CurrentSession.slug}"; } }
         private static List<Process> WaitList = new();
-        private static bool StopCreating = false;
+        private static bool StopPulling = false;
         #region Reusable Base Functionality
         public static void StopPort()
         {
-            StopCreating = true;
-            if (Directory.Exists(ServerProcessor.Port))
+            StopPulling = true;
+            if (Directory.Exists(Port))
             {
-                string[] files = Directory.GetFiles(ServerProcessor.Port);
+                string[] files = Directory.GetFiles(Port);
                 foreach (string file in files)
                 {
                     File.SetAttributes(file, FileAttributes.Normal);
                     File.Delete(file);
                 }
-                Directory.Delete(ServerProcessor.Port);
+                Directory.Delete(Port);
             }
         }
         private static string GetKeyByRecipient(string recipient)
@@ -88,6 +96,10 @@ namespace Incubator_2.Common
             }
             else if (result.Length > 32)
             {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ProgramState.ShowInfoDialog(result.Length.ToString());
+                });
                 result = result.Substring(0, 31);
             }
             return result;
@@ -96,8 +108,9 @@ namespace Incubator_2.Common
         {
             await Task.Run(() =>
             {
+                Logger.WriteLog($"Encrypting process {process.id}");
                 string content = JsonConvert.SerializeObject(process);
-                string filename = $"{ProgramState.ServerProcesses}\\Port {process.recipient}\\{process.id}.procinc";
+                string filename = $"{ProgramState.ServerProcesses}\\Port_{process.recipient}\\{process.id}.procinc";
                 File.WriteAllTextAsync(filename, Cryptographer.EncryptString(GetKeyByRecipient(process.recipient), content));
             });
         }
@@ -106,11 +119,13 @@ namespace Incubator_2.Common
             Process result = new Process();
             try
             {
+                Logger.WriteLog($"Decrypting file of process {filename}");
                 string output = Cryptographer.DecryptString(GetKeyByRecipient(ProgramState.CurrentSession.slug), File.ReadAllText(filename));
                 result = JsonConvert.DeserializeObject<Process>(output);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Logger.WriteLog(e.Message, LogType.ERROR);
                 return new Process();
             }
             
@@ -138,43 +153,39 @@ namespace Incubator_2.Common
             }
 
         }
-        private static void RuntimeCollector()
-        {
-
-        }
         #endregion
 
         public async static void Listen()
         {
-            
             RemoveOldest();
             //string targetFileName = $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession.slug}.procinc";
             await Task.Run(() =>
             {
-                while (ProgramState.CurrentSession.active)
+                while (ProgramState.CurrentSession is not null || ProgramState.CurrentSession.active || !StopPulling)
                 {
                     try
                     {
-                        if (!Directory.Exists(Port) && !StopCreating)
+                        if (!Directory.Exists(Port))
                         {
                             Directory.CreateDirectory(Port);
                         }
                         foreach (string f in Directory.GetFiles(Port))
                         {
-                            Switcher(FromFile(f));
+                            Switcher(FromFile(f));                            
                         }
-                        Thread.Sleep(200);
-                        ProgramState.ShowUserSelector("Выберите пользователя, с которым хотите начать общение");
                     }
-                    catch(Exception)
+                    catch (Exception e)
                     {
+                        Logger.WriteLog(e.Message, LogType.ERROR);
                         continue;
                     }
+                    Thread.Sleep(200);
                 }
             });
         }
         public async static void Switcher(Process process)
         {
+            Logger.WriteLog($"Process was received: {process.id} {process.target} {process.content}");
             await Task.Run(() =>
             {
                 if (process.type == ProcessType.QUERY && process.recipient == ProgramState.CurrentSession.slug)
@@ -188,10 +199,7 @@ namespace Incubator_2.Common
                             RestartProcessHandle();
                             break;
                         case ProcessTarget.EXPLICIT: // admin process
-                            ShowExplicitMessageProcessHandle(process.content);
-                            break;
-                        case ProcessTarget.QUESTION:
-                            ShowQuestionMessageProcessHandle(process.content);
+                            ShowExplicitMessageProcessHandle(process.content, process);
                             break;
                         case ProcessTarget.UNKNOWN:
                         default: break;
@@ -199,7 +207,15 @@ namespace Incubator_2.Common
                 }
                 else if (process.type == ProcessType.RESPONSE)
                 {
-                    
+                    switch (process.target)
+                    {
+                        case ProcessTarget.EXPLICIT:
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                ProgramState.ShowInfoDialog($"Пользователь ответил: {process.content}", "Ответ на запрос");
+                            });
+                            break;
+                    }
                 }
             });
             
@@ -235,20 +251,26 @@ namespace Incubator_2.Common
                 });
             }
         }
-        private static void ShowExplicitMessageProcessHandle(string content)
+        private static void ShowExplicitMessageProcessHandle(string content, Process process)
         {
             ExplicitMessage m = JsonConvert.DeserializeObject<ExplicitMessage>(content);
             Application.Current.Dispatcher.Invoke(() =>
             {
-                ProgramState.ShowExlamationDialog(m.message, m.header);
-            });
-        }
-        private static void ShowQuestionMessageProcessHandle(string content)
-        {
-            ExplicitMessage m = JsonConvert.DeserializeObject<ExplicitMessage>(content);
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                ProgramState.ShowQuestionDialog(m.message, m.header);
+                switch (m.message_type)
+                {
+                    case AdminMessageType.NOTIFY:
+                    default:
+                        ProgramState.ShowInfoDialog(m.message, m.header);
+                        break;
+                    case AdminMessageType.WARNING:
+                        ProgramState.ShowExlamationDialog(m.message, m.header);
+                        break;
+                    case AdminMessageType.QUESTION:
+                        DialogStatus ds = ProgramState.ShowQuestionDialog(m.message, m.header);
+                        SendQuestionResultResponse(process, ds);
+                        break;
+                }
+                
             });
         }
         #endregion
@@ -260,14 +282,7 @@ namespace Incubator_2.Common
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             return DateTime.Now.ToString("HHmmssffff") + new string(Enumerable.Repeat(chars, 4).Select(s => s[random.Next(s.Length)]).ToArray());
         }
-        private static void AddToWaitList(Process process)
-        {
-            WaitList.Add(process);
-        }
-        private static void RemoveFromWaitList(Process process)
-        {
-            WaitList.Remove(process);
-        }
+
         private static Process CreateResponseProcess(Process process)
         {
             (process.emitter, process.recipient) = (process.recipient, process.emitter);
@@ -282,19 +297,20 @@ namespace Incubator_2.Common
             process.emitter = ProgramState.CurrentSession.slug;
             process.recipient = recipient;
             process.type = ProcessType.QUERY;
-            WaitList.Add(process);
             return process;
         }
         public static void SendTerminateProcess(string recipient)
         {
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.TERMINATE;
+            Logger.WriteLog($"Process send: {process.id} {process.target}");
             ToFile(process);
         }
         public static void SendRestartProcess(string recipient)
         {
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.RESTART;
+            Logger.WriteLog($"Process send: {process.id} {process.target}");
             ToFile(process);
         }
         public static void SendExplicitProcess(ExplicitMessage message, string recipient)
@@ -302,15 +318,21 @@ namespace Incubator_2.Common
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.EXPLICIT;
             process.content = JsonConvert.SerializeObject(message);
+            Logger.WriteLog($"Process send: {process.id} {process.target}");
+            if (message.message_type == AdminMessageType.QUESTION)
+            {
+                WaitList.Add(process);
+            }
             ToFile(process);
         }
-        public static void SendQuestionProcess(ExplicitMessage message, string recipient)
+
+        #endregion
+        #region Responses
+        private static void SendQuestionResultResponse(Process inputProcess, DialogStatus ds)
         {
-            Process process = CreateQueryProcess(recipient);
-            process.target = ProcessTarget.QUESTION;
-            process.content = JsonConvert.SerializeObject(message);
-            AddToWaitList(process);
-            ToFile(process);
+            Process outputProcess = CreateResponseProcess(inputProcess);
+            outputProcess.content = (ds == DialogStatus.Yes) ? "Да" : "Нет";
+            ToFile(outputProcess);
         }
         #endregion
     }

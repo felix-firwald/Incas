@@ -44,6 +44,7 @@ namespace Incubator_2.Windows
         {
             if (ProgramState.CurrentUser != null)
             {
+                ProgramState.CurrentUserParameters = ProgramState.CurrentUser.GetParametersContext();
                 if (ProgramState.CurrentUserParameters.IsRightPassword(this.pwd.Text))
                 {
                     Permission.CurrentUserPermission = ProgramState.CurrentUserParameters.permission_group;

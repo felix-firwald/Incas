@@ -24,5 +24,6 @@ namespace Incubator_2.Forms.Communication
         {
             InitializeComponent();
         }
+
     }
 }
