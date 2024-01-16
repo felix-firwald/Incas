@@ -59,7 +59,6 @@ namespace Common
             SQLiteConnection.CreateFile(ProgramState.DatabasePath);
             SQLiteConnection.CreateFile(ProgramState.ServiceDatabasePath);
             SQLiteConnection.CreateFile(ProgramState.CustomDatabasePath);
-            //new Field(Field, )
             AutoTableCreator atc = new AutoTableCreator();
             Query q = new Query("");
             q.typeOfConnection = DBConnectionType.SERVICE;

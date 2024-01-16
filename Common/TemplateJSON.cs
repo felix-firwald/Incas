@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.Models;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,24 @@ namespace Incubator_2.Common
     {
         public int id;
         public int template;
-        public string template_name;
-        public DateTime generated_time;
-        public string file_name;
+        public string templateName;
+        public DateTime generatedTime;
+        public string fileName;
         public string reference;
         public string destination;
+
+        public GeneratedDocument AsModel()
+        {
+            GeneratedDocument d = new();
+            d.id = id;
+            d.template = template;
+            d.templateName = templateName;
+            d.generatedTime = generatedTime;
+            d.fileName = fileName;
+            d.reference = reference;
+            d.destination = destination;
+            return d;
+        }
     }
     public class TemplateJSON
     {
@@ -34,19 +48,19 @@ namespace Incubator_2.Common
             template_name = templname;
         }
 
-        public SGeneratedDocument Save(int generationId)
+        public SGeneratedDocument Save()
         {
             string result = Newtonsoft.Json.JsonConvert.SerializeObject(this);
             DateTime timestamp = DateTime.Now;
-            string shortname = $"{timestamp.ToString("yyyyMMddHHmmss")}_{generationId}.jinc";
+            string shortname = $"{timestamp.ToString("yyyyMMddHHmmss")}{ProgramState.GenerateSlug(4)}.jinc";
             string filename = ProgramState.TemplatesGenerated + "\\" + shortname;
             File.WriteAllText(filename, result, Encoding.UTF8);
             SGeneratedDocument st = new SGeneratedDocument();
-            st.file_name = this.file_name;
+            st.fileName = this.file_name;
             st.template = this.template_id;
-            st.template_name = this.template_name;
+            st.templateName = this.template_name;
             st.reference = shortname;
-            st.generated_time = timestamp;
+            st.generatedTime = timestamp;
             return st;
         }
 

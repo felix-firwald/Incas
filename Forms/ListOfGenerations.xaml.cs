@@ -1,6 +1,7 @@
 ﻿using Common;
 using Incubator_2.Common;
 using Incubator_2.Forms.OneInstance;
+using Incubator_2.Models;
 using Incubator_2.Windows;
 using Models;
 using System;
@@ -35,13 +36,15 @@ namespace Incubator_2.Forms
         public void UpdateList()
         {
             this.ContentPanel.Children.Clear();
-            RegistreCreatedJSON.GetRegistry();
-            foreach (SGeneratedDocument record in RegistreCreatedJSON.generatedDocuments)
+            using (GeneratedDocument d = new())
             {
-                FileCreated fc = new FileCreated(record);
-                fc.OnSelectorChecked += AddToSelection;
-                fc.OnSelectorUnchecked += RemoveFromSelection;
-                this.ContentPanel.Children.Add(fc);
+                foreach (SGeneratedDocument record in d.GetAllDocuments())
+                {
+                    FileCreated fc = new FileCreated(record);
+                    fc.OnSelectorChecked += AddToSelection;
+                    fc.OnSelectorUnchecked += RemoveFromSelection;
+                    this.ContentPanel.Children.Add(fc);
+                }
             }
             if (this.ContentPanel.Children.Count == 0)
             {
@@ -76,7 +79,6 @@ namespace Incubator_2.Forms
                         this.ContentPanel.Children.Remove(fc);
                         RegistreCreatedJSON.RemoveRecord(fc.record);
                     }
-                    RegistreCreatedJSON.SaveRegistry();
                 }
                 else
                 {
@@ -92,7 +94,7 @@ namespace Incubator_2.Forms
             {
                 using (Template tm = new())
                 {
-                    if (tm.GetTemplateById(Selection[0].record.template_id) != null)
+                    if (tm.GetTemplateById(Selection[0].record.template) != null)
                     {
                         try
                         {

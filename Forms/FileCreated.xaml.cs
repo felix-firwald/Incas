@@ -19,9 +19,9 @@ namespace Incubator_2.Forms
         {
             InitializeComponent();
             record = rec;
-            this.Filename.Content = record.file_name;
-            this.TemplateName.Content = record.template_name;
-            this.GenerationTime.Content = record.generated_time.ToString("f");
+            this.Filename.Content = record.fileName;
+            this.TemplateName.Content = record.templateName;
+            this.GenerationTime.Content = record.generatedTime.ToString("f");
         }
 
         private void Selector_Checked(object sender, RoutedEventArgs e)

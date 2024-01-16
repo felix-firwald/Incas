@@ -106,7 +106,6 @@ namespace Incubator_2.Windows
             this.Dispatcher.Invoke(() =>
             {
                 Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-                RegistreCreatedJSON.GetRegistry();
                 int i = 1;
                 foreach (UC_FileCreator fc in creators)
                 {
@@ -119,7 +118,6 @@ namespace Incubator_2.Windows
                     
                     i++;
                 }
-                RegistreCreatedJSON.SaveRegistry();
                 Mouse.OverrideCursor = null;
                 ProgramState.OpenFolder(this.dir.Text);
             });

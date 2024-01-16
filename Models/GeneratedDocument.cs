@@ -1,6 +1,8 @@
 ﻿using Common;
+using Incubator_2.Common;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +23,31 @@ namespace Incubator_2.Models
         {
             tableName = "GeneratedDocuments";
         }
+        public SGeneratedDocument AsStruct()
+        {
+            SGeneratedDocument d = new();
+            d.id = id;
+            d.template = template;
+            d.templateName = templateName;
+            d.generatedTime = generatedTime;
+            d.fileName = fileName;
+            d.reference = reference;
+            d.destination = destination;
+            return d;
+        }
+        public List<SGeneratedDocument> GetAllDocuments()
+        {
+            DataTable dt = StartCommand()
+                .Select()
+                .Execute();
+            List<SGeneratedDocument> result = new();
+            foreach (DataRow dr in dt.Rows)
+            {
+                this.Serialize(dr);
+                result.Add(AsStruct());
+            }
+            return result;
+        }
         public void AddRecord()
         {
             StartCommand()
@@ -33,6 +60,13 @@ namespace Incubator_2.Models
                     {nameof(reference), reference },
                     {nameof(destination), destination },
                 })
+                .ExecuteVoid();
+        }
+        public void RemoveRecord()
+        {
+            StartCommand()
+                .Delete()
+                .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }
     }
