@@ -11,8 +11,8 @@ namespace Incubator_2.ViewModels.VMAdmin
 {
     class VM_SessionElement : VM_Base
     {
-        Session _session;
-        public VM_SessionElement(Session s)
+        SSession _session;
+        public VM_SessionElement(ref SSession s)
         {
             _session = s;
         }

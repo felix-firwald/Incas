@@ -1,18 +1,8 @@
-﻿using Incubator_2.ViewModels.VMAdmin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Incubator_2.Models;
+using Incubator_2.ViewModels.VMAdmin;
+using Incubator_2.Windows.AdminWindows;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Incubator_2.Forms.AdminPanel
 {
@@ -27,11 +17,30 @@ namespace Incubator_2.Forms.AdminPanel
             InitializeComponent();
             this.vm = new VM_WorkspaceParameters();
             this.DataContext = vm;
+            LoadSectors();
+        }
+
+        private void LoadSectors()
+        {
+            using (Sector s = new())
+            {
+                s.GetSectors().ForEach(sector =>
+                {
+                    SectorElement se = new(sector);
+                    this.Sectors.Children.Add(se);
+                });
+            }
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
             this.vm.SaveParameters();
+        }
+
+        private void AddSectorClick(object sender, RoutedEventArgs e)
+        {
+            SectorEditor se = new(new Sector());
+            se.ShowDialog();
         }
     }
 }

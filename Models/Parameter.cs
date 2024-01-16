@@ -10,6 +10,7 @@ namespace Incubator_2.Models
     public enum ParameterType
     {
         INCUBATOR,
+        SECTOR,
         DATABASE,
         CHAT,
         MISC
@@ -33,7 +34,7 @@ namespace Incubator_2.Models
         }
         public Parameter GetParameter(ParameterType typeOf, string nameOf, string defaultValue = "0", bool createIfNotExists=true)
         {
-            DataRow dr = StartCommand()
+            DataRow dr = StartCommandToService()
                         .Select()
                         .WhereEqual("type", typeOf.ToString())
                         .WhereEqual("name", nameOf)
@@ -79,12 +80,12 @@ namespace Incubator_2.Models
         }
         public Parameter CreateParameter()
         {
-            StartCommand()
+            StartCommandToService()
                 .Insert(new Dictionary<string, string> 
                     {
-                        {"type", $"'{type}'"},
-                        {"name", $"'{name}'"},
-                        {"value", $"'{value}'"}
+                        {"type", type.ToString()},
+                        {"name", name},
+                        {"value", value}
                     }
                 )
                 .ExecuteVoid();
@@ -92,7 +93,7 @@ namespace Incubator_2.Models
         }
         public Parameter UpdateValue()
         {
-            StartCommand()
+            StartCommandToService()
                 .Update("value", value)
                 .WhereEqual("id", id.ToString())
                 .ExecuteVoid();

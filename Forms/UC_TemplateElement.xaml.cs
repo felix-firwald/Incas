@@ -22,19 +22,18 @@ namespace Forms
     /// </summary>
     public partial class UC_TemplateElement : UserControl
     {
-        public Template template;
+        public STemplate template;
 
         public delegate void Base();
         public event Base OnUpdated;
-        public UC_TemplateElement(Template t)
+        public UC_TemplateElement(STemplate t)
         {
             InitializeComponent();
             template = t;
             this.MainLabel.Content = template.name;
-            //GetChilds();
             IsChild();
         }
-        public void AddChild(Template t)
+        public void AddChild(STemplate t)
         {
             UC_TemplateElement c = new UC_TemplateElement(t);
             this.ChildPanel.Children.Add(c);
@@ -58,7 +57,7 @@ namespace Forms
         {
             if (IsFileExists())
             {
-                UseTemplate ut = new UseTemplate(template);
+                UseTemplate ut = new UseTemplate(template.AsModel());
                 ut.Show();
             }
             else
@@ -86,7 +85,7 @@ namespace Forms
                     {
                         Models.Tag tag = new Models.Tag();
                         tag.RemoveAllTagsByTemplate(template.id);
-                        template.RemoveTemplate();
+                        template.AsModel().RemoveTemplate();
                         UpdateList();
                     }
                 }
@@ -105,14 +104,14 @@ namespace Forms
                 {
                     if (this.template.parent != 0)  // если это ребенок
                     {
-                        VM_ChildTemplate vm = new VM_ChildTemplate(this.template.parent, this.template);
+                        VM_ChildTemplate vm = new VM_ChildTemplate(this.template.parent, this.template.AsModel());
                         CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
                         cc.OnCreated += UpdateList;
                         cc.ShowDialog();
                     }
                     else
                     {
-                        CreateTemplateWord ctw = new CreateTemplateWord(this.template);
+                        CreateTemplateWord ctw = new CreateTemplateWord(this.template.AsModel());
                         ctw.OnCreated += UpdateList;
                         ctw.ShowDialog();
                     }

@@ -146,7 +146,7 @@ namespace Common
         #region Insert Update Delete
         public Query Insert(Dictionary<string, string> dict)
         {
-            Result = $"INSERT INTO {Table} ({string.Join(", ", dict.Keys)})\nVALUES ({string.Join(", ", dict.Values)})";
+            Result = $"INSERT INTO {Table} ({string.Join(", ", dict.Keys)})\nVALUES ('{string.Join("', '", dict.Values)}')";
             return this;
         }
         public Query Update(string cell, string value, bool isStr = true)
@@ -213,11 +213,15 @@ namespace Common
         /// <returns></returns>
         public Query WhereNotNULL(string cell)
         {
-            return Where(cell, "is not", "NULL", false);
+            return Where(cell, "is not", $"NULL AND {cell} is not \"\"", false);
         }
+        /// <summary>
+        /// Where A is NULL
+        /// </summary>
+        /// <returns></returns>
         public Query WhereNULL(string cell)
         {
-            return Where(cell, "is ", "NULL", false);
+            return Where(cell, "is ", $"NULL OR {cell} = \"\"", false);
         }
 
         /// <summary>

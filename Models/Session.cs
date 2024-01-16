@@ -5,6 +5,29 @@ using System.Data;
 
 namespace Models
 {
+    public struct SSession
+    {
+        public string slug { get; set; }
+        public string user { get; set; }
+        public int userId { get; set; }
+        public DateTime timeStarted { get; set; }
+        public DateTime timeFinished { get; set; }
+        public string computer { get; set; }
+        public bool active { get; set; }
+
+        public Session AsModel()
+        {
+            Session session = new();
+            session.slug = slug;
+            session.user = user;
+            session.userId = userId;
+            session.timeStarted = timeStarted;
+            session.timeFinished = timeFinished;
+            session.computer = computer;
+            session.active = active;
+            return session;
+        }
+    }
     public class Session : Model
     {
         public string slug { get; set; }
@@ -18,20 +41,31 @@ namespace Models
         {
             tableName = "Sessions";
         }
+        public SSession AsStruct()
+        {
+            SSession s = new();
+            s.slug = slug;
+            s.user = user;
+            s.userId = userId;
+            s.timeStarted = timeStarted;
+            s.timeFinished = timeFinished;
+            s.computer = computer;
+            s.active = active;
+            return s;
+        }
 
-        public List<Session> GetAllSessions()
+        public List<SSession> GetAllSessions()
         {
             DataTable dt = StartCommandToService()
                 .Select()
                 .OrderByDESC("slug")
                 .Limit(40)
                 .Execute();
-            List<Session> sessions = new List<Session>();
+            List<SSession> sessions = new();
             foreach (DataRow dr in dt.Rows)
             {
-                Session s = new Session();
-                s.Serialize(dr);
-                sessions.Add(s);
+                this.Serialize(dr);
+                sessions.Add(this.AsStruct());
             }
             return sessions;
         }
@@ -82,11 +116,11 @@ namespace Models
                 StartCommandToService()
                     .Insert(new Dictionary<string, string>
                     {
-                        {"slug", $"'{slug}'" },
-                        { "user", $"'{user}'" },
-                        { "userId", $"'{userId}'" },
-                        { "timeStarted", $"'{timeStarted}'" },
-                        { "computer", $"'{computer}'" },
+                        {"slug", slug },
+                        { "user", user },
+                        { "userId", userId.ToString() },
+                        { "timeStarted", timeStarted.ToString() },
+                        { "computer", computer },
                         { "active", BoolToInt(active).ToString() },
                     })
                     .ExecuteVoid();
@@ -95,7 +129,7 @@ namespace Models
         public void CloseSession()
         {
             StartCommandToService()
-                .Update("active", $"0")
+                .Update("active", "0")
                 .Update("timeFinished", $"{DateTime.Now}")
                 .WhereEqual("slug", this.slug)
                 .ExecuteVoid();

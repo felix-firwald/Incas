@@ -29,6 +29,10 @@ namespace Common
 
         }
     }
+    public interface IModelConverter
+    {
+        public Model AsModel();
+    }
 
     public abstract class Model : System.IDisposable
     {

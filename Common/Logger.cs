@@ -33,11 +33,6 @@ namespace Incubator_2.Common
                         }
                         catch (Exception)
                         {
-                            try
-                            {
-                                File.AppendAllText(loggerFile + "_2", content);
-                            }
-                            catch (Exception) { }
                         }
                     });
                 }

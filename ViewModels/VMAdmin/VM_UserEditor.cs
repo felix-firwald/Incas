@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incubator_2.Common;
+using Incubator_2.Models;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -14,18 +15,57 @@ namespace Incubator_2.ViewModels.VMAdmin
     {
         private User _user;
         private UserParameters _userParameters;
+        private List<Sector> _sectors;
+        private Sector _selectedSector;
         public VM_UserEditor(User user)
         {
             _user = user;
             if (user.id > 0 )
             {
                 _userParameters = user.GetParametersContext();
+                using (Sector s = new())
+                {
+                    Sectors = s.GetSectors();
+                    s.slug = _user.sector;
+                    _selectedSector = s.GetSector();
+                    OnPropertyChanged(nameof(SelectedSector));
+                }
             }
             else
             {
+                using (Sector s = new())
+                {
+                    Sectors = s.GetSectors();
+                }
                 _userParameters = new();
             }
         }
+        public List<Sector> Sectors
+        {
+            get
+            {
+                return _sectors;
+            }
+            set
+            {
+                _sectors = value;
+                OnPropertyChanged(nameof(Sectors));
+            }
+        }
+
+        public Sector SelectedSector
+        {
+            get
+            {
+                return _selectedSector;
+            }
+            set
+            {
+                _selectedSector = value;
+                OnPropertyChanged(nameof(SelectedSector));
+            }
+        }
+
         public string PermissionStatus
         {
             get
@@ -148,23 +188,6 @@ namespace Incubator_2.ViewModels.VMAdmin
             }
         }
 
-        private bool Serialize(PseudoBoolean b)
-        {
-            switch (b)
-            {
-                case PseudoBoolean.Yes: return true;
-                case PseudoBoolean.No: default: return false;
-            }
-        }
-        private PseudoBoolean Deserialize(bool b)
-        {
-            if (b)
-            {
-                return PseudoBoolean.Yes;
-            }
-            return PseudoBoolean.No;
-        }
-
         public bool CanViewTasks
         {
             get
@@ -253,10 +276,11 @@ namespace Incubator_2.ViewModels.VMAdmin
 
         public bool Save()
         {
-            if (!string.IsNullOrWhiteSpace(_user.username) && !string.IsNullOrWhiteSpace(_userParameters.startup_password) && !string.IsNullOrWhiteSpace(_user.surname))
+            if (!string.IsNullOrWhiteSpace(_user.username) && !string.IsNullOrWhiteSpace(_userParameters.startup_password) && !string.IsNullOrWhiteSpace(_user.surname) && _selectedSector != null)
             {
                 _user.fullname = $"{_user.surname} {_user.secondName}";
                 UserContextor.SaveContext(_userParameters, _user);
+                _user.sector = _selectedSector.slug;
                 _user.SaveUser(); 
                 return true;
             }

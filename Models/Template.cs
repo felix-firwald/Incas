@@ -10,6 +10,27 @@ namespace Models
         Word,
         Excel
     }
+    public struct STemplate
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string path { get; set; }
+        public string suggestedPath { get; set; }
+        public int parent { get; set; }
+        public TemplateType type { get; set; }
+
+        public Template AsModel()
+        {
+            Template template = new();
+            template.id = id;
+            template.name = name;
+            template.path = path;
+            template.suggestedPath = suggestedPath;
+            template.parent = parent;
+            template.type = type;
+            return template;
+        }
+    }
     public class Template : Model
     {
         public int id { get; set; }
@@ -18,11 +39,23 @@ namespace Models
         public string suggestedPath { get; set; }
         public int parent { get; set; }
         public TemplateType type { get; set; }
-        public bool isAbstract { get; set; }
         public Template()
         {
             tableName = "Templates";
+            
         }
+        public STemplate AsStruct()
+        {
+            STemplate template = new();
+            template.id = id;
+            template.name = name;
+            template.path = path;
+            template.suggestedPath = suggestedPath;
+            template.parent = parent;
+            template.type = type;
+            return template;
+        }
+
         public Template GetTemplateById(int id)
         {
             DataRow dr = StartCommand()
@@ -42,7 +75,7 @@ namespace Models
             }
             
         }
-        private List<Template> GetAllTemplatesBy(TemplateType tt, string cat)
+        private List<STemplate> GetAllTemplatesBy(TemplateType tt, string cat)
         {
             DataTable dt = StartCommand()
                 .Select()
@@ -51,13 +84,12 @@ namespace Models
                 .WhereNULL("parent")
                 .OrderByASC("name")
                 .Execute();
-            List<Template> resulting = new List<Template>();
+            List<STemplate> resulting = new();
             foreach (DataRow dr in dt.Rows)
             {
-                Template mt = new Template();
-                mt.Serialize(dr);
-                mt.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
-                resulting.Add(mt);
+                this.Serialize(dr);
+                this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
+                resulting.Add(this.AsStruct());
             }
             return resulting;
         }
@@ -88,11 +120,11 @@ namespace Models
             this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dt["type"].ToString());
             return this;
         }
-        public List<Template> GetWordTemplates(string category)
+        public List<STemplate> GetWordTemplates(string category)
         {
             return GetAllTemplatesBy(TemplateType.Word, category);
         }
-        public List<Template> GetExcelTemplates()
+        public List<STemplate> GetExcelTemplates()
         {
             return GetAllTemplatesBy(TemplateType.Excel, "");
         }
@@ -115,12 +147,11 @@ namespace Models
             StartCommand()
                 .Insert(new Dictionary<string, string>
                 {
-                    { "name", $"'{name}'" },
-                    { "path", $"'{path}'" },
-                    { "parent", isChild? $"'{parent}'" : "null" },
-                    { "suggestedPath", isChild? "''" : $"'{suggestedPath}'" },
-                    { "isAbstract", BoolToInt(isAbstract).ToString() },
-                    { "type", $"'{type}'" } 
+                    { "name", name },
+                    { "path", path },
+                    { "parent", isChild? parent.ToString(): "" }, // раньше тут было просто null а теперь будет 'null'
+                    { "suggestedPath", isChild? "''" : suggestedPath },
+                    { "type", type.ToString() } 
                 })
                 .ExecuteVoid();
             this.id = int.Parse(
@@ -152,19 +183,18 @@ namespace Models
                     .Execute();
             }
         }
-        public List<Template> GetAllChildren(List<int> ids)
+        public List<STemplate> GetAllChildren(List<int> ids)
         {
             DataTable dt = StartCommand()
                 .Select()
                 .WhereIn("parent", ids)
                 .OrderByASC("name")
                 .Execute();
-            List<Template> children = new List<Template>();
+            List<STemplate> children = new();
             foreach (DataRow dr in dt.Rows)
             {
-                Template templ = new Template();
-                templ.Serialize(dr);
-                children.Add(templ);
+                this.Serialize(dr);
+                children.Add(this.AsStruct());
             }
             return children;
         }

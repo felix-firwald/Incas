@@ -36,7 +36,7 @@ namespace Incubator_2.Forms
         {
             this.ContentPanel.Children.Clear();
             RegistreCreatedJSON.GetRegistry();
-            foreach (STemplateJSON record in RegistreCreatedJSON.generatedDocuments)
+            foreach (SGeneratedDocument record in RegistreCreatedJSON.generatedDocuments)
             {
                 FileCreated fc = new FileCreated(record);
                 fc.OnSelectorChecked += AddToSelection;

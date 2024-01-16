@@ -23,10 +23,10 @@ namespace Incubator_2.Forms.AdminPanel
     public partial class SessionElement : UserControl
     {
         VM_SessionElement vm;
-        public SessionElement(Session session)
+        public SessionElement(SSession session)
         {
             InitializeComponent();
-            vm = new(session);
+            vm = new(ref session);
             this.DataContext = vm;
         }
 

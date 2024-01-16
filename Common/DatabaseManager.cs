@@ -30,7 +30,29 @@ namespace Common
                 connection.Close();
             }
         }
-
+        public static void InitializeData(string customName = null)
+        {
+            AutoTableCreator atc = new AutoTableCreator();
+            Query q = new Query("");
+            if (customName == null)
+            {
+                q.typeOfConnection = DBConnectionType.BASE;
+            }
+            else
+            {
+                customName = $"{ProgramState.CommonPath}\\{customName}.dbinc";
+                SQLiteConnection.CreateFile(customName);
+                q.typeOfConnection = DBConnectionType.OTHER;
+                q.DBPath = customName;
+            }
+            q.AddCustomRequest(GetTaskDefinition(atc))
+             .AddCustomRequest(GetSubtaskDefinition(atc))
+             .AddCustomRequest(GetTemplateDefinition(atc))
+             .AddCustomRequest(GetTagDefinition(atc))
+             .AddCustomRequest(GetGeneratedDocumentDefinition(atc))
+             .AddCustomRequest(GetCustomTableDefinition(atc))
+             .ExecuteVoid();
+        }
 
         public static bool CreateTables()
         {
@@ -40,18 +62,13 @@ namespace Common
             //new Field(Field, )
             AutoTableCreator atc = new AutoTableCreator();
             Query q = new Query("");
-            q.typeOfConnection = DBConnectionType.BASE;
-            q.AddCustomRequest(GetParameterDefinition(atc))
-             .AddCustomRequest(GetUserDefinition(atc))
-             .AddCustomRequest(GetTaskDefinition(atc))
-             .AddCustomRequest(GetSubtaskDefinition(atc))
-             .AddCustomRequest(GetTemplateDefinition(atc))
-             .AddCustomRequest(GetTagDefinition(atc))
-             .AddCustomRequest(GetCustomTableDefinition(atc))
-             .ExecuteVoid();
             q.typeOfConnection = DBConnectionType.SERVICE;
-            q.AddCustomRequest(GetSessionDefinition(atc))
+            q.AddCustomRequest(GetParameterDefinition(atc))
+             .AddCustomRequest(GetSectorDefinition(atc))
+             .AddCustomRequest(GetUserDefinition(atc))
+             .AddCustomRequest(GetSessionDefinition(atc))
              .ExecuteVoid();
+            InitializeData();
             return true;
         }
         public static void CreateChatDatabase(string chat, int user1, int user2)
@@ -71,6 +88,12 @@ namespace Common
             q.DBPath = db;
             q.AddCustomRequest(GetMessageDefinition(atc))
              .ExecuteVoid();
+        }
+
+        private static string GetSectorDefinition(AutoTableCreator atc)
+        {
+            atc.Initialize(typeof(Sector), "Sectors");
+            return atc.GetQueryText();
         }
 
         private static string GetMessageDefinition(AutoTableCreator atc)
@@ -113,6 +136,13 @@ namespace Common
         {
             atc.Initialize(typeof(Template), "Templates");
             atc.SetFK("parent", "Templates", "id");
+            return atc.GetQueryText();
+        }
+        private static string GetGeneratedDocumentDefinition(AutoTableCreator atc)
+        {
+            atc.Initialize(typeof(GeneratedDocument), "GeneratedDocuments");
+            atc.SetFK("template", "Templates", "id");
+            atc.SetAsUnique("reference");
             return atc.GetQueryText();
         }
         private static string GetTagDefinition(AutoTableCreator atc)

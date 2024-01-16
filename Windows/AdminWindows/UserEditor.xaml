@@ -41,21 +41,22 @@
             </ComboBoxItem>
         </ComboBox>
 
-        <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <ComboBox Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding Sectors}" SelectedItem="{Binding SelectedSector, Mode=TwoWay, NotifyOnSourceUpdated=True}" DisplayMemberPath="name" SelectedValuePath="slug" />
             <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Username}" IsEnabled="{Binding UsernameEditable}" MaxLength="20" Tag="Юзернейм (должен быть уникальным)" Grid.Row="1" Margin="5,5,5,5" CharacterCasing="Lower"/>
             <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Surname}" MaxLength="30" Tag="Фамилия" Grid.Row="3" Margin="5,5,5,5"/>
             <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding SecondName}" MaxLength="60" Tag="Имя (и отчество)" Grid.Row="3" Margin="5,5,5,5"/>
             <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Post}" MaxLength="35" Tag="Должность" Grid.Row="4" Grid.ColumnSpan="2" Margin="5,5,5,5"/>
             <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Password}" MaxLength="12" Tag="Первоначальный пароль" Grid.Row="5" Grid.ColumnSpan="2" Margin="5,5,5,5"/>
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="3">
+        <StackPanel Grid.Row="1" Grid.Column="1" >
             <CheckBox Style="{DynamicResource Toggle}" Grid.Row="1" Grid.Column="1" IsChecked="{Binding CanViewTasks}" Content="Видимость панели задач"/>
             <CheckBox Style="{DynamicResource Toggle}" Grid.Row="2" Grid.Column="1" IsChecked="{Binding CanViewCommunication}" Content="Видимость панели коммуникации"/>
             <CheckBox Style="{DynamicResource Toggle}" Grid.Row="3" Grid.Column="1" IsChecked="{Binding CanViewDatabase}" Content="Видимость панели базы данных"/>
             <CheckBox Style="{DynamicResource Toggle}" Grid.Row="1" Grid.Column="1" IsChecked="{Binding CanCreateTemplates}" Content="Создание шаблонов"/>
             <CheckBox Style="{DynamicResource Toggle}" Grid.Row="2" Grid.Column="1" IsChecked="{Binding CanModifyTemplates}" Content="Удаление или редактирование шаблонов"/>
             <CheckBox Style="{DynamicResource Toggle}" Grid.Row="2" Grid.Column="1" IsChecked="{Binding WritesLog}" Content="Вести журнал логов"/>
-            <CheckBox Style="{DynamicResource Toggle}" Grid.Row="2" Grid.Column="1" IsChecked="{Binding WritesListenLog}" IsEnabled="{Binding WritesLog}" Content="Вносить в журнал прослушивания (не рекомендуется)"/>
+            <CheckBox Style="{DynamicResource Toggle}" Grid.Row="2" Grid.Column="1" IsChecked="{Binding WritesListenLog}" IsEnabled="{Binding WritesLog}" Content="Вносить в журнал прослушивания"/>
         </StackPanel>
         <Button Style="{DynamicResource ButtonMain}" Grid.Row="6" Content="Сохранить" Click="SaveClick" IsDefault="True" Grid.ColumnSpan="2" Margin="5,5,5,5"/>
     </Grid>

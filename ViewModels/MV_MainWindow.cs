@@ -67,6 +67,18 @@ namespace Incubator_2.ViewModels
                 }
             }
         }
+        public string SectorName
+        {
+            get { return ProgramState.CurrentSector.name; }
+            set
+            {
+                if (ProgramState.CurrentSector.name != value)
+                {
+                    ProgramState.CurrentSector.name = value;
+                    OnPropertyChanged("SectorName");
+                }
+            }
+        }
 
         private Visibility VisibilityConverter(bool b)
         {

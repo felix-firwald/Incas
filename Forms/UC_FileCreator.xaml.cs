@@ -180,7 +180,7 @@ namespace Incubator_2.Forms
             });
             RegistreCreatedJSON.AddRecord(new TemplateJSON(this.template.id, this.template.name, this.Filename.Text, filledTags));
         }
-        public void RenameByTag(string tag, string prefix = "", string postfix = "")
+        public void RenameByTag(string tag, string prefix = "", string postfix = "", bool additive = false)
         {
             string result = "";
             foreach (UC_TagFiller tf in TagFillers)
@@ -191,7 +191,15 @@ namespace Incubator_2.Forms
                     break;
                 }
             }
-            this.Filename.Text = $"{prefix} {result} {postfix}".Trim();
+            if (additive)
+            {
+                this.Filename.Text = $"{prefix} {this.Filename.Text} {result} {postfix}".Trim();
+            }
+            else
+            {
+                this.Filename.Text = $"{prefix} {result} {postfix}".Trim();
+            }
+            
         }
         public List<string> GetExcelRow()
         {

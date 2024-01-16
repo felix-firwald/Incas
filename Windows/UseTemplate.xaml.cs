@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 
 namespace Incubator_2.Windows
@@ -86,6 +87,7 @@ namespace Incubator_2.Windows
         {
             if (ValidateContent())
             {
+                RegistryData.SetTemplatePreferredPath(this.template.id.ToString(), this.dir.Text);
                 worker.DoWork += CreateFiles;
                 //worker.RunWorkerCompleted += worker_RunWorkerCompleted;
                 worker.ProgressChanged += OnProgressChanged;
@@ -103,6 +105,7 @@ namespace Incubator_2.Windows
         {
             this.Dispatcher.Invoke(() =>
             {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
                 RegistreCreatedJSON.GetRegistry();
                 int i = 1;
                 foreach (UC_FileCreator fc in creators)
@@ -117,7 +120,7 @@ namespace Incubator_2.Windows
                     i++;
                 }
                 RegistreCreatedJSON.SaveRegistry();
-
+                Mouse.OverrideCursor = null;
                 ProgramState.OpenFolder(this.dir.Text);
             });
         }
@@ -167,7 +170,7 @@ namespace Incubator_2.Windows
             {
                 foreach (UC_FileCreator fc in this.creators)
                 {
-                    fc.RenameByTag(fr.SelectedTag, fr.Prefix, fr.Postfix);
+                    fc.RenameByTag(fr.SelectedTag, fr.Prefix, fr.Postfix, fr.IsAdditive);
                 }
             }
             

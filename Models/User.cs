@@ -11,6 +11,31 @@ using System.Xml.Linq;
 
 namespace Models
 {
+    public struct SUser
+    {
+        public int id { get; set; }
+        public string username { get; set; }
+        public string sign { get; set; }
+        public string surname { get; set; }
+        public string secondName { get; set; }
+        public string fullname { get; set; }
+        public string post { get; set; }
+        public string sector { get; set; }
+
+        public User AsModel()
+        {
+            User user = new();
+            user.id = id;
+            user.username = username;
+            user.sign = sign;
+            user.surname = surname;
+            user.secondName = secondName;
+            user.fullname = fullname;
+            user.post = post;
+            user.sector = sector;
+            return user;
+        }
+    }
     
     public class User : Model
     {
@@ -21,6 +46,7 @@ namespace Models
         public string secondName { get; set; }
         public string fullname { get; set; }
         public string post { get; set; }
+        public string sector { get; set; }
 
         public User() 
         {
@@ -30,7 +56,7 @@ namespace Models
         public List<User> GetAllUsers()
         {
             List<User> output = new List<User>();
-            DataTable dt = StartCommand()
+            DataTable dt = StartCommandToService()
                 .Select()
                 .OrderByASC("fullname")
                 .Execute();
@@ -44,51 +70,44 @@ namespace Models
         }
         public DataTable GetAllUsersAsDT()
         {
-            return StartCommand()
+            return StartCommandToService()
                 .Select()
                 .Execute();
         }
         public User GetUserByName()
         {
-            DataRow dr = StartCommand()
+            DataRow dr = StartCommandToService()
                     .Select()
                     .WhereEqual("username", this.username)
                     .ExecuteOne();
             this.Serialize(dr);
             return this;
         }
-        //public User GetUserByPassword()
-        //{
-        //    DataRow dr = StartCommand()
-        //            .Select()
-        //            .WhereEqual("password", this.password)
-        //            .ExecuteOne();
-                
-        //    this.Serialize(dr);
-        //    return this;
-        //}
+
         public void UpdateUser()
         {
-            StartCommand()
+            StartCommandToService()
                 .Update("surname", surname)
                 .Update("secondName", secondName)
                 .Update("fullname", fullname)
                 .Update("post", post)
+                .Update("sector", sector)
                 .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }
         public void AddUser()
         {
             this.sign = ProgramState.GenerateSlug(12);
-            StartCommand()
+            StartCommandToService()
                 .Insert(new Dictionary<string, string>
                 {
-                    { "username", $"'{username}'" },
-                    { "sign", $"'{sign}'" },
-                    { "surname", $"'{surname}'" },
-                    { "secondName", $"'{secondName}'" },
-                    { "fullname", $"'{fullname}'" },
-                    { "post", $"'{post}'" }
+                    { "username", username},
+                    { "sign", sign },
+                    { "surname", surname },
+                    { "secondName", secondName },
+                    { "fullname", fullname },
+                    { "post", post },
+                    { "sector", sector }
                 })
                 .ExecuteVoid();
             GetUserByName();
@@ -106,7 +125,7 @@ namespace Models
         }
         public bool DoesUserExists(string username)
         {
-            DataTable dt = StartCommand()
+            DataTable dt = StartCommandToService()
                 .Select("username")
                 .WhereEqual("username", username)
                 .Execute();
@@ -120,23 +139,10 @@ namespace Models
             }
             return false;
         }
-        //public bool IsPasswordExists(string pwd)
-        //{
-        //    DataTable dt = StartCommand()
-        //        .Select()
-        //        .WhereEqual("password", pwd)
-        //        .Execute();
-        //    if (dt.Rows.Count == 0)
-        //    {
-        //        return false;
-        //    }
-        //    DataRow dr = dt.Rows[0];
-        //    this.Serialize(dr);
-        //    return true;
-        //}
+
         public void RemoveUser()
         {
-            StartCommand()
+            StartCommandToService()
                 .Delete()
                 .WhereEqual("username", username)
                 .ExecuteVoid();

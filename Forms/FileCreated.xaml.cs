@@ -11,11 +11,11 @@ namespace Incubator_2.Forms
     /// </summary>
     public partial class FileCreated : UserControl
     {
-        public readonly STemplateJSON record;
+        public readonly SGeneratedDocument record;
         public delegate void SelectorNotify(FileCreated my);
         public event SelectorNotify OnSelectorChecked;
         public event SelectorNotify OnSelectorUnchecked;
-        public FileCreated(STemplateJSON rec)
+        public FileCreated(SGeneratedDocument rec)
         {
             InitializeComponent();
             record = rec;

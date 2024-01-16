@@ -27,8 +27,17 @@
                 <Button Style="{DynamicResource ButtonMain}" Content="Сохранить изменения" Click="SaveClick"/>
             </StackPanel>
         </GroupBox>
-        <GroupBox Style="{DynamicResource MainGroupBox}" Header="РЕЗЕРВНОЕ КОПИРОВАНИЕ" Grid.Row="1">
-            
+        <GroupBox Style="{DynamicResource MainGroupBox}" Header="СЕКТОРА РАБОЧЕГО ПРОСТРАНСТВА" Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Style="{DynamicResource ButtonMain}" Content="Добавить сектор" Click="AddSectorClick"/>
+                <StackPanel x:Name="Sectors" Grid.Row="1">
+                    
+                </StackPanel>
+            </Grid>
         </GroupBox>
     </Grid>
 </UserControl>

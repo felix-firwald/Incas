@@ -12,26 +12,26 @@ namespace Incubator_2.Common
     public static class RegistreCreatedJSON
     {
         static string mainFile { get { return ProgramState.TemplatesGenerated + "\\reg.jinc"; } }
-        public static List<STemplateJSON> generatedDocuments { get; private set; }
+        public static List<SGeneratedDocument> generatedDocuments { get; private set; }
         
         static RegistreCreatedJSON()
         {
-            generatedDocuments = new List<STemplateJSON>();
+            generatedDocuments = new List<SGeneratedDocument>();
         }
         public static void GetRegistry()
         {
             if (File.Exists(mainFile))
             {
-                generatedDocuments = Newtonsoft.Json.JsonConvert.DeserializeObject<List<STemplateJSON>>(File.ReadAllText(mainFile));
+                generatedDocuments = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedDocument>>(File.ReadAllText(mainFile));
                 if (generatedDocuments == null )
                 {
-                    generatedDocuments = new List<STemplateJSON>();
+                    generatedDocuments = new List<SGeneratedDocument>();
                 }
             }
             else
             {
                 File.Create(mainFile);
-                generatedDocuments = new List<STemplateJSON>();
+                generatedDocuments = new List<SGeneratedDocument>();
             }
         }
         public static void SaveRegistry()
@@ -50,11 +50,11 @@ namespace Incubator_2.Common
         {
             return ProgramState.TemplatesGenerated + "\\" + filename;
         }
-        public static TemplateJSON LoadRecord(STemplateJSON refer)
+        public static TemplateJSON LoadRecord(SGeneratedDocument refer)
         {
             return Newtonsoft.Json.JsonConvert.DeserializeObject<TemplateJSON>(File.ReadAllText(GetReference(refer.reference)));
         }
-        public static void RemoveRecord(STemplateJSON record)
+        public static void RemoveRecord(SGeneratedDocument record)
         {
             generatedDocuments.Remove(record);
             File.Delete(GetReference(record.reference));

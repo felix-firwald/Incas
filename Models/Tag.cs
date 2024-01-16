@@ -88,11 +88,11 @@ namespace Models
             StartCommand()
                 .Insert(new Dictionary<string, string>
                 {
-                    { "template", $"'{template}'" },
-                    { "name", $"'{name}'" },
-                    { "type", $"'{type}'" },
-                    { "value", $"'{value}'" },
-                    { "parent", $"'{parent}'" },
+                    { "template", template.ToString() },
+                    { "name", name },
+                    { "type", type.ToString() },
+                    { "value", value },
+                    { "parent", parent.ToString() },
                 })
                 .ExecuteVoid();
         }

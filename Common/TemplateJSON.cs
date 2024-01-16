@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace Incubator_2.Common
 {
-    public struct STemplateJSON
+    public struct SGeneratedDocument
     {
-        public int template_id;
+        public int id;
+        public int template;
         public string template_name;
         public DateTime generated_time;
         public string file_name;
@@ -33,16 +34,16 @@ namespace Incubator_2.Common
             template_name = templname;
         }
 
-        public STemplateJSON Save(int generationId)
+        public SGeneratedDocument Save(int generationId)
         {
             string result = Newtonsoft.Json.JsonConvert.SerializeObject(this);
             DateTime timestamp = DateTime.Now;
             string shortname = $"{timestamp.ToString("yyyyMMddHHmmss")}_{generationId}.jinc";
             string filename = ProgramState.TemplatesGenerated + "\\" + shortname;
             File.WriteAllText(filename, result, Encoding.UTF8);
-            STemplateJSON st = new STemplateJSON();
+            SGeneratedDocument st = new SGeneratedDocument();
             st.file_name = this.file_name;
-            st.template_id = this.template_id;
+            st.template = this.template_id;
             st.template_name = this.template_name;
             st.reference = shortname;
             st.generated_time = timestamp;

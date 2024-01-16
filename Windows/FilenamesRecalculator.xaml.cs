@@ -33,6 +33,10 @@ namespace Incubator_2.Windows
         {
             get { return this.postfixValue.Text; }
         }
+        public bool IsAdditive
+        {
+            get { return (bool)this.Additive.IsChecked; }
+        }
         private int template;
 
         public FilenamesRecalculator(int templ, List<string> tags)

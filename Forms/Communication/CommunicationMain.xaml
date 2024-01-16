@@ -12,7 +12,7 @@
                 <ColumnDefinition MinWidth="100"/>
                 <ColumnDefinition Width="2*" MinWidth="300" />
             </Grid.ColumnDefinitions>
-            <StackPanel/>
+            <ListBox x:Name="Users" Style="{DynamicResource ListBoxMain}" Background="{x:Null}"/>
             <Border Grid.Column="1" CornerRadius="5" Background="{DynamicResource Black}">
                 
             </Border>

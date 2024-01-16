@@ -44,6 +44,7 @@ namespace Incubator_2.Windows
         {
             if (ProgramState.CurrentUser != null)
             {
+                ProgramState.ShowWaitCursor();
                 ProgramState.CurrentUserParameters = ProgramState.CurrentUser.GetParametersContext();
                 if (ProgramState.CurrentUserParameters.IsRightPassword(this.pwd.Text))
                 {
@@ -56,9 +57,10 @@ namespace Incubator_2.Windows
                     }
                     else
                     {
+                        ProgramState.SetSectorByUser(ProgramState.CurrentUser);
                         ProgramState.OpenSession();
                         ServerProcessor.Listen();
-
+                        ProgramState.ShowWaitCursor(false);
                         DialogResult = true;
                         this.Close();
                     }

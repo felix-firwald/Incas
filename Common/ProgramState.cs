@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using Incubator_2.Common;
 using System.Windows.Documents;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 
 namespace Common
@@ -40,8 +41,8 @@ namespace Common
     {
         public static string CommonPath { get; private set; }
         public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incubator";
-        public static string DatabasePath { get { return CommonPath + @"\data.dbinc"; } }
-        public static string CustomDatabasePath { get { return CommonPath + @"\custom.dbinc"; } }
+        public static string DatabasePath { get; private set; }
+        public static string CustomDatabasePath { get { return CommonPath + @"\custom.db"; } }
         public static string ServiceDatabasePath { get { return Root + @"\service.dbinc"; } }
         public static string Root { get { return CommonPath + @"\Root"; } }
         public static string ServerProcesses { get { return Root + @"\ServerProccesses"; } } // ...\Root\ServerProccesses
@@ -59,15 +60,17 @@ namespace Common
         public static string TemplatesGenerated { get { return Templates + @"\Generated"; } }    // ...\Root\Templates\Generated
         #endregion
 
+        #region User
         public static User CurrentUser { get; set; }
         public static UserParameters CurrentUserParameters { get; set; }
         public static Session CurrentSession { get; private set; }
-        public static string SystemName = Environment.UserName;
-
+        #endregion
+        public static Sector CurrentSector { get; private set; }
         #region Path and init
         public async static void SetCommonPath(string path)
         {
             CommonPath = path;
+            DatabasePath = path + @"\data.dbinc";
             await System.Threading.Tasks.Task.Run(() =>
             {
                 Directory.CreateDirectory(Templates);
@@ -165,7 +168,7 @@ namespace Common
             SetCommonPath(data.workspacePath);
             CreateTablesInDatabase();
             RegistryData.SetWorkspacePath(data.workspaceName, data.workspacePath);
-            using (Parameter par = new Parameter())
+            using (Parameter par = new())
             {
                 par.type = ParameterType.INCUBATOR;
                 par.name = "ws_name";
@@ -178,13 +181,20 @@ namespace Common
                 par.WriteBoolValue(false);
                 par.CreateParameter();
             }
-            using (User user = new User())
+            using (Sector sector = new())
+            {
+                sector.slug = "data";
+                sector.name = "Базовый сектор";
+                sector.AddSector(false);
+            }
+            using (User user = new())
             {
                 user.username = "admin";
                 user.post = "Администратор рабочего пространства";
                 user.surname = data.userSurname;
                 user.secondName = data.userFullname;
                 user.fullname = $"{user.surname} {user.secondName}";
+                user.sector = "data";
                 user.AddUser();
                 UserParameters up = new();
                 up.permission_group = PermissionGroup.Admin;
@@ -300,7 +310,7 @@ namespace Common
         }
         #endregion
 
-        #region ModalDialogs
+        #region Modal Dialogs
         public static void ShowErrorDialog(string message, string title = "Возникла неизвестная ошибка")
         {
             Dialog d = new Dialog(message, title, Dialog.DialogIcon.Error);
@@ -327,6 +337,34 @@ namespace Common
             ActiveUserSelector au = new(helpText);
             au.ShowDialog();
             return au.SelectedSession;
+        }
+        public static void ShowWaitCursor(bool wait = true)
+        {
+            if (wait)
+            {
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+            }
+            else
+            {
+                Mouse.OverrideCursor = null;
+            }
+        }
+        #endregion
+
+        #region Sector Managing
+        public static void SetSectorByUser(User user)
+        {
+            string result = $"{CommonPath}\\{user.sector}.dbinc";
+            if (File.Exists(result))
+            {
+                DatabasePath = result;
+                using (Sector s = new())
+                {
+                    s.slug = user.sector;
+                    s.GetSector();
+                    CurrentSector = s;
+                }
+            }
         }
         #endregion
 

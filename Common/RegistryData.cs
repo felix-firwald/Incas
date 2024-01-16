@@ -149,6 +149,10 @@ namespace Common
         {
             return GetTemplate(template).GetValue("preferred_postfix").ToString();
         }
+        public static void SetTemplatePreferredPath(string template, string path)
+        {
+            GetTemplate(template).SetValue("preferred_path", path);
+        }
         public static void SetTemplatePreferredPrefix(string template, string prefix)
         {
             GetTemplate(template).SetValue("preferred_prefix", prefix);
