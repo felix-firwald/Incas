@@ -41,7 +41,6 @@ namespace Incubator_2.Models
             if (string.IsNullOrEmpty(slug))
             {
                 AddSector();
-                DatabaseManager.InitializeData(slug);
             }
             else
             {

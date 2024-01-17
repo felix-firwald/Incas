@@ -27,24 +27,10 @@
             <Trigger Property="UIElement.IsMouseOver" Value="True">
                 <Setter Property="Panel.Background" TargetName="ButtonBorder" Value="{DynamicResource Basic}"/>
                 <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource DarkLight}"/>
-                <Setter Property="Opacity" Value="1"/>
             </Trigger>
             <Trigger Property="ToggleButton.IsChecked" Value="True">
                 <Setter Property="Shape.Fill" TargetName="Arrow" Value="White"/>
-                <Trigger.EnterActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="ButtonBorder" Storyboard.TargetProperty="Background.Color"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.EnterActions>
-                <Trigger.ExitActions>
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <ColorAnimation Duration="0:0:0.250" To="#43464d" Storyboard.TargetName="ButtonBorder" Storyboard.TargetProperty="Background.Color"/>
-                        </Storyboard>
-                    </BeginStoryboard>
-                </Trigger.ExitActions>
+                <Setter TargetName="ButtonBorder" Property="Background" Value="DodgerBlue"/>
             </Trigger>
             <Trigger Property="UIElement.IsEnabled" Value="False">
                 <Setter Property="Panel.Background" TargetName="Border" Value="{StaticResource LightBlack}"/>
@@ -55,6 +41,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    
     <Style x:Key="ComboBoxMain" TargetType="{x:Type ComboBox}">
         <Setter Property="UIElement.SnapsToDevicePixels" Value="True"/>
         <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True"/>
@@ -94,13 +81,15 @@
                             </TextBox.Template>
                         </TextBox>
                         <!-- Popup showing items -->
-                        <Popup Name="Popup" Placement="Bottom" Focusable="False" AllowsTransparency="True" IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}" PopupAnimation="Slide">
+                        <Popup Name="Popup" Placement="Bottom" Focusable="False" AllowsTransparency="True" IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}" PopupAnimation="Fade">
                             <Grid Name="DropDown" SnapsToDevicePixels="True"
                                 MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
                                 MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
                                 <Border Name="DropDownBorder" Background="{StaticResource Black}" Margin="0, 1, 0, 0" CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource Element}"/>
                                 <ScrollViewer Margin="6" SnapsToDevicePixels="True">
-                                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" Cursor="Hand" />
+                                    <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" Cursor="Hand">
+                                    
+                                    </ItemsPresenter>
                                 </ScrollViewer>
                             </Grid>
                         </Popup>

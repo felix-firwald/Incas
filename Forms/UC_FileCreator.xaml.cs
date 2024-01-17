@@ -214,6 +214,7 @@ namespace Incubator_2.Forms
 
         private async void PreviewCLick(object sender, MouseButtonEventArgs e)
         {
+            ProgramState.ShowWaitCursor();
             await System.Threading.Tasks.Task.Run(() =>
             {
 
@@ -224,7 +225,7 @@ namespace Incubator_2.Forms
                 List<string> tagsToReplace = new List<string>();
                 List<string> values = new List<string>();
                 Application.Current.Dispatcher.BeginInvoke(
-                    DispatcherPriority.Background,
+                    DispatcherPriority.Normal,
                     new Action(() => 
                     {
                         foreach (UC_TagFiller tf in TagFillers)
@@ -240,6 +241,7 @@ namespace Incubator_2.Forms
                             wt.CreateTable(tab.tag.name, tab.DataTable);
                         }
                         string fileXPS = wt.TurnToXPS();
+                        ProgramState.ShowWaitCursor(false);
                         PreviewWindow pr = new PreviewWindow(fileXPS);
                         pr.Show();
                     })

@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:Incubator_2.Forms" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-
-    <Border x:Name="MainBorder" Margin="5" CornerRadius="5" Background="{DynamicResource Dark}">
+    <Border x:Name="MainBorder" Margin="5" CornerRadius="5" Background="{DynamicResource Dark}" Cursor="">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -25,9 +24,17 @@
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="10,0,5,0"/>
                 <CheckBox Style="{DynamicResource Selector}"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,0,5,0"/>
-                <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="Новый"/>
+                <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="Новый">
+                    <TextBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                            <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
+                        </ContextMenu>
+                    </TextBox.ContextMenu>
+                </TextBox>
                 <Label Style="{DynamicResource LabelElement}" Content=".docx" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-5,0,0,0"/>
             </StackPanel>
+            <Rectangle Fill="{DynamicResource Element}" HorizontalAlignment="Left" Grid.Column="1" Width="1"/>
             <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" MouseDown="Remove" ToolTip="Удалить файл" Cursor="Hand" Grid.Column="1"/>
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
             <StackPanel x:Name="ContentPanel" Grid.Row="2" Grid.ColumnSpan="2">

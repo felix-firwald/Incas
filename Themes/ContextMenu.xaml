@@ -36,6 +36,7 @@
         <Setter Property="Foreground" Value="{DynamicResource Light}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Opacity" Value="1"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">

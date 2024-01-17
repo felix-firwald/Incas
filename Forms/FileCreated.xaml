@@ -16,9 +16,9 @@
     
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        
+        <Rectangle Fill="{DynamicResource Element}" VerticalAlignment="Bottom" Height="1" Grid.Row="1" Grid.ColumnSpan="2"/>
         <CheckBox x:Name="Selector" Style="{DynamicResource Selector}" Grid.RowSpan="2" Grid.Column="2" Checked="Selector_Checked" Unchecked="Selector_Unchecked"/>
-        <Label x:Name="Filename" Style="{DynamicResource LabelElement}" Content="Имя не определено" VerticalAlignment="Top" Grid.RowSpan="2" FontSize="11" VerticalContentAlignment="Bottom" Grid.ColumnSpan="2" Height="25" FontWeight="Bold"/>
+        <Label x:Name="Filename" Style="{DynamicResource LabelElement}" Content="Имя не определено" VerticalAlignment="Top" Grid.RowSpan="2" FontSize="11" VerticalContentAlignment="Bottom" Grid.ColumnSpan="2" Height="25" FontWeight="Bold" Cursor=""/>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Label x:Name="GenerationTime" Style="{DynamicResource LabelElement}" Content="Дата не определена" Grid.Row="1" FontSize="11" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="23"/>
             <Label Style="{DynamicResource LabelSecondary}" Content=">>>" Foreground="{DynamicResource DarkLight}"/>
