@@ -278,10 +278,12 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             if (!string.IsNullOrWhiteSpace(_user.username) && !string.IsNullOrWhiteSpace(_userParameters.startup_password) && !string.IsNullOrWhiteSpace(_user.surname) && _selectedSector != null)
             {
+                ProgramState.ShowWaitCursor();
                 _user.fullname = $"{_user.surname} {_user.secondName}";
-                UserContextor.SaveContext(_userParameters, _user);
                 _user.sector = _selectedSector.slug;
-                _user.SaveUser(); 
+                _user.SaveUser();
+                UserContextor.SaveContext(_userParameters, _user);
+                ProgramState.ShowWaitCursor(false);
                 return true;
             }
             return false;

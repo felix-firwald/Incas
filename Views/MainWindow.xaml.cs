@@ -99,6 +99,7 @@ namespace Incubator_2
             {
                 case PermissionGroup.Admin:
                 case PermissionGroup.Moderator:
+                    ProgramState.ShowWaitCursor();
                     AdminPanel adminPanel = new AdminPanel();
                     adminPanel.Show();
                     break;

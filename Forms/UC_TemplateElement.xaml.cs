@@ -57,6 +57,7 @@ namespace Forms
         {
             if (IsFileExists())
             {
+                ProgramState.ShowWaitCursor();
                 UseTemplate ut = new UseTemplate(template.AsModel());
                 ut.Show();
             }

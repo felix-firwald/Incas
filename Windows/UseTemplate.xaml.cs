@@ -35,6 +35,7 @@ namespace Incubator_2.Windows
             LoadTags();
             AddFileCreator();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
+            ProgramState.ShowWaitCursor(false);
         }
         public UseTemplate(Template t, List<TemplateJSON> records)
         {
@@ -46,6 +47,7 @@ namespace Incubator_2.Windows
             {
                 AddFileCreator().ApplyRecord(item);
             }
+            ProgramState.ShowWaitCursor(false);
         }
         private void LoadTags()
         {

@@ -94,6 +94,7 @@ namespace Incubator_2.Forms
             {
                 using (Template tm = new())
                 {
+                    ProgramState.ShowWaitCursor();
                     if (tm.GetTemplateById(Selection[0].record.template) != null)
                     {
                         try
@@ -108,6 +109,7 @@ namespace Incubator_2.Forms
                         }
                         catch (IOException ex)
                         {
+                            ProgramState.ShowWaitCursor(false);
                             ProgramState.ShowErrorDialog($"Один из файлов поврежден или удален. Пожалуйста, попробуйте ещё раз.\n{ex}");
                         }
                     }

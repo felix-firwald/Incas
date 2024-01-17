@@ -1,4 +1,5 @@
-﻿using Incubator_2.ViewModels;
+﻿using Common;
+using Incubator_2.ViewModels;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -21,6 +22,7 @@ namespace Incubator_2.Windows
                 this.rbWorkspace.Visibility = Visibility.Collapsed;
                 this.rbUsers.Visibility = Visibility.Collapsed;
             }
+            ProgramState.ShowWaitCursor(false);
         }
 
         private void CloseClick(object sender, MouseButtonEventArgs e)
