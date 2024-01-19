@@ -70,6 +70,7 @@ namespace Common
     }
     public sealed class Query
     {
+        public const string Null = "!NULL!";
         public readonly string Table;
         public string Result { get; private set; }
         private bool isWhereAlready = false;
@@ -143,10 +144,15 @@ namespace Common
         }
         #endregion
 
+        private void ReplaceNull()
+        {
+            Result = Result.Replace($"'{Null}'", "null");
+        }
         #region Insert Update Delete
         public Query Insert(Dictionary<string, string> dict)
         {
             Result = $"INSERT INTO {Table} ({string.Join(", ", dict.Keys)})\nVALUES ('{string.Join("', '", dict.Values)}')";
+            ReplaceNull();
             return this;
         }
         public Query Update(string cell, string value, bool isStr = true)
@@ -213,7 +219,7 @@ namespace Common
         /// <returns></returns>
         public Query WhereNotNULL(string cell)
         {
-            return Where(cell, "is not", $"NULL AND {cell} is not \"\"", false);
+            return Where(cell, "is not ", $"NULL AND {cell} = ''", false);
         }
         /// <summary>
         /// Where A is NULL
@@ -221,7 +227,7 @@ namespace Common
         /// <returns></returns>
         public Query WhereNULL(string cell)
         {
-            return Where(cell, "is ", $"NULL OR {cell} = \"\"", false);
+            return Where(cell, "is ", $"NULL OR {cell} = ''", false);
         }
 
         /// <summary>

@@ -149,8 +149,8 @@ namespace Models
                 {
                     { "name", name },
                     { "path", path },
-                    { "parent", isChild? parent.ToString(): "" }, // раньше тут было просто null а теперь будет 'null'
-                    { "suggestedPath", isChild? "''" : suggestedPath },
+                    { "parent", isChild? parent.ToString(): Query.Null }, // раньше тут было просто null а теперь будет 'null'
+                    { "suggestedPath", isChild? Query.Null : suggestedPath },
                     { "type", type.ToString() } 
                 })
                 .ExecuteVoid();

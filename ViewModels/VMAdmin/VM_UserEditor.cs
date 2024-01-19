@@ -27,7 +27,7 @@ namespace Incubator_2.ViewModels.VMAdmin
                 {
                     Sectors = s.GetSectors();
                     s.slug = _user.sector;
-                    _selectedSector = s.GetSector();
+                    _selectedSector = FindSector(s.slug);
                     OnPropertyChanged(nameof(SelectedSector));
                 }
             }
@@ -39,6 +39,17 @@ namespace Incubator_2.ViewModels.VMAdmin
                 }
                 _userParameters = new();
             }
+        }
+        private Sector FindSector(string slug)
+        {
+            foreach (Sector s in Sectors)
+            {
+                if (s.slug == slug)
+                {
+                    return s;
+                }
+            }
+            return new();
         }
         public List<Sector> Sectors
         {

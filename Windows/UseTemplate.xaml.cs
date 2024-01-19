@@ -90,12 +90,7 @@ namespace Incubator_2.Windows
             if (ValidateContent())
             {
                 RegistryData.SetTemplatePreferredPath(this.template.id.ToString(), this.dir.Text);
-                worker.DoWork += CreateFiles;
-                //worker.RunWorkerCompleted += worker_RunWorkerCompleted;
-                worker.ProgressChanged += OnProgressChanged;
-                worker.WorkerReportsProgress = true;
-                worker.RunWorkerAsync();
-                //CreateFiles();
+                CreateFiles();
             }
         }
         private void OnProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -103,26 +98,15 @@ namespace Incubator_2.Windows
             this.ProgressCreation.Value = e.ProgressPercentage;
         }
 
-        private void CreateFiles(object sender, DoWorkEventArgs e)
+        private void CreateFiles()
         {
-            this.Dispatcher.Invoke(() =>
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+            foreach (UC_FileCreator fc in creators)
             {
-                Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-                int i = 1;
-                foreach (UC_FileCreator fc in creators)
-                {
-                    fc.CreateFile(this.dir.Text);
-                    int perc = i * 100 / creators.Count;
-                    App.Current.Dispatcher.Invoke(() =>
-                    {
-                        worker.ReportProgress(perc);
-                    });
-                    
-                    i++;
-                }
-                Mouse.OverrideCursor = null;
-                ProgramState.OpenFolder(this.dir.Text);
-            });
+                fc.CreateFile(this.dir.Text);
+            }
+            Mouse.OverrideCursor = null;
+            ProgramState.OpenFolder(this.dir.Text);
         }
 
         private void AddFC_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)

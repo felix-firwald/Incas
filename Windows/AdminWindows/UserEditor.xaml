@@ -42,7 +42,7 @@
         </ComboBox>
 
         <StackPanel Grid.Row="1" Grid.Column="0">
-            <ComboBox Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding Sectors}" SelectedItem="{Binding SelectedSector, Mode=TwoWay, NotifyOnSourceUpdated=True}" DisplayMemberPath="name" SelectedValuePath="slug" />
+            <ComboBox Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding Sectors}" SelectedItem="{Binding SelectedSector, Mode=TwoWay, NotifyOnSourceUpdated=True}" DisplayMemberPath="name" SelectedValuePath="slug"/>
             <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding Username}" IsEnabled="{Binding UsernameEditable}" MaxLength="20" Tag="Юзернейм (должен быть уникальным)" Grid.Row="1" Margin="5,5,5,5" CharacterCasing="Lower">
                 <TextBox.ContextMenu>
                     <ContextMenu>

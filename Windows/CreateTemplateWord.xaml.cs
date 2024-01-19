@@ -115,6 +115,7 @@ namespace Incubator_2.Windows
         {
             if (CheckForSave())
             {
+                ProgramState.ShowWaitCursor();
                 this.Close();
                 if (isEdit)
                 {
@@ -127,14 +128,18 @@ namespace Incubator_2.Windows
                     SaveTags(false);
                 }
                 OnCreated?.Invoke();
+                ProgramState.ShowWaitCursor(false);
             }
         }
 
-        private void SaveTags(bool isEdit)
+        private async void SaveTags(bool isEdit)
         {
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
-                tag.SaveTag(template.id, isEdit);
+                await System.Threading.Tasks.Task.Run(() =>
+                {     
+                    tag.SaveTag(template.id, isEdit);
+                });
             }
         }
 

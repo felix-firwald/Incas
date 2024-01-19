@@ -22,6 +22,7 @@ namespace Incubator_2.Forms.AdminPanel
 
         private void LoadSectors()
         {
+            this.Sectors.Children.Clear();
             using (Sector s = new())
             {
                 s.GetSectors().ForEach(sector =>
@@ -41,6 +42,7 @@ namespace Incubator_2.Forms.AdminPanel
         {
             SectorEditor se = new(new Sector());
             se.ShowDialog();
+            LoadSectors();
         }
     }
 }

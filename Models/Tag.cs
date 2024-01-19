@@ -7,6 +7,10 @@ using System.Linq;
 
 namespace Models
 {
+    public struct TagParameters
+    {
+        public string Name;
+    }
     public enum TypeOfTag
     {
         Variable,
@@ -92,7 +96,7 @@ namespace Models
                     { "name", name },
                     { "type", type.ToString() },
                     { "value", value },
-                    { "parent", parent.ToString() },
+                    { "parent", parent > 0? parent.ToString(): Query.Null },
                 })
                 .ExecuteVoid();
         }

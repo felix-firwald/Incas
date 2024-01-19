@@ -1,4 +1,5 @@
 ﻿using Common;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Tag = Models.Tag;
 
 
 namespace Incubator_2.Forms
@@ -38,7 +40,7 @@ namespace Incubator_2.Forms
                 case TypeOfTag.Text:
                     SetTextBoxMode();
                     this.Textbox.Text = this.tag.value;
-                    this.Textbox.Style = FindResource("TextBoxBig") as Style;
+                    this.Textbox.Style = FindResource("TextBoxBig") as System.Windows.Style;
                     this.Textbox.MaxLength = 1200;
                     break;
                 case TypeOfTag.LocalConstant:
@@ -180,6 +182,48 @@ namespace Incubator_2.Forms
             {
                 this.Textbox.Text = $"«{this.Textbox.Text}»";
             }
+        }
+        private void AddDateNow(object sender, RoutedEventArgs e)
+        {
+            this.Textbox.Text += DateTime.Now.ToString("dd.MM.yyyy");
+        }
+        private void AddDateLongNow(object sender, RoutedEventArgs e)
+        {
+            this.Textbox.Text += DateTime.Now.ToString("D");
+        }
+        private void AddIncrementedDate(object sender, RoutedEventArgs e)
+        {
+            IncrementDate(sender);
+        }
+        private void AddIncrementedLongDate(object sender, RoutedEventArgs e)
+        {
+            IncrementDate(sender, true);
+        }
+
+        private void IncrementDate(object sender, bool longType = false)
+        {
+            int days = int.Parse(((MenuItem)sender).Tag.ToString());
+            string format = longType ? "D" : "dd.MM.yyyy";
+            DateTime result = DateTime.Now;
+            switch (days)
+            {
+                case 31:
+                    result = result.AddMonths(1);
+                    break;
+                case 93:
+                    result = result.AddMonths(3);
+                    break;
+                case 186:
+                    result = result.AddMonths(6);
+                    break;
+                case 365:
+                    result = result.AddYears(1);
+                    break;
+                default:
+                    result = result.AddDays(days);
+                    break;
+            }
+            this.Textbox.Text += result.ToString(format);
         }
 
         private void InsertToOther(object sender, RoutedEventArgs e)

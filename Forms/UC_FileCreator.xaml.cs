@@ -113,12 +113,12 @@ namespace Incubator_2.Forms
         public void Maximize()
         {
             this.MainBorder.Height = this.ContentPanel.Height + 40;
-            this.IsCollapsed = !this.IsCollapsed;
+            this.IsCollapsed = false;
         }
         public void Minimize()
         {
             this.MainBorder.Height = 40;
-            this.IsCollapsed = !this.IsCollapsed;
+            this.IsCollapsed = true;
         }
 
         private void ResizeClick(object sender, MouseButtonEventArgs e)
@@ -154,31 +154,45 @@ namespace Incubator_2.Forms
         }
         public void CreateFile(string newPath)
         {
-            string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
-            File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
-            Dictionary<int, string> filledTags = new Dictionary<int, string>();
-            WordTemplator wt = new WordTemplator(newFile);
-
-            List<string> tagsToReplace = new List<string>();
-            List<string> values = new List<string>();
-            this.Dispatcher.Invoke(() =>
+            try
             {
-                foreach (UC_TagFiller tf in TagFillers)
+                string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
+                File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
+                Dictionary<int, string> filledTags = new Dictionary<int, string>();
+                WordTemplator wt = new WordTemplator(newFile);
+
+                List<string> tagsToReplace = new List<string>();
+                List<string> values = new List<string>();
+                this.Dispatcher.Invoke(() =>
                 {
-                    string name = tf.GetTagName();
-                    int id = tf.GetId();
-                    string value = tf.GetValue();
-                    filledTags.Add(id, value);
-                    tagsToReplace.Add(name);
-                    values.Add(value);
-                }
-                wt.Replace(tagsToReplace, values);
-                foreach (TableFiller tab in Tables)
-                {
-                    wt.CreateTable(tab.tag.name, tab.DataTable);
-                }
-            });
-            RegistreCreatedJSON.AddRecord(new TemplateJSON(this.template.id, this.template.name, this.Filename.Text, filledTags));
+                    foreach (UC_TagFiller tf in TagFillers)
+                    {
+                        string name = tf.GetTagName();
+                        int id = tf.GetId();
+                        string value = tf.GetValue();
+                        filledTags.Add(id, value);
+                        tagsToReplace.Add(name);
+                        values.Add(value);
+                    }
+                    wt.Replace(tagsToReplace, values);
+                    foreach (TableFiller tab in Tables)
+                    {
+                        wt.CreateTable(tab.tag.name, tab.DataTable);
+                    }
+                });
+                RegistreCreatedJSON.AddRecord(new TemplateJSON(this.template.id, this.template.name, this.Filename.Text, filledTags));
+            }
+            catch (IOException)
+            {
+                ProgramState.ShowErrorDialog($"При доступе к файлу \"{this.Filename.Text}\" или его папке возникла ошибка.\n" +
+                    $"Возможно существует файл с таким же именем, который уже открыт другим пользователем.\n" +
+                    $"Файл будет пропущен.");
+            }
+            catch (Exception e)
+            {
+                ProgramState.ShowErrorDialog(e.Message);
+            }
+
         }
         public void RenameByTag(string tag, string prefix = "", string postfix = "", bool additive = false)
         {

@@ -34,6 +34,7 @@ namespace Common
             StringReplaceTextOptions options = new StringReplaceTextOptions();
             for (int i = 0; i < tags.Count; i++)
             {
+                
                 options.SearchValue = ConvertTag(tags[i]);
                 options.NewValue = values[i].Trim(); // а нахуя Trim?
                 doc.ReplaceText(options);
