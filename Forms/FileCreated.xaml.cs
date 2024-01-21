@@ -20,7 +20,7 @@ namespace Incubator_2.Forms
             InitializeComponent();
             record = rec;
             this.Filename.Content = record.fileName;
-            this.TemplateName.Content = record.templateName;
+            this.TemplateName.Text = record.templateName;
             this.GenerationTime.Content = record.generatedTime.ToString("f");
         }
 

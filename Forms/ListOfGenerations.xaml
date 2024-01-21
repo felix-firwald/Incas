@@ -13,7 +13,9 @@
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <ScrollViewer Style="{StaticResource ScrollViewerBase}" Grid.Row="0">
-                <StackPanel x:Name="ContentPanel" />
+                <StackPanel x:Name="ContentPanel">
+                    
+                </StackPanel>
             </ScrollViewer>
             <Border Background="{DynamicResource Black}" Grid.Row="1" CornerRadius="5">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

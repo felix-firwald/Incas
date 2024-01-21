@@ -16,7 +16,9 @@
             <ColumnDefinition Width="2*" MinWidth="250"/>
         </Grid.ColumnDefinitions>
         <GroupBox Style="{DynamicResource MainGroupBox}" Header="ЗАДАЧИ В РАБОТЕ" Grid.Column="0" Margin="5,5,5,5" Grid.RowSpan="2">
-            <StackPanel x:Name="ActualTasks"/>
+            <StackPanel x:Name="ActualTasks">
+                <Expander Style="{DynamicResource ExpanderMain}" Header="Привет"/>
+            </StackPanel>
         </GroupBox>
         <GridSplitter Grid.Column="0" Grid.RowSpan="2"/>
         <GroupBox Style="{DynamicResource MainGroupBox}" Header="ПРОСРОЧЕННЫЕ ЗАДАЧИ" Grid.Column="1" Grid.Row="0">

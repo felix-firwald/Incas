@@ -174,6 +174,7 @@ namespace Incubator_2.Windows
             
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                ProgramState.ShowWaitCursor();
                 List<Dictionary<string, string>> pairs = new();    // список "файлов", где каждый элемент в списке - это список тегов и значений относящихся к файлу
                 IXLWorksheet ws;
                 try
@@ -187,6 +188,7 @@ namespace Incubator_2.Windows
                     return;
                 }
                 this.ContentPanel.Children.Clear();
+                this.creators.Clear();
                 foreach (Tag tag in tags)
                 {
                     IXLCell colCell;
@@ -218,6 +220,7 @@ namespace Incubator_2.Windows
                     var fc = AddFileCreator();
                     fc.ApplyFromExcel(item);
                 }
+                ProgramState.ShowWaitCursor(false);
             }
         }
 

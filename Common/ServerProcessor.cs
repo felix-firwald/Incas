@@ -158,7 +158,6 @@ namespace Incubator_2.Common
         public async static void Listen()
         {
             RemoveOldest();
-            //string targetFileName = $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession.slug}.procinc";
             await Task.Run(() =>
             {
                 while (ProgramState.CurrentSession is not null || ProgramState.CurrentSession.active || !StopPulling)
@@ -178,10 +177,6 @@ namespace Incubator_2.Common
                     {
                         Logger.WriteLog(e.Message, LogType.ERROR);
                         continue;
-                    }
-                    if (ProgramState.CurrentUserParameters.write_listen_log)
-                    {
-                        Logger.WriteLog("Listen port");
                     }
                     Thread.Sleep(200);
                 }

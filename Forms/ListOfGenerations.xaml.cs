@@ -38,17 +38,43 @@ namespace Incubator_2.Forms
             this.ContentPanel.Children.Clear();
             using (GeneratedDocument d = new())
             {
-                foreach (SGeneratedDocument record in d.GetAllDocuments())
+                foreach (string template in d.GetAllUsedTemplates())
                 {
-                    FileCreated fc = new FileCreated(record);
-                    fc.OnSelectorChecked += AddToSelection;
-                    fc.OnSelectorUnchecked += RemoveFromSelection;
-                    this.ContentPanel.Children.Add(fc);
+                    Expander exp = new();
+                    exp.Header = template;
+                    exp.Expanded += CurrentExpander_Expanded;
+                    exp.Style = FindResource("ExpanderMain") as Style;
+                    this.ContentPanel.Children.Add(exp);
                 }
             }
             if (this.ContentPanel.Children.Count == 0)
             {
                 this.ContentPanel.Children.Add(new NoContent());
+            }
+        }
+
+        private void CurrentExpander_Expanded(object sender, RoutedEventArgs e)
+        {
+            Expander exp = (Expander)sender;
+            FillExpander(exp, exp.Header.ToString());
+        }
+
+        public void FillExpander(Expander exp, string templateName)
+        {
+            if (exp.Content == null)
+            {
+                using (GeneratedDocument d = new())
+                {
+                    StackPanel content = new();
+                    d.GetDocumentsByTemplate(templateName).ForEach(document =>
+                    {
+                        FileCreated fc = new FileCreated(document);
+                        fc.OnSelectorChecked += AddToSelection;
+                        fc.OnSelectorUnchecked += RemoveFromSelection;
+                        content.Children.Add(fc);
+                    });
+                    exp.Content = content;
+                }
             }
         }
 
@@ -67,18 +93,20 @@ namespace Incubator_2.Forms
             UpdateList();
         }
 
-        private void RemoveClick(object sender, MouseButtonEventArgs e)
+        private async void RemoveClick(object sender, MouseButtonEventArgs e)
         {
             if (ProgramState.IsWorkspaceOpened())
             {
                 if (Selection.Count > 0)
                 {
-                    RegistreCreatedJSON.GetRegistry();
-                    foreach (FileCreated fc in Selection)
+                    await System.Threading.Tasks.Task.Run(() =>
                     {
-                        this.ContentPanel.Children.Remove(fc);
-                        RegistreCreatedJSON.RemoveRecord(fc.record);
-                    }
+                        foreach (FileCreated fc in Selection)
+                        {
+                            this.ContentPanel.Children.Remove(fc);
+                            RegistreCreatedJSON.RemoveRecord(fc.record);
+                        }
+                    });
                 }
                 else
                 {

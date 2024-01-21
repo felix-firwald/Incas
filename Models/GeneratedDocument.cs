@@ -35,10 +35,38 @@ namespace Incubator_2.Models
             d.destination = destination;
             return d;
         }
+        public List<string> GetAllUsedTemplates()
+        {
+            DataTable dt = StartCommand()
+                .SelectUnique("templateName")
+                .Execute();
+            List<string> result = new();
+            foreach (DataRow dr in dt.Rows)
+            {
+                result.Add(dr["templateName"].ToString());
+            }
+            return result;
+        }
+        public List<SGeneratedDocument> GetDocumentsByTemplate(string templateName)
+        {
+            DataTable dt = StartCommand()
+                .Select()
+                .WhereEqual("templateName", templateName)
+                .OrderByDESC("generatedTime")
+                .Execute();
+            List<SGeneratedDocument> result = new();
+            foreach (DataRow dr in dt.Rows)
+            {
+                this.Serialize(dr);
+                result.Add(AsStruct());
+            }
+            return result;
+        }
         public List<SGeneratedDocument> GetAllDocuments()
         {
             DataTable dt = StartCommand()
                 .Select()
+                .OrderByDESC("template ASC, generatedTime")
                 .Execute();
             List<SGeneratedDocument> result = new();
             foreach (DataRow dr in dt.Rows)
