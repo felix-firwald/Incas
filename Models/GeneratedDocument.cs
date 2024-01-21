@@ -52,7 +52,7 @@ namespace Incubator_2.Models
             DataTable dt = StartCommand()
                 .Select()
                 .WhereEqual("templateName", templateName)
-                .OrderByDESC("generatedTime")
+                .OrderByASC("generatedTime DESC, fileName")
                 .Execute();
             List<SGeneratedDocument> result = new();
             foreach (DataRow dr in dt.Rows)
@@ -95,6 +95,13 @@ namespace Incubator_2.Models
             StartCommand()
                 .Delete()
                 .WhereEqual("id", id.ToString())
+                .ExecuteVoid();
+        }
+        public void RemoveRecords(List<string> ids)
+        {
+            StartCommand()
+                .Delete()
+                .WhereIn("id", ids)
                 .ExecuteVoid();
         }
     }

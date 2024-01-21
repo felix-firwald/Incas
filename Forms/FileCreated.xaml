@@ -12,20 +12,22 @@
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="148"/>
             <ColumnDefinition Width="30"/>
-            <ColumnDefinition Width="43*"/>
-
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
-        <Rectangle Fill="{DynamicResource Element}" VerticalAlignment="Bottom" Height="1" Grid.Row="1" Grid.ColumnSpan="4"/>
-        <CheckBox x:Name="Selector" Style="{DynamicResource Selector}" Grid.RowSpan="2" Grid.Column="3" Checked="Selector_Checked" Unchecked="Selector_Unchecked"/>
-        <Label x:Name="Filename" Style="{DynamicResource LabelElement}" Content="Имя не определено" VerticalAlignment="Top" Grid.RowSpan="2" FontSize="10" VerticalContentAlignment="Bottom" Grid.ColumnSpan="4" FontWeight="Bold" Cursor=""/>
-        
-        <Label x:Name="GenerationTime" Style="{DynamicResource LabelElement}" Content="Дата не определена" Grid.Row="1" FontSize="10" VerticalAlignment="Top" Margin="0,0,0,-2"/>
-        <Label Style="{DynamicResource LabelSecondary}" VerticalAlignment="Center" Content="-->" Foreground="{DynamicResource DarkLight}" FontSize="9" FontWeight="Bold" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"/>
-        <TextBlock x:Name="TemplateName" Style="{DynamicResource TextBlockMain}" Text="Шаблон не определен" FontSize="10" VerticalAlignment="Center" Grid.Row="1" FontWeight="Normal" Foreground="{DynamicResource Success}" TextTrimming="WordEllipsis" Grid.Column="2"/>
-       
+
+        <Label x:Name="Counter" Grid.RowSpan="2" Content="1" Style="{DynamicResource LabelElement}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="9" HorizontalContentAlignment="Center"/>
+
+        <CheckBox x:Name="Selector" Style="{DynamicResource Selector}" Grid.RowSpan="2" Grid.Column="4" Checked="Selector_Checked" Unchecked="Selector_Unchecked"/>
+        <Label x:Name="Filename" Style="{DynamicResource LabelElement}" Content="Имя не определено" VerticalAlignment="Top" Grid.RowSpan="2" FontSize="10" VerticalContentAlignment="Bottom" FontWeight="Bold" Cursor="" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+        <Label x:Name="GenerationTime" Style="{DynamicResource LabelElement}" Content="Дата не определена" Grid.Row="1" FontSize="10" VerticalAlignment="Center" Grid.Column="1"/>
+        <Label Style="{DynamicResource LabelSecondary}" VerticalAlignment="Center" Content="-->" Foreground="{DynamicResource DarkLight}" FontSize="9" FontWeight="Bold" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="TemplateName" Style="{DynamicResource TextBlockMain}" Text="Шаблон не определен" FontSize="10" VerticalAlignment="Center" Grid.Row="1" FontWeight="Normal" Foreground="{DynamicResource Success}" TextTrimming="WordEllipsis" Grid.Column="3"/>
+
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>

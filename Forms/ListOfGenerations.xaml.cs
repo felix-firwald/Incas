@@ -66,12 +66,14 @@ namespace Incubator_2.Forms
                 using (GeneratedDocument d = new())
                 {
                     StackPanel content = new();
+                    int counter = 1;
                     d.GetDocumentsByTemplate(templateName).ForEach(document =>
                     {
-                        FileCreated fc = new FileCreated(document);
+                        FileCreated fc = new FileCreated(document, counter);
                         fc.OnSelectorChecked += AddToSelection;
                         fc.OnSelectorUnchecked += RemoveFromSelection;
                         content.Children.Add(fc);
+                        counter++;
                     });
                     exp.Content = content;
                 }
@@ -93,20 +95,21 @@ namespace Incubator_2.Forms
             UpdateList();
         }
 
-        private async void RemoveClick(object sender, MouseButtonEventArgs e)
+        private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
             if (ProgramState.IsWorkspaceOpened())
             {
                 if (Selection.Count > 0)
                 {
-                    await System.Threading.Tasks.Task.Run(() =>
+                    List<SGeneratedDocument> docs = new();
+                    foreach (FileCreated item in Selection)
                     {
-                        foreach (FileCreated fc in Selection)
-                        {
-                            this.ContentPanel.Children.Remove(fc);
-                            RegistreCreatedJSON.RemoveRecord(fc.record);
-                        }
-                    });
+                        docs.Add(item.record);
+                    }
+                    ProgramState.ShowWaitCursor();
+                    RegistreCreatedJSON.RemoveRecords(docs);
+                    ProgramState.ShowWaitCursor(false);
+                    this.UpdateList();
                 }
                 else
                 {

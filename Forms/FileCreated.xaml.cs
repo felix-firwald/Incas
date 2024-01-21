@@ -15,10 +15,11 @@ namespace Incubator_2.Forms
         public delegate void SelectorNotify(FileCreated my);
         public event SelectorNotify OnSelectorChecked;
         public event SelectorNotify OnSelectorUnchecked;
-        public FileCreated(SGeneratedDocument rec)
+        public FileCreated(SGeneratedDocument rec, int counter = 1)
         {
             InitializeComponent();
             record = rec;
+            this.Counter.Content = counter;
             this.Filename.Content = record.fileName;
             this.TemplateName.Text = record.templateName;
             this.GenerationTime.Content = record.generatedTime.ToString("f");
