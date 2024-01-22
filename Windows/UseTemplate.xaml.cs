@@ -3,6 +3,7 @@ using Common;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Incubator_2.Common;
 using Incubator_2.Forms;
+using Incubator_2.Models;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -37,15 +38,18 @@ namespace Incubator_2.Windows
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
             ProgramState.ShowWaitCursor(false);
         }
-        public UseTemplate(Template t, List<TemplateJSON> records)
+        public UseTemplate(Template t, List<SGeneratedDocument> records)
         {
             InitializeComponent();
             this.template = t;
             LoadTags();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
-            foreach (TemplateJSON item in records)
+            foreach (SGeneratedDocument item in records)
             {
-                AddFileCreator().ApplyRecord(item);
+                using (GeneratedTag gt = new())
+                {
+                    AddFileCreator().ApplyRecord(t.name, gt.GetByDocument(item.reference)) ;
+                }
             }
             ProgramState.ShowWaitCursor(false);
         }
@@ -105,6 +109,7 @@ namespace Incubator_2.Windows
             {
                 fc.CreateFile(this.dir.Text);
             }
+            DatabaseManager.ExecuteBackground();
             Mouse.OverrideCursor = null;
             ProgramState.OpenFolder(this.dir.Text);
         }

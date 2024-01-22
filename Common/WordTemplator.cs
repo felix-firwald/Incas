@@ -28,18 +28,20 @@ namespace Common
             return DocX.Load(this.Path);
         }
 
-        public void Replace(List<string> tags, List<string> values) // не Dictionary потому что важен порядок замены
+        public async void Replace(List<string> tags, List<string> values) // не Dictionary потому что важен порядок замены
         {
             DocX doc = LoadFile();
-            StringReplaceTextOptions options = new StringReplaceTextOptions();
-            for (int i = 0; i < tags.Count; i++)
+            await System.Threading.Tasks.Task.Run(() =>
             {
-                
-                options.SearchValue = ConvertTag(tags[i]);
-                options.NewValue = values[i].Trim(); // а нахуя Trim?
-                doc.ReplaceText(options);
-            }
-            doc.Save();      
+                StringReplaceTextOptions options = new StringReplaceTextOptions();
+                for (int i = 0; i < tags.Count; i++)
+                {
+                    options.SearchValue = ConvertTag(tags[i]);
+                    options.NewValue = values[i].Trim(); // а нахуя Trim?
+                    doc.ReplaceText(options);
+                }
+            });
+            doc.Save();
         }
         public void CreateTable(string tag, DataTable dt)
         {

@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incubator_2.Common;
+using Incubator_2.Models;
 using Incubator_2.Windows;
 using Models;
 using System;
@@ -81,16 +82,16 @@ namespace Incubator_2.Forms
             });
         }
         
-        public void ApplyRecord(TemplateJSON record)
+        public void ApplyRecord(string fileName, List<SGeneratedTag> record)
         {
-            this.Filename.Text = record.file_name;
-            foreach (KeyValuePair<int, string> tag in record.filled_tags)
+            this.Filename.Text = fileName;
+            foreach (SGeneratedTag tag in record)
             {
                 foreach (UC_TagFiller tagfiller in TagFillers)
                 {
-                    if (tagfiller.tag.id == tag.Key)
+                    if (tagfiller.tag.id == tag.tag)
                     {
-                        tagfiller.SetValue(tag.Value);
+                        tagfiller.SetValue(tag.value);
                         break;
                     }
                 }
@@ -158,7 +159,7 @@ namespace Incubator_2.Forms
             {
                 string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
                 File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
-                Dictionary<int, string> filledTags = new Dictionary<int, string>();
+                List<SGeneratedTag> filledTags = new();
                 WordTemplator wt = new WordTemplator(newFile);
 
                 List<string> tagsToReplace = new List<string>();
@@ -167,10 +168,16 @@ namespace Incubator_2.Forms
                 {
                     foreach (UC_TagFiller tf in TagFillers)
                     {
-                        string name = tf.GetTagName();
                         int id = tf.GetId();
+                        string name = tf.GetTagName();
                         string value = tf.GetValue();
-                        filledTags.Add(id, value);
+                        if (tf.tag.type != TypeOfTag.LocalConstant)
+                        {
+                            SGeneratedTag gt = new();
+                            gt.tag = id;
+                            gt.value = value;
+                            filledTags.Add(gt);
+                        }
                         tagsToReplace.Add(name);
                         values.Add(value);
                     }
@@ -180,7 +187,18 @@ namespace Incubator_2.Forms
                         wt.CreateTable(tab.tag.name, tab.DataTable);
                     }
                 });
-                RegistreCreatedJSON.AddRecord(new TemplateJSON(this.template.id, this.template.name, this.Filename.Text, filledTags));
+                using (GeneratedDocument doc = new())
+                {
+                    doc.fileName = this.Filename.Text;
+                    doc.template = this.template.id;
+                    doc.templateName = this.template.name;
+                    doc.AddRecord();
+                    using (GeneratedTag tag = new())
+                    {
+                        tag.document = doc.reference;
+                        tag.AddGeneratedTags(filledTags);
+                    }
+                }
             }
             catch (IOException)
             {
@@ -194,6 +212,7 @@ namespace Incubator_2.Forms
             }
 
         }
+
         public void RenameByTag(string tag, string prefix = "", string postfix = "", bool additive = false)
         {
             string result = "";

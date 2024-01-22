@@ -28,7 +28,7 @@ namespace Incubator_2.Forms
         {
             InitializeComponent();
             this.tag = t;
-            this.MainLabel.Content = this.tag.name + ":";
+            this.MainLabel.Text = this.tag.name + ":";
             switch (tag.type)
             {
                 case TypeOfTag.Variable:

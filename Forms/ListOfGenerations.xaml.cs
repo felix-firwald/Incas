@@ -130,10 +130,10 @@ namespace Incubator_2.Forms
                     {
                         try
                         {
-                            List<TemplateJSON> tj = new List<TemplateJSON>();
+                            List<SGeneratedDocument> tj = new();
                             foreach (FileCreated fc in Selection)
                             {
-                                tj.Add(RegistreCreatedJSON.LoadRecord(fc.record));
+                                tj.Add(fc.record);
                             }
                             UseTemplate ut = new UseTemplate(tm, tj);
                             ut.Show();

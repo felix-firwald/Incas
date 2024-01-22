@@ -1,9 +1,11 @@
 ﻿using Common;
+using DocumentFormat.OpenXml.InkML;
 using Incubator_2.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -78,6 +80,8 @@ namespace Incubator_2.Models
         }
         public void AddRecord()
         {
+            generatedTime = DateTime.Now;
+            reference = $"{generatedTime.ToString("yyMMddHHmmss")}{ProgramState.GenerateSlug(4)}";
             StartCommand()
                 .Insert(new()
                 {
@@ -88,7 +92,7 @@ namespace Incubator_2.Models
                     {nameof(reference), reference },
                     {nameof(destination), destination },
                 })
-                .ExecuteVoid();
+                .Accumulate();
         }
         public void RemoveRecord()
         {

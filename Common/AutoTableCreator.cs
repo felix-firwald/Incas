@@ -33,7 +33,7 @@ namespace Incubator_2.Common
         {
             if (FKtable != null)
             {
-                return $"REFERENCES {FKtable} ({FKfield})";
+                return $"REFERENCES {FKtable} ({FKfield}) ON DELETE CASCADE";
             }
             return "";
         }
@@ -52,7 +52,7 @@ namespace Incubator_2.Common
             {
                 return "id INTEGER PRIMARY KEY AUTOINCREMENT";
             }
-            return $"{Name} {TypeOf} {GetNull()} {GetFK()} {GetUniq()}".Trim();
+            return $"{Name} {TypeOf} {GetNull()} {GetUniq()} {GetFK()}".Trim();
         }
     }
     internal class AutoTableCreator

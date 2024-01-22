@@ -14,6 +14,7 @@ namespace Common
 {
     public static class DatabaseManager // static cause server connection must be only one per session
     {
+        private static List<string> commandsText = new();
         public static SQLiteConnection connection;
         public static void OpenConnection(string path)
         {
@@ -50,6 +51,7 @@ namespace Common
              .AddCustomRequest(GetTemplateDefinition(atc))
              .AddCustomRequest(GetTagDefinition(atc))
              .AddCustomRequest(GetGeneratedDocumentDefinition(atc))
+             .AddCustomRequest(GetGeneratedTagDefinition(atc))
              .AddCustomRequest(GetCustomTableDefinition(atc))
              .ExecuteVoid();
         }
@@ -89,6 +91,7 @@ namespace Common
              .ExecuteVoid();
         }
 
+        #region Definitions
         private static string GetSectorDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Sector), "Sectors");
@@ -144,6 +147,7 @@ namespace Common
             atc.SetAsUnique("reference");
             return atc.GetQueryText();
         }
+        
         private static string GetTagDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Tag), "Tags");
@@ -151,10 +155,37 @@ namespace Common
             atc.SetFK("parent", "Tags", "id");
             return atc.GetQueryText();
         }
+        private static string GetGeneratedTagDefinition(AutoTableCreator atc)
+        {
+            atc.Initialize(typeof(GeneratedTag), "GeneratedTags");
+            atc.SetFK("document", "GeneratedDocuments", "reference");
+            atc.SetFK("tag", "Tags", "id");
+            return atc.GetQueryText();
+        }
         private static string GetCustomTableDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Subtask), "CustomTables");
             return atc.GetQueryText();
+        }
+        #endregion
+
+        public static void AppendBackgroundQuery(Query q)
+        {
+            commandsText.Add(q.Result);
+        }
+        public async static void ExecuteBackground()
+        {
+            if (commandsText.Count > 0)
+            {
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    string result = string.Join(";\n", commandsText);
+                    commandsText.Clear();
+                    Query q = new("");
+                    q.AddCustomRequest(result);
+                    q.ExecuteVoid();
+                });
+            } 
         }
     }
 }

@@ -144,6 +144,15 @@ namespace Common
         }
         #endregion
 
+        public Query SeparateCommand()
+        {
+            Result += ";\n";
+            return this;
+        }
+        private void IfNotExists()
+        {
+            Result += " if not exists";
+        }
         private void ReplaceNull()
         {
             Result = Result.Replace($"'{Null}'", "null");
@@ -151,7 +160,7 @@ namespace Common
         #region Insert Update Delete
         public Query Insert(Dictionary<string, string> dict)
         {
-            Result = $"INSERT INTO {Table} ({string.Join(", ", dict.Keys)})\nVALUES ('{string.Join("', '", dict.Values)}')";
+            Result += $"INSERT INTO {Table} ({string.Join(", ", dict.Keys)})\nVALUES ('{string.Join("', '", dict.Values)}')";
             ReplaceNull();
             return this;
         }
@@ -361,6 +370,11 @@ namespace Common
         }
 
         #region Connection and Request
+        public Query Combine(Query query)
+        {
+            this.Result += "; " + query.Result.ToString();
+            return this;
+        }
         private SQLiteConnection GetConnection()
         {
             string path;
@@ -468,6 +482,11 @@ namespace Common
                     $"\nПроверьте правильность данных.",
                     "Ошибка выполнения запроса");
             }
+        }
+        public void Accumulate()
+        {
+            DatabaseManager.AppendBackgroundQuery(this);
+            Clear();
         }
         #endregion
     }

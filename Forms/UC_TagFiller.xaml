@@ -12,7 +12,7 @@
             <ColumnDefinition MinWidth="150" MaxWidth="200" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Label x:Name="MainLabel" Style="{DynamicResource LabelElement}" Content="Имя тега:" VerticalAlignment="Top" Grid.Column="0" Margin="5,7,0,0" MaxHeight="30"/>
+        <TextBlock x:Name="MainLabel" Style="{DynamicResource TextBlockImportant}" Text="Имя тега:" VerticalAlignment="Top" Grid.Column="0" Margin="8,12,5,5" MaxHeight="30" Foreground="{DynamicResource GrayLight}" TextWrapping="Wrap"/>
         <TextBox x:Name="Textbox" Style="{DynamicResource TextBoxMain}" Grid.Column="1" Visibility="Hidden" Cursor="IBeam" AutoWordSelection="True" TextWrapping="WrapWithOverflow" SelectionBrush="{DynamicResource PrimaryMain}" SelectionTextBrush="{DynamicResource Light}">
             <TextBox.ContextMenu>
                 <ContextMenu>
