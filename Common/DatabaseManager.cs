@@ -51,7 +51,6 @@ namespace Common
              .AddCustomRequest(GetTemplateDefinition(atc))
              .AddCustomRequest(GetTagDefinition(atc))
              .AddCustomRequest(GetGeneratedDocumentDefinition(atc))
-             .AddCustomRequest(GetGeneratedTagDefinition(atc))
              .AddCustomRequest(GetCustomTableDefinition(atc))
              .ExecuteVoid();
         }
@@ -153,13 +152,6 @@ namespace Common
             atc.Initialize(typeof(Tag), "Tags");
             atc.SetFK("template", "Templates", "id");
             atc.SetFK("parent", "Tags", "id");
-            return atc.GetQueryText();
-        }
-        private static string GetGeneratedTagDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(GeneratedTag), "GeneratedTags");
-            atc.SetFK("document", "GeneratedDocuments", "reference");
-            atc.SetFK("tag", "Tags", "id");
             return atc.GetQueryText();
         }
         private static string GetCustomTableDefinition(AutoTableCreator atc)

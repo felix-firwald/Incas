@@ -4,6 +4,7 @@ using Incubator_2.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
@@ -11,6 +12,37 @@ using System.Threading.Tasks;
 
 namespace Incubator_2.Models
 {
+    public struct SGeneratedDocument
+    {
+        public int id;
+        public int template;
+        public string templateName;
+        public DateTime generatedTime;
+        public string fileName;
+        public string reference;
+        public List<SGeneratedTag> filledTags;
+
+        public List<SGeneratedTag> GetFilledTags()
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(File.ReadAllText(RegistreCreatedJSON.GetReference(this.reference)));
+        }
+        public void SaveFilledTags(List<SGeneratedTag> tags)
+        {
+            File.WriteAllText(RegistreCreatedJSON.GetReference(this.reference), Newtonsoft.Json.JsonConvert.SerializeObject(tags));
+        }
+
+        public GeneratedDocument AsModel()
+        {
+            GeneratedDocument d = new();
+            d.id = id;
+            d.template = template;
+            d.templateName = templateName;
+            d.generatedTime = generatedTime;
+            d.fileName = fileName;
+            d.reference = reference;
+            return d;
+        }
+    }
     public class GeneratedDocument : Model
     {
         public int id { get; set; }
@@ -19,7 +51,6 @@ namespace Incubator_2.Models
         public DateTime generatedTime { get; set; }
         public string fileName { get; set; }
         public string reference { get; set; }
-        public string destination { get; set; }
 
         public GeneratedDocument()
         {
@@ -34,9 +65,9 @@ namespace Incubator_2.Models
             d.generatedTime = generatedTime;
             d.fileName = fileName;
             d.reference = reference;
-            d.destination = destination;
             return d;
         }
+
         public List<string> GetAllUsedTemplates()
         {
             DataTable dt = StartCommand()
@@ -74,6 +105,7 @@ namespace Incubator_2.Models
             foreach (DataRow dr in dt.Rows)
             {
                 this.Serialize(dr);
+
                 result.Add(AsStruct());
             }
             return result;
@@ -90,7 +122,6 @@ namespace Incubator_2.Models
                     {nameof(generatedTime), generatedTime.ToString() },
                     {nameof(fileName), fileName },
                     {nameof(reference), reference },
-                    {nameof(destination), destination },
                 })
                 .Accumulate();
         }
@@ -107,6 +138,18 @@ namespace Incubator_2.Models
                 .Delete()
                 .WhereIn("id", ids)
                 .ExecuteVoid();
+        }
+
+        public List<SGeneratedTag> GetFilledTags()
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(File.ReadAllText(RegistreCreatedJSON.GetReference(this.reference)));
+        }
+        public async void SaveFilledTags(List<SGeneratedTag> tags)
+        {
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                File.WriteAllText(RegistreCreatedJSON.GetReference(this.reference), Newtonsoft.Json.JsonConvert.SerializeObject(tags));
+            });
         }
     }
 }

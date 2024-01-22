@@ -19,18 +19,12 @@ namespace Incubator_2.Common
 
             }
         }
-        public static void AddRecord(TemplateJSON record)
+
+        public static string GetReference(string filename)
         {
-            record.Save().AsModel().AddRecord();
+            return ProgramState.TemplatesGenerated + "\\" + filename + ".jinc";
         }
-        private static string GetReference(string filename)
-        {
-            return ProgramState.TemplatesGenerated + "\\" + filename;
-        }
-        public static TemplateJSON LoadRecord(SGeneratedDocument refer)
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<TemplateJSON>(File.ReadAllText(GetReference(refer.reference)));
-        }
+
         public async static void RemoveRecords(List<SGeneratedDocument> record)
         {
             await System.Threading.Tasks.Task.Run(() =>

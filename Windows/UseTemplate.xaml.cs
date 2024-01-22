@@ -11,7 +11,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -46,10 +45,7 @@ namespace Incubator_2.Windows
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
             foreach (SGeneratedDocument item in records)
             {
-                using (GeneratedTag gt = new())
-                {
-                    AddFileCreator().ApplyRecord(t.name, gt.GetByDocument(item.reference)) ;
-                }
+                AddFileCreator().ApplyRecord(t.name, item.GetFilledTags());
             }
             ProgramState.ShowWaitCursor(false);
         }

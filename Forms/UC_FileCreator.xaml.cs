@@ -193,11 +193,7 @@ namespace Incubator_2.Forms
                     doc.template = this.template.id;
                     doc.templateName = this.template.name;
                     doc.AddRecord();
-                    using (GeneratedTag tag = new())
-                    {
-                        tag.document = doc.reference;
-                        tag.AddGeneratedTags(filledTags);
-                    }
+                    doc.SaveFilledTags(filledTags);
                 }
             }
             catch (IOException)
