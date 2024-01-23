@@ -20,9 +20,11 @@ namespace Incubator_2.Common
             }
         }
 
-        public static string GetReference(string filename)
+        public static string GetReference(int template, string filename)
         {
-            return ProgramState.TemplatesGenerated + "\\" + filename + ".jinc";
+            string dir = $"{ProgramState.TemplatesGenerated}\\{template}";
+            Directory.CreateDirectory(dir);
+            return dir + $"\\{filename}.jinc";
         }
 
         public async static void RemoveRecords(List<SGeneratedDocument> record)
@@ -32,7 +34,7 @@ namespace Incubator_2.Common
                 List<string> ids = new();
                 foreach (SGeneratedDocument r in record)
                 {
-                    File.Delete(GetReference(r.reference));
+                    File.Delete(GetReference(r.template, r.reference));
                     ids.Add(r.id.ToString());
                 }
                 using (GeneratedDocument d = new())

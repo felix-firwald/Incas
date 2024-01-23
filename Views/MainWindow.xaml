@@ -22,7 +22,7 @@
     <Grid Background="{DynamicResource Basic}">
         <Grid.RowDefinitions>
             <RowDefinition Height="395*"/>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250" MinWidth="140" MaxWidth="400"/>
@@ -146,10 +146,10 @@
             </TabControl>
         </Border>
 
-        <StackPanel MinHeight="60" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Background="{StaticResource LightBlack}">
+        <StackPanel MinHeight="50" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Background="{StaticResource LightBlack}">
             <Label Content="f" Foreground="{DynamicResource Icon}" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Harlow Solid Italic" FontSize="14" MinWidth="64" FontStyle="Italic"/>
 
-            <Button Style="{DynamicResource DashboardButton}" Content="Управление файлами" Width="120" Click="FilesManagerClick"/>
+            <Button Style="{DynamicResource DashboardButton}" Content="Создать задачу" Width="120" Click="NewTaskClick"/>
             <Button Style="{DynamicResource DashboardButton}" Content="Буфер обмена" Width="120"/>
         </StackPanel>
     </Grid>

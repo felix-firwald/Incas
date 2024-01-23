@@ -12,10 +12,11 @@
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Margin" Value="1"/>
+        <Setter Property="MinHeight" Value="20"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="Border" MinHeight="30" Padding="2" CornerRadius="6" BorderThickness="1" SnapsToDevicePixels="true">
+                    <Border x:Name="Border" MinHeight="{TemplateBinding MinHeight}" Padding="2" CornerRadius="6" BorderThickness="1" SnapsToDevicePixels="true">
                         <Border.Background>
                             <SolidColorBrush Color="Transparent" />
                         </Border.Background>
@@ -25,6 +26,66 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Border" Property="Background" Value="DodgerBlue"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ListBoxItemPurple" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Background" Value="#FFA7ABB7"/>
+        <Setter Property="Foreground" Value="#FFA7ABB7"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Margin" Value="3,3,3,3"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border Name="bor" Grid.Column="1" Background="{DynamicResource Area}" CornerRadius="3" BorderThickness="1" BorderBrush="{DynamicResource Element}" Margin="0,0,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Polygon x:Name="PolygonMain" Points="10, 20, 10, 0, 20, 10" Fill="{DynamicResource LightPurple}" Visibility="Collapsed" VerticalAlignment="Center" Margin="-10,0,0,0" Width="NaN" Height="NaN" Panel.ZIndex="-9"/>
+                            <ContentPresenter TextElement.FontFamily="/Fonts/#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
+                        </StackPanel>
+
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetName="bor" Storyboard.TargetProperty="Background.Color"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.350" To="#FF393C46" Storyboard.TargetName="bor" Storyboard.TargetProperty="Background.Color"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="PolygonMain" Property="Visibility" Value="Visible"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="#B255FF" Storyboard.TargetProperty="Foreground.Color"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="2" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderThickness"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#B255FF" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderBrush.Color"/>
+
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.250" To="#FFA7ABB7" Storyboard.TargetProperty="Foreground.Color"/>
+                                        <ThicknessAnimation Duration="0:0:0.300" To="1" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderThickness"/>
+                                        <ColorAnimation Duration="0:0:0.350" To="#43464d" Storyboard.TargetName="bor" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

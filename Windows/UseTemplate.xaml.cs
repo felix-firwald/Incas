@@ -45,7 +45,7 @@ namespace Incubator_2.Windows
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
             foreach (SGeneratedDocument item in records)
             {
-                AddFileCreator().ApplyRecord(t.name, item.GetFilledTags());
+                AddFileCreator().ApplyRecord(item.fileName, item.GetFilledTags());
             }
             ProgramState.ShowWaitCursor(false);
         }

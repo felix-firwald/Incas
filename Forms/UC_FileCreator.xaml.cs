@@ -264,7 +264,7 @@ namespace Incubator_2.Forms
                             tagsToReplace.Add(nameOf);
                             values.Add(value);
                         }
-                        wt.Replace(tagsToReplace, values);
+                        wt.Replace(tagsToReplace, values, false);
                         foreach (TableFiller tab in Tables)
                         {
                             wt.CreateTable(tab.tag.name, tab.DataTable);

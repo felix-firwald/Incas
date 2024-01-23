@@ -49,8 +49,11 @@ namespace Incubator_2.Forms
                 case TypeOfTag.LocalEnumeration:
                     SetComboBoxMode();
                     this.Combobox.ItemsSource = this.tag.value.Split(';');
-                    //this.Combobox.Text = this.tag.value;
                     this.Combobox.SelectedIndex = 0;
+                    break;
+                case TypeOfTag.Relation:
+                    this.SelectionBox.Visibility = Visibility.Visible;
+                    this.SelectionBox.Source = this.tag.value;
                     break;
             }
         }
@@ -64,6 +67,9 @@ namespace Incubator_2.Forms
                 default:
                     this.Textbox.Text = value;
                     break;
+                case TypeOfTag.Relation:
+                    this.SelectionBox.Value = value;
+                    break;
                 case TypeOfTag.LocalConstant:
                     return;
                 case TypeOfTag.LocalEnumeration:
@@ -75,11 +81,9 @@ namespace Incubator_2.Forms
         private void SetTextBoxMode()
         {
             this.Textbox.Visibility = Visibility.Visible;
-            this.Combobox.Visibility = Visibility.Hidden;
         }
         private void SetComboBoxMode()
         {
-            this.Textbox.Visibility = Visibility.Hidden;
             this.Combobox.Visibility = Visibility.Visible;
         }
         public string GetTagName()
@@ -95,6 +99,8 @@ namespace Incubator_2.Forms
                     return this.Textbox.Text;
                 case TypeOfTag.LocalConstant:
                     return this.tag.value;
+                case TypeOfTag.Relation:
+                    return this.SelectionBox.Value;
                 case TypeOfTag.LocalEnumeration:
                     if (this.Combobox.SelectedIndex != -1)
                     {

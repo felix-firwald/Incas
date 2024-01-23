@@ -22,10 +22,6 @@
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Открыть выбранные записи" MouseDown="UseClick"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранные записи" MouseDown="RemoveClick"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Filter" ToolTip="Отфильтровать список">
-                        <fa:FontAwesome.ContextMenu>
-                            <ContextMenu>
-                            </ContextMenu>
-                        </fa:FontAwesome.ContextMenu>
                     </fa:FontAwesome>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" ToolTip="Обновить список" MouseDown="UpdateClick"/>
                 </StackPanel>

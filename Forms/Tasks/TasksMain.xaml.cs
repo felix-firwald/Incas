@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Task = Models.Task;
 
 namespace Incubator_2.Forms.Tasks
 {
@@ -23,6 +25,17 @@ namespace Incubator_2.Forms.Tasks
         public TasksMain()
         {
             InitializeComponent();
+            UpdateList();
+        }
+        public void UpdateList()
+        {
+            using (Task t = new())
+            {
+                t.GetAllTasks().ForEach(task =>
+                {
+                    this.ActualTasks.Children.Add(new TaskElement(task));
+                });
+            }
         }
     }
 }

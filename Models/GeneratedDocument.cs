@@ -24,11 +24,11 @@ namespace Incubator_2.Models
 
         public List<SGeneratedTag> GetFilledTags()
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(File.ReadAllText(RegistreCreatedJSON.GetReference(this.reference)));
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(File.ReadAllText(RegistreCreatedJSON.GetReference(this.template, this.reference)));
         }
         public void SaveFilledTags(List<SGeneratedTag> tags)
         {
-            File.WriteAllText(RegistreCreatedJSON.GetReference(this.reference), Newtonsoft.Json.JsonConvert.SerializeObject(tags));
+            File.WriteAllText(RegistreCreatedJSON.GetReference(this.template, this.reference), Newtonsoft.Json.JsonConvert.SerializeObject(tags));
         }
 
         public GeneratedDocument AsModel()
@@ -142,13 +142,13 @@ namespace Incubator_2.Models
 
         public List<SGeneratedTag> GetFilledTags()
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(File.ReadAllText(RegistreCreatedJSON.GetReference(this.reference)));
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(File.ReadAllText(RegistreCreatedJSON.GetReference(this.template, this.reference)));
         }
         public async void SaveFilledTags(List<SGeneratedTag> tags)
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                File.WriteAllText(RegistreCreatedJSON.GetReference(this.reference), Newtonsoft.Json.JsonConvert.SerializeObject(tags));
+                File.WriteAllText(RegistreCreatedJSON.GetReference(this.template, this.reference), Newtonsoft.Json.JsonConvert.SerializeObject(tags));
             });
         }
     }

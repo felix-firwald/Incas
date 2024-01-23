@@ -29,19 +29,19 @@ namespace Incubator_2.Forms.Database
             //FillTabesList();
             this.DataContext = vm;
         }
-        public void FillTabesList()
-        {
-            this.TablesList.Items.Clear();
-            using (CustomTable ct = new())
-            {
-                ct.GetTablesList().ForEach(t =>
-                {
-                    RadioButton rb = new();
-                    rb.Content = t;
-                    rb.Style = FindResource("CategoryButton") as Style;
-                    this.TablesList.Items.Add(rb);
-                });
-            }
-        }
+        //public void FillTabesList()
+        //{
+        //    this.TablesList.Items.Clear();
+        //    using (CustomTable ct = new())
+        //    {
+        //        ct.GetTablesList().ForEach(t =>
+        //        {
+        //            RadioButton rb = new();
+        //            rb.Content = t;
+        //            rb.Style = FindResource("CategoryButton") as Style;
+        //            this.TablesList.Items.Add(rb);
+        //        });
+        //    }
+        //}
     }
 }

@@ -13,9 +13,16 @@
                 <ColumnDefinition Width="1"/>
                 <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <TextBox Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="White" Text="567567567" VerticalAlignment="Center" Margin="8,0,8,0" IsReadOnly="True" AutoWordSelection="True"/>
+            <TextBox x:Name="Input" Style="{DynamicResource TextBoxEmpty}" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{DynamicResource PrimaryMain}" SelectionTextBrush="{x:Null}" Foreground="White" VerticalAlignment="Center" Margin="8,0,8,0" IsReadOnly="True" AutoWordSelection="True" CaretBrush="Black" Cursor="">
+                <TextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                        <!--<MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>-->
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
             <Rectangle Fill="{DynamicResource Element}" Grid.Column="1"/>
-            <fa:FontAwesome Icon="EllipsisH" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2"/>
+            <fa:FontAwesome Icon="EllipsisH" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="ButtonClick" ToolTip="Выбрать запись"></fa:FontAwesome>
         </Grid>
 
     </Border>

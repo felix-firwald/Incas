@@ -210,4 +210,30 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="TextBoxEmpty" TargetType="{x:Type TextBox}">
+        <!--<Setter Property="Padding" Value="10 3"/>-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <ScrollViewer 
+                        x:Name="PART_ContentHost" 
+                        Focusable="False" 
+                        HorizontalScrollBarVisibility="Hidden" 
+                        VerticalScrollBarVisibility="Hidden" Foreground="{TemplateBinding Foreground}"  />
+                        <Label 
+                        x:Name="WaterMarkerLabel" 
+                        Content="{TemplateBinding Tag}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        Visibility="Collapsed"
+                        Foreground="{TemplateBinding BorderBrush}"
+                        Padding="{TemplateBinding Padding}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

@@ -24,7 +24,6 @@ namespace Incubator_2
                 Application.Current.Shutdown();
             }
             this.DataContext = new MV_MainWindow();
-            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             if (string.IsNullOrEmpty(ProgramState.CurrentUserParameters.password))
             {
                 if (ProgramState.ShowQuestionDialog("Текущий пароль, использованный вами для входа, " +
@@ -111,10 +110,10 @@ namespace Incubator_2
             
         }
 
-        private void FilesManagerClick(object sender, RoutedEventArgs e)
+        private void NewTaskClick(object sender, RoutedEventArgs e)
         {
-            FilesManager fm = new();
-            fm.Show();
+            CreateTask ct = new CreateTask();
+            ct.Show();
         }
     }
 }

@@ -28,10 +28,10 @@ namespace Common
             return DocX.Load(this.Path);
         }
 
-        public async void Replace(List<string> tags, List<string> values) // не Dictionary потому что важен порядок замены
+        public async void Replace(List<string> tags, List<string> values, bool async = true) // не Dictionary потому что важен порядок замены
         {
             DocX doc = LoadFile();
-            await System.Threading.Tasks.Task.Run(() =>
+            void MakeReplace()
             {
                 StringReplaceTextOptions options = new StringReplaceTextOptions();
                 for (int i = 0; i < tags.Count; i++)
@@ -40,7 +40,18 @@ namespace Common
                     options.NewValue = values[i].Trim(); // а нахуя Trim?
                     doc.ReplaceText(options);
                 }
-            });
+            }
+            if (async)
+            {
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    MakeReplace();
+                });
+            }
+            else
+            {
+                MakeReplace();
+            }
             doc.Save();
         }
         public void CreateTable(string tag, DataTable dt)

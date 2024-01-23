@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Common;
+using Incubator_2.Windows.CustomDatabase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,39 @@ namespace Incubator_2.CustomControls
     /// </summary>
     public partial class SelectionBox : UserControl
     {
+        public string Value { get { return this.Input.Text; } set { this.Input.Text = value; } }
+
+        public string Table = "";
+        public string Field = "";
+        public string Source
+        {
+            set
+            {
+                Table = value.Split('.')[0];
+                Field = value.Split('.')[1];
+            }
+        }
         public SelectionBox()
         {
             InitializeComponent();
+        }
+
+        private void ButtonClick(object sender, MouseButtonEventArgs e)
+        {
+            DatabaseSelection s = new(Table, Field);
+            s.ShowDialog();
+            if (s.Result == Windows.DialogStatus.Yes)
+            {
+                try
+                {
+                    this.Value = s.SelectedValue;
+                }
+                catch(Exception ex)
+                {
+                    ProgramState.ShowErrorDialog(ex.Message);
+                    this.Value = "";
+                }
+            }
         }
     }
 }

@@ -1,0 +1,23 @@
+﻿<Window x:Class="Incubator_2.Windows.CreateTask"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Incubator_2.Windows"
+        mc:Ignorable="d"
+        Title="Создать задачу" Height="400" Width="500" Style="{DynamicResource WindowBase}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBox x:Name="TaskName" Style="{DynamicResource TextBoxMain}" Tag="Имя задачи"/>
+            <TextBox x:Name="TaskDescription" Style="{DynamicResource TextBoxBig}" Tag="Описание задачи"/>
+            <TextBox x:Name="Subtasks" Style="{DynamicResource TextBoxBig}" Tag="Подзадачи (разделяются символом ';')"/>
+            <DatePicker x:Name="DateFinished" Style="{DynamicResource DatePickerMain}" />
+            
+        </StackPanel>
+        <Button Style="{DynamicResource ButtonMain}" Content="Сохранить задачу" Grid.Row="1" Click="Button_Click"/>
+    </Grid>
+</Window>
