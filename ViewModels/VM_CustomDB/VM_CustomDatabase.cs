@@ -1,4 +1,6 @@
-﻿using Incubator_2.Models;
+﻿using Common;
+using Incubator_2.Common;
+using Incubator_2.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -46,6 +48,31 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 OnPropertyChanged(nameof(SelectedTable));
                 OnPropertyChanged(nameof(Table));
             }
+        }
+        private DataRow _selectedRow;
+        public DataRow SelectedRow
+        {
+            get
+            {
+                return _selectedRow;
+            }
+            set
+            {
+                _selectedRow = value;
+                OnPropertyChanged(nameof(SelectedRow));
+            }
+        }
+        public List<FieldCreator> GetTableDefinition()
+        {
+            return requester.GetTableDefinition(SelectedTable);
+        }
+        public string GetPK()
+        {
+            return requester.GetPKField(SelectedTable);
+        }
+        public void RefreshTable()
+        {
+            OnPropertyChanged(nameof(Table));
         }
     }
 }

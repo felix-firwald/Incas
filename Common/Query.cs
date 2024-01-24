@@ -71,7 +71,7 @@ namespace Common
     public sealed class Query
     {
         public const string Null = "!NULL!";
-        public readonly string Table;
+        public string Table;
         public string Result { get; private set; }
         private bool isWhereAlready = false;
         private bool isUpdateAlready = false;
@@ -160,7 +160,7 @@ namespace Common
         #region Insert Update Delete
         public Query Insert(Dictionary<string, string> dict)
         {
-            Result += $"INSERT INTO {Table} ({string.Join(", ", dict.Keys)})\nVALUES ('{string.Join("', '", dict.Values)}')";
+            Result += $"INSERT INTO {Table} ([{string.Join("], [", dict.Keys)}])\nVALUES ('{string.Join("', '", dict.Values)}')";
             ReplaceNull();
             return this;
         }

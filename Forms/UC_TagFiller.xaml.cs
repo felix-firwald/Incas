@@ -1,5 +1,6 @@
 ﻿using Common;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Incubator_2.Common;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,26 @@ namespace Incubator_2.Forms
                     this.SelectionBox.Visibility = Visibility.Visible;
                     this.SelectionBox.Source = this.tag.value;
                     break;
+            }
+        }
+        public UC_TagFiller(FieldCreator fc)
+        {
+            InitializeComponent();
+            this.tag = new();
+            
+            tag.name = fc.Name;
+            this.MainLabel.Text = tag.name + ":";
+            if (fc.FKtable != null)
+            {
+                tag.type = TypeOfTag.Relation;
+                this.SelectionBox.Visibility = Visibility.Visible;
+                this.SelectionBox.Table = fc.FKtable;
+                this.SelectionBox.Field = fc.FKfield;
+            }
+            else
+            {
+                tag.type = TypeOfTag.Text;
+                SetTextBoxMode();
             }
         }
 

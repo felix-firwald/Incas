@@ -1,7 +1,10 @@
-﻿using Incubator_2.Models;
+﻿using Common;
+using Incubator_2.Models;
 using Incubator_2.ViewModels.VM_CustomDB;
+using Incubator_2.Windows.CustomDatabase;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,22 +29,44 @@ namespace Incubator_2.Forms.Database
         public CustomDatabaseMain()
         {
             InitializeComponent();
-            //FillTabesList();
             this.DataContext = vm;
         }
-        //public void FillTabesList()
-        //{
-        //    this.TablesList.Items.Clear();
-        //    using (CustomTable ct = new())
-        //    {
-        //        ct.GetTablesList().ForEach(t =>
-        //        {
-        //            RadioButton rb = new();
-        //            rb.Content = t;
-        //            rb.Style = FindResource("CategoryButton") as Style;
-        //            this.TablesList.Items.Add(rb);
-        //        });
-        //    }
-        //}
+
+        private void AddNewRecordClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                CreateRecord cr = new(vm.SelectedTable, vm.GetTableDefinition());
+                cr.ShowDialog();
+                vm.RefreshTable();
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog(ex.Message);
+            }
+        }
+
+        private void RefreshClick(object sender, MouseButtonEventArgs e)
+        {
+            vm.RefreshTable();
+        }
+
+        private void DeleteRecordsClick(object sender, MouseButtonEventArgs e)
+        {
+            if (this.TableGrid.SelectedItems.Count == 0)
+            {
+                ProgramState.ShowExlamationDialog("Не выбрано ни одной записи для удаления!", "Действие невозможно");
+                return;
+            }
+            CustomTable ct = new();
+            List<string> selection = new();
+            string pk = vm.GetPK();
+            for (int i = 0; i < this.TableGrid.SelectedItems.Count; i++)
+            {
+                selection.Add(((DataRowView)this.TableGrid.SelectedItems[i]).Row[pk].ToString());
+            }
+            ct.DeleteInTable(vm.SelectedTable, pk, selection);
+            vm.RefreshTable();
+        }
     }
 }

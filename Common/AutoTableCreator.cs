@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.InkML;
+﻿using Common;
+using DocumentFormat.OpenXml.InkML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,10 @@ using System.Windows.Controls;
 
 namespace Incubator_2.Common
 {
-    struct FieldCreator
+    public struct FieldCreator
     {
-        public string TypeOf;
-        public string Name;
+        public string Name = "";
+        public string TypeOf = "";
         public bool NotNULL = false;
         public bool IsUNIQUE = false;
         public bool IsPK = false;
@@ -55,7 +56,7 @@ namespace Incubator_2.Common
             return $"{Name} {TypeOf} {GetNull()} {GetUniq()} {GetFK()}".Trim();
         }
     }
-    internal class AutoTableCreator
+    public class AutoTableCreator
     {
         private Dictionary<string,FieldCreator> definition = new Dictionary<string, FieldCreator>();
         private string TableName;

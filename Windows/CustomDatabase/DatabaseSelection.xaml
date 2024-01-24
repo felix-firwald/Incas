@@ -15,7 +15,7 @@
         <!--<ListView x:Name="List"/>-->
         <!--<fa:FontAwesome Icon="Search" Foreground="{DynamicResource Element}" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Margin="10,0,0,0"/>
         <TextBox Style="{DynamicResource TextBoxTransparent}" HorizontalAlignment="Left" Margin="35,0,0,0" MinWidth="200" TextChanged="SearchTextChanged"/>-->
-        <DataGrid x:Name="Grid" Style="{DynamicResource DataGridMain}" Background="{x:Null}" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" HeadersVisibility="Column" Margin="5,5,5,5" />
+        <DataGrid x:Name="Grid" Style="{DynamicResource DataGridMain}" Background="{DynamicResource Black}" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" HeadersVisibility="Column" Margin="5,5,5,5" />
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button Style="{DynamicResource ButtonMain}" MinWidth="150" Content="Выбрать" Click="SelectClick" IsDefault="True"/>
         </StackPanel>

@@ -174,6 +174,18 @@ namespace Common
         {
             return value? 1 : 0;
         }
+        protected bool IntToBool(int value)
+        {
+            return value == 0? false: true;
+        }
+        protected bool IntToBool(long value)
+        {
+            return value == 0 ? false : true;
+        }
+        protected bool IntToBool(uint value)
+        {
+            return value == 0 ? false : true;
+        }
         /// <summary>
         /// Does not support custom types and sets such fields to null
         /// </summary>
@@ -191,27 +203,7 @@ namespace Common
                 }
             }
         }
-        //protected void Insert()
-        //{
-        //    Dictionary<string, string> pairs = new();
-        //    foreach (var property in this.GetType().GetProperties())
-        //    {
-        //        try
-        //        {
-        //            if (property.Name != "id")
-        //            {
-        //                pairs.Add(property.Name, property.GetValue(this).ToString()); // берет
-        //            }
-        //        }
-        //        catch (Exception)
-        //        {
-        //            continue;
-        //        }
-        //    }
-        //    string result = $"INSERT INTO {tableName} ({string.Join(", ", pairs.Keys)}) VALUES (";
-            
-        //    result += ")";
-        //}
+
         #endregion
         
         private DataRow GetOne(DataTable dt)

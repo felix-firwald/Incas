@@ -35,18 +35,18 @@ namespace Incubator_2.Windows.CustomDatabase
                 return ((DataRowView)Grid.SelectedItems[0]).Row[Field].ToString();
             }
         }
-        public DatabaseSelection(string table, string field)
+        public DatabaseSelection(string table, string field, string custom = "")
         {
             InitializeComponent();
             this.Table = table;
             this.Field = field;
-            FillList();
+            FillList(custom);
         }
-        private void FillList()
+        private void FillList(string custom)
         {
             Query q = new("");
             q.typeOfConnection = DBConnectionType.CUSTOM;
-            q.AddCustomRequest($"SELECT * FROM {Table}");
+            q.AddCustomRequest($"SELECT * FROM {Table} {custom}");
             DataTable dt = q.Execute();
             this.Grid.ItemsSource = dt.DefaultView;
         }

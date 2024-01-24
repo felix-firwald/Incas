@@ -31,62 +31,7 @@ namespace Incubator_2.Models
         {
             tableName = "CustomTables";
         }
-        
-        public List<CustomTable> GetAllTables()
-        {
-            DataTable dt = StartCommand()
-                .Select()
-                .Execute();
-            List<CustomTable> tables = new List<CustomTable>();
-            foreach (DataRow dr in dt.Rows)
-            {
-                CustomTable table = new CustomTable();
-                table.Serialize(dr);
-                table.fields = DeserializeFields(dr["fields"].ToString());
-                tables.Add(table);
-            }
-            return tables;
-        }
-        private List<CustomField> DeserializeFields(string str)
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<CustomField>>(str);
-        }
-        private string SerializeFields()
-        {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(this.fields);
-        }
-        //public CustomTable AddCustomTable()
-        //{
-        //    StartCommand().Insert(new Dictionary<string, string>
-        //    {
-        //        { "name", $"'{name}'" },
-        //        { "viewName", $"'{viewName}'" },
-        //        { "fields", $"'{SerializeFields()}'" },
-        //    }).ExecuteVoid();
-        //    return this;
-        //}
-        //public CustomTable Update()
-        //{
-        //    StartCommand()
-        //        .Update("viewName", name)
-        //        .Update("fields", SerializeFields())
-        //        .WhereEqual("id", id.ToString())
-        //        .ExecuteVoid();
-        //    return this;
-        //}
-        //public CustomTable GetCustomTableByName()
-        //{
-        //    DataRow dr = StartCommand()
-        //        .Select()
-        //        .WhereEqual("name", name)
-        //        .ExecuteOne();
-        //    Serialize(dr);
-        //    return this;
-        //}
-        //public void RemoveCustomTable()
-        //{
-        //    StartCommand().Delete().WhereEqual("id", id.ToString());
-        //}
+
         public List<string> GetTablesList()
         {
             DataTable dt = StartCommandToCustom()
@@ -102,6 +47,77 @@ namespace Incubator_2.Models
         public DataTable GetTable(string tableName)
         {
             return StartCommandToCustom().AddCustomRequest($"SELECT * FROM {tableName};").Execute();
+        }
+        public List<FieldCreator> GetTableFields(string tableName)
+        {
+            DataTable dt = StartCommandToCustom()
+                .AddCustomRequest($"PRAGMA table_info(\"{tableName}\")")
+                .Execute();
+            List<FieldCreator> creators = new();
+            foreach (DataRow dr in dt.Rows)
+            {
+                FieldCreator fc = new();
+                fc.Name = dr["name"].ToString();
+                fc.TypeOf = dr["type"].ToString();
+                fc.NotNULL = IntToBool((long)dr["notnull"]);
+                fc.IsPK = IntToBool((long)dr["pk"]);
+                creators.Add(fc);
+            }
+            return creators;
+        }
+        public string GetPKField(string tableName)
+        {
+            DataTable dt = StartCommandToCustom()
+                .AddCustomRequest($"PRAGMA table_info(\"{tableName}\")")
+                .Execute();
+            foreach (DataRow dr in dt.Rows)
+            {
+                string name = dr["name"].ToString();
+                if (IntToBool((long)dr["pk"]))
+                {
+                    return name;
+                }
+            }
+            return "";
+        }
+
+        public List<FieldCreator> GetTableDefinition(string tableName)
+        {
+            DataTable dt = StartCommandToCustom()
+                .AddCustomRequest($"PRAGMA foreign_key_list(\"{tableName}\")")
+                .Execute();
+            List<FieldCreator> creators = GetTableFields(tableName);
+            
+            foreach (DataRow dr in dt.Rows)
+            {
+                string field = dr["from"].ToString();
+                string fktable = dr["table"].ToString();
+                string fkfield = dr["to"].ToString();
+                for (int f = 0; f < creators.Count; f++)
+                {
+                    if (field == creators[f].Name)
+                    {
+                        FieldCreator fc = creators[f];
+                        fc.FKtable = fktable;
+                        fc.FKfield = fkfield;
+                        creators[f] = fc;
+                    }
+                }
+            }
+            return creators;
+        }
+        public void InsertInTable(string table, Dictionary<string, string> pairs)
+        {
+            Query q = StartCommandToCustom();
+            q.Table = table;
+            q.Insert(pairs);
+            q.ExecuteVoid();
+        }
+        public void DeleteInTable(string table, string field, List<string> values)
+        {
+            StartCommandToCustom()
+                .AddCustomRequest($"DELETE FROM [{table}] WHERE [{field}] IN ('{string.Join("', '", values)}')")
+                .ExecuteVoid();
         }
     }
 }

@@ -13,7 +13,7 @@
                 <ColumnDefinition Width="1"/>
                 <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="Input" Style="{DynamicResource TextBoxEmpty}" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{DynamicResource PrimaryMain}" SelectionTextBrush="{x:Null}" Foreground="White" VerticalAlignment="Center" Margin="8,0,8,0" IsReadOnly="True" AutoWordSelection="True" CaretBrush="Black" Cursor="">
+            <TextBox x:Name="Input" Style="{DynamicResource TextBoxEmpty}" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{DynamicResource PrimaryMain}" SelectionTextBrush="{x:Null}" Foreground="{DynamicResource Light}" VerticalAlignment="Center" Margin="8,0,8,0" IsReadOnly="True" AutoWordSelection="True" CaretBrush="Black" Cursor="">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>

@@ -19,14 +19,15 @@
             <ListBox x:Name="TablesList" Style="{DynamicResource ListBoxMain}" Margin="0" ItemContainerStyle="{DynamicResource ListBoxItemPurple}" ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" Background="{x:Null}">
 
             </ListBox>
-            <DataGrid Style="{DynamicResource DataGridMain}" Grid.Column="1" ItemsSource="{Binding Table}" Margin="5,5,5,5" IsReadOnly="True">
+            <DataGrid x:Name="TableGrid" Style="{DynamicResource DataGridMain}" Grid.Column="1" ItemsSource="{Binding Table}" Margin="5,5,5,5" IsReadOnly="True">
 
             </DataGrid>
             <Border Grid.Row="1" Grid.Column="1" Background="{DynamicResource Black}" CornerRadius="5">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Plus" ToolTip="Добавить запись"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" ToolTip="Редактировать запись"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить запись"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Plus" ToolTip="Добавить запись" MouseDown="AddNewRecordClick"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" ToolTip="Редактировать запись" IsEnabled="False"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить запись" MouseDown="DeleteRecordsClick"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" ToolTip="Обновить записи" MouseDown="RefreshClick"/>
                 </StackPanel>
             </Border>
         </Grid>
