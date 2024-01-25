@@ -17,7 +17,14 @@
         <TextBox Style="{DynamicResource TextBoxTransparent}" HorizontalAlignment="Left" Margin="35,0,0,0" MinWidth="200" TextChanged="SearchTextChanged"/>-->
         <DataGrid x:Name="Grid" Style="{DynamicResource DataGridMain}" Background="{DynamicResource Black}" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" HeadersVisibility="Column" Margin="5,5,5,5" />
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Style="{DynamicResource ButtonMain}" MinWidth="150" Content="Выбрать" Click="SelectClick" IsDefault="True"/>
+            <Button Style="{DynamicResource ButtonMain}" MinWidth="150" Click="SelectClick" IsDefault="True">
+                <StackPanel Orientation="Horizontal">
+                    <Path RenderOptions.EdgeMode="Aliased"
+                        Data="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" VerticalAlignment="Center" Fill="White" UseLayoutRounding="False" SnapsToDevicePixels="False"
+                        />
+                    <Label Content="Выбрать" Foreground="White"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

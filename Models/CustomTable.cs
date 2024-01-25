@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace Incubator_2.Models
 {
+    public enum TableType
+    {
+        All,
+        OnlyTables,
+        OnlyViews
+    }
     struct CustomField
     {
         public string name;
@@ -32,10 +38,23 @@ namespace Incubator_2.Models
             tableName = "CustomTables";
         }
 
-        public List<string> GetTablesList()
+        public List<string> GetTablesList(TableType type = TableType.OnlyTables)
         {
+            string query;
+            switch (type)
+            {
+                case TableType.OnlyTables:
+                    query = "type ='table' AND name NOT LIKE 'sqlite_%'";
+                    break;
+                case TableType.OnlyViews:
+                    query = "type ='views' AND name NOT LIKE 'sqlite_%'";
+                    break;
+                default:
+                    query = "name NOT LIKE 'sqlite_%'";
+                    break;
+            }
             DataTable dt = StartCommandToCustom()
-                .AddCustomRequest("SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%';")
+                .AddCustomRequest("SELECT name FROM sqlite_schema WHERE " + query) // SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'
                 .Execute();
             List<string> result = new();
             foreach (DataRow dr in dt.Rows)

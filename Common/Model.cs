@@ -92,7 +92,6 @@ namespace Common
             foreach (var prop in this.GetType().GetProperties())
             {
                 result.Add(prop.Name);
-                Console.WriteLine(prop.Name, prop.DeclaringType);
             }
             return result;
         }

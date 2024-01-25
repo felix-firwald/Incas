@@ -78,7 +78,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridCell}">
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
-                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" TextElement.Foreground="White"/>
+                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" TextElement.Foreground="White" Margin="4,0,0,0" MinWidth="40"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -115,26 +115,53 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <!--<Style x:Key="ColumnCheckBoxMain" TargetType="{x:Type DataGridCheckBoxColumn}">
+        
+    </Style>-->
     <Style x:Key="ColumnHeaderMain" TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Background" Value="Black"/>
-        <Setter Property="Foreground" Value="{DynamicResource DarkYellow}"/>
-        <Setter Property="BorderThickness" Value="1,0,0,0"/>
+        <Setter Property="Background" Value="{DynamicResource Element}"/>
+        <Setter Property="Foreground" Value="{DynamicResource LightPurple}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,0"/>
         <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
                     <Border CornerRadius="6" BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
-                            <theme:DataGridHeaderBorder Background="{DynamicResource Dark}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" IsPressed="{TemplateBinding IsPressed}" IsHovered="{TemplateBinding IsMouseOver}" IsClickable="{TemplateBinding CanUserSort}" Padding="{TemplateBinding Padding}" SortDirection="{TemplateBinding SortDirection}" SeparatorVisibility="{TemplateBinding SeparatorVisibility}" SeparatorBrush="{TemplateBinding SeparatorBrush}">
-                                <ContentPresenter Margin="6" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            </theme:DataGridHeaderBorder>
+                            <DockPanel LastChildFill="True">
+                                <Path x:Name="ArrowUp" DockPanel.Dock="Left" Data="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5" Visibility="Collapsed" Fill="{DynamicResource Success}" VerticalAlignment="Center" Margin="0,0,0,4" Grid.Column="1" MinWidth="15" HorizontalAlignment="Center" SnapsToDevicePixels="True" />
+                                <Path x:Name="ArrowDown" DockPanel.Dock="Left" Data="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4" Visibility="Collapsed" Fill="{DynamicResource DarkYellow}" VerticalAlignment="Center" Margin="0,0,0,4" Grid.Column="1" MinWidth="15" HorizontalAlignment="Center" SnapsToDevicePixels="True" />
+
+                                <theme:DataGridHeaderBorder x:Name="Header" Background="{DynamicResource Dark}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,2" IsPressed="{TemplateBinding IsPressed}" IsHovered="{TemplateBinding IsMouseOver}" IsClickable="{TemplateBinding CanUserSort}" Padding="{TemplateBinding Padding}" SortDirection="{TemplateBinding SortDirection}" SeparatorVisibility="{TemplateBinding SeparatorVisibility}" SeparatorBrush="{TemplateBinding SeparatorBrush}">
+                                    <ContentPresenter x:Name="Text" Margin="6" TextElement.FontWeight="Bold" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                </theme:DataGridHeaderBorder>
+                            </DockPanel>
+                            
                             <!--<Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}"/>-->
-                            <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                            
+                            <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}" Grid.Column="2"/>
                         </Grid>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Header" Property="Background" Value="{DynamicResource LightBlack}"/>
+                            
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource Light}"/>
+                        </Trigger>
+                        <Trigger Property="SortDirection" Value="Ascending">
+                            <Setter TargetName="ArrowUp" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="SortDirection" Value="Descending">
+                            <Setter TargetName="ArrowDown" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
+                
             </Setter.Value>
         </Setter>
     </Style>
@@ -156,6 +183,7 @@
         <Setter Property="RowStyle" Value="{DynamicResource RowMain}"/>
         <Setter Property="HeadersVisibility" Value="Column"/>
         <Setter Property="Padding" Value="0"/> <!--это здесь выставлен внутренний отступ !!!!!!-->
+        <Setter Property="MinColumnWidth" Value="40"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DataGrid}">

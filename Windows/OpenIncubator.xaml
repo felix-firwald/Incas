@@ -45,7 +45,7 @@
             </ListBox>
         </Border>
         <Border Grid.Row="2" CornerRadius="5" Margin="6,6,6,6" Background="{DynamicResource Black}" Grid.Column="1">
-            
+
             <StackPanel Orientation="Vertical" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить новое рабочее пространство в список" MouseDown="AddClick" FontSize="16" />
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранное рабочее пространство" MouseDown="RemoveClick"/>
@@ -53,7 +53,18 @@
             </StackPanel>
         </Border>
 
-        <Button Style="{StaticResource ButtonMain}" IsDefault="True" Grid.Row="5" Grid.ColumnSpan="2" Content="Войти" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0" Height="30"/>
+        <Button Style="{StaticResource ButtonMain}" IsDefault="True" Grid.Row="5" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0" Height="30">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <Path 
+                    Data="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" Fill="White" VerticalAlignment="Center" Margin="0,0,0,2"/>
+                <Label Content="Войти" Foreground="White" Grid.Column="1"/>
+            </Grid>
+        </Button>
 
     </Grid>
 </Window>
