@@ -41,7 +41,7 @@ namespace Incubator_2.Windows
             }
             else
             {
-                ProgramState.ShowExlamationDialog("Пользователь не выбран!", "Действие невозможно");
+                ProgramState.ShowExclamationDialog("Пользователь не выбран!", "Действие невозможно");
             }
         }
 

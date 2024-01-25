@@ -119,5 +119,24 @@ namespace Incubator_2.Models
                 .AddCustomRequest($"DELETE FROM [{table}] WHERE [{field}] IN ('{string.Join("', '", values)}')")
                 .ExecuteVoid();
         }
+        public DataRow GetOneFromTable(string table, string pk, string pkValue)
+        {
+            Query q = StartCommandToCustom();
+            q.Table = table;
+            q.Select();
+            q.WhereEqual(pk, pkValue);
+            return q.ExecuteOne();
+        }
+        public void UpdateInTable(string table, string pk, string pkValue, Dictionary<string, string> pairs)
+        {
+            Query q = StartCommandToCustom();
+            q.Table = table;
+            foreach (KeyValuePair<string, string> pair in pairs)
+            {
+                q.Update(pair.Key, pair.Value);
+            }
+            q.WhereEqual(pk, pkValue);
+            q.ExecuteVoid();
+        }
     }
 }

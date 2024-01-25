@@ -113,7 +113,7 @@ namespace Incubator_2.Forms
                 }
                 else
                 {
-                    ProgramState.ShowExlamationDialog("Не выбрано ни одного элемента для удаления.\n" +
+                    ProgramState.ShowExclamationDialog("Не выбрано ни одного элемента для удаления.\n" +
                         "Используйте селекторы для выбора тех записей, которые нужно удалить.", "Действие невозможно");
                 }
             }
@@ -148,7 +148,7 @@ namespace Incubator_2.Forms
             }
             else
             {
-                ProgramState.ShowExlamationDialog("Не выбрано ни одного элемента для отправки в секвенсор.\n" +
+                ProgramState.ShowExclamationDialog("Не выбрано ни одного элемента для отправки в секвенсор.\n" +
                     "Используйте селекторы для выбора тех записей, которые нужно открыть.", "Действие невозможно");
             }
         }

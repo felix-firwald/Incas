@@ -316,9 +316,9 @@ namespace Common
             Dialog d = new Dialog(message, title, Dialog.DialogIcon.Error);
             d.ShowDialog();
         }
-        public static void ShowExlamationDialog(string message, string title = "Обратите внимание")
+        public static void ShowExclamationDialog(string message, string title = "Обратите внимание")
         {
-            Dialog d = new Dialog(message, title, Dialog.DialogIcon.Exlamation);
+            Dialog d = new Dialog(message, title, Dialog.DialogIcon.Exclamation);
             d.ShowDialog();
         }
         public static void ShowInfoDialog(string message, string title = "Оповещение")

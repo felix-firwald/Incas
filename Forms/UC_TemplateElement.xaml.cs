@@ -79,7 +79,7 @@ namespace Forms
                 {
                     if (this.ChildPanel.Children.Count > 0)
                     {
-                        ProgramState.ShowExlamationDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
+                        ProgramState.ShowExclamationDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
                         return;
                     }
                     if (ProgramState.ShowQuestionDialog($"Шаблон \"{template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
@@ -93,7 +93,7 @@ namespace Forms
             }
             else
             {
-                ProgramState.ShowExlamationDialog("Вам недоступна функция удаления шаблонов.", "Удаление прервано");
+                ProgramState.ShowExclamationDialog("Вам недоступна функция удаления шаблонов.", "Удаление прервано");
             }
         }
 
@@ -120,7 +120,7 @@ namespace Forms
             }
             else
             {
-                ProgramState.ShowExlamationDialog("Вам недоступна функция редактирования шаблонов.", "Редактирование прервано");
+                ProgramState.ShowExclamationDialog("Вам недоступна функция редактирования шаблонов.", "Редактирование прервано");
             }
         }
 
@@ -138,7 +138,7 @@ namespace Forms
             }
             else
             {
-                ProgramState.ShowExlamationDialog("Вам недоступна функция создания шаблонов.", "Создание прервано");
+                ProgramState.ShowExclamationDialog("Вам недоступна функция создания шаблонов.", "Создание прервано");
             }
         }
         private void UpdateList()

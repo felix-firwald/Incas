@@ -55,7 +55,7 @@ namespace Incubator_2.Forms.Database
         {
             if (this.TableGrid.SelectedItems.Count == 0)
             {
-                ProgramState.ShowExlamationDialog("Не выбрано ни одной записи для удаления!", "Действие невозможно");
+                ProgramState.ShowExclamationDialog("Не выбрано ни одной записи для удаления!", "Действие невозможно");
                 return;
             }
             CustomTable ct = new();
@@ -66,6 +66,20 @@ namespace Incubator_2.Forms.Database
                 selection.Add(((DataRowView)this.TableGrid.SelectedItems[i]).Row[pk].ToString());
             }
             ct.DeleteInTable(vm.SelectedTable, pk, selection);
+            vm.RefreshTable();
+        }
+
+        private void EditRecordClick(object sender, MouseButtonEventArgs e)
+        {
+            if (this.TableGrid.SelectedItems.Count == 0)
+            {
+                ProgramState.ShowExclamationDialog("Не выбрано ни одной записи для редактирования!", "Действие невозможно");
+                return;
+            }
+            string pk = vm.GetPK();
+            string record = ((DataRowView)this.TableGrid.SelectedItems[0]).Row[pk].ToString();
+            CreateRecord cr = new CreateRecord(vm.SelectedTable, pk, record, vm.GetTableDefinition());
+            cr.ShowDialog();
             vm.RefreshTable();
         }
     }

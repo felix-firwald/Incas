@@ -55,7 +55,7 @@ namespace Incubator_2.Windows.CustomDatabase
         {
             if (Grid.SelectedItems.Count == 0)
             {
-                ProgramState.ShowExlamationDialog("Нельзя использовать пустое значение!", "Значение не выбрано");
+                ProgramState.ShowExclamationDialog("Нельзя использовать пустое значение!", "Значение не выбрано");
                 return;
             }
             Result = DialogStatus.Yes;

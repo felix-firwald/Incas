@@ -80,7 +80,7 @@ namespace Incubator_2.Common
                     UserParameters p = new();
                     p.ApplyAdminProperties(ProgramState.GenerateSlug(4));
                     ToFile(p, user, GetKey(user));
-                    ProgramState.ShowExlamationDialog($"Пароль для пользователя {user.fullname} был сброшен. Временный пароль: {p.startup_password}", "Пользователь восстановлен");
+                    ProgramState.ShowExclamationDialog($"Пароль для пользователя {user.fullname} был сброшен. Временный пароль: {p.startup_password}", "Пользователь восстановлен");
                     return p;
                 }
                 return new();

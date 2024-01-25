@@ -283,7 +283,7 @@ namespace Incubator_2.Common
                         ProgramState.ShowInfoDialog(m.message, m.header);
                         break;
                     case AdminMessageType.WARNING:
-                        ProgramState.ShowExlamationDialog(m.message, m.header);
+                        ProgramState.ShowExclamationDialog(m.message, m.header);
                         break;
                     case AdminMessageType.QUESTION:
                         DialogStatus ds = ProgramState.ShowQuestionDialog(m.message, m.header);

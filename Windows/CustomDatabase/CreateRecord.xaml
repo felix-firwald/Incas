@@ -19,6 +19,6 @@
 
         </StackPanel>
         <Button Style="{DynamicResource ButtonMain}" Content="Сохранить и закрыть" Grid.Row="1" Click="SaveAndCloseClick" Margin="5,5,5,5" IsDefault="True"/>
-        <Button Style="{DynamicResource ButtonMain}" Content="Сохранить" Grid.Row="1" Click="SaveClick" Margin="5,5,5,5" Grid.Column="1"/>
+        <Button x:Name="SaveButton" Style="{DynamicResource ButtonMain}" Content="Сохранить" Grid.Row="1" Click="SaveClick" Margin="5,5,5,5" Grid.Column="1"/>
     </Grid>
 </Window>

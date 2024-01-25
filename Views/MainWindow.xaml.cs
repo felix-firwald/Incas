@@ -104,7 +104,7 @@ namespace Incubator_2
                     break;
                 case PermissionGroup.Operator:
                 default:
-                    ProgramState.ShowExlamationDialog("Данная функция доступна только администраторам и модераторам.", "Нет доступа");
+                    ProgramState.ShowExclamationDialog("Данная функция доступна только администраторам и модераторам.", "Нет доступа");
                     break;
             }
             

@@ -171,12 +171,12 @@ namespace Common
             if (isUpdateAlready)
             {
                 Result += $",\n" +
-                $"{cell} = {c}{value}{c}";
+                $"[{cell}] = {c}{value}{c}";
             }
             else
             {
                 Result += $"UPDATE {Table}\n" +
-                $"SET {cell} = {c}{value}{c}";
+                $"SET [{cell}] = {c}{value}{c}";
                 isUpdateAlready = true;
             }
             return this;
@@ -209,14 +209,14 @@ namespace Common
             }
             if (isWhereAlready)
             {
-                resulting = Result + $"\nAND {cell} {comparator} {c}{value}{c}\n";
+                resulting = Result + $"\nAND [{cell}] {comparator} {c}{value}{c}\n";
                 Result = resulting;
                 return this;
             }
             else
             {
                 isWhereAlready = true;
-                resulting = Result + $"\nWHERE {cell} {comparator} {c}{value}{c}\n";
+                resulting = Result + $"\nWHERE [{cell}] {comparator} {c}{value}{c}\n";
                 Result = resulting;
                 return this;
             }

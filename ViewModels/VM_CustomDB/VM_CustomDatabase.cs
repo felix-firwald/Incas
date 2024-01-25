@@ -72,6 +72,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         }
         public void RefreshTable()
         {
+            OnPropertyChanged(nameof(Tables));
             OnPropertyChanged(nameof(Table));
         }
     }

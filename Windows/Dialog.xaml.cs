@@ -22,7 +22,7 @@ namespace Incubator_2.Windows
         public enum DialogIcon
         {
             Error,
-            Exlamation,
+            Exclamation,
             Info
         }
         public Dialog(string text, string title="Неизвестная ошибка", DialogIcon ic = DialogIcon.Error)
@@ -35,7 +35,7 @@ namespace Incubator_2.Windows
                 case DialogIcon.Error:
                     this.IconError.Visibility = Visibility.Visible;
                     break;
-                case DialogIcon.Exlamation:
+                case DialogIcon.Exclamation:
                     this.IconExlamation.Visibility = Visibility.Visible;
                     break;
                 case DialogIcon.Info:

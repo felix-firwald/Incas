@@ -68,13 +68,13 @@ namespace Incubator_2.Windows
                 }
                 else
                 {
-                    ProgramState.ShowExlamationDialog("Пароль введен неверно.", "Вход невозможен");
+                    ProgramState.ShowExclamationDialog("Пароль введен неверно.", "Вход невозможен");
                     this.pwd.Text = "";
                 }
             }
             else
             {
-                ProgramState.ShowExlamationDialog("Пользователь не выбран.", "Вход невозможен");
+                ProgramState.ShowExclamationDialog("Пользователь не выбран.", "Вход невозможен");
             }
             
         }
