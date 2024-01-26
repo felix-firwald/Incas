@@ -44,13 +44,13 @@ namespace Incubator_2.Models
             switch (type)
             {
                 case TableType.OnlyTables:
-                    query = "type ='table' AND name NOT LIKE 'sqlite_%'";
+                    query = "type ='table' AND name NOT LIKE 'sqlite_%' ORDER BY name ASC";
                     break;
                 case TableType.OnlyViews:
-                    query = "type ='views' AND name NOT LIKE 'sqlite_%'";
+                    query = "type ='views' AND name NOT LIKE 'sqlite_%' ORDER BY name ASC";
                     break;
                 default:
-                    query = "name NOT LIKE 'sqlite_%'";
+                    query = "name NOT LIKE 'sqlite_%' ORDER BY name ASC";
                     break;
             }
             DataTable dt = StartCommandToCustom()
@@ -65,7 +65,7 @@ namespace Incubator_2.Models
         }
         public DataTable GetTable(string tableName)
         {
-            return StartCommandToCustom().AddCustomRequest($"SELECT * FROM {tableName};").Execute();
+            return StartCommandToCustom().AddCustomRequest($"SELECT * FROM [{tableName}];").Execute();
         }
         public List<FieldCreator> GetTableFields(string tableName)
         {

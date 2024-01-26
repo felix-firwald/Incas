@@ -111,7 +111,7 @@ namespace Common
         public Query Select(string selection = "*")
         {
             string resulting;
-            resulting = $"SELECT {selection}\nFROM {Table}\n";
+            resulting = $"SELECT {selection}\nFROM [{Table}]\n";
             Result = resulting;
             return this;
         }
@@ -160,7 +160,7 @@ namespace Common
         #region Insert Update Delete
         public Query Insert(Dictionary<string, string> dict)
         {
-            Result += $"INSERT INTO {Table} ([{string.Join("], [", dict.Keys)}])\nVALUES ('{string.Join("', '", dict.Values)}')";
+            Result += $"INSERT INTO [{Table}] ([{string.Join("], [", dict.Keys)}])\nVALUES ('{string.Join("', '", dict.Values)}')";
             ReplaceNull();
             return this;
         }
@@ -175,7 +175,7 @@ namespace Common
             }
             else
             {
-                Result += $"UPDATE {Table}\n" +
+                Result += $"UPDATE [{Table}]\n" +
                 $"SET [{cell}] = {c}{value}{c}";
                 isUpdateAlready = true;
             }
@@ -183,7 +183,7 @@ namespace Common
         }
         public Query Delete()
         {
-            Result += $"DELETE FROM {Table}\n";
+            Result += $"DELETE FROM [{Table}]\n";
             return this;
         }
         #endregion
@@ -192,7 +192,7 @@ namespace Common
         public Query InnerJoin(string innerTable, string fieldBaseTable, string fieldJoinedTable)
         {
             string resulting;
-            resulting = Result + $"INNER JOIN {innerTable}\nON {Table}.{fieldBaseTable}={innerTable}.{fieldJoinedTable}\n";
+            resulting = Result + $"INNER JOIN [{innerTable}]\nON {Table}.{fieldBaseTable}={innerTable}.{fieldJoinedTable}\n";
             Result = resulting;
             return this;
         }

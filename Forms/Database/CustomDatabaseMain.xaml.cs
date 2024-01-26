@@ -36,6 +36,11 @@ namespace Incubator_2.Forms.Database
         {
             try
             {
+                if (string.IsNullOrEmpty(vm.SelectedTable))
+                {
+                    ProgramState.ShowExclamationDialog("Таблица для записи не выбрана!", "Действие невозможно");
+                    return;
+                }
                 CreateRecord cr = new(vm.SelectedTable, vm.GetTableDefinition());
                 cr.ShowDialog();
                 vm.RefreshTable();
@@ -53,34 +58,56 @@ namespace Incubator_2.Forms.Database
 
         private void DeleteRecordsClick(object sender, MouseButtonEventArgs e)
         {
-            if (this.TableGrid.SelectedItems.Count == 0)
+            try
             {
-                ProgramState.ShowExclamationDialog("Не выбрано ни одной записи для удаления!", "Действие невозможно");
-                return;
+                if (this.TableGrid.SelectedItems.Count == 0)
+                {
+                    ProgramState.ShowExclamationDialog("Не выбрано ни одной записи для удаления!", "Действие невозможно");
+                    return;
+                }
+                CustomTable ct = new();
+                List<string> selection = new();
+                string pk = vm.GetPK();
+                for (int i = 0; i < this.TableGrid.SelectedItems.Count; i++)
+                {
+                    selection.Add(((DataRowView)this.TableGrid.SelectedItems[i]).Row[pk].ToString());
+                }
+                ct.DeleteInTable(vm.SelectedTable, pk, selection);
             }
-            CustomTable ct = new();
-            List<string> selection = new();
-            string pk = vm.GetPK();
-            for (int i = 0; i < this.TableGrid.SelectedItems.Count; i++)
+            catch (ArgumentException)
             {
-                selection.Add(((DataRowView)this.TableGrid.SelectedItems[i]).Row[pk].ToString());
+                ProgramState.ShowErrorDialog("Неправильная конфигурация таблицы (вероятно у таблицы отсутствует первичный ключ).", "Ошибка идентификации записи");
             }
-            ct.DeleteInTable(vm.SelectedTable, pk, selection);
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog("При попытке удаления записей возникла ошибка неизвестного характера:\n" + ex.Message);
+            }
             vm.RefreshTable();
         }
 
         private void EditRecordClick(object sender, MouseButtonEventArgs e)
         {
-            if (this.TableGrid.SelectedItems.Count == 0)
+            try
             {
-                ProgramState.ShowExclamationDialog("Не выбрано ни одной записи для редактирования!", "Действие невозможно");
-                return;
+                if (this.TableGrid.SelectedItems.Count == 0)
+                {
+                    ProgramState.ShowExclamationDialog("Не выбрано ни одной записи для редактирования!", "Действие невозможно");
+                    return;
+                }
+                string pk = vm.GetPK();
+                string record = ((DataRowView)this.TableGrid.SelectedItems[0]).Row[pk].ToString();
+                CreateRecord cr = new CreateRecord(vm.SelectedTable, pk, record, vm.GetTableDefinition());
+                cr.ShowDialog();
+                vm.RefreshTable();
             }
-            string pk = vm.GetPK();
-            string record = ((DataRowView)this.TableGrid.SelectedItems[0]).Row[pk].ToString();
-            CreateRecord cr = new CreateRecord(vm.SelectedTable, pk, record, vm.GetTableDefinition());
-            cr.ShowDialog();
-            vm.RefreshTable();
+            catch (ArgumentException)
+            {
+                ProgramState.ShowErrorDialog("Неправильная конфигурация таблицы (вероятно у таблицы отсутствует первичный ключ).", "Ошибка идентификации записи");
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog("При попытке открыть окно редактирования записи возникла ошибка неизвестного характера:\n" + ex.Message);
+            }
         }
     }
 }
