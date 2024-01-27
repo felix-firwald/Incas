@@ -47,7 +47,7 @@ namespace Incubator_2.Models
         }
         public void AddDatabase()
         {
-            path = ProgramState.GenerateSlug(6);
+            path = ProgramState.GenerateSlug(12);
             SQLiteConnection.CreateFile($"{ProgramState.CustomDatabasePath}\\{path}.dbinc");
             StartCommandToService()
                 .Insert(new()

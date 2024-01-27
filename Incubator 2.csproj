@@ -55,6 +55,29 @@
     <FileVersion>0.9.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Fonts\RobotoMono-Bold.ttf" />
+    <None Remove="Fonts\RobotoMono-BoldItalic.ttf" />
+    <None Remove="Fonts\RobotoMono-ExtraLight.ttf" />
+    <None Remove="Fonts\RobotoMono-ExtraLightItalic.ttf" />
+    <None Remove="Fonts\RobotoMono-Italic.ttf" />
+    <None Remove="Fonts\RobotoMono-Light.ttf" />
+    <None Remove="Fonts\RobotoMono-LightItalic.ttf" />
+    <None Remove="Fonts\RobotoMono-Medium.ttf" />
+    <None Remove="Fonts\RobotoMono-MediumItalic.ttf" />
+    <None Remove="Fonts\RobotoMono-Regular.ttf" />
+    <None Remove="Fonts\RobotoMono-SemiBold.ttf" />
+    <None Remove="Fonts\RobotoMono-SemiBoldItalic.ttf" />
+    <None Remove="Fonts\RobotoMono-Thin.ttf" />
+    <None Remove="Fonts\RobotoMono-ThinItalic.ttf" />
+    <None Remove="Fonts\VelaSans-Bold.ttf" />
+    <None Remove="Fonts\VelaSans-ExtraBold.ttf" />
+    <None Remove="Fonts\VelaSans-ExtraLight.ttf" />
+    <None Remove="Fonts\VelaSans-Light.ttf" />
+    <None Remove="Fonts\VelaSans-Medium.ttf" />
+    <None Remove="Fonts\VelaSans-Regular.ttf" />
+    <None Remove="Fonts\VelaSans-SemiBold.ttf" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
     <Resource Include="Fonts\JetBrainsMono-BoldItalic.ttf" />
     <Resource Include="Fonts\JetBrainsMono-ExtraBold.ttf" />
@@ -87,6 +110,25 @@
     <Resource Include="Fonts\JetBrainsMonoNL-SemiBoldItalic.ttf" />
     <Resource Include="Fonts\JetBrainsMonoNL-Thin.ttf" />
     <Resource Include="Fonts\JetBrainsMonoNL-ThinItalic.ttf" />
+    <Resource Include="Fonts\RobotoMono-Bold.ttf" />
+    <Resource Include="Fonts\RobotoMono-BoldItalic.ttf" />
+    <Resource Include="Fonts\RobotoMono-ExtraLight.ttf" />
+    <Resource Include="Fonts\RobotoMono-ExtraLightItalic.ttf" />
+    <Resource Include="Fonts\RobotoMono-Italic.ttf" />
+    <Resource Include="Fonts\RobotoMono-Medium.ttf" />
+    <Resource Include="Fonts\RobotoMono-MediumItalic.ttf" />
+    <Resource Include="Fonts\RobotoMono-Regular.ttf" />
+    <Resource Include="Fonts\RobotoMono-SemiBold.ttf" />
+    <Resource Include="Fonts\RobotoMono-SemiBoldItalic.ttf" />
+    <Resource Include="Fonts\RobotoMono-Thin.ttf" />
+    <Resource Include="Fonts\RobotoMono-ThinItalic.ttf" />
+    <Resource Include="Fonts\VelaSans-Bold.ttf" />
+    <Resource Include="Fonts\VelaSans-ExtraBold.ttf" />
+    <Resource Include="Fonts\VelaSans-ExtraLight.ttf" />
+    <Resource Include="Fonts\VelaSans-Light.ttf" />
+    <Resource Include="Fonts\VelaSans-Medium.ttf" />
+    <Resource Include="Fonts\VelaSans-Regular.ttf" />
+    <Resource Include="Fonts\VelaSans-SemiBold.ttf" />
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="Logo.ico" />

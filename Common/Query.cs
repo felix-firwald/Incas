@@ -247,6 +247,10 @@ namespace Common
         {
             return Where(cell, "=", value, isStr);
         }
+        public Query WhereEqual(string cell, int value)
+        {
+            return Where(cell, "=", value.ToString(), false);
+        }
 
         /// <summary>
         /// Where A (left arg) != B (right arg)
@@ -255,6 +259,10 @@ namespace Common
         public Query WhereNotEqual(string cell, string value, bool isStr = true)
         {
             return Where(cell, "<>", value, isStr);
+        }
+        public Query WhereNotEqual(string cell, int value)
+        {
+            return Where(cell, "<>", value.ToString(), false);
         }
 
         /// <summary>
@@ -265,6 +273,10 @@ namespace Common
         {
             return Where(cell, "<", value, isStr);
         }
+        public Query WhereLess(string cell, int value)
+        {
+            return Where(cell, "<", value.ToString(), false);
+        }
 
         /// <summary>
         /// Where A (left arg) > B (right arg)
@@ -274,14 +286,18 @@ namespace Common
         {
             return Where(cell, ">", value, isStr);
         }
+        public Query WhereMore(string cell, int value)
+        {
+            return Where(cell, ">", value.ToString(), false);
+        }
 
         /// <summary>
         /// Where A (left arg) BETWEEN B (central arg) AND C (right arg)
         /// </summary>
         /// <returns></returns>
-        public Query WhereBetween(string cell, string left, string right, bool isStr = true)
+        public Query WhereBetween(string cell, int left, int right)
         {
-            return Where(cell, "BETWEEN", $"{left} AND {right}", isStr);
+            return Where(cell, "BETWEEN", $"{left} AND {right}", false);
         }
 
         /// <summary>
@@ -306,6 +322,51 @@ namespace Common
         {
             return Where(cell, "LIKE", $"%{value}%", true);
         }
+        public Query WhereLike(string cell, int value)
+        {
+            return Where(cell, "LIKE", $"%{value}%", true);
+        }
+        public Query WhereNotLike(string cell, string value)
+        {
+            return Where(cell, "NOT LIKE", $"%{value}%", true);
+        }
+        public Query WhereNotLike(string cell, int value)
+        {
+            return Where(cell, "NOT LIKE", $"%{value}%", true);
+        }
+        public Query WhereStartsWith(string cell, string value)
+        {
+            return Where(cell, "LIKE", $"{value}%", true);
+        }
+        public Query WhereStartsWith(string cell, int value)
+        {
+            return Where(cell, "LIKE", $"{value}%", true);
+        }
+        public Query WhereNotStartsWith(string cell, string value)
+        {
+            return Where(cell, "NOT LIKE", $"{value}%", true);
+        }
+        public Query WhereNotStartsWith(string cell, int value)
+        {
+            return Where(cell, "NOT LIKE", $"{value}%", true);
+        }
+        public Query WhereEndsWith(string cell, string value)
+        {
+            return Where(cell, "LIKE", $"%{value}", true);
+        }
+        public Query WhereEndsWith(string cell, int value)
+        {
+            return Where(cell, "LIKE", $"%{value}", true);
+        }
+        public Query WhereNotEndsWith(string cell, string value)
+        {
+            return Where(cell, "NOT LIKE", $"%{value}", true);
+        }
+        public Query WhereNotEndsWith(string cell, int value)
+        {
+            return Where(cell, "NOT LIKE", $"%{value}", true);
+        }
+
         #endregion
 
         #region Order By

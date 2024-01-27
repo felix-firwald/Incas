@@ -51,7 +51,6 @@ namespace Common
              .AddCustomRequest(GetTemplateDefinition(atc))
              .AddCustomRequest(GetTagDefinition(atc))
              .AddCustomRequest(GetGeneratedDocumentDefinition(atc))
-             .AddCustomRequest(GetCustomTableDefinition(atc))
              .ExecuteVoid();
         }
 
@@ -64,9 +63,10 @@ namespace Common
             q.typeOfConnection = DBConnectionType.SERVICE;
             q.AddCustomRequest(GetParameterDefinition(atc))
              .AddCustomRequest(GetSectorDefinition(atc))
-             .AddCustomRequest(GetDatabasesDefinition(atc))
              .AddCustomRequest(GetUserDefinition(atc))
              .AddCustomRequest(GetSessionDefinition(atc))
+             .AddCustomRequest(GetDatabasesDefinition(atc))
+             .AddCustomRequest(GetCommandDefinition(atc))
              .ExecuteVoid();
             InitializeData();
             return true;
@@ -162,9 +162,9 @@ namespace Common
             atc.SetFK("parent", "Tags", "id");
             return atc.GetQueryText();
         }
-        private static string GetCustomTableDefinition(AutoTableCreator atc)
+        private static string GetCommandDefinition(AutoTableCreator atc)
         {
-            atc.Initialize(typeof(Subtask), "CustomTables");
+            atc.Initialize(typeof(Command), "Commands");
             return atc.GetQueryText();
         }
         #endregion

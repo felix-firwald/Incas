@@ -46,7 +46,7 @@
                             <ColumnDefinition Width="*" MinWidth="80"/>
                         </Grid.ColumnDefinitions>
                         <Border x:Name="border" Grid.ColumnSpan="2"/>
-                        <Label x:Name="Arrow" Style="{DynamicResource LabelElement}" Content="f" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="{DynamicResource Element}" FontWeight="Bold" FontStyle="Italic" Margin="0,0,0,0"/>
+                        <Label x:Name="Arrow" Style="{DynamicResource LabelElement}" Content="f" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="{DynamicResource Element}" FontWeight="Bold" FontStyle="Italic" Margin="0,-2,0,0"/>
                         <TextBlock Foreground="{TemplateBinding Foreground}" Grid.Column="1" Margin="5 0 15 0"  VerticalAlignment="Center" x:Name="_txt" Text="{Binding Header,RelativeSource={RelativeSource TemplatedParent}}" />
                         <Path Visibility="Collapsed" x:Name="_path" Grid.Column="1" HorizontalAlignment="Right"  Margin="5 13 5 0"   Data="M0,4 4,0 0,-4 z" Fill="#7E8A92"/>
                         <Popup Placement="Right" x:Name="SubMenuPopup" AllowsTransparency="True"   Focusable="False" IsOpen="{TemplateBinding IsSubmenuOpen}" >

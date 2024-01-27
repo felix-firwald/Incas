@@ -30,6 +30,17 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 }
             }
         }
+        public Visibility TablesVisibility
+        {
+            get
+            {
+                if (SelectedDatabase.id == 0)
+                {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
 
         public Visibility EditingVisibility
         {
@@ -99,6 +110,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 _selectedDatabase = value;
                 OnPropertyChanged(nameof(SelectedDatabase));
                 OnPropertyChanged(nameof(Tables));
+                OnPropertyChanged(nameof(TablesVisibility));
                 SelectedTable = Tables.FirstOrDefault();
             }
         }

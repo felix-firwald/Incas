@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms.Database" xmlns:oneinstance="clr-namespace:Incubator_2.Forms.OneInstance" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="900">
-    <GroupBox Style="{DynamicResource MainGroupBox}" Header="БАЗА ДАННЫХ">
+             d:DesignHeight="450" d:DesignWidth="900" Cursor="">
+    <GroupBox Style="{DynamicResource MainGroupBox}" Header="БАЗЫ ДАННЫХ">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
@@ -14,26 +14,27 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="240" MinWidth="100" MaxWidth="400"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="272*"/>
+                <ColumnDefinition Width="240" MinWidth="50" MaxWidth="400"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.RowSpan="2">
-                <Expander Style="{DynamicResource ExpanderMain}" Header="Базы данных">
+                <Expander Style="{DynamicResource ExpanderMain}" Header="Базы данных" IsExpanded="True">
                     <ListBox x:Name="DatabasesList"
                          Style="{DynamicResource ListBoxMain}"
                          ItemContainerStyle="{DynamicResource ListBoxItemPurple}"
                          ItemsSource="{Binding Databases}" SelectedItem="{Binding SelectedDatabase}" DisplayMemberPath="name" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2"/>
                 </Expander>
-                <Expander Style="{DynamicResource ExpanderMain}" Header="Таблицы">
+                <Expander Style="{DynamicResource ExpanderMain}" Header="Таблицы" IsExpanded="True" Visibility="{Binding TablesVisibility}">
                     <ListBox x:Name="TablesList" 
                          Style="{DynamicResource ListBoxMain}"
                          ItemContainerStyle="{DynamicResource ListBoxItemPurple}"
                          ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2"/>
                 </Expander>
             </StackPanel>
-            
+
             <GridSplitter Grid.RowSpan="2"/>
-            <DataGrid x:Name="TableGrid" Style="{DynamicResource DataGridMain}" Grid.Column="2" ItemsSource="{Binding Table}" IsTextSearchEnabled="True" Margin="5,5,5,5" IsReadOnly="True" SelectionUnit="{Binding SelectionUnit}"/>
-            <Border Grid.Row="1" Grid.Column="2" Background="{DynamicResource Black}" CornerRadius="5" Margin="6,0,6,0">
+            <DataGrid x:Name="TableGrid" Style="{DynamicResource DataGridMain}" Grid.Column="1" ItemsSource="{Binding Table}" IsTextSearchEnabled="True" Margin="5,5,5,5" IsReadOnly="True" SelectionUnit="{Binding SelectionUnit}"/>
+            <Border Grid.Row="1" Grid.Column="1" Background="{DynamicResource Black}" CornerRadius="5" Margin="6,0,6,0" Grid.ColumnSpan="2">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Plus" ToolTip="Добавить запись" MouseDown="AddNewRecordClick" IsEnabled="{Binding CanUserEditTable}"/>
                     <Rectangle Fill="{DynamicResource Element}" Width="1" Margin="0,3,0,3" Visibility="{Binding EditingVisibility}" />
@@ -44,7 +45,18 @@
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" ToolTip="Обновить записи" MouseDown="RefreshClick"/>
                 </StackPanel>
             </Border>
-            <GridSplitter Grid.Column="1" Grid.RowSpan="2"/>
+            <GridSplitter Grid.Column="1" Grid.RowSpan="2"  />
+            <Border Grid.Column="2" Background="{DynamicResource Black}" CornerRadius="2" Margin="0,5,5,5" BorderThickness="2" BorderBrush="{DynamicResource Element}">
+                <StackPanel>
+                    <Label Content="Чтение:" Foreground="{DynamicResource Success}"/>
+                    <MenuItem Header="Показать только актуальные"/>
+                    <MenuItem Header="Обновить" Cursor="Hand"/>
+                    <Rectangle Fill="{DynamicResource Element}" Height="1"/>
+                    <Label Content="Изменение:" Foreground="{DynamicResource DarkYellow}"/>
+                    <MenuItem Header="Установить всё на NULL"/>
+                    <MenuItem Header="Удалить неактуальные" Cursor="Hand"/>
+                </StackPanel>
+            </Border>
         </Grid>
     </GroupBox>
 </UserControl>

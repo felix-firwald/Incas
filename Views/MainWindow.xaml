@@ -56,13 +56,14 @@
             <TextBlock x:Name="LPost" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
             <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
 
-            <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}"  IsChecked="True">
+            <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}" IsChecked="True" Cursor="Hand" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition x:Name="ColDR" Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <fa:FontAwesome Icon="FileText" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
+                    <Path Fill="{Binding ElementName=DocumentsRadio, Path=Foreground}" Data="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
+                    <Path Fill="{Binding ElementName=DocumentsRadio, Path=Foreground}" Data="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
                     <TextBlock Text="Документы" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DocumentsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
@@ -72,7 +73,7 @@
                         <ColumnDefinition x:Name="ColTR" Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <fa:FontAwesome Icon="ThList" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
+                    <Path Fill="{Binding ElementName=TasksRadio, Path=Foreground}" Data="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0" />
                     <TextBlock Text="Задачи" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=TasksRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
@@ -92,7 +93,7 @@
                         <ColumnDefinition x:Name="ColRR" Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <fa:FontAwesome Icon="Microphone" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
+                    <Path Fill="{Binding ElementName=CommunicationsRadio, Path=Foreground}" Data="M3.05 3.05a7 7 0 0 0 0 9.9.5.5 0 0 1-.707.707 8 8 0 0 1 0-11.314.5.5 0 0 1 .707.707m2.122 2.122a4 4 0 0 0 0 5.656.5.5 0 1 1-.708.708 5 5 0 0 1 0-7.072.5.5 0 0 1 .708.708m5.656-.708a.5.5 0 0 1 .708 0 5 5 0 0 1 0 7.072.5.5 0 1 1-.708-.708 4 4 0 0 0 0-5.656.5.5 0 0 1 0-.708m2.122-2.12a.5.5 0 0 1 .707 0 8 8 0 0 1 0 11.313.5.5 0 0 1-.707-.707 7 7 0 0 0 0-9.9.5.5 0 0 1 0-.707zM10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0" Cursor="" />
                     <TextBlock Text="Внутренняя связь" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=CommunicationsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
@@ -102,8 +103,8 @@
                         <ColumnDefinition x:Name="ColDBR" Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <fa:FontAwesome Icon="Server" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" Cursor="" />
-                    <TextBlock Text="База данных" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DatabaseRadio, Path=Foreground}" Cursor="" Grid.Column="1" TextTrimming="WordEllipsis" />
+                    <Path Fill="{Binding ElementName=DatabaseRadio, Path=Foreground}" Data="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5"/>
+                    <TextBlock Text="Базы данных" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DatabaseRadio, Path=Foreground}" Cursor="" Grid.Column="1" TextTrimming="WordEllipsis" />
                 </Grid>
             </RadioButton>
             <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
@@ -113,7 +114,9 @@
                         <ColumnDefinition x:Name="ColSR" Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <fa:FontAwesome Icon="Gear" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
+                    <!--<fa:FontAwesome Icon="Gear" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />-->
+                    <Path Fill="{Binding ElementName=SettingsRadio, Path=Foreground}" Data="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
+                    <Path Fill="{Binding ElementName=SettingsRadio, Path=Foreground}" Data="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" Cursor=""/>
                     <TextBlock Text="Настройки" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=SettingsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
                 </Grid>
             </RadioButton>

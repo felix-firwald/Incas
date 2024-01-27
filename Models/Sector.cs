@@ -21,7 +21,7 @@ namespace Incubator_2.Models
         {
             if (generateSlug)
             {
-                slug = ProgramState.GenerateSlug(6);
+                slug = ProgramState.GenerateSlug(12);
             }
             StartCommandToService()
                 .Insert(new()
