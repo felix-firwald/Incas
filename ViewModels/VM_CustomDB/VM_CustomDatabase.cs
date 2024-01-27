@@ -66,7 +66,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                if (_selectedTable != "")
+                if (!string.IsNullOrEmpty(_selectedTable))
                 {
                     return requester.GetTable(SelectedTable, SelectedDatabase.path);
                 }
@@ -99,6 +99,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 _selectedDatabase = value;
                 OnPropertyChanged(nameof(SelectedDatabase));
                 OnPropertyChanged(nameof(Tables));
+                SelectedTable = Tables.FirstOrDefault();
             }
         }
         public List<string> Tables

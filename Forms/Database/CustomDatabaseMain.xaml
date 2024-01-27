@@ -18,7 +18,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.RowSpan="2">
                 <Expander Style="{DynamicResource ExpanderMain}" Header="Базы данных">
-                    <ListBox x:Name="DatabasesList" 
+                    <ListBox x:Name="DatabasesList"
                          Style="{DynamicResource ListBoxMain}"
                          ItemContainerStyle="{DynamicResource ListBoxItemPurple}"
                          ItemsSource="{Binding Databases}" SelectedItem="{Binding SelectedDatabase}" DisplayMemberPath="name" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2"/>
@@ -32,7 +32,7 @@
             </StackPanel>
             
             <GridSplitter Grid.RowSpan="2"/>
-            <DataGrid x:Name="TableGrid" Style="{DynamicResource DataGridMain}" Grid.Column="2" ItemsSource="{Binding Table}" Margin="5,5,5,5" IsReadOnly="True" SelectionUnit="{Binding SelectionUnit}"/>
+            <DataGrid x:Name="TableGrid" Style="{DynamicResource DataGridMain}" Grid.Column="2" ItemsSource="{Binding Table}" IsTextSearchEnabled="True" Margin="5,5,5,5" IsReadOnly="True" SelectionUnit="{Binding SelectionUnit}"/>
             <Border Grid.Row="1" Grid.Column="2" Background="{DynamicResource Black}" CornerRadius="5" Margin="6,0,6,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Plus" ToolTip="Добавить запись" MouseDown="AddNewRecordClick" IsEnabled="{Binding CanUserEditTable}"/>
