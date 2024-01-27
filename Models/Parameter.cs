@@ -10,9 +10,9 @@ namespace Incubator_2.Models
     public enum ParameterType
     {
         INCUBATOR,
-        SECTOR,
         DATABASE,
         CHAT,
+        RESTRICT_EDIT_TABLE,
         MISC
     }
     public class DBParamNotFound : Exception
@@ -54,6 +54,22 @@ namespace Incubator_2.Models
             this.Serialize(dr);
             this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
             return this;
+        }
+        public bool Exists(ParameterType typeOf, string nameOf, string expectedValue)
+        {
+            DataRow dr = StartCommandToService()
+                        .Select()
+                        .WhereEqual("type", typeOf.ToString())
+                        .WhereEqual("name", nameOf)
+                        .WhereEqual("value", expectedValue)
+                        .ExecuteOne();
+            if (dr == null)
+            {
+                return false;
+            }
+            this.Serialize(dr);
+            this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
+            return id > 0;
         }
         public bool GetValueAsBool()
         {

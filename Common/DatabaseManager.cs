@@ -59,12 +59,12 @@ namespace Common
         {
             SQLiteConnection.CreateFile(ProgramState.DatabasePath);
             SQLiteConnection.CreateFile(ProgramState.ServiceDatabasePath);
-            SQLiteConnection.CreateFile(ProgramState.CustomDatabasePath);
             AutoTableCreator atc = new AutoTableCreator();
             Query q = new Query("");
             q.typeOfConnection = DBConnectionType.SERVICE;
             q.AddCustomRequest(GetParameterDefinition(atc))
              .AddCustomRequest(GetSectorDefinition(atc))
+             .AddCustomRequest(GetDatabasesDefinition(atc))
              .AddCustomRequest(GetUserDefinition(atc))
              .AddCustomRequest(GetSessionDefinition(atc))
              .ExecuteVoid();
@@ -94,6 +94,14 @@ namespace Common
         private static string GetSectorDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Sector), "Sectors");
+            return atc.GetQueryText();
+        }
+        private static string GetDatabasesDefinition(AutoTableCreator atc)
+        {
+            atc.Initialize(typeof(Database), "Databases");
+            atc.SetAsUnique("name");
+            atc.SetNotNull("name", true);
+            atc.SetNotNull("path", true);
             return atc.GetQueryText();
         }
 

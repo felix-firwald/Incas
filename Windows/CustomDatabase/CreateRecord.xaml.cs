@@ -27,31 +27,34 @@ namespace Incubator_2.Windows.CustomDatabase
         public readonly string Table;
         public string PK;
         public string PKValue;
-        public CreateRecord(string tableName, List<FieldCreator> fields) // add new
+        private string path;
+        public CreateRecord(string tableName, List<FieldCreator> fields, string pathDb) // add new
         {
             InitializeComponent();
             Table = tableName;
+            path = pathDb;
             foreach (FieldCreator field in fields)
             {
                 if (!field.IsPK)
                 {
-                    this.ContentPanel.Children.Add(new UC_TagFiller(field));
+                    this.ContentPanel.Children.Add(new UC_TagFiller(field, pathDb));
                 }
             }
         }
-        public CreateRecord(string tableName, string pk, string pkValue, List<FieldCreator> fields) // update
+        public CreateRecord(string tableName, string pk, string pkValue, List<FieldCreator> fields, string pathDb) // update
         {
             InitializeComponent();
             Table = tableName;
             PK = pk;
             PKValue = pkValue;
+            path = pathDb;
             CustomTable ct = new();
-            DataRow dr = ct.GetOneFromTable(Table, pk, pkValue);
+            DataRow dr = ct.GetOneFromTable(Table, pk, pkValue, pathDb);
             foreach (FieldCreator field in fields)
             {
                 if (!field.IsPK)
                 {
-                    UC_TagFiller tf = new(field);
+                    UC_TagFiller tf = new(field, pathDb);
                     tf.SetValue(dr[field.Name].ToString());
                     this.ContentPanel.Children.Add(tf);
                 }
@@ -68,11 +71,11 @@ namespace Incubator_2.Windows.CustomDatabase
             CustomTable c = new();
             if (PK == null)
             {
-                c.InsertInTable(Table, pairs);
+                c.InsertInTable(Table, path, pairs);
             }
             else
             {
-                c.UpdateInTable(Table, PK, PKValue, pairs);
+                c.UpdateInTable(Table, PK, PKValue, path, pairs);
             }
         }
 

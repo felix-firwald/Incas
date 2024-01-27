@@ -58,7 +58,7 @@ namespace Incubator_2.Forms
                     break;
             }
         }
-        public UC_TagFiller(FieldCreator fc)
+        public UC_TagFiller(FieldCreator fc, string path)
         {
             InitializeComponent();
             this.tag = new();
@@ -69,6 +69,7 @@ namespace Incubator_2.Forms
             {
                 tag.type = TypeOfTag.Relation;
                 this.SelectionBox.Visibility = Visibility.Visible;
+                this.SelectionBox.Database = path;
                 this.SelectionBox.Table = fc.FKtable;
                 this.SelectionBox.Field = fc.FKfield;
             }

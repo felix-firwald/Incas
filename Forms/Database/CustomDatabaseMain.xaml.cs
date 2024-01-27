@@ -41,7 +41,7 @@ namespace Incubator_2.Forms.Database
                     ProgramState.ShowExclamationDialog("Таблица для записи не выбрана!", "Действие невозможно");
                     return;
                 }
-                CreateRecord cr = new(vm.SelectedTable, vm.GetTableDefinition());
+                CreateRecord cr = new(vm.SelectedTable, vm.GetTableDefinition(), vm.SelectedDatabase.path);
                 cr.ShowDialog();
                 vm.RefreshTable();
             }
@@ -72,7 +72,7 @@ namespace Incubator_2.Forms.Database
                 {
                     selection.Add(((DataRowView)this.TableGrid.SelectedItems[i]).Row[pk].ToString());
                 }
-                ct.DeleteInTable(vm.SelectedTable, pk, selection);
+                ct.DeleteInTable(vm.SelectedTable, pk, vm.SelectedDatabase.path, selection);
             }
             catch (ArgumentException)
             {
@@ -96,7 +96,7 @@ namespace Incubator_2.Forms.Database
                 }
                 string pk = vm.GetPK();
                 string record = ((DataRowView)this.TableGrid.SelectedItems[0]).Row[pk].ToString();
-                CreateRecord cr = new CreateRecord(vm.SelectedTable, pk, record, vm.GetTableDefinition());
+                CreateRecord cr = new CreateRecord(vm.SelectedTable, pk, record, vm.GetTableDefinition(), vm.SelectedDatabase.path);
                 cr.ShowDialog();
                 vm.RefreshTable();
             }
@@ -108,6 +108,11 @@ namespace Incubator_2.Forms.Database
             {
                 ProgramState.ShowErrorDialog("При попытке открыть окно редактирования записи возникла ошибка неизвестного характера:\n" + ex.Message);
             }
+        }
+
+        private void SwitchSelectionUnitClick(object sender, MouseButtonEventArgs e)
+        {
+            vm.SwitchSelectionUnit();
         }
     }
 }

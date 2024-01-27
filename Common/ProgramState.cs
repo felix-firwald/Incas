@@ -42,7 +42,7 @@ namespace Common
         public static string CommonPath { get; private set; }
         public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incubator";
         public static string DatabasePath { get; private set; }
-        public static string CustomDatabasePath { get { return CommonPath + @"\custom.db"; } }
+        public static string CustomDatabasePath { get { return Root + @"\Databases"; } }
         public static string ServiceDatabasePath { get { return Root + @"\service.dbinc"; } }
         public static string Root { get { return CommonPath + @"\Root"; } }
         public static string ServerProcesses { get { return Root + @"\ServerProccesses"; } } // ...\Root\ServerProccesses
@@ -77,12 +77,17 @@ namespace Common
                 Directory.CreateDirectory(TemplatesSourcesWordPath);
                 Directory.CreateDirectory(TemplatesSourcesExcelPath);
                 Directory.CreateDirectory(ServerProcesses);
+                Directory.CreateDirectory(CustomDatabasePath);
                 Directory.CreateDirectory(Messages);
                 Directory.CreateDirectory(LogData);
                 Directory.CreateDirectory(UsersContext);
                 Directory.CreateDirectory(TemplatesRuntime);
                 Directory.CreateDirectory(TemplatesGenerated);
             });
+        }
+        public static string GetFullPathOfCustomDb(string path)
+        {
+            return $"{CustomDatabasePath}\\{path}.db";
         }
         public static void ClearDataForRestart()
         {

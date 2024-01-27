@@ -388,7 +388,7 @@ namespace Common
                     path = ProgramState.ServiceDatabasePath;
                     break;
                 case DBConnectionType.CUSTOM:
-                    path = ProgramState.CustomDatabasePath;
+                    path = this.DBPath;
                     break;
                 case DBConnectionType.OTHER:
                     path = this.DBPath;

@@ -26,6 +26,7 @@ namespace Incubator_2.Windows.CustomDatabase
     public partial class DatabaseSelection : Window
     {
         public DialogStatus Result = DialogStatus.Undefined;
+        public readonly string Database;
         public readonly string Table;
         public readonly string Field;
         public string SelectedValue
@@ -35,9 +36,10 @@ namespace Incubator_2.Windows.CustomDatabase
                 return ((DataRowView)Grid.SelectedItems[0]).Row[Field].ToString();
             }
         }
-        public DatabaseSelection(string table, string field, string custom = "")
+        public DatabaseSelection(string database, string table, string field, string custom = "")
         {
             InitializeComponent();
+            this.Database = database;
             this.Table = table;
             this.Title = $"Выбор записи ({table})";
             this.Field = field;
@@ -47,6 +49,7 @@ namespace Incubator_2.Windows.CustomDatabase
         {
             Query q = new("");
             q.typeOfConnection = DBConnectionType.CUSTOM;
+            q.DBPath = ProgramState.GetFullPathOfCustomDb(Database);
             q.AddCustomRequest($"SELECT * FROM [{Table}] {custom}");
             DataTable dt = q.Execute();
             this.Grid.ItemsSource = dt.DefaultView;

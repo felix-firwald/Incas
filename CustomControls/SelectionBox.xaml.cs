@@ -24,14 +24,16 @@ namespace Incubator_2.CustomControls
     {
         public string Value { get { return this.Input.Text; } set { this.Input.Text = value; } }
 
+        public string Database = "";
         public string Table = "";
         public string Field = "";
         public string Source
         {
             set
             {
-                Table = value.Split('.')[0];
-                Field = value.Split('.')[1];
+                Database = value.Split('.')[0];
+                Table = value.Split('.')[1];
+                Field = value.Split('.')[2];
             }
         }
         public SelectionBox()
@@ -41,7 +43,7 @@ namespace Incubator_2.CustomControls
 
         private void ButtonClick(object sender, MouseButtonEventArgs e)
         {
-            DatabaseSelection s = new(Table, Field);
+            DatabaseSelection s = new(Database, Table, Field);
             s.ShowDialog();
             if (s.Result == Windows.DialogStatus.Yes)
             {

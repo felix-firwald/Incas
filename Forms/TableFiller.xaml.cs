@@ -32,6 +32,7 @@ namespace Incubator_2.Forms
             tag = t;
             vm = new VM_TableFiller(t);
             this.DataContext = vm;
+            this.ExpanderMain.Header = tag.name;
         }
     }
 }
