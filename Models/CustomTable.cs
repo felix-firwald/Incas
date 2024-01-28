@@ -57,9 +57,13 @@ namespace Incubator_2.Models
             }
             return result;
         }
-        public DataTable GetTable(string table, string pathDb)
+        public DataTable GetTable(string table, string pathDb, string custom)
         {
-            return GetQuery(table, pathDb).AddCustomRequest($"SELECT * FROM [{table}];").Execute();
+            if (string.IsNullOrEmpty(custom))
+            {
+                return GetQuery(table, pathDb).AddCustomRequest($"SELECT * FROM [{table}];").Execute();
+            }
+            return GetQuery(table, pathDb).AddCustomRequest(custom).Execute();
         }
         public List<FieldCreator> GetTableFields(string table, string pathDb)
         {           
@@ -148,6 +152,12 @@ namespace Incubator_2.Models
                 q.Update(pair.Key, pair.Value);
             }
             q.WhereEqual(pk, pkValue);
+            q.ExecuteVoid();
+        }
+        public void CustomRequest(string pathDb, string query)
+        {
+            Query q = GetQuery("", pathDb);
+            q.AddCustomRequest(query);
             q.ExecuteVoid();
         }
     }

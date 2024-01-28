@@ -100,6 +100,7 @@ namespace Common
         {
             atc.Initialize(typeof(Database), "Databases");
             atc.SetAsUnique("name");
+            atc.SetAsUnique("path");
             atc.SetNotNull("name", true);
             atc.SetNotNull("path", true);
             return atc.GetQueryText();
@@ -165,6 +166,10 @@ namespace Common
         private static string GetCommandDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Command), "Commands");
+            atc.SetFK("database", "Databases", "path");
+            atc.SetNotNull("database", true);
+            atc.SetTextType("query");
+            atc.SetTextType("restrictions");
             return atc.GetQueryText();
         }
         #endregion

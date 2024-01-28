@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,7 +18,9 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         private string _selectedTable = "";
         private DataRow _selectedRow;
         private DataGridSelectionUnit _selectionUnit = DataGridSelectionUnit.FullRow;
+        private List<SCommand> _commands = new List<SCommand>();
         CustomTable requester = new();
+
         public VM_CustomDatabase() { }
 
         public bool CanUserEditTable
@@ -28,6 +31,17 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 {
                     return !p.Exists(ParameterType.RESTRICT_EDIT_TABLE, _selectedTable, ProgramState.CurrentUser.id.ToString());
                 }
+            }
+        }
+        public Visibility CreateCommandVisibility
+        {
+            get
+            {
+                if (Permission.IsUserHavePermission(PermissionGroup.Moderator))
+                {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
             }
         }
         public Visibility TablesVisibility
@@ -73,13 +87,15 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 }
             }
         }
+
+        public string CustomViewRequest;
         public DataTable Table
         {
             get
             {
                 if (!string.IsNullOrEmpty(_selectedTable))
                 {
-                    return requester.GetTable(SelectedTable, SelectedDatabase.path);
+                    return requester.GetTable(SelectedTable, SelectedDatabase.path, CustomViewRequest);
                 }
                 else
                 {
@@ -135,8 +151,15 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             {
                 _selectedTable = value;
                 OnPropertyChanged(nameof(SelectedTable));
+                CustomViewRequest = null;
                 OnPropertyChanged(nameof(Table));
                 OnPropertyChanged(nameof(CanUserEditTable));
+                using (Command c = new())
+                {
+                    Commands = c.GetCommandsOfTable(SelectedDatabase.path, SelectedTable);
+                }
+                OnPropertyChanged(nameof(ReadCommands));
+                OnPropertyChanged(nameof(UpdateCommands));
             }
         }
         
@@ -150,6 +173,34 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             {
                 _selectedRow = value;
                 OnPropertyChanged(nameof(SelectedRow));
+            }
+        }
+        public List<SCommand> Commands
+        {
+            get
+            {
+                return _commands;
+            }
+            set
+            {
+                _commands = value;
+                OnPropertyChanged(nameof(Commands));
+                OnPropertyChanged(nameof(ReadCommands));
+                OnPropertyChanged(nameof(UpdateCommands));
+            }
+        }
+        public List<SCommand> ReadCommands
+        {
+            get
+            {
+                return _commands.Where(x => x.type == Models.CommandType.Read).ToList();
+            }
+        }
+        public List<SCommand> UpdateCommands
+        {
+            get
+            {
+                return _commands.Where(x => x.type == Models.CommandType.Update).ToList();
             }
         }
         public List<FieldCreator> GetTableDefinition()
@@ -178,6 +229,12 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 SelectionUnit = DataGridSelectionUnit.Cell;
             }
         }
+        public void CustomUpdateRequest(string query)
+        {
+            requester.CustomRequest(SelectedDatabase.path, query);
+            this.RefreshTable();
+        }
+        
         #endregion
     }
 }

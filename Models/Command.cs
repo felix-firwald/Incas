@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace Incubator_2.Models
 {
+    public enum CommandType
+    {
+        Read,
+        Update
+    }
     public struct SCommand
     {
         public int id { get; set; }
@@ -16,7 +21,7 @@ namespace Incubator_2.Models
         public string table { get; set; }
         public string name { get; set; }
         public string query { get; set; }
-        public string type { get; set; }
+        public CommandType type { get; set; }
         public string restrictions { get; set; }
 
         public Command AsModel()
@@ -40,7 +45,7 @@ namespace Incubator_2.Models
         public string table { get; set; }
         public string name { get; set; }
         public string query { get; set; }
-        public string type { get; set; }
+        public CommandType type { get; set; }
         public string restrictions { get; set; }
         public Command()
         {
@@ -64,6 +69,7 @@ namespace Incubator_2.Models
             foreach (DataRow dr in dt.Rows)
             {
                 this.Serialize(dr);
+                this.type = (CommandType)Enum.Parse(typeof(CommandType), dr["type"].ToString());
                 commands.Add(this.AsStruct());
             }
             return commands;
@@ -74,11 +80,10 @@ namespace Incubator_2.Models
                 .Select()
                 .WhereEqual(nameof(database), db)
                 .WhereEqual(nameof(table), table)
-                .WhereNotLike(nameof(restrictions), ProgramState.CurrentUser.sign)
                 .Execute();
             return SerializeList(dt);
         }
-        public List<SCommand> GetAllCommands(string db, string table)
+        public List<SCommand> GetAllCommands()
         {
             DataTable dt = StartCommandToService()
                 .Select()
@@ -87,7 +92,17 @@ namespace Incubator_2.Models
         }
         public void AddCommand()
         {
-
+            StartCommandToService()
+                .Insert(new()
+                {
+                    { nameof(database), database },
+                    { nameof(table), table },
+                    { nameof(name), name },
+                    { nameof(query), query },
+                    { nameof(type), type.ToString() },
+                    { nameof(restrictions), restrictions },
+                })
+                .ExecuteVoid();
         }
     }
 }

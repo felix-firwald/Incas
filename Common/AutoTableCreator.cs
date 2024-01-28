@@ -139,5 +139,11 @@ namespace Incubator_2.Common
             fc.FKfield = field;
             definition[name] = fc;
         }
+        public void SetTextType(string name)
+        {
+            FieldCreator fc = definition[name];
+            fc.TypeOf = "TEXT";
+            definition[name] = fc;
+        }
     }
 }

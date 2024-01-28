@@ -137,20 +137,7 @@ namespace Common
         /// Возвращает SqlConnection с подставленными значениями, предварительно проверяя доступ
         /// </summary>
         /// <returns></returns>
-        private static SQLiteConnection GetConnection()
-        {
-            return new SQLiteConnection($"Data source={ProgramState.DatabasePath}; Version=3; UseUTF16Encoding=True", true);
-        }
-        private string GetRequest(bool clear=true)
-        {
-            string tmp = result;
-            Console.WriteLine($"[{DateTime.Now}] {tmp}");
-            if (clear)
-            {
-                Clear();
-            }
-            return tmp;
-        }
+
         private bool CheckPermission(DatabasePermissions permission)
         {
             switch (permission)

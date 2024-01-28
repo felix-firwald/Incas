@@ -114,5 +114,22 @@ namespace Incubator_2.Forms.Database
         {
             vm.SwitchSelectionUnit();
         }
+
+        private void ReadCommandClick(object sender, RoutedEventArgs e)
+        {
+            vm.CustomViewRequest = ((MenuItem)sender).Tag.ToString();
+            vm.RefreshTable();
+        }
+
+        private void UpdateCommandClick(object sender, RoutedEventArgs e)
+        {
+            MenuItem mi = (MenuItem)sender;
+            vm.CustomUpdateRequest(mi.Tag.ToString());
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
