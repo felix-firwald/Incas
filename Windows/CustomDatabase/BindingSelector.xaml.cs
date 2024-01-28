@@ -21,6 +21,7 @@ namespace Incubator_2.Windows.CustomDatabase
     public partial class BindingSelector : Window
     {
         VM_BindingSelector vm;
+        public DialogStatus Result = DialogStatus.Undefined;
         public string SelectedDatabase { get { return vm.SelectedDatabase.path; } }
         public string SelectedTable { get { return vm.SelectedTable; } }
         public string SelectedField { get { return vm.SelectedField; } }
@@ -30,10 +31,23 @@ namespace Incubator_2.Windows.CustomDatabase
             vm = new();
             this.DataContext = vm;
         }
+        public BindingSelector(string database, string table, string field)
+        {
+            InitializeComponent();
+            vm = new();
+            this.DataContext = vm;
+            vm.SetSelectedDatabase(database);
+            vm.SelectedTable = table;
+            vm.SelectedField = field;
+        }
 
         private void SelectClick(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            if (vm.ValidateContent())
+            {
+                Result = DialogStatus.Yes;
+                this.Close();
+            }
         }
     }
 }

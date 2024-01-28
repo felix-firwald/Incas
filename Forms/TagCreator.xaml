@@ -79,7 +79,7 @@
                         </StackPanel>
                     </ComboBoxItem>
                 </ComboBox>
-                <TextBox x:Name="MainTextBox" Style="{DynamicResource TextBoxBig}" Tag="{Binding DescriptionText}" Text="{Binding DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="500" TextWrapping="Wrap">
+                <TextBox x:Name="MainTextBox" Style="{DynamicResource TextBoxBig}" Tag="{Binding DescriptionText}" Text="{Binding DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding DefaultValueVisibility}" MaxLength="500" TextWrapping="Wrap">
                     <TextBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Очистить" Click="ClearClick"/>
@@ -90,6 +90,7 @@
                         </ContextMenu>
                     </TextBox.ContextMenu>
                 </TextBox>
+                <Button Style="{DynamicResource ButtonMain}" Content="Определить привязку" Visibility="{Binding ButtonRelationVisibility}" Click="DefineRelationClick"/>
             </StackPanel>
         </Grid>
     </Border>

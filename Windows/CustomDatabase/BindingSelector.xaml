@@ -5,39 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows.CustomDatabase"
         mc:Ignorable="d"
-        Title="Выбор привязки" Height="450" Width="650" Style="{DynamicResource WindowBase}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+        Title="Выбор привязки" Height="450" MinHeight="350" Width="450" Style="{DynamicResource WindowBase}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" >
             <Border Background="{DynamicResource Black}" CornerRadius="5" Margin="5">
-                <ListBox x:Name="DatabasesList" MinWidth="200"
+                <ListBox x:Name="DatabasesList" MinWidth="200" MinHeight="100"
                          Style="{DynamicResource ListBoxMain}"
                          ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
                          ItemsSource="{Binding Databases}" SelectedItem="{Binding SelectedDatabase}" 
                          DisplayMemberPath="name" Background="{x:Null}"
                              Grid.RowSpan="2"/>
             </Border>
+            <Path Fill="{DynamicResource LightPurple}" Data="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-5,0,0,0" />
             <Border Background="{DynamicResource Black}" CornerRadius="5" Margin="5">
-                <ListBox x:Name="TablesList" MinWidth="200"
+                <ListBox x:Name="TablesList" MinWidth="200" MinHeight="100"
                          Style="{DynamicResource ListBoxMain}"
                          ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
                          ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" 
                          Background="{x:Null}"
-                         Grid.RowSpan="2"/>
+                         Grid.RowSpan="2" MaxHeight="200"/>
             </Border>
-            <Border Background="{DynamicResource Black}" CornerRadius="5" Margin="5">
-                <ListBox x:Name="FieldsList" MinWidth="200"
-                         Style="{DynamicResource ListBoxMain}"
-                         ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
-                         ItemsSource="{Binding Fields}" SelectedItem="{Binding SelectedField}" 
-                         Background="{x:Null}"
-                         Grid.RowSpan="2"/>
-            </Border>
-        </StackPanel> <!--ItemContainerStyle="{DynamicResource ListBoxItemPurple}"-->
-        <Button Style="{DynamicResource ButtonMain}" Grid.Row="1" Click="SelectClick">
+            <!--<Path Fill="{DynamicResource LightPurple}" Data="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-5,0,0,0" />-->
+
+            
+        </StackPanel>
+        <Border Background="{DynamicResource Black}" CornerRadius="5" Margin="5" Grid.Row="1">
+            <ListBox x:Name="FieldsList" MinWidth="200"
+             Style="{DynamicResource ListBoxMain}"
+             ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
+             ItemsSource="{Binding Fields}" SelectedItem="{Binding SelectedField}" 
+             Background="{x:Null}"
+             Grid.RowSpan="2" MaxHeight="200"/>
+        </Border>
+        <!--ItemContainerStyle="{DynamicResource ListBoxItemPurple}"-->
+        <Button Style="{DynamicResource ButtonMain}" Grid.Row="2" Click="SelectClick" Margin="5,5,5,5">
             <StackPanel Orientation="Horizontal">
                 <Path RenderOptions.EdgeMode="Aliased"
                         Data="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" VerticalAlignment="Center" Fill="White" UseLayoutRounding="False" SnapsToDevicePixels="False"

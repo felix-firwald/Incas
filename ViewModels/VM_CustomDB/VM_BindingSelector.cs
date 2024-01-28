@@ -1,4 +1,5 @@
-﻿using Incubator_2.Models;
+﻿using Common;
+using Incubator_2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,16 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 using (Database db = new())
                 {
                     return db.GetActualDatabases();
+                }
+            }
+        }
+        public void SetSelectedDatabase(string path)
+        {
+            foreach (SDatabase db in Databases)
+            {
+                if (db.path == path)
+                {
+                    SelectedDatabase = db;
                 }
             }
         }
@@ -83,6 +94,15 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 _selectedField = value;
                 OnPropertyChanged(nameof(SelectedField));
             }
+        }
+        public bool ValidateContent()
+        {
+            if (SelectedField == null)
+            {
+                ProgramState.ShowExclamationDialog("Поле не выбрано!", "Действие невозможно");
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Incubator_2.ViewModels
@@ -72,9 +73,11 @@ namespace Incubator_2.ViewModels
             get { return SerializeToInput(mainTag.type); }
             set
             {
-                 mainTag.type = SerializeFromInput(value);
-                 OnPropertyChanged(nameof(TypeOfTagValue));
-                 OnPropertyChanged(nameof(DescriptionText));
+                mainTag.type = SerializeFromInput(value);
+                OnPropertyChanged(nameof(TypeOfTagValue));
+                OnPropertyChanged(nameof(DescriptionText));
+                OnPropertyChanged(nameof(ButtonRelationVisibility));
+                OnPropertyChanged(nameof(DefaultValueVisibility));
             }
         }
 
@@ -117,6 +120,28 @@ namespace Incubator_2.ViewModels
                     return "4";
                 case TypeOfTag.Table:
                     return "5";
+            }
+        }
+        public Visibility ButtonRelationVisibility
+        {
+            get
+            {
+                if (this.mainTag.type == TypeOfTag.Relation)
+                {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+        public Visibility DefaultValueVisibility
+        {
+            get
+            {
+                if (this.mainTag.type == TypeOfTag.Relation)
+                {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
             }
         }
         #endregion

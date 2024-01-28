@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
 using Incubator_2.ViewModels;
+using Incubator_2.Windows.CustomDatabase;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -95,6 +96,17 @@ namespace Incubator_2.Forms
             this.vm.DefaultValue += "[Новый]";
             this.MainTextBox.SelectionStart = start + 1;
             this.MainTextBox.SelectionLength = 5;
+        }
+
+        private void DefineRelationClick(object sender, RoutedEventArgs e)
+        {
+            BindingSelector bs = new();
+            bs.ShowDialog();
+            if (bs.Result == Windows.DialogStatus.Yes)
+            {
+                this.vm.DefaultValue = $"{bs.SelectedDatabase}.{bs.SelectedTable}.{bs.SelectedField}";
+            }
+
         }
     }
 }
