@@ -15,7 +15,7 @@ namespace Incubator_2.Models
         OnlyTables,
         OnlyViews
     }
-    class CustomTable : Model
+    public class CustomTable : Model
     {
         public CustomTable()
         {
@@ -81,6 +81,17 @@ namespace Incubator_2.Models
             }
             return creators;
         }
+        public List<string> GetTableFieldsSimple(string table, string pathDb)
+        {
+            DataTable dt = GetQuery(tableName, pathDb).AddCustomRequest($"PRAGMA table_info(\"{table}\")")
+                            .Execute();
+            List<string> fields = new();
+            foreach (DataRow dr in dt.Rows)
+            {
+                fields.Add(dr["name"].ToString());
+            }
+            return fields;
+        }
         public string GetPKField(string table, string pathDb)
         {
             DataTable dt = GetQuery(table, pathDb)
@@ -122,6 +133,7 @@ namespace Incubator_2.Models
             }
             return creators;
         }
+        
         public void InsertInTable(string table, string pathDb, Dictionary<string, string> pairs)
         {
             Query q = GetQuery(table, pathDb);

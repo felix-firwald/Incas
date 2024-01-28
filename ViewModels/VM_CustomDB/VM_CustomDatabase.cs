@@ -89,13 +89,16 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         }
 
         public string CustomViewRequest;
+
         public DataTable Table
         {
             get
             {
                 if (!string.IsNullOrEmpty(_selectedTable))
                 {
-                    return requester.GetTable(SelectedTable, SelectedDatabase.path, CustomViewRequest);
+                    DataTable dt = requester.GetTable(SelectedTable, SelectedDatabase.path, CustomViewRequest);
+                    dt.DefaultView.RowFilter = "";
+                    return dt;
                 }
                 else
                 {

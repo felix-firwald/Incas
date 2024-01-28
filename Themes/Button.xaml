@@ -101,7 +101,7 @@
         </Setter>
     </Style>
     <Style x:Key="ButtonFlat" TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="{DynamicResource Black}"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{DynamicResource Element}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinHeight" Value="40"/>

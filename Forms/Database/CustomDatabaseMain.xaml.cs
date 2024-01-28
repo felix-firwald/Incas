@@ -131,5 +131,18 @@ namespace Incubator_2.Forms.Database
         {
 
         }
+
+        private void NewCommandClick(object sender, RoutedEventArgs e)
+        {
+            if (vm.SelectedDatabase.path != null && vm.SelectedTable != null)
+            {
+                CreateCommand cc = new(vm.SelectedDatabase.path, vm.SelectedTable);
+                cc.ShowDialog();
+            }
+            else
+            {
+                ProgramState.ShowExclamationDialog("База данных или таблица не выбрана!", "Действие невозможно");
+            }
+        }
     }
 }

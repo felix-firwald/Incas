@@ -31,9 +31,16 @@ namespace Incubator_2.CustomControls
         {
             set
             {
-                Database = value.Split('.')[0];
-                Table = value.Split('.')[1];
-                Field = value.Split('.')[2];
+                try
+                {
+                    Database = value.Split('.')[0];
+                    Table = value.Split('.')[1];
+                    Field = value.Split('.')[2];
+                }
+                catch(Exception ex)
+                {
+                    ProgramState.ShowErrorDialog($"При попытке определения таблицы возникла ошибка:\n{ex}", "Ошибка");
+                }
             }
         }
         public SelectionBox()
