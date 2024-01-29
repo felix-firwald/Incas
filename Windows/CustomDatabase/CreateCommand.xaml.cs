@@ -72,17 +72,20 @@ namespace Incubator_2.Windows.CustomDatabase
                 case "WHEREPK":
                     this.vm.Query += GetWherePKExample();
                     break;
+                case "JOIN":
+                    this.vm.Query = GetJoinExample();
+                    break;
                 case "ORDERBY":
                     this.vm.Query += $"\nORDER BY [{vm.Table}].[Поле] ASC";
                     break;
             }
         }
-        private List<string> GetFieldsDefinition()
+        private List<string> GetFieldsDefinition(string table)
         {
-            List<string> fields = vm.Requester.GetTableFieldsSimple(vm.Table, vm.Database);
+            List<string> fields = vm.Requester.GetTableFieldsSimple(table, vm.Database);
             for (int f = 0; f < fields.Count; f++)
             {
-                fields[f] = $"[{vm.Table}].[{fields[f]}]";
+                fields[f] = $"[{table}].[{fields[f]}]";
             }
             return fields;
         }
@@ -98,7 +101,7 @@ namespace Incubator_2.Windows.CustomDatabase
         private string GetSelectQueryExample()
         {
             string result = "SELECT ";
-            result += string.Join(",\n       ", GetFieldsDefinition());
+            result += string.Join(",\n       ", GetFieldsDefinition(vm.Table));
             return result += $"\nFROM   [{vm.Table}]";
         }
         private string GetWhereExample()
@@ -110,6 +113,28 @@ namespace Incubator_2.Windows.CustomDatabase
             return $"{GetWhereByContext()} [{vm.Table}].[{vm.GetPKField()}] in (%SELECTED%)";
         }
 
+        private string GetJoinExample()
+        {
+            BindingSelector bs = new();
+            bs.ShowDialog();
+            string result;
+            if (string.IsNullOrEmpty(vm.Query) || !vm.Query.Contains("JOIN"))
+            {
+                result = "SELECT ";
+                List<string> fields = GetFieldsDefinition(vm.Table);
+                List<string> joinFields = GetFieldsDefinition(bs.SelectedTable);
+                fields.AddRange(joinFields);
+                result += string.Join(",\n       ", fields);
+                return result += $"\nFROM   [{vm.Table}]\nJOIN [{bs.SelectedTable}]\n    ON [{bs.SelectedTable}].[{bs.SelectedField}] = [{vm.Table}].[Поле]";
+            }
+            else
+            {
+                List<string> joinFields = GetFieldsDefinition(bs.SelectedTable);
+                result = vm.Query.Replace("FROM", $"       {string.Join(",\n       ", joinFields)}\nFROM");
+                return result += $"\nJOIN [{bs.SelectedTable}]\n    ON [{bs.SelectedTable}].[{bs.SelectedField}] = [{vm.Table}].[Поле]";
+            }
+            
+        }
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
             
