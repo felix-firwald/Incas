@@ -31,14 +31,23 @@ namespace Incubator_2.Windows.CustomDatabase
             vm = new();
             this.DataContext = vm;
         }
-        public BindingSelector(string database, string table, string field)
+        public BindingSelector(string database, string table, bool dbEnabled = true, bool tableEnabled = true)
         {
             InitializeComponent();
             vm = new();
             this.DataContext = vm;
             vm.SetSelectedDatabase(database);
             vm.SelectedTable = table;
-            vm.SelectedField = field;
+            vm.DatabaseSelectionEnable = dbEnabled;
+            vm.TableSelectionEnable = tableEnabled;
+        }
+        public BindingSelector(string database, bool dbEnabled = true)
+        {
+            InitializeComponent();
+            vm = new();
+            this.DataContext = vm;
+            vm.SetSelectedDatabase(database);
+            vm.DatabaseSelectionEnable = dbEnabled;
         }
 
         private void SelectClick(object sender, RoutedEventArgs e)

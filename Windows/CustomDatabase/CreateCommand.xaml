@@ -5,73 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows.CustomDatabase"
         mc:Ignorable="d"
-        Title="Создать новую команду" Height="450" MinHeight="320" Width="500"  Style="{DynamicResource WindowBase}" SizeToContent="Height" WindowStartupLocation="CenterScreen">
+        Title="Создать новую команду" Height="650" MinHeight="500" Width="800" MinWidth="600"  Style="{DynamicResource WindowBase}" SizeToContent="Height" WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="250"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="355*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <StackPanel>
-            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding CommandName}" Tag="Имя команды" MaxLength="50">
-                <TextBox.ContextMenu>
-                    <ContextMenu>
-                        
-                    </ContextMenu>
-                </TextBox.ContextMenu>
-            </TextBox>
-            <CheckBox Style="{DynamicResource Toggle}" Content="Команда изменяет данные" IsChecked="{Binding IsEditCommandType}"/>
-            <WrapPanel>
-                <Button x:Name="btnAddSELECT" Style="{DynamicResource ButtonFlat}" Tag="SELECT" Click="AddToRTBClick">
-                    <StackPanel Orientation="Horizontal" Margin="2">
-                        <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddSELECT, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
-                        <Label Foreground="{Binding ElementName=btnAddSELECT, Path=Foreground}" Content="ВЫБРАТЬ ИЗ"/>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="btnAddUPDATE" Style="{DynamicResource ButtonFlat}" Tag="UPDATE" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}">
-                    <StackPanel Orientation="Horizontal" Margin="2">
-                        <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddUPDATE, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
-                        <Label Foreground="{Binding ElementName=btnAddUPDATE, Path=Foreground}" Content="ОБНОВИТЬ"/>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="btnAddDELETE" Style="{DynamicResource ButtonFlat}" Tag="DELETE" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}">
-                    <StackPanel Orientation="Horizontal" Margin="2">
-                        <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddDELETE, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
-                        <Label Foreground="{Binding ElementName=btnAddDELETE, Path=Foreground}" Content="УДАЛИТЬ"/>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="btnAddWHERE" Style="{DynamicResource ButtonFlat}" Tag="WHERE" Click="AddToRTBClick">
-                    <StackPanel Orientation="Horizontal" Margin="2">
-                        <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddWHERE, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
-                        <Label Foreground="{Binding ElementName=btnAddWHERE, Path=Foreground}" Content="ГДЕ"/>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="btnAddWHEREPKs" Style="{DynamicResource ButtonFlat}" Tag="WHEREPK" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}">
-                    <StackPanel Orientation="Horizontal" Margin="2">
-                        <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddWHEREPKs, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
-                        <Label Foreground="{Binding ElementName=btnAddWHEREPKs, Path=Foreground}" Content="ОГРАНИЧИТЬ ВЫБРАННЫМИ"/>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="btnAddJOIN" Style="{DynamicResource ButtonFlat}" Tag="JOIN" Click="AddToRTBClick">
-                    <StackPanel Orientation="Horizontal" Margin="2">
-                        <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddJOIN, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
-                        <Label Foreground="{Binding ElementName=btnAddJOIN, Path=Foreground}" Content="ПРИСОЕДИНИТЬ ТАБЛИЦУ"/>
-                    </StackPanel>
-                </Button>
-                <Button x:Name="btnAddORDER" Style="{DynamicResource ButtonFlat}" Tag="ORDERBY" Click="AddToRTBClick">
-                    <StackPanel Orientation="Horizontal" Margin="2">
-                        <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddORDER, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
-                        <Label Foreground="{Binding ElementName=btnAddORDER, Path=Foreground}" Content="СОРТИРОВАТЬ"/>
-                    </StackPanel>
-                </Button>
-            </WrapPanel>
-            <TextBox x:Name="Code" Style="{DynamicResource TextBoxCode}" Text="{Binding Query}" Tag="Текст команды" MinHeight="160" TabIndex="4" Padding="5,5,5,5" TextChanged="OnTextChanged" Margin="5,0,5,0" AcceptsReturn="True">
-                <TextBox.ContextMenu>
-                    <ContextMenu>
+        <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding CommandName}" Tag="Имя команды" MaxLength="50" Grid.ColumnSpan="2">
+            <TextBox.ContextMenu>
+                <ContextMenu>
 
+                </ContextMenu>
+            </TextBox.ContextMenu>
+        </TextBox>
+        <StackPanel Grid.Row="1">
+            
+            <CheckBox Style="{DynamicResource Toggle}" Content="Команда изменяет данные" IsChecked="{Binding IsEditCommandType}"/>
+
+            <TextBox x:Name="Code" Style="{DynamicResource TextBoxCode}" Text="{Binding Query}" Tag="Текст команды" MinHeight="300" TabIndex="4" Padding="5,5,5,5" TextChanged="OnTextChanged" Margin="5,0,5,0" AcceptsReturn="True">
+                <TextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                        <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
         </StackPanel>
-        <Button Style="{DynamicResource ButtonMain}" Content="Сохранить команду" Grid.Row="1" Click="SaveClick"/>
+        <Border Grid.Column="1" Background="{DynamicResource Black}" Grid.Row="1" CornerRadius="5" Padding="0,5,0,5" Margin="0,0,5,0">
+            <StackPanel>
+                <MenuItem Header="Выбрать" Tag="SELECT" Click="AddToRTBClick"/>
+                <MenuItem Tag="UPDATE" Header="Обновить" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}"/>
+                <MenuItem Tag="DELETE" Header="Удалить" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}"/>
+                <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="3,0,3,0"/>
+                <MenuItem Tag="WHERE" Header="Где равно" Click="AddToRTBClick"/>
+                <MenuItem Tag="WHERE NOT EQUAL" Header="Где не равно" Click="AddToRTBClick"/>
+                <MenuItem Tag="WHERE MORE" Header="Где больше" Click="AddToRTBClick"/>
+                <MenuItem Tag="WHERE LESS" Header="Где меньше" Click="AddToRTBClick"/>
+                <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="3,0,3,0"/>
+                <MenuItem Tag="WHEREPK" Header="Ограничить выбранными" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}"/>
+                <MenuItem Tag="JOIN" Header="Присоединить таблицу" Click="AddToRTBClick"/>
+                <MenuItem Tag="ORDERASC" Header="Сортировать (по возрастанию)" Click="AddToRTBClick"/>
+                <MenuItem Tag="ORDERDESC" Header="Сортировать (по убыванию)" Click="AddToRTBClick"/>
+            </StackPanel>
+        </Border>
+
+        <Button Style="{DynamicResource ButtonMain}" Content="Сохранить команду" Grid.Row="2" Click="SaveClick" Grid.ColumnSpan="2" Margin="5,5,5,5"/>
     </Grid>
 </Window>

@@ -5,17 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows.CustomDatabase"
         mc:Ignorable="d"
-        Title="Выбор привязки" Height="450" MinHeight="350" Width="450" Style="{DynamicResource WindowBase}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Выбор привязки" Height="450" MinHeight="200" Width="450" MinWidth="200" Style="{DynamicResource WindowBase}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" >
+        <StackPanel Orientation="Horizontal" Visibility="{Binding TopPanelVisibility}" >
             <Border Background="{DynamicResource Black}" CornerRadius="5" Margin="5">
                 <ListBox x:Name="DatabasesList" MinWidth="200" MinHeight="100"
                          Style="{DynamicResource ListBoxMain}"
+                         IsEnabled="{Binding DatabaseSelectionEnable}"
                          ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
                          ItemsSource="{Binding Databases}" SelectedItem="{Binding SelectedDatabase}" 
                          DisplayMemberPath="name" Background="{x:Null}"
@@ -25,6 +26,8 @@
             <Border Background="{DynamicResource Black}" CornerRadius="5" Margin="5">
                 <ListBox x:Name="TablesList" MinWidth="200" MinHeight="100"
                          Style="{DynamicResource ListBoxMain}"
+                         IsEnabled="{Binding TableSelectionEnable}"
+                         
                          ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
                          ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" 
                          Background="{x:Null}"
@@ -35,12 +38,12 @@
             
         </StackPanel>
         <Border Background="{DynamicResource Black}" CornerRadius="5" Margin="5" Grid.Row="1">
-            <ListBox x:Name="FieldsList" MinWidth="200"
+            <ListBox x:Name="FieldsList" MinWidth="300"
              Style="{DynamicResource ListBoxMain}"
              ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
              ItemsSource="{Binding Fields}" SelectedItem="{Binding SelectedField}" 
              Background="{x:Null}"
-             Grid.RowSpan="2" MaxHeight="200"/>
+             Grid.RowSpan="2" MinHeight="40" MaxHeight="200"/>
         </Border>
         <!--ItemContainerStyle="{DynamicResource ListBoxItemPurple}"-->
         <Button Style="{DynamicResource ButtonMain}" Grid.Row="2" Click="SelectClick" Margin="5,5,5,5">

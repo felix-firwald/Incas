@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
@@ -13,9 +14,48 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         private SDatabase _selectedDB;
         private string _selectedTable;
         private string _selectedField;
+        private bool _dbEnable = true;
+        private bool _tableEnable = true;
         public VM_BindingSelector()
         {
 
+        }
+        public Visibility TopPanelVisibility
+        {
+            get
+            {
+                if (!_dbEnable && !_tableEnable)
+                {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
+        public bool DatabaseSelectionEnable
+        {
+            get
+            {
+                return _dbEnable;
+            }
+            set
+            {
+                _dbEnable = value;
+                OnPropertyChanged(nameof(DatabaseSelectionEnable));
+                OnPropertyChanged(nameof(TopPanelVisibility));
+            }
+        }
+        public bool TableSelectionEnable
+        {
+            get
+            {
+                return _tableEnable;
+            }
+            set
+            {
+                _tableEnable = value;
+                OnPropertyChanged(nameof(TableSelectionEnable));
+                OnPropertyChanged(nameof(TopPanelVisibility));
+            }
         }
         public List<SDatabase> Databases
         {

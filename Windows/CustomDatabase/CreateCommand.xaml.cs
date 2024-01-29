@@ -54,7 +54,7 @@ namespace Incubator_2.Windows.CustomDatabase
 
         private void AddToRTBClick(object sender, RoutedEventArgs e)
         {
-            Button btn = (Button)sender;
+            MenuItem btn = (MenuItem)sender;
             switch (btn.Tag.ToString())
             {
                 case "SELECT":
@@ -69,14 +69,26 @@ namespace Incubator_2.Windows.CustomDatabase
                 case "WHERE":
                     this.vm.Query += GetWhereExample();
                     break;
+                case "WHERE NOT EQUAL":
+                    this.vm.Query += GetWhereExample("<>");
+                    break;
+                case "WHERE LESS":
+                    this.vm.Query += GetWhereExample("<", "");
+                    break;
+                case "WHERE MORE":
+                    this.vm.Query += GetWhereExample(">", "");
+                    break;
                 case "WHEREPK":
                     this.vm.Query += GetWherePKExample();
                     break;
                 case "JOIN":
                     this.vm.Query = GetJoinExample();
                     break;
-                case "ORDERBY":
-                    this.vm.Query += $"\nORDER BY [{vm.Table}].[Поле] ASC";
+                case "ORDERASC":
+                    this.vm.Query += GetOrderByExample("ASC");
+                    break;
+                case "ORDERDESC":
+                    this.vm.Query += GetOrderByExample("DESC");
                     break;
             }
         }
@@ -92,7 +104,7 @@ namespace Incubator_2.Windows.CustomDatabase
 
         private string GetWhereByContext()
         {
-            if (this.vm.Query.Contains("WHERE"))
+            if (!string.IsNullOrEmpty(this.vm.Query) && this.vm.Query.Contains("WHERE"))
             {
                 return "\n  AND ";
             }
@@ -104,9 +116,16 @@ namespace Incubator_2.Windows.CustomDatabase
             result += string.Join(",\n       ", GetFieldsDefinition(vm.Table));
             return result += $"\nFROM   [{vm.Table}]";
         }
-        private string GetWhereExample()
+        private string GetWhereExample(string comparator = "=", string mark = "'")
         {
-            return $"{GetWhereByContext()} [{vm.Table}].[Поле] = 'значение'";
+            BindingSelector bd = new(vm.Database, vm.Table, false);
+            bd.ShowDialog();
+            if (bd.Result == DialogStatus.Yes)
+            {
+                string value = ProgramState.ShowInputBox("Введите значение", $"Значение для условия к полю '{bd.SelectedField}'");
+                return $"{GetWhereByContext()} [{bd.SelectedTable}].[{bd.SelectedField}] {comparator} {mark}{value}{mark}";
+            }
+            return "";
         }
         private string GetWherePKExample()
         {
@@ -115,7 +134,7 @@ namespace Incubator_2.Windows.CustomDatabase
 
         private string GetJoinExample()
         {
-            BindingSelector bs = new();
+            BindingSelector bs = new(vm.Database, false);
             bs.ShowDialog();
             string result;
             if (string.IsNullOrEmpty(vm.Query) || !vm.Query.Contains("JOIN"))
@@ -133,7 +152,14 @@ namespace Incubator_2.Windows.CustomDatabase
                 result = vm.Query.Replace("FROM", $"       {string.Join(",\n       ", joinFields)}\nFROM");
                 return result += $"\nJOIN [{bs.SelectedTable}]\n    ON [{bs.SelectedTable}].[{bs.SelectedField}] = [{vm.Table}].[Поле]";
             }
-            
+        }
+        private string GetOrderByExample(string type = "ASC")
+        {
+            BindingSelector bs = new(vm.Database, vm.Table, false, false);
+            bs.ShowDialog();
+            string result;
+            result = $"\nORDER BY [{vm.Table}].[{bs.SelectedField}] {type}";
+            return result;
         }
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {

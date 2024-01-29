@@ -337,6 +337,12 @@ namespace Common
             d.ShowDialog();
             return d.status;
         }
+        public static string ShowInputBox(string title, string description = "Введите значение")
+        {
+            DialogInput dialog = new(title, description);
+            dialog.ShowDialog();
+            return dialog.Input;
+        }
         public static Session ShowUserSelector(string helpText)
         {
             ActiveUserSelector au = new(helpText);
