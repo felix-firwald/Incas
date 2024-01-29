@@ -61,12 +61,19 @@ namespace Incubator_2.Windows.CustomDatabase
             }
             this.SaveButton.IsEnabled = false;
         }
-        private void Save()
+        private bool Save()
         {
             Dictionary<string, string> pairs = new();
             foreach (UC_TagFiller tf in this.ContentPanel.Children)
             {
-                pairs.Add(tf.GetTagName(), tf.GetValue());
+                if (tf.ValidateContent())
+                {
+                    pairs.Add(tf.GetTagName(), tf.GetValue());
+                }
+                else
+                {
+                    return false;
+                }
             }
             CustomTable c = new();
             if (PK == null)
@@ -77,12 +84,15 @@ namespace Incubator_2.Windows.CustomDatabase
             {
                 c.UpdateInTable(Table, PK, PKValue, path, pairs);
             }
+            return true;
         }
 
         private void SaveAndCloseClick(object sender, RoutedEventArgs e)
         {
-            Save();
-            this.Close();
+            if (Save())
+            {
+                this.Close();
+            }
         }
         private void SaveClick(object sender, RoutedEventArgs e)
         {

@@ -15,12 +15,19 @@ using Tag = Models.Tag;
 
 namespace Incubator_2.Forms
 {
+    public enum FillerMode
+    {
+        Tag,
+        RecordField
+    }
     /// <summary>
     /// Логика взаимодействия для UC_TagFiller.xaml
     /// </summary>
     public partial class UC_TagFiller : UserControl
     {
         public readonly Tag tag;
+        public FillerMode Mode;
+        private bool isRequired = false;
         public delegate void StringAction(int tag, string text);
         public event StringAction OnInsert;
         public delegate void StringActionRecalculate(string tag);
@@ -28,6 +35,7 @@ namespace Incubator_2.Forms
         public UC_TagFiller(Tag t)
         {
             InitializeComponent();
+            Mode = FillerMode.Tag;
             this.tag = t;
             this.MainLabel.Text = this.tag.name + ":";
             switch (tag.type)
@@ -62,9 +70,10 @@ namespace Incubator_2.Forms
         {
             InitializeComponent();
             this.tag = new();
-            
+            Mode = FillerMode.RecordField;
             tag.name = fc.Name;
             this.MainLabel.Text = tag.name + ":";
+            isRequired = fc.NotNULL;
             if (fc.FKtable != null)
             {
                 tag.type = TypeOfTag.Relation;
@@ -112,8 +121,21 @@ namespace Incubator_2.Forms
         {
             return this.tag.name;
         }
+        public bool ValidateContent()
+        {
+            if (tag.type == TypeOfTag.Variable || tag.type == TypeOfTag.Text)
+            {
+                if (isRequired && string.IsNullOrEmpty(this.Textbox.Text))
+                {
+                    ProgramState.ShowExclamationDialog($"Поле \"{tag.name}\" обязательно для заполнения!", "Действие прервано");
+                    return false;
+                }
+            }
+            return true;
+        }
         public string GetValue()
         {
+            
             switch (tag.type)
             {
                 case TypeOfTag.Variable:
