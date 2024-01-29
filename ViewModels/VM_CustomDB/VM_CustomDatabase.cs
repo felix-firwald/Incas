@@ -1,4 +1,5 @@
 ﻿using Common;
+using DocumentFormat.OpenXml.Office2010.CustomUI;
 using Incubator_2.Common;
 using Incubator_2.Models;
 using System;
@@ -157,12 +158,16 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 CustomViewRequest = null;
                 OnPropertyChanged(nameof(Table));
                 OnPropertyChanged(nameof(CanUserEditTable));
-                using (Command c = new())
-                {
-                    Commands = c.GetCommandsOfTable(SelectedDatabase.path, SelectedTable);
-                }
+                UpdateListOfCommands();
                 OnPropertyChanged(nameof(ReadCommands));
                 OnPropertyChanged(nameof(UpdateCommands));
+            }
+        }
+        private void UpdateListOfCommands()
+        {
+            using (Models.Command c = new())
+            {
+                Commands = c.GetCommandsOfTable(SelectedDatabase.path, SelectedTable);
             }
         }
         
@@ -206,6 +211,17 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 return _commands.Where(x => x.type == Models.CommandType.Update).ToList();
             }
         }
+        public SCommand GetCommand(int id)
+        {
+            foreach (SCommand command in Commands)
+            {
+                if (command.id == id)
+                {
+                    return command;
+                }
+            }
+            return new();
+        }
         public List<FieldCreator> GetTableDefinition()
         {
             return requester.GetTableDefinition(SelectedTable, SelectedDatabase.path);
@@ -220,6 +236,13 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             OnPropertyChanged(nameof(Databases));
             OnPropertyChanged(nameof(Tables));
             OnPropertyChanged(nameof(Table));
+        }
+        public void RefreshCommands()
+        {
+            UpdateListOfCommands();
+            OnPropertyChanged(nameof(Commands));
+            OnPropertyChanged(nameof(ReadCommands));
+            OnPropertyChanged(nameof(UpdateCommands));
         }
         public void SwitchSelectionUnit()
         {

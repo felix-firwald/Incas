@@ -12,13 +12,14 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel>
-            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding CommandName}" Tag="Имя команды">
+            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding CommandName}" Tag="Имя команды" MaxLength="50">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
+            <CheckBox Style="{DynamicResource Toggle}" Content="Команда изменяет данные" IsChecked="{Binding IsEditCommandType}"/>
             <WrapPanel>
                 <Button x:Name="btnAddSELECT" Style="{DynamicResource ButtonFlat}" Tag="SELECT" Click="AddToRTBClick">
                     <StackPanel Orientation="Horizontal" Margin="2">
@@ -26,13 +27,13 @@
                         <Label Foreground="{Binding ElementName=btnAddSELECT, Path=Foreground}" Content="ВЫБРАТЬ ИЗ"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="btnAddUPDATE" Style="{DynamicResource ButtonFlat}" Tag="UPDATE" Click="AddToRTBClick">
+                <Button x:Name="btnAddUPDATE" Style="{DynamicResource ButtonFlat}" Tag="UPDATE" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}">
                     <StackPanel Orientation="Horizontal" Margin="2">
                         <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddUPDATE, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
                         <Label Foreground="{Binding ElementName=btnAddUPDATE, Path=Foreground}" Content="ОБНОВИТЬ"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="btnAddDELETE" Style="{DynamicResource ButtonFlat}" Tag="DELETE" Click="AddToRTBClick">
+                <Button x:Name="btnAddDELETE" Style="{DynamicResource ButtonFlat}" Tag="DELETE" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}">
                     <StackPanel Orientation="Horizontal" Margin="2">
                         <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddDELETE, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
                         <Label Foreground="{Binding ElementName=btnAddDELETE, Path=Foreground}" Content="УДАЛИТЬ"/>
@@ -42,6 +43,12 @@
                     <StackPanel Orientation="Horizontal" Margin="2">
                         <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddWHERE, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
                         <Label Foreground="{Binding ElementName=btnAddWHERE, Path=Foreground}" Content="ГДЕ"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="btnAddWHEREPKs" Style="{DynamicResource ButtonFlat}" Tag="WHEREPK" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}">
+                    <StackPanel Orientation="Horizontal" Margin="2">
+                        <Path RenderOptions.EdgeMode="Aliased" Fill="{Binding ElementName=btnAddWHEREPKs, Path=Foreground}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center"/>
+                        <Label Foreground="{Binding ElementName=btnAddWHEREPKs, Path=Foreground}" Content="ОГРАНИЧИТЬ ВЫБРАННЫМИ"/>
                     </StackPanel>
                 </Button>
                 <Button x:Name="btnAddJOIN" Style="{DynamicResource ButtonFlat}" Tag="JOIN" Click="AddToRTBClick">
@@ -57,22 +64,13 @@
                     </StackPanel>
                 </Button>
             </WrapPanel>
-            <RichTextBox x:Name="RTB" Style="{DynamicResource RichTextBoxCode}" Tag="Текст команды" MinHeight="160" TabIndex="4" Padding="5,5,5,5" TextChanged="OnTextChanged" Margin="5,0,5,0">
-                <RichTextBox.Resources>
-                    <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="0"/>
-                    </Style>
-                </RichTextBox.Resources>
-                <RichTextBox.ContextMenu>
+            <TextBox x:Name="Code" Style="{DynamicResource TextBoxCode}" Text="{Binding Query}" Tag="Текст команды" MinHeight="160" TabIndex="4" Padding="5,5,5,5" TextChanged="OnTextChanged" Margin="5,0,5,0" AcceptsReturn="True">
+                <TextBox.ContextMenu>
                     <ContextMenu>
-                        
+
                     </ContextMenu>
-                </RichTextBox.ContextMenu>
-            </RichTextBox>
-            <ListBox Style="{DynamicResource ListBoxMain}">
-                <ListBoxItem Style="{DynamicResource ListBoxItemMicro}" Content="Привет" IsSelected="True"/>
-                <ListBoxItem Style="{DynamicResource ListBoxItemMicro}" Content="Это дед"/>
-            </ListBox>
+                </TextBox.ContextMenu>
+            </TextBox>
         </StackPanel>
         <Button Style="{DynamicResource ButtonMain}" Content="Сохранить команду" Grid.Row="1" Click="SaveClick"/>
     </Grid>

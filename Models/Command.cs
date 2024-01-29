@@ -1,7 +1,9 @@
 ﻿using Common;
 using DocumentFormat.OpenXml.Bibliography;
+using Incubator_2.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -12,7 +14,9 @@ namespace Incubator_2.Models
     
     public enum CommandType
     {
+        [Description("Чтение")]
         Read,
+        [Description("Изменение")]
         Update
     }
     public struct ReadCommand
@@ -107,6 +111,7 @@ namespace Incubator_2.Models
             {
                 this.Serialize(dr);
                 this.type = (CommandType)Enum.Parse(typeof(CommandType), dr["type"].ToString());
+                DecryptQuery();
                 commands.Add(this.AsStruct());
             }
             return commands;
@@ -117,6 +122,7 @@ namespace Incubator_2.Models
                 .Select()
                 .WhereEqual(nameof(database), db)
                 .WhereEqual(nameof(table), table)
+                .OrderByASC(nameof(name))
                 .Execute();
             return SerializeList(dt);
         }
@@ -129,16 +135,46 @@ namespace Incubator_2.Models
         }
         public void AddCommand()
         {
+            if (id > 0)
+            {
+                Update();
+                return;
+            }
             StartCommandToService()
                 .Insert(new()
                 {
                     { nameof(database), database },
                     { nameof(table), table },
                     { nameof(name), name },
-                    { nameof(query), query },
+                    { nameof(query), EncryptQuery() },
                     { nameof(type), type.ToString() },
                     { nameof(restrictions), restrictions },
                 })
+                .ExecuteVoid();
+        }
+        public void Update()
+        {
+            StartCommandToService()
+                .Update(nameof(name), name)
+                .Update(nameof(query), EncryptQuery())
+                .Update(nameof(type), type.ToString())
+                .Update(nameof(restrictions), restrictions)
+                .WhereEqual(nameof(id), id)
+                .ExecuteVoid();
+        }
+        public string EncryptQuery()
+        {
+            return Cryptographer.EncryptString(Cryptographer.GenerateKey(database + table), query);
+        }
+        public void DecryptQuery()
+        {
+            query = Cryptographer.DecryptString(Cryptographer.GenerateKey(database + table), query);
+        }
+        public void DeleteCommand()
+        {
+            StartCommandToService()
+                .Delete()
+                .WhereEqual(nameof(id), id)
                 .ExecuteVoid();
         }
     }

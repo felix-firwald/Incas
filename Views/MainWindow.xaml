@@ -47,7 +47,7 @@
             </Border>
         </DockPanel>-->
 
-        <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize">
+        <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize" Cursor="">
             <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,15" Text="{Binding SectorName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
             <Image x:Name="Logo" Height="auto" Width="auto" Source="/Views/Logo.png" UseLayoutRounding="False" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" Cursor="Hand" ToolTip="Жми на меня и тебе откроется панель управления" MouseDown="Logo_MouseDown">
             </Image>
@@ -77,7 +77,7 @@
                     <TextBlock Text="Задачи" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=TasksRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
-            <RadioButton x:Name="HandbookRadio" Style="{DynamicResource MenuButton}">
+            <!--<RadioButton x:Name="HandbookRadio" Style="{DynamicResource MenuButton}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition x:Name="ColHR" Width="30"/>
@@ -86,7 +86,7 @@
                     <fa:FontAwesome Icon="InfoCircle" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
                     <TextBlock Text="Справочник" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=HandbookRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
                 </Grid>
-            </RadioButton>
+            </RadioButton>-->
             <RadioButton x:Name="CommunicationsRadio" Style="{DynamicResource MenuButton}" Cursor="Hand" Visibility="{Binding CommunicationVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>

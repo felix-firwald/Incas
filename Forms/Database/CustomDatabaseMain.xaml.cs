@@ -123,8 +123,22 @@ namespace Incubator_2.Forms.Database
 
         private void UpdateCommandClick(object sender, RoutedEventArgs e)
         {
-            MenuItem mi = (MenuItem)sender;
-            vm.CustomUpdateRequest(mi.Tag.ToString());
+            string request = ((MenuItem)sender).Tag.ToString();
+            if (request.Contains("%SELECTED%"))
+            {
+                List<string> selection = new();
+                string pk = vm.GetPK();
+                for (int i = 0; i < this.TableGrid.SelectedItems.Count; i++)
+                {
+                    selection.Add(((DataRowView)this.TableGrid.SelectedItems[i]).Row[pk].ToString());
+                }
+                vm.CustomUpdateRequest(request.Replace("%SELECTED%", string.Join(", ", selection)));
+            }
+            else
+            {
+                vm.CustomUpdateRequest(request);
+            }
+            
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -138,11 +152,30 @@ namespace Incubator_2.Forms.Database
             {
                 CreateCommand cc = new(vm.SelectedDatabase.path, vm.SelectedTable);
                 cc.ShowDialog();
+                vm.RefreshCommands();
             }
             else
             {
                 ProgramState.ShowExclamationDialog("База данных или таблица не выбрана!", "Действие невозможно");
             }
+        }
+
+        private void EditCommand(object sender, RoutedEventArgs e)
+        {
+            SCommand com = vm.GetCommand(int.Parse(((MenuItem)sender).Tag.ToString()));
+            CreateCommand cc = new(com);
+            cc.ShowDialog();
+            vm.RefreshCommands();
+        }
+
+        private void RemoveCommand(object sender, RoutedEventArgs e)
+        {
+            using (Command c = new())
+            {
+                c.id = int.Parse(((MenuItem)sender).Tag.ToString());
+                c.DeleteCommand();
+            }
+            vm.RefreshCommands();
         }
     }
 }

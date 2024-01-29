@@ -235,12 +235,21 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="TextBoxCode" TargetType="{x:Type TextBox}">
+        <Setter Property="MinHeight" Value="80"/>
+        <Setter Property="Background" Value="{DynamicResource Black}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
+        <Setter Property="AcceptsReturn" Value="True"/>
+
+    </Style>
     <Style x:Key="RichTextBoxCode" TargetType="RichTextBox">
         <Setter Property="MinHeight" Value="80"/>
         <Setter Property="Background" Value="{DynamicResource Black}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
-        
+        <Setter Property="AcceptsReturn" Value="True"/>
     </Style>
 </ResourceDictionary>

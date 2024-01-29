@@ -477,6 +477,7 @@ namespace Common
                     conn.Open();
                     SQLiteCommand cmd = conn.CreateCommand();
                     cmd.CommandText = GetRequest();
+                    Console.WriteLine(cmd.CommandText);
                     SQLiteDataReader sqlreader = cmd.ExecuteReader();
                     DataTable objDataTable = new DataTable();
                     objDataTable.Load(sqlreader);
@@ -502,6 +503,7 @@ namespace Common
                     conn.Open();
                     SQLiteCommand cmd = conn.CreateCommand();
                     cmd.CommandText = GetRequest();
+                    Console.WriteLine(cmd.CommandText);
                     SQLiteDataReader sqlreader = cmd.ExecuteReader();
                     DataTable objDataTable = new DataTable();
                     objDataTable.Load(sqlreader);
@@ -531,6 +533,7 @@ namespace Common
                     conn.Open();
                     SQLiteCommand cmd = conn.CreateCommand();
                     cmd.CommandText = GetRequest();
+                    Console.WriteLine(cmd.CommandText);
                     cmd.ExecuteNonQuery();
                     return;
                 }

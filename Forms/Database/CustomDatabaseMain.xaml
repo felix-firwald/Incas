@@ -71,10 +71,11 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <MenuItem Header="{Binding name}" Tag="{Binding query}" ToolTipService.InitialShowDelay="800" Click="ReadCommandClick">
+                                <MenuItem Header="{Binding name}" Tag="{Binding query}" ToolTipService.IsEnabled="False" Click="ReadCommandClick">
                                     <MenuItem.ContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Header="Удалить команду"/>
+                                            <MenuItem Header="Редактировать команду" Visibility="{Binding CreateCommandVisibility}" Tag="{Binding id}" ToolTipService.IsEnabled="False" Click="EditCommand"/>
+                                            <MenuItem Header="Удалить команду" Visibility="{Binding CreateCommandVisibility}" Tag="{Binding id}" ToolTipService.IsEnabled="False" Click="RemoveCommand"/>
                                         </ContextMenu>
                                     </MenuItem.ContextMenu>
                                 </MenuItem>
@@ -98,7 +99,14 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <MenuItem Header="{Binding name}" Tag="{Binding query}" ToolTipService.InitialShowDelay="800" Click="UpdateCommandClick"/>
+                                <MenuItem Header="{Binding name}" Tag="{Binding query}" ToolTipService.IsEnabled="False" Click="UpdateCommandClick">
+                                    <MenuItem.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Редактировать команду" Visibility="{Binding CreateCommandVisibility}" Tag="{Binding id}" ToolTipService.IsEnabled="False" Click="EditCommand"/>
+                                            <MenuItem Header="Удалить команду" Visibility="{Binding CreateCommandVisibility}" Tag="{Binding id}" ToolTipService.IsEnabled="False" Click="RemoveCommand"/>
+                                        </ContextMenu>
+                                    </MenuItem.ContextMenu>
+                                </MenuItem>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

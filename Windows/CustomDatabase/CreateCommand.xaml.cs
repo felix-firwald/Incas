@@ -1,4 +1,6 @@
-﻿using Incubator_2.ViewModels.VM_CustomDB;
+﻿using Common;
+using Incubator_2.Models;
+using Incubator_2.ViewModels.VM_CustomDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,16 +37,20 @@ namespace Incubator_2.Windows.CustomDatabase
         public CreateCommand(string database, string table)
         {
             InitializeComponent();
-            vm = new(database, table);
+            Command c = new();
+            c.database = database;
+            c.table = table;
+            vm = new(c);
             this.DataContext = vm;
-            BindingSelector bs = new();
-            bs.ShowDialog();
+        }
+        public CreateCommand(SCommand com)
+        {
+            InitializeComponent();
+            Command c = com.AsModel();
+            vm = new(c);
+            this.DataContext = vm;
         }
 
-        private TextRange GetTextRange()
-        {
-            return new TextRange(RTB.Document.ContentStart, RTB.Document.ContentEnd);
-        }
 
         private void AddToRTBClick(object sender, RoutedEventArgs e)
         {
@@ -52,22 +58,22 @@ namespace Incubator_2.Windows.CustomDatabase
             switch (btn.Tag.ToString())
             {
                 case "SELECT":
-                    this.RTB.Document.Blocks.Clear();
-                    this.RTB.AppendText(GetSelectQueryExample());
+                    this.vm.Query = GetSelectQueryExample();
                     break;
                 case "UPDATE":
-                    this.RTB.Document.Blocks.Clear();
-                    this.RTB.AppendText($"UPDATE [{vm.Table}]\nSET [Поле] = 'Новое значение'");
+                    this.vm.Query = $"UPDATE [{vm.Table}]\nSET [Поле] = 'Новое значение'";
                     break;
                 case "DELETE":
-                    this.RTB.Document.Blocks.Clear();
-                    this.RTB.AppendText($"DELETE *\nFROM [{vm.Table}]");
+                    this.vm.Query = $"DELETE *\nFROM [{vm.Table}]";
                     break;
                 case "WHERE":
-                    this.RTB.AppendText($"\nWHERE [{vm.Table}].[Поле] = 'Нужное значение'");
+                    this.vm.Query += GetWhereExample();
+                    break;
+                case "WHEREPK":
+                    this.vm.Query += GetWherePKExample();
                     break;
                 case "ORDERBY":
-                    this.RTB.AppendText($"\nORDER BY [{vm.Table}].[Поле] ASC");
+                    this.vm.Query += $"\nORDER BY [{vm.Table}].[Поле] ASC";
                     break;
             }
         }
@@ -80,17 +86,28 @@ namespace Incubator_2.Windows.CustomDatabase
             }
             return fields;
         }
+
+        private string GetWhereByContext()
+        {
+            if (this.vm.Query.Contains("WHERE"))
+            {
+                return "\n  AND ";
+            }
+            return "\nWHERE ";
+        }
         private string GetSelectQueryExample()
         {
             string result = "SELECT ";
             result += string.Join(",\n       ", GetFieldsDefinition());
             return result += $"\nFROM   [{vm.Table}]";
         }
-        private string GetSelectWhereExample()
+        private string GetWhereExample()
         {
-            string result = "WHERE ";
-            result += string.Join(",\n       ", GetFieldsDefinition());
-            return result += $"\nFROM   [{vm.Table}]";
+            return $"{GetWhereByContext()} [{vm.Table}].[Поле] = 'значение'";
+        }
+        private string GetWherePKExample()
+        {
+            return $"{GetWhereByContext()} [{vm.Table}].[{vm.GetPKField()}] in (%SELECTED%)";
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
@@ -109,47 +126,14 @@ namespace Incubator_2.Windows.CustomDatabase
             }
             catch (FormatException) { }
         }
-        private Dictionary<int, int> GetEntriesOfSubstring(string substring, string text)
-        {
-            int startIndex = 0;
-            Dictionary<int, int> entries = new();
-            while (startIndex < text.Length)
-            {
-                int start = text.IndexOf(text, startIndex);
-
-                if (start < 0)
-                {
-                    return entries;
-                }
-                else
-                {
-                    startIndex = start + text.Length + 1;
-                    
-                }
-            }
-            return entries;
-        }
-        private void Colorize()
-        {
-            //string[] words = GetTextRange().Text.Split(new string[] { "\r\n", "\r", "\n", " " }, StringSplitOptions.None);
-            //this.RTB.Document.Blocks.Clear();
-            //foreach (string word in words)
-            //{
-            //    if (specialWords.Contains(word.Trim()))
-            //    {
-            //        AppendText(this.RTB, word, "#0cfb00");
-            //    }
-            //    else
-            //    {
-            //        AppendText(this.RTB, word, "White");
-            //    }
-            //    this.RTB.AppendText(" ");
-            //}
-        }
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            Colorize();
+            if (vm.ValidateQuery())
+            {
+                vm.Save();
+                this.Close();
+            }
         }
     }
 }
