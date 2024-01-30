@@ -118,7 +118,8 @@ namespace Incubator_2.Forms.Database
         private void ReadCommandClick(object sender, RoutedEventArgs e)
         {
             vm.CustomViewRequest = ((MenuItem)sender).Tag.ToString();
-            vm.RefreshTable();
+            vm.UpdateTable();
+            
         }
 
         private void UpdateCommandClick(object sender, RoutedEventArgs e)
@@ -176,6 +177,25 @@ namespace Incubator_2.Forms.Database
                 c.DeleteCommand();
             }
             vm.RefreshCommands();
+        }
+
+        private void SearchTextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void SearchClick(object sender, MouseButtonEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(vm.ColumnFilter) && !string.IsNullOrEmpty(vm.SearchText))
+            {
+                vm.CustomViewRequest = $"SELECT * FROM [{vm.SelectedTable}] WHERE [{vm.ColumnFilter}] LIKE '%{vm.SearchText}%'";
+                vm.UpdateTable();
+            }
+        }
+
+        private void ClearCustomClick(object sender, MouseButtonEventArgs e)
+        {
+            vm.ClearTableFromCustomView();
         }
     }
 }

@@ -3,6 +3,7 @@ using Incubator_2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -57,6 +58,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 OnPropertyChanged(nameof(TopPanelVisibility));
             }
         }
+
         public List<SDatabase> Databases
         {
             get

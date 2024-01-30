@@ -29,7 +29,7 @@
                          IsEnabled="{Binding TableSelectionEnable}"
                          
                          ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
-                         ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" 
+                         ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}"
                          Background="{x:Null}"
                          Grid.RowSpan="2" MaxHeight="200"/>
             </Border>

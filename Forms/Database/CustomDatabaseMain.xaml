@@ -5,11 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms.Database" xmlns:oneinstance="clr-namespace:Incubator_2.Forms.OneInstance" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="900" Cursor="">
+             d:DesignHeight="450" d:DesignWidth="1200" Cursor="">
     <GroupBox Style="{DynamicResource MainGroupBox}" Header="БАЗЫ ДАННЫХ">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="162*"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -17,7 +18,7 @@
                 <ColumnDefinition Width="272*"/>
                 <ColumnDefinition Width="240" MinWidth="100" MaxWidth="400"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.RowSpan="2">
+            <StackPanel Grid.RowSpan="3">
                 <Expander Style="{DynamicResource ExpanderMain}" Header="Базы данных" IsExpanded="True">
                     <ListBox x:Name="DatabasesList"
                          Style="{DynamicResource ListBoxMain}"
@@ -31,22 +32,38 @@
                          ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2"/>
                 </Expander>
             </StackPanel>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition MaxWidth="300"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Поиск по указанному полю" Text="{Binding SearchText}" TextChanged="SearchTextChanged" Margin="40,5,5,5" Cursor="IBeam">
+                    <TextBox.ContextMenu>
+                        <ContextMenu>
 
-            <GridSplitter Grid.RowSpan="2"/>
-            <DataGrid x:Name="TableGrid" Style="{DynamicResource DataGridMain}" Grid.Column="1" ItemsSource="{Binding Table}" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" TextSearch.TextPath="id" TextSearch.Text="11" Margin="5,5,5,5" IsReadOnly="True" SelectionUnit="{Binding SelectionUnit}"/>
-            <Border Grid.Row="1" Grid.Column="1" Background="{DynamicResource Black}" CornerRadius="5" Margin="6,0,6,0" Grid.ColumnSpan="2">
+                        </ContextMenu>
+                    </TextBox.ContextMenu>
+                </TextBox>
+                <ComboBox Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding Columns}" SelectedItem="{Binding ColumnFilter}" Cursor="Hand" Grid.Column="1" Margin="5,5,40,5"/>
+                
+                <fa:FontAwesome Icon="Search" Style="{DynamicResource IconButton}" MouseDown="SearchClick" HorizontalAlignment="Left"/>
+                <fa:FontAwesome Icon="Remove" Style="{DynamicResource IconButton}" MouseDown="ClearCustomClick" HorizontalAlignment="Right" Grid.Column="1"/>
+            </Grid>
+            <GridSplitter Grid.RowSpan="3"/>
+            <DataGrid x:Name="TableGrid" Style="{DynamicResource DataGridMain}" Grid.Column="1" ItemsSource="{Binding Table}" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" TextSearch.TextPath="id" TextSearch.Text="11" Margin="5,5,5,5" IsReadOnly="True" SelectionUnit="{Binding SelectionUnit}" Grid.Row="1"/>
+            <Border Grid.Row="2" Grid.Column="1" Background="{DynamicResource Black}" CornerRadius="5" Margin="6,0,6,0" Grid.ColumnSpan="2">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Plus" ToolTip="Добавить запись" MouseDown="AddNewRecordClick" IsEnabled="{Binding CanUserEditTable}"/>
                     <Rectangle Fill="{DynamicResource Element}" Width="1" Margin="0,3,0,3" Visibility="{Binding EditingVisibility}" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" ToolTip="Редактировать выбранную запись" MouseDown="EditRecordClick" Visibility="{Binding EditingVisibility}" IsEnabled="{Binding CanUserEditTable}"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранные записи" MouseDown="DeleteRecordsClick" Visibility="{Binding EditingVisibility}" IsEnabled="{Binding CanUserEditTable}"/>
-                    <Rectangle Fill="{DynamicResource Element}" Width="1" Margin="0,3,0,3" />
+                    <Rectangle Fill="{DynamicResource Element}" Width="1" Margin="0,3,0,3" Cursor="" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="MousePointer" ToolTip="Переключить тип выбора ячеек (целиком строка или отдельная ячейка)" MouseDown="SwitchSelectionUnitClick"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" ToolTip="Обновить записи" MouseDown="RefreshClick"/>
                 </StackPanel>
             </Border>
-            <GridSplitter Grid.Column="1" />
-            <Border Grid.Column="2" Background="{DynamicResource Black}" CornerRadius="2" Margin="0,5,5,5" BorderThickness="2" BorderBrush="{DynamicResource Element}">
+            <GridSplitter Grid.Column="1" Grid.RowSpan="2" />
+            <Border Grid.Column="2" Background="{DynamicResource Black}" CornerRadius="2" Margin="0,5,5,5" BorderThickness="2" BorderBrush="{DynamicResource Element}" Grid.RowSpan="2">
                 <StackPanel>
                     <Button x:Name="btnNewCommand" Style="{DynamicResource ButtonFlat}" Visibility="{Binding CreateCommandVisibility}" Click="NewCommandClick">
                         <StackPanel Orientation="Horizontal">
@@ -91,7 +108,7 @@
                         <Path Fill="{DynamicResource DarkYellow}" Data="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Label Content="Изменение:" Foreground="{DynamicResource DarkYellow}" Grid.Column="1"/>
                     </Grid>
-                    <ItemsControl ItemsSource="{Binding UpdateCommands}">
+                    <ItemsControl ItemsSource="{Binding UpdateCommands}" IsEnabled="{Binding EditingEnabled}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel/>

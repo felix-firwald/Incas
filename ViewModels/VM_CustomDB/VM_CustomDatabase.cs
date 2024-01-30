@@ -18,6 +18,10 @@ namespace Incubator_2.ViewModels.VM_CustomDB
     {
         private string _selectedTable = "";
         private DataRow _selectedRow;
+        private string _columnFilter = "";
+        private string _searchText = "";
+        private DataTable _dataTable = new();
+        private bool isTableNeedUpdate = true;
         private DataGridSelectionUnit _selectionUnit = DataGridSelectionUnit.FullRow;
         private List<SCommand> _commands = new List<SCommand>();
         CustomTable requester = new();
@@ -71,6 +75,20 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 }
             }
         }
+        public bool EditingEnabled
+        {
+            get
+            {
+                if (SelectionUnit == DataGridSelectionUnit.FullRow)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
 
         public DataGridSelectionUnit SelectionUnit
         {
@@ -85,26 +103,69 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                     _selectionUnit = value;
                     OnPropertyChanged(nameof(SelectionUnit));
                     OnPropertyChanged(nameof(EditingVisibility));
+                    OnPropertyChanged(nameof(EditingEnabled));
                 }
             }
         }
 
+
         public string CustomViewRequest;
 
+        
         public DataTable Table
         {
             get
             {
                 if (!string.IsNullOrEmpty(_selectedTable))
                 {
-                    DataTable dt = requester.GetTable(SelectedTable, SelectedDatabase.path, CustomViewRequest);
-                    dt.DefaultView.RowFilter = "";
-                    return dt;
+                    
+                    return _dataTable;
                 }
                 else
                 {
                     return new();
                 }
+            }
+        }
+        public List<string> Columns
+        {
+            get
+            {
+                List<string> columns = new();
+                foreach (DataColumn col in _dataTable.Columns)
+                {
+                    columns.Add(col.ColumnName);
+                }
+                if (columns.Count > 0)
+                {
+                    ColumnFilter = columns[0];
+                }
+                return columns;
+            }
+        }
+        public string ColumnFilter
+        {
+            get
+            {
+                return _columnFilter;
+            }
+            set
+            {
+                _columnFilter = value;
+                OnPropertyChanged(nameof(ColumnFilter));
+            }
+        }
+        public string SearchText
+        {
+            get
+            {
+                return _searchText;
+            }
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(SearchText));
+                OnPropertyChanged(nameof(Table));
             }
         }
 
@@ -154,14 +215,23 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             set
             {
                 _selectedTable = value;
+                
                 OnPropertyChanged(nameof(SelectedTable));
                 CustomViewRequest = null;
-                OnPropertyChanged(nameof(Table));
+                //OnPropertyChanged(nameof(Table));
+                UpdateTable();
                 OnPropertyChanged(nameof(CanUserEditTable));
+                
                 UpdateListOfCommands();
                 OnPropertyChanged(nameof(ReadCommands));
                 OnPropertyChanged(nameof(UpdateCommands));
+                OnPropertyChanged(nameof(Columns));
             }
+        }
+        public void UpdateTable()
+        {
+            _dataTable = requester.GetTable(SelectedTable, SelectedDatabase.path, CustomViewRequest);
+            OnPropertyChanged(nameof(Table));
         }
         private void UpdateListOfCommands()
         {
@@ -235,7 +305,13 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             OnPropertyChanged(nameof(Databases));
             OnPropertyChanged(nameof(Tables));
+            
             OnPropertyChanged(nameof(Table));
+        }
+        public void ClearTableFromCustomView()
+        {           
+            SearchText = string.Empty;
+            SelectedTable = SelectedTable;
         }
         public void RefreshCommands()
         {
