@@ -1,5 +1,6 @@
 ﻿using Common;
 using DocumentFormat.OpenXml.InkML;
+using Incubator_2.Common;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
 using Incubator_2.Windows.ToolBar;
@@ -16,6 +17,7 @@ namespace Incubator_2
     /// </summary>
     public partial class MainWindow : Window
     {
+        MV_MainWindow vm;
         public MainWindow()
         {
             InitializeComponent();
@@ -23,7 +25,8 @@ namespace Incubator_2
             {
                 Application.Current.Shutdown();
             }
-            this.DataContext = new MV_MainWindow();
+            vm = new MV_MainWindow();
+            this.DataContext = vm;
             if (string.IsNullOrEmpty(ProgramState.CurrentUserParameters.password))
             {
                 if (ProgramState.ShowQuestionDialog("Текущий пароль, использованный вами для входа, " +
@@ -114,6 +117,12 @@ namespace Incubator_2
         {
             CreateTask ct = new CreateTask();
             ct.Show();
+        }
+
+        private void HandleCommandClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            CommandHandler.Handle(this.InputCommand.Text);
+            this.InputCommand.Clear();
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Incubator_2.Windows.CustomDatabase
                     this.vm.Query = GetSelectQueryExample();
                     break;
                 case "UPDATE":
-                    this.vm.Query = $"UPDATE [{vm.Table}]\nSET [Поле] = 'Новое значение'";
+                    this.vm.Query = GetUpdateExample();
                     break;
                 case "DELETE":
                     this.vm.Query = $"DELETE *\nFROM [{vm.Table}]";
@@ -115,6 +115,33 @@ namespace Incubator_2.Windows.CustomDatabase
             string result = "SELECT ";
             result += string.Join(",\n       ", GetFieldsDefinition(vm.Table));
             return result += $"\nFROM   [{vm.Table}]";
+        }
+        private string GetUpdateExample()
+        {
+            string result = "";
+            if (!string.IsNullOrEmpty(this.vm.Query))
+            {
+                if (!this.vm.Query.Contains("UPDATE"))
+                {
+                    result = $"UPDATE [{vm.Table}]\nSET  ";
+                }
+                else
+                {
+                    result = this.vm.Query;
+                }
+            }
+            else
+            {
+                result = $"UPDATE [{vm.Table}]\nSET  ";
+            }
+            BindingSelector bs = ProgramState.ShowBindingSelector(vm.Database, vm.Table, false, false);
+            if (bs.Result == DialogStatus.Yes)
+            {
+                string value = ProgramState.ShowInputBox("Введите новое значение", $"Новое значение для поля '{bs.SelectedField}'");
+                result += $",\n    [{bs.SelectedField}] = '{value}'";
+                return result.Replace($"SET  ,\n", $"SET  ");
+            }
+            return "";
         }
         private string GetWhereExample(string comparator = "=", string mark = "'")
         {

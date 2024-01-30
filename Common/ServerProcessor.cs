@@ -343,10 +343,6 @@ namespace Incubator_2.Common
             process.target = ProcessTarget.EXPLICIT;
             process.content = JsonConvert.SerializeObject(message);
             WriteLogSending(process);
-            //if (message.message_type == AdminMessageType.QUESTION)
-            //{
-            //    WaitList.Add(process);
-            //}
             ToFile(process);
         }
 

@@ -55,14 +55,21 @@ namespace Incubator_2.Models
             this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
             return this;
         }
-        public bool Exists(ParameterType typeOf, string nameOf, string expectedValue)
+        public bool Exists(ParameterType typeOf, string nameOf, string expectedValue, bool like = true)
         {
-            DataRow dr = StartCommandToService()
+            Query q = StartCommandToService()
                         .Select()
                         .WhereEqual("type", typeOf.ToString())
-                        .WhereEqual("name", nameOf)
-                        .WhereEqual("value", expectedValue)
-                        .ExecuteOne();
+                        .WhereEqual("name", nameOf);
+            if (like)
+            {
+                q.WhereLike("value", expectedValue);
+            }
+            else
+            {
+                q.WhereEqual("value", expectedValue);
+            }
+            DataRow dr = q.ExecuteOne();
             if (dr == null)
             {
                 return false;
@@ -112,6 +119,15 @@ namespace Incubator_2.Models
             StartCommandToService()
                 .Update("value", value)
                 .WhereEqual("id", id.ToString())
+                .ExecuteVoid();
+            return this;
+        }
+        public Parameter DeleteParameterByTypeAndName()
+        {
+            StartCommandToService()
+                .Delete()
+                .WhereEqual("type", type.ToString())
+                .WhereEqual("name", name)
                 .ExecuteVoid();
             return this;
         }

@@ -71,6 +71,19 @@ namespace Incubator_2.Models
             }
             return result;
         }
+        public List<string> GetSectorSlugs()
+        {
+            DataTable dt = StartCommandToService()
+                .Select()
+                .Execute();
+            List<string> result = new();
+            foreach (DataRow dr in dt.Rows)
+            {
+                this.Serialize(dr);
+                result.Add(this.slug);
+            }
+            return result;
+        }
         public Sector GetSector()
         {
             DataRow dr = StartCommandToService()

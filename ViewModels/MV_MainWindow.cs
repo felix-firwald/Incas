@@ -16,6 +16,17 @@ namespace Incubator_2.ViewModels
         {
             LoadInfo();
         }
+        public Visibility AdminFunctionVisibility
+        {
+            get
+            {
+                if (Permission.CurrentUserPermission == PermissionGroup.Admin)
+                {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
 
         public string Surname
         {

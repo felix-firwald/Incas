@@ -34,7 +34,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             {
                 using (Parameter p = new())
                 {
-                    return !p.Exists(ParameterType.RESTRICT_EDIT_TABLE, _selectedTable, ProgramState.CurrentUser.id.ToString());
+                    return !p.Exists(ParameterType.RESTRICT_EDIT_TABLE, $"{_selectedDatabase.path}.{_selectedTable}", ProgramState.CurrentUser.id.ToString(), false);
                 }
             }
         }
@@ -334,7 +334,8 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         public void CustomUpdateRequest(string query)
         {
             requester.CustomRequest(SelectedDatabase.path, query);
-            this.RefreshTable();
+            //this.RefreshTable();
+            UpdateTable();
         }
         
         #endregion

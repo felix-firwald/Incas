@@ -12,6 +12,7 @@ using Incubator_2.Common;
 using System.Windows.Documents;
 using System.Collections.Generic;
 using System.Windows.Input;
+using Incubator_2.Windows.CustomDatabase;
 
 
 namespace Common
@@ -343,11 +344,39 @@ namespace Common
             dialog.ShowDialog();
             return dialog.Input;
         }
-        public static Session ShowUserSelector(string helpText)
+        public static BindingSelector ShowBindingSelector()
+        {
+            BindingSelector bd = new();
+            bd.ShowDialog();
+            return bd;
+        }
+        public static BindingSelector ShowBindingSelector(string database, bool dbEnabled = true)
+        {
+            BindingSelector bd = new(database, dbEnabled);
+            bd.ShowDialog();
+            return bd;
+        }
+        public static BindingSelector ShowBindingSelector(string database, string table, bool dbEnabled = true, bool tableEnabled = true)
+        {
+            BindingSelector bd = new(database, table, dbEnabled, tableEnabled);
+            bd.ShowDialog();
+            return bd;
+        }
+        public static Session ShowActiveUserSelector(string helpText)
         {
             ActiveUserSelector au = new(helpText);
             au.ShowDialog();
             return au.SelectedSession;
+        }
+        public static User ShowUserSelector()
+        {
+            UserSelector us = new();
+            us.ShowDialog();
+            if (us.Result == DialogStatus.Yes)
+            {
+                return us.SelectedUser;
+            }
+            return new();
         }
         public static void ShowWaitCursor(bool wait = true)
         {

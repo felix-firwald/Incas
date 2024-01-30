@@ -77,16 +77,6 @@
                     <TextBlock Text="Задачи" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=TasksRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
-            <!--<RadioButton x:Name="HandbookRadio" Style="{DynamicResource MenuButton}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition x:Name="ColHR" Width="30"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <fa:FontAwesome Icon="InfoCircle" VerticalAlignment="Center" FontSize="16" HorizontalAlignment="Left" />
-                    <TextBlock Text="Справочник" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=HandbookRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
-                </Grid>
-            </RadioButton>-->
             <RadioButton x:Name="CommunicationsRadio" Style="{DynamicResource MenuButton}" Cursor="Hand" Visibility="{Binding CommunicationVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -134,9 +124,6 @@
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=TasksRadio, Path=IsChecked}" Background="{x:Null}">
                     <tasks:TasksMain/>
                 </TabItem>
-                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=HandbookRadio, Path=IsChecked}" Background="{x:Null}">
-                    <handbook:HandbookMain/>
-                </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=CommunicationsRadio, Path=IsChecked}" Background="{x:Null}">
                     <communications:CommunicationMain/>
                 </TabItem>
@@ -150,8 +137,10 @@
         </Border>
 
         <StackPanel MinHeight="50" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Background="{StaticResource LightBlack}">
+            <fa:FontAwesome Icon="Code" Style="{DynamicResource IconButton}" Visibility="{Binding AdminFunctionVisibility}" MouseDown="HandleCommandClick"/>
+            <TextBox x:Name="InputCommand" Style="{DynamicResource TextBoxTransparent}" MinWidth="200" Visibility="{Binding AdminFunctionVisibility}"/>
             <Label Content="f" Foreground="{DynamicResource Icon}" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Harlow Solid Italic" FontSize="14" MinWidth="64" FontStyle="Italic"/>
-
+            
             <Button Style="{DynamicResource DashboardButton}" Content="Создать задачу" Width="120" Click="NewTaskClick"/>
             <Button Style="{DynamicResource DashboardButton}" Content="Буфер обмена" Width="120"/>
         </StackPanel>
