@@ -218,20 +218,19 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 
                 OnPropertyChanged(nameof(SelectedTable));
                 CustomViewRequest = null;
-                //OnPropertyChanged(nameof(Table));
                 UpdateTable();
-                OnPropertyChanged(nameof(CanUserEditTable));
-                
+                OnPropertyChanged(nameof(CanUserEditTable));               
                 UpdateListOfCommands();
-                OnPropertyChanged(nameof(ReadCommands));
-                OnPropertyChanged(nameof(UpdateCommands));
                 OnPropertyChanged(nameof(Columns));
             }
         }
         public void UpdateTable()
         {
-            _dataTable = requester.GetTable(SelectedTable, SelectedDatabase.path, CustomViewRequest);
-            OnPropertyChanged(nameof(Table));
+            if (!string.IsNullOrEmpty(SelectedTable))
+            {
+                _dataTable = requester.GetTable(SelectedTable, SelectedDatabase.path, CustomViewRequest);
+                OnPropertyChanged(nameof(Table));
+            }
         }
         private void UpdateListOfCommands()
         {
@@ -239,6 +238,8 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             {
                 Commands = c.GetCommandsOfTable(SelectedDatabase.path, SelectedTable);
             }
+            OnPropertyChanged(nameof(ReadCommands));
+            OnPropertyChanged(nameof(UpdateCommands));
         }
         
         public DataRow SelectedRow

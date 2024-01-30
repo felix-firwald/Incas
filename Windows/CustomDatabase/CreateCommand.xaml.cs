@@ -81,6 +81,12 @@ namespace Incubator_2.Windows.CustomDatabase
                 case "WHEREPK":
                     this.vm.Query += GetWherePKExample();
                     break;
+                case "PARAMFIELD":
+                    this.vm.Query += GetParameterField();
+                    break;
+                case "PARAMTIME":
+                    this.vm.Query += "\n{%TIME%}";
+                    break;
                 case "JOIN":
                     this.vm.Query = GetJoinExample();
                     break;
@@ -139,7 +145,7 @@ namespace Incubator_2.Windows.CustomDatabase
             {
                 string value = ProgramState.ShowInputBox("Введите новое значение", $"Новое значение для поля '{bs.SelectedField}'");
                 result += $",\n    [{bs.SelectedField}] = '{value}'";
-                return result.Replace($"SET  ,\n", $"SET  ");
+                return result.Replace($"SET  ,\n", $"SET ");
             }
             return "";
         }
@@ -156,7 +162,12 @@ namespace Incubator_2.Windows.CustomDatabase
         }
         private string GetWherePKExample()
         {
-            return $"{GetWhereByContext()} [{vm.Table}].[{vm.GetPKField()}] in (%SELECTED%)";
+            return $"{GetWhereByContext()} [{vm.Table}].[{vm.GetPKField()}] in ({{%SELECTED%}})";
+        }
+        private string GetParameterField()
+        {
+            BindingSelector bd = ProgramState.ShowBindingSelector(vm.Database, vm.Table, false, false);
+            return $"\n{{%SELECTED#{bd.SelectedField}%}}";
         }
 
         private string GetJoinExample()
@@ -184,9 +195,14 @@ namespace Incubator_2.Windows.CustomDatabase
         {
             BindingSelector bs = new(vm.Database, vm.Table, false, false);
             bs.ShowDialog();
-            string result;
-            result = $"\nORDER BY [{vm.Table}].[{bs.SelectedField}] {type}";
-            return result;
+            if (!vm.Query.Contains("ORDER BY"))
+            {
+                return $"\nORDER BY [{vm.Table}].[{bs.SelectedField}] {type}";
+            }
+            else
+            {
+                return $",\n [{vm.Table}].[{bs.SelectedField}] {type}";
+            }
         }
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {

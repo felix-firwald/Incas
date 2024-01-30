@@ -48,6 +48,9 @@
                 <MenuItem Tag="WHERE LESS" Header="Где меньше" Click="AddToRTBClick"/>
                 <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="3,0,3,0"/>
                 <MenuItem Tag="WHEREPK" Header="Ограничить выбранными" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}"/>
+                <MenuItem Tag="PARAMFIELD" Header="Параметр выбранного поля" Click="AddToRTBClick"/>
+                <MenuItem Tag="PARAMTIME" Header="Параметр текущего времени" Click="AddToRTBClick" IsEnabled="{Binding IsEditCommandType}"/>
+                <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="3,0,3,0"/>
                 <MenuItem Tag="JOIN" Header="Присоединить таблицу" Click="AddToRTBClick"/>
                 <MenuItem Tag="ORDERASC" Header="Сортировать (по возрастанию)" Click="AddToRTBClick"/>
                 <MenuItem Tag="ORDERDESC" Header="Сортировать (по убыванию)" Click="AddToRTBClick"/>

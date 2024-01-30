@@ -98,7 +98,7 @@ namespace Incubator_2.Forms.Database
                 string record = ((DataRowView)this.TableGrid.SelectedItems[0]).Row[pk].ToString();
                 CreateRecord cr = new CreateRecord(vm.SelectedTable, pk, record, vm.GetTableDefinition(), vm.SelectedDatabase.path);
                 cr.ShowDialog();
-                vm.RefreshTable();
+                vm.UpdateTable();
             }
             catch (ArgumentException)
             {
@@ -117,30 +117,55 @@ namespace Incubator_2.Forms.Database
 
         private void ReadCommandClick(object sender, RoutedEventArgs e)
         {
-            vm.CustomViewRequest = ((MenuItem)sender).Tag.ToString();
+            vm.CustomViewRequest = ReplaceParametersInQuery(((MenuItem)sender).Tag.ToString());
             vm.UpdateTable();
             
+        }
+        private string GetParameterFormat(string parameter)
+        {
+            return "{%" + parameter + "%}";
+        }
+
+        private List<string> GetPKSelection()
+        {
+            List<string> selection = new();
+            string pk = vm.GetPK();
+            for (int i = 0; i < this.TableGrid.SelectedItems.Count; i++)
+            {
+                selection.Add(((DataRowView)this.TableGrid.SelectedItems[i]).Row[pk].ToString());
+            }
+            return selection;
+        }
+
+        private string ReplaceParametersInQuery(string request)
+        {
+            if (request.Contains("{%"))
+            {
+                request = request.Replace(GetParameterFormat("TIME"), DateTime.Now.ToString("G"));
+                if (request.Contains(GetParameterFormat("INPUT")))
+                {
+                    request = request.Replace(GetParameterFormat("INPUT"), ProgramState.ShowInputBox("Введите значение", "Для выполнения функции ожидается ввод"));
+                }
+                if (this.TableGrid.SelectedItems.Count > 0 && request.Contains("SELECTED"))
+                {
+                    request = request.Replace(GetParameterFormat("SELECTED"), string.Join(", ", GetPKSelection()));
+                    foreach (string col in vm.Columns)
+                    {
+                        request = request.Replace(GetParameterFormat("SELECTED#" + col), ((DataRowView)this.TableGrid.SelectedItems[0]).Row[col].ToString());
+                    }
+                }
+            }
+            return request;
         }
 
         private void UpdateCommandClick(object sender, RoutedEventArgs e)
         {
             string request = ((MenuItem)sender).Tag.ToString();
-            if (request.Contains("%SELECTED%"))
-            {
-                List<string> selection = new();
-                string pk = vm.GetPK();
-                for (int i = 0; i < this.TableGrid.SelectedItems.Count; i++)
-                {
-                    selection.Add(((DataRowView)this.TableGrid.SelectedItems[i]).Row[pk].ToString());
-                }
-                vm.CustomUpdateRequest(request.Replace("%SELECTED%", string.Join(", ", selection)));
-            }
-            else
-            {
-                vm.CustomUpdateRequest(request);
-            }
+            
+            vm.CustomUpdateRequest(ReplaceParametersInQuery(request));
             
         }
+        
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {

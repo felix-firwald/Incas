@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incubator_2.Models;
+using Incubator_2.Windows;
 using Incubator_2.Windows.CustomDatabase;
 using Models;
 using System;
@@ -12,6 +13,10 @@ namespace Incubator_2.Common
 {
     public static class CommandHandler
     {
+        private static void ShowObjectNotFound(string commandName, string obj)
+        {
+            ProgramState.ShowExclamationDialog($"Объект или модификатор (\"{obj}\") для команды #{commandName} не предусмотрены!", "Команда не будет выполнена");
+        }
         public static void Handle(string input)
         {
             try
@@ -22,37 +27,46 @@ namespace Incubator_2.Common
             }
             catch (Exception)
             {
-                ProgramState.ShowErrorDialog("Обнаружена синтаксическая ошибка! Команда не будет выполнена.");
+                ProgramState.ShowErrorDialog("Обнаружена синтаксическая ошибка!", "Команда не будет выполнена");
             }
         }
         private static void SwitchOnAction(string action, string arguments)
         {
             switch (action)
             {
-                case "#new":
-                    SwitchOnCreationCommands(arguments);
-                    break;
-                case "#remove":
-                    SwitchOnDeleteCommands(arguments);
-                    break;
-                case "#restrict":
-                    SwitchOnRestrictCommands(arguments);
-                    break;
+                
                 case "#lock":
+                case "#set locked 1":
                     ProgramState.SetWorkspaceLocked(true);
                     ProgramState.ShowInfoDialog("Рабочее пространство успешно заблокировано", "Отчет о выполнении");
                     break;
                 case "#unlock":
+                case "#set locked 0":
                     ProgramState.SetWorkspaceLocked(false);
                     ProgramState.ShowInfoDialog("Рабочее пространство успешно разблокировано", "Отчет о выполнении");
                     break;
                 case "#open":
+                case "#set opened 1":
                     ProgramState.SetWorkspaceOpened(true);
                     ProgramState.ShowInfoDialog("Рабочее пространство успешно открыто", "Отчет о выполнении");
                     break;
                 case "#close":
+                case "#set opened 0":
                     ProgramState.SetWorkspaceOpened(false);
                     ProgramState.ShowInfoDialog("Рабочее пространство успешно закрыто", "Отчет о выполнении");
+                    break;
+                case "#new":
+                    SwitchOnCreationCommands(arguments);
+                    break;
+                case "#drop":
+                    SwitchOnDeleteCommands(arguments);
+                    break;
+                case "#restrict":
+                case "#set restriction":
+                    SwitchOnRestrictCommands(arguments);
+                    break;
+                case "#set":
+
                     break;
                 default:
                     ProgramState.ShowExclamationDialog("Команда не существует!");
@@ -72,6 +86,8 @@ namespace Incubator_2.Common
                     }
                     break;
                 case "user":
+                    UserEditor ue = new(new User());
+                    ue.ShowDialog();
                     break;
                 case "database":
                     using (Database db = new())
@@ -85,13 +101,21 @@ namespace Incubator_2.Common
                     }
                     break;
                 default:
-                    ProgramState.ShowExclamationDialog("Команда не существует!");
+                    ShowObjectNotFound("new", input);
                     break;
             }
         }
         private static void SwitchOnDeleteCommands(string input)
         {
-
+            input = input.Trim();
+            switch (input)
+            {
+                case "user":
+                    User u = ProgramState.ShowUserSelector();
+                    u.RemoveUser();
+                    UserContextor.RemoveContext(u);
+                    break;
+            }
         }
         private static void SwitchOnRestrictCommands(string input)
         {
@@ -137,7 +161,7 @@ namespace Incubator_2.Common
                     }
                     break;
                 default:
-                    ProgramState.ShowExclamationDialog("Команда не существует!");
+                    ShowObjectNotFound("restrict", input);
                     break;
             }
         }

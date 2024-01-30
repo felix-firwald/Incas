@@ -27,6 +27,17 @@ namespace Incubator_2.ViewModels
                 return Visibility.Collapsed;
             }
         }
+        public Visibility ModeratorFunctionVisibility
+        {
+            get
+            {
+                if (Permission.IsUserHavePermission(PermissionGroup.Moderator))
+                {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
 
         public string Surname
         {

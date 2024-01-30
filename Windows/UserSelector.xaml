@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
         mc:Ignorable="d"
-        Title="Выбор пользователя" Height="250" MaxHeight="500" Width="400" Style="{DynamicResource WindowBase}" WindowStartupLocation="CenterScreen" SizeToContent="Height">
+        Title="Выбор пользователя" Height="250" MaxHeight="500" Width="400" Style="{DynamicResource CentralWindow}" WindowStartupLocation="CenterScreen" SizeToContent="Height">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>

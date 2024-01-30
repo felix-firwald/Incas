@@ -100,6 +100,18 @@ namespace Incubator_2.Common
             string filename = $"{ProgramState.UsersContext}\\{user.sign}{user.id}.enic";
             File.WriteAllText(filename, Cryptographer.EncryptString(key, content));
         }
+        public static void RemoveContext(User user)
+        {
+            try
+            {
+                string filename = $"{ProgramState.UsersContext}\\{user.sign}{user.id}.enic";
+                File.Delete(filename);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
         private static string GetKey(User user)
         {
             string result = Cryptographer.GenerateKey($"{user.id}{user.sign}");

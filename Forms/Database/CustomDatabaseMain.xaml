@@ -20,16 +20,32 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.RowSpan="3">
                 <Expander Style="{DynamicResource ExpanderMain}" Header="Базы данных" IsExpanded="True">
-                    <ListBox x:Name="DatabasesList"
+                    <StackPanel>
+                        <Button x:Name="btnNewDatabase" Style="{DynamicResource ButtonFlat}" Visibility="{Binding CreateCommandVisibility}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path RenderOptions.EdgeMode="Aliased" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" Fill="{Binding ElementName=btnNewDatabase, Path=Foreground}" VerticalAlignment="Center"/>
+                                <Label Foreground="{Binding ElementName=btnNewDatabase, Path=Foreground}" Content="Добавить базу данных"/>
+                            </StackPanel>
+                        </Button>
+                        <ListBox x:Name="DatabasesList"
                          Style="{DynamicResource ListBoxMain}"
                          ItemContainerStyle="{DynamicResource ListBoxItemPurple}"
                          ItemsSource="{Binding Databases}" SelectedItem="{Binding SelectedDatabase}" DisplayMemberPath="name" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2"/>
+                    </StackPanel>
                 </Expander>
                 <Expander Style="{DynamicResource ExpanderMain}" Header="Таблицы" IsExpanded="True" Visibility="{Binding TablesVisibility}">
-                    <ListBox x:Name="TablesList" 
+                    <StackPanel>
+                        <Button x:Name="btnNewTable" Style="{DynamicResource ButtonFlat}" Visibility="{Binding CreateCommandVisibility}">
+                            <StackPanel Orientation="Horizontal">
+                                <Path RenderOptions.EdgeMode="Aliased" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" Fill="{Binding ElementName=btnNewTable, Path=Foreground}" VerticalAlignment="Center"/>
+                                <Label Foreground="{Binding ElementName=btnNewTable, Path=Foreground}" Content="Добавить таблицу"/>
+                            </StackPanel>
+                        </Button>
+                        <ListBox x:Name="TablesList" 
                          Style="{DynamicResource ListBoxMain}"
                          ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
                          ItemsSource="{Binding Tables}" SelectedItem="{Binding SelectedTable}" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2"/>
+                    </StackPanel>
                 </Expander>
             </StackPanel>
             <Grid Grid.Column="1">
@@ -88,7 +104,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <MenuItem Header="{Binding name}" Tag="{Binding query}" ToolTipService.IsEnabled="False" Click="ReadCommandClick">
+                                <MenuItem Header="{Binding name}" Tag="{Binding query}" ToolTip="Выполнить команду для показа списка в другом виде" Click="ReadCommandClick">
                                     <MenuItem.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="Редактировать команду" Visibility="{Binding CreateCommandVisibility}" Tag="{Binding id}" ToolTipService.IsEnabled="False" Click="EditCommand"/>
@@ -116,7 +132,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <MenuItem Header="{Binding name}" Tag="{Binding query}" ToolTipService.IsEnabled="False" Click="UpdateCommandClick">
+                                <MenuItem Header="{Binding name}" Tag="{Binding query}" ToolTip="Выполнить команду для изменения данных" Click="UpdateCommandClick">
                                     <MenuItem.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="Редактировать команду" Visibility="{Binding CreateCommandVisibility}" Tag="{Binding id}" ToolTipService.IsEnabled="False" Click="EditCommand"/>
