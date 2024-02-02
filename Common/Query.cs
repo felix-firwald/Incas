@@ -157,10 +157,27 @@ namespace Common
         {
             Result = Result.Replace($"'{Null}'", "null");
         }
-        #region Insert Update Delete
-        public Query Insert(Dictionary<string, string> dict)
+        #region Transaction
+        public Query BeginTransaction()
         {
-            Result += $"INSERT INTO [{Table}] ([{string.Join("], [", dict.Keys)}])\nVALUES ('{string.Join("', '", dict.Values)}')";
+            Result += "BEGIN TRANSACTION\n";
+            return this;
+        }
+        public Query EndTransaction()
+        {
+            Result += "\nEND TRANSACTION";
+            return this;
+        }
+        #endregion
+        #region Insert Update Delete
+        public Query Insert(Dictionary<string, string> dict, bool replace = false)
+        {
+            string start = "INSERT INTO";
+            if (replace)
+            {
+                start = "INSERT OR REPLACE INTO";
+            }
+            Result += $"{start} [{Table}] ([{string.Join("], [", dict.Keys)}])\nVALUES ('{string.Join("', '", dict.Values)}')";
             ReplaceNull();
             return this;
         }
@@ -476,8 +493,10 @@ namespace Common
                 {
                     conn.Open();
                     SQLiteCommand cmd = conn.CreateCommand();
+                    System.Diagnostics.Debug.WriteLine(this.DBPath);
+                    System.Diagnostics.Debug.WriteLine(Result);
                     cmd.CommandText = GetRequest();
-                    Console.WriteLine(cmd.CommandText);
+                    
                     SQLiteDataReader sqlreader = cmd.ExecuteReader();
                     DataTable objDataTable = new DataTable();
                     objDataTable.Load(sqlreader);
@@ -502,8 +521,9 @@ namespace Common
                 {
                     conn.Open();
                     SQLiteCommand cmd = conn.CreateCommand();
+                    System.Diagnostics.Debug.WriteLine(this.DBPath);
+                    System.Diagnostics.Debug.WriteLine(Result);
                     cmd.CommandText = GetRequest();
-                    Console.WriteLine(cmd.CommandText);
                     SQLiteDataReader sqlreader = cmd.ExecuteReader();
                     DataTable objDataTable = new DataTable();
                     objDataTable.Load(sqlreader);
@@ -533,7 +553,6 @@ namespace Common
                     conn.Open();
                     SQLiteCommand cmd = conn.CreateCommand();
                     cmd.CommandText = GetRequest();
-                    Console.WriteLine(cmd.CommandText);
                     cmd.ExecuteNonQuery();
                     return;
                 }

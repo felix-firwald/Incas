@@ -122,8 +122,8 @@ namespace Incubator_2.Common
             input = input.Trim();
             switch (input)
             {
-                case "edit table":
-                case "editing table":
+                case "table administrator":
+                case "table moderator":
                     using (Parameter p = new())
                     {
                         p.type = ParameterType.RESTRICT_EDIT_TABLE;
@@ -131,8 +131,8 @@ namespace Incubator_2.Common
                         if (bs.Result == Windows.DialogStatus.Yes)
                         {
                             p.name = $"{bs.SelectedDatabase}.{bs.SelectedTable}";
-                            User u = ProgramState.ShowUserSelector();
-                            p.value = u.id.ToString();
+                            p.DeleteParameterByTypeAndName();
+                            p.value = input.Split(' ')[1];
                             p.CreateParameter();
                         }
                         else

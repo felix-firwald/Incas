@@ -32,10 +32,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                using (Parameter p = new())
-                {
-                    return !p.Exists(ParameterType.RESTRICT_EDIT_TABLE, $"{_selectedDatabase.path}.{_selectedTable}", ProgramState.CurrentUser.id.ToString(), false);
-                }
+                return true;
             }
         }
         public Visibility CreateCommandVisibility
@@ -118,7 +115,6 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             {
                 if (!string.IsNullOrEmpty(_selectedTable))
                 {
-                    
                     return _dataTable;
                 }
                 else
@@ -165,7 +161,6 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             {
                 _searchText = value;
                 OnPropertyChanged(nameof(SearchText));
-                OnPropertyChanged(nameof(Table));
             }
         }
 
@@ -228,8 +223,10 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             if (!string.IsNullOrEmpty(SelectedTable))
             {
+                ProgramState.ShowWaitCursor();
                 _dataTable = requester.GetTable(SelectedTable, SelectedDatabase.path, CustomViewRequest);
                 OnPropertyChanged(nameof(Table));
+                ProgramState.ShowWaitCursor(false);
             }
         }
         private void UpdateListOfCommands()
@@ -302,6 +299,10 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             return requester.GetPKField(SelectedTable, SelectedDatabase.path);
         }
+        public List<string> GetFieldsSimple()
+        {
+            return requester.GetTableFieldsSimple(SelectedTable, SelectedDatabase.path);
+        }
         public void RefreshTable()
         {
             OnPropertyChanged(nameof(Databases));
@@ -338,6 +339,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             //this.RefreshTable();
             UpdateTable();
         }
+        
         
         #endregion
     }

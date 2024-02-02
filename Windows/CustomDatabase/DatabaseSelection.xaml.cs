@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
@@ -52,7 +53,7 @@ namespace Incubator_2.Windows.CustomDatabase
             q.DBPath = ProgramState.GetFullPathOfCustomDb(Database);
             q.AddCustomRequest($"SELECT * FROM [{Table}] {custom}");
             DataTable dt = q.Execute();
-            this.Grid.ItemsSource = dt.DefaultView;
+            this.Grid.ItemsSource = dt.DefaultView;  
         }
 
         private void SelectClick(object sender, RoutedEventArgs e)

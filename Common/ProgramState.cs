@@ -319,35 +319,53 @@ namespace Common
         #region Modal Dialogs
         public static void ShowErrorDialog(string message, string title = "Возникла неизвестная ошибка")
         {
-            Dialog d = new Dialog(message, title, Dialog.DialogIcon.Error);
-            d.ShowDialog();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Dialog d = new Dialog(message, title, Dialog.DialogIcon.Error);
+                d.ShowDialog();
+            });
         }
         public static void ShowExclamationDialog(string message, string title = "Обратите внимание")
         {
-            Dialog d = new Dialog(message, title, Dialog.DialogIcon.Exclamation);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Dialog d = new Dialog(message, title, Dialog.DialogIcon.Exclamation);
             d.ShowDialog();
+            });
         }
         public static void ShowInfoDialog(string message, string title = "Оповещение")
         {
-            Dialog d = new Dialog(message, title, Dialog.DialogIcon.Info);
-            d.ShowDialog();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Dialog d = new Dialog(message, title, Dialog.DialogIcon.Info);
+                d.ShowDialog();
+            });
         }
         public static DialogStatus ShowQuestionDialog(string message, string title, string yesText="Да", string noText = "Нет")
         {
             DialogQuestion d = new DialogQuestion(message, title, yesText, noText);
-            d.ShowDialog();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                d.ShowDialog();
+            });
             return d.status;
         }
         public static string ShowInputBox(string title, string description = "Введите значение")
         {
             DialogInput dialog = new(title, description);
-            dialog.ShowDialog();
+            Application.Current.Dispatcher.Invoke(() =>
+            {                
+                dialog.ShowDialog();     
+            });
             return dialog.Input;
         }
         public static BindingSelector ShowBindingSelector()
         {
             BindingSelector bd = new();
-            bd.ShowDialog();
+            Application.Current.Dispatcher.Invoke(() =>
+            {                                
+                bd.ShowDialog();
+            });
             return bd;
         }
         public static BindingSelector ShowBindingSelector(string database, bool dbEnabled = true)
@@ -359,19 +377,28 @@ namespace Common
         public static BindingSelector ShowBindingSelector(string database, string table, bool dbEnabled = true, bool tableEnabled = true)
         {
             BindingSelector bd = new(database, table, dbEnabled, tableEnabled);
-            bd.ShowDialog();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                bd.ShowDialog();
+            });
             return bd;
         }
         public static Session ShowActiveUserSelector(string helpText)
         {
             ActiveUserSelector au = new(helpText);
-            au.ShowDialog();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                au.ShowDialog();
+            });
             return au.SelectedSession;
         }
         public static User ShowUserSelector()
         {
             UserSelector us = new();
-            us.ShowDialog();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                us.ShowDialog();
+            });
             if (us.Result == DialogStatus.Yes)
             {
                 return us.SelectedUser;

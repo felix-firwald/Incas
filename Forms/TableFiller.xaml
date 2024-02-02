@@ -5,11 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms"
              mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="800">
-    <Expander x:Name="ExpanderMain" Margin="5" Style="{DynamicResource ExpanderMain}">
-        <Grid MinHeight="80">
-            <DataGrid Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid}"/>
-        </Grid>
-    </Expander>
-    
+             d:DesignHeight="160" d:DesignWidth="800">
+    <Grid MinHeight="80">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <Button Style="{DynamicResource ButtonMain}" MinWidth="200" Content="Вставить из базы данных" Click="InsertClick"/>
+        </StackPanel>
+        <DataGrid MinHeight="160" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid}" Grid.Row="1"/>
+    </Grid>
+
 </UserControl>

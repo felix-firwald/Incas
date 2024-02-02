@@ -33,6 +33,8 @@ namespace Incubator_2.ViewModels.VMAdmin
                         return "Администратор";
                     case PermissionGroup.Moderator:
                         return "Модератор";
+                    case PermissionGroup.Editor:
+                        return "Редактор";
                     case PermissionGroup.Operator:
                     default:
                         return "Оператор";

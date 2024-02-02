@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows"
         mc:Ignorable="d"
-        Title="UserEditor" Height="400" Width="700" Style="{DynamicResource Dialog}" WindowStartupLocation="CenterScreen">
+        Title="Редактор пользователя" Height="400" Width="700" Style="{DynamicResource WindowBase}" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="16*"/>
@@ -22,21 +22,28 @@
                 <StackPanel Orientation="Horizontal">
                     <Ellipse Fill="{DynamicResource Success}" Width="5" Height="5"/>
                     <Label Content="Администратор" Style="{DynamicResource LabelElement}"/>
-                    <Label Content="Полный доступ к управлению" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
+                    <Label Content="Полный доступ к управлению" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}"/>
                 </StackPanel>
             </ComboBoxItem>
             <ComboBoxItem >
                 <StackPanel Orientation="Horizontal">
                     <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
                     <Label Content="Модератор" Style="{DynamicResource LabelElement}"/>
-                    <Label Content="Ограниченный доступ к управлению" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
+                    <Label Content="Ограниченный доступ к управлению" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}"/>
+                </StackPanel>
+            </ComboBoxItem>
+            <ComboBoxItem >
+                <StackPanel Orientation="Horizontal">
+                    <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
+                    <Label Content="Редактор" Style="{DynamicResource LabelElement}"/>
+                    <Label Content="Расширенный функционал" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}"/>
                 </StackPanel>
             </ComboBoxItem>
             <ComboBoxItem>
                 <StackPanel Orientation="Horizontal">
                     <Ellipse Fill="{DynamicResource Error}" Width="5" Height="5"/>
                     <Label Content="Оператор" Style="{DynamicResource LabelElement}"/>
-                    <Label Content="Обычный функционал" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
+                    <Label Content="Обычный функционал" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}"/>
                 </StackPanel>
             </ComboBoxItem>
         </ComboBox>

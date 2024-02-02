@@ -51,9 +51,9 @@ namespace Incubator_2.Common
         {
             if (IsPK)
             {
-                return "id INTEGER PRIMARY KEY AUTOINCREMENT";
+                return "[id] INTEGER PRIMARY KEY AUTOINCREMENT";
             }
-            return $"{Name} {TypeOf} {GetNull()} {GetUniq()} {GetFK()}".Trim();
+            return $"[{Name}] {TypeOf} {GetNull()} {GetUniq()} {GetFK()}".Trim();
         }
     }
     public class AutoTableCreator
@@ -89,7 +89,7 @@ namespace Incubator_2.Common
 
         public string GetQueryText()
         {
-            string result = $"CREATE TABLE {TableName} (\n";
+            string result = $"CREATE TABLE [{TableName}] (\n";
             result += string.Join(",\n", definition.Values);
             result += "\n);";
             return result;

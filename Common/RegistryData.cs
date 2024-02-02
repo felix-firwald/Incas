@@ -96,7 +96,8 @@ namespace Common
             {
                 return "";
             }
-            return GetWorkspaceByName(name).GetValue("user").ToString();
+
+            return GetWorkspaceByName(name).GetValue("user", "").ToString();
         }
         public static void SetWorkspaceSelectedUser(string name, string user)
         {

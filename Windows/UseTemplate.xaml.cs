@@ -247,8 +247,17 @@ namespace Incubator_2.Windows
                     }
                     row++;
                 }
-                wb.SaveAs(this.dir.Text + $"\\{this.template.name} {DateTime.Now.ToString("d")}.xlsx");
-                ProgramState.OpenFolder(this.dir.Text);
+                try
+                {
+                    wb.SaveAs(this.dir.Text + $"\\{this.template.name} {DateTime.Now.ToString("d")}.xlsx");
+                    ProgramState.OpenFolder(this.dir.Text);
+                }
+                catch (IOException)
+                {
+                    ProgramState.ShowErrorDialog("При попытке записать файл возникла ошибка,\nвозможно файл уже открыт." +
+                        "\nЗакройте его и попробуйте снова", "Сохранение прервано");
+                }
+                
             }
         }
     }

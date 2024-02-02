@@ -11,11 +11,15 @@ using System.Windows;
 
 namespace Incubator_2.Common
 {
-    public enum PseudoBoolean // потому что эта тупая хуета не десериализует
+    public enum RestrictionType // потому что эта тупая хуета не десериализует
     {
-        Yes,
-        No
+        WriteEdit,
+        EditOnly,
+        WriteOnly,
+        ReadOnly,
+        NoAccess
     }
+
     public class UserParameters
     {
         public bool tasks_visibility { get; set; }
@@ -30,7 +34,7 @@ namespace Incubator_2.Common
         public bool write_log { get; set; }
         public bool write_listen_log { get; set; }
 
-        public bool IsRightPassword(string input) // всегда false потому что я еще не записывал в UserParameters через UserEditor пароль
+        public bool IsRightPassword(string input)
         {
             if (string.IsNullOrEmpty(password))
             {
@@ -73,8 +77,11 @@ namespace Incubator_2.Common
             }
             catch (FileNotFoundException)
             {
-                ProgramState.ShowErrorDialog($"Служебный файл пользователя не найден. " +
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ProgramState.ShowErrorDialog($"Служебный файл пользователя не найден. " +
                     $"Инкубатор попробует исправить ситуацию.", "Данные отсутствуют");
+                });
                 if (user.id == 1)
                 {
                     UserParameters p = new();

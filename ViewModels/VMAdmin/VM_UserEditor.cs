@@ -101,9 +101,11 @@ namespace Incubator_2.ViewModels.VMAdmin
                     return "0";
                 case PermissionGroup.Moderator:
                     return "1";
+                case PermissionGroup.Editor:
+                    return "2";
                 case PermissionGroup.Operator:
                 default:
-                    return "2";
+                    return "3";
             }
         }
         private PermissionGroup ParseToEnum(string index)
@@ -115,6 +117,8 @@ namespace Incubator_2.ViewModels.VMAdmin
                 case "1":
                     return PermissionGroup.Moderator;
                 case "2":
+                    return PermissionGroup.Editor;
+                case "3":
                 default:
                     return PermissionGroup.Operator;
             }

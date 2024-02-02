@@ -1,4 +1,6 @@
-﻿using Incubator_2.ViewModels;
+﻿using Common;
+using Incubator_2.ViewModels;
+using Incubator_2.Windows.CustomDatabase;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -32,7 +34,17 @@ namespace Incubator_2.Forms
             tag = t;
             vm = new VM_TableFiller(t);
             this.DataContext = vm;
-            this.ExpanderMain.Header = tag.name;
+        }
+        public void ApplyTable(DataTable dt)
+        {
+
+        }
+
+        private void InsertClick(object sender, RoutedEventArgs e)
+        {
+            BindingSelector bs = ProgramState.ShowBindingSelector();
+            DatabaseSelection s = new(bs.SelectedDatabase, bs.SelectedTable, "");
+            s.
         }
     }
 }
