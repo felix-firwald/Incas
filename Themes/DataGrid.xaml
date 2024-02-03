@@ -116,9 +116,9 @@
         </Setter>
     </Style>
 
-    <!--<Style x:Key="ColumnCheckBoxMain" TargetType="{x:Type DataGridCheckBoxColumn}">
+    <Style x:Key="ColumnCheckBoxMain" TargetType="DataGridCheckBoxColumn">
         
-    </Style>-->
+    </Style>
     <Style x:Key="ColumnHeaderMain" TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="{DynamicResource Element}"/>

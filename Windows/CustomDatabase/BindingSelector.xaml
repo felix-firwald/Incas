@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows.CustomDatabase"
         mc:Ignorable="d"
-        Title="Выбор привязки" Height="450" MinHeight="200" Width="450" MinWidth="200" Style="{DynamicResource WindowBase}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Выбор привязки" Height="450" MinHeight="200" Width="450" MinWidth="200" Style="{DynamicResource WindowBase}" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" Topmost="True" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>

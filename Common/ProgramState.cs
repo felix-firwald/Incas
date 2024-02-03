@@ -325,6 +325,22 @@ namespace Common
                 d.ShowDialog();
             });
         }
+        public static void ShowDatabaseErrorDialog(string message, string title = "Ошибка при выполнении запроса")
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Dialog d = new Dialog(message, title, Dialog.DialogIcon.DatabaseError);
+                d.ShowDialog();
+            });
+        }
+        public static void ShowAccessErrorDialog(string message, string title = "Нет доступа")
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Dialog d = new Dialog(message, title, Dialog.DialogIcon.AccessDenied);
+                d.ShowDialog();
+            });
+        }
         public static void ShowExclamationDialog(string message, string title = "Обратите внимание")
         {
             Application.Current.Dispatcher.Invoke(() =>

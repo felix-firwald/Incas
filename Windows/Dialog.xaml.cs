@@ -22,6 +22,8 @@ namespace Incubator_2.Windows
         public enum DialogIcon
         {
             Error,
+            DatabaseError,
+            AccessDenied,
             Exclamation,
             Info
         }
@@ -35,8 +37,14 @@ namespace Incubator_2.Windows
                 case DialogIcon.Error:
                     this.IconError.Visibility = Visibility.Visible;
                     break;
+                case DialogIcon.DatabaseError:
+                    this.IconDatabaseError.Visibility = Visibility.Visible;
+                    break;
+                case DialogIcon.AccessDenied:
+                    this.IconAccessDenied.Visibility = Visibility.Visible;
+                    break;
                 case DialogIcon.Exclamation:
-                    this.IconExlamation.Visibility = Visibility.Visible;
+                    this.IconExclamation.Visibility = Visibility.Visible;
                     break;
                 case DialogIcon.Info:
                     this.IconInfo.Visibility = Visibility.Visible;

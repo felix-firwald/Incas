@@ -7,6 +7,18 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/" x:Class="Incubator_2.Windows.Dialog"
         mc:Ignorable="d"
         Title="Ошибка" Style="{DynamicResource Dialog}" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
+    <Window.Resources>
+        <Style x:Key="IconStyle" TargetType="{x:Type Path}">
+            <!--<Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>-->
+            <Setter Property="Stretch" Value="UniformToFill"/>
+            <Setter Property="MinHeight" Value="50"/>
+            <Setter Property="MinWidth" Value="50"/>
+            <Setter Property="MaxHeight" Value="50"/>
+            <Setter Property="MaxWidth" Value="50"/>
+            <Setter Property="Grid.RowSpan" Value="2"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>
@@ -20,9 +32,18 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <fa:FontAwesome x:Name="IconError" HorizontalAlignment="Center" VerticalAlignment="Center" Icon="ExclamationCircle" FontSize="60" Foreground="{DynamicResource Error}" Grid.RowSpan="2" Visibility="Hidden"/>
-        <fa:FontAwesome x:Name="IconExlamation" HorizontalAlignment="Center" VerticalAlignment="Center" Icon="ExclamationTriangle" FontSize="50" Foreground="{DynamicResource Yellow}" Grid.RowSpan="2" Visibility="Hidden"/>
-        <fa:FontAwesome x:Name="IconInfo" HorizontalAlignment="Center" VerticalAlignment="Center" Icon="InfoCircle" FontSize="50" Foreground="{DynamicResource Icon}" Grid.RowSpan="2" Visibility="Hidden" />
+        <Path Style="{DynamicResource IconStyle}" x:Name="IconError" Fill="{DynamicResource Error}" Visibility="Hidden" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+        <Path Style="{DynamicResource IconStyle}" x:Name="IconExclamation" Fill="{DynamicResource Yellow}" Visibility="Hidden" Data="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2" Stretch="Uniform"/>
+        <Path Style="{DynamicResource IconStyle}" x:Name="IconInfo" Fill="{DynamicResource Icon}" Visibility="Hidden" Data="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+        <Grid x:Name="IconDatabaseError" Grid.RowSpan="2" Visibility="Hidden">
+            <Path Style="{DynamicResource IconStyle}" Fill="{DynamicResource Element}" Data="M12.096 6.223A5 5 0 0 0 13 5.698V7c0 .289-.213.654-.753 1.007a4.5 4.5 0 0 1 1.753.25V4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16c.536 0 1.058-.034 1.555-.097a4.5 4.5 0 0 1-.813-.927Q8.378 15 8 15c-1.464 0-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13h.027a4.6 4.6 0 0 1 0-1H8c-1.464 0-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10q.393 0 .774-.024a4.5 4.5 0 0 1 1.102-1.132C9.298 8.944 8.666 9 8 9c-1.464 0-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777M3 4c0-.374.356-.875 1.318-1.313C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4" Stretch="Uniform" />
+            <Path Style="{DynamicResource IconStyle}" Fill="{DynamicResource Error}" Data="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708" MinWidth="25" MinHeight="25" MaxWidth="0" MaxHeight="0" Height="0" Margin="32,27,0,0" />
+        </Grid>
+        <Grid x:Name="IconAccessDenied" Grid.RowSpan="2" Visibility="Hidden">
+            <Path Style="{DynamicResource IconStyle}" Fill="{DynamicResource Element}" Data="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" Stretch="Uniform" Margin="0,0,12,10" />
+            <Path Style="{DynamicResource IconStyle}" Fill="{DynamicResource Error}" Data="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708" MinWidth="25" MinHeight="25" MaxWidth="0" MaxHeight="0" Height="0" Margin="32,27,0,0" />
+        </Grid>
+
         <Label x:Name="Title" Grid.Column="1" Content="Возникла неизвестная ошибка" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" Width="240" FontWeight="Bold" FontFamily="JetBrains Mono"/>
         <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Margin="0,0,5,0" MaxHeight="400" >
             <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="По умолчанию, такой текст обозначает критическую неисправность в работе программы." Margin="5,0,10,10"/>

@@ -5,45 +5,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms.Tasks" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="140" d:DesignWidth="600" Margin="5">
-    <Border CornerRadius="5" BorderThickness="1" BorderBrush="{DynamicResource Element}" >
+             d:DesignHeight="40" d:DesignWidth="600">
+    <Border>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
-            <Label Style="{DynamicResource LabelElementSpecial}" Content="{Binding TaskName, FallbackValue=Название}" Grid.ColumnSpan="3" VerticalAlignment="Center" FontWeight="Bold" Margin="5,0,0,0"/>
-            <Rectangle Fill="{DynamicResource Element}" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" Height="1"/>
-            <TextBlock Style="{DynamicResource TextBlockMain}" Text="{Binding TaskText, FallbackValue=Описание задачи}" Grid.Row="1" Grid.ColumnSpan="3" Foreground="{DynamicResource GrayLight}" Margin="10,5,5,5" TextWrapping="Wrap"/>
-            <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Background="{x:Null}" Margin="0,0,0,40">
-                <ItemsControl x:Name="tStack" ItemsSource="{Binding Subtasks}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox Style="{DynamicResource CheckBoxMain}" TextElement.FontFamily="/Fonts/#JetBrains Mono" IsChecked="{Binding passed}" Content="{Binding text}" MinHeight="20"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
-            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5,0,0,0" VerticalAlignment="Center">
+
+            <Label Style="{DynamicResource LabelElement}" Content="{Binding TaskName, FallbackValue=Название}" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Column="1"/>
+            <!--<StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5,0,0,0" VerticalAlignment="Center">
                 <Label Style="{DynamicResource LabelElement}" Content="{Binding SubtasksPassedCount, FallbackValue=0}" VerticalAlignment="Center" FontSize="11"/>
                 <Label Style="{DynamicResource LabelElement}" Content="/" VerticalAlignment="Center" FontSize="11"/>
                 <Label Style="{DynamicResource LabelElement}" Content="{Binding SubtasksCount, FallbackValue=1}" VerticalAlignment="Center" FontSize="11"/>
-            </StackPanel>
-            <Rectangle Fill="{DynamicResource Element}" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Top" Height="1"/>
-            <ProgressBar Grid.Row="3" Grid.Column="1" Height="2" Margin="0,0,10,0" Background="{DynamicResource Basic}" BorderBrush="{DynamicResource Basic}" Foreground="{DynamicResource Success}" Value="{Binding SubtasksPassedCount}" Maximum="{Binding SubtasksCount}" VerticalAlignment="Center"/>
-            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Check" Grid.Row="3" Grid.Column="2" MouseDown="CheckClick"/>
+            </StackPanel>-->
+            <ProgressBar Grid.Column="2" Height="2" Margin="0,0,10,0" Background="{DynamicResource Basic}" BorderBrush="{DynamicResource Basic}" Foreground="{DynamicResource Success}" Value="{Binding SubtasksPassedCount}" Maximum="{Binding SubtasksCount}" VerticalAlignment="Center"/>
+            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Check" MouseDown="CheckClick"/>
+            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" Grid.Column="3"/>
+            <CheckBox Style="{DynamicResource Selector}" Grid.Column="4"/>
         </Grid>
     </Border>
 </UserControl>

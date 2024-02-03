@@ -44,7 +44,7 @@ namespace Incubator_2.Forms
         {
             BindingSelector bs = ProgramState.ShowBindingSelector();
             DatabaseSelection s = new(bs.SelectedDatabase, bs.SelectedTable, "");
-            s.
+            s.ShowDialog();
         }
     }
 }

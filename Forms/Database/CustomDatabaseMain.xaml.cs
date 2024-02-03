@@ -51,7 +51,8 @@ namespace Incubator_2.Forms.Database
                 }
                 CreateRecord cr = new(vm.SelectedTable, vm.GetTableDefinition(), vm.SelectedDatabase.path);
                 cr.ShowDialog();
-                vm.RefreshTable();
+                vm.UpdateTable();
+
             }
             catch (Exception ex)
             {

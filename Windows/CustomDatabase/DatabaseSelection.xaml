@@ -7,12 +7,13 @@
         mc:Ignorable="d"
         Title="Выбор записи" Height="650" Width="800" MinHeight="550" MinWidth="550" Style="{DynamicResource WindowBase}" SnapsToDevicePixels="True" UseLayoutRounding="True" Topmost="True" WindowStartupLocation="CenterScreen">
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="185*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <DataGrid x:Name="Grid" Style="{DynamicResource DataGridMain}" Background="{DynamicResource Black}" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" HeadersVisibility="Column" Margin="5,5,5,5" />
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
             <Button Style="{DynamicResource ButtonMain}" MinWidth="150" Click="SelectClick" IsDefault="True">
                 <StackPanel Orientation="Horizontal">
                     <Path RenderOptions.EdgeMode="Aliased"

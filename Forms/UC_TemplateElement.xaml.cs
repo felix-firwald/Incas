@@ -93,7 +93,7 @@ namespace Forms
             }
             else
             {
-                ProgramState.ShowExclamationDialog("Вам недоступна функция удаления шаблонов.", "Удаление прервано");
+                ProgramState.ShowAccessErrorDialog("Вам недоступна функция удаления шаблонов.", "Удаление прервано");
             }
         }
 
@@ -120,7 +120,7 @@ namespace Forms
             }
             else
             {
-                ProgramState.ShowExclamationDialog("Вам недоступна функция редактирования шаблонов.", "Редактирование прервано");
+                ProgramState.ShowAccessErrorDialog("Вам недоступна функция редактирования шаблонов.", "Редактирование прервано");
             }
         }
 
@@ -138,7 +138,7 @@ namespace Forms
             }
             else
             {
-                ProgramState.ShowExclamationDialog("Вам недоступна функция создания шаблонов.", "Создание прервано");
+                ProgramState.ShowAccessErrorDialog("Вам недоступна функция создания шаблонов.", "Создание прервано");
             }
         }
         private void UpdateList()

@@ -506,10 +506,9 @@ namespace Common
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog(
+                ProgramState.ShowDatabaseErrorDialog(
                     $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
-                    $"\nПроверьте правильность данных.",
-                    "Ошибка выполнения запроса");
+                    $"\nПроверьте правильность данных.");
                 return new DataTable();
             }
         }
@@ -537,10 +536,9 @@ namespace Common
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog(
+                ProgramState.ShowDatabaseErrorDialog(
                     $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
-                    $"\nПроверьте правильность данных.",
-                    "Ошибка выполнения запроса");
+                    $"\nПроверьте правильность данных.");
                 return null;
             }
         }
@@ -560,10 +558,9 @@ namespace Common
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog(
+                ProgramState.ShowDatabaseErrorDialog(
                     $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
-                    $"\nПроверьте правильность данных.",
-                    "Ошибка выполнения запроса");
+                    $"\nПроверьте правильность данных.");
             }
         }
         public void Accumulate()
