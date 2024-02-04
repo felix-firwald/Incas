@@ -31,6 +31,16 @@ namespace Common
                 connection.Close();
             }
         }
+        public static void InitializePort()
+        {
+            AutoTableCreator atc = new AutoTableCreator();
+            SQLiteConnection.CreateFile(ServerProcessor.Port);
+            Query q = new Query("");
+            q.typeOfConnection = DBConnectionType.CUSTOM;
+            q.DBPath = ServerProcessor.Port;
+            q.AddCustomRequest(GetProcessDefinition(atc));
+            q.ExecuteVoid();
+        }
         public static void InitializeData(string customName = null)
         {
             AutoTableCreator atc = new AutoTableCreator();
@@ -46,27 +56,31 @@ namespace Common
                 q.typeOfConnection = DBConnectionType.OTHER;
                 q.DBPath = customName;
             }
-            q.AddCustomRequest(GetTaskDefinition(atc))
+            q.BeginTransaction()
+             .AddCustomRequest(GetTaskDefinition(atc))
              .AddCustomRequest(GetSubtaskDefinition(atc))
              .AddCustomRequest(GetTemplateDefinition(atc))
              .AddCustomRequest(GetTagDefinition(atc))
              .AddCustomRequest(GetGeneratedDocumentDefinition(atc))
+             .EndTransaction()
              .ExecuteVoid();
         }
 
-        public static bool CreateTables()
+        public static bool InitializeService()
         {
             SQLiteConnection.CreateFile(ProgramState.DatabasePath);
             SQLiteConnection.CreateFile(ProgramState.ServiceDatabasePath);
             AutoTableCreator atc = new AutoTableCreator();
             Query q = new Query("");
             q.typeOfConnection = DBConnectionType.SERVICE;
-            q.AddCustomRequest(GetParameterDefinition(atc))
+            q.BeginTransaction()
+             .AddCustomRequest(GetParameterDefinition(atc))
              .AddCustomRequest(GetSectorDefinition(atc))
              .AddCustomRequest(GetUserDefinition(atc))
              .AddCustomRequest(GetSessionDefinition(atc))
              .AddCustomRequest(GetDatabasesDefinition(atc))
              .AddCustomRequest(GetCommandDefinition(atc))
+             .EndTransaction()
              .ExecuteVoid();
             InitializeData();
             return true;
@@ -91,6 +105,12 @@ namespace Common
         }
 
         #region Definitions
+        private static string GetProcessDefinition(AutoTableCreator atc)
+        {
+            atc.Initialize(typeof(Incubator_2.Models.Process), "Processes");
+            atc.SetAsUnique("identifier");
+            return atc.GetQueryText();
+        }
         private static string GetSectorDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Sector), "Sectors");

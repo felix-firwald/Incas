@@ -158,7 +158,7 @@ namespace Common
         #endregion
         private static bool CreateTablesInDatabase()
         {
-            return DatabaseManager.CreateTables();
+            return DatabaseManager.InitializeService();
         }
         public static Parameter GetParameter(ParameterType type, string name, string defaultValue="0", bool createIfNot = true)
         {
@@ -297,7 +297,7 @@ namespace Common
                 CurrentSession = ms;
                 ms.ClearOldestSessions();
             }
-            Directory.CreateDirectory(ServerProcessor.Port);
+            //Directory.CreateDirectory(ServerProcessor.Port);
         }
         public static List<Session> GetActiveSessions()
         {

@@ -34,7 +34,7 @@ namespace Incubator_2.Common
         {
             if (FKtable != null)
             {
-                return $"REFERENCES {FKtable} ({FKfield}) ON DELETE CASCADE";
+                return $"REFERENCES [{FKtable}] ([{FKfield}]) ON DELETE CASCADE";
             }
             return "";
         }
@@ -97,6 +97,25 @@ namespace Incubator_2.Common
 
         private static string SwitchOnType(Type type)
         {
+            switch (Type.GetTypeCode(type.GetType()))
+            {
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                    return "INTEGER";
+                case TypeCode.Double:
+                    return "DOUBLE";
+                case TypeCode.Boolean:
+                    return "BOOLEAN";
+                case TypeCode.String:
+                case TypeCode.DateTime:
+                case TypeCode.Object:
+                    return "TEXT";
+            }
+
             if (type == typeof(int))
             {
                 return "INTEGER";

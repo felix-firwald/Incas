@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
 
 namespace Common
@@ -23,6 +24,12 @@ namespace Common
         SERVICE,
         CUSTOM,
         OTHER
+    }
+    public enum ExecuteType
+    {
+        EXECUTE,
+        EXECUTE_VOID,
+        EXECUTE_ONE
     }
     public struct Field
     {
@@ -475,7 +482,7 @@ namespace Common
             SQLiteConnection conn = new SQLiteConnection($"Data source={path}; Version=3; UseUTF16Encoding=True", true);
             return conn;
         }
-        private string GetRequest(bool clear = true)
+        private string GetRequest(bool clear = false)
         {
             string tmp = Result;
             Console.WriteLine($"[{DateTime.Now}] {tmp}");
@@ -504,7 +511,7 @@ namespace Common
                 }
 
             }
-            catch (Exception ex)
+            catch (SQLiteException ex)
             {
                 ProgramState.ShowDatabaseErrorDialog(
                     $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
@@ -534,7 +541,7 @@ namespace Common
                 }
 
             }
-            catch (Exception ex)
+            catch (SQLiteException ex)
             {
                 ProgramState.ShowDatabaseErrorDialog(
                     $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
@@ -556,11 +563,44 @@ namespace Common
                 }
 
             }
-            catch (Exception ex)
+            catch (SQLiteException ex)
             {
                 ProgramState.ShowDatabaseErrorDialog(
                     $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
                     $"\nПроверьте правильность данных.");
+            }
+        }
+        private void SwitchOnSqliteException(SQLiteException ex, ExecuteType executeType)
+        {
+            switch (ex.ErrorCode)
+            {
+                case 5: // busy
+                case 6: // locked
+                    Thread.Sleep(50);
+                    switch (executeType)
+                    {
+                        case ExecuteType.EXECUTE:
+                            Execute();
+                            break;
+                        case ExecuteType.EXECUTE_VOID:
+                            ExecuteVoid();
+                            break;
+                        case ExecuteType.EXECUTE_ONE:
+                            ExecuteOne();
+                            break;
+                    }
+                    break;
+                case 11:
+                case 26:
+                    ProgramState.ShowDatabaseErrorDialog(
+                        $"База данных повреждена." +
+                        $"\nЕё использование невозможно.\n\nСведения об ошибке: {ex}");
+                    break;
+                default:
+                    ProgramState.ShowDatabaseErrorDialog(
+                        $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
+                        $"\nПроверьте правильность данных.");
+                    break;
             }
         }
         public void Accumulate()

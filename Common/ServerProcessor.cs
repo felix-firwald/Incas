@@ -1,5 +1,6 @@
 ﻿using Common;
 using DocumentFormat.OpenXml.Presentation;
+using Incubator_2.Models;
 using Incubator_2.Windows;
 using Newtonsoft.Json;
 using System;
@@ -68,23 +69,18 @@ namespace Incubator_2.Common
     }
     static class ServerProcessor
     {
-        public static string Port { get { return $"{ProgramState.ServerProcesses}\\Port_{ProgramState.CurrentSession.slug}"; } }
+        public static string Port { get { return $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession.slug}.incport"; } }
         private static List<Process> WaitList = new();
         private static bool StopPulling = false;
         #region Reusable Base Functionality
         public static void StopPort()
         {
             StopPulling = true;
-            if (Directory.Exists(Port))
+            try
             {
-                string[] files = Directory.GetFiles(Port);
-                foreach (string file in files)
-                {
-                    File.SetAttributes(file, FileAttributes.Normal);
-                    File.Delete(file);
-                }
-                Directory.Delete(Port);
+                File.Delete(Port);
             }
+            catch { }
         }
         private static string GetKeyByRecipient(string recipient)
         {
@@ -96,49 +92,51 @@ namespace Incubator_2.Common
             }
             else if (result.Length > 32)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    ProgramState.ShowInfoDialog(result.Length.ToString());
-                });
+                //Application.Current.Dispatcher.Invoke(() =>
+                //{
+                //    ProgramState.ShowInfoDialog(result.Length.ToString());
+                //});
                 result = result.Substring(0, 31);
             }
             return result;
         }
-        private async static void ToFile(Process process)
+        private async static void SendToPort(Process process)
         {
             await Task.Run(() =>
             {
                 Logger.WriteLog($"Encrypting process {process.id}");
                 string content = JsonConvert.SerializeObject(process);
-                string filename = $"{ProgramState.ServerProcesses}\\Port_{process.recipient}\\{process.id}.procinc";
-                File.WriteAllTextAsync(filename, Cryptographer.EncryptString(GetKeyByRecipient(process.recipient), content));
+                using (Models.Process p = new())
+                {
+                    p.identifier = process.id;
+                    p.content = Cryptographer.EncryptString(GetKeyByRecipient(process.recipient), content);
+                    p.Send(process.recipient);
+                }
             });
         }
-        private static Process FromFile(string filename)
+        private static Process Parse(string input)
         {
             Process result = new Process();
             try
             {
-                Logger.WriteLog($"Decrypting file of process {filename}");
-                string output = Cryptographer.DecryptString(GetKeyByRecipient(ProgramState.CurrentSession.slug), File.ReadAllText(filename));
+                string output = Cryptographer.DecryptString(GetKeyByRecipient(ProgramState.CurrentSession.slug), input);
                 result = JsonConvert.DeserializeObject<Process>(output);
             }
             catch (Exception e)
             {
+                ProgramState.ShowErrorDialog(e.Message);
                 Logger.WriteLog(e.Message, LogType.ERROR);
                 return new Process();
             }
-            
-            File.Delete(filename);
             return result;
         }
         private static void RemoveOldest()
         {
             try
             {
-                string[] dirs = Directory.GetDirectories(ProgramState.ServerProcesses);
+                string[] files = Directory.GetFiles(ProgramState.ServerProcesses);
 
-                foreach (string dir in dirs)
+                foreach (string dir in files)
                 {
                     DirectoryInfo di = new DirectoryInfo(dir);
                     if (di.CreationTime < DateTime.Now.AddHours(-12) || !di.Name.StartsWith("Port"))
@@ -164,13 +162,16 @@ namespace Incubator_2.Common
                 {
                     try
                     {
-                        if (!Directory.Exists(Port))
+                        if (!File.Exists(Port))
                         {
-                            Directory.CreateDirectory(Port);
+                            DatabaseManager.InitializePort();
                         }
-                        foreach (string f in Directory.GetFiles(Port))
+                        using (Models.Process process = new())
                         {
-                            Switcher(FromFile(f));                            
+                            foreach (string content in process.GetNewProcesses())
+                            {
+                                Switcher(Parse(content));
+                            }
                         }
                     }
                     catch (Exception e)
@@ -178,7 +179,7 @@ namespace Incubator_2.Common
                         Logger.WriteLog(e.Message, LogType.ERROR);
                         continue;
                     }
-                    Thread.Sleep(200);
+                    Thread.Sleep(100);
                 }
             });
         }
@@ -328,14 +329,14 @@ namespace Incubator_2.Common
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.TERMINATE;
             WriteLogSending(process);
-            ToFile(process);
+            SendToPort(process);
         }
         public static void SendRestartProcess(string recipient)
         {
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.RESTART;
             WriteLogSending(process);
-            ToFile(process);
+            SendToPort(process);
         }
         public static void SendExplicitProcess(ExplicitMessage message, string recipient)
         {
@@ -343,7 +344,7 @@ namespace Incubator_2.Common
             process.target = ProcessTarget.EXPLICIT;
             process.content = JsonConvert.SerializeObject(message);
             WriteLogSending(process);
-            ToFile(process);
+            SendToPort(process);
         }
 
         #endregion
@@ -352,7 +353,7 @@ namespace Incubator_2.Common
         {
             Process outputProcess = CreateResponseProcess(inputProcess);
             outputProcess.content = (ds == DialogStatus.Yes) ? "Да" : "Нет";
-            ToFile(outputProcess);
+            SendToPort(outputProcess);
         }
         #endregion
     }

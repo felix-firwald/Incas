@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using Incubator_2.Common;
 using Models;
 //using Microsoft.Office.Core;
 
@@ -102,6 +103,20 @@ namespace Common
         protected Query StartCommandToService()
         {
             return new Query(this.tableName, DBConnectionType.SERVICE);
+        }
+        protected Query StartCommandToOtherPort(string port)
+        {
+            return new Query(this.tableName, DBConnectionType.OTHER)
+            {
+                DBPath = $"{ProgramState.ServerProcesses}\\{port}.incport"
+            };
+        }
+        protected Query StartCommandToMyPort()
+        {
+            return new Query(this.tableName, DBConnectionType.OTHER)
+            {
+                DBPath = ServerProcessor.Port
+            };
         }
         protected Query StartCommandToChat(string path)
         {
