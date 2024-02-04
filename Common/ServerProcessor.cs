@@ -179,7 +179,7 @@ namespace Incubator_2.Common
                         Logger.WriteLog(e.Message, LogType.ERROR);
                         continue;
                     }
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                 }
             });
         }

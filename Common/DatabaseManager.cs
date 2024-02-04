@@ -207,7 +207,10 @@ namespace Common
                     string result = string.Join(";\n", commandsText);
                     commandsText.Clear();
                     Query q = new("");
-                    q.AddCustomRequest(result);
+                    q.BeginTransaction();
+                    q.AddCustomRequest(result + ";");
+                    q.EndTransaction();                    
+                    ProgramState.ShowInfoDialog(q.Result);
                     q.ExecuteVoid();
                 });
             } 

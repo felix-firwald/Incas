@@ -192,8 +192,8 @@ namespace Incubator_2.Forms
                     doc.fileName = this.Filename.Text;
                     doc.template = this.template.id;
                     doc.templateName = this.template.name;
-                    doc.AddRecord();
                     doc.SaveFilledTags(filledTags);
+                    doc.AddRecord();
                 }
             }
             catch (IOException)

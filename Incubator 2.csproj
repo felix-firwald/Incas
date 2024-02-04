@@ -49,8 +49,8 @@
     <PackageIcon>Logo.png</PackageIcon>
     <PackageId>FirwaldTechnologies.Incubator</PackageId>
     <SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
-    <Product>Incubator</Product>
-    <Title>Инкубатор</Title>
+    <Product>INCAS</Product>
+    <Title>INCAS</Title>
     <Description>Офисное приложение</Description>
     <FileVersion>0.9.0.0</FileVersion>
   </PropertyGroup>

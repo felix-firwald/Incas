@@ -12,6 +12,11 @@ using System.Threading.Tasks;
 
 namespace Incubator_2.Models
 {
+    public struct SGeneratedTag
+    {
+        public int tag { get; set; }
+        public string value { get; set; }
+    }
     public struct SGeneratedDocument
     {
         public int id;
@@ -21,14 +26,15 @@ namespace Incubator_2.Models
         public string fileName;
         public string reference;
         public List<SGeneratedTag> filledTags;
+        public string filledTagsString;
 
         public List<SGeneratedTag> GetFilledTags()
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(File.ReadAllText(RegistreCreatedJSON.GetReference(this.template, this.reference)));
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(Cryptographer.DecryptString(filledTagsString));
         }
         public void SaveFilledTags(List<SGeneratedTag> tags)
         {
-            File.WriteAllText(RegistreCreatedJSON.GetReference(this.template, this.reference), Newtonsoft.Json.JsonConvert.SerializeObject(tags));
+            filledTagsString = Cryptographer.EncryptString(Newtonsoft.Json.JsonConvert.SerializeObject(tags));
         }
 
         public GeneratedDocument AsModel()
@@ -40,6 +46,7 @@ namespace Incubator_2.Models
             d.generatedTime = generatedTime;
             d.fileName = fileName;
             d.reference = reference;
+            d.content = filledTagsString;
             return d;
         }
     }
@@ -51,6 +58,7 @@ namespace Incubator_2.Models
         public DateTime generatedTime { get; set; }
         public string fileName { get; set; }
         public string reference { get; set; }
+        public string content { get; set; }
 
         public GeneratedDocument()
         {
@@ -65,6 +73,7 @@ namespace Incubator_2.Models
             d.generatedTime = generatedTime;
             d.fileName = fileName;
             d.reference = reference;
+            d.filledTagsString = content;
             return d;
         }
 
@@ -121,7 +130,7 @@ namespace Incubator_2.Models
                     {nameof(templateName), templateName },
                     {nameof(generatedTime), generatedTime.ToString() },
                     {nameof(fileName), fileName },
-                    {nameof(reference), reference },
+                    {nameof(content), content },
                 })
                 .Accumulate();
         }
@@ -144,12 +153,9 @@ namespace Incubator_2.Models
         {
             return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(File.ReadAllText(RegistreCreatedJSON.GetReference(this.template, this.reference)));
         }
-        public async void SaveFilledTags(List<SGeneratedTag> tags)
+        public void SaveFilledTags(List<SGeneratedTag> tags)
         {
-            await System.Threading.Tasks.Task.Run(() =>
-            {
-                File.WriteAllText(RegistreCreatedJSON.GetReference(this.template, this.reference), Newtonsoft.Json.JsonConvert.SerializeObject(tags));
-            });
+            content = Cryptographer.EncryptString(Newtonsoft.Json.JsonConvert.SerializeObject(tags));
         }
     }
 }

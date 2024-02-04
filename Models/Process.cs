@@ -34,11 +34,11 @@ namespace Incubator_2.Models
             DataTable dt = StartCommandToMyPort()
                 .Select()
                 .WhereEqual(nameof(received), "0")
-                .Execute();
-            SetReceived();
+                .Execute();           
             List<string> result = new();
             if (dt.Rows.Count > 0)
             {
+                SetReceived();
                 foreach (DataRow dr in dt.Rows)
                 {
                     result.Add(dr["content"].ToString());

@@ -167,12 +167,12 @@ namespace Common
         #region Transaction
         public Query BeginTransaction()
         {
-            Result += "BEGIN TRANSACTION\n";
+            Result += "BEGIN TRANSACTION;\n";
             return this;
         }
         public Query EndTransaction()
         {
-            Result += "\nEND TRANSACTION";
+            Result += "\nEND TRANSACTION;";
             return this;
         }
         #endregion
