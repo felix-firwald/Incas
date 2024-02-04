@@ -34,11 +34,12 @@ namespace Incubator_2.Common
         GET_USER = 105,
         // ALL USERS
         OPEN_SEQUENCER = 201,
-        COPY_FILE = 202,
-        OPEN_WORD = 203,
-        OPEN_EXCEL = 204,
+        COPY_TEXT = 202,
+        COPY_FILE = 203,
+        OPEN_WORD = 204,
+        OPEN_EXCEL = 205,
         UPDATE_MAIN = 301,
-         
+        
     }
     enum ResponseCode
     {
@@ -92,10 +93,6 @@ namespace Incubator_2.Common
             }
             else if (result.Length > 32)
             {
-                //Application.Current.Dispatcher.Invoke(() =>
-                //{
-                //    ProgramState.ShowInfoDialog(result.Length.ToString());
-                //});
                 result = result.Substring(0, 31);
             }
             return result;
@@ -170,6 +167,7 @@ namespace Incubator_2.Common
                         {
                             foreach (string content in process.GetNewProcesses())
                             {
+                                ProgramState.MainWindow.ProcessHandled = true;
                                 Switcher(Parse(content));
                             }
                         }
@@ -201,6 +199,9 @@ namespace Incubator_2.Common
                         case ProcessTarget.EXPLICIT: // admin process
                             ShowExplicitMessageProcessHandle(process.content, process);
                             break;
+                        case ProcessTarget.COPY_TEXT:
+                            Clipboard.SetText(process.content);
+                            break;
                         case ProcessTarget.UNKNOWN:
                         default: break;
                     }
@@ -217,6 +218,8 @@ namespace Incubator_2.Common
                             break;
                     }
                 }
+                Thread.Sleep(500);
+                ProgramState.MainWindow.ProcessHandled = false;
             });
             
         }
@@ -343,6 +346,14 @@ namespace Incubator_2.Common
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.EXPLICIT;
             process.content = JsonConvert.SerializeObject(message);
+            WriteLogSending(process);
+            SendToPort(process);
+        }
+        public static void SendCopyTextProcess(string text, string recipient)
+        {
+            Process process = CreateQueryProcess(recipient);
+            process.target = ProcessTarget.COPY_TEXT;
+            process.content = text;
             WriteLogSending(process);
             SendToPort(process);
         }

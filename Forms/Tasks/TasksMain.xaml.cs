@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Incubator_2.ViewModels.VM_Tasks;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,20 +23,22 @@ namespace Incubator_2.Forms.Tasks
     /// </summary>
     public partial class TasksMain : UserControl
     {
+        public VM_TasksMain vm;
         public TasksMain()
         {
             InitializeComponent();
-            UpdateList();
+            vm = new();
+            this.DataContext = vm;
         }
-        public void UpdateList()
-        {
-            using (Task t = new())
-            {
-                t.GetAllTasks().ForEach(task =>
-                {
-                    this.ActualTasks.Children.Add(new TaskElement(task));
-                });
-            }
-        }
+        //public void UpdateList()
+        //{
+        //    using (Task t = new())
+        //    {
+        //        t.GetAllTasks().ForEach(task =>
+        //        {
+        //            this.ActualTasks.Children.Add(new TaskElement(task));
+        //        });
+        //    }
+        //}
     }
 }

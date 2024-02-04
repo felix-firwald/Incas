@@ -5,16 +5,65 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms.Communication"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Cursor="">
     <GroupBox Style="{DynamicResource MainGroupBox}" Header="ВНУТРЕННЯЯ СВЯЗЬ">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="100"/>
-                <ColumnDefinition Width="2*" MinWidth="300" />
+                <ColumnDefinition MinWidth="100" MaxWidth="300"/>
+                <ColumnDefinition Width="3*" MinWidth="300" />
             </Grid.ColumnDefinitions>
-            <ListBox x:Name="Users" Style="{DynamicResource ListBoxMain}" Background="{x:Null}"/>
-            <Border Grid.Column="1" CornerRadius="5" Background="{DynamicResource Black}">
-                
+            <ListBox x:Name="Users" Style="{DynamicResource ListBoxMain}" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser}" DisplayMemberPath="fullname" ItemContainerStyle="{DynamicResource ListBoxItemMicro}" Background="{x:Null}">
+            </ListBox>
+            <GridSplitter/>
+            <Border Grid.Column="1" CornerRadius="2" BorderBrush="{DynamicResource Element}" BorderThickness="2" Background="{DynamicResource Black}">
+                <StackPanel>
+                    <Border MinHeight="60" Background="{DynamicResource Dark}">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Margin="24,0,24,0">
+                                <Path Fill="{DynamicResource Element}" Data="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" VerticalAlignment="Bottom" Margin="0,0,0,30" RenderTransformOrigin="0.5,0.5" >
+                                    <Path.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="2" ScaleY="2"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Path.RenderTransform>
+                                </Path>
+                                <Path Fill="{DynamicResource Element}" Data="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" >
+                                    <Path.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="2" ScaleY="2"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Grid>
+                            <Rectangle Fill="{DynamicResource Element}" Width="1" Margin="0,5,0,5"/>
+                            <StackPanel VerticalAlignment="Center">
+                                <Label Style="{DynamicResource LabelElement}" Content="{Binding SelectedUser.fullname}" VerticalAlignment="Center" FontSize="13"/>
+                                <Label Style="{DynamicResource LabelElement}" Content="{Binding SelectedUser.post}" VerticalAlignment="Center" Foreground="{DynamicResource DarkYellow}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                    <WrapPanel>
+                        <Button Style="{DynamicResource ButtonSquare}">
+                            <StackPanel HorizontalAlignment="Center">
+                                <Path Fill="{DynamicResource Element}" Data="M10 1.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5zm-2 0h1v1A2.5 2.5 0 0 0 6.5 5h3A2.5 2.5 0 0 0 12 2.5v-1h1a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2" HorizontalAlignment="Center"/>
+                                <Label Style="{DynamicResource LabelElement}" Content="Буфер обмена"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{DynamicResource ButtonSquare}">
+                            <StackPanel HorizontalAlignment="Center">
+                                <Path Fill="{DynamicResource Element}" Data="M10 1.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5zm-2 0h1v1A2.5 2.5 0 0 0 6.5 5h3A2.5 2.5 0 0 0 12 2.5v-1h1a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2" HorizontalAlignment="Center"/>
+                                <Label Style="{DynamicResource LabelElement}" Content="Отправить файл"/>
+                            </StackPanel>
+                        </Button>
+                    </WrapPanel>
+                    
+                </StackPanel>
             </Border>
         </Grid>
     </GroupBox>

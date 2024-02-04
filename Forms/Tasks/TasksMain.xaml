@@ -13,29 +13,19 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" MinWidth="300"/>
-            <ColumnDefinition Width="2*" MinWidth="250"/>
-        </Grid.ColumnDefinitions>
-        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ЗАДАЧИ В РАБОТЕ" Grid.Column="0" Margin="5,5,5,5" Grid.RowSpan="2">
-            <StackPanel x:Name="ActualTasks">
 
-            </StackPanel>
+        </Grid.ColumnDefinitions>
+        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ЗАДАЧИ В РАБОТЕ" Grid.Column="0"  Grid.RowSpan="2">
+            <DataGrid Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Source=Tasks}" IsReadOnly="True" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="N" Binding="{Binding id}"/>
+                    <DataGridTextColumn Header="Наименование задачи" Binding="{Binding name}"/>
+                    <DataGridTextColumn Header="Дата выполнения" Binding="{Binding dateFinished}"/>
+                    <DataGridCheckBoxColumn Header="Статус задачи" ElementStyle="{DynamicResource CheckBoxMain}" Binding="{Binding passed}"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </GroupBox>
         <GridSplitter Grid.Column="0" Grid.RowSpan="2"/>
-
-        <GridSplitter Style="{DynamicResource SplitterHorizontal}" Grid.Row="1" Grid.Column="1" />
-        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ВЫБРАННАЯ ЗАДАЧА" Grid.Column="1" Grid.RowSpan="2">
-            <StackPanel>
-                <Grid MinHeight="80">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Path Fill="{DynamicResource Icon}" Data="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0" Stretch="Uniform" Margin="20,20,20,20"/>
-                    <Label Style="{DynamicResource LabelElement}" Content="Название задачи" Grid.Column="1"/>
-                </Grid>
-            </StackPanel>
-        </GroupBox>
-
 
     </Grid>
 </UserControl>

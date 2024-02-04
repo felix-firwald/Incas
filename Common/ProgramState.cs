@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Incubator_2.Windows.CustomDatabase;
+using Incubator_2.ViewModels;
 
 
 namespace Common
@@ -67,6 +68,7 @@ namespace Common
         public static Session CurrentSession { get; private set; }
         #endregion
         public static Sector CurrentSector { get; private set; }
+        public static MV_MainWindow MainWindow { get; set; }
         #region Path and init
         public async static void SetCommonPath(string path)
         {

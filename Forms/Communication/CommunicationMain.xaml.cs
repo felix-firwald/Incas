@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Incubator_2.ViewModels.VM_Communication;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,20 +22,12 @@ namespace Incubator_2.Forms.Communication
     /// </summary>
     public partial class CommunicationMain : UserControl
     {
+        VM_CommunicationMain vm;
         public CommunicationMain()
         {
             InitializeComponent();
-            GetAllUsers();
-        }
-        public void GetAllUsers()
-        {
-            using (User us = new())
-            {
-                foreach (var item in us.GetAllUsers())
-                {
-                    this.Users.Items.Add(item.fullname);
-                }
-            }
+            vm = new();
+            this.DataContext = vm;
         }
 
     }

@@ -11,7 +11,7 @@ namespace Incubator_2.ViewModels
         private string _fullname = "Имя";
         private string _post = "Должность";
         private string _workspaceName = "Имя инкубатора";
-
+        private bool _processHandled = false;
         public MV_MainWindow()
         {
             LoadInfo();
@@ -36,6 +36,18 @@ namespace Incubator_2.ViewModels
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
+            }
+        }
+        public bool ProcessHandled
+        {
+            get
+            {
+                return _processHandled;
+            }
+            set
+            {
+                _processHandled = value;
+                OnPropertyChanged(nameof(ProcessHandled));
             }
         }
 

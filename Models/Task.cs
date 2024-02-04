@@ -65,8 +65,20 @@ namespace Models
             foreach (DataRow dr in dt.Rows)
             {
                 this.Serialize(dr);
-                this.ParseSubtasksFromJSON(dr["subtasks"].ToString());
                 result.Add(this.AsStruct());
+            }
+            return result;
+        }
+        public List<Task> GetAllTasksModels()
+        {
+            DataTable dt = StartCommand()
+                .Select()
+                .Execute();
+            List<Task> result = new();
+            foreach (DataRow dr in dt.Rows)
+            {
+                this.Serialize(dr);
+                result.Add(this);
             }
             return result;
         }

@@ -26,6 +26,7 @@ namespace Incubator_2
                 Application.Current.Shutdown();
             }
             vm = new MV_MainWindow();
+            ProgramState.MainWindow = vm;
             this.DataContext = vm;
             if (string.IsNullOrEmpty(ProgramState.CurrentUserParameters.password))
             {

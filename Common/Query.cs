@@ -82,6 +82,7 @@ namespace Common
         public string Result { get; private set; }
         private bool isWhereAlready = false;
         private bool isUpdateAlready = false;
+        private uint recursion = 0;
         public DBConnectionType typeOfConnection { get; set; }
         public string DBPath { get; set; }
         public Query(string table, DBConnectionType type = DBConnectionType.BASE) 
@@ -513,9 +514,7 @@ namespace Common
             }
             catch (SQLiteException ex)
             {
-                ProgramState.ShowDatabaseErrorDialog(
-                    $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
-                    $"\nПроверьте правильность данных.");
+                SwitchOnSqliteException(ex, ExecuteType.EXECUTE);
                 return new DataTable();
             }
         }
@@ -543,9 +542,7 @@ namespace Common
             }
             catch (SQLiteException ex)
             {
-                ProgramState.ShowDatabaseErrorDialog(
-                    $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
-                    $"\nПроверьте правильность данных.");
+                SwitchOnSqliteException(ex, ExecuteType.EXECUTE_ONE);
                 return null;
             }
         }
@@ -565,9 +562,7 @@ namespace Common
             }
             catch (SQLiteException ex)
             {
-                ProgramState.ShowDatabaseErrorDialog(
-                    $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
-                    $"\nПроверьте правильность данных.");
+                SwitchOnSqliteException(ex, ExecuteType.EXECUTE_VOID);
             }
         }
         private void SwitchOnSqliteException(SQLiteException ex, ExecuteType executeType)
@@ -577,17 +572,26 @@ namespace Common
                 case 5: // busy
                 case 6: // locked
                     Thread.Sleep(50);
-                    switch (executeType)
+                    recursion++;
+                    if (recursion < 20)
                     {
-                        case ExecuteType.EXECUTE:
-                            Execute();
-                            break;
-                        case ExecuteType.EXECUTE_VOID:
-                            ExecuteVoid();
-                            break;
-                        case ExecuteType.EXECUTE_ONE:
-                            ExecuteOne();
-                            break;
+                        switch (executeType)
+                        {
+                            case ExecuteType.EXECUTE:
+                                Execute();
+                                break;
+                            case ExecuteType.EXECUTE_VOID:
+                                ExecuteVoid();
+                                break;
+                            case ExecuteType.EXECUTE_ONE:
+                                ExecuteOne();
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        recursion = 0;
+                        ProgramState.ShowDatabaseErrorDialog("Не удалось выполнить запрос, поскольку база данных занята другим процессом.");
                     }
                     break;
                 case 11:

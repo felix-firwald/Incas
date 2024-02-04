@@ -115,25 +115,41 @@
                     <ControlTemplate.Triggers>
 
                         <Trigger Property="IsMouseOver" Value="True">
-                            <!--<Trigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.100" To="#FF3E414B" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
-
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.250" To="#1d1d1f" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.ExitActions>-->
                             <Setter Property="Foreground" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" TargetName="border" Value="DodgerBlue"/>
+                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ButtonSquare" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource Icon}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="MinHeight" Value="80"/>
+        <Setter Property="MaxHeight" Value="80"/>
+        <Setter Property="MinWidth" Value="80"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" Opacity="1" CornerRadius="5" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource Element}" BorderThickness="0" SnapsToDevicePixels="true">
+                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter TargetName="border" Property="BorderThickness" Value="1"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
                             <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
