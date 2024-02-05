@@ -69,11 +69,11 @@ namespace Models
             }
             return sessions;
         }
-        public List<Session> GetOpenedSessions()
+        public List<Session> GetOpenedSessions(bool opened = true)
         {
             DataTable dt = StartCommandToService()
                 .Select()
-                .WhereEqual("active", "1")
+                .WhereEqual("active", opened? 1 : 0)
                 .GroupBy("userId")
                 .Having("MAX(slug)")
                 .OrderByASC("user")

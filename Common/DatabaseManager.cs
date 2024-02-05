@@ -209,8 +209,7 @@ namespace Common
                     Query q = new("");
                     q.BeginTransaction();
                     q.AddCustomRequest(result + ";");
-                    q.EndTransaction();                    
-                    ProgramState.ShowInfoDialog(q.Result);
+                    q.EndTransaction();
                     q.ExecuteVoid();
                 });
             } 

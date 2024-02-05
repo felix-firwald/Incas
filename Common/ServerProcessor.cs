@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Presentation;
 using Incubator_2.Models;
 using Incubator_2.Windows;
+using Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -99,7 +100,7 @@ namespace Incubator_2.Common
         }
         private async static void SendToPort(Process process)
         {
-            await Task.Run(() =>
+            await System.Threading.Tasks.Task.Run(() =>
             {
                 Logger.WriteLog($"Encrypting process {process.id}");
                 string content = JsonConvert.SerializeObject(process);
@@ -131,20 +132,19 @@ namespace Incubator_2.Common
         {
             try
             {
-                string[] files = Directory.GetFiles(ProgramState.ServerProcesses);
-
-                foreach (string dir in files)
+                List<Session> closed = new();
+                using (Session s = new Session())
                 {
-                    DirectoryInfo di = new DirectoryInfo(dir);
-                    if (di.CreationTime < DateTime.Now.AddHours(-12) || !di.Name.StartsWith("Port"))
-                    {
-                        di.Delete();
-                    }
+                    closed = s.GetOpenedSessions(false);
+                }
+                foreach (Session s in closed)
+                {    
+                    File.Delete($"{ProgramState.ServerProcesses}\\{s.slug}.incport");
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return;
+                ProgramState.ShowErrorDialog(e.Message);
             }
 
         }
@@ -153,7 +153,7 @@ namespace Incubator_2.Common
         public async static void Listen()
         {
             RemoveOldest();
-            await Task.Run(() =>
+            await System.Threading.Tasks.Task.Run(() =>
             {
                 while (ProgramState.CurrentSession is not null || ProgramState.CurrentSession.active || !StopPulling)
                 {
@@ -184,7 +184,7 @@ namespace Incubator_2.Common
         public async static void Switcher(Process process)
         {
             Logger.WriteLog($"Process was received: {process.id} {process.target} {process.content}");
-            await Task.Run(() =>
+            await System.Threading.Tasks.Task.Run(() =>
             {
                 if (process.type == ProcessType.QUERY && process.recipient == ProgramState.CurrentSession.slug)
                 {
