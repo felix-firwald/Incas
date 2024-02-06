@@ -293,9 +293,16 @@ namespace Incubator_2.Common
             {
                 if (fb.ShowDialog() == DialogResult.OK)
                 {
-                    File.Copy(fullname, $"{fb.SelectedPath}\\{filename}", true);
-                    File.Delete(fullname);
-                    ProgramState.OpenFolder(fb.SelectedPath);
+                    try
+                    {
+                        File.Copy(fullname, $"{fb.SelectedPath}\\{filename}", true);
+                        File.Delete(fullname);
+                        ProgramState.OpenFolder(fb.SelectedPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        ProgramState.ShowErrorDialog($"При попытке выполнения процесса возникла ошибка:\n{ex}");
+                    }
                 }
             });
 

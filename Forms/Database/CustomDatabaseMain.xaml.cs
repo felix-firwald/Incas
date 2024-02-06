@@ -407,6 +407,11 @@ namespace Incubator_2.Forms.Database
                     ProgramState.ShowExclamationDialog("Таблица для записи не выбрана!", "Действие невозможно");
                     return;
                 }
+                if (this.TableGrid.SelectedItems.Count == 0)
+                {
+                    ProgramState.ShowExclamationDialog("Не выбрана запись для копирования!", "Действие невозможно");
+                    return;
+                }
                 CreateRecord cr = new(vm.SelectedTable, vm.GetTableDefinition(), vm.SelectedDatabase.path, ((DataRowView)this.TableGrid.SelectedItems[0]).Row);
                 cr.ShowDialog();
                 vm.UpdateTable();
