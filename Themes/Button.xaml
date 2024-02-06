@@ -60,7 +60,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource Yellow}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="MinWidth" Value="160"/>
+        <Setter Property="MinWidth" Value="80"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -92,7 +92,6 @@
                             <Setter TargetName="border" Property="BorderThickness" Value="0,12,0,0"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Background" TargetName="border" Value="#2D2D30"/>
                             <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="DimGray"/>
                         </Trigger>
                     </ControlTemplate.Triggers>

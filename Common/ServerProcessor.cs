@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Windows.ApplicationModel.Background;
+using System.Windows.Forms;
 
 namespace Incubator_2.Common
 {
@@ -74,7 +74,8 @@ namespace Incubator_2.Common
         public static string Port { get { return $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession.slug}.incport"; } }
         private static List<Process> WaitList = new();
         private static bool StopPulling = false;
-        #region Reusable Base Functionality
+
+        #region Base Functionality
         public static void StopPort()
         {
             StopPulling = true;
@@ -150,6 +151,7 @@ namespace Incubator_2.Common
         }
         #endregion
 
+        #region Main
         public async static void Listen()
         {
             RemoveOldest();
@@ -200,7 +202,19 @@ namespace Incubator_2.Common
                             ShowExplicitMessageProcessHandle(process.content, process);
                             break;
                         case ProcessTarget.COPY_TEXT:
-                            Clipboard.SetText(process.content);
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                System.Windows.Clipboard.SetText(process.content);
+                            });
+                            break;
+                        case ProcessTarget.COPY_FILE:
+                            CopyFileProcessHandle(process.content);
+                            break;
+                        case ProcessTarget.OPEN_WORD:
+                            OpenWordProcessHandle(process.content);
+                            break;
+                        case ProcessTarget.OPEN_EXCEL:
+                            OpenExcelProcessHandle(process.content);
                             break;
                         case ProcessTarget.UNKNOWN:
                         default: break;
@@ -211,7 +225,7 @@ namespace Incubator_2.Common
                     switch (process.target)
                     {
                         case ProcessTarget.EXPLICIT:
-                            Application.Current.Dispatcher.Invoke(() =>
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
                                 ProgramState.ShowInfoDialog($"Пользователь ответил: {process.content}", "Ответ на запрос");
                             });
@@ -223,6 +237,7 @@ namespace Incubator_2.Common
             });
             
         }
+        #endregion
         private static Process GetProcessFromWaitList(string id)
         {
             foreach (Process process in WaitList)
@@ -249,25 +264,26 @@ namespace Incubator_2.Common
         {
             if (Permission.CurrentUserPermission != PermissionGroup.Admin)
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Application.Current.MainWindow.Hide();
+                    System.Windows.Application.Current.MainWindow.Hide();
                     ProgramState.CloseSession();
-                    Application.Current.MainWindow = new SessionBroken();
+                    System.Windows.Application.Current.MainWindow = new SessionBroken();
                     SessionBroken b = new SessionBroken();
                     b.ShowDialog();
                 });
             }
         }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
         private static void RestartProcessHandle()
         {
             if (Permission.CurrentUserPermission != PermissionGroup.Admin)
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Application.Current.MainWindow.Hide();
+                    System.Windows.Application.Current.MainWindow.Hide();
                     ProgramState.CloseSession();
-                    Application.Current.MainWindow = new SessionBroken();
+                    System.Windows.Application.Current.MainWindow = new SessionBroken();
                     SessionBroken b = new SessionBroken(BrokenType.Restart);
                     b.ShowDialog();
                     ProgramState.ClearDataForRestart();
@@ -275,10 +291,52 @@ namespace Incubator_2.Common
                 });
             }
         }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+        private static void CopyFileProcessHandle(string filename)
+        {
+            string fullname = $"{ProgramState.Exchanges}\\{filename}";
+            FolderBrowserDialog fb = new();
+            fb.Description = $"Папка для сохранения \"{filename}\"";
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (fb.ShowDialog() == DialogResult.OK)
+                {
+                    File.Copy(fullname, $"{fb.SelectedPath}\\{filename}");
+                    File.Delete(fullname);
+                }
+            });
+
+        }
+        private static void OpenWordProcessHandle(string filename)
+        {
+            string fullname = $"{ProgramState.Exchanges}\\{filename}";
+            ProgramState.ShowInfoDialog(fullname);
+            try
+            {
+                System.Diagnostics.Process.Start("WINWORD.EXE", fullname);
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog($"Не удалось открыть присланный Word файл:\n{ex}", "Действие невозможно");
+            }
+        }
+        private static void OpenExcelProcessHandle(string filename)
+        {
+            string fullname = $"{ProgramState.Exchanges}\\{filename}";
+            ProgramState.ShowInfoDialog(fullname);
+            try
+            {
+                System.Diagnostics.Process.Start("WINEXCEL.EXE", fullname);
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog($"Не удалось открыть присланный Excel файл:\n{ex}", "Действие невозможно");
+            }
+        }
         private static void ShowExplicitMessageProcessHandle(string content, Process process)
         {
             ExplicitMessage m = JsonConvert.DeserializeObject<ExplicitMessage>(content);
-            Application.Current.Dispatcher.Invoke(() =>
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 switch (m.message_type)
                 {
@@ -356,6 +414,27 @@ namespace Incubator_2.Common
             process.content = text;
             WriteLogSending(process);
             SendToPort(process);
+        }
+        private static void SendFileProcess(string filename, string fullname, string recipient, ProcessTarget target)
+        {
+            Process process = CreateQueryProcess(recipient);
+            process.target = target;
+            process.content = filename;
+            WriteLogSending(process);
+            File.Copy(fullname, $"{ProgramState.Exchanges}\\{filename}", true);
+            SendToPort(process);
+        }
+        public static void SendCopyFileProcess(string filename, string fullname, string recipient)
+        {
+            SendFileProcess(filename, fullname, recipient, ProcessTarget.COPY_FILE);
+        }
+        public static void SendOpenWordProcess(string filename, string fullname, string recipient)
+        {
+            SendFileProcess(filename, fullname, recipient, ProcessTarget.OPEN_WORD);
+        }
+        public static void SendOpenExcelProcess(string filename, string fullname, string recipient)
+        {
+            SendFileProcess(filename, fullname, recipient, ProcessTarget.OPEN_EXCEL);
         }
 
         #endregion

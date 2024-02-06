@@ -77,7 +77,7 @@
                     <TextBlock Text="Задачи" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=TasksRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
-            <RadioButton x:Name="CommunicationsRadio" Style="{DynamicResource MenuButton}" Cursor="Hand" Visibility="{Binding CommunicationVisibility}">
+            <!--<RadioButton x:Name="CommunicationsRadio" Style="{DynamicResource MenuButton}" Cursor="Hand" Visibility="{Binding CommunicationVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
@@ -86,7 +86,7 @@
                     <Path Fill="{Binding ElementName=CommunicationsRadio, Path=Foreground}" Data="M3.05 3.05a7 7 0 0 0 0 9.9.5.5 0 0 1-.707.707 8 8 0 0 1 0-11.314.5.5 0 0 1 .707.707m2.122 2.122a4 4 0 0 0 0 5.656.5.5 0 1 1-.708.708 5 5 0 0 1 0-7.072.5.5 0 0 1 .708.708m5.656-.708a.5.5 0 0 1 .708 0 5 5 0 0 1 0 7.072.5.5 0 1 1-.708-.708 4 4 0 0 0 0-5.656.5.5 0 0 1 0-.708m2.122-2.12a.5.5 0 0 1 .707 0 8 8 0 0 1 0 11.313.5.5 0 0 1-.707-.707 7 7 0 0 0 0-9.9.5.5 0 0 1 0-.707zM10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0" Cursor="" />
                     <TextBlock Text="Внутренняя связь" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=CommunicationsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
-            </RadioButton>
+            </RadioButton>-->
             <RadioButton x:Name="DatabaseRadio" Style="{DynamicResource MenuButton}" Cursor="Hand" Visibility="{Binding DatabaseVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -163,10 +163,21 @@
         <StackPanel MinHeight="50" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Background="{StaticResource LightBlack}">
             <fa:FontAwesome Icon="Code" Style="{DynamicResource IconButton}" Visibility="{Binding AdminFunctionVisibility}" MouseDown="HandleCommandClick"/>
             <TextBox x:Name="InputCommand" Style="{DynamicResource TextBoxTransparent}" MinWidth="200" Visibility="{Binding AdminFunctionVisibility}"/>
-            <Label Content="f" Foreground="{DynamicResource Icon}" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontFamily="Harlow Solid Italic" FontSize="14" MinWidth="64" FontStyle="Italic"/>
-            
-            <Button Style="{DynamicResource DashboardButton}" Content="Создать задачу" Width="120" Click="NewTaskClick"/>
-            <Button Style="{DynamicResource DashboardButton}" Content="Буфер обмена" Width="120"/>
+            <!--<Label Content="(f)" Foreground="{DynamicResource Element}" VerticalAlignment="Center" HorizontalContentAlignment="Center" FontSize="20" MinWidth="64" FontFamily="Segoe UI Semilight" FontStyle="Italic" Margin="0,0,0,5"/>
+            <Label Content="->" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource LightPurple}" VerticalAlignment="Center" Margin="-20,0,0,0" FontWeight="Bold" />-->
+            <Button Style="{DynamicResource DashboardButton}" Tag="Clipboard" Click="DashClick" ToolTip="Отправить текст в буфер обмена другого пользователя">
+                <Path Fill="{DynamicResource DarkLight}" Stretch="UniformToFill" Margin="0,14,0,14" Data="M10 1.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5zm-2 0h1v1A2.5 2.5 0 0 0 6.5 5h3A2.5 2.5 0 0 0 12 2.5v-1h1a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2"/>
+            </Button>
+            <Button Style="{DynamicResource DashboardButton}" Tag="File" Click="DashClick" ToolTip="Отправить файл другому пользователю">
+                <Path Fill="{DynamicResource DarkLight}" Stretch="UniformToFill" Margin="0,14,0,14" Data="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+            </Button>
+            <Button Style="{DynamicResource DashboardButton}" Tag="Word" Click="DashClick" ToolTip="Открыть файл Word у другого пользователя" IsEnabled="False">
+                <Path Fill="{DynamicResource DarkLight}" Stretch="UniformToFill" Margin="0,14,0,14" Data="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M5.485 6.879l1.036 4.144.997-3.655a.5.5 0 0 1 .964 0l.997 3.655 1.036-4.144a.5.5 0 0 1 .97.242l-1.5 6a.5.5 0 0 1-.967.01L8 9.402l-1.018 3.73a.5.5 0 0 1-.967-.01l-1.5-6a.5.5 0 1 1 .97-.242z"/>
+            </Button>
+            <Button Style="{DynamicResource DashboardButton}" Tag="Excel" Click="DashClick" ToolTip="Открыть файл Excel у другого пользователя" IsEnabled="False">
+                <Path Fill="{DynamicResource DarkLight}" Stretch="UniformToFill" Margin="0,14,0,14" Data="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M5.884 6.68 8 9.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 10l2.233 2.68a.5.5 0 0 1-.768.64L8 10.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 10 5.116 7.32a.5.5 0 1 1 .768-.64"/>
+            </Button>
+
         </StackPanel>
         <StackPanel x:Name="ProcessInfo" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="15,15,12,15">
             <StackPanel.Style>

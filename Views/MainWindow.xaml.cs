@@ -8,6 +8,8 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
 using Windows.UI.Notifications;
 
 namespace Incubator_2
@@ -23,7 +25,7 @@ namespace Incubator_2
             InitializeComponent();
             if (!ProgramState.CheckSensitive())
             {
-                Application.Current.Shutdown();
+                System.Windows.Application.Current.Shutdown();
             }
             vm = new MV_MainWindow();
             ProgramState.MainWindow = vm;
@@ -42,7 +44,7 @@ namespace Incubator_2
         private void OnClosed(object sender, EventArgs e)
         {
             ProgramState.CloseSession();
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void OnResize(object sender, SizeChangedEventArgs e)
@@ -114,16 +116,49 @@ namespace Incubator_2
             
         }
 
-        private void NewTaskClick(object sender, RoutedEventArgs e)
-        {
-            CreateTask ct = new CreateTask();
-            ct.Show();
-        }
-
         private void HandleCommandClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             CommandHandler.Handle(this.InputCommand.Text);
             this.InputCommand.Clear();
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+        private void DashClick(object sender, RoutedEventArgs e)
+        {
+            string target = ProgramState.ShowActiveUserSelector("Выберите пользователя для отправки процесса.").slug;
+            if (!string.IsNullOrEmpty(target))
+            {
+                switch (((System.Windows.Controls.Button)sender).Tag.ToString())
+                {
+                    case "Clipboard":
+                        string result = ProgramState.ShowInputBox("Текст для буфера обмена", "Укажите текст для буфера обмена");
+                        ServerProcessor.SendCopyTextProcess(result, target);
+                        break;
+                    case "File":
+                        OpenFileDialog of = new();
+                        if (of.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        {
+                            ServerProcessor.SendCopyFileProcess(of.SafeFileName, of.FileName, target);
+                        }
+                        break;
+                    case "Word":
+                        OpenFileDialog of2 = new();
+                        of2.Filter = "Файлы Word|*.doc;*.docx";
+                        if (of2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        {
+                            ServerProcessor.SendOpenWordProcess(of2.SafeFileName, of2.FileName, target);
+                        }
+                        break;
+                    case "Excel":
+                        OpenFileDialog of3 = new();
+                        of3.Filter = "Файлы Excel|*.xls;*.xlsx;*.xlsm";
+                        if (of3.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                        {
+                            ServerProcessor.SendOpenExcelProcess(of3.SafeFileName, of3.FileName, target);
+                        }
+                        break;
+                }
+            }
         }
     }
 }

@@ -17,7 +17,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding HelpTextTitle, FallbackValue=Текст не определен}" VerticalAlignment="Center" Margin="12,0,12,0" Foreground="{DynamicResource Icon}" Grid.ColumnSpan="2"/>
-        <ListBox Background="{DynamicResource Basic}" BorderBrush="{x:Null}" MaxHeight="260" ItemsSource="{Binding Sessions}" SelectedValue="{Binding SelectedSession}" DisplayMemberPath="user" Grid.Row="1" Grid.ColumnSpan="2">
+        <ListBox Background="{DynamicResource Basic}" BorderBrush="{x:Null}" MaxHeight="260" ItemContainerStyle="{DynamicResource ListBoxItemMicro}" ItemsSource="{Binding Sessions}" SelectedValue="{Binding SelectedSession}" DisplayMemberPath="user" Grid.Row="1" Grid.ColumnSpan="2">
 
         </ListBox>
         <Button Grid.Row="2" Style="{DynamicResource ButtonMain}" Content="Выбрать" IsDefault="True" Click="Button_Click" Margin="5,5,5,5"/>

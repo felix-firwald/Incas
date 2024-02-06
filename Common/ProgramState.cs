@@ -48,6 +48,7 @@ namespace Common
         public static string ServiceDatabasePath { get { return Root + @"\service.dbinc"; } }
         public static string Root { get { return CommonPath + @"\Root"; } }
         public static string ServerProcesses { get { return Root + @"\ServerProccesses"; } } // ...\Root\ServerProccesses
+        public static string Exchanges { get { return Root + @"\Exchanges"; } } // ...\Root\Exchanges
         public static string Messages { get { return Root + @"\Messages"; } } // папка еще не создана
 
         public static string UsersContext { get { return Root + @"\UsersContext"; } }
@@ -80,12 +81,12 @@ namespace Common
                 Directory.CreateDirectory(TemplatesSourcesWordPath);
                 Directory.CreateDirectory(TemplatesSourcesExcelPath);
                 Directory.CreateDirectory(ServerProcesses);
+                Directory.CreateDirectory(Exchanges);
                 Directory.CreateDirectory(CustomDatabasePath);
                 Directory.CreateDirectory(Messages);
                 Directory.CreateDirectory(LogData);
                 Directory.CreateDirectory(UsersContext);
                 Directory.CreateDirectory(TemplatesRuntime);
-                Directory.CreateDirectory(TemplatesGenerated);
             });
         }
         public static string GetFullPathOfCustomDb(string path)
@@ -408,7 +409,14 @@ namespace Common
             {
                 au.ShowDialog();
             });
-            return au.SelectedSession;
+            if (au.SelectedSession != null)
+            {
+                return au.SelectedSession;
+            }
+            else
+            {
+                return new();
+            }
         }
         public static User ShowUserSelector()
         {
