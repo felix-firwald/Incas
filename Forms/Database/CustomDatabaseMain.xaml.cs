@@ -397,5 +397,25 @@ namespace Incubator_2.Forms.Database
                     break;
             }
         }
+
+        private void CopyRecordClick(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(vm.SelectedTable))
+                {
+                    ProgramState.ShowExclamationDialog("Таблица для записи не выбрана!", "Действие невозможно");
+                    return;
+                }
+                CreateRecord cr = new(vm.SelectedTable, vm.GetTableDefinition(), vm.SelectedDatabase.path, ((DataRowView)this.TableGrid.SelectedItems[0]).Row);
+                cr.ShowDialog();
+                vm.UpdateTable();
+
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog(ex.Message);
+            }
+        }
     }
 }

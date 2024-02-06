@@ -1,20 +1,12 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Presentation;
-using Incubator_2.Models;
 using Incubator_2.Windows;
 using Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.Pkcs;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
 
 namespace Incubator_2.Common
@@ -301,8 +293,9 @@ namespace Incubator_2.Common
             {
                 if (fb.ShowDialog() == DialogResult.OK)
                 {
-                    File.Copy(fullname, $"{fb.SelectedPath}\\{filename}");
+                    File.Copy(fullname, $"{fb.SelectedPath}\\{filename}", true);
                     File.Delete(fullname);
+                    ProgramState.OpenFolder(fb.SelectedPath);
                 }
             });
 
@@ -313,7 +306,9 @@ namespace Incubator_2.Common
             ProgramState.ShowInfoDialog(fullname);
             try
             {
-                System.Diagnostics.Process.Start("WINWORD.EXE", fullname);
+                System.Diagnostics.Process proc = new();
+                proc.StartInfo.FileName = fullname;
+                proc.Start();
             }
             catch (Exception ex)
             {

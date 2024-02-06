@@ -61,6 +61,23 @@ namespace Incubator_2.Windows.CustomDatabase
             }
             this.SaveButton.IsEnabled = false;
         }
+        public CreateRecord(string tableName, List<FieldCreator> fields, string pathDb, DataRow dr) // copy
+        {
+            InitializeComponent();
+            Table = tableName;
+            path = pathDb;
+            CustomTable ct = new();
+            foreach (FieldCreator field in fields)
+            {
+                if (!field.IsPK)
+                {
+                    UC_TagFiller tf = new(field, pathDb);
+                    tf.SetValue(dr[field.Name].ToString());
+                    this.ContentPanel.Children.Add(tf);
+                }
+            }
+            this.SaveButton.IsEnabled = false;
+        }
         private bool Save()
         {
             Dictionary<string, string> pairs = new();

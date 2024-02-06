@@ -87,6 +87,7 @@
             <Border Grid.Row="2" Grid.Column="1" Background="{DynamicResource Black}" CornerRadius="5" Margin="6,0,6,0" Grid.ColumnSpan="2">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Plus" ToolTip="Добавить запись" MouseDown="AddNewRecordClick" IsEnabled="{Binding CanUserEditTable}"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Clipboard" ToolTip="Добавить запись копированием текущей" MouseDown="CopyRecordClick" IsEnabled="{Binding CanUserEditTable}" Visibility="{Binding EditingVisibility}"/>
                     <Rectangle Fill="{DynamicResource Element}" Width="1" Margin="0,3,0,3" Visibility="{Binding EditingVisibility}" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" ToolTip="Редактировать выбранную запись" MouseDown="EditRecordClick" Visibility="{Binding EditingVisibility}" IsEnabled="{Binding CanUserEditTable}"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранные записи" MouseDown="DeleteRecordsClick" Visibility="{Binding EditingVisibility}" IsEnabled="{Binding CanUserEditTable}"/>
