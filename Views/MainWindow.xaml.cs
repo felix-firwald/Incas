@@ -5,6 +5,7 @@ using Incubator_2.ViewModels;
 using Incubator_2.Windows;
 using Incubator_2.Windows.ToolBar;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -128,7 +129,14 @@ namespace Incubator_2
             string target = ProgramState.ShowActiveUserSelector("Выберите пользователя для отправки процесса.").slug;
             if (!string.IsNullOrEmpty(target))
             {
-                switch (((System.Windows.Controls.Button)sender).Tag.ToString())
+                Dictionary<string, string> filters = new()
+                {
+                    { "Excel", "Файлы Excel|*.xls;*.xlsx;*.xlsm" },
+                    { "Word", "Файлы Word|*.doc;*.docx" },
+                    { "Pdf", "Файлы PDF|*.pdf" }
+                };
+                string tag = ((System.Windows.Controls.Button)sender).Tag.ToString();
+                switch (tag)
                 {
                     case "Clipboard":
                         string result = ProgramState.ShowInputBox("Текст для буфера обмена", "Укажите текст для буфера обмена");
@@ -142,19 +150,13 @@ namespace Incubator_2
                         }
                         break;
                     case "Word":
+                    case "Excel":
+                    case "Pdf":
                         OpenFileDialog of2 = new();
-                        of2.Filter = "Файлы Word|*.doc;*.docx";
+                        of2.Filter = filters[tag];
                         if (of2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                         {
-                            ServerProcessor.SendOpenWordProcess(of2.SafeFileName, of2.FileName, target);
-                        }
-                        break;
-                    case "Excel":
-                        OpenFileDialog of3 = new();
-                        of3.Filter = "Файлы Excel|*.xls;*.xlsx;*.xlsm";
-                        if (of3.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                        {
-                            ServerProcessor.SendOpenExcelProcess(of3.SafeFileName, of3.FileName, target);
+                            ServerProcessor.SendOpenFileProcess(of2.SafeFileName, of2.FileName, target);
                         }
                         break;
                 }

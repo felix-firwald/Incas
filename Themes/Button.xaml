@@ -57,7 +57,7 @@
     <Style x:Key="DashboardButton" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="{DynamicResource LightBlack}"/>
         <Setter Property="Foreground" Value="{DynamicResource GrayLight}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource Yellow}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Success}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinWidth" Value="80"/>

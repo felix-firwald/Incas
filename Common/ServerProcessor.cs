@@ -29,8 +29,7 @@ namespace Incubator_2.Common
         OPEN_SEQUENCER = 201,
         COPY_TEXT = 202,
         COPY_FILE = 203,
-        OPEN_WORD = 204,
-        OPEN_EXCEL = 205,
+        OPEN_FILE = 204,
         UPDATE_MAIN = 301,
         
     }
@@ -202,11 +201,8 @@ namespace Incubator_2.Common
                         case ProcessTarget.COPY_FILE:
                             CopyFileProcessHandle(process.content);
                             break;
-                        case ProcessTarget.OPEN_WORD:
-                            OpenWordProcessHandle(process.content);
-                            break;
-                        case ProcessTarget.OPEN_EXCEL:
-                            OpenExcelProcessHandle(process.content);
+                        case ProcessTarget.OPEN_FILE:
+                            OpenFileProcessHandle(process.content);
                             break;
                         case ProcessTarget.UNKNOWN:
                         default: break;
@@ -307,34 +303,22 @@ namespace Incubator_2.Common
             });
 
         }
-        private static void OpenWordProcessHandle(string filename)
+        private static void OpenFileProcessHandle(string filename)
         {
             string fullname = $"{ProgramState.Exchanges}\\{filename}";
-            ProgramState.ShowInfoDialog(fullname);
             try
             {
                 System.Diagnostics.Process proc = new();
                 proc.StartInfo.FileName = fullname;
+                proc.StartInfo.UseShellExecute = true;
                 proc.Start();
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"Не удалось открыть присланный Word файл:\n{ex}", "Действие невозможно");
+                ProgramState.ShowErrorDialog($"Не удалось открыть присланный файл:\n{ex}", "Действие невозможно");
             }
         }
-        private static void OpenExcelProcessHandle(string filename)
-        {
-            string fullname = $"{ProgramState.Exchanges}\\{filename}";
-            ProgramState.ShowInfoDialog(fullname);
-            try
-            {
-                System.Diagnostics.Process.Start("WINEXCEL.EXE", fullname);
-            }
-            catch (Exception ex)
-            {
-                ProgramState.ShowErrorDialog($"Не удалось открыть присланный Excel файл:\n{ex}", "Действие невозможно");
-            }
-        }
+
         private static void ShowExplicitMessageProcessHandle(string content, Process process)
         {
             ExplicitMessage m = JsonConvert.DeserializeObject<ExplicitMessage>(content);
@@ -430,13 +414,9 @@ namespace Incubator_2.Common
         {
             SendFileProcess(filename, fullname, recipient, ProcessTarget.COPY_FILE);
         }
-        public static void SendOpenWordProcess(string filename, string fullname, string recipient)
+        public static void SendOpenFileProcess(string filename, string fullname, string recipient)
         {
-            SendFileProcess(filename, fullname, recipient, ProcessTarget.OPEN_WORD);
-        }
-        public static void SendOpenExcelProcess(string filename, string fullname, string recipient)
-        {
-            SendFileProcess(filename, fullname, recipient, ProcessTarget.OPEN_EXCEL);
+            SendFileProcess(filename, fullname, recipient, ProcessTarget.OPEN_FILE);
         }
 
         #endregion
