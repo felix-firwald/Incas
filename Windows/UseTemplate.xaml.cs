@@ -32,6 +32,7 @@ namespace Incubator_2.Windows
         {
             InitializeComponent();
             this.template = t;
+            this.Title = t.name;
             LoadTags();
             AddFileCreator();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
@@ -41,6 +42,7 @@ namespace Incubator_2.Windows
         {
             InitializeComponent();
             this.template = t;
+            this.Title = t.name;
             LoadTags();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
             foreach (SGeneratedDocument item in records)
