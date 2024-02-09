@@ -101,13 +101,16 @@ namespace Incubator_2.Forms
             {
                 if (Selection.Count > 0)
                 {
-                    List<SGeneratedDocument> docs = new();
+                    List<int> docs = new();
                     foreach (FileCreated item in Selection)
                     {
-                        docs.Add(item.record);
+                        docs.Add(item.record.id);
                     }
                     ProgramState.ShowWaitCursor();
-                    RegistreCreatedJSON.RemoveRecords(docs);
+                    using (GeneratedDocument d = new())
+                    {
+                        d.RemoveRecords(docs);
+                    }
                     ProgramState.ShowWaitCursor(false);
                     this.UpdateList();
                 }

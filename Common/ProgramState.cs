@@ -60,7 +60,6 @@ namespace Common
         public static string TemplatesSourcesWordPath { get { return Templates + @"\Sources\Word"; } }    // ...\Root\Templates\Sources\Word
         public static string TemplatesSourcesExcelPath { get { return Templates + @"\Sources\Excel"; } }    // ...\Root\Templates\Sources\Excel
         public static string TemplatesRuntime { get { return Templates + @"\Runtime"; } }    // ...\Root\Templates\Runtime
-        public static string TemplatesGenerated { get { return Templates + @"\Generated"; } }    // ...\Root\Templates\Generated
         #endregion
 
         #region User

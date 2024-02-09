@@ -141,6 +141,13 @@ namespace Incubator_2.Models
                 .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }
+        public void RemoveRecords(List<int> ids)
+        {
+            StartCommand()
+                .Delete()
+                .WhereIn("id", ids)
+                .ExecuteVoid();
+        }
         public void RemoveRecords(List<string> ids)
         {
             StartCommand()
@@ -149,10 +156,10 @@ namespace Incubator_2.Models
                 .ExecuteVoid();
         }
 
-        public List<SGeneratedTag> GetFilledTags()
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(File.ReadAllText(RegistreCreatedJSON.GetReference(this.template, this.reference)));
-        }
+        //public List<SGeneratedTag> GetFilledTags()
+        //{
+        //    return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(File.ReadAllText(RegistreCreatedJSON.GetReference(this.template, this.reference)));
+        //}
         public void SaveFilledTags(List<SGeneratedTag> tags)
         {
             content = Cryptographer.EncryptString(Newtonsoft.Json.JsonConvert.SerializeObject(tags));
