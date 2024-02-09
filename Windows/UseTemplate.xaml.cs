@@ -260,5 +260,32 @@ namespace Incubator_2.Windows
                 
             }
         }
+
+        private void SendToUserClick(object sender, MouseButtonEventArgs e)
+        {
+            string recipient = ProgramState.ShowActiveUserSelector("Выберите пользователя для отправки формы.").slug;
+            ProgramState.ShowWaitCursor();
+            List<SGeneratedDocument> documents = new();
+            if (!string.IsNullOrEmpty(recipient))
+            {
+                foreach (UC_FileCreator fc in this.ContentPanel.Children)
+                {
+                    if (fc.SelectorChecked == true)
+                    {
+                        documents.Add(fc.GetGeneratedDocument());
+                    }
+                }
+                ProgramState.ShowWaitCursor(false);
+                if (documents.Count == 0)
+                {
+                    ProgramState.ShowExclamationDialog("Не выбрано ни одного элемента для отправки! (используйте селекторы)", "Действие прервано");
+                }
+                else
+                {
+                    ServerProcessor.SendOpenSequencerProcess(documents, recipient);
+                }
+            }
+
+        }
     }
 }

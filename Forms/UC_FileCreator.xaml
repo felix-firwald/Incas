@@ -22,7 +22,7 @@
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,10,0" />
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть средство предпросмотра" Cursor="Hand" MouseDown="PreviewCLick"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="10,0,5,0"/>
-                <CheckBox Style="{DynamicResource Selector}"/>
+                <CheckBox x:Name="Selector" Style="{DynamicResource Selector}" Checked="OnSelectorChecked" Unchecked="OnSelectorUnchecked"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,0,5,0"/>
                 <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="Новый">
                     <TextBox.ContextMenu>

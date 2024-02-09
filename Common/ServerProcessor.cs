@@ -1,4 +1,6 @@
 ﻿using Common;
+using Incubator_2.Forms;
+using Incubator_2.Models;
 using Incubator_2.Windows;
 using Models;
 using Newtonsoft.Json;
@@ -188,6 +190,9 @@ namespace Incubator_2.Common
                         case ProcessTarget.EXPLICIT: // admin process
                             ShowExplicitMessageProcessHandle(process.content, process);
                             break;
+                        case ProcessTarget.OPEN_SEQUENCER:
+                            OpenSequencerProcessHandle(process.content);
+                            break;
                         case ProcessTarget.COPY_TEXT:
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
@@ -331,6 +336,25 @@ namespace Incubator_2.Common
                 ProgramState.ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex}", "Действие невозможно");
             }
         }
+        private static void OpenSequencerProcessHandle(string content)
+        {
+            try
+            {
+                List<SGeneratedDocument> documents = JsonConvert.DeserializeObject<List<SGeneratedDocument>>(content);
+                using (Template t = new())
+                {
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        UseTemplate ut = new(t.GetTemplateById(documents[0].template), documents);
+                        ut.Show();
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog($"Не удалось открыть присланную запись:\n{ex}", "Действие невозможно");
+            }
+        }
 
         private static void ShowExplicitMessageProcessHandle(string content, Process process)
         {
@@ -427,6 +451,13 @@ namespace Incubator_2.Common
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.OPEN_WEB;
             process.content = url;
+            SendToPort(process);
+        }
+        public static void SendOpenSequencerProcess(List<SGeneratedDocument> documents, string recipient)
+        {
+            Process process = CreateQueryProcess(recipient);
+            process.target = ProcessTarget.OPEN_SEQUENCER;
+            process.content = JsonConvert.SerializeObject(documents);
             SendToPort(process);
         }
 

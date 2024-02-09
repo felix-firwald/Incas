@@ -28,6 +28,7 @@ namespace Incubator_2.Forms
         public event TagAction OnInsertRequested;
         public delegate void TagActionRecalculate(string tag);
         public event TagActionRecalculate OnRenameRequested;
+        public bool SelectorChecked { get { return (bool)this.Selector.IsChecked; } }
         public UC_FileCreator(Template templ, List<Tag> tagsList)
         {
             InitializeComponent();
@@ -153,6 +154,28 @@ namespace Incubator_2.Forms
                 .Replace("\"", "")
                 .Trim();
         }
+        public SGeneratedDocument GetGeneratedDocument()
+        {
+            SGeneratedDocument result = new();
+            result.template = this.template.id;
+            result.fileName = this.Filename.Text;
+            List<SGeneratedTag> filledTags = new();
+            foreach (UC_TagFiller tf in TagFillers)
+            {
+                int id = tf.GetId();
+                string name = tf.GetTagName();
+                string value = tf.GetValue();
+                if (tf.tag.type != TypeOfTag.LocalConstant)
+                {
+                    SGeneratedTag gt = new();
+                    gt.tag = id;
+                    gt.value = value;
+                    filledTags.Add(gt);
+                }
+            }
+            result.SaveFilledTags(filledTags);
+            return result;
+        }
         public void CreateFile(string newPath)
         {
             try
@@ -277,6 +300,16 @@ namespace Incubator_2.Forms
                 );  
             });
             
+        }
+
+        private void OnSelectorChecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnSelectorUnchecked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
