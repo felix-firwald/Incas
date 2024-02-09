@@ -153,6 +153,15 @@ namespace Incubator_2
                             ServerProcessor.SendOpenFileProcess(of2.SafeFileName, of2.FileName, target);
                         }
                         break;
+                    case "Web":
+                        string url = ProgramState.ShowInputBox("Укажите адрес");
+                        if (!url.StartsWith("https://"))
+                        {
+                            ProgramState.ShowExclamationDialog("Введенный адрес либо не является адресом сети, либо небезопасен.", "Действие прервано");
+                            return;
+                        }
+                        ServerProcessor.SendOpenWebProcess(url, target);
+                        break;
                 }
             }
         }

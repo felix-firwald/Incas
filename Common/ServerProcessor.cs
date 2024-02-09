@@ -30,8 +30,8 @@ namespace Incubator_2.Common
         COPY_TEXT = 202,
         COPY_FILE = 203,
         OPEN_FILE = 204,
-        UPDATE_MAIN = 301,
-        
+        OPEN_WEB = 205,
+        UPDATE_MAIN = 301,        
     }
     enum ResponseCode
     {
@@ -200,6 +200,9 @@ namespace Incubator_2.Common
                         case ProcessTarget.OPEN_FILE:
                             OpenFileProcessHandle(process.content);
                             break;
+                        case ProcessTarget.OPEN_WEB:
+                            OpenWebProcessHandle(process.content);
+                            break;
                         case ProcessTarget.UNKNOWN:
                         default: break;
                     }
@@ -314,6 +317,20 @@ namespace Incubator_2.Common
                 ProgramState.ShowErrorDialog($"Не удалось открыть присланный файл:\n{ex}", "Действие невозможно");
             }
         }
+        private static void OpenWebProcessHandle(string url)
+        {
+            try
+            {
+                System.Diagnostics.Process proc = new();
+                proc.StartInfo.FileName = url;
+                proc.StartInfo.UseShellExecute = true;
+                proc.Start();
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex}", "Действие невозможно");
+            }
+        }
 
         private static void ShowExplicitMessageProcessHandle(string content, Process process)
         {
@@ -404,6 +421,13 @@ namespace Incubator_2.Common
         public static void SendOpenFileProcess(string filename, string fullname, string recipient)
         {
             SendFileProcess(filename, fullname, recipient, ProcessTarget.OPEN_FILE);
+        }
+        public static void SendOpenWebProcess(string url, string recipient)
+        {
+            Process process = CreateQueryProcess(recipient);
+            process.target = ProcessTarget.OPEN_WEB;
+            process.content = url;
+            SendToPort(process);
         }
 
         #endregion
