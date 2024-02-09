@@ -2,6 +2,7 @@
 using Incubator_2.Forms;
 using Incubator_2.ViewModels;
 using Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -171,7 +172,7 @@ namespace Incubator_2.Windows
             string pathFile = ProgramState.GetFullnameOfWordFile(template.path);
             if (!File.Exists(pathFile))
             {
-                ProgramState.ShowErrorDialog($"Файл ({template.path}) не существует!\nТеги не могут быть обнаружены.", "Поиск невозможен");
+                ProgramState.ShowExclamationDialog($"Файл ({template.path}) не существует!\nТеги не могут быть обнаружены.", "Поиск невозможен");
                 return;
             }
             try
@@ -208,5 +209,26 @@ namespace Incubator_2.Windows
             }
         }
         #endregion
+
+        private void EditSourceClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            string pathFile = ProgramState.GetFullnameOfWordFile(template.path);
+            if (!File.Exists(pathFile))
+            {
+                ProgramState.ShowExclamationDialog($"Файл ({template.path}) не существует!", "Действие прервано");
+                return;
+            }
+            try
+            {
+                System.Diagnostics.Process proc = new();
+                proc.StartInfo.FileName = pathFile;
+                proc.StartInfo.UseShellExecute = true;
+                proc.Start();
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog($"При попытке открытия файла возникла ошибка:\n{ex}");
+            }
+        }
     }
 }

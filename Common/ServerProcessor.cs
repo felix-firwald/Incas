@@ -94,7 +94,6 @@ namespace Incubator_2.Common
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                Logger.WriteLog($"Encrypting process {process.id}");
                 string content = JsonConvert.SerializeObject(process);
                 using (Models.Process p = new())
                 {
@@ -115,7 +114,6 @@ namespace Incubator_2.Common
             catch (Exception e)
             {
                 ProgramState.ShowErrorDialog(e.Message);
-                Logger.WriteLog(e.Message, LogType.ERROR);
                 return new Process();
             }
             return result;
@@ -167,7 +165,6 @@ namespace Incubator_2.Common
                     }
                     catch (Exception e)
                     {
-                        Logger.WriteLog(e.Message, LogType.ERROR);
                         continue;
                     }
                     Thread.Sleep(200);
@@ -176,7 +173,6 @@ namespace Incubator_2.Common
         }
         public async static void Switcher(Process process)
         {
-            Logger.WriteLog($"Process was received: {process.id} {process.target} {process.content}");
             await System.Threading.Tasks.Task.Run(() =>
             {
                 if (process.type == ProcessType.QUERY && process.recipient == ProgramState.CurrentSession.slug)
@@ -344,10 +340,6 @@ namespace Incubator_2.Common
         #endregion
 
         #region Sending
-        private static void WriteLogSending(Process process)
-        {
-            Logger.WriteLog($"Process send: id {process.id}, type {process.type}, target {process.target}");
-        }
         private static string GenerateId()
         {
             Random random = new Random();
@@ -375,14 +367,12 @@ namespace Incubator_2.Common
         {
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.TERMINATE;
-            WriteLogSending(process);
             SendToPort(process);
         }
         public static void SendRestartProcess(string recipient)
         {
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.RESTART;
-            WriteLogSending(process);
             SendToPort(process);
         }
         public static void SendExplicitProcess(ExplicitMessage message, string recipient)
@@ -390,7 +380,6 @@ namespace Incubator_2.Common
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.EXPLICIT;
             process.content = JsonConvert.SerializeObject(message);
-            WriteLogSending(process);
             SendToPort(process);
         }
         public static void SendCopyTextProcess(string text, string recipient)
@@ -398,7 +387,6 @@ namespace Incubator_2.Common
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.COPY_TEXT;
             process.content = text;
-            WriteLogSending(process);
             SendToPort(process);
         }
         private static void SendFileProcess(string filename, string fullname, string recipient, ProcessTarget target)
@@ -406,7 +394,6 @@ namespace Incubator_2.Common
             Process process = CreateQueryProcess(recipient);
             process.target = target;
             process.content = filename;
-            WriteLogSending(process);
             File.Copy(fullname, $"{ProgramState.Exchanges}\\{filename}", true);
             SendToPort(process);
         }

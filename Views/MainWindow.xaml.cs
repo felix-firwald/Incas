@@ -117,12 +117,6 @@ namespace Incubator_2
             
         }
 
-        private void HandleCommandClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            CommandHandler.Handle(this.InputCommand.Text);
-            this.InputCommand.Clear();
-        }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
         private void DashClick(object sender, RoutedEventArgs e)
         {
@@ -161,6 +155,11 @@ namespace Incubator_2
                         break;
                 }
             }
+        }
+
+        private void HandleCommandClick(object sender, RoutedEventArgs e)
+        {
+            CommandHandler.Handle(ProgramState.ShowInputBox("Введите команду"));
         }
     }
 }

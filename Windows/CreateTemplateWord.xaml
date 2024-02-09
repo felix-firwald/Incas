@@ -59,11 +59,11 @@
                 <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" ToolTip="Добавить тег" MouseDown="AddTagClick" />
                     <fa:FontAwesome x:Name="FindInFileButton" Style="{DynamicResource IconButton}" Icon="SearchPlus" Grid.Column="1" Grid.Row="1" ToolTip="Обнаружить теги в выбранном файле (все текущие теги будут удалены)" MouseDown="FindTagsInFile" />
-                    <Rectangle Height="1" Fill="{DynamicResource Element}"/>
+                    <Rectangle Height="1" Fill="{DynamicResource Element}" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" Grid.Column="1" Grid.Row="1" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAll" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" Grid.Column="1" Grid.Row="1" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAll" />
-                    <Rectangle Height="1" Fill="{DynamicResource Element}"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ObjectGroup" Grid.Column="1" Grid.Row="1" ToolTip="Добавить группу" />
+                    <Rectangle Height="1" Fill="{DynamicResource Element}" Margin="4,2,4,2"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" Grid.Column="1" Grid.Row="1" ToolTip="Редактировать исходный файл" MouseDown="EditSourceClick" />
                 </StackPanel>
             </Border>
             <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="2"/>

@@ -88,6 +88,7 @@ namespace Common
                 Directory.CreateDirectory(UsersContext);
                 Directory.CreateDirectory(TemplatesRuntime);
             });
+            CollectGarbage();
         }
         public static string GetFullPathOfCustomDb(string path)
         {
@@ -481,6 +482,29 @@ namespace Common
         public static void OpenFolder(string path)
         {
             System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", path);
+        }
+        private async static void RemoveFilesOlderThan(string folder, DateTime time)
+        {
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                foreach (string item in Directory.GetFiles(folder))
+                {
+                    if (File.GetCreationTime(item) < time)
+                    {
+                        try
+                        {
+                            File.Delete(item);
+                        }
+                        catch { }
+                    }
+                }
+            });
+        }
+        public static void CollectGarbage()
+        {
+            RemoveFilesOlderThan(ServerProcesses, DateTime.Now.AddHours(-8));
+            RemoveFilesOlderThan(Exchanges, DateTime.Now.AddHours(-1));
+            RemoveFilesOlderThan(LogData, DateTime.Now.AddHours(-8));
         }
     }
 }
