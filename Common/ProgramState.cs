@@ -88,6 +88,8 @@ namespace Common
                 Directory.CreateDirectory(TemplatesRuntime);
             });
             CollectGarbage();
+            
+            TelegramProcessor.StartBot("6911917508:AAHJeEhfNKzzOJjp0IlGtZ51lqNrE2LBnK4");
         }
         public static string GetFullPathOfCustomDb(string path)
         {

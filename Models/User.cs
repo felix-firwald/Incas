@@ -21,6 +21,7 @@ namespace Models
         public string fullname { get; set; }
         public string post { get; set; }
         public string sector { get; set; }
+        public string context { get; set; }
 
         public User AsModel()
         {
@@ -33,6 +34,7 @@ namespace Models
             user.fullname = fullname;
             user.post = post;
             user.sector = sector;
+            user.context = context; 
             return user;
         }
     }
@@ -47,6 +49,7 @@ namespace Models
         public string fullname { get; set; }
         public string post { get; set; }
         public string sector { get; set; }
+        public string context { get; set; }
 
         public User() 
         {
@@ -107,7 +110,8 @@ namespace Models
                     { "secondName", secondName },
                     { "fullname", fullname },
                     { "post", post },
-                    { "sector", sector }
+                    { "sector", sector },
+                    { "context", context }
                 })
                 .ExecuteVoid();
             GetUserByName();
@@ -148,10 +152,19 @@ namespace Models
                 .ExecuteVoid();
         }
         #endregion
-
+        private string GetKey()
+        {
+            string result = Cryptographer.GenerateKey($"{this.id}{this.sign}");
+            return result;
+        }
         public UserParameters GetParametersContext()
         {
-            return UserContextor.GetContext(this);
+            return JsonConvert.DeserializeObject<UserParameters>(Cryptographer.DecryptString(GetKey(), this.context));
+            //return UserContextor.GetContext(this);
+        }
+        public void SaveParametersContext(UserParameters parameters)
+        {
+            this.context = Cryptographer.EncryptString(GetKey(), JsonConvert.SerializeObject(parameters));
         }
     }
 }

@@ -85,6 +85,11 @@ namespace Incubator_2.Forms
         
         public void ApplyRecord(string fileName, List<SGeneratedTag> record)
         {
+            if (record == null)
+            {
+                ProgramState.ShowDatabaseErrorDialog("Не удалось получить информацию о полях документа.", "Запись повреждена");
+                return;
+            }
             this.Filename.Text = fileName;
             foreach (SGeneratedTag tag in record)
             {

@@ -89,7 +89,7 @@ namespace Incubator_2.Common
 
         public string GetQueryText()
         {
-            string result = $"CREATE TABLE [{TableName}] (\n";
+            string result = $"CREATE TABLE IF NOT EXISTS [{TableName}] (\n";
             result += string.Join(",\n", definition.Values);
             result += "\n);";
             return result;
