@@ -214,6 +214,10 @@ namespace Common
                 });
             } 
         }
+        public static void TryFix(SQLiteException ex, DBConnectionType con)
+        {
+
+        }
     }
 }
 

@@ -46,11 +46,16 @@ namespace Incubator_2
 
         }
 
-        private void TestFunc()
+        private void Unhandled(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            //UseTemplate test = new UseTemplate(new Template());
-            //test.ShowDialog();
-            //return true;
+            ProgramState.CloseSession();
+            ProgramState.ShowErrorDialog($"Возникла ошибка, не позволяющая приложению продолжать свою работу.\n" +
+                $"Описание: {e.Exception.Message}\nПриложение будет немедленно закрыто.", "Критическая ошибка");
+        }
+
+        private void OnExit(object sender, ExitEventArgs e)
+        {
+            ProgramState.CloseSession();
         }
     }
 }

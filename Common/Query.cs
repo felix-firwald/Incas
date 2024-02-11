@@ -569,6 +569,15 @@ namespace Common
         {
             switch (ex.ErrorCode)
             {
+                case 1:
+                    ProgramState.ShowDatabaseErrorDialog(
+                        $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}" +
+                        $"\nINCAS попытается исправить проблему, если она связана с конфигурацией служебной базы данных.");
+                    if (typeOfConnection == DBConnectionType.BASE || typeOfConnection == DBConnectionType.SERVICE)
+                    {
+
+                    }
+                    break;
                 case 5: // busy
                 case 6: // locked
                     Thread.Sleep(50);
@@ -601,8 +610,9 @@ namespace Common
                         $"\nЕё использование невозможно.\n\nСведения об ошибке: {ex}");
                     break;
                 default:
+
                     ProgramState.ShowDatabaseErrorDialog(
-                        $"При выполнении запроса к базе данных возникла ошибка:\n{ex}" +
+                        $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}" +
                         $"\nПроверьте правильность данных.");
                     break;
             }

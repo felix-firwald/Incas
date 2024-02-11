@@ -47,7 +47,7 @@ namespace Common
         public static string CustomDatabasePath { get { return Root + @"\Databases"; } }
         public static string ServiceDatabasePath { get { return Root + @"\service.dbinc"; } }
         public static string Root { get { return CommonPath + @"\Root"; } }
-        public static string ServerProcesses { get { return Root + @"\ServerProccesses"; } } // ...\Root\ServerProccesses
+        public static string ServerProcesses { get { return Root + @"\ServerProcesses"; } } // ...\Root\ServerProccesses
         public static string Exchanges { get { return Root + @"\Exchanges"; } } // ...\Root\Exchanges
         public static string Messages { get { return Root + @"\Messages"; } } // папка еще не создана
 
@@ -84,7 +84,6 @@ namespace Common
                 Directory.CreateDirectory(CustomDatabasePath);
                 Directory.CreateDirectory(Messages);
                 Directory.CreateDirectory(LogData);
-                Directory.CreateDirectory(UsersContext);
                 Directory.CreateDirectory(TemplatesRuntime);
             });
             CollectGarbage();
