@@ -575,7 +575,7 @@ namespace Common
                         $"\nINCAS попытается исправить проблему, если она связана с конфигурацией служебной базы данных.");
                     if (typeOfConnection == DBConnectionType.BASE || typeOfConnection == DBConnectionType.SERVICE)
                     {
-
+                        DatabaseManager.TryFix(ex, typeOfConnection);
                     }
                     break;
                 case 5: // busy

@@ -148,7 +148,7 @@ namespace Incubator_2.Common
             RemoveOldest();
             await System.Threading.Tasks.Task.Run(() =>
             {
-                while (ProgramState.CurrentSession is not null || ProgramState.CurrentSession.active || !StopPulling)
+                while (ProgramState.CurrentSession is not null || (bool)ProgramState.CurrentSession?.active || !StopPulling)
                 {
                     try
                     {
@@ -267,9 +267,9 @@ namespace Incubator_2.Common
             }
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
-        private static void RestartProcessHandle()
+        public static void RestartProcessHandle(bool force = false)
         {
-            if (Permission.CurrentUserPermission != PermissionGroup.Admin)
+            if (Permission.CurrentUserPermission != PermissionGroup.Admin || force)
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {

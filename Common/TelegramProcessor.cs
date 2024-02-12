@@ -52,12 +52,16 @@ namespace Incubator_2.Common
                         }
                         break;
                     case UpdateType.CallbackQuery:
-                        string pressedButtonID = update.CallbackQuery.Data; // Сюда вытягиваешь callbackData из кнопки.
-
+                        SwitchOnCallbackQuery(update.CallbackQuery.Data);
                         break;
                 }
             }
             catch { }
+        }
+        private static void SwitchOnCallbackQuery(string callback)
+        {
+            //InlineKeyboardMarkup inlineKeyboard = new(InlineKeyboardButton.WithCallbackData(text: "Создать документ", callbackData: "NEWDOC"));
+
         }
         private static Task<Message> SendStartMessage(ChatId cid)
         {

@@ -216,7 +216,54 @@ namespace Common
         }
         public static void TryFix(SQLiteException ex, DBConnectionType con)
         {
-
+            if (ex.Message.Contains("no such table:"))
+            {
+                string[] result = ex.Message.Split();
+                AutoTableCreator atc = new AutoTableCreator();
+                Query q = new Query("");
+                q.typeOfConnection = con;
+                switch (result[result.Length - 1].Trim())
+                {
+                    case "Processes":
+                        q.AddCustomRequest(GetProcessDefinition(atc));
+                        break;
+                    case "Sectors":
+                        q.AddCustomRequest(GetSectorDefinition(atc));
+                        break;
+                    case "Databases":
+                        q.AddCustomRequest(GetDatabasesDefinition(atc));
+                        break;
+                    case "Parameters":
+                        q.AddCustomRequest(GetParameterDefinition(atc));
+                        break;
+                    case "Users":
+                        q.AddCustomRequest(GetParameterDefinition(atc));
+                        break;
+                    case "Sessions":
+                        q.AddCustomRequest(GetSessionDefinition(atc));
+                        break;
+                    case "Tasks":
+                        q.AddCustomRequest(GetTaskDefinition(atc));
+                        break;
+                    case "Templates":
+                        q.AddCustomRequest(GetTemplateDefinition(atc));
+                        break;
+                    case "GeneratedDocuments":
+                        q.AddCustomRequest(GetGeneratedDocumentDefinition(atc));
+                        break;
+                    case "Tags":
+                        q.AddCustomRequest(GetTagDefinition(atc));
+                        break;
+                    case "Commands":
+                        q.AddCustomRequest(GetCommandDefinition(atc));
+                        break;
+                    default:
+                        return;
+                }
+                q.ExecuteVoid();
+                ProgramState.ShowInfoDialog("INCAS исправил ошибку. Программа будет перезапущена.");
+                ServerProcessor.RestartProcessHandle(force: true);
+            }
         }
     }
 }
