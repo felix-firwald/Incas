@@ -164,8 +164,9 @@ namespace Incubator_2.Common
                                 Switcher(Parse(content));
                             }
                         }
+                        ProgramState.CollectGarbage();
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         continue;
                     }
@@ -432,11 +433,21 @@ namespace Incubator_2.Common
         }
         private static void SendFileProcess(string filename, string fullname, string recipient, ProcessTarget target)
         {
-            Process process = CreateQueryProcess(recipient);
-            process.target = target;
-            process.content = filename;
-            File.Copy(fullname, $"{ProgramState.Exchanges}\\{filename}", true);
-            SendToPort(process);
+            try
+            {
+                Process process = CreateQueryProcess(recipient);
+                process.target = target;
+                process.content = filename;
+                if (!fullname.StartsWith(ProgramState.Exchanges))
+                {
+                    File.Copy(fullname, $"{ProgramState.Exchanges}\\{filename}", true);
+                }
+                SendToPort(process);
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog(ex.Message);
+            }
         }
         public static void SendCopyFileProcess(string filename, string fullname, string recipient)
         {

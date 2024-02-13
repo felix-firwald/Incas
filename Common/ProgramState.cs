@@ -69,6 +69,8 @@ namespace Common
         #endregion
         public static Sector CurrentSector { get; private set; }
         public static MV_MainWindow MainWindow { get; set; }
+
+        private static DateTime LastGarbageCollect = DateTime.Now;
         #region Path and init
         public async static void SetCommonPath(string path)
         {
@@ -88,7 +90,7 @@ namespace Common
             });
             CollectGarbage();
             
-            TelegramProcessor.StartBot("6911917508:AAHJeEhfNKzzOJjp0IlGtZ51lqNrE2LBnK4");
+            //TelegramProcessor.StartBot("6911917508:AAHJeEhfNKzzOJjp0IlGtZ51lqNrE2LBnK4");
         }
         public static string GetFullPathOfCustomDb(string path)
         {
@@ -502,10 +504,14 @@ namespace Common
         }
         public static void CollectGarbage()
         {
-            RemoveFilesOlderThan(ServerProcesses, DateTime.Now.AddHours(-8));
-            RemoveFilesOlderThan(Exchanges, DateTime.Now.AddHours(-1));
-            RemoveFilesOlderThan(TemplatesRuntime, DateTime.Now.AddHours(-1));
-            RemoveFilesOlderThan(LogData, DateTime.Now.AddHours(-8));
+            if (LastGarbageCollect < DateTime.Now.AddMinutes(-5))
+            {
+                RemoveFilesOlderThan(ServerProcesses, DateTime.Now.AddHours(-8));
+                RemoveFilesOlderThan(Exchanges, DateTime.Now.AddHours(-1));
+                RemoveFilesOlderThan(TemplatesRuntime, DateTime.Now.AddHours(-1));
+                RemoveFilesOlderThan(LogData, DateTime.Now.AddHours(-8));
+                LastGarbageCollect = DateTime.Now;
+            }
         }
     }
 }

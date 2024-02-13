@@ -40,6 +40,7 @@
         <Grid.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Открыть файл" Click="CreateFileClick"/>
+                <MenuItem Header="Открыть файл у другого пользователя" Click="CreateFileForAnotherClick"/>
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>
