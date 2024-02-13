@@ -1,5 +1,11 @@
-﻿using Incubator_2.Common;
+﻿using Common;
+using Incubator_2.Common;
 using Incubator_2.Models;
+using Models;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -45,6 +51,33 @@ namespace Incubator_2.Forms
             else
             {
                 this.Selector.IsChecked = true;
+            }
+        }
+
+        private void CreateFileClick(object sender, RoutedEventArgs e)
+        {
+            ProgramState.ShowWaitCursor();
+            string filename = $"{ProgramState.TemplatesRuntime}\\{record.fileName}.docx";            
+            using (Template templ = new())
+            {
+                using (Tag t = new())
+                {
+                    UC_FileCreator fc = new(templ.GetTemplateById(record.template), t.GetAllTagsByTemplate(record.template));
+                    fc.ApplyRecord(record.fileName, record.GetFilledTags());
+                    fc.CreateFile(ProgramState.TemplatesRuntime, false, false);
+                }
+            }
+            ProgramState.ShowWaitCursor(false);
+            try
+            {
+                System.Diagnostics.Process proc = new();
+                proc.StartInfo.FileName = filename;
+                proc.StartInfo.UseShellExecute = true;
+                proc.Start();
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog($"Не удалось открыть файл:\n{ex}", "Действие невозможно");
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Common;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +25,12 @@ namespace Incubator_2.Common
             
         }
 
-        private async static Task Error(ITelegramBotClient client, Exception exception, CancellationToken token)
+        private async static System.Threading.Tasks.Task Error(ITelegramBotClient client, Exception exception, CancellationToken token)
         {
             
         }
 
-        private async static Task Update(ITelegramBotClient cli, Update update, CancellationToken token)
+        private async static System.Threading.Tasks.Task Update(ITelegramBotClient cli, Update update, CancellationToken token)
         {
             try
             {
@@ -46,22 +47,57 @@ namespace Incubator_2.Common
                                     await SendStartMessage(message.Chat.Id);
                                     break;
                                 default:
-                                    ProgramState.ShowInfoDialog(message.Text, "Текст пользователя");
+                                    if (message.Text.StartsWith("Category#"))
+                                    {
+                                        ShowTemplates(message.Chat.Id, message.Text.Replace("Category#", ""));
+                                    }
                                     break;
                             }
                         }
                         break;
                     case UpdateType.CallbackQuery:
-                        SwitchOnCallbackQuery(update.CallbackQuery.Data);
+                        SwitchOnCallbackQuery(update.CallbackQuery.Message.Chat.Id, update.CallbackQuery.Data);
                         break;
                 }
             }
             catch { }
         }
-        private static void SwitchOnCallbackQuery(string callback)
+        private static void ShowTemplates(long chat, string category)
         {
-            //InlineKeyboardMarkup inlineKeyboard = new(InlineKeyboardButton.WithCallbackData(text: "Создать документ", callbackData: "NEWDOC"));
-
+            string result = "Выберите шаблон:";
+            using (Template t = new())
+            {
+                foreach (STemplate item in t.GetWordTemplates(category))
+                {
+                    result += $"\n`{item.name}`\n";
+                }
+            }
+            client.SendTextMessageAsync(chatId: chat, text: result, parseMode: ParseMode.MarkdownV2);
+        }
+        private static void SwitchOnCallbackQuery(long chat, string callback)
+        {
+            string message = "";
+            switch (callback)
+            {
+                case "NEWDOC":
+                    using (Template t = new())
+                    {
+                        List<string> categories = t.GetCategories();
+                        string result = "Выберите *одну* из категорий ниже:";
+                        foreach (string category in categories)
+                        {
+                            if (string.IsNullOrWhiteSpace(category)) continue;
+                            result += $"\n`Category#{category}`\n";
+                        }
+                        message = result;
+                    }
+                    break;
+                case "GETDOC":
+                    break;
+                case "SELECTUSER":
+                    break;
+            }
+            client.SendTextMessageAsync(chatId: chat, text: message, parseMode: ParseMode.MarkdownV2);
         }
         private static Task<Message> SendStartMessage(ChatId cid)
         {
@@ -70,12 +106,14 @@ namespace Incubator_2.Common
                 // first row
                 [
                     InlineKeyboardButton.WithCallbackData(text: "Создать документ", callbackData: "NEWDOC"),
-                    InlineKeyboardButton.WithCallbackData(text: "Получить созданный документ", callbackData: "GETDOC"),
                 ],
                 // second row
+                [
+                    InlineKeyboardButton.WithCallbackData(text: "Получить созданный документ", callbackData: "GETDOC"),
+                ],
                 new []
                 {
-                    InlineKeyboardButton.WithCallbackData(text: "Получить созданный документ", callbackData: "GETDOC"),
+                    InlineKeyboardButton.WithCallbackData(text: "Выбрать пользователя", callbackData: "SELECTUSER"),
                 },
             });
             return client.SendTextMessageAsync(

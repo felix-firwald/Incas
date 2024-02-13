@@ -307,7 +307,7 @@ namespace Incubator_2.Common
             });
 
         }
-        private static void OpenFileProcessHandle(string filename)
+        public static void OpenFileProcessHandle(string filename)
         {
             string fullname = $"{ProgramState.Exchanges}\\{filename}";
             try

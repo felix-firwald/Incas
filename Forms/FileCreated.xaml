@@ -39,7 +39,7 @@
         </Grid.Style>
         <Grid.ContextMenu>
             <ContextMenu>
-                <MenuItem Header="Показать записи по шаблону"/>
+                <MenuItem Header="Открыть файл" Click="CreateFileClick"/>
             </ContextMenu>
         </Grid.ContextMenu>
     </Grid>

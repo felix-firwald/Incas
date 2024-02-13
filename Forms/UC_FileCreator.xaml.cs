@@ -36,6 +36,7 @@ namespace Incubator_2.Forms
             this.template = templ;
             FillContentPanel();
         }
+
         private void FillContentPanel()
         {
             this.tags.ForEach(t =>
@@ -181,7 +182,7 @@ namespace Incubator_2.Forms
             result.SaveFilledTags(filledTags);
             return result;
         }
-        public void CreateFile(string newPath)
+        public void CreateFile(string newPath, bool async = true, bool save = true)
         {
             try
             {
@@ -209,19 +210,22 @@ namespace Incubator_2.Forms
                         tagsToReplace.Add(name);
                         values.Add(value);
                     }
-                    wt.Replace(tagsToReplace, values);
+                    wt.Replace(tagsToReplace, values, async);
                     foreach (TableFiller tab in Tables)
                     {
                         wt.CreateTable(tab.tag.name, tab.DataTable);
                     }
                 });
-                using (GeneratedDocument doc = new())
+                if (save)
                 {
-                    doc.fileName = this.Filename.Text;
-                    doc.template = this.template.id;
-                    doc.templateName = this.template.name;
-                    doc.SaveFilledTags(filledTags);
-                    doc.AddRecord();
+                    using (GeneratedDocument doc = new())
+                    {
+                        doc.fileName = this.Filename.Text;
+                        doc.template = this.template.id;
+                        doc.templateName = this.template.name;
+                        doc.SaveFilledTags(filledTags);
+                        doc.AddRecord();
+                    }
                 }
             }
             catch (IOException)

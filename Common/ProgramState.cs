@@ -504,6 +504,7 @@ namespace Common
         {
             RemoveFilesOlderThan(ServerProcesses, DateTime.Now.AddHours(-8));
             RemoveFilesOlderThan(Exchanges, DateTime.Now.AddHours(-1));
+            RemoveFilesOlderThan(TemplatesRuntime, DateTime.Now.AddHours(-1));
             RemoveFilesOlderThan(LogData, DateTime.Now.AddHours(-8));
         }
     }
