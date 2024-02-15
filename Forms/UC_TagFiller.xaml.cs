@@ -284,6 +284,11 @@ namespace Incubator_2.Forms
         {
             OnRename?.Invoke(this.tag.name);
         }
-        
+
+        private void TextRequest(object sender, RoutedEventArgs e)
+        {
+            string rec = ProgramState.ShowActiveUserSelector("Выберите пользователя для запроса данных").slug;
+            ServerProcessor.SendRequestTextProcess(this, rec);
+        }
     }
 }

@@ -29,10 +29,11 @@ namespace Incubator_2.Common
         GET_USER = 105,
         // ALL USERS
         OPEN_SEQUENCER = 201,
-        COPY_TEXT = 202,
-        COPY_FILE = 203,
-        OPEN_FILE = 204,
-        OPEN_WEB = 205,
+        REQUEST_TEXT = 202,
+        COPY_TEXT = 203,
+        COPY_FILE = 204,
+        OPEN_FILE = 205,
+        OPEN_WEB = 206,
         UPDATE_MAIN = 301,        
     }
     enum ResponseCode
@@ -67,6 +68,11 @@ namespace Incubator_2.Common
         public static string Port { get { return $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession.slug}.incport"; } }
         private static List<Process> WaitList = new();
         private static bool StopPulling = false;
+
+        #region ControlsWait
+        private static List<UC_TagFiller> tagFillersWait = new();
+        #endregion
+
 
         #region Base Functionality
         public static void StopPort()
@@ -209,6 +215,9 @@ namespace Incubator_2.Common
                         case ProcessTarget.OPEN_WEB:
                             OpenWebProcessHandle(process.content);
                             break;
+                        case ProcessTarget.REQUEST_TEXT:
+                            ShowInputDialogHandle(process);
+                            break;
                         case ProcessTarget.UNKNOWN:
                         default: break;
                     }
@@ -221,6 +230,22 @@ namespace Incubator_2.Common
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
                                 ProgramState.ShowInfoDialog($"Пользователь ответил: {process.content}", "Ответ на запрос");
+                            });
+                            break;
+                        case ProcessTarget.REQUEST_TEXT:
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                string uid = process.content.Split("|||")[0];
+                                string value = process.content.Split("|||")[1];
+                                for (int i = 0; i <= tagFillersWait.Count; i++)
+                                {
+                                    if (tagFillersWait[i].GetId() == int.Parse(uid))
+                                    {
+                                        tagFillersWait[i].SetValue(value);
+                                        tagFillersWait.Remove(tagFillersWait[i]);
+                                        break;
+                                    }
+                                }
                             });
                             break;
                     }
@@ -379,6 +404,20 @@ namespace Incubator_2.Common
                 
             });
         }
+        private static void ShowInputDialogHandle(Process oldProc)
+        {
+            Process process = new();
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                string result = ProgramState.ShowInputBox("Запрос значения", oldProc.content.Split("|||")[1]);
+                process.content = $"{oldProc.content.Split("|||")[0]}|||{result}";
+            });
+            process.emitter = ProgramState.CurrentSession.slug;
+            process.recipient = oldProc.emitter;
+            process.target = ProcessTarget.REQUEST_TEXT;
+            process.type = ProcessType.RESPONSE;
+            SendToPort(process);
+        }
         #endregion
 
         #region Sending
@@ -429,6 +468,14 @@ namespace Incubator_2.Common
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.COPY_TEXT;
             process.content = text;
+            SendToPort(process);
+        }
+        public static void SendRequestTextProcess(UC_TagFiller tagfiller, string recipient)
+        {
+            Process process = CreateQueryProcess(recipient);
+            process.target = ProcessTarget.REQUEST_TEXT;
+            process.content = $"{tagfiller.GetId()}|||{tagfiller.tag.name}";
+            tagFillersWait.Add(tagfiller);
             SendToPort(process);
         }
         private static void SendFileProcess(string filename, string fullname, string recipient, ProcessTarget target)

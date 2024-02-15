@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Telegram.Bot.Types;
 
 namespace Incubator_2.Forms
 {
@@ -187,7 +188,7 @@ namespace Incubator_2.Forms
             try
             {
                 string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
-                File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
+                System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
                 List<SGeneratedTag> filledTags = new();
                 WordTemplator wt = new WordTemplator(newFile);
 
@@ -280,7 +281,7 @@ namespace Incubator_2.Forms
             {
 
                 string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.docx";
-                File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
+                System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
                 WordTemplator wt = new WordTemplator(newFile);
 
                 List<string> tagsToReplace = new List<string>();
@@ -319,6 +320,25 @@ namespace Incubator_2.Forms
         private void OnSelectorUnchecked(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void OpenFileClick(object sender, MouseButtonEventArgs e)
+        {
+            ProgramState.ShowWaitCursor();
+            CreateFile(ProgramState.TemplatesRuntime, false, false);
+            string filename = $"{ProgramState.TemplatesRuntime}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
+            try
+            {
+                System.Diagnostics.Process proc = new();
+                proc.StartInfo.FileName = filename;
+                proc.StartInfo.UseShellExecute = true;
+                proc.Start();
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog($"Не удалось открыть файл:\n{ex.Message}", "Действие невозможно");
+            }
+            ProgramState.ShowWaitCursor(false);
         }
     }
 }

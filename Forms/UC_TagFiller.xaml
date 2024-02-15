@@ -35,6 +35,7 @@
                         <MenuItem Header="Обернуть фрагмент в кавычки" Click="WrapAsQuoteClick"/>
                     </MenuItem>
                     <MenuItem Header="Вставить данные">
+                        <MenuItem Header="Запросить текстовые данные" Click="TextRequest"/>
                         <MenuItem Header="Текущая дата (краткий формат)" Click="AddDateNow"/>
                         <MenuItem Header="Текущая дата (длинный формат)" Click="AddDateLongNow"/>
                         <Separator Background="{DynamicResource Element}"/>
