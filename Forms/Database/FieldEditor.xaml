@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms.Database" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="300" d:DesignWidth="800">
     <Border x:Name="MainBorder" Margin="5" CornerRadius="5" Background="{DynamicResource Dark}">
         <Grid>
             <Grid.RowDefinitions>
@@ -35,57 +35,34 @@
 
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
             <StackPanel Grid.Row="2" x:Name="ContentPanel">
-                <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding TypeOfTagValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding DataType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <ComboBoxItem >
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Fill="{DynamicResource Success}" Width="5" Height="5"/>
-                            <Label Content="Короткий текст" Style="{DynamicResource LabelElement}"/>
+                            <Label Content="Текст" Style="{DynamicResource LabelElement}"/>
                             <Label Content="Ручной ввод" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
                         </StackPanel>
                     </ComboBoxItem>
                     <ComboBoxItem >
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Fill="{DynamicResource Success}" Width="5" Height="5"/>
-                            <Label Content="Многострочный текст" Style="{DynamicResource LabelElement}"/>
+                            <Label Content="Число" Style="{DynamicResource LabelElement}"/>
                             <Label Content="Ручной ввод" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
                         </StackPanel>
                     </ComboBoxItem>
                     <ComboBoxItem >
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
-                            <Label Content="Перечисление" Style="{DynamicResource LabelElement}"/>
+                            <Label Content="Булевое" Style="{DynamicResource LabelElement}"/>
                             <Label Content="Выпадающий список" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
                         </StackPanel>
                     </ComboBoxItem>
-                    <ComboBoxItem >
-                        <StackPanel Orientation="Horizontal">
-                            <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
-                            <Label Content="Данные" Style="{DynamicResource LabelElement}"/>
-                            <Label Content="Окно выбора записи из базы данных" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
-                        </StackPanel>
-                    </ComboBoxItem>
-                    <ComboBoxItem >
-                        <StackPanel Orientation="Horizontal">
-                            <Ellipse Fill="{DynamicResource Error}" Width="5" Height="5"/>
-                            <Label Content="Константа" Style="{DynamicResource LabelElement}"/>
-                            <Label Content="Неизменяемое значение" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
-                        </StackPanel>
-                    </ComboBoxItem>
                 </ComboBox>
-                <TextBox x:Name="MainTextBox" Style="{DynamicResource TextBoxBig}" Tag="{Binding DescriptionText}" Text="{Binding DefaultValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding DefaultValueVisibility}" MaxLength="500" TextWrapping="Wrap">
-                    <TextBox.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
-                            <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
-                        </ContextMenu>
-                    </TextBox.ContextMenu>
-                </TextBox>
                 <CheckBox Style="{DynamicResource Toggle}" Content="Первичный ключ" IsChecked="{Binding IsPK}"/>
-                <CheckBox Style="{DynamicResource Toggle}" Content="Внешний ключ" IsChecked="{Binding IsFK}"/>
-                <Button Style="{DynamicResource ButtonMain}" Content="Определить привязку" Visibility="{Binding ButtonRelationVisibility}"/>
+                <CheckBox x:Name="CBFK" Style="{DynamicResource Toggle}" Content="Внешний ключ" IsChecked="{Binding IsFK}"/>
+                <Button Style="{DynamicResource ButtonMain}" Content="Определить привязку" IsEnabled="{Binding ElementName=CBFK, Path=IsChecked}"/>
                 <CheckBox Style="{DynamicResource Toggle}" Content="Уникальное значение" IsChecked="{Binding IsUnique}"/>
                 <CheckBox Style="{DynamicResource Toggle}" Content="Не может быть нулевым" IsChecked="{Binding IsNotNull}"/>
-                
             </StackPanel>
         </Grid>
     </Border>

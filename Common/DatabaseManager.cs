@@ -56,13 +56,11 @@ namespace Common
                 q.typeOfConnection = DBConnectionType.OTHER;
                 q.DBPath = customName;
             }
-            q.BeginTransaction()
-             .AddCustomRequest(GetTaskDefinition(atc))
+            q.AddCustomRequest(GetTaskDefinition(atc))
              .AddCustomRequest(GetSubtaskDefinition(atc))
              .AddCustomRequest(GetTemplateDefinition(atc))
              .AddCustomRequest(GetTagDefinition(atc))
              .AddCustomRequest(GetGeneratedDocumentDefinition(atc))
-             .EndTransaction()
              .ExecuteVoid();
         }
 
@@ -73,14 +71,14 @@ namespace Common
             AutoTableCreator atc = new AutoTableCreator();
             Query q = new Query("");
             q.typeOfConnection = DBConnectionType.SERVICE;
-            q.BeginTransaction()
+            q
              .AddCustomRequest(GetParameterDefinition(atc))
              .AddCustomRequest(GetSectorDefinition(atc))
              .AddCustomRequest(GetUserDefinition(atc))
              .AddCustomRequest(GetSessionDefinition(atc))
              .AddCustomRequest(GetDatabasesDefinition(atc))
              .AddCustomRequest(GetCommandDefinition(atc))
-             .EndTransaction()
+             
              .ExecuteVoid();
             InitializeData();
             return true;

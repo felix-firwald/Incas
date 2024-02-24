@@ -51,7 +51,7 @@ namespace Incubator_2.Common
         {
             if (IsPK)
             {
-                return "[id] INTEGER PRIMARY KEY AUTOINCREMENT";
+                return $"[{Name}] INTEGER PRIMARY KEY AUTOINCREMENT";
             }
             return $"[{Name}] {TypeOf} {GetNull()} {GetUniq()} {GetFK()}".Trim();
         }

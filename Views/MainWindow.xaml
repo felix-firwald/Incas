@@ -28,24 +28,7 @@
             <ColumnDefinition Width="250" MinWidth="140" MaxWidth="400"/>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <!--<DockPanel Grid.ColumnSpan="2">
-            <Border Background="{DynamicResource Black}">
-                <Grid Margin="5,5,5,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="40" />
-                        <ColumnDefinition Width="40" />
-                        <ColumnDefinition Width="40" />
-                    </Grid.ColumnDefinitions>
 
-                    <Label Style="{DynamicResource LabelElement}" Content="ИНКУБАТОР" VerticalAlignment="Center" Margin="5,0,0,0"/>
-
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" Grid.Column="1" FontSize="12" MouseDown="WindowMinimize" />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" Grid.Column="2" FontSize="12" MouseDown="WindowMaximize" />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" Grid.Column="3" FontSize="14" Margin="0" MouseDown="WindowClose" Cursor="Hand"/>
-                </Grid>
-            </Border>
-        </DockPanel>-->
 
         <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize" Cursor="">
             <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,15" Text="{Binding SectorName, FallbackValue=Без имени}" TextWrapping="Wrap"/>

@@ -21,12 +21,15 @@ namespace Incubator_2.ViewModels
 
         private void UpdateUsers()
         {
-            using (User user = new())
+            if (RegistryData.IsWorkspaceExists(SelectedWorkspace))
             {
-                _users.Clear();
-                _users = user.GetAllUsers();
+                using (User user = new())
+                {
+                    _users.Clear();
+                    _users = user.GetAllUsers();
+                }
+                UpdateSelectedUser();
             }
-            UpdateSelectedUser();
         }
 
         public void Refresh()
@@ -59,11 +62,13 @@ namespace Incubator_2.ViewModels
         {
             get
             {
+
                 return RegistryData.GetSelectedWorkspace();
             }
             set
             {
                 RegistryData.SetSelectedWorkspace(value);
+
                 ProgramState.SetCommonPath(Path);
                 OnPropertyChanged(nameof(SelectedWorkspace));
                 OnPropertyChanged(nameof(Path));
@@ -85,8 +90,11 @@ namespace Incubator_2.ViewModels
             set
             {
                 RegistryData.SetWorkspacePath(SelectedWorkspace, value);
-                OnPropertyChanged(nameof(Path));
-                OnPropertyChanged(nameof(Users));
+                if (RegistryData.IsWorkspaceExists(SelectedWorkspace))
+                {
+                    OnPropertyChanged(nameof(Path));
+                    OnPropertyChanged(nameof(Users));
+                }
             }
         }
         private List<User> _users = new();
@@ -144,6 +152,7 @@ namespace Incubator_2.ViewModels
         {
             get
             {
+                
                 return RegistryData.GetWorkspacePassword(SelectedWorkspace);
             }
             set

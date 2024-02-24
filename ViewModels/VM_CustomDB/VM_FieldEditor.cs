@@ -64,5 +64,9 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 OnPropertyChanged(nameof(IsNotNull));
             }
         }
+        public string GetDefinition()
+        {
+            return creator.ToString();
+        }
     }
 }

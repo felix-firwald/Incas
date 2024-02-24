@@ -65,7 +65,7 @@ namespace Incubator_2.Common
     }
     static class ServerProcessor
     {
-        public static string Port { get { return $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession.slug}.incport"; } }
+        public static string Port { get { return $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession?.slug}.incport"; } }
         private static List<Process> WaitList = new();
         private static bool StopPulling = false;
 
@@ -412,6 +412,7 @@ namespace Incubator_2.Common
                 string result = ProgramState.ShowInputBox("Запрос значения", oldProc.content.Split("|||")[1]);
                 process.content = $"{oldProc.content.Split("|||")[0]}|||{result}";
             });
+            process.id = GenerateId();
             process.emitter = ProgramState.CurrentSession.slug;
             process.recipient = oldProc.emitter;
             process.target = ProcessTarget.REQUEST_TEXT;

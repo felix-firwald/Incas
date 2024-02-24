@@ -28,5 +28,9 @@ namespace Incubator_2.Forms.Database
             vm = new();
             this.DataContext = vm;
         }
+        public string GetDefinition()
+        {
+            return vm.GetDefinition();
+        }
     }
 }

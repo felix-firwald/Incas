@@ -178,45 +178,46 @@ namespace Common
         {
             Permission.CurrentUserPermission = PermissionGroup.Admin;
             SetCommonPath(data.workspacePath);
-            CreateTablesInDatabase();
-            RegistryData.SetWorkspacePath(data.workspaceName, data.workspacePath);
-            using (Parameter par = new())
+            if (CreateTablesInDatabase())
             {
-                par.type = ParameterType.INCUBATOR;
-                par.name = "ws_name";
-                par.value = data.workspaceName;
-                par.CreateParameter();
-                par.name = "ws_opened";
-                par.WriteBoolValue(true);
-                par.CreateParameter();
-                par.name = "ws_locked";
-                par.WriteBoolValue(false);
-                par.CreateParameter();
+                RegistryData.SetWorkspacePath(data.workspaceName, data.workspacePath);
+                using (Parameter par = new())
+                {
+                    par.type = ParameterType.INCUBATOR;
+                    par.name = "ws_name";
+                    par.value = data.workspaceName;
+                    par.CreateParameter();
+                    par.name = "ws_opened";
+                    par.WriteBoolValue(true);
+                    par.CreateParameter();
+                    par.name = "ws_locked";
+                    par.WriteBoolValue(false);
+                    par.CreateParameter();
+                }
+                using (Sector sector = new())
+                {
+                    sector.slug = "data";
+                    sector.name = "Базовый сектор";
+                    sector.AddSector(false);
+                }
+                using (User user = new())
+                {
+                    user.username = "admin";
+                    user.post = "Администратор рабочего пространства";
+                    user.surname = data.userSurname;
+                    user.secondName = data.userFullname;
+                    user.fullname = $"{user.surname} {user.secondName}";
+                    user.sector = "data";
+                    user.AddUser();
+                    UserParameters up = new();
+                    up.permission_group = PermissionGroup.Admin;
+                    up.tasks_visibility = true;
+                    up.communication_visibility = true;
+                    up.database_visibility = true;
+                    up.password = data.userPassword;
+                    UserContextor.SaveContext(up, user);
+                }
             }
-            using (Sector sector = new())
-            {
-                sector.slug = "data";
-                sector.name = "Базовый сектор";
-                sector.AddSector(false);
-            }
-            using (User user = new())
-            {
-                user.username = "admin";
-                user.post = "Администратор рабочего пространства";
-                user.surname = data.userSurname;
-                user.secondName = data.userFullname;
-                user.fullname = $"{user.surname} {user.secondName}";
-                user.sector = "data";
-                user.AddUser();
-                UserParameters up = new();
-                up.permission_group = PermissionGroup.Admin;
-                up.tasks_visibility = true;
-                up.communication_visibility = true;
-                up.database_visibility = true;
-                up.password = data.userPassword;
-                UserContextor.SaveContext(up, user);
-            }
-
         }
         public static string GetWorkspaceName()
         {

@@ -422,5 +422,10 @@ namespace Incubator_2.Forms.Database
                 ProgramState.ShowErrorDialog(ex.Message);
             }
         }
+
+        private void NewTemplateClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

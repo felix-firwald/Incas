@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +66,10 @@ namespace Common
         public static string GetSelectedWorkspacePath()
         {
             return GetWorkspacePath(GetSelectedWorkspace());
+        }
+        public static bool IsWorkspaceExists(string workspace)
+        {
+            return GetWorkspaceData().GetSubKeyNames().Contains(workspace);
         }
 
         public static RegistryKey GetWorkspaceByName(string name)
