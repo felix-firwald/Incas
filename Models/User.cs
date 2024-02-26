@@ -87,6 +87,11 @@ namespace Models
             return this;
         }
 
+        public void GenerateSign()
+        {
+            this.sign = ProgramState.GenerateSlug(12);
+        }
+
         public void UpdateUser()
         {
             StartCommandToService()
@@ -100,7 +105,10 @@ namespace Models
         }
         public void AddUser()
         {
-            this.sign = ProgramState.GenerateSlug(12);
+            if (string.IsNullOrEmpty(sign))
+            {
+                GenerateSign();
+            }
             StartCommandToService()
                 .Insert(new Dictionary<string, string>
                 {
@@ -154,7 +162,7 @@ namespace Models
         #endregion
         private string GetKey()
         {
-            string result = Cryptographer.GenerateKey($"{this.id}{this.sign}");
+            string result = Cryptographer.GenerateKey(this.sign);
             return result;
         }
         public UserParameters GetParametersContext()

@@ -508,6 +508,7 @@ namespace Common
                     SQLiteDataReader sqlreader = cmd.ExecuteReader();
                     DataTable objDataTable = new DataTable();
                     objDataTable.Load(sqlreader);
+                    conn.Close();
                     return objDataTable;
                 }
 
@@ -536,6 +537,7 @@ namespace Common
                     {
                         return objDataTable.Rows[0];
                     }
+                    conn.Close();
                     return null;
                 }
 
@@ -556,13 +558,29 @@ namespace Common
                     SQLiteCommand cmd = conn.CreateCommand();
                     cmd.CommandText = GetRequest();
                     cmd.ExecuteNonQuery();
+                    conn.Close();
                     return;
                 }
 
             }
+            
             catch (SQLiteException ex)
             {
                 SwitchOnSqliteException(ex, ExecuteType.EXECUTE_VOID);
+            }
+            catch (Exception)
+            {
+                Thread.Sleep(50);
+                recursion++;
+                if (recursion < 10)
+                {
+                    ExecuteVoid();
+                }
+                else
+                {
+                    recursion = 0;
+                    ProgramState.ShowDatabaseErrorDialog("База данных блокируется другим процессом.");
+                }
             }
         }
         private void SwitchOnSqliteException(SQLiteException ex, ExecuteType executeType)

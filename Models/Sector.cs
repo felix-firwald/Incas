@@ -17,13 +17,13 @@ namespace Incubator_2.Models
         {
             tableName = "Sectors";
         }
-        public void AddSector(bool generateSlug = true)
+        public void AddSector(bool generateSlug = true, bool acumulate = false)
         {
             if (generateSlug)
             {
                 slug = ProgramState.GenerateSlug(12);
             }
-            StartCommandToService()
+            Query q = StartCommandToService()
                 .Insert(new()
                 {
                     {
@@ -32,8 +32,8 @@ namespace Incubator_2.Models
                     {
                         "name", name
                     }
-                })
-                .ExecuteVoid();
+                });
+                q.ExecuteVoid();
             DatabaseManager.InitializeData(slug);
         }
         public void SaveSector()

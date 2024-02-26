@@ -62,6 +62,7 @@ namespace Common
              .AddCustomRequest(GetTagDefinition(atc))
              .AddCustomRequest(GetGeneratedDocumentDefinition(atc))
              .ExecuteVoid();
+            //SQLiteConnection.ClearAllPools();
         }
 
         public static bool InitializeService()

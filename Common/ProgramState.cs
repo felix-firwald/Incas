@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using Incubator_2.Windows.CustomDatabase;
 using Incubator_2.ViewModels;
+using System.Data.SQLite;
+using System.Threading;
 
 
 namespace Common
@@ -72,22 +74,19 @@ namespace Common
 
         private static DateTime LastGarbageCollect = DateTime.Now;
         #region Path and init
-        public async static void SetCommonPath(string path)
+        public static void SetCommonPath(string path)
         {
             CommonPath = path;
             DatabasePath = path + @"\data.dbinc";
-            await System.Threading.Tasks.Task.Run(() =>
-            {
-                Directory.CreateDirectory(Templates);
-                Directory.CreateDirectory(TemplatesSourcesWordPath);
-                Directory.CreateDirectory(TemplatesSourcesExcelPath);
-                Directory.CreateDirectory(ServerProcesses);
-                Directory.CreateDirectory(Exchanges);
-                Directory.CreateDirectory(CustomDatabasePath);
-                Directory.CreateDirectory(Messages);
-                Directory.CreateDirectory(LogData);
-                Directory.CreateDirectory(TemplatesRuntime);
-            });
+            Directory.CreateDirectory(Templates);
+            Directory.CreateDirectory(TemplatesSourcesWordPath);
+            Directory.CreateDirectory(TemplatesSourcesExcelPath);
+            Directory.CreateDirectory(ServerProcesses);
+            Directory.CreateDirectory(Exchanges);
+            Directory.CreateDirectory(CustomDatabasePath);
+            Directory.CreateDirectory(Messages);
+            Directory.CreateDirectory(LogData);
+            Directory.CreateDirectory(TemplatesRuntime);
             CollectGarbage();
             
             //TelegramProcessor.StartBot("6911917508:AAHJeEhfNKzzOJjp0IlGtZ51lqNrE2LBnK4");
@@ -176,47 +175,75 @@ namespace Common
         #region Incubator
         public static void InitWorkspace(FirstWorkspaceData data)
         {
+            int recursion = 0;
+            void Create()
+            {
+                try
+                {
+                    recursion++;
+
+                    using (Parameter par = new())
+                    {
+                        par.type = ParameterType.INCUBATOR;
+                        par.name = "ws_name";
+                        par.value = data.workspaceName;
+                        par.CreateParameter();
+                        par.name = "ws_opened";
+                        par.WriteBoolValue(true);
+                        par.CreateParameter();
+                        par.name = "ws_locked";
+                        par.WriteBoolValue(false);
+                        par.CreateParameter();
+                        
+                    }
+                    ShowInfoDialog("Рабочее пространство успешно создано.");
+                    using (Sector sector = new())
+                    {
+                        sector.slug = "data";
+                        sector.name = "Базовый сектор";
+                        sector.AddSector(false);
+                    }
+                    
+                    using (User user = new())
+                    {
+                        user.username = "admin";
+                        user.post = "Администратор рабочего пространства";
+                        user.surname = data.userSurname;
+                        user.secondName = data.userFullname;
+                        user.fullname = $"{user.surname} {user.secondName}";
+                        user.sector = "data";
+                        UserParameters up = new();
+                        up.permission_group = PermissionGroup.Admin;
+                        up.tasks_visibility = true;
+                        up.communication_visibility = true;
+                        up.database_visibility = true;
+                        up.password = data.userPassword;
+                        user.GenerateSign();
+                        user.SaveParametersContext(up);
+                        user.AddUser();
+                    }
+                }
+                catch (IOException)
+                {
+                    Thread.Sleep(50);
+                    if (recursion < 20)
+                    {
+                        Create();
+                    }
+                    else
+                    {
+                        ShowErrorDialog("Нечто блокирует файл базы данных.");
+                    }
+                }
+            }
+            ShowWaitCursor();
             Permission.CurrentUserPermission = PermissionGroup.Admin;
             SetCommonPath(data.workspacePath);
             if (CreateTablesInDatabase())
             {
+                ShowWaitCursor(false);
                 RegistryData.SetWorkspacePath(data.workspaceName, data.workspacePath);
-                using (Parameter par = new())
-                {
-                    par.type = ParameterType.INCUBATOR;
-                    par.name = "ws_name";
-                    par.value = data.workspaceName;
-                    par.CreateParameter();
-                    par.name = "ws_opened";
-                    par.WriteBoolValue(true);
-                    par.CreateParameter();
-                    par.name = "ws_locked";
-                    par.WriteBoolValue(false);
-                    par.CreateParameter();
-                }
-                using (Sector sector = new())
-                {
-                    sector.slug = "data";
-                    sector.name = "Базовый сектор";
-                    sector.AddSector(false);
-                }
-                using (User user = new())
-                {
-                    user.username = "admin";
-                    user.post = "Администратор рабочего пространства";
-                    user.surname = data.userSurname;
-                    user.secondName = data.userFullname;
-                    user.fullname = $"{user.surname} {user.secondName}";
-                    user.sector = "data";
-                    user.AddUser();
-                    UserParameters up = new();
-                    up.permission_group = PermissionGroup.Admin;
-                    up.tasks_visibility = true;
-                    up.communication_visibility = true;
-                    up.database_visibility = true;
-                    up.password = data.userPassword;
-                    UserContextor.SaveContext(up, user);
-                }
+                Create();
             }
         }
         public static string GetWorkspaceName()

@@ -296,6 +296,7 @@ namespace Incubator_2.ViewModels.VMAdmin
                 ProgramState.ShowWaitCursor();
                 _user.fullname = $"{_user.surname} {_user.secondName}";
                 _user.sector = _selectedSector.slug;
+                _user.GenerateSign();
                 _user.SaveParametersContext(_userParameters);
                 _user.SaveUser();
                 ProgramState.ShowWaitCursor(false);
