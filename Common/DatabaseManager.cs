@@ -113,6 +113,8 @@ namespace Common
         private static string GetSectorDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Sector), "Sectors");
+            atc.SetAsUnique("slug");
+            atc.SetAsUnique("name");
             return atc.GetQueryText();
         }
         private static string GetDatabasesDefinition(AutoTableCreator atc)

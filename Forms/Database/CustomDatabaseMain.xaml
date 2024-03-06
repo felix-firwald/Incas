@@ -22,7 +22,7 @@
                 <StackPanel >
                     <Expander Style="{DynamicResource ExpanderMain}" Header="Базы данных" IsExpanded="True">
                         <StackPanel>
-                            <Button x:Name="btnNewDatabase" Style="{DynamicResource ButtonFlat}" Visibility="{Binding CreateCommandVisibility}">
+                            <Button x:Name="btnNewDatabase" Style="{DynamicResource ButtonFlat}" Visibility="{Binding CreateCommandVisibility}" Click="NewDatabase">
                                 <StackPanel Orientation="Horizontal">
                                     <Path RenderOptions.EdgeMode="Aliased" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" Fill="{Binding ElementName=btnNewDatabase, Path=Foreground}" VerticalAlignment="Center"/>
                                     <Label Foreground="{Binding ElementName=btnNewDatabase, Path=Foreground}" Content="Добавить базу данных"/>
@@ -43,7 +43,7 @@
                     </Expander>
                     <Expander Style="{DynamicResource ExpanderMain}" Header="Таблицы" IsExpanded="True" Visibility="{Binding TablesVisibility}">
                         <StackPanel>
-                            <Button x:Name="btnNewTable" Style="{DynamicResource ButtonFlat}" Visibility="{Binding CreateCommandVisibility}">
+                            <Button x:Name="btnNewTable" Style="{DynamicResource ButtonFlat}" Visibility="{Binding CreateCommandVisibility}" Click="NewTable">
                                 <StackPanel Orientation="Horizontal">
                                     <Path RenderOptions.EdgeMode="Aliased" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" Fill="{Binding ElementName=btnNewTable, Path=Foreground}" VerticalAlignment="Center"/>
                                     <Label Foreground="{Binding ElementName=btnNewTable, Path=Foreground}" Content="Добавить таблицу"/>

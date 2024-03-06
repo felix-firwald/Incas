@@ -427,5 +427,26 @@ namespace Incubator_2.Forms.Database
         {
 
         }
+
+        private void NewDatabase(object sender, RoutedEventArgs e)
+        {
+            using (Models.Database db = new())
+            {
+                db.name = ProgramState.ShowInputBox("Имя базы данных");
+                using (Models.Sector s = new())
+                {
+                    foreach (Sector sec in s.GetSectors())
+                    {
+                        db.sectors += $"{sec.slug} ";
+                    }
+                }
+                db.AddDatabase();
+            }
+        }
+
+        private void NewTable(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

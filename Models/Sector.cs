@@ -32,7 +32,7 @@ namespace Incubator_2.Models
                     {
                         "name", name
                     }
-                });
+                }, true);
                 q.ExecuteVoid();
             DatabaseManager.InitializeData(slug);
         }

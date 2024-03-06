@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.Common;
 using Incubator_2.Models;
 using Incubator_2.Windows;
 using Incubator_2.Windows.ToolBar;
@@ -19,15 +20,17 @@ namespace Incubator_2
             base.OnStartup(e);
             try
             {
+                if (DateTime.Now > DateTime.Parse("29.04.2024"))
+                {
+                    ProgramState.ShowErrorDialog("Истек предельный срок для лицензии этой версии. Обновите программу.", "Лицензия истекла");
+                    App.Current.Shutdown();
+                }
                 OpenIncubator oi = new OpenIncubator();
                 
                 if (oi.ShowDialog() == false)
                 {
                     //Current.Shutdown();
                 }
-                
-                //MainWindow mw = new MainWindow();
-                //this.MainWindow = mw;
             }
             catch (DBParamNotFound p)
             {
@@ -35,13 +38,7 @@ namespace Incubator_2
                     $"Вероятно, имело место быть ручное вмешательство в файл data.dbinc, в результате чего " +
                     $"параметр был удален.\nДальнейшее использование рабочей области находится под угрозой.", "Возникла критическая ошибка");
                 d.ShowDialog();
-                App.Current.Shutdown();
-            }
-            catch (Exception ex)
-            {
-                Dialog d = new Dialog($"{ex.Message}\nПрограмма будет немедленно закрыта.", "Возникла критическая ошибка");
-                d.ShowDialog();
-                App.Current.Shutdown();
+                
             }
 
         }
