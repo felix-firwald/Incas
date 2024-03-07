@@ -30,7 +30,8 @@
         <StackPanel x:Name="ChildPanel" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4">
             
         </StackPanel>
-        <Rectangle Grid.Row="1" Width="2" Fill="{StaticResource LightPurple}" Cursor="" Margin="19,0,19,0"/>
+        <Border Grid.Row="1" Width="2" Background="{DynamicResource LightPurple}" CornerRadius="1.5" />
+        <!--<Rectangle Grid.Row="1" Width="2" Fill="{StaticResource LightPurple}" Cursor="" Margin="19,0,19,0"/>-->
         <Grid.Style>
             <Style TargetType="{x:Type Grid}">
                 <Style.Triggers>
@@ -41,4 +42,9 @@
             </Style>
         </Grid.Style>
     </Grid>
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Header="Открыть привязанные шаблоны" Click="ShowTransferClick"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
 </UserControl>

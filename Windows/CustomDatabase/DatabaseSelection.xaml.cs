@@ -37,6 +37,13 @@ namespace Incubator_2.Windows.CustomDatabase
                 return ((DataRowView)Grid.SelectedItems[0]).Row[Field].ToString();
             }
         }
+        public DataRow SelectedValues
+        {
+            get
+            {
+                return ((DataRowView)Grid.SelectedItems[0]).Row;
+            }
+        }
         public DatabaseSelection(string database, string table, string field, string custom = "")
         {
             InitializeComponent();

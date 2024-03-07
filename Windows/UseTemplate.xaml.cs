@@ -289,5 +289,23 @@ namespace Incubator_2.Windows
             }
 
         }
+
+        private void TransferClick(object sender, MouseButtonEventArgs e)
+        {
+            List<SGeneratedDocument> documents = new();
+            foreach (UC_FileCreator fc in this.ContentPanel.Children)
+            {
+                if (fc.SelectorChecked == true)
+                {
+                    documents.Add(fc.GetGeneratedDocument());
+                }
+            }
+            if (documents.Count == 0)
+            {
+                ProgramState.ShowExclamationDialog("Не выбрано ни одного элемента для отправки! (используйте селекторы)", "Действие прервано");
+                return;
+            }
+
+        }
     }
 }

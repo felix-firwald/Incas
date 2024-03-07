@@ -1,13 +1,9 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Bibliography;
 using Incubator_2.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.Models
 {
@@ -17,43 +13,15 @@ namespace Incubator_2.Models
         [Description("Чтение")]
         Read,
         [Description("Изменение")]
-        Update
-    }
-    public struct ReadCommand
-    {
-        public string Select;
-        public string From;
-        public string Where;
-        public List<string> Joins;
-        public List<string> Orders;
-        private string GetWhere()
-        {
-            if (Where is null)
-            {
-                return "";
-            }
-            return "WHERE " + Where;
-        }
-        private string GetJoins()
-        {
-            if (Joins is null)
-            {
-                return "";
-            }
-            return string.Join('\n', Joins);
-        }
-        private string GetOrders()
-        {
-            if (Orders is null)
-            {
-                return "";
-            }
-            return "ORDER BY " + string.Join(", ", Orders);
-        }
-        public override string ToString()
-        {
-            return $"SELECT {Select} FROM [{From}] {GetWhere()} {GetJoins()} {GetOrders()}".Trim();
-        }
+        Update,
+        [Description("Для шаблонов: трансфер")]
+        TemplateTransfer,
+        [Description("Для шаблонов: парсер из строки")]
+        TemplateParser,
+        [Description("Для шаблонов: триггеры")]
+        TemplateTrigger,
+        [Description("Для шаблонов: команды")]
+        TemplateCommand,
     }
     public struct SCommand
     {

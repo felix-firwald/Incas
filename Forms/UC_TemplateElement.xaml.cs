@@ -145,5 +145,10 @@ namespace Forms
         {
             OnUpdated?.Invoke();
         }
+
+        private void ShowTransferClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

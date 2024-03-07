@@ -45,7 +45,14 @@ namespace Incubator_2
 
         private void Unhandled(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            ProgramState.CloseSession();
+            try
+            {
+                ProgramState.CloseSession();
+            }
+            catch (Exception)
+            {
+
+            }
             ProgramState.ShowErrorDialog($"Возникла ошибка, не позволяющая приложению продолжать свою работу.\n" +
                 $"Описание: {e.Exception.Message}\nПриложение будет немедленно закрыто.", "Критическая ошибка");
         }

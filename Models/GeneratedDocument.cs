@@ -81,6 +81,7 @@ namespace Incubator_2.Models
         {
             DataTable dt = StartCommand()
                 .SelectUnique("templateName")
+                .OrderByASC("templateName")
                 .Execute();
             List<string> result = new();
             foreach (DataRow dr in dt.Rows)
