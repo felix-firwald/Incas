@@ -230,5 +230,10 @@ namespace Incubator_2.Windows
                 ProgramState.ShowErrorDialog($"При попытке открытия файла возникла ошибка:\n{ex}");
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

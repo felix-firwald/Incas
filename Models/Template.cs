@@ -5,6 +5,7 @@ using System.Data;
 
 namespace Models
 {
+    
     public enum TemplateType
     {
         Word,
@@ -18,6 +19,7 @@ namespace Models
         public string suggestedPath { get; set; }
         public int parent { get; set; }
         public TemplateType type { get; set; }
+        public string settings { get; set; }
 
         public Template AsModel()
         {
@@ -28,6 +30,7 @@ namespace Models
             template.suggestedPath = suggestedPath;
             template.parent = parent;
             template.type = type;
+            template.settings = settings;
             return template;
         }
     }
@@ -37,8 +40,10 @@ namespace Models
         public string name { get; set; }
         public string path { get; set; }
         public string suggestedPath { get; set; }
-        public int parent { get; set; }
         public TemplateType type { get; set; }
+        public int parent { get; set; }
+        public string settings { get; set; }
+
         public Template()
         {
             tableName = "Templates";

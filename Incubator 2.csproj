@@ -47,12 +47,13 @@
   <PropertyGroup>
     <StartupObject>Incubator_2.App</StartupObject>
     <PackageIcon>Logo.png</PackageIcon>
-    <PackageId>FirwaldTechnologies.Incubator</PackageId>
+    <PackageId>firwald/incas</PackageId>
     <SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
     <Product>INCAS</Product>
     <Title>INCAS</Title>
     <Description>Офисное приложение</Description>
-    <FileVersion>0.9.0.0</FileVersion>
+    <AssemblyName>Incas</AssemblyName>
+    <Version>0.9.6</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Fonts\RobotoMono-Bold.ttf" />

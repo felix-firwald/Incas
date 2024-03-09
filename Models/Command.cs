@@ -94,6 +94,7 @@ namespace Incubator_2.Models
                 .Execute();
             return SerializeList(dt);
         }
+
         public List<SCommand> GetAllCommands()
         {
             DataTable dt = StartCommandToService()

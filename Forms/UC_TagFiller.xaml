@@ -12,6 +12,10 @@
             <ColumnDefinition MinWidth="150" MaxWidth="200" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <TextBlock x:Name="MainLabel" Style="{DynamicResource TextBlockImportant}" Text="Имя тега:" VerticalAlignment="Top" Grid.Column="0" Margin="8,12,5,5" MaxHeight="30" Foreground="{DynamicResource GrayLight}" TextWrapping="Wrap"/>
         <TextBox x:Name="Textbox" Style="{DynamicResource TextBoxMain}" Grid.Column="1" Visibility="Hidden" Cursor="IBeam" AutoWordSelection="True" TextWrapping="WrapWithOverflow" SelectionBrush="{DynamicResource PrimaryMain}" SelectionTextBrush="{DynamicResource Light}">
             <TextBox.ContextMenu>
@@ -63,7 +67,7 @@
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>
-        <ComboBox x:Name="Combobox" Style="{DynamicResource ComboBoxMain}" Grid.Column="1" Visibility="Hidden">
+        <ComboBox x:Name="Combobox" Style="{DynamicResource ComboBoxMain}" Grid.Column="1" Visibility="Hidden" ToolTipService.InitialShowDelay="180">
             <ComboBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -71,6 +75,6 @@
                 </ContextMenu>
             </ComboBox.ContextMenu>
         </ComboBox>
-        <CustomControls:SelectionBox x:Name="SelectionBox" Grid.Column="1" Visibility="Hidden"/>
+        <CustomControls:SelectionBox x:Name="SelectionBox" Grid.Column="1" Visibility="Hidden" ToolTipService.InitialShowDelay="180"/>
     </Grid>
 </UserControl>

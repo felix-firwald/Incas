@@ -15,7 +15,17 @@ namespace Incubator_2.ViewModels
         {
             this.template_main = templ;
         }
-
+        public bool IsEdit
+        {
+            get
+            {
+                if (template_main.id == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
         public string NameOfTemplate 
         {
             get { return this.template_main.name; }

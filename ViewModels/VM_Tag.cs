@@ -37,7 +37,7 @@ namespace Incubator_2.ViewModels
                     case TypeOfTag.LocalEnumeration:
                         return "Предлагаемые значения (для разделения используйте символ \";\")";
                     case TypeOfTag.Relation:
-                        return "Укажите таблицу и поле (например, Пользователи.Имя)";
+                        return "Укажите таблицу и поле";
                     case TypeOfTag.Table:
                         return "Укажите названия столбцов (для разделения используйте символ \";\")";
                 }
@@ -68,6 +68,36 @@ namespace Incubator_2.ViewModels
                 }
             }
         }
+        public Visibility DescriptionVisibility
+        {
+            get
+            {
+                switch (mainTag.type)
+                {
+                    default:
+                        return Visibility.Visible;
+                    case TypeOfTag.LocalConstant:
+                        return Visibility.Collapsed;
+                }
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return mainTag.description;
+            }
+            set
+            {
+                if (value != mainTag.description)
+                {
+                    mainTag.description = value;
+                    OnPropertyChanged(nameof(Description));
+                }
+            }
+        }
+
         public string TypeOfTagValue
         {
             get { return SerializeToInput(mainTag.type); }
@@ -98,6 +128,7 @@ namespace Incubator_2.ViewModels
                 case "3":
                     return TypeOfTag.Relation;
                 case "4":
+                    Description = "";
                     return TypeOfTag.LocalConstant;
                 case "5":
                     return TypeOfTag.Table;

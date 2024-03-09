@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Создание шаблона" Height="550" Width="800" MinWidth="700" MinHeight="550" Style="{DynamicResource WindowBase}">
+        Title="Создание шаблона" Height="650" Width="900" MinWidth="700" MinHeight="550" Style="{DynamicResource WindowBase}" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>
@@ -13,8 +13,8 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="4*" MinWidth="250" MaxWidth="400"/>
+                <ColumnDefinition Width="6*"/>
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -66,7 +66,32 @@
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" Grid.Column="1" Grid.Row="1" ToolTip="Редактировать исходный файл" MouseDown="EditSourceClick" />
                 </StackPanel>
             </Border>
-            <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="2"/>
+            <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="2" IsEnabled="{Binding IsEdit}">
+                <StackPanel>
+                    <Button Style="{DynamicResource ButtonFlat}" Content="+ Добавить связанный шаблон" Click="Button_Click"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Path Fill="{DynamicResource Success}" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        <Label Content="Привязанные шаблоны (трансфер):" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                    </Grid>
+                    <Rectangle Fill="{DynamicResource Element}" Height="1"/>
+                    <Button Style="{DynamicResource ButtonFlat}" Content="+ Добавить триггер"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Path Fill="{DynamicResource Yellow}" Data="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
+
+                        <Label Content="Триггеры:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+            
             <Border Grid.Row="2" CornerRadius="5" Margin="5" Background="{DynamicResource Black}" Grid.Column="1" ScrollViewer.CanContentScroll="True">
                 <ScrollViewer Style="{DynamicResource ScrollViewerBase}" HorizontalContentAlignment="Stretch" Grid.Row="2" Grid.Column="1">
                     <StackPanel x:Name="ContentPanel"/>

@@ -28,7 +28,7 @@ namespace Models
         public TypeOfTag type { get; set; }
         public string value { get; set; }
         public int parent { get; set; }
-        public string parameters { get; set; }
+        public string description { get; set; }
         public Tag() 
         {
             tableName = "Tags";
@@ -97,6 +97,7 @@ namespace Models
                     { "type", type.ToString() },
                     { "value", value },
                     { "parent", parent > 0? parent.ToString(): Query.Null },
+                    { "description", description },
                 })
                 .ExecuteVoid();
         }
@@ -111,6 +112,7 @@ namespace Models
                 .Update("name", name)
                 .Update("type", type.ToString())
                 .Update("value", value)
+                .Update("description", description)
                 .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }

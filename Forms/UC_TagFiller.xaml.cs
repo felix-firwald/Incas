@@ -38,6 +38,7 @@ namespace Incubator_2.Forms
             Mode = FillerMode.Tag;
             this.tag = t;
             this.MainLabel.Text = this.tag.name + ":";
+            
             switch (tag.type)
             {
                 case TypeOfTag.Variable:
@@ -45,12 +46,14 @@ namespace Incubator_2.Forms
                     SetTextBoxMode();
                     this.Textbox.Text = this.tag.value;
                     this.Textbox.MaxLength = 120;
+                    this.Textbox.Tag = this.tag.description;
                     break;
                 case TypeOfTag.Text:
                     SetTextBoxMode();
                     this.Textbox.Text = this.tag.value;
                     this.Textbox.Style = FindResource("TextBoxBig") as System.Windows.Style;
                     this.Textbox.MaxLength = 1200;
+                    this.Textbox.Tag = this.tag.description;
                     break;
                 case TypeOfTag.LocalConstant:
                     this.Visibility = Visibility.Collapsed;
@@ -59,10 +62,16 @@ namespace Incubator_2.Forms
                     SetComboBoxMode();
                     this.Combobox.ItemsSource = this.tag.value.Split(';');
                     this.Combobox.SelectedIndex = 0;
+                    if (!string.IsNullOrWhiteSpace(this.tag.description))
+                    {
+                        this.Combobox.ToolTip = this.tag.description;
+                    }
+                    
                     break;
                 case TypeOfTag.Relation:
                     this.SelectionBox.Visibility = Visibility.Visible;
                     this.SelectionBox.Source = this.tag.value;
+                    this.SelectionBox.ToolTip = this.tag.description;
                     break;
             }
         }
