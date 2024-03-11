@@ -16,6 +16,7 @@ using Incubator_2.Windows.CustomDatabase;
 using Incubator_2.ViewModels;
 using System.Data.SQLite;
 using System.Threading;
+using Incubator_2.Windows.Selectors;
 
 
 namespace Common
@@ -461,6 +462,15 @@ namespace Common
                 return us.SelectedUser;
             }
             return new();
+        }
+        public static Template ShowTemplateSelector(TemplateType type, string help)
+        {
+            TemplateSelector ts = new(type, help);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ts.ShowDialog();
+            });
+            return ts.SelectedTemplate.AsModel();
         }
         public static void ShowWaitCursor(bool wait = true)
         {

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Incubator_2.Models.Auxiliary;
+using Incubator_2.ViewModels.VM_Templates;
+using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +22,47 @@ namespace Incubator_2.Windows.Templates
     /// </summary>
     public partial class CreateTransfer : Window
     {
-        public CreateTransfer()
+        public VM_Transfer vm;
+        DialogStatus result = DialogStatus.Undefined;
+        public CreateTransfer(List<Tag> tags) // new
         {
             InitializeComponent();
+            vm = new(new(), tags);
+            this.DataContext = vm;
+            LoadMatches(tags);
+        }
+        public CreateTransfer(Transfer transfer, List<Tag> tags) // edit
+        {
+            InitializeComponent();
+            vm = new(transfer, tags);
+        }
+        private void LoadMatches(List<Tag> tags)
+        {
+            List<Tag> choices = GetAvailableTags();
+            foreach (Tag tag in tags)
+            {
+                TransferMatch m = new TransferMatch();
+                m.From = tag.id;
+                this.Matches.Children.Add(new Forms.Templates.TransferMatch(m, choices));
+            }
+        }
+        private List<Tag> GetAvailableTags()
+        {
+            using (Tag t = new())
+            {
+                return t.GetAllTagsByTemplate(44); //vm.SelectedTemplate
+            }
+        }
+
+        private void SaveClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CloseClick(object sender, RoutedEventArgs e)
+        {
+            result = DialogStatus.No;
+            this.Close();
         }
     }
 }

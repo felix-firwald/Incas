@@ -38,7 +38,7 @@ namespace Incubator_2.ViewModels
                 }
             }
         }
-        public string SourceFile
+        public string Source
         {
             get { return this.template_main.path; }
             set
@@ -46,7 +46,7 @@ namespace Incubator_2.ViewModels
                 if (this.template_main.path != value)
                 {
                     this.template_main.path = value;
-                    OnPropertyChanged("SourceFile");
+                    OnPropertyChanged("Source");
                 }
             }
         }

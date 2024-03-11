@@ -73,6 +73,10 @@ namespace Incubator_2.Forms
                     this.SelectionBox.Source = this.tag.value;
                     this.SelectionBox.ToolTip = this.tag.description;
                     break;
+                case TypeOfTag.Generator:
+                    this.Generator.Visibility = Visibility.Visible;
+                    this.Generator.TemplateId = int.Parse(this.tag.value);
+                    break;
             }
         }
         public UC_TagFiller(FieldCreator fc, string path)
@@ -114,6 +118,9 @@ namespace Incubator_2.Forms
                     return;
                 case TypeOfTag.LocalEnumeration:
                     this.Combobox.SelectedValue = value;
+                    break;
+                case TypeOfTag.Generator:
+                    this.Generator.SetData(value);
                     break;
             }
         }
@@ -160,6 +167,18 @@ namespace Incubator_2.Forms
                         return this.Combobox.Items.GetItemAt(this.Combobox.SelectedIndex).ToString();
                     }
                     return "";
+                case TypeOfTag.Generator:
+                    return this.Generator.GetText();
+
+            }
+        }
+        public string GetData()
+        {
+            switch (tag.type)
+            {
+                default: return "";
+                case TypeOfTag.Generator:
+                    return this.Generator.GetData();
 
             }
         }

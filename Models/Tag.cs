@@ -18,6 +18,7 @@ namespace Models
         Relation,
         LocalEnumeration,
         LocalConstant,
+        Generator,
         Table
     }
     public class Tag : Model

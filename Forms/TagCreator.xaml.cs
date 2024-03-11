@@ -1,6 +1,8 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
+﻿using Common;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows.CustomDatabase;
+using Incubator_2.Windows.Templates;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -107,6 +109,46 @@ namespace Incubator_2.Forms
                 this.vm.DefaultValue = $"{bs.SelectedDatabase}.{bs.SelectedTable}.{bs.SelectedField}";
             }
 
+        }
+
+        private void DefineGeneratorClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(vm.DefaultValue))
+                {
+                    if (ProgramState.ShowQuestionDialog(
+                    "Вы хотите использовать существующий генератор или создать новый?",
+                    "Новый или существующий",
+                    "Новый", "Существующий") == Windows.DialogStatus.Yes)
+                    {
+                        CreateTextTemplate ctt = new();
+                        ctt.ShowDialog();
+                        vm.DefaultValue = ctt.template.id.ToString();
+                    }
+                    else
+                    {
+                        Template t = ProgramState.ShowTemplateSelector(TemplateType.Text, "Выберите генератор для использования");
+                        if (t.id != 0)
+                        {
+                            vm.DefaultValue = t.id.ToString();
+                        }
+                    }
+                }
+                else
+                {
+                    using (Template t = new Template())
+                    {
+                        CreateTextTemplate ctt = new(t.GetTemplateById(int.Parse(vm.DefaultValue)));
+                        ctt.ShowDialog();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog("При попытке открытия генератора возникла ошибка:\n" + ex.Message);
+            }
+            
         }
     }
 }

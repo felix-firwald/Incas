@@ -9,6 +9,7 @@ namespace Models
     public enum TemplateType
     {
         Word,
+        Text,
         Excel
     }
     public struct STemplate
@@ -98,20 +99,27 @@ namespace Models
             }
             return resulting;
         }
-        public List<Template> GetAllWordTemplates()
+        public List<STemplate> GetAllWordTemplates()
+        {
+            return GetAllByType(TemplateType.Word);
+        }
+        public List<STemplate> GetAllTextTemplates()
+        {
+            return GetAllByType(TemplateType.Text);
+        }
+        private List<STemplate> GetAllByType(TemplateType type)
         {
             DataTable dt = StartCommand()
                 .Select()
-                .WhereEqual("type", "Word")
+                .WhereEqual("type", type.ToString())
                 .OrderByASC("name")
                 .Execute();
-            List<Template> resulting = new List<Template>();
+            List<STemplate> resulting = new();
             foreach (DataRow dr in dt.Rows)
             {
-                Template mt = new Template();
-                mt.Serialize(dr);
-                mt.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
-                resulting.Add(mt);
+                this.Serialize(dr);
+                this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
+                resulting.Add(this.AsStruct());
             }
             return resulting;
         }

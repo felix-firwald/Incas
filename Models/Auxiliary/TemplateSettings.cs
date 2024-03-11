@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace Incubator_2.Models.Auxiliary
 {
+    public struct TransferMatch
+    {
+        public int From;
+        public int To;
+    }
     public struct Transfer
     {
         public string name;
-        public Dictionary<int, int> content;
+        public int template;
+        public List<TransferMatch> content;
     }
 
 

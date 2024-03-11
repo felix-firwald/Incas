@@ -77,6 +77,8 @@ namespace Incubator_2.ViewModels
                     default:
                         return Visibility.Visible;
                     case TypeOfTag.LocalConstant:
+                    case TypeOfTag.Generator:
+                    case TypeOfTag.Table:
                         return Visibility.Collapsed;
                 }
             }
@@ -107,7 +109,9 @@ namespace Incubator_2.ViewModels
                 OnPropertyChanged(nameof(TypeOfTagValue));
                 OnPropertyChanged(nameof(DescriptionText));
                 OnPropertyChanged(nameof(ButtonRelationVisibility));
+                OnPropertyChanged(nameof(ButtonGeneratorVisibility));
                 OnPropertyChanged(nameof(DefaultValueVisibility));
+                OnPropertyChanged(nameof(DescriptionVisibility));
             }
         }
 
@@ -131,6 +135,11 @@ namespace Incubator_2.ViewModels
                     Description = "";
                     return TypeOfTag.LocalConstant;
                 case "5":
+                    Description = "";
+                    DefaultValue = "";
+                    return TypeOfTag.Generator;
+                case "6":
+                    Description = "";
                     return TypeOfTag.Table;
             }
         }
@@ -149,8 +158,10 @@ namespace Incubator_2.ViewModels
                     return "3";
                 case TypeOfTag.LocalConstant:
                     return "4";
-                case TypeOfTag.Table:
+                case TypeOfTag.Generator:
                     return "5";
+                case TypeOfTag.Table:
+                    return "6";
             }
         }
         public Visibility ButtonRelationVisibility
@@ -164,15 +175,29 @@ namespace Incubator_2.ViewModels
                 return Visibility.Collapsed;
             }
         }
+        public Visibility ButtonGeneratorVisibility
+        {
+            get
+            {
+                if (this.mainTag.type == TypeOfTag.Generator)
+                {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
         public Visibility DefaultValueVisibility
         {
             get
             {
-                if (this.mainTag.type == TypeOfTag.Relation)
+                switch (this.mainTag.type)
                 {
-                    return Visibility.Collapsed;
+                    default:
+                        return Visibility.Visible;
+                    case TypeOfTag.Relation:
+                    case TypeOfTag.Generator:
+                        return Visibility.Collapsed;
                 }
-                return Visibility.Visible;
             }
         }
         #endregion

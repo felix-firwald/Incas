@@ -1,6 +1,7 @@
 ﻿using Common;
 using Incubator_2.Forms;
 using Incubator_2.ViewModels;
+using Incubator_2.Windows.Templates;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ namespace Incubator_2.Windows
                     File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesWordPath}\\{fd.SafeFileName}");
                 }
                 result = fd.SafeFileName;
-                this.VM_template.SourceFile = result;
+                this.VM_template.Source = result;
             }
         }
 
@@ -231,9 +232,19 @@ namespace Incubator_2.Windows
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void AddTransferClick(object sender, RoutedEventArgs e)
         {
+            List<Tag> tags = new();
+            using (Tag tag = new Tag())
+            {
+                foreach (Tag t in tag.GetAllTagsByTemplate(template.id))
+                {
+                    tags.Add(t);
+                }
+            }
 
+            CreateTransfer ct = new(tags);
+            ct.ShowDialog();
         }
     }
 }

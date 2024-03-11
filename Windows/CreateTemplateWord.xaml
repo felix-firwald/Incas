@@ -27,7 +27,7 @@
                 <RowDefinition Height="40"/>
                 <!--кнопка создания файла или печати-->
             </Grid.RowDefinitions>
-            <TextBox x:Name="sourceFile" Style="{DynamicResource TextBoxMain}" Text="{Binding SourceFile}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Файл шаблона в формате .docx" Grid.Column="0" Margin="5,0,5,0" Grid.ColumnSpan="2">
+            <TextBox x:Name="sourceFile" Style="{DynamicResource TextBoxMain}" Text="{Binding Source}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Файл шаблона в формате .docx" Grid.Column="0" Margin="5,0,5,0" Grid.ColumnSpan="2">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -68,17 +68,6 @@
             </Border>
             <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="2" IsEnabled="{Binding IsEdit}">
                 <StackPanel>
-                    <Button Style="{DynamicResource ButtonFlat}" Content="+ Добавить связанный шаблон" Click="Button_Click"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Path Fill="{DynamicResource Success}" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-                        <Label Content="Привязанные шаблоны (трансфер):" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
-                    </Grid>
-                    <Rectangle Fill="{DynamicResource Element}" Height="1"/>
                     <Button Style="{DynamicResource ButtonFlat}" Content="+ Добавить триггер"/>
                     <Grid>
                         <Grid.ColumnDefinitions>

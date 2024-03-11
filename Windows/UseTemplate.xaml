@@ -44,7 +44,6 @@
                     <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Calculator" Grid.Column="1" Grid.Row="1" MouseDown="RecalculateNamesClick" ToolTip="Пересчитать имена файлов"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Send" Grid.Column="1" Grid.Row="1" MouseDown="SendToUserClick" ToolTip="Отправить выбранные документы пользователю"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Exchange" Grid.Column="1" Grid.Row="1" MouseDown="TransferClick" ToolTip="Трансфер выбранного документа в другой вид"/>
 
                 </StackPanel>
             </Border>

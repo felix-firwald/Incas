@@ -30,7 +30,11 @@ namespace Incubator_2.Models
 
         public List<SGeneratedTag> GetFilledTags()
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(Cryptographer.DecryptString(filledTagsString));
+            if (filledTags == null)
+            {
+                filledTags = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(Cryptographer.DecryptString(filledTagsString));
+            }            
+            return filledTags;
         }
         public void SaveFilledTags(List<SGeneratedTag> tags)
         {

@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="Incubator_2.Forms.Templates.TransferMatch"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incubator_2.Forms.Templates"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="400">
+    <Grid Height="40" VerticalAlignment="Bottom">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Label Style="{DynamicResource LabelElement}" Content="{Binding SourceTag, FallbackValue=Неизвестно}" VerticalAlignment="Center" Background="{x:Null}" Foreground="{DynamicResource PrimaryMain}"/>
+        <Label Style="{DynamicResource LabelElement}" Content="=>" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Center"/>
+        <ComboBox Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding AvailableTags}" DisplayMemberPath="name" SelectedValue="{Binding SelectedTag}" SelectedValuePath="id" Grid.Column="2"/>
+    </Grid>
+</UserControl>

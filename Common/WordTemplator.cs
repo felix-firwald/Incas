@@ -40,6 +40,7 @@ namespace Common
                     options.NewValue = values[i].Trim(); // а нахуя Trim?
                     doc.ReplaceText(options);
                 }
+                // MakeFormatting(doc);
             }
             if (async)
             {
@@ -54,6 +55,38 @@ namespace Common
             }
             doc.Save();
         }
+        //public void MakeFormatting(DocX doc)
+        //{
+        //    StringReplaceTextOptions options = new StringReplaceTextOptions();
+        //    options.NewFormatting = new Formatting();
+        //    options.NewFormatting.FontFamily = new Font("Times New Roman");
+        //    options.NewFormatting.Bold = true;
+        //    GetMatchesFormat(doc, @"<b>.*</b>", new List<string> { "<b>", "</b>" }, options);
+        //    options.NewFormatting.Bold = false;
+        //    options.NewFormatting.Italic = true;
+        //    GetMatchesFormat(doc, @"<i>.*</i>", new List<string> { "<i>", "</i>" }, options);
+        //    doc.ReplaceText(options);
+        //}
+        //private List<string> GetMatchesFormat(DocX doc, string pattern, List<string> removableParts, StringReplaceTextOptions options)
+        //{
+        //    Regex reg = new Regex(pattern);
+        //    List<string> result = new List<string>();
+        //    MatchCollection matches = reg.Matches(doc.Text);
+        //    foreach (Match match in matches)
+        //    {
+        //        result.Add(match.Value);
+        //        options.SearchValue = match.Value;
+        //        string newValue = match.Value;
+        //        foreach (string part in removableParts)
+        //        {
+        //            newValue = newValue.Replace(part, "");
+        //        }
+        //        options.NewValue = newValue;
+        //        doc.ReplaceText(options);
+        //    }
+
+        //    return result;
+        //}
         public void CreateTable(string tag, DataTable dt)
         {
             DocX doc = LoadFile();
@@ -89,6 +122,7 @@ namespace Common
             DocX doc = DocX.Load(this.Path);
             Regex regex = new Regex(@"\[[A-Za-zА-Яа-я ]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
             MatchCollection matches = regex.Matches(doc.Text);
+            
             foreach (Match match in matches)
             {
                 result.Add(match.Value.TrimStart('[').TrimEnd(']'));
