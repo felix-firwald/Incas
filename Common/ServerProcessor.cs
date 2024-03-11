@@ -1,7 +1,10 @@
 ﻿using Common;
+using DocumentFormat.OpenXml.Drawing;
 using Incubator_2.Forms;
+using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
 using Incubator_2.Windows;
+using Incubator_2.Windows.Templates;
 using Models;
 using Newtonsoft.Json;
 using System;
@@ -29,11 +32,12 @@ namespace Incubator_2.Common
         GET_USER = 105,
         // ALL USERS
         OPEN_SEQUENCER = 201,
-        REQUEST_TEXT = 202,
-        COPY_TEXT = 203,
-        COPY_FILE = 204,
-        OPEN_FILE = 205,
-        OPEN_WEB = 206,
+        OPEN_GENERATOR = 202,
+        REQUEST_TEXT = 213,
+        COPY_TEXT = 214,
+        COPY_FILE = 215,
+        OPEN_FILE = 216,
+        OPEN_WEB = 217,
         UPDATE_MAIN = 301,        
     }
     enum ResponseCode
@@ -57,12 +61,25 @@ namespace Incubator_2.Common
     struct Process
     {
         public string id;
+        public string back_id;
         public string emitter;
         public string recipient;
         public ProcessType type;
         public ProcessTarget target;
         public string content;
     }
+    static class WaitControls
+    {
+        public static List<UC_TagFiller> TagFillers = new();
+        public static Dictionary<string, Generator> Generators = new();
+        public static Generator GetGenerator(string process)
+        {
+            Generator g = Generators[process];
+            Generators.Remove(process);
+            return g;
+        }
+    }
+
     static class ServerProcessor
     {
         public static string Port { get { return $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession?.slug}.incport"; } }
@@ -70,7 +87,6 @@ namespace Incubator_2.Common
         private static bool StopPulling = false;
 
         #region ControlsWait
-        private static List<UC_TagFiller> tagFillersWait = new();
         #endregion
 
 
@@ -200,6 +216,9 @@ namespace Incubator_2.Common
                         case ProcessTarget.OPEN_SEQUENCER:
                             OpenSequencerProcessHandle(process.content);
                             break;
+                        case ProcessTarget.OPEN_GENERATOR:
+                            OpenGeneratorProcessHandle(process);
+                            break;
                         case ProcessTarget.COPY_TEXT:
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
@@ -237,15 +256,23 @@ namespace Incubator_2.Common
                             {
                                 string uid = process.content.Split("|||")[0];
                                 string value = process.content.Split("|||")[1];
-                                for (int i = 0; i <= tagFillersWait.Count; i++)
+                                for (int i = 0; i <= WaitControls.TagFillers.Count; i++)
                                 {
-                                    if (tagFillersWait[i].GetId() == int.Parse(uid))
+                                    if (WaitControls.TagFillers[i].GetId() == int.Parse(uid))
                                     {
-                                        tagFillersWait[i].SetValue(value);
-                                        tagFillersWait.Remove(tagFillersWait[i]);
+                                        WaitControls.TagFillers[i].SetValue(value);
+                                        WaitControls.TagFillers.Remove(WaitControls.TagFillers[i]);
                                         break;
                                     }
                                 }
+                            });
+                            break;
+                        case ProcessTarget.OPEN_GENERATOR:
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                WaitControls
+                                .GetGenerator(process.back_id)
+                                .SetData(JsonConvert.DeserializeObject<SGeneratedDocument>(process.content), "Требуется подтверждение");
                             });
                             break;
                     }
@@ -256,27 +283,7 @@ namespace Incubator_2.Common
             
         }
         #endregion
-        private static Process GetProcessFromWaitList(string id)
-        {
-            foreach (Process process in WaitList)
-            {
-                if (process.id == id)
-                {
-                    return process;
-                }
-            }
-            return new Process();
-        }
-        private static void RemoveProcessFromWaitList(string id)
-        {
-            foreach (Process process in WaitList)
-            {
-                if (process.id == id)
-                {
-                    WaitList.Remove(process);
-                }
-            }
-        }
+
         #region Handling Queries
         private static void TerminateProcessHandle()
         {
@@ -381,6 +388,32 @@ namespace Incubator_2.Common
                 ProgramState.ShowErrorDialog($"Не удалось открыть присланную запись:\n{ex}", "Действие невозможно");
             }
         }
+        private static void OpenGeneratorProcessHandle(Process p)
+        {
+            try
+            {
+                SGeneratedDocument part = JsonConvert.DeserializeObject<SGeneratedDocument>(p.content);
+                using (Template t = new())
+                {
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        UseTemplateText ut = new(t.GetTemplateById(part.template), part);
+                        ut.Show();
+                        ut.OnFinishedEditing += new(() =>
+                        {
+                            SendOpenGeneratorResultResponse(p, ut.GetData());
+                            return;
+                        });
+
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog($"Не удалось открыть присланную часть документа:\n{ex}", "Действие невозможно");
+            }
+        }
+
 
         private static void ShowExplicitMessageProcessHandle(string content, Process process)
         {
@@ -432,6 +465,8 @@ namespace Incubator_2.Common
         private static Process CreateResponseProcess(Process process)
         {
             (process.emitter, process.recipient) = (process.recipient, process.emitter);
+            process.back_id = process.id;
+            process.id = GenerateId();
             process.type = ProcessType.RESPONSE;
             return process;
         }
@@ -476,7 +511,7 @@ namespace Incubator_2.Common
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.REQUEST_TEXT;
             process.content = $"{tagfiller.GetId()}|||{tagfiller.tag.name}";
-            tagFillersWait.Add(tagfiller);
+            WaitControls.TagFillers.Add(tagfiller);
             SendToPort(process);
         }
         private static void SendFileProcess(string filename, string fullname, string recipient, ProcessTarget target)
@@ -519,6 +554,14 @@ namespace Incubator_2.Common
             process.content = JsonConvert.SerializeObject(documents);
             SendToPort(process);
         }
+        public static void SendOpenGeneratorProcess(SGeneratedDocument part, Generator tagfiller, string recipient)
+        {
+            Process process = CreateQueryProcess(recipient);
+            process.target = ProcessTarget.OPEN_GENERATOR;
+            process.content = JsonConvert.SerializeObject(part);
+            WaitControls.Generators.Add(process.id, tagfiller);
+            SendToPort(process);
+        }
 
         #endregion
         #region Responses
@@ -526,6 +569,12 @@ namespace Incubator_2.Common
         {
             Process outputProcess = CreateResponseProcess(inputProcess);
             outputProcess.content = (ds == DialogStatus.Yes) ? "Да" : "Нет";
+            SendToPort(outputProcess);
+        }
+        private static void SendOpenGeneratorResultResponse(Process inputProcess, SGeneratedDocument part)
+        {
+            Process outputProcess = CreateResponseProcess(inputProcess);
+            outputProcess.content = JsonConvert.SerializeObject(part);
             SendToPort(outputProcess);
         }
         #endregion

@@ -22,6 +22,14 @@
                     </TextBox.ContextMenu>
                 </TextBox>
             </StackPanel>
+            <StackPanel x:Name="InProcess" Orientation="Horizontal" Visibility="Collapsed" Margin="10,0,0,0" Grid.ColumnSpan="2">
+                <Path Fill="{DynamicResource PrimaryMain}" VerticalAlignment="Center" Data="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"/>
+                <TextBox Style="{DynamicResource TextBoxEmpty}" x:Name="ProcessText" Foreground="{DynamicResource PrimaryMain}" IsReadOnly="True" VerticalAlignment="Center" Background="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" BorderBrush="{x:Null}" Margin="5,0,0,0">
+                    <TextBox.ContextMenu>
+                        <ContextMenu/>
+                    </TextBox.ContextMenu>
+                </TextBox>
+            </StackPanel>
             <StackPanel x:Name="Warning" Orientation="Horizontal" Visibility="Collapsed" Margin="10,0,0,0" Grid.ColumnSpan="2">
                 <Path Fill="{DynamicResource Yellow}" VerticalAlignment="Center" Data="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                 <TextBox Style="{DynamicResource TextBoxEmpty}" x:Name="WarningText" Foreground="{DynamicResource Yellow}" IsReadOnly="True" VerticalAlignment="Center" Background="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" BorderBrush="{x:Null}" Margin="5,0,0,0">
@@ -42,7 +50,7 @@
             <fa:FontAwesome Icon="User" Grid.Column="1" Style="{DynamicResource IconButton}" MouseDown="SendToUserClick" ToolTip="Передать другому пользователю"/>
 
             <Rectangle Fill="{DynamicResource Basic}" Grid.Column="1" Width="1" HorizontalAlignment="Right" Height="23" VerticalAlignment="Center"/>
-            <fa:FontAwesome Icon="EllipsisH" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="OpenClick" ToolTip="Открыть генератор"/>
+            <fa:FontAwesome x:Name="OpenButton" Icon="EllipsisH" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="OpenClick" ToolTip="Открыть генератор"/>
         
         </Grid>
     </Border>

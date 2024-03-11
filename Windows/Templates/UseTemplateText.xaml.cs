@@ -19,6 +19,8 @@ namespace Incubator_2.Windows.Templates
         public DialogStatus Result = DialogStatus.Undefined;
         private Template template;
         private List<Tag> tags;
+        public delegate void Base();
+        public event Base OnFinishedEditing;
         public UseTemplateText(Template templ, SGeneratedDocument data)
         {
             InitializeComponent();
@@ -94,6 +96,11 @@ namespace Incubator_2.Windows.Templates
 
         private void ApplyClick(object sender, RoutedEventArgs e)
         {
+            if (OnFinishedEditing != null)
+            {
+                OnFinishedEditing();
+            }
+            
             Result = DialogStatus.Yes;
             this.Close();
         }

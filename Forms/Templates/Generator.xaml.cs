@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.Common;
 using Incubator_2.Models;
 using Incubator_2.Windows.Templates;
 using Models;
@@ -41,6 +42,18 @@ namespace Incubator_2.Forms.Templates
             }
             catch { }
         }
+        public void SetData(SGeneratedDocument data, string warning = "Требуется открыть для обновления")
+        {
+            try
+            {
+                Result = data;
+                SetWarning(warning);
+            }
+            catch (Exception)
+            {
+                SetNotContented();
+            }
+        }
 
         public string GetText()
         {
@@ -63,24 +76,45 @@ namespace Incubator_2.Forms.Templates
         {
             this.NotContented.Visibility = Visibility.Collapsed;
             this.Warning.Visibility = Visibility.Collapsed;
+            this.InProcess.Visibility = Visibility.Collapsed;
             this.Contented.Visibility = Visibility.Visible;
+            this.OpenButton.IsEnabled = true;
         }
         private void SetNotContented()
         {
             this.Contented.Visibility = Visibility.Collapsed;
             this.Warning.Visibility = Visibility.Collapsed;
-            this.NotContented.Visibility = Visibility.Visible;   
+            this.InProcess.Visibility = Visibility.Collapsed;
+            this.NotContented.Visibility = Visibility.Visible;
+            this.OpenButton.IsEnabled = true;
         }
         private void SetWarning(string text)
         {
             this.NotContented.Visibility = Visibility.Collapsed;
             this.Contented.Visibility = Visibility.Collapsed;
             this.WarningText.Text = text;
+            this.InProcess.Visibility = Visibility.Collapsed;
             this.Warning.Visibility = Visibility.Visible;
+            this.OpenButton.IsEnabled = true;
+        }
+        private void SetInProcess(string text)
+        {
+            this.NotContented.Visibility = Visibility.Collapsed;
+            this.Contented.Visibility = Visibility.Collapsed;
+            this.Warning.Visibility = Visibility.Collapsed;
+            this.ProcessText.Text = text;
+            this.InProcess.Visibility = Visibility.Visible;
+            this.OpenButton.IsEnabled = false;
         }
         private void SendToUserClick(object sender, MouseButtonEventArgs e)
         {
-
+            Session s = ProgramState.ShowActiveUserSelector("Выберите пользователя для заполнения этой части документа.");
+            if (s.userId != 0)
+            {
+                Result.template = TemplateId;
+                ServerProcessor.SendOpenGeneratorProcess(Result, this, s.slug);
+                SetInProcess($"Делегировано: {s.user}");
+            }
         }
 
         private void OpenClick(object sender, MouseButtonEventArgs e)
@@ -103,8 +137,6 @@ namespace Incubator_2.Forms.Templates
                 {
                     ProgramState.ShowErrorDialog(ex.Message);
                 }
-
-                
             }
         }
     }
