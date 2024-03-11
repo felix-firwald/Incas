@@ -71,6 +71,7 @@ namespace Incubator_2.Forms
         private void CreateFileClick(object sender, RoutedEventArgs e)
         {
             ProgramState.ShowWaitCursor();
+            string plus = DateTime.Now.ToString("HH.mm.ss ");
             string filename = $"{ProgramState.TemplatesRuntime}\\{record.fileName}.docx";
             CreateFile(ProgramState.TemplatesRuntime);
             ProgramState.ShowWaitCursor(false);

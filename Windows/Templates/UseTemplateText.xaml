@@ -5,14 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows.Templates"
         mc:Ignorable="d"
-        Title="Генератор" Height="450" MaxHeight="600" Width="600" MinWidth="500" Background="{DynamicResource Basic}" SizeToContent="Height" WindowStartupLocation="CenterScreen" Topmost="True">
+        Title="Генератор" Height="600" MinHeight="550" MaxHeight="800" Width="550" MinWidth="550" Background="{DynamicResource Basic}" SizeToContent="Height" WindowStartupLocation="CenterScreen" Topmost="True">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <StackPanel x:Name="ContentPanel" />
-        <Button Style="{DynamicResource ButtonMain}" Grid.Row="4" IsDefault="True" Grid.ColumnSpan="2" Margin="5,5,5,5" Click="ApplyClick">
+        <Border Background="{DynamicResource Dark}" Grid.ColumnSpan="2" Margin="5,5,5,5" CornerRadius="5" BorderThickness="1" BorderBrush="{DynamicResource Element}">
+            <StackPanel x:Name="ContentPanel" />
+        </Border>
+        
+        <Expander Style="{DynamicResource ExpanderMain}" Header="Предварительный просмотр" Grid.Row="1" Grid.ColumnSpan="2" IsExpanded="True" Margin="3,3,3,3">
+            <TextBox x:Name="ResultView" Style="{DynamicResource TextBoxBig}" MinHeight="150" Tag="Результат" IsReadOnly="True">
+                <TextBox.ContextMenu>
+                    <ContextMenu/>
+                </TextBox.ContextMenu>
+            </TextBox>
+        </Expander>
+        
+        <GridSplitter Style="{DynamicResource SplitterHorizontal}" VerticalAlignment="Bottom" Grid.ColumnSpan="2"/>
+        <Button Style="{DynamicResource ButtonMain}" Grid.Row="2" IsDefault="True" Margin="5,5,5,5" Click="ApplyClick">
             <StackPanel Orientation="Horizontal">
                 <Path 
     Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" VerticalAlignment="Center" Fill="White" UseLayoutRounding="False" SnapsToDevicePixels="False"
@@ -20,5 +37,14 @@
                 <Label Content="Завершить редактирование" Foreground="White"/>
             </StackPanel>
         </Button>
+        <Button Style="{DynamicResource ButtonMain}" Grid.Row="2" IsDefault="True" Margin="5,5,5,5" Click="UpdateClick" Grid.Column="1">
+            <StackPanel Orientation="Horizontal">
+                <Path 
+Data="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m3.81.086a.5.5 0 0 1 .67.225A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.25.25 0 0 1 0-.384l2.36-1.966a.25.25 0 0 1 .41.192V12h6a4 4 0 0 0 3.585-5.777.5.5 0 0 1 .225-.67Z" VerticalAlignment="Center" Fill="White" UseLayoutRounding="False" SnapsToDevicePixels="False"
+    />
+                <Label Content="Обновить вид" Foreground="White"/>
+            </StackPanel>
+        </Button>
+
     </Grid>
 </Window>

@@ -23,6 +23,7 @@ namespace Incubator_2.Windows.Templates
         {
             InitializeComponent();
             template = templ;
+            this.Title = template.name;
             GetTags();
             if (data.filledTags != null)
             {
@@ -95,6 +96,10 @@ namespace Incubator_2.Windows.Templates
         {
             Result = DialogStatus.Yes;
             this.Close();
+        }
+        private void UpdateClick(object sender, RoutedEventArgs e)
+        {
+            this.ResultView.Text = GetText();
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Incubator_2.Forms.Templates
             try
             {
                 Result = JsonConvert.DeserializeObject<SGeneratedDocument>(data);
-                SetOpenedRequired();
+                SetWarning("Требуется открыть для обновления");
             }
             catch { }
         }
@@ -71,10 +71,11 @@ namespace Incubator_2.Forms.Templates
             this.Warning.Visibility = Visibility.Collapsed;
             this.NotContented.Visibility = Visibility.Visible;   
         }
-        private void SetWarning()
+        private void SetWarning(string text)
         {
             this.NotContented.Visibility = Visibility.Collapsed;
             this.Contented.Visibility = Visibility.Collapsed;
+            this.WarningText.Text = text;
             this.Warning.Visibility = Visibility.Visible;
         }
         private void SendToUserClick(object sender, MouseButtonEventArgs e)
