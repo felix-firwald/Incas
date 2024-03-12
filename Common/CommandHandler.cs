@@ -113,7 +113,6 @@ namespace Incubator_2.Common
                 case "user":
                     User u = ProgramState.ShowUserSelector();
                     u.RemoveUser();
-                    UserContextor.RemoveContext(u);
                     break;
             }
         }

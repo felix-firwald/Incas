@@ -54,7 +54,7 @@ namespace Common
         public static string Exchanges { get { return Root + @"\Exchanges"; } } // ...\Root\Exchanges
         public static string Messages { get { return Root + @"\Messages"; } } // папка еще не создана
 
-        public static string UsersContext { get { return Root + @"\UsersContext"; } }
+        public static string Scripts { get { return Root + @"\Scripts"; } }
         public static string LogData { get { return Root + @"\LogData"; } } // ...\Root\LogData
 
         #region Templates
@@ -83,6 +83,7 @@ namespace Common
             Directory.CreateDirectory(TemplatesSourcesWordPath);
             Directory.CreateDirectory(TemplatesSourcesExcelPath);
             Directory.CreateDirectory(ServerProcesses);
+            Directory.CreateDirectory(Scripts);
             Directory.CreateDirectory(Exchanges);
             Directory.CreateDirectory(CustomDatabasePath);
             Directory.CreateDirectory(Messages);

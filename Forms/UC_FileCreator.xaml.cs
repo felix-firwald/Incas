@@ -217,7 +217,6 @@ namespace Incubator_2.Forms
                                 gt.value = value;
                                 filledTags.Add(gt);
                             }
-                            
                         }
                         tagsToReplace.Add(name);
                         values.Add(value);

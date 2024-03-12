@@ -30,7 +30,8 @@ namespace Incubator_2.Windows
         {
             UserParameters parameters = ProgramState.CurrentUserParameters;
             parameters.password = this.Input.Text;
-            UserContextor.SaveContext(parameters, ProgramState.CurrentUser);
+            ProgramState.CurrentUserParameters = parameters;
+            ProgramState.CurrentUser.SaveUser();
             this.Close();
         }
     }

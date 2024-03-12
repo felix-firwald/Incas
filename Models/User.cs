@@ -100,6 +100,7 @@ namespace Models
                 .Update("fullname", fullname)
                 .Update("post", post)
                 .Update("sector", sector)
+                .Update("context", context)
                 .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }
