@@ -21,11 +21,25 @@ using System.Windows.Shapes;
 
 namespace Incubator_2.Forms.Templates
 {
+    public enum GeneratorStatus
+    {
+        NotContented,
+        Contented,
+        Warning,
+        InProcess
+    }
+    public class NotReadyException : Exception
+    {
+        public NotReadyException(string message)
+        : base(message) { }
+    }
+
     /// <summary>
     /// Логика взаимодействия для Generator.xaml
     /// </summary>
     public partial class Generator : UserControl
     {
+        public GeneratorStatus Status = GeneratorStatus.NotContented;
         public int TemplateId;
         public SGeneratedDocument Result;
         private string resultText;
@@ -74,6 +88,8 @@ namespace Incubator_2.Forms.Templates
         }
         private void SetContented()
         {
+            this.Status = GeneratorStatus.Contented;
+            this.IconUser.ToolTip = "Делегировать другому пользователю";
             this.NotContented.Visibility = Visibility.Collapsed;
             this.Warning.Visibility = Visibility.Collapsed;
             this.InProcess.Visibility = Visibility.Collapsed;
@@ -82,6 +98,8 @@ namespace Incubator_2.Forms.Templates
         }
         private void SetNotContented()
         {
+            this.Status = GeneratorStatus.NotContented;
+            this.IconUser.ToolTip = "Делегировать другому пользователю";
             this.Contented.Visibility = Visibility.Collapsed;
             this.Warning.Visibility = Visibility.Collapsed;
             this.InProcess.Visibility = Visibility.Collapsed;
@@ -90,6 +108,8 @@ namespace Incubator_2.Forms.Templates
         }
         private void SetWarning(string text)
         {
+            this.Status = GeneratorStatus.Warning;
+            this.IconUser.ToolTip = "Делегировать другому пользователю";
             this.NotContented.Visibility = Visibility.Collapsed;
             this.Contented.Visibility = Visibility.Collapsed;
             this.WarningText.Text = text;
@@ -99,21 +119,32 @@ namespace Incubator_2.Forms.Templates
         }
         private void SetInProcess(string text)
         {
+            this.Status = GeneratorStatus.InProcess;
             this.NotContented.Visibility = Visibility.Collapsed;
             this.Contented.Visibility = Visibility.Collapsed;
             this.Warning.Visibility = Visibility.Collapsed;
             this.ProcessText.Text = text;
             this.InProcess.Visibility = Visibility.Visible;
             this.OpenButton.IsEnabled = false;
+            this.IconUser.ToolTip = "Отозвать делегацию";
         }
         private void SendToUserClick(object sender, MouseButtonEventArgs e)
         {
-            Session s = ProgramState.ShowActiveUserSelector("Выберите пользователя для заполнения этой части документа.");
-            if (s.userId != 0)
+            switch (this.Status)
             {
-                Result.template = TemplateId;
-                ServerProcessor.SendOpenGeneratorProcess(Result, this, s.slug);
-                SetInProcess($"Делегировано: {s.user}");
+                case GeneratorStatus.InProcess:
+                    WaitControls.RemoveGenerator(this);
+                    SetNotContented();
+                    break;
+                default:
+                    Session s = ProgramState.ShowActiveUserSelector("Выберите пользователя для заполнения этой части документа.");
+                    if (s.userId != 0)
+                    {
+                        Result.template = TemplateId;
+                        ServerProcessor.SendOpenGeneratorProcess(Result, this, s.slug);
+                        SetInProcess($"Делегировано: {s.user}");
+                    }
+                    break;
             }
         }
 

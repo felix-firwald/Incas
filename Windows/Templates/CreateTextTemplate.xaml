@@ -25,7 +25,7 @@
                 <RowDefinition Height="40"/>
                 <!--кнопка создания файла или печати-->
             </Grid.RowDefinitions>
-            <TextBox x:Name="sourceFile" Style="{DynamicResource TextBoxBig}" Text="{Binding Source}" TextWrapping="Wrap" HorizontalContentAlignment="Left" Tag="Основной текст" Grid.Column="0" Margin="5,0,5,5" Grid.Row="1" MinHeight="350">
+            <TextBox x:Name="source" Style="{DynamicResource TextBoxBig}" Text="{Binding Source}" TextWrapping="Wrap" HorizontalContentAlignment="Left" Tag="Основной текст" Grid.Column="0" Margin="5,0,5,5" Grid.Row="1" MinHeight="350">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>

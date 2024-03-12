@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Xceed.Words.NET;
 
 namespace Incubator_2.Windows.Templates
 {
@@ -95,7 +97,20 @@ namespace Incubator_2.Windows.Templates
         }
         private void GetTagsFromTextClick(object sender, MouseButtonEventArgs e)
         {
+            List<string> result = new List<string>();
+            Regex regex = new Regex(@"\[[A-Za-zА-Яа-я ]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
+            MatchCollection matches = regex.Matches(this.source.Text);
 
+            foreach (Match match in matches)
+            {
+                result.Add(match.Value.TrimStart('[').TrimEnd(']'));
+            }
+            foreach (string tagname in result)
+            {
+                Tag tag = new Tag();
+                tag.name = tagname;
+                AddTag(tag);
+            }
         }
         private void MinimizeAllClick(object sender, MouseButtonEventArgs e)
         {

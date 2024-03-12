@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Windows.ApplicationModel.Background;
 
 namespace Incubator_2.Common
 {
@@ -77,6 +78,23 @@ namespace Incubator_2.Common
             Generator g = Generators[process];
             Generators.Remove(process);
             return g;
+        }
+        public static void RemoveGenerator(Generator g)
+        {
+            string key = "";
+            foreach (KeyValuePair<string, Generator> pair in Generators)
+            {
+                if (pair.Value == g)
+                {
+                    key = pair.Key;
+                    break;
+                }
+            }
+            try
+            {
+                Generators.Remove(key);
+            }
+            catch { }
         }
     }
 
@@ -270,9 +288,13 @@ namespace Incubator_2.Common
                         case ProcessTarget.OPEN_GENERATOR:
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
-                                WaitControls
-                                .GetGenerator(process.back_id)
-                                .SetData(JsonConvert.DeserializeObject<SGeneratedDocument>(process.content), "Требуется подтверждение");
+                                try
+                                {
+                                    WaitControls
+                                        .GetGenerator(process.back_id)
+                                        .SetData(JsonConvert.DeserializeObject<SGeneratedDocument>(process.content), "Требуется подтверждение");
+                                }
+                                catch { }
                             });
                             break;
                     }
@@ -410,7 +432,7 @@ namespace Incubator_2.Common
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"Не удалось открыть присланную часть документа:\n{ex}", "Действие невозможно");
+                ProgramState.ShowErrorDialog($"Не удалось открыть присланную часть документа:\n{ex.Message}", "Действие невозможно");
             }
         }
 
