@@ -126,7 +126,7 @@ namespace Incubator_2.Forms
                     break;
                 case TypeOfTag.Date:
                     DateTime parsedDate;
-                    bool success = DateTime.TryParseExact(value, this.tag.value, CultureInfo.CurrentCulture, DateTimeStyles.None, out parsedDate);
+                    bool success = DateTime.TryParseExact(value, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out parsedDate);
                     if (success)
                     {
                         this.DatePicker.SelectedDate = parsedDate;
@@ -209,6 +209,12 @@ namespace Incubator_2.Forms
                 default: return "";
                 case TypeOfTag.Generator:
                     return this.Generator.GetData();
+                case TypeOfTag.Date:
+                    if (this.DatePicker.SelectedDate.HasValue)
+                    {
+                        return ((DateTime)this.DatePicker.SelectedDate).ToString("dd.MM.yyyy");
+                    }
+                    return "";
 
             }
         }

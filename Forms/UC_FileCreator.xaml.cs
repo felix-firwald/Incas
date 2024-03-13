@@ -203,7 +203,7 @@ namespace Incubator_2.Forms
                         string value = tf.GetValue();
                         if (tf.tag.type != TypeOfTag.LocalConstant)
                         {
-                            if (tf.tag.type == TypeOfTag.Generator)
+                            if (tf.tag.type == TypeOfTag.Generator || tf.tag.type == TypeOfTag.Date)
                             {
                                 SGeneratedTag gtg = new();
                                 gtg.tag = id;
