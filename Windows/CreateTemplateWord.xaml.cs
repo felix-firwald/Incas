@@ -96,6 +96,11 @@ namespace Incubator_2.Windows
             List<string> names = new List<string>();
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
+                if (!tag.Check())
+                {
+                    ProgramState.ShowExclamationDialog($"Тег \"{tag.tag.name}\" не заполнен.", "Сохранение прервано");
+                    return false;
+                }
                 if (names.Contains(tag.TagName.Text))
                 {
                     ProgramState.ShowExclamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");

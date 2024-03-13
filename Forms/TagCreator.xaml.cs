@@ -39,7 +39,25 @@ namespace Incubator_2.Forms
             }
         }
 
-        
+        public bool Check()
+        {
+            switch (this.tag.type)
+            {
+                case TypeOfTag.Variable:
+                case TypeOfTag.Text:
+                default:
+                    return true;
+                case TypeOfTag.Relation:
+                case TypeOfTag.LocalEnumeration:
+                case TypeOfTag.Generator:
+                case TypeOfTag.Table:
+                    if (string.IsNullOrWhiteSpace(this.tag.value))
+                    {
+                        return false;
+                    }
+                    return true;
+            }
+        }
 
         public void SaveTag(int templ, bool isEdit=false)
         {
@@ -150,5 +168,6 @@ namespace Incubator_2.Forms
             }
             
         }
+
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows.Templates"
         mc:Ignorable="d"
-        Title="Генератор" Height="600" MinHeight="550" MaxHeight="800" Width="550" MinWidth="550" Background="{DynamicResource Basic}" SizeToContent="Height" WindowStartupLocation="CenterScreen" Topmost="True">
+        Title="Генератор" Height="600" MinHeight="550" MaxHeight="700" Width="550" MinWidth="550" Background="{DynamicResource Basic}" SizeToContent="Height" WindowStartupLocation="CenterScreen" Topmost="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -16,8 +16,10 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <Border Background="{DynamicResource Dark}" Grid.ColumnSpan="2" Margin="5,5,5,5" CornerRadius="5" BorderThickness="1" BorderBrush="{DynamicResource Element}">
-            <StackPanel x:Name="ContentPanel" />
+        <Border Background="{DynamicResource Dark}" Grid.ColumnSpan="2" MaxHeight="400" Margin="5,5,5,5" CornerRadius="5" BorderThickness="1" BorderBrush="{DynamicResource Element}">
+            <ScrollViewer Style="{DynamicResource ScrollViewerBase}">
+                <StackPanel x:Name="ContentPanel" />
+            </ScrollViewer>
         </Border>
         <!--<DatePicker Style="{DynamicResource DatePickerMain}" VerticalAlignment="Top"/>-->
         <Expander Style="{DynamicResource ExpanderMain}" Header="Предварительный просмотр" Grid.Row="1" Grid.ColumnSpan="2" IsExpanded="True" Margin="3,3,3,3">

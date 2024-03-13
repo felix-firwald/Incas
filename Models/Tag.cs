@@ -11,6 +11,13 @@ namespace Models
     {
         public string Name;
     }
+    public struct DateTagSettings
+    {
+        public DateTime min;
+        public DateTime max;
+        public string format;
+        
+    }
     public enum TypeOfTag
     {
         Variable,
