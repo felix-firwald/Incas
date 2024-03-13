@@ -77,5 +77,6 @@
         </ComboBox>
         <CustomControls:SelectionBox x:Name="SelectionBox" Grid.Column="1" Visibility="Hidden" ToolTipService.InitialShowDelay="180"/>
         <templates:Generator x:Name="Generator" Grid.Column="1" Visibility="Hidden" />
+        <DatePicker x:Name="DatePicker" Style="{DynamicResource DatePickerMain}" Visibility="Hidden" Grid.Column="1" Margin="5,5,5,5"/>
     </Grid>
 </UserControl>

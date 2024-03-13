@@ -1,9 +1,11 @@
 ﻿using Common;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
+using Irony.Parsing;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -66,12 +68,15 @@ namespace Incubator_2.Forms
                     {
                         this.Combobox.ToolTip = this.tag.description;
                     }
-                    
                     break;
                 case TypeOfTag.Relation:
                     this.SelectionBox.Visibility = Visibility.Visible;
                     this.SelectionBox.Source = this.tag.value;
                     this.SelectionBox.ToolTip = this.tag.description;
+                    break;
+                case TypeOfTag.Date:
+                    this.DatePicker.Visibility = Visibility.Visible;
+                    this.DatePicker.ToolTip = this.tag.description;
                     break;
                 case TypeOfTag.Generator:
                     this.Generator.Visibility = Visibility.Visible;
@@ -119,6 +124,18 @@ namespace Incubator_2.Forms
                 case TypeOfTag.LocalEnumeration:
                     this.Combobox.SelectedValue = value;
                     break;
+                case TypeOfTag.Date:
+                    DateTime parsedDate;
+                    bool success = DateTime.TryParseExact(value, this.tag.value, CultureInfo.CurrentCulture, DateTimeStyles.None, out parsedDate);
+                    if (success)
+                    {
+                        this.DatePicker.SelectedDate = parsedDate;
+                    }
+                    else
+                    {
+                        ProgramState.ShowErrorDialog("Не удалось распознать дату");
+                    }
+                    break;
                 case TypeOfTag.Generator:
                     this.Generator.SetData(value);
                     break;
@@ -149,6 +166,18 @@ namespace Incubator_2.Forms
             }
             return true;
         }
+        private string GetDateInFormat()
+        {
+            if (string.IsNullOrWhiteSpace(this.tag.value))
+            {
+                return this.DatePicker.SelectedDate.ToString();
+            }
+            if (this.DatePicker.SelectedDate.HasValue)
+            {
+                return ((DateTime)this.DatePicker.SelectedDate).ToString(this.tag.value);
+            }
+            return "";
+        }
         public string GetValue()
         {
             
@@ -167,9 +196,10 @@ namespace Incubator_2.Forms
                         return this.Combobox.Items.GetItemAt(this.Combobox.SelectedIndex).ToString();
                     }
                     return "";
+                case TypeOfTag.Date:
+                    return GetDateInFormat();
                 case TypeOfTag.Generator:
                     return this.Generator.GetText();
-
             }
         }
         public string GetData()

@@ -19,9 +19,9 @@
         <Border Background="{DynamicResource Dark}" Grid.ColumnSpan="2" Margin="5,5,5,5" CornerRadius="5" BorderThickness="1" BorderBrush="{DynamicResource Element}">
             <StackPanel x:Name="ContentPanel" />
         </Border>
-        
+        <!--<DatePicker Style="{DynamicResource DatePickerMain}" VerticalAlignment="Top"/>-->
         <Expander Style="{DynamicResource ExpanderMain}" Header="Предварительный просмотр" Grid.Row="1" Grid.ColumnSpan="2" IsExpanded="True" Margin="3,3,3,3">
-            <TextBox x:Name="ResultView" Style="{DynamicResource TextBoxBig}" MinHeight="150" Tag="Результат" IsReadOnly="True">
+            <TextBox x:Name="ResultView" Style="{DynamicResource TextBoxBig}" MinHeight="150" Tag="Результат" IsReadOnly="True" TextWrapping="WrapWithOverflow">
                 <TextBox.ContextMenu>
                     <ContextMenu/>
                 </TextBox.ContextMenu>

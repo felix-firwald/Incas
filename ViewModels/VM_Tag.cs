@@ -38,6 +38,8 @@ namespace Incubator_2.ViewModels
                         return "Предлагаемые значения (для разделения используйте символ \";\")";
                     case TypeOfTag.Relation:
                         return "Укажите таблицу и поле";
+                    case TypeOfTag.Date:
+                        return "Укажите правило форматирования";
                     case TypeOfTag.Table:
                         return "Укажите названия столбцов (для разделения используйте символ \";\")";
                 }
@@ -132,13 +134,15 @@ namespace Incubator_2.ViewModels
                 case "3":
                     return TypeOfTag.Relation;
                 case "4":
+                    return TypeOfTag.Date;
+                case "5":
                     Description = "";
                     return TypeOfTag.LocalConstant;
-                case "5":
+                case "6":
                     Description = "";
                     DefaultValue = "";
                     return TypeOfTag.Generator;
-                case "6":
+                case "7":
                     Description = "";
                     return TypeOfTag.Table;
             }
@@ -156,12 +160,14 @@ namespace Incubator_2.ViewModels
                     return "2";
                 case TypeOfTag.Relation:
                     return "3";
-                case TypeOfTag.LocalConstant:
+                case TypeOfTag.Date:
                     return "4";
-                case TypeOfTag.Generator:
+                case TypeOfTag.LocalConstant:
                     return "5";
-                case TypeOfTag.Table:
+                case TypeOfTag.Generator:
                     return "6";
+                case TypeOfTag.Table:
+                    return "7";
             }
         }
         public Visibility ButtonRelationVisibility
