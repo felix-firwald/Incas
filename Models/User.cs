@@ -89,12 +89,15 @@ namespace Models
 
         public void GenerateSign()
         {
-            this.sign = ProgramState.GenerateSlug(12);
+            if (string.IsNullOrEmpty(this.sign))
+            {
+                this.sign = ProgramState.GenerateSlug(12);
+            }
         }
-
         public void UpdateUser()
         {
             StartCommandToService()
+                .Update("sign", sign)
                 .Update("surname", surname)
                 .Update("secondName", secondName)
                 .Update("fullname", fullname)
@@ -169,7 +172,6 @@ namespace Models
         public UserParameters GetParametersContext()
         {
             return JsonConvert.DeserializeObject<UserParameters>(Cryptographer.DecryptString(GetKey(), this.context));
-            //return UserContextor.GetContext(this);
         }
         public void SaveParametersContext(UserParameters parameters)
         {

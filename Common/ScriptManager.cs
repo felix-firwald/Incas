@@ -16,19 +16,24 @@ namespace Incubator_2.Common
         {
             return $"{ProgramState.Scripts}\\{name}";
         }
-        public static void Execute(string fileName, UserControl currentForm)
+        public static void Execute()
         {
             // собственно среда выполнения Python-скрипта
             ScriptEngine engine = Python.CreateEngine();
+            engine.Runtime.LoadAssembly(typeof(string).Assembly);
+            ScriptScope scope = engine.CreateScope();
+            //scope.SetVariable("input_var", "13.03.2024");
             //engine.LoadAssembly(System.Reflection.Assembly.GetExecutingAssembly());
             
             try
             {
-                engine.ExecuteFile(GetFullPathOfScript(fileName));
+                engine.ExecuteFile(GetFullPathOfScript("main.py"), scope);
+                dynamic result = scope.GetVariable("output");
+                ProgramState.ShowInfoDialog(result);
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"При выполнении пользовательского скрипта \"{fileName}\" возникла ошибка:\n" + ex.Message, "Ошибка выполнения скрипта");
+                ProgramState.ShowErrorDialog($"При выполнении пользовательского скрипта возникла ошибка:\n" + ex.Message, "Ошибка выполнения скрипта");
             }
         }
     }

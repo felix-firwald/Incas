@@ -357,6 +357,10 @@ namespace Common
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
+                if (message == null)
+                {
+                    return;
+                }
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.Error);
                 d.ShowDialog();
             });

@@ -5,6 +5,7 @@ using Irony.Parsing;
 using Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -12,11 +13,19 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Tag = Models.Tag;
 
 
 namespace Incubator_2.Forms
 {
+    public static class CommandIcons
+    {
+        public static Geometry ConvertFromString(string input)
+        {
+            return (Geometry)TypeDescriptor.GetConverter(typeof(Geometry)).ConvertFrom(input);
+        }
+    }
     public enum FillerMode
     {
         Tag,
@@ -40,7 +49,7 @@ namespace Incubator_2.Forms
             Mode = FillerMode.Tag;
             this.tag = t;
             this.MainLabel.Text = this.tag.name + ":";
-            
+            //this.CommandIcon.Data = FindResource("Regex") as Geometry;
             switch (tag.type)
             {
                 case TypeOfTag.Variable:

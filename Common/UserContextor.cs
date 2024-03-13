@@ -42,10 +42,10 @@ namespace Incubator_2.Common
             }
             return input == password;
         }
-        public void Show()
-        {
-            ProgramState.ShowInfoDialog($"startup_password: {startup_password}, password: {password}");
-        }
+        //public void Show()
+        //{
+        //    ProgramState.ShowInfoDialog($"startup_password: {startup_password}, password: {password}, tasks_visibility: {tasks_visibility}");
+        //}
 
         public void ApplyStandartProperties(string pwd)
         {

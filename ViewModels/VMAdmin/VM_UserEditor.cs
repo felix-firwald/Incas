@@ -20,7 +20,7 @@ namespace Incubator_2.ViewModels.VMAdmin
         public VM_UserEditor(User user)
         {
             _user = user;
-            if (user.id > 0 )
+            if (user.id > 0)
             {
                 _userParameters = user.GetParametersContext();
                 using (Sector s = new())
