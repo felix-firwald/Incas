@@ -71,6 +71,10 @@ namespace Common
         {
             return GetWorkspaceData().GetSubKeyNames().Contains(workspace);
         }
+        public static bool IsRoosterExists()
+        {
+            return GetRoot().GetValueNames().Contains("Rooster");
+        }
 
         public static RegistryKey GetWorkspaceByName(string name)
         {

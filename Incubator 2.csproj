@@ -78,6 +78,7 @@
     <None Remove="Fonts\VelaSans-Regular.ttf" />
     <None Remove="Fonts\VelaSans-SemiBold.ttf" />
     <None Remove="Static\Chicken.wav" />
+    <None Remove="Static\Rooster.wav" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
@@ -148,9 +149,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Static\Chicken.wav">
+    <EmbeddedResource Include="Static\Chicken.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Rooster.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Logo.png" />
@@ -199,5 +203,8 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 </Project>

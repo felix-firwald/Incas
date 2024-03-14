@@ -7,6 +7,7 @@ using Incubator_2.Windows.ToolBar;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Media;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -44,10 +45,21 @@ namespace Incubator_2
             }
             PlayEasterEgg();
         }
-        private void PlayEasterEgg()
+        private void PlayEasterEgg(string name = "Chicken")
         {
-            SoundPlayer player = new SoundPlayer(Properties.Resources.);//sound_file is name of your actual file
-            player.Play();
+            try
+            {
+                if (RegistryData.IsRoosterExists())
+                {
+                    using (FileStream stream = File.Open($"Static\\{name}.wav", FileMode.Open))
+                    {
+                        SoundPlayer myNewSound = new SoundPlayer(stream);
+                        myNewSound.Load();
+                        myNewSound.Play();
+                    }
+                }
+            }
+            catch { }
         }
 
         private void OnClosed(object sender, EventArgs e)
@@ -109,20 +121,7 @@ namespace Incubator_2
 
         private void Logo_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            switch (Permission.CurrentUserPermission)
-            {
-                case PermissionGroup.Admin:
-                case PermissionGroup.Moderator:
-                    ProgramState.ShowWaitCursor();
-                    AdminPanel adminPanel = new AdminPanel();
-                    adminPanel.Show();
-                    break;
-                case PermissionGroup.Operator:
-                default:
-                    ProgramState.ShowExclamationDialog("Данная функция доступна только администраторам и модераторам.", "Нет доступа");
-                    break;
-            }
-            
+            PlayEasterEgg("Rooster");
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
@@ -177,6 +176,11 @@ namespace Incubator_2
         private void HandleCommandClick(object sender, RoutedEventArgs e)
         {
             CommandHandler.Handle(ProgramState.ShowInputBox("Введите команду"));
+        }
+
+        private void Logo_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
         }
     }
 }
