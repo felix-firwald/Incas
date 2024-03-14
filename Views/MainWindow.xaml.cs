@@ -7,10 +7,12 @@ using Incubator_2.Windows.ToolBar;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Media;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Media;
 using Windows.UI.Notifications;
 
 namespace Incubator_2
@@ -40,6 +42,12 @@ namespace Incubator_2
                     windowSet.ShowDialog();
                 }
             }
+            PlayEasterEgg();
+        }
+        private void PlayEasterEgg()
+        {
+            SoundPlayer player = new SoundPlayer(Properties.Resources.);//sound_file is name of your actual file
+            player.Play();
         }
 
         private void OnClosed(object sender, EventArgs e)

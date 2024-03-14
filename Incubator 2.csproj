@@ -77,6 +77,7 @@
     <None Remove="Fonts\VelaSans-Medium.ttf" />
     <None Remove="Fonts\VelaSans-Regular.ttf" />
     <None Remove="Fonts\VelaSans-SemiBold.ttf" />
+    <None Remove="Static\Chicken.wav" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
@@ -145,6 +146,11 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Static\Chicken.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Logo.png" />

@@ -17,6 +17,7 @@ using Incubator_2.ViewModels;
 using System.Data.SQLite;
 using System.Threading;
 using Incubator_2.Windows.Selectors;
+using System.Media;
 
 
 namespace Common
@@ -361,6 +362,7 @@ namespace Common
                 {
                     return;
                 }
+                SystemSounds.Hand.Play();
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.Error);
                 d.ShowDialog();
             });
@@ -369,6 +371,7 @@ namespace Common
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
+                SystemSounds.Hand.Play();
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.DatabaseError);
                 d.ShowDialog();
             });
@@ -377,6 +380,7 @@ namespace Common
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
+                SystemSounds.Hand.Play();
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.AccessDenied);
                 d.ShowDialog();
             });
@@ -385,6 +389,7 @@ namespace Common
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
+                SystemSounds.Exclamation.Play();
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.Exclamation);
             d.ShowDialog();
             });
@@ -393,6 +398,7 @@ namespace Common
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
+                SystemSounds.Beep.Play();
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.Info);
                 d.ShowDialog();
             });
@@ -402,6 +408,7 @@ namespace Common
             DialogQuestion d = new DialogQuestion(message, title, yesText, noText);
             Application.Current.Dispatcher.Invoke(() =>
             {
+                SystemSounds.Question.Play();
                 d.ShowDialog();
             });
             return d.status;
