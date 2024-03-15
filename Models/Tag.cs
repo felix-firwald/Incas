@@ -1,5 +1,8 @@
 ﻿using Common;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Incubator_2.Common;
 using Incubator_2.Windows;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,12 +14,11 @@ namespace Models
     {
         public string Name;
     }
-    public struct DateTagSettings
+    public struct CommandSettings
     {
-        public DateTime min;
-        public DateTime max;
-        public string format;
-        
+        public string Icon;
+        public string Name;
+        public string Script;
     }
     public enum TypeOfTag
     {
@@ -38,6 +40,7 @@ namespace Models
         public string value { get; set; }
         public int parent { get; set; }
         public string description { get; set; }
+        public string command { get; set; }
         public Tag() 
         {
             tableName = "Tags";
@@ -105,8 +108,9 @@ namespace Models
                     { "name", name },
                     { "type", type.ToString() },
                     { "value", value },
-                    { "parent", parent > 0? parent.ToString(): Query.Null },
+                    { "parent", parent > 0? parent.ToString(): Common.Query.Null },
                     { "description", description },
+                    { "command", command },
                 })
                 .ExecuteVoid();
         }
@@ -122,6 +126,7 @@ namespace Models
                 .Update("type", type.ToString())
                 .Update("value", value)
                 .Update("description", description)
+                .Update("command", command)
                 .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }
@@ -151,8 +156,26 @@ namespace Models
             {
                 this.Serialize(dr);
                 this.type = (TypeOfTag)Enum.Parse(typeof(TypeOfTag), dr["type"].ToString());
+            }           
+        }
+        public string GetKey()
+        {
+            return "TAG";
+        }
+        public CommandSettings GetCommand()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<CommandSettings>(Cryptographer.DecryptString(this.command));
             }
-            
+            catch (Exception)
+            {
+                return new();
+            }
+        }
+        public void SaveCommand(CommandSettings cs)
+        {
+            this.command = Cryptographer.EncryptString(JsonConvert.SerializeObject(cs));
         }
     }
 }

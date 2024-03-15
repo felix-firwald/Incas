@@ -2,6 +2,7 @@
 using Incubator_2.Common;
 using Incubator_2.Models;
 using Incubator_2.Windows;
+using Microsoft.Scripting.Hosting;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,7 @@ namespace Incubator_2.Forms
                     UC_TagFiller tf = new UC_TagFiller(t);
                     tf.OnInsert += OnInsert;
                     tf.OnRename += OnRename;
+                    tf.OnScriptRequested += OnScriptRequested;
                     this.ContentPanel.Children.Add(tf);
                     TagFillers.Add(tf);
                 }
@@ -58,6 +60,28 @@ namespace Incubator_2.Forms
                 }
             });
         }
+
+        private void OnScriptRequested(string script)
+        {
+            try
+            {
+                ScriptScope scope = ScriptManager.GetEngine().CreateScope();
+                foreach (UC_TagFiller tf in TagFillers)
+                {
+                    scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetValue());
+                }
+                ScriptManager.Execute(script, scope);
+                foreach (UC_TagFiller tf in TagFillers)
+                {
+                    tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
+                }
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog("При обработке скрипта на стороне формы возникла ошибка:\n" + ex.Message);
+            }
+        }
+
         private void OnInsert(int tag, string value)
         {
             OnInsertRequested?.Invoke(tag, value);

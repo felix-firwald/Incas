@@ -1,6 +1,7 @@
 ﻿using Common;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using Incubator_2.ViewModels;
+using Incubator_2.Windows;
 using Incubator_2.Windows.CustomDatabase;
 using Incubator_2.Windows.Templates;
 using Models;
@@ -169,5 +170,18 @@ namespace Incubator_2.Forms
             
         }
 
+        private void EditScriptClick(object sender, RoutedEventArgs e)
+        {
+            CreateTagCommand ct = new(tag.GetCommand());
+            ct.ShowDialog();
+            if (ct.Result == DialogStatus.Yes)
+            {
+                tag.SaveCommand(ct.Command);
+            }
+            else if (ct.Result == DialogStatus.No)
+            {
+                tag.command = "";
+            }
+        }
     }
 }

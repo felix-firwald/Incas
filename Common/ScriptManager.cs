@@ -12,24 +12,31 @@ namespace Incubator_2.Common
 {
     public static class ScriptManager
     {
+        private static ScriptEngine engine;
+        static ScriptManager()
+        {
+            engine = Python.CreateEngine();
+
+        }
+        public static ScriptEngine GetEngine()
+        {
+            return engine;
+        }
         public static string GetFullPathOfScript(string name)
         {
             return $"{ProgramState.Scripts}\\{name}";
         }
-        public static void Execute()
+        public static void Execute(string script, ScriptScope scope)
         {
             // собственно среда выполнения Python-скрипта
-            ScriptEngine engine = Python.CreateEngine();
-            engine.Runtime.LoadAssembly(typeof(string).Assembly);
-            ScriptScope scope = engine.CreateScope();
+            //ScriptEngine engine = Python.CreateEngine();
+            //engine.Runtime.LoadAssembly(typeof(string).Assembly);
             //scope.SetVariable("input_var", "13.03.2024");
             //engine.LoadAssembly(System.Reflection.Assembly.GetExecutingAssembly());
             
             try
             {
-                engine.ExecuteFile(GetFullPathOfScript("main.py"), scope);
-                dynamic result = scope.GetVariable("output");
-                ProgramState.ShowInfoDialog(result);
+                engine.Execute(script, scope);
             }
             catch (Exception ex)
             {

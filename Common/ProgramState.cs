@@ -352,6 +352,19 @@ namespace Common
             ServerProcessor.StopPort();
         }
         #endregion
+        public static void PlaySound(string path)
+        {
+            try
+            {
+                using (FileStream stream = File.Open($"Static\\{path}.wav", FileMode.Open))
+                {
+                    SoundPlayer myNewSound = new SoundPlayer(stream);
+                    myNewSound.Load();
+                    myNewSound.Play();
+                }
+            }
+            catch { }
+        }
 
         #region Modal Dialogs
         public static void ShowErrorDialog(string message, string title = "Возникла неизвестная ошибка")
@@ -362,7 +375,7 @@ namespace Common
                 {
                     return;
                 }
-                SystemSounds.Hand.Play();
+                PlaySound("UI-Exclamation");
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.Error);
                 d.ShowDialog();
             });
@@ -371,7 +384,7 @@ namespace Common
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                SystemSounds.Hand.Play();
+                PlaySound("UI-Exclamation");
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.DatabaseError);
                 d.ShowDialog();
             });
@@ -380,7 +393,7 @@ namespace Common
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                SystemSounds.Hand.Play();
+                PlaySound("UI-Exclamation");
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.AccessDenied);
                 d.ShowDialog();
             });
@@ -389,7 +402,7 @@ namespace Common
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                SystemSounds.Exclamation.Play();
+                PlaySound("UI-Attention");
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.Exclamation);
             d.ShowDialog();
             });
@@ -398,7 +411,7 @@ namespace Common
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                SystemSounds.Beep.Play();
+                PlaySound("UI-Attention");
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.Info);
                 d.ShowDialog();
             });
@@ -408,7 +421,7 @@ namespace Common
             DialogQuestion d = new DialogQuestion(message, title, yesText, noText);
             Application.Current.Dispatcher.Invoke(() =>
             {
-                SystemSounds.Question.Play();
+                PlaySound("UI-Attention");
                 d.ShowDialog();
             });
             return d.status;

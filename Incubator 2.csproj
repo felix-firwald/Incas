@@ -79,6 +79,8 @@
     <None Remove="Fonts\VelaSans-SemiBold.ttf" />
     <None Remove="Static\Chicken.wav" />
     <None Remove="Static\Rooster.wav" />
+    <None Remove="Static\UI-Attention.wav" />
+    <None Remove="Static\UI-Exclamation.wav" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
@@ -153,6 +155,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Static\Rooster.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\UI-Attention.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\UI-Exclamation.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

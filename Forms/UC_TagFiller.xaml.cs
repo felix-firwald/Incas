@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
 using Irony.Parsing;
+using Microsoft.Scripting.Hosting;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -39,8 +40,11 @@ namespace Incubator_2.Forms
         public readonly Tag tag;
         public FillerMode Mode;
         private bool isRequired = false;
+        private string command = "";
         public delegate void StringAction(int tag, string text);
         public event StringAction OnInsert;
+        public delegate void CommandScript(string script);
+        public event CommandScript OnScriptRequested;
         public delegate void StringActionRecalculate(string tag);
         public event StringActionRecalculate OnRename;
         public UC_TagFiller(Tag t)
@@ -92,6 +96,18 @@ namespace Incubator_2.Forms
                     this.Generator.TemplateId = int.Parse(this.tag.value);
                     break;
             }
+            MakeButton();
+        }
+        private void MakeButton()
+        {
+            CommandSettings cs = tag.GetCommand();
+            if (string.IsNullOrWhiteSpace(cs.Script))
+            {
+                return;
+            }
+            command = cs.Script;
+            this.CommandButton.Visibility = Visibility.Visible;
+            this.CommandButtonText.Content = cs.Name;
         }
         public UC_TagFiller(FieldCreator fc, string path)
         {
@@ -362,6 +378,30 @@ namespace Incubator_2.Forms
         {
             string rec = ProgramState.ShowActiveUserSelector("Выберите пользователя для запроса данных").slug;
             ServerProcessor.SendRequestTextProcess(this, rec);
+        }
+
+        private void CommandClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {             
+                if (command.Contains("# [affects other]"))
+                {
+                    OnScriptRequested?.Invoke(command);
+                }
+                else
+                {
+                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();
+                    scope.SetVariable("input_data", this.GetValue());
+                    ScriptManager.Execute(command, scope);
+
+                    this.SetValue((string)scope.GetVariable("output"));
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog("При обработке скрипта произошла ошибка:\n" + ex.Message);
+            }
         }
     }
 }

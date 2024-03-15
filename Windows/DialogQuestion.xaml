@@ -6,6 +6,18 @@
         xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="DialogQuestion" Style="{DynamicResource Dialog}" Height="150" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
+                             From="0.0" To="1.0" Duration="0:0:0.180"
+                             AutoReverse="False"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+
+    </Window.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>

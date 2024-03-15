@@ -1,5 +1,8 @@
-﻿using Incubator_2.Forms;
+﻿using Common;
+using Incubator_2.Common;
+using Incubator_2.Forms;
 using Incubator_2.Models;
+using Microsoft.Scripting.Hosting;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -46,8 +49,31 @@ namespace Incubator_2.Windows.Templates
         private void AddField(Tag t)
         {
             UC_TagFiller tf = new(t);
+            tf.OnScriptRequested += OnScriptRequested;
             this.ContentPanel.Children.Add(tf);
         }
+
+        private void OnScriptRequested(string script)
+        {
+            try
+            {
+                ScriptScope scope = ScriptManager.GetEngine().CreateScope();
+                foreach (UC_TagFiller tf in this.ContentPanel.Children)
+                {
+                    scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetValue());
+                }
+                ScriptManager.Execute(script, scope);
+                foreach (UC_TagFiller tf in this.ContentPanel.Children)
+                {
+                    tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
+                }
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog("При обработке скрипта на стороне формы возникла ошибка:\n" + ex.Message);
+            }
+        }
+
         public void ApplyData(SGeneratedDocument data)
         {
             foreach (SGeneratedTag tag in data.GetFilledTags())
