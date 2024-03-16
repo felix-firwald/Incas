@@ -103,6 +103,7 @@ namespace Forms
             {
                 if (ProgramState.IsWorkspaceOpened())
                 {
+                    ProgramState.ShowWaitCursor();
                     if (this.template.parent != 0)  // если это ребенок
                     {
                         VM_ChildTemplate vm = new VM_ChildTemplate(this.template.parent, this.template.AsModel());

@@ -41,6 +41,7 @@ namespace Incubator_2.Windows
             }
             VM_template = new VM_Template(this.template);
             this.DataContext = VM_template;
+            ProgramState.ShowWaitCursor(false);
         }
 
         private void GetTags()

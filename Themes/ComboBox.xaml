@@ -8,40 +8,105 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="13" />
+                <ColumnDefinition Width="35" />
             </Grid.ColumnDefinitions>
-            <Border Grid.ColumnSpan="2" Name="Border"
+            <Border Grid.ColumnSpan="3" Name="Border"
               BorderBrush="{StaticResource Element}" 
-              CornerRadius="6" BorderThickness="1, 1, 1, 1" 
+              CornerRadius="6" BorderThickness="1" 
               Background="{StaticResource Black}" />
-            <Border Grid.Column="1" Margin="3, 3, 3, 3" BorderBrush="#444" Name="ButtonBorder"
-              CornerRadius="6, 6, 6, 6" BorderThickness="0, 0, 0, 0" 
-              Background="{StaticResource Dark}" />
+            
+            <Border Grid.Column="2" Margin="1" BorderBrush="#444" Name="ButtonBorder" CornerRadius="6,6,6,6" BorderThickness="0"  Background="{StaticResource Black}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Path Name="Arrow" Data="m -6.354 -2.354 a 0.5 0.5 0 0 1 0.708 0 l 5.646 5.647 l 5.646 -5.647 a 0.5 0.5 0 0 1 0.708 0.708 l -6 6 a 0.5 0.5 0 0 1 -0.708 0 l -6 -6 a 0.5 0.5 0 0 1 0 -0.708" HorizontalAlignment="Center" Fill="{DynamicResource Area}" VerticalAlignment="Center" Margin="0,2,0,0">
+                    <Path.RenderTransform>
+                        <RotateTransform Angle="0" x:Name="ArrowRotate"/>
+                    </Path.RenderTransform>
+                </Path>
+            </Border>
+            <Rectangle Width="1" Height="23" Fill="{DynamicResource Basic}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-            <Path Name="Arrow" Grid.Column="1" 
-            Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
-            HorizontalAlignment="Center" Fill="#444"
-            VerticalAlignment="Center" />
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="UIElement.IsMouseOver" Value="True">
-                <Setter Property="Panel.Background" TargetName="ButtonBorder" Value="{DynamicResource Basic}"/>
-                <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource DarkLight}"/>
+                <!--<Setter Property="Panel.Background" TargetName="ButtonBorder" Value="{DynamicResource Basic}"/>-->
+                <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource Icon}"/>
             </Trigger>
             <Trigger Property="ToggleButton.IsChecked" Value="True">
-                <Setter Property="Shape.Fill" TargetName="Arrow" Value="White"/>
-                <Setter TargetName="ButtonBorder" Property="Background" Value="DodgerBlue"/>
+                <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource PrimaryMain}"/>
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Duration="0:0:0.200" To="180"
+                                     Storyboard.TargetName="ArrowRotate"
+                                     Storyboard.TargetProperty="Angle"/>
+                            
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Duration="0:0:0.4" To="0"
+                                     Storyboard.TargetName="ArrowRotate"
+                                     Storyboard.TargetProperty="Angle"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+                <!--<Setter TargetName="ButtonBorder" Property="Background" Value="DodgerBlue"/>-->
             </Trigger>
             <Trigger Property="UIElement.IsEnabled" Value="False">
-                <Setter Property="Panel.Background" TargetName="Border" Value="{StaticResource LightBlack}"/>
-                <Setter Property="Panel.Background" TargetName="ButtonBorder" Value="{StaticResource LightBlack}"/>
-                <Setter Property="TextElement.Foreground" Value="{StaticResource GrayLight}"/>
-                <Setter Property="Shape.Fill" TargetName="Arrow" Value="#999"/>
+                <Setter Property="Opacity" Value="0.5"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
     
+    <Style TargetType="{x:Type ComboBoxItem}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Margin" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                    <Border x:Name="Border" Padding="4,3,4,3" MinHeight="20" CornerRadius="4" BorderThickness="0" BorderBrush="{DynamicResource Area}" Background="{DynamicResource Black}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter/>
+                            <Path x:Name="Pointer" Grid.Column="1" Margin="2,2,2,4" Fill="{DynamicResource Success}" Visibility="Collapsed" Data="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="IsMouseOver" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource LightBlack}"/>
+                            <Setter TargetName="Pointer" Property="Visibility" Value="Visible"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="False" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Basic}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Basic}"/>
+                            <Setter TargetName="Pointer" Property="Visibility" Value="Visible"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="ComboBoxMain" TargetType="{x:Type ComboBox}">
         <Setter Property="UIElement.SnapsToDevicePixels" Value="True"/>
         <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True"/>
