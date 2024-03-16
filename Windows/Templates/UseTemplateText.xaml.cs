@@ -60,7 +60,7 @@ namespace Incubator_2.Windows.Templates
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                 foreach (UC_TagFiller tf in this.ContentPanel.Children)
                 {
-                    scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetValue());
+                    scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
                 foreach (UC_TagFiller tf in this.ContentPanel.Children)

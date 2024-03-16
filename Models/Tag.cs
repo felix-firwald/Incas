@@ -27,6 +27,7 @@ namespace Models
         Relation,
         LocalEnumeration,
         LocalConstant,
+        HiddenField,
         Date,
         Generator,
         Table

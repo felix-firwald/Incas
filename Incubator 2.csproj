@@ -171,6 +171,7 @@
     <Resource Include="Windows\Logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
     <PackageReference Include="ClosedXML" Version="0.102.1" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
     <PackageReference Include="DocX" Version="2.5.0" />
@@ -179,6 +180,7 @@
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
     <PackageReference Include="FreeSpire.Doc" Version="11.6.0" />
     <PackageReference Include="IronPython" Version="3.4.1" />
+    <PackageReference Include="IronPython.StdLib" Version="3.4.1" />
     <PackageReference Include="Irony.NetCore" Version="1.0.11" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

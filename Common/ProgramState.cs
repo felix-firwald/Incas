@@ -18,6 +18,7 @@ using System.Data.SQLite;
 using System.Threading;
 using Incubator_2.Windows.Selectors;
 using System.Media;
+using Microsoft.Scripting.Hosting;
 
 
 namespace Common
@@ -91,7 +92,7 @@ namespace Common
             Directory.CreateDirectory(LogData);
             Directory.CreateDirectory(TemplatesRuntime);
             CollectGarbage();
-            
+            ScriptManager.Execute("from Incas import Service", ScriptManager.GetEngine().CreateScope());
             //TelegramProcessor.StartBot("6911917508:AAHJeEhfNKzzOJjp0IlGtZ51lqNrE2LBnK4");
         }
         public static string GetFullPathOfCustomDb(string path)
@@ -333,6 +334,7 @@ namespace Common
                 ms.AddSession();
                 CurrentSession = ms;
                 ms.ClearOldestSessions();
+                
             }
             //Directory.CreateDirectory(ServerProcessor.Port);
         }

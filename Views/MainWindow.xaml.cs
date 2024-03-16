@@ -43,6 +43,7 @@ namespace Incubator_2
                     windowSet.ShowDialog();
                 }
             }
+            
             PlayEasterEgg();
         }
         private void PlayEasterEgg(string name = "Chicken")

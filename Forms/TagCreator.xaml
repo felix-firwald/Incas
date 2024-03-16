@@ -80,6 +80,13 @@
                     </ComboBoxItem>
                     <ComboBoxItem >
                         <StackPanel Orientation="Horizontal">
+                            <Ellipse Fill="{DynamicResource Error}" Width="5" Height="5"/>
+                            <Label Content="Скрытое поле" Style="{DynamicResource LabelElement}"/>
+                            <Label Content="Поле, которое можно заполнить только автоматически" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem >
+                        <StackPanel Orientation="Horizontal">
                             <Ellipse Fill="{DynamicResource Purple}" Width="5" Height="5"/>
                             <Label Content="Генератор" Style="{DynamicResource LabelElement}"/>
                             <Label Content="Заполнение выделенной формы для генерации текста" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11" Cursor=""/>

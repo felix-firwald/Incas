@@ -71,6 +71,8 @@ namespace Incubator_2.Forms
                     this.Textbox.Tag = this.tag.description;
                     break;
                 case TypeOfTag.LocalConstant:
+                case TypeOfTag.HiddenField:
+                    this.Textbox.Text = this.tag.value;
                     this.Visibility = Visibility.Collapsed;
                     break;
                 case TypeOfTag.LocalEnumeration:
@@ -138,6 +140,7 @@ namespace Incubator_2.Forms
             {
                 case TypeOfTag.Variable:
                 case TypeOfTag.Text:
+                case TypeOfTag.HiddenField:
                 default:
                     this.Textbox.Text = value;
                     break;
@@ -155,10 +158,6 @@ namespace Incubator_2.Forms
                     if (success)
                     {
                         this.DatePicker.SelectedDate = parsedDate;
-                    }
-                    else
-                    {
-                        ProgramState.ShowErrorDialog("Не удалось распознать дату");
                     }
                     break;
                 case TypeOfTag.Generator:
@@ -230,8 +229,7 @@ namespace Incubator_2.Forms
         public string GetData()
         {
             switch (tag.type)
-            {
-                default: return "";
+            {    
                 case TypeOfTag.Generator:
                     return this.Generator.GetData();
                 case TypeOfTag.Date:
@@ -240,6 +238,7 @@ namespace Incubator_2.Forms
                         return ((DateTime)this.DatePicker.SelectedDate).ToString("dd.MM.yyyy");
                     }
                     return "";
+                default: return GetValue();
 
             }
         }
@@ -383,7 +382,8 @@ namespace Incubator_2.Forms
         private void CommandClick(object sender, RoutedEventArgs e)
         {
             try
-            {             
+            {
+                ProgramState.ShowWaitCursor();
                 if (command.Contains("# [affects other]"))
                 {
                     OnScriptRequested?.Invoke(command);
@@ -400,6 +400,7 @@ namespace Incubator_2.Forms
             }
             catch (Exception ex)
             {
+                ProgramState.ShowWaitCursor(false);
                 ProgramState.ShowErrorDialog("При обработке скрипта произошла ошибка:\n" + ex.Message);
             }
         }

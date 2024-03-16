@@ -34,6 +34,8 @@ namespace Incubator_2.ViewModels
                         return "Значение по умолчанию";
                     case TypeOfTag.LocalConstant:
                         return "Значение константы";
+                    case TypeOfTag.HiddenField:
+                        return "Значение, которое будет использовано, если скрипт вернет пустую строку";
                     case TypeOfTag.LocalEnumeration:
                         return "Предлагаемые значения (для разделения используйте символ \";\")";
                     case TypeOfTag.Relation:
@@ -79,6 +81,7 @@ namespace Incubator_2.ViewModels
                     default:
                         return Visibility.Visible;
                     case TypeOfTag.LocalConstant:
+                    case TypeOfTag.HiddenField:
                     case TypeOfTag.Generator:
                     case TypeOfTag.Table:
                         return Visibility.Collapsed;
@@ -140,9 +143,12 @@ namespace Incubator_2.ViewModels
                     return TypeOfTag.LocalConstant;
                 case "6":
                     Description = "";
+                    return TypeOfTag.HiddenField;
+                case "7":
+                    Description = "";
                     DefaultValue = "";
                     return TypeOfTag.Generator;
-                case "7":
+                case "8":
                     Description = "";
                     return TypeOfTag.Table;
             }
@@ -164,10 +170,12 @@ namespace Incubator_2.ViewModels
                     return "4";
                 case TypeOfTag.LocalConstant:
                     return "5";
-                case TypeOfTag.Generator:
+                case TypeOfTag.HiddenField:
                     return "6";
-                case TypeOfTag.Table:
+                case TypeOfTag.Generator:
                     return "7";
+                case TypeOfTag.Table:
+                    return "8";
             }
         }
         public Visibility ButtonRelationVisibility

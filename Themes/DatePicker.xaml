@@ -48,7 +48,7 @@
                             </Grid.ColumnDefinitions>
                             <Rectangle Margin="0,0,2,0" Width="1" Fill="{DynamicResource Basic}" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30"/>
                             <Button x:Name="PART_Button" Grid.Column="1" Focusable="False" HorizontalAlignment="Left" Margin="3,0,3,0" Grid.Row="0" Template="{StaticResource DropDownButtonTemplate}" VerticalAlignment="Center" Width="30" Cursor="Hand"/>
-                            <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" ContextMenu="{TemplateBinding ContextMenu}" HorizontalContentAlignment="Stretch" Grid.Row="0" VerticalContentAlignment="Center" Style="{DynamicResource DatePickerTextBoxStyle1}" Background="{x:Null}" Margin="0,0,0,0" CaretBrush="White" />
+                            <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" ContextMenu="{TemplateBinding ContextMenu}" HorizontalContentAlignment="Stretch" Grid.Row="0" VerticalContentAlignment="Center" Style="{DynamicResource DatePickerTextBoxStyle1}" Background="{x:Null}" Margin="0,0,0,0" CaretBrush="White" SelectionTextBrush="{DynamicResource Light}" />
                             <Grid x:Name="PART_DisabledVisual" Grid.ColumnSpan="2" Grid.Column="0" IsHitTestVisible="False" Opacity="0" Grid.Row="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>

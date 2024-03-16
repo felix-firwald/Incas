@@ -68,7 +68,7 @@ namespace Incubator_2.Forms
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                 foreach (UC_TagFiller tf in TagFillers)
                 {
-                    scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetValue());
+                    scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
                 foreach (UC_TagFiller tf in TagFillers)
