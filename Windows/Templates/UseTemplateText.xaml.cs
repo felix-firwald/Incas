@@ -122,6 +122,14 @@ namespace Incubator_2.Windows.Templates
 
         private void ApplyClick(object sender, RoutedEventArgs e)
         {
+            foreach (UC_TagFiller tf in this.ContentPanel.Children)
+            {
+                if (string.IsNullOrEmpty(tf.GetData()))
+                {
+                    ProgramState.ShowExclamationDialog($"Тег \"{tf.tag.name}\" не заполнен!", "Сохранение отклонено");
+                    return;
+                }
+            }
             if (OnFinishedEditing != null)
             {
                 OnFinishedEditing();

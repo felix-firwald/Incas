@@ -66,7 +66,7 @@
                             <Label Style="{DynamicResource LabelElement}" Foreground="{DynamicResource LightPurple}" Content="Утвержденный текст:" FontFamily="JetBrains Mono Medium"/>
                         </StackPanel>
                         <Border CornerRadius="6" Background="{DynamicResource LightBlack}" Padding="5">
-                            <TextBox Style="{DynamicResource TextBoxEmpty}" x:Name="TextBoxResult" MinHeight="100" MinWidth="200" MaxWidth="450" IsReadOnly="True" Foreground="White" TextWrapping="WrapWithOverflow">
+                            <TextBox Style="{DynamicResource TextBoxEmpty}" x:Name="TextBoxResult" MinHeight="60" MinWidth="250" MaxWidth="450" IsReadOnly="True" Foreground="White" TextWrapping="WrapWithOverflow">
                                 <TextBox.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
