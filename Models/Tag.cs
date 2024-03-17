@@ -40,6 +40,7 @@ namespace Models
         public TypeOfTag type { get; set; }
         public string value { get; set; }
         public int parent { get; set; }
+        public int orderNumber { get; set; }
         public string description { get; set; }
         public string command { get; set; }
         public Tag() 
@@ -56,7 +57,7 @@ namespace Models
             }
             DataTable dt = this.StartCommand()
                 .AddCustomRequest(req)
-                .OrderByASC("id")
+                .OrderByASC("orderNumber ASC, id")
                 .Execute();
             List<Tag> parentTags = new List<Tag>();
             List<Tag> childrenTags = new List<Tag>();
@@ -112,6 +113,7 @@ namespace Models
                     { "parent", parent > 0? parent.ToString(): Common.Query.Null },
                     { "description", description },
                     { "command", command },
+                    { "orderNumber", orderNumber.ToString() }
                 })
                 .ExecuteVoid();
         }
@@ -128,6 +130,7 @@ namespace Models
                 .Update("value", value)
                 .Update("description", description)
                 .Update("command", command)
+                .Update("orderNumber", orderNumber.ToString())
                 .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }

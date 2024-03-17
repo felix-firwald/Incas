@@ -76,11 +76,13 @@ namespace Incubator_2.Forms
         {
             this.MainBorder.Height = 40;
             this.IsCollapsed = !this.IsCollapsed;
+            this.NumberUp.Visibility = Visibility.Visible;
         }
         public void Maximize()
         {
             this.MainBorder.Height = this.ContentPanel.Height + 40;
             this.IsCollapsed = !this.IsCollapsed;
+            this.NumberUp.Visibility = Visibility.Collapsed;
         }
 
         private void TurnSizeClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -182,6 +184,16 @@ namespace Incubator_2.Forms
             {
                 tag.command = "";
             }
+        }
+
+        private void UpClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.vm.IncrementOrder();
+        }
+
+        private void DownClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.vm.DecrementOrder();
         }
     }
 }

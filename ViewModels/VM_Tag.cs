@@ -47,6 +47,29 @@ namespace Incubator_2.ViewModels
                 }
             }
         }
+        public int OrderNumber
+        {
+            get
+            {
+                return mainTag.orderNumber;
+            }
+            set
+            {
+                if (value >= 0)
+                {
+                    mainTag.orderNumber = value;
+                    OnPropertyChanged(nameof(OrderNumber));
+                }
+            }
+        }
+        public void IncrementOrder()
+        {
+            OrderNumber++;
+        }
+        public void DecrementOrder()
+        {
+            OrderNumber--;
+        }
 
         public string NameOfTag
         {

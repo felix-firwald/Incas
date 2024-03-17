@@ -13,7 +13,7 @@
                 <ColumnDefinition Width="1"/>
                 <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="Input" Style="{DynamicResource TextBoxEmpty}" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{DynamicResource PrimaryMain}" SelectionTextBrush="{x:Null}" Foreground="{DynamicResource Light}" VerticalAlignment="Center" Margin="8,0,8,0" IsReadOnly="True" AutoWordSelection="True" CaretBrush="Black" Cursor="">
+            <TextBox x:Name="Input" Style="{DynamicResource TextBoxEmpty}" Background="{x:Null}" BorderBrush="{x:Null}" SelectionBrush="{DynamicResource PrimaryMain}" SelectionTextBrush="{x:Null}" Foreground="{DynamicResource Light}" VerticalAlignment="Center" Margin="8,0,8,0" IsReadOnly="True" AutoWordSelection="True" CaretBrush="Black">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -21,8 +21,9 @@
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
-            <Rectangle Fill="{DynamicResource Basic}" Grid.Column="1" Height="23" VerticalAlignment="Center"/>
+            <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="1" Height="23" VerticalAlignment="Center"/>
             <fa:FontAwesome Icon="EllipsisH" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="ButtonClick" ToolTip="Выбрать запись"></fa:FontAwesome>
+            <!--<Path Grid.Column="2" Style="{DynamicResource PathMain}" VerticalAlignment="Center" HorizontalAlignment="Center" MouseDown="ButtonClick" ToolTip="Выбрать запись" Data="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" Stretch="Uniform" Margin="12,12,12,12" />-->
         </Grid>
 
     </Border>

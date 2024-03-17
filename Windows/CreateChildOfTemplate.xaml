@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:forms="clr-namespace:Incubator_2.Forms"
         mc:Ignorable="d"
-        Title="Создать наследника для шаблона" Height="550" Width="800" MinWidth="700" MinHeight="550" Style="{DynamicResource WindowBase}">
+        Title="Создать наследника для шаблона" Height="650" Width="950" MinWidth="950" MinHeight="650" Style="{DynamicResource WindowBase}" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>

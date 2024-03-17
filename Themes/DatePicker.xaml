@@ -31,8 +31,8 @@
                                 <SolidColorBrush x:Key="DisabledBrush" Color="#A5FFFFFF"/>
                                 <ControlTemplate x:Key="DropDownButtonTemplate" TargetType="{x:Type Button}">
                                     <Grid FlowDirection="LeftToRight" Cursor="Hand" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="20" Height="20">
-                                        
-                                        <Path x:Name="PART_Icon" Fill="{DynamicResource Icon}" HorizontalAlignment="Center"  Stretch="Fill" VerticalAlignment="Center" Data="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07a7.001 7.001 0 0 1 3.274 12.474l.601.602a.5.5 0 0 1-.707.708l-.746-.746A6.97 6.97 0 0 1 8 16a6.97 6.97 0 0 1-3.422-.892l-.746.746a.5.5 0 0 1-.707-.708l.602-.602A7.001 7.001 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5m2.5 5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9zM.86 5.387A2.5 2.5 0 1 1 4.387 1.86 8.04 8.04 0 0 0 .86 5.387M11.613 1.86a2.5 2.5 0 1 1 3.527 3.527 8.04 8.04 0 0 0-3.527-3.527" />
+
+                                        <Path x:Name="PART_Icon" Fill="{DynamicResource Icon}" HorizontalAlignment="Center"  Stretch="Fill" VerticalAlignment="Center" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
                                     </Grid>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
@@ -46,7 +46,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 
                             </Grid.ColumnDefinitions>
-                            <Rectangle Margin="0,0,2,0" Width="1" Fill="{DynamicResource Basic}" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30"/>
+                            <Rectangle Margin="0,0,2,0" Width="1" Fill="{DynamicResource LightBlack}" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30"/>
                             <Button x:Name="PART_Button" Grid.Column="1" Focusable="False" HorizontalAlignment="Left" Margin="3,0,3,0" Grid.Row="0" Template="{StaticResource DropDownButtonTemplate}" VerticalAlignment="Center" Width="30" Cursor="Hand"/>
                             <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" ContextMenu="{TemplateBinding ContextMenu}" HorizontalContentAlignment="Stretch" Grid.Row="0" VerticalContentAlignment="Center" Style="{DynamicResource DatePickerTextBoxStyle1}" Background="{x:Null}" Margin="0,0,0,0" CaretBrush="White" SelectionTextBrush="{DynamicResource Light}" />
                             <Grid x:Name="PART_DisabledVisual" Grid.ColumnSpan="2" Grid.Column="0" IsHitTestVisible="False" Opacity="0" Grid.Row="0">
@@ -92,7 +92,7 @@
                 <ControlTemplate TargetType="{x:Type Calendar}">
                     <CalendarItem x:Name="PART_CalendarItem" BorderBrush="{TemplateBinding BorderBrush}" 
                                       FontFamily="{TemplateBinding FontFamily}"
-                                      BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"
+                                      BorderThickness="{TemplateBinding BorderThickness}" Background="{DynamicResource Basic}"
                                       FontSize="20" Style="{DynamicResource CalendarItemStyle1}" />
                 </ControlTemplate>
             </Setter.Value>
@@ -104,7 +104,7 @@
         <Setter Property="MinHeight" Value="5" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{DynamicResource Basic}" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Width" Value="48"/>
@@ -152,7 +152,7 @@
         </Setter>
     </Style>
     <Style x:Key="CalendarButtonStyle1" TargetType="{x:Type CalendarButton}">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{StaticResource Dark}" />
         <Setter Property="MinWidth" Value="40" />
         <Setter Property="MinHeight" Value="42" />
         <Setter Property="FontSize" Value="20" />

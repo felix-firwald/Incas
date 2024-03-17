@@ -46,9 +46,9 @@
                     </TextBox.ContextMenu>
                 </TextBox>
             </StackPanel>
-            <Rectangle Fill="{DynamicResource Basic}" Grid.Column="0" Width="1" HorizontalAlignment="Right" Height="23" VerticalAlignment="Center" Cursor=""/>
+            <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="0" Width="1" HorizontalAlignment="Right" Height="23" VerticalAlignment="Center" Cursor=""/>
             <fa:FontAwesome x:Name="IconUser" Icon="User" Grid.Column="1" Style="{DynamicResource IconButton}" MouseDown="SendToUserClick" ToolTip="Делегировать другому пользователю"/>
-            <Rectangle Fill="{DynamicResource Basic}" Grid.Column="1" Width="1" HorizontalAlignment="Right" Height="23" VerticalAlignment="Center"/>
+            <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="1" Width="1" HorizontalAlignment="Right" Height="23" VerticalAlignment="Center"/>
             <fa:FontAwesome x:Name="OpenButton" Icon="EllipsisH" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="OpenClick" ToolTip="Открыть генератор"/>
         
         </Grid>

@@ -28,6 +28,7 @@ namespace Incubator_2.Windows
             // загрузить обычные теги
             ParseParentTags();
             ParseChildTags();
+            ProgramState.ShowWaitCursor(false);
         }
 
         private void ParseParentTags()
