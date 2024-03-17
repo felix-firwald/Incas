@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="TextBoxBase" TargetType="{x:Type TextBox}">
         <Setter Property="Cursor" Value="IBeam"/>
-        <Setter Property="Background" Value="{DynamicResource Black}"/>
-        <Setter Property="Foreground" Value="{DynamicResource Light}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource Focus}"/>
+        <Setter Property="Background" Value="{StaticResource Black}"/>
+        <Setter Property="Foreground" Value="{StaticResource Light}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Focus}"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="Padding" Value="10 3"/>
         <Setter Property="Opacity" Value="1"/>
@@ -80,7 +80,7 @@
                             <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>
                         <Trigger Property="Validation.HasError" Value="True">
-                            <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource Error}"/>
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Error}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -237,8 +237,8 @@
     </Style>
     <Style x:Key="TextBoxCode" TargetType="{x:Type TextBox}">
         <Setter Property="MinHeight" Value="80"/>
-        <Setter Property="Background" Value="{DynamicResource Black}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
+        <Setter Property="Background" Value="{StaticResource Black}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
         <Setter Property="AcceptsReturn" Value="True"/>
@@ -246,8 +246,8 @@
     </Style>
     <Style x:Key="RichTextBoxCode" TargetType="RichTextBox">
         <Setter Property="MinHeight" Value="80"/>
-        <Setter Property="Background" Value="{DynamicResource Black}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
+        <Setter Property="Background" Value="{StaticResource Black}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
         <Setter Property="AcceptsReturn" Value="True"/>

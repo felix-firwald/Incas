@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="GroupBox">
-                    <Border CornerRadius="5" Background="{DynamicResource Area}" BorderBrush="{DynamicResource Element}" BorderThickness="2">
+                    <Border CornerRadius="5" Background="{StaticResource Area}" BorderBrush="{StaticResource Element}" BorderThickness="2">
 
                         <Grid>
                             <Grid.RowDefinitions>
@@ -17,12 +17,12 @@
                             </Grid.RowDefinitions>
 
                             <Border Grid.Row="0">
-                                <Label Foreground="{DynamicResource DarkLight}" Background="{DynamicResource Area}" FontSize="16" FontFamily="/Fonts/#JetBrains Mono" FontWeight="ExtraLight" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Label Foreground="{StaticResource DarkLight}" Background="{StaticResource Area}" FontSize="16" FontFamily="/Fonts/#JetBrains Mono" FontWeight="ExtraLight" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" />
                                 </Label>
                             </Border>
 
-                            <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" >
+                            <Rectangle Grid.Row="1" Fill="{StaticResource Element}" >
                             </Rectangle>
                             <Border Grid.Row="2" BorderThickness="0" BorderBrush="#25A0DA">
                                 <ContentPresenter Margin="4" />

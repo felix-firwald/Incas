@@ -6,7 +6,7 @@
             <Setter.Value>
                 <ControlTemplate>
                     <Border>
-                        <Rectangle Margin="0" StrokeDashArray="1 2" Stroke="{DynamicResource Element}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                        <Rectangle Margin="0" StrokeDashArray="1 2" Stroke="{StaticResource Element}" SnapsToDevicePixels="true" StrokeThickness="1"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -27,14 +27,14 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <!--<Ellipse x:Name="circle" Fill="{StaticResource Element}" HorizontalAlignment="Center" Height="19" Stroke="{StaticResource Element}" VerticalAlignment="Center" Width="19" StrokeThickness="0" UseLayoutRounding="True"/>-->
-                            <Path Name="Arrow" Data="m -6.354 -2.354 a 0.5 0.5 0 0 1 0.708 0 l 5.646 5.647 l 5.646 -5.647 a 0.5 0.5 0 0 1 0.708 0.708 l -6 6 a 0.5 0.5 0 0 1 -0.708 0 l -6 -6 a 0.5 0.5 0 0 1 0 -0.708" HorizontalAlignment="Center" Fill="{DynamicResource Icon}" VerticalAlignment="Center" Margin="0,4,0,0">
+                            <Path Name="Arrow" Data="m -6.354 -2.354 a 0.5 0.5 0 0 1 0.708 0 l 5.646 5.647 l 5.646 -5.647 a 0.5 0.5 0 0 1 0.708 0.708 l -6 6 a 0.5 0.5 0 0 1 -0.708 0 l -6 -6 a 0.5 0.5 0 0 1 0 -0.708" HorizontalAlignment="Center" Fill="{StaticResource Icon}" VerticalAlignment="Center" Margin="0,4,0,0">
                                 <Path.RenderTransform>
                                     <RotateTransform Angle="-90" x:Name="ArrowRotate"/>
                                 </Path.RenderTransform>
                             </Path>
 
-                            <ContentPresenter x:Name="header" Grid.Column="1" TextElement.FontSize="11" TextElement.Foreground="{DynamicResource GrayLight}" TextElement.FontFamily="/Fonts/#JetBrains Mono" HorizontalAlignment="Right" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center" OpacityMask="{x:Null}"/>
-                            <Rectangle x:Name="rect" Fill="{DynamicResource Element}" Grid.Column="2" Height="1" Margin="10,0,0,0"/>
+                            <ContentPresenter x:Name="header" Grid.Column="1" TextElement.FontSize="11" TextElement.Foreground="{StaticResource GrayLight}" TextElement.FontFamily="/Fonts/#JetBrains Mono" HorizontalAlignment="Right" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center" OpacityMask="{x:Null}"/>
+                            <Rectangle x:Name="rect" Fill="{StaticResource Element}" Grid.Column="2" Height="1" Margin="10,0,0,0"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -61,17 +61,14 @@
                             </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <!--<Setter Property="Fill" TargetName="circle" Value="{StaticResource LightPurple}"/>-->
-                            <Setter Property="Fill" TargetName="rect" Value="{DynamicResource LightPurple}"/>
-                            <Setter Property="TextElement.Foreground" TargetName="header" Value="{DynamicResource LightPurple}"/>
+                            <Setter Property="Fill" TargetName="rect" Value="{StaticResource LightPurple}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="header" Value="{StaticResource LightPurple}"/>
                             <Setter Property="Stroke" TargetName="Arrow" Value="{StaticResource LightPurple}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Fill" TargetName="rect" Value="{DynamicResource LightPurple}"/>
+                            <Setter Property="Fill" TargetName="rect" Value="{StaticResource LightPurple}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <!--<Setter Property="Stroke" TargetName="circle" Value="{StaticResource Icon}"/>
-                            <Setter Property="Fill" TargetName="circle" Value="{StaticResource Icon}"/>-->
                             <Setter Property="Stroke" TargetName="Arrow" Value="{StaticResource Icon}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -238,7 +235,7 @@
 
     <Style x:Key="ExpanderMain" TargetType="{x:Type Expander}">
         <Setter Property="MinHeight" Value="30"/>
-        <Setter Property="Foreground" Value="{DynamicResource Icon}"/>
+        <Setter Property="Foreground" Value="{StaticResource Icon}"/>
         <Setter Property="Margin" Value="2"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -246,8 +243,8 @@
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3" SnapsToDevicePixels="true">
                         <DockPanel>
                             <ToggleButton x:Name="HeaderSite" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" DockPanel.Dock="Top" FontStretch="{TemplateBinding FontStretch}" Foreground="{TemplateBinding Foreground}" FocusVisualStyle="{StaticResource ExpanderHeaderFocusVisual}" FontStyle="{TemplateBinding FontStyle}" FontFamily="{TemplateBinding FontFamily}" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" MinWidth="0" MinHeight="0" Padding="{TemplateBinding Padding}" Style="{StaticResource ExpanderDownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            
-                            <Border x:Name="BorderSite" CornerRadius="5" BorderBrush="{DynamicResource Element}" BorderThickness="1" Visibility="Collapsed" Margin="0,5,0,5">
+
+                            <Border x:Name="BorderSite" CornerRadius="5" BorderBrush="{StaticResource Element}" BorderThickness="1" Visibility="Collapsed" Margin="0,5,0,5">
                                 <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="0,4,0,4" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Visibility="Collapsed"/>
                             </Border>
                         </DockPanel>
@@ -273,9 +270,6 @@
                             <Setter Property="DockPanel.Dock" TargetName="HeaderSite" Value="Right"/>
                             <Setter Property="Style" TargetName="HeaderSite" Value="{StaticResource ExpanderLeftHeaderStyle}"/>
                         </Trigger>
-                        <!--<Trigger Property="IsMouseOver" Value="True">
-                            <Trigger TargetName="HeaderSite" Property="IsMouseOver" Value="True"/>
-                        </Trigger>-->
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

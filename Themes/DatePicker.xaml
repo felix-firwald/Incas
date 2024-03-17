@@ -4,11 +4,11 @@
         <Setter Property="Foreground" Value="#FF333333"/>
         <Setter Property="IsTodayHighlighted" Value="True"/>
         <Setter Property="SelectedDateFormat" Value="Short"/>
-        <Setter Property="Background" Value="{DynamicResource Black}"/>
+        <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="40"/>
         <Setter Property="Margin" Value="5"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="Template">
@@ -32,7 +32,7 @@
                                 <ControlTemplate x:Key="DropDownButtonTemplate" TargetType="{x:Type Button}">
                                     <Grid FlowDirection="LeftToRight" Cursor="Hand" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="20" Height="20">
 
-                                        <Path x:Name="PART_Icon" Fill="{DynamicResource Icon}" HorizontalAlignment="Center"  Stretch="Fill" VerticalAlignment="Center" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                        <Path x:Name="PART_Icon" Fill="{StaticResource Icon}" HorizontalAlignment="Center"  Stretch="Fill" VerticalAlignment="Center" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
                                     </Grid>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
@@ -46,7 +46,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 
                             </Grid.ColumnDefinitions>
-                            <Rectangle Margin="0,0,2,0" Width="1" Fill="{DynamicResource LightBlack}" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30"/>
+                            <Rectangle Margin="0,0,2,0" Width="1" Fill="{StaticResource LightBlack}" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30"/>
                             <Button x:Name="PART_Button" Grid.Column="1" Focusable="False" HorizontalAlignment="Left" Margin="3,0,3,0" Grid.Row="0" Template="{StaticResource DropDownButtonTemplate}" VerticalAlignment="Center" Width="30" Cursor="Hand"/>
                             <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" ContextMenu="{TemplateBinding ContextMenu}" HorizontalContentAlignment="Stretch" Grid.Row="0" VerticalContentAlignment="Center" Style="{DynamicResource DatePickerTextBoxStyle1}" Background="{x:Null}" Margin="0,0,0,0" CaretBrush="White" SelectionTextBrush="{DynamicResource Light}" />
                             <Grid x:Name="PART_DisabledVisual" Grid.ColumnSpan="2" Grid.Column="0" IsHitTestVisible="False" Opacity="0" Grid.Row="0">
