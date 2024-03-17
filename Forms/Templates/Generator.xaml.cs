@@ -176,5 +176,10 @@ namespace Incubator_2.Forms.Templates
             this.TextBoxResult.Text = resultText;
             this.PopupText.IsOpen = !this.PopupText.IsOpen;
         }
+
+        private void CopyResultClick(object sender, MouseButtonEventArgs e)
+        {
+            Clipboard.SetText(resultText);
+        }
     }
 }

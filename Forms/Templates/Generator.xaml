@@ -39,7 +39,7 @@
                 </TextBox>
             </StackPanel>
             <StackPanel x:Name="Contented" Orientation="Horizontal" Visibility="Collapsed" Margin="10,0,0,0" MouseDown="ShowTextClick" Cursor="Hand">
-                <Path Fill="{DynamicResource Success}" VerticalAlignment="Center" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                <Path x:Name="ContentedIcon" Fill="{DynamicResource Success}" VerticalAlignment="Center" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                 <TextBox Style="{DynamicResource TextBoxEmpty}" Text="Заполнено" Foreground="{DynamicResource Success}" IsReadOnly="True" MouseDown="ShowTextClick" Cursor="Hand" VerticalAlignment="Center" Background="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" BorderBrush="{x:Null}" Padding="5,0,0,0">
                     <TextBox.ContextMenu>
                         <ContextMenu/>
@@ -51,19 +51,22 @@
             <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="1" Width="1" HorizontalAlignment="Right" Height="23" VerticalAlignment="Center"/>
             <fa:FontAwesome x:Name="OpenButton" Icon="EllipsisH" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="OpenClick" ToolTip="Открыть генератор"/>
             <Popup x:Name="PopupText" IsOpen="False"
-                   PlacementTarget="{Binding ElementName=Contented}"
-                   Placement="Left" StaysOpen="False" UseLayoutRounding="True"
-                   HorizontalOffset="{Binding ActualWidth, ElementName=Contented}"
-                   VerticalOffset="{Binding ActualHeight, ElementName=Contented}" AllowsTransparency="True" >
+                   PlacementTarget="{Binding ElementName=ContentedIcon}"
+                   Placement="Center" StaysOpen="False" UseLayoutRounding="True"
+                   HorizontalOffset="{Binding ActualWidth, ElementName=ContentedIcon}"
+                   VerticalOffset="{Binding ActualHeight, ElementName=ContentedIcon}" AllowsTransparency="True" >
                 <Border CornerRadius="6" Margin="12" Padding="5" Background="{StaticResource Black}" BorderBrush="{DynamicResource LightBlack}" BorderThickness="1" UseLayoutRounding="True">
                     <Border.Effect>
                         <DropShadowEffect Color="#1d1d1f" BlurRadius="2" ShadowDepth="5" Opacity="0.5"/>
                     </Border.Effect>
                     <StackPanel>
-                        <Label Style="{DynamicResource LabelElement}" Foreground="{DynamicResource LightPurple}" Content="Утвержденный текст:"/>
-
+                        <StackPanel Orientation="Horizontal">
+                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Clipboard" MouseDown="CopyResultClick" ToolTip="Копировать весь текст в буфер обмена"/>
+                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Search" MouseDown="OpenClick" ToolTip="Открыть генератор" VerticalAlignment="Center" Margin="5,3,5,7"/>
+                            <Label Style="{DynamicResource LabelElement}" Foreground="{DynamicResource LightPurple}" Content="Утвержденный текст:" FontFamily="JetBrains Mono Medium"/>
+                        </StackPanel>
                         <Border CornerRadius="6" Background="{DynamicResource LightBlack}" Padding="5">
-                            <TextBox Style="{DynamicResource TextBoxEmpty}" x:Name="TextBoxResult" IsReadOnly="True" Foreground="White">
+                            <TextBox Style="{DynamicResource TextBoxEmpty}" x:Name="TextBoxResult" MinHeight="100" MinWidth="200" MaxWidth="450" IsReadOnly="True" Foreground="White" TextWrapping="WrapWithOverflow">
                                 <TextBox.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
