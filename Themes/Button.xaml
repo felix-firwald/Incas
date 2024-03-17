@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="ButtonMain" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}"/>
-        <Setter Property="Background" Value="{DynamicResource Dark}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
+        <Setter Property="Background" Value="{StaticResource Dark}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -57,8 +57,8 @@
 
     <Style x:Key="ButtonMainFinish" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}"/>
-        <Setter Property="Background" Value="{DynamicResource Dark}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
+        <Setter Property="Background" Value="{StaticResource Dark}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -111,9 +111,9 @@
     </Style>
     
     <Style x:Key="DashboardButton" TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="{DynamicResource LightBlack}"/>
-        <Setter Property="Foreground" Value="{DynamicResource GrayLight}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource LightPurple}"/>
+        <Setter Property="Background" Value="{StaticResource LightBlack}"/>
+        <Setter Property="Foreground" Value="{StaticResource GrayLight}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource LightPurple}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinWidth" Value="60"/>
@@ -157,7 +157,7 @@
     </Style>
     <Style x:Key="ButtonFlat" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource Element}"/>
+        <Setter Property="Foreground" Value="{StaticResource Element}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinHeight" Value="40"/>
         <Setter Property="MaxHeight" Value="40"/>
@@ -186,7 +186,7 @@
     </Style>
     <Style x:Key="ButtonSquare" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource Icon}"/>
+        <Setter Property="Foreground" Value="{StaticResource Icon}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="MinHeight" Value="80"/>

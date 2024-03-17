@@ -23,16 +23,16 @@
                     </Path.RenderTransform>
                 </Path>
             </Border>
-            <Rectangle Width="1" Height="23" Fill="{DynamicResource LightBlack}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <Rectangle Width="1" Height="23" Fill="{StaticResource LightBlack}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="UIElement.IsMouseOver" Value="True">
                 <!--<Setter Property="Panel.Background" TargetName="ButtonBorder" Value="{DynamicResource Basic}"/>-->
-                <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource Icon}"/>
+                <Setter Property="Shape.Fill" TargetName="Arrow" Value="{StaticResource Icon}"/>
             </Trigger>
             <Trigger Property="ToggleButton.IsChecked" Value="True">
-                <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource PrimaryMain}"/>
+                <Setter Property="Shape.Fill" TargetName="Arrow" Value="{StaticResource PrimaryMain}"/>
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
@@ -68,14 +68,14 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                    <Border x:Name="Border" Padding="4,3,4,3" MinHeight="20" CornerRadius="4" BorderThickness="0" BorderBrush="{DynamicResource Area}" Background="{DynamicResource Black}">
+                    <Border x:Name="Border" Padding="4,3,4,3" MinHeight="20" CornerRadius="4" BorderThickness="0" BorderBrush="{StaticResource Area}" Background="{StaticResource Black}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
                             <ContentPresenter/>
-                            <Path x:Name="Pointer" Grid.Column="1" Margin="2,2,2,4" Fill="{DynamicResource Success}" Visibility="Hidden" Data="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" VerticalAlignment="Center"/>
+                            <Path x:Name="Pointer" Grid.Column="1" Margin="2,2,2,4" Fill="{StaticResource Success}" Visibility="Hidden" Data="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -84,7 +84,7 @@
                                 <Condition Property="IsSelected" Value="True" />
                                 <Condition Property="IsMouseOver" Value="False" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource LightBlack}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource LightBlack}"/>
                             <Setter TargetName="Pointer" Property="Visibility" Value="Visible"/>
                         </MultiTrigger>
                         <MultiTrigger>
@@ -92,14 +92,14 @@
                                 <Condition Property="IsSelected" Value="False" />
                                 <Condition Property="IsMouseOver" Value="True" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Basic}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource Basic}"/>
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsSelected" Value="True" />
                                 <Condition Property="IsMouseOver" Value="True" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Basic}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource Basic}"/>
                             <Setter TargetName="Pointer" Property="Visibility" Value="Visible"/>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
@@ -118,7 +118,7 @@
         <Setter Property="Padding" Value="10 3"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
-        <Setter Property="TextElement.Foreground" Value="{DynamicResource Light}"/>
+        <Setter Property="TextElement.Foreground" Value="{StaticResource Light}"/>
         <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Control.Template">
             <Setter.Value>

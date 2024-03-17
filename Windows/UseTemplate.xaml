@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Секвенсор" Height="700" MinHeight="600" Width="850" MinWidth="850" Style="{DynamicResource WindowBase}" Topmost="True" Uid="8" Cursor="" SnapsToDevicePixels="True" WindowStartupLocation="CenterScreen">
+        Title="Секвенсор" Height="700" MinHeight="600" Width="850" MinWidth="850" Style="{StaticResource WindowBase}" Topmost="True" Uid="8" Cursor="" SnapsToDevicePixels="True" WindowStartupLocation="CenterScreen">
 
     <Border>
         <Grid>
@@ -23,7 +23,7 @@
                 <RowDefinition Height="20"/>
                 <!--кнопка создания файла или печати-->
             </Grid.RowDefinitions>
-            <TextBox x:Name="dir" Style="{DynamicResource TextBoxMain}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Конечная папка" Grid.Column="0" Margin="5,0,5,0">
+            <TextBox x:Name="dir" Style="{StaticResource TextBoxMain}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Конечная папка" Grid.Column="0" Margin="5,0,5,0">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -32,29 +32,29 @@
                 </TextBox.ContextMenu>
             </TextBox>
             <Button Style="{StaticResource ButtonMain}" Content=". . ." Click="review_Click" Grid.Row="0" Grid.Column="2" Margin="5,5,5,5" Cursor="Hand" />
-            <Border Grid.Row="1" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="5">
+            <Border Grid.Row="1" Grid.Column="3" Margin="5" Background="{StaticResource Black}" CornerRadius="5">
                 <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" >
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" MouseDown="AddFC_Click" ToolTip="Добавить ещё один файл" />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowLeft" Grid.Column="1" Grid.Row="1" MouseDown="GetFromExcel" ToolTip="Вытянуть из Excel" />
-                    <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="4,2,4,2"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowRight" Grid.Column="1" Grid.Row="1" MouseDown="SendToExcel" ToolTip="Вытянуть в Excel" />
-                    <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="4,2,4,2"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" Grid.Column="1" Grid.Row="1" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAll" Margin="5,0,5,5" />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" Grid.Column="1" Grid.Row="1" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAll" />
-                    <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="4,2,4,2"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Calculator" Grid.Column="1" Grid.Row="1" MouseDown="RecalculateNamesClick" ToolTip="Пересчитать имена файлов"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Send" Grid.Column="1" Grid.Row="1" MouseDown="SendToUserClick" ToolTip="Отправить выбранные документы пользователю"/>
+                    <fa:FontAwesome Style="{StaticResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" MouseDown="AddFC_Click" ToolTip="Добавить ещё один файл" />
+                    <fa:FontAwesome Style="{StaticResource IconButton}" Icon="ArrowLeft" Grid.Column="1" Grid.Row="1" MouseDown="GetFromExcel" ToolTip="Вытянуть из Excel" />
+                    <Rectangle Fill="{StaticResource Element}" Height="1" Margin="4,2,4,2"/>
+                    <fa:FontAwesome Style="{StaticResource IconButton}" Icon="ArrowRight" Grid.Column="1" Grid.Row="1" MouseDown="SendToExcel" ToolTip="Вытянуть в Excel" />
+                    <Rectangle Fill="{StaticResource Element}" Height="1" Margin="4,2,4,2"/>
+                    <fa:FontAwesome Style="{StaticResource IconButton}" Icon="WindowMinimize" Grid.Column="1" Grid.Row="1" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAll" Margin="5,0,5,5" />
+                    <fa:FontAwesome Style="{StaticResource IconButton}" Icon="WindowMaximize" Grid.Column="1" Grid.Row="1" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAll" />
+                    <Rectangle Fill="{StaticResource Element}" Height="1" Margin="4,2,4,2"/>
+                    <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Calculator" Grid.Column="1" Grid.Row="1" MouseDown="RecalculateNamesClick" ToolTip="Пересчитать имена файлов"/>
+                    <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Send" Grid.Column="1" Grid.Row="1" MouseDown="SendToUserClick" ToolTip="Отправить выбранные документы пользователю"/>
 
                 </StackPanel>
             </Border>
-            <Border Grid.Row="1" CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" BorderThickness="1">
-                <ScrollViewer Style="{DynamicResource ScrollViewerBase}" Cursor="">
+            <Border Grid.Row="1" CornerRadius="5" Margin="5,5,5,5" Background="{StaticResource Black}" BorderThickness="1">
+                <ScrollViewer Style="{StaticResource ScrollViewerBase}" Cursor="">
                     <StackPanel x:Name="ContentPanel" ScrollViewer.CanContentScroll="True"/>
                 </ScrollViewer>
             </Border>
             <Button Style="{StaticResource ButtonMain}" Grid.Row="2" Content="Создать файлы по шаблону" Click="CreateFilesClick" Margin="5,5,5,5" Grid.ColumnSpan="2"/>
-            <StackPanel Grid.Row="4" Grid.ColumnSpan="8" Background="{DynamicResource Black}" VerticalAlignment="Center">
-                <ProgressBar x:Name="ProgressCreation" Background="{DynamicResource Black}" BorderBrush="{x:Null}" />
+            <StackPanel Grid.Row="4" Grid.ColumnSpan="8" Background="{StaticResource Black}" VerticalAlignment="Center">
+                <ProgressBar x:Name="ProgressCreation" Background="{StaticResource Black}" BorderBrush="{x:Null}" />
             </StackPanel>
         </Grid>
     </Border>
