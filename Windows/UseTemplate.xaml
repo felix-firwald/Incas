@@ -36,12 +36,12 @@
                 <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" >
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" MouseDown="AddFC_Click" ToolTip="Добавить ещё один файл" />
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="ArrowLeft" Grid.Column="1" Grid.Row="1" MouseDown="GetFromExcel" ToolTip="Вытянуть из Excel" />
-                    <Rectangle Fill="{StaticResource Element}" Height="1" Margin="4,2,4,2"/>
+                    <Rectangle Fill="{StaticResource LightBlack}" Height="1" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="ArrowRight" Grid.Column="1" Grid.Row="1" MouseDown="SendToExcel" ToolTip="Вытянуть в Excel" />
-                    <Rectangle Fill="{StaticResource Element}" Height="1" Margin="4,2,4,2"/>
+                    <Rectangle Fill="{StaticResource LightBlack}" Height="1" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="WindowMinimize" Grid.Column="1" Grid.Row="1" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAll" Margin="5,0,5,5" />
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="WindowMaximize" Grid.Column="1" Grid.Row="1" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAll" />
-                    <Rectangle Fill="{StaticResource Element}" Height="1" Margin="4,2,4,2"/>
+                    <Rectangle Fill="{StaticResource LightBlack}" Height="1" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Calculator" Grid.Column="1" Grid.Row="1" MouseDown="RecalculateNamesClick" ToolTip="Пересчитать имена файлов"/>
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Send" Grid.Column="1" Grid.Row="1" MouseDown="SendToUserClick" ToolTip="Отправить выбранные документы пользователю"/>
 

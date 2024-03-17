@@ -372,10 +372,12 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ToolTip">
-                            <Border CornerRadius="5" BorderBrush="{TemplateBinding Foreground}" BorderThickness="1" Background="{DynamicResource Black}" Padding="8,8,8,8">
+                            <Border CornerRadius="5" BorderBrush="{StaticResource LightBlack}" BorderThickness="1" Background="{DynamicResource Black}" Padding="8,8,8,8">
                                 <StackPanel>
                                     <Label Content="Помощь" TextElement.FontFamily="/Fonts/#JetBrains Mono" TextElement.FontSize="11" TextElement.FontWeight="Bold" Foreground="{TemplateBinding Foreground}"/>
-                                    <ContentPresenter TextElement.Foreground="White" TextElement.FontFamily="/Fonts/#JetBrains Mono" TextElement.FontWeight="ExtraLight" TextElement.FontSize="11"/>
+                                    <Border Background="{StaticResource LightBlack}" CornerRadius="5" Padding="5">
+                                        <ContentPresenter TextElement.Foreground="White" TextElement.FontFamily="/Fonts/#JetBrains Mono" TextElement.FontWeight="ExtraLight" TextElement.FontSize="11"/>
+                                    </Border>
                                 </StackPanel>
                             </Border>
                         </ControlTemplate>
