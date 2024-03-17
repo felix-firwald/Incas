@@ -363,6 +363,7 @@ namespace Common
                     SoundPlayer myNewSound = new SoundPlayer(stream);
                     myNewSound.Load();
                     myNewSound.Play();
+                    myNewSound.Dispose();
                 }
             }
             catch { }

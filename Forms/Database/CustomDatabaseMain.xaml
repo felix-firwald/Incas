@@ -139,7 +139,7 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <Rectangle Fill="{DynamicResource Element}" Height="1"/>
+                    <Rectangle Fill="{DynamicResource LightBlack}" Height="1"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"/>
@@ -167,7 +167,7 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <Rectangle Fill="{DynamicResource Element}" Height="1" Visibility="{Binding CreateCommandVisibility}"/>
+                    <Rectangle Fill="{DynamicResource LightBlack}" Height="1" Visibility="{Binding CreateCommandVisibility}"/>
                     <Grid Visibility="{Binding CreateCommandVisibility}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"/>
@@ -179,7 +179,7 @@
                     </Grid>
                     <MenuItem Header="Импорт из Excel (добавление)" Tag="Import" Click="ImportClick" Visibility="{Binding CreateCommandVisibility}"/>
                     <MenuItem Header="Импорт из Excel (с заменой)" Tag="FullImport" Click="ImportClick" Visibility="{Binding CreateCommandVisibility}"/>
-                    <Rectangle Fill="{DynamicResource Element}" Height="1"/>
+                    <Rectangle Fill="{DynamicResource LightBlack}" Height="1"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"/>

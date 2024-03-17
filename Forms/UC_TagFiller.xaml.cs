@@ -329,40 +329,6 @@ namespace Incubator_2.Forms
         {
             this.Textbox.Text += DateTime.Now.ToString("D");
         }
-        private void AddIncrementedDate(object sender, RoutedEventArgs e)
-        {
-            IncrementDate(sender);
-        }
-        private void AddIncrementedLongDate(object sender, RoutedEventArgs e)
-        {
-            IncrementDate(sender, true);
-        }
-
-        private void IncrementDate(object sender, bool longType = false)
-        {
-            int days = int.Parse(((MenuItem)sender).Tag.ToString());
-            string format = longType ? "D" : "dd.MM.yyyy";
-            DateTime result = DateTime.Now;
-            switch (days)
-            {
-                case 31:
-                    result = result.AddMonths(1);
-                    break;
-                case 93:
-                    result = result.AddMonths(3);
-                    break;
-                case 186:
-                    result = result.AddMonths(6);
-                    break;
-                case 365:
-                    result = result.AddYears(1);
-                    break;
-                default:
-                    result = result.AddDays(days);
-                    break;
-            }
-            this.Textbox.Text += result.ToString(format);
-        }
 
         private void InsertToOther(object sender, RoutedEventArgs e)
         {

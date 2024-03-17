@@ -170,5 +170,11 @@ namespace Incubator_2.Forms.Templates
                 }
             }
         }
+
+        private void ShowTextClick(object sender, MouseButtonEventArgs e)
+        {
+            this.TextBoxResult.Text = resultText;
+            this.PopupText.IsOpen = !this.PopupText.IsOpen;
+        }
     }
 }

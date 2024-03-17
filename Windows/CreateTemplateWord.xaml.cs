@@ -93,6 +93,11 @@ namespace Incubator_2.Windows
                 ProgramState.ShowExclamationDialog($"Шаблон без единого тега не является шаблоном.", "Сохранение прервано");
                 return false;
             }
+            if (this.ContentPanel.Children.Count > 25)
+            {
+                ProgramState.ShowExclamationDialog($"Шаблон не может содержать более 25 тегов.\nРекомендуется использовать генераторы.", "Сохранение прервано");
+                return false;
+            }
 
             List<string> names = new List<string>();
             foreach (TagCreator tag in this.ContentPanel.Children)

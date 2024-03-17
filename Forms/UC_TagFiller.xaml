@@ -25,45 +25,24 @@
                     <MenuItem Header="Копировать" Click="CopyClick" Tag="Скопировать выделенный текст"/>
                     <MenuItem Header="Копировать все" Click="CopyAllClick" Tag="Скопировать весь текст из этого поля"/>
                     <MenuItem Header="Вставить" Click="PasteClick" Tag="Вставить скопированный текст"/>
-                    <Separator Background="{DynamicResource Element}"/>
+                    <Separator Background="{DynamicResource LightBlack}"/>
                     <MenuItem Header="Проставить во всех файлах" Click="InsertToOther" Tag="Значение этого тега будет скопировано в поля ввода этого же тега для других файлов."/>
                     <MenuItem Header="Пересчитать имена по тегу" Click="RecalculateNamesClick" Tag="Имена каждого файла будут пересчитаны по этому тегу (без префикса и постфикса)" />
-                    <Separator Background="{DynamicResource Element}"/>
+                    <Separator Background="{DynamicResource LightBlack}"/>
                     <MenuItem Header="Работа с текстом">
                         <MenuItem Header="Каждое слово с заглавной буквы" Click="MakeTitleClick" />
                         <MenuItem Header="Привести текст к верхнему регистру" Click="MakeUpperClick"/>
                         <MenuItem Header="Привести текст к нижнему регистру" Click="MakeLowerClick" />
-                        <Separator Background="{DynamicResource Element}"/>
+                        <Separator Background="{DynamicResource LightBlack}"/>
                         <MenuItem Header="Удалить лишние пробелы" Click="RemoveWhitespacesClick" />
                         <MenuItem Header="Заменить переносы пробелами" Click="RemoveLineBreaksClick" />
-                        <Separator Background="{DynamicResource Element}"/>
+                        <Separator Background="{DynamicResource LightBlack}"/>
                         <MenuItem Header="Обернуть фрагмент в кавычки" Click="WrapAsQuoteClick"/>
                     </MenuItem>
                     <MenuItem Header="Вставить данные">
                         <MenuItem Header="Запросить текстовые данные" Click="TextRequest"/>
                         <MenuItem Header="Текущая дата (краткий формат)" Click="AddDateNow"/>
                         <MenuItem Header="Текущая дата (длинный формат)" Click="AddDateLongNow"/>
-                        <Separator Background="{DynamicResource Element}"/>
-                        <MenuItem Header="Прибавленная дата (краткий формат)">
-                            <MenuItem Header="+ 1 день" Click="AddIncrementedDate" Tag="1"/>
-                            <MenuItem Header="+ 1 неделя" Click="AddIncrementedDate" Tag="7"/>
-                            <MenuItem Header="+ 2 недели" Click="AddIncrementedDate" Tag="14"/>
-                            <MenuItem Header="+ 3 недели" Click="AddIncrementedDate" Tag="21"/>
-                            <MenuItem Header="+ 1 месяц" Click="AddIncrementedDate" Tag="31"/>
-                            <MenuItem Header="+ 3 месяца" Click="AddIncrementedDate" Tag="93"/>
-                            <MenuItem Header="+ полгода" Click="AddIncrementedDate" Tag="186"/>
-                            <MenuItem Header="+ год" Click="AddIncrementedDate" Tag="365"/>
-                        </MenuItem>
-                        <MenuItem Header="Прибавленная дата (длинный формат)">
-                            <MenuItem Header="+ 1 день" Click="AddIncrementedLongDate" Tag="1"/>
-                            <MenuItem Header="+ 1 неделя" Click="AddIncrementedLongDate" Tag="7"/>
-                            <MenuItem Header="+ 2 недели" Click="AddIncrementedLongDate" Tag="14"/>
-                            <MenuItem Header="+ 3 недели" Click="AddIncrementedLongDate" Tag="21"/>
-                            <MenuItem Header="+ 1 месяц" Click="AddIncrementedLongDate" Tag="31"/>
-                            <MenuItem Header="+ 3 месяца" Click="AddIncrementedLongDate" Tag="93"/>
-                            <MenuItem Header="+ полгода" Click="AddIncrementedLongDate" Tag="186"/>
-                            <MenuItem Header="+ год" Click="AddIncrementedLongDate" Tag="365"/>
-                        </MenuItem>
                     </MenuItem>
                 </ContextMenu>
             </TextBox.ContextMenu>

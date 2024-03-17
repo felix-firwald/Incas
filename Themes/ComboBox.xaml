@@ -12,8 +12,8 @@
                 <ColumnDefinition Width="35" />
             </Grid.ColumnDefinitions>
             <Border Grid.ColumnSpan="3" Name="Border"
-              BorderBrush="{StaticResource Element}" 
-              CornerRadius="6" BorderThickness="1" 
+              BorderBrush="{StaticResource Focus}" 
+              CornerRadius="6" BorderThickness="1" UseLayoutRounding="True"
               Background="{StaticResource Black}" />
             
             <Border Grid.Column="2" Margin="1" BorderBrush="#444" Name="ButtonBorder" CornerRadius="6,6,6,6" BorderThickness="0"  Background="{StaticResource Black}" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -146,11 +146,15 @@
                             </TextBox.Template>
                         </TextBox>
                         <!-- Popup showing items -->
-                        <Popup Name="Popup" Placement="Bottom" Focusable="False" AllowsTransparency="True" IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}" PopupAnimation="Fade">
+                        <Popup Name="Popup" Placement="Bottom" Margin="12" Focusable="False" AllowsTransparency="True" IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}" PopupAnimation="Fade">
                             <Grid Name="DropDown" SnapsToDevicePixels="True"
                                 MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
                                 MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
-                                <Border Name="DropDownBorder" Background="{StaticResource Black}" Margin="0, 1, 0, 0" CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource Element}"/>
+                                <Border Name="DropDownBorder" Background="{StaticResource Black}" Margin="0, 1, 0, 0" CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource LightBlack}">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#1d1d1f" BlurRadius="2" ShadowDepth="5" Opacity="0.5"/>
+                                    </Border.Effect>
+                                </Border>
                                 <ScrollViewer Margin="6" SnapsToDevicePixels="True">
                                     <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" Cursor="Hand">
                                     

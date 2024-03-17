@@ -24,7 +24,7 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Static\Logo128.ico</ApplicationIcon>
+    <ApplicationIcon>Static\CommonLogo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>173479A22F8A970010E5D9533E658733A55AB229</ManifestCertificateThumbprint>
@@ -153,7 +153,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Static\Logo128.ico" />
+    <Content Include="Static\CommonLogo.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Static\Chicken.wav">
