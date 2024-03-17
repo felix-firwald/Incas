@@ -26,34 +26,53 @@
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Ellipse x:Name="circle" Fill="{StaticResource Element}" HorizontalAlignment="Center" Height="19" Stroke="{StaticResource Element}" VerticalAlignment="Center" Width="19" StrokeThickness="0" UseLayoutRounding="True"/>
-                            <Path x:Name="arrow" Data="M 2 7 L 6 3 L 2 -1" HorizontalAlignment="Center" Stroke="{StaticResource Light}" SnapsToDevicePixels="false" StrokeThickness="2" VerticalAlignment="Center"/>
-                            <!--M 1,1.5 L 4.5,5 L 8,1.5-->
-                            
+                            <!--<Ellipse x:Name="circle" Fill="{StaticResource Element}" HorizontalAlignment="Center" Height="19" Stroke="{StaticResource Element}" VerticalAlignment="Center" Width="19" StrokeThickness="0" UseLayoutRounding="True"/>-->
+                            <Path Name="Arrow" Data="m -6.354 -2.354 a 0.5 0.5 0 0 1 0.708 0 l 5.646 5.647 l 5.646 -5.647 a 0.5 0.5 0 0 1 0.708 0.708 l -6 6 a 0.5 0.5 0 0 1 -0.708 0 l -6 -6 a 0.5 0.5 0 0 1 0 -0.708" HorizontalAlignment="Center" Fill="{DynamicResource Icon}" VerticalAlignment="Center" Margin="0,4,0,0">
+                                <Path.RenderTransform>
+                                    <RotateTransform Angle="-90" x:Name="ArrowRotate"/>
+                                </Path.RenderTransform>
+                            </Path>
+
                             <ContentPresenter x:Name="header" Grid.Column="1" TextElement.FontSize="11" TextElement.Foreground="{DynamicResource GrayLight}" TextElement.FontFamily="/Fonts/#JetBrains Mono" HorizontalAlignment="Right" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center" OpacityMask="{x:Null}"/>
                             <Rectangle x:Name="rect" Fill="{DynamicResource Element}" Grid.Column="2" Height="1" Margin="10,0,0,0"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
-                            <Setter Property="Data" TargetName="arrow" Value="M 1,1.5 L 4.5,5 L 8,1.5"/>
+                            <!--<Setter Property="Data" TargetName="Arrow" Value="M 1,1.5 L 4.5,5 L 8,1.5"/>-->
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.150" To="0"
+                                             Storyboard.TargetName="ArrowRotate"
+                                             Storyboard.TargetProperty="Angle"/>
+
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.200" To="-90"
+                                            Storyboard.TargetName="ArrowRotate"
+                                            Storyboard.TargetProperty="Angle"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Fill" TargetName="circle" Value="{StaticResource LightPurple}"/>
+                            <!--<Setter Property="Fill" TargetName="circle" Value="{StaticResource LightPurple}"/>-->
                             <Setter Property="Fill" TargetName="rect" Value="{DynamicResource LightPurple}"/>
                             <Setter Property="TextElement.Foreground" TargetName="header" Value="{DynamicResource LightPurple}"/>
-                            <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource Light}"/>
+                            <Setter Property="Stroke" TargetName="Arrow" Value="{StaticResource LightPurple}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Stroke" TargetName="circle" Value="{StaticResource Icon}"/>
-                            <Setter Property="StrokeThickness" TargetName="circle" Value="1.5"/>
-                            <Setter Property="Fill" TargetName="circle" Value="{StaticResource Icon}"/>
-                            <Setter Property="Data" TargetName="arrow" Value="M 0 2 L 4 2 L 4 -2"/>
+                            <Setter Property="Fill" TargetName="rect" Value="{DynamicResource LightPurple}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Stroke" TargetName="circle" Value="{StaticResource Icon}"/>
-                            <Setter Property="Fill" TargetName="circle" Value="{StaticResource Icon}"/>
-                            <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource Icon}"/>
+                            <!--<Setter Property="Stroke" TargetName="circle" Value="{StaticResource Icon}"/>
+                            <Setter Property="Fill" TargetName="circle" Value="{StaticResource Icon}"/>-->
+                            <Setter Property="Stroke" TargetName="Arrow" Value="{StaticResource Icon}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

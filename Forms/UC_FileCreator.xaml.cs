@@ -127,6 +127,14 @@ namespace Incubator_2.Forms
                         break;
                     }
                 }
+                foreach (TableFiller table in Tables)
+                {
+                    if (table.tag.id == tag.tag)
+                    {
+                        table.SetData(tag.value);
+                        break;
+                    }
+                }
             }
         }
         public void ApplyFromExcel(Dictionary<string, string> pairs)
@@ -204,6 +212,10 @@ namespace Incubator_2.Forms
                     filledTags.Add(gt);
                 }
             }
+            foreach (TableFiller table in Tables)
+            {               
+                filledTags.Add(table.GetAsGeneratedTag());
+            }
             result.SaveFilledTags(filledTags);
             return result;
         }
@@ -220,6 +232,11 @@ namespace Incubator_2.Forms
                 List<string> values = new List<string>();
                 this.Dispatcher.Invoke(() =>
                 {
+                    foreach (TableFiller tab in Tables)
+                    {
+                        wt.CreateTable(tab.tag.name, tab.DataTable);
+                        filledTags.Add(tab.GetAsGeneratedTag());
+                    }
                     foreach (UC_TagFiller tf in TagFillers)
                     {
                         int id = tf.GetId();
@@ -246,10 +263,6 @@ namespace Incubator_2.Forms
                         values.Add(value);
                     }
                     wt.Replace(tagsToReplace, values, async);
-                    foreach (TableFiller tab in Tables)
-                    {
-                        wt.CreateTable(tab.tag.name, tab.DataTable);
-                    }
                 });
                 if (save)
                 {
@@ -301,8 +314,7 @@ namespace Incubator_2.Forms
         {
             List<string> output = new();
             foreach (UC_TagFiller tf in TagFillers)
-            {
-                
+            {   
                 output.Add(tf.GetValue());
             }
             return output;

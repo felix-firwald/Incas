@@ -12,7 +12,7 @@
         Style="{DynamicResource WindowBase}"
         WindowState="Maximized"
         Title="{Binding WorkspaceName}"
-        Icon="/Views/Logo.png"
+        Icon="/Views/Logo64.ico"
         Closed="OnClosed"     
         AllowDrop="True"
         MinHeight="700" MinWidth="900"

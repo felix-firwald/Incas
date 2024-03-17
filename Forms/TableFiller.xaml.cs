@@ -1,7 +1,9 @@
 ﻿using Common;
+using Incubator_2.Models;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows.CustomDatabase;
 using Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -35,9 +37,24 @@ namespace Incubator_2.Forms
             vm = new VM_TableFiller(t);
             this.DataContext = vm;
         }
-        public void ApplyTable(DataTable dt)
+        public void SetData(DataTable dt)
         {
-
+            this.vm.Grid = dt;
+        }
+        public void SetData(string data)
+        {
+            this.vm.Grid = JsonConvert.DeserializeObject<DataTable>(data);
+        }
+        public string GetData()
+        {
+            return JsonConvert.SerializeObject(this.vm.Grid);
+        }
+        public SGeneratedTag GetAsGeneratedTag()
+        {
+            SGeneratedTag result = new();
+            result.tag = this.tag.id;
+            result.value = GetData();
+            return result;
         }
 
         private void InsertClick(object sender, RoutedEventArgs e)

@@ -24,7 +24,7 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Logo.ico</ApplicationIcon>
+    <ApplicationIcon>Static\Logo128.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>173479A22F8A970010E5D9533E658733A55AB229</ManifestCertificateThumbprint>
@@ -81,6 +81,7 @@
     <None Remove="Static\Rooster.wav" />
     <None Remove="Static\UI-Attention.wav" />
     <None Remove="Static\UI-Exclamation.wav" />
+    <None Remove="Views\Logo64.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
@@ -134,6 +135,7 @@
     <Resource Include="Fonts\VelaSans-Medium.ttf" />
     <Resource Include="Fonts\VelaSans-Regular.ttf" />
     <Resource Include="Fonts\VelaSans-SemiBold.ttf" />
+    <Resource Include="Views\Logo64.ico" />
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="Logo.ico" />
@@ -149,6 +151,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Static\Logo128.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Static\Chicken.wav">

@@ -101,11 +101,10 @@ namespace Common
 
             Formatting rowStyle = new Formatting();
             head.FontFamily = new Font("Times New Roman");
-
-            for (int i = 0; i < dt.Columns.Count; i++)
+            for (int i = 0; i < dt.Columns.Count; i++) // cols
             {
                 tab.Rows[0].Cells[i].Paragraphs[0].Append(dt.Columns[i].ColumnName, head);
-                for (int row = 0; row < dt.Rows.Count; row++)
+                for (int row = 0; row < dt.Rows.Count; row++) // rows
                 {
                     tab.Rows[row+1].Cells[i].Paragraphs[0].Append(dt.Rows[row][i].ToString(), rowStyle);
                 }
