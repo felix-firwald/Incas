@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
+﻿using Common;
+using DocumentFormat.OpenXml.Bibliography;
 using ICSharpCode.AvalonEdit.Highlighting;
 using Incubator_2.ViewModels.VM_Templates;
 using Models;
@@ -48,6 +49,11 @@ namespace Incubator_2.Windows
         {
             Result = DialogStatus.No;
             this.Close();
+        }
+
+        private void GetMoreInfoClick(object sender, MouseButtonEventArgs e)
+        {
+            ProgramState.OpenWebPage("https://teletype.in/@incas/kOef49wr3J4");
         }
     }
 }

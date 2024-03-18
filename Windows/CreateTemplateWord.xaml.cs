@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incubator_2.Common;
 using Incubator_2.Forms;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows.Templates;
@@ -256,6 +257,11 @@ namespace Incubator_2.Windows
 
             CreateTransfer ct = new(tags);
             ct.ShowDialog();
+        }
+
+        private void GetMoreInfoClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ProgramState.OpenWebPage("https://teletype.in/@incas/UM8Uf15j2fB");
         }
     }
 }

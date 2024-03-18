@@ -368,7 +368,20 @@ namespace Common
             }
             catch { }
         }
-
+        public static void OpenWebPage(string url)
+        {
+            try
+            {
+                System.Diagnostics.Process proc = new();
+                proc.StartInfo.FileName = url;
+                proc.StartInfo.UseShellExecute = true;
+                proc.Start();
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex.Message}", "Действие невозможно");
+            }
+        }
         #region Modal Dialogs
         public static void ShowErrorDialog(string message, string title = "Возникла неизвестная ошибка")
         {

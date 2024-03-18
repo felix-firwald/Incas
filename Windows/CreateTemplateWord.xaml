@@ -64,6 +64,7 @@
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" Grid.Column="1" Grid.Row="1" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAll" />
                     <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" Grid.Column="1" Grid.Row="1" ToolTip="Редактировать исходный файл" MouseDown="EditSourceClick" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" Grid.Column="1" Grid.Row="1" ToolTip="Открыть справочную информацию" MouseDown="GetMoreInfoClick" />
                 </StackPanel>
             </Border>
             <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="2" IsEnabled="{Binding IsEdit}">
