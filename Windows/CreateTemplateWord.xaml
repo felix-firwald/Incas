@@ -69,7 +69,6 @@
             </Border>
             <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="2" IsEnabled="{Binding IsEdit}">
                 <StackPanel>
-                    <Button Style="{DynamicResource ButtonFlat}" Content="+ Добавить триггер"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"/>
@@ -79,6 +78,7 @@
 
                         <Label Content="Триггеры:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                     </Grid>
+                    <MenuItem Header="При сохранении документа" Click="AddCommandClick" />
                 </StackPanel>
             </Border>
             

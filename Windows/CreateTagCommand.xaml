@@ -10,6 +10,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="auto" MaxWidth="120">
+            </ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -22,17 +24,51 @@
             <ComboBoxItem Content="Кнопка"/>
             <ComboBoxItem Content="При изменении данных"/>
         </ComboBox>
+        <ComboBox Style="{DynamicResource ComboBoxMain}" Visibility="{Binding IconVisibility}" SelectedIndex="{Binding Icon}" MinWidth="100" Grid.Column="2">
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Magic}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Activity}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Archive}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Arrow90}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Mail}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Bezier}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Box}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Regex}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Broadcast}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Caps}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Check}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Flag}"/>
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <Path Fill="{StaticResource Icon}" Data="{StaticResource Key}"/>
+            </ComboBoxItem>
+        </ComboBox>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" ToolTip="Открыть справочную информацию" MouseDown="GetMoreInfoClick" HorizontalAlignment="Left"/>
-        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="3">
             <Label Style="{DynamicResource LabelElement}" Content="# Python 3"/>
-            <!--<TextBox Style="{DynamicResource TextBoxCode}" Text="{Binding Script}" MinHeight="200" AcceptsTab="True">
-                <TextBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
-                        <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
-                    </ContextMenu>
-                </TextBox.ContextMenu>
-            </TextBox>-->
+            
             <avalonEdit:TextEditor x:Name="CodeEditor" 
                 xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                 FontFamily="JetBrains Mono"
@@ -68,7 +104,7 @@
                 <Label Content="Сохранить команду" Foreground="White"/>
             </StackPanel>
         </Button>
-        <Button Style="{DynamicResource ButtonMain}" Visibility="{Binding DescriptionVisibility}" Grid.Row="2" Grid.Column="1" Margin="5,5,5,5" Click="DeleteClick">
+        <Button Style="{DynamicResource ButtonMain}" Visibility="{Binding DescriptionVisibility}" Grid.Row="2" Grid.Column="1" Margin="5,5,5,5" Click="DeleteClick" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal">
                 <Path Fill="White" VerticalAlignment="Center" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
                 <Label Content="Удалить команду" Foreground="White"/>

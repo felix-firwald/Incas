@@ -14,6 +14,22 @@ namespace Models
     {
         public string Name;
     }
+    public enum IconType
+    {
+        Magic,
+        Activity,
+        Archive,
+        Arrow90,
+        Mail,
+        Bezier,
+        Box,
+        Regex,
+        Broadcast,
+        Caps,
+        Check,
+        Flag,
+        Key
+    }
     public enum ScriptType
     {
         None = 0,
@@ -23,7 +39,7 @@ namespace Models
     }
     public struct CommandSettings
     {
-        public string Icon;
+        public IconType Icon;
         public ScriptType ScriptType;
         public string Name;
         public string Script;

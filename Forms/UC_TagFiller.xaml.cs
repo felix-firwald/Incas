@@ -107,6 +107,7 @@ namespace Incubator_2.Forms
             {
                 return;
             }
+            this.CommandButtonIcon.Data = FindResource(command.Icon.ToString()) as PathGeometry;
             this.CommandButton.Visibility = Visibility.Visible;
             this.CommandButtonText.Content = command.Name;
         }

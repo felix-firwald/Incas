@@ -73,7 +73,10 @@ namespace Incubator_2.Forms
                 ScriptManager.Execute(script, scope);
                 foreach (UC_TagFiller tf in TagFillers)
                 {
-                    tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
+                    if (tf.tag.type != TypeOfTag.Generator)
+                    {
+                        tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
+                    }                   
                 }
             }
             catch (Exception ex)

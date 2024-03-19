@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Incubator_2.ViewModels.VM_Templates
 {
@@ -46,19 +47,26 @@ namespace Incubator_2.ViewModels.VM_Templates
                 OnPropertyChanged(nameof(Script));
             }
         }
-        public string Icon
+        public Visibility IconVisibility
         {
             get
             {
-                if (commandSettings.Icon == null)
+                if (ScriptType == 1)
                 {
-                    commandSettings.Icon = "";
+                    return Visibility.Visible;
                 }
-                return commandSettings.Icon;
+                return Visibility.Collapsed;
+            }
+        }
+        public int Icon
+        {
+            get
+            {
+                return (int)commandSettings.Icon;
             }
             set
             {
-                commandSettings.Icon = value;
+                commandSettings.Icon = (IconType)value;
                 OnPropertyChanged(nameof(Icon));
             }
         }
@@ -72,8 +80,10 @@ namespace Incubator_2.ViewModels.VM_Templates
             {
                 commandSettings.ScriptType = (ScriptType)value;
                 OnPropertyChanged(nameof(ScriptType));
+                OnPropertyChanged(nameof(IconVisibility));
             }
         }
+        
         public CommandSettings GetData()
         {
             return commandSettings;

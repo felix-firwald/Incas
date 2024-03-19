@@ -263,5 +263,10 @@ namespace Incubator_2.Windows
         {
             ProgramState.OpenWebPage("https://teletype.in/@incas/UM8Uf15j2fB");
         }
+
+        private void AddCommandClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
