@@ -62,6 +62,18 @@ namespace Incubator_2.ViewModels.VM_Templates
                 OnPropertyChanged(nameof(Icon));
             }
         }
+        public int ScriptType
+        {
+            get
+            {
+                return (int)commandSettings.ScriptType;
+            }
+            set
+            {
+                commandSettings.ScriptType = (ScriptType)value;
+                OnPropertyChanged(nameof(ScriptType));
+            }
+        }
         public CommandSettings GetData()
         {
             return commandSettings;

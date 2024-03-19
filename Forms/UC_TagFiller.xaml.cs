@@ -40,7 +40,7 @@ namespace Incubator_2.Forms
         public readonly Tag tag;
         public FillerMode Mode;
         private bool isRequired = false;
-        private string command = "";
+        private CommandSettings command;
         public delegate void StringAction(int tag, string text);
         public event StringAction OnInsert;
         public delegate void CommandScript(string script);
@@ -102,14 +102,13 @@ namespace Incubator_2.Forms
         }
         private void MakeButton()
         {
-            CommandSettings cs = tag.GetCommand();
-            if (string.IsNullOrWhiteSpace(cs.Script))
+            command = tag.GetCommand();
+            if (command.ScriptType != ScriptType.Button)
             {
                 return;
             }
-            command = cs.Script;
             this.CommandButton.Visibility = Visibility.Visible;
-            this.CommandButtonText.Content = cs.Name;
+            this.CommandButtonText.Content = command.Name;
         }
         public UC_TagFiller(FieldCreator fc, string path)
         {
@@ -344,31 +343,55 @@ namespace Incubator_2.Forms
             string rec = ProgramState.ShowActiveUserSelector("Выберите пользователя для запроса данных").slug;
             ServerProcessor.SendRequestTextProcess(this, rec);
         }
-
-        private void CommandClick(object sender, RoutedEventArgs e)
+        private void PlayScript()
         {
             try
             {
-                ProgramState.ShowWaitCursor();
-                if (command.Contains("# [affects other]"))
+                if (command.Script.Contains("# [affects other]"))
                 {
-                    OnScriptRequested?.Invoke(command);
+                    OnScriptRequested?.Invoke(command.Script);
                 }
                 else
                 {
                     ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                     scope.SetVariable("input_data", this.GetValue());
-                    ScriptManager.Execute(command, scope);
+                    ScriptManager.Execute(command.Script, scope);
 
                     this.SetValue((string)scope.GetVariable("output"));
                 }
-                
+
             }
             catch (Exception ex)
             {
-                ProgramState.ShowWaitCursor(false);
+
                 ProgramState.ShowErrorDialog("При обработке скрипта произошла ошибка:\n" + ex.Message);
             }
+        }
+        private void CommandClick(object sender, RoutedEventArgs e)
+        {
+            PlayScript();
+        }
+        private void CheckForScriptOnUpdate()
+        {
+            if (command.ScriptType == ScriptType.ValueChanged)
+            {
+                PlayScript();
+            }
+        }
+
+        private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CheckForScriptOnUpdate();
+        }
+
+        private void Textbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckForScriptOnUpdate();
+        }
+
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CheckForScriptOnUpdate();
         }
     }
 }

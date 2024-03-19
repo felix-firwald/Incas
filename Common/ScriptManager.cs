@@ -17,11 +17,22 @@ namespace Incas
     public class Service
     {
         public Service() { }
-        public static User CurrentUser = ProgramState.CurrentUser;
         public static string CurrentSessionId = ProgramState.CurrentSession.slug;
-        public static void ShowInfoDialog(string message)
+        public static int GetUserId()
         {
-            ProgramState.ShowInfoDialog(message);
+            return ProgramState.CurrentUser.id;
+        }
+        public static string GetUserUsername()
+        {
+            return ProgramState.CurrentUser.username;
+        }
+        public static string GetUserFullname()
+        {
+            return ProgramState.CurrentUser.fullname;
+        }
+        public static void ShowInfoDialog(string message, string title)
+        {
+            ProgramState.ShowInfoDialog(message, title);
         }
         public static string ShowInputBox(string title, string description)
         {

@@ -147,6 +147,11 @@ namespace Incubator_2.Windows.Templates
                     ProgramState.ShowExclamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
                     return false;
                 }
+                if (tag.tag.type == TypeOfTag.Table)
+                {
+                    ProgramState.ShowExclamationDialog($"В генераторах нельзя использовать таблицы!", "Сохранение прервано");
+                    return false;
+                }
                 names.Add(tag.TagName.Text);
             }
 

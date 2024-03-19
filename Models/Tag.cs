@@ -14,9 +14,17 @@ namespace Models
     {
         public string Name;
     }
+    public enum ScriptType
+    {
+        None = 0,
+        Button = 1,
+        ValueChanged = 2,
+        DocumentSaving = 3
+    }
     public struct CommandSettings
     {
         public string Icon;
+        public ScriptType ScriptType;
         public string Name;
         public string Script;
     }

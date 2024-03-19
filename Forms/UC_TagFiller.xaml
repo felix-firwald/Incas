@@ -18,7 +18,7 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="MainLabel" Style="{DynamicResource TextBlockImportant}" Text="Имя тега:" VerticalAlignment="Top" Grid.Column="0" Margin="8,12,5,5" MaxHeight="30" Foreground="{DynamicResource GrayLight}" TextWrapping="Wrap"/>
-        <TextBox x:Name="Textbox" Style="{DynamicResource TextBoxMain}" Grid.Column="1" Visibility="Hidden" Cursor="IBeam" AutoWordSelection="True" TextWrapping="WrapWithOverflow" SelectionBrush="{DynamicResource PrimaryMain}" SelectionTextBrush="{DynamicResource Light}">
+        <TextBox x:Name="Textbox" Style="{DynamicResource TextBoxMain}" Grid.Column="1" TextChanged="Textbox_TextChanged" Visibility="Hidden" Cursor="IBeam" AutoWordSelection="True" TextWrapping="WrapWithOverflow" SelectionBrush="{DynamicResource PrimaryMain}" SelectionTextBrush="{DynamicResource Light}">
             <TextBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Очистить" Click="ClearClick" Tag="Очистить поле"/>
@@ -47,7 +47,7 @@
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>
-        <ComboBox x:Name="Combobox" Style="{DynamicResource ComboBoxMain}" Grid.Column="1" Visibility="Hidden" ToolTipService.InitialShowDelay="180">
+        <ComboBox x:Name="Combobox" Style="{DynamicResource ComboBoxMain}" Grid.Column="1" SelectionChanged="Combobox_SelectionChanged" Visibility="Hidden" ToolTipService.InitialShowDelay="180">
             <ComboBox.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -57,7 +57,7 @@
         </ComboBox>
         <CustomControls:SelectionBox x:Name="SelectionBox" Grid.Column="1" Visibility="Hidden" ToolTipService.InitialShowDelay="180"/>
         <templates:Generator x:Name="Generator" Grid.Column="1" Visibility="Hidden" />
-        <DatePicker x:Name="DatePicker" Style="{DynamicResource DatePickerMain}" Visibility="Hidden" Grid.Column="1" Margin="5,5,5,5" Cursor="">
+        <DatePicker x:Name="DatePicker" Style="{DynamicResource DatePickerMain}" SelectedDateChanged="DatePicker_SelectedDateChanged" Visibility="Hidden" Grid.Column="1" Margin="5,5,5,5" Cursor="">
             <DatePicker.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>

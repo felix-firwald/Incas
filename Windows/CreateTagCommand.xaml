@@ -17,7 +17,11 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <TextBox Style="{DynamicResource TextBoxMain}" Tag="Имя команды" Text="{Binding Name}" MaxLength="25"/>
-        <ComboBox Style="{DynamicResource ComboBoxMain}" Visibility="Collapsed" Grid.Column="1"/>
+        <ComboBox Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding ScriptType}" Grid.Column="1">
+            <ComboBoxItem Content="Деактивирована"/>
+            <ComboBoxItem Content="Кнопка"/>
+            <ComboBoxItem Content="При изменении данных"/>
+        </ComboBox>
         <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" ToolTip="Открыть справочную информацию" MouseDown="GetMoreInfoClick" HorizontalAlignment="Left"/>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
             <Label Style="{DynamicResource LabelElement}" Content="# Python 3"/>
@@ -34,7 +38,28 @@
                 FontFamily="JetBrains Mono"
                 SyntaxHighlighting="Python"
                 MinHeight="300" ShowLineNumbers="True"
-                FontSize="12" Background="{DynamicResource Black}" Foreground="{DynamicResource Light}" LineNumbersForeground="{DynamicResource Element}"/>
+                FontSize="12" Background="{DynamicResource Black}" Foreground="{DynamicResource Light}" LineNumbersForeground="{DynamicResource Element}">
+                <avalonEdit:TextEditor.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Вырезать" Command="ApplicationCommands.Cut"/>
+                        <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                        <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
+                        <Separator Background="{DynamicResource LightBlack}"/>
+                        <MenuItem Header="Скрипты">
+                            <MenuItem Header="Библиотека Incas">
+                                <MenuItem Header="Добавить импорт библиотеки Incas" Click="HelpScriptClick" Tag="IncasLibrary"/>
+                                <Separator Background="{DynamicResource LightBlack}"/>
+                                <MenuItem Header="Получить имя текущего пользователя" Click="HelpScriptClick" Tag="CurrentUserFullname"/>
+                                <MenuItem Header="Вывод оповещения пользователю" Click="HelpScriptClick" Tag="ShowInfo"/>
+                                <MenuItem Header="Запрос строки от пользователя" Click="HelpScriptClick" Tag="ShowInputBox"/>
+                                <MenuItem Header="Вывод окна выбора из базы данных" Click="HelpScriptClick" Tag="ShowDatabaseSelection"/>
+                            </MenuItem>
+                            <MenuItem Header="Подтвердить влияние на другие теги" Click="HelpScriptClick" Tag="AffectsOther"/>
+                            <MenuItem Header="Получить текущую дату" Click="HelpScriptClick" Tag="CurrentDate"/>
+                        </MenuItem>
+                    </ContextMenu>
+                </avalonEdit:TextEditor.ContextMenu>
+            </avalonEdit:TextEditor>
         </StackPanel>
         
         <Button Style="{DynamicResource ButtonMainFinish}" Visibility="{Binding DescriptionVisibility}" Grid.Row="2" Click="SaveClick">
