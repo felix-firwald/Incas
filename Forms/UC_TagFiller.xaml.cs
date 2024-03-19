@@ -394,5 +394,10 @@ namespace Incubator_2.Forms
         {
             CheckForScriptOnUpdate();
         }
+
+        private void SelectionBox_OnValueChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckForScriptOnUpdate();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Common;
+using ICSharpCode.AvalonEdit.Document;
 using Incubator_2.Windows.CustomDatabase;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,8 @@ namespace Incubator_2.CustomControls
                 }
             }
         }
+        public delegate void ValueChanged(object sender, TextChangedEventArgs e);
+        public event ValueChanged OnValueChanged;
         public SelectionBox()
         {
             InitializeComponent();
@@ -64,6 +67,11 @@ namespace Incubator_2.CustomControls
                     this.Value = "";
                 }
             }
+        }
+
+        private void Input_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            OnValueChanged?.Invoke(this, e);
         }
     }
 }

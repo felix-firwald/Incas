@@ -5,7 +5,11 @@ using System.Data;
 
 namespace Models
 {
-    
+    public struct TemplateSettings
+    {
+        public CommandSettings Validation;
+        public CommandSettings OnSaving;
+    }
     public enum TemplateType
     {
         Word,
