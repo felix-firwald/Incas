@@ -40,6 +40,7 @@ namespace Incubator_2.Forms
         public readonly Tag tag;
         public FillerMode Mode;
         private bool isRequired = false;
+        private bool validated = true;
         private CommandSettings command;
         public delegate void StringAction(int tag, string text);
         public event StringAction OnInsert;
@@ -110,6 +111,11 @@ namespace Incubator_2.Forms
             this.CommandButtonIcon.Data = FindResource(command.Icon.ToString()) as PathGeometry;
             this.CommandButton.Visibility = Visibility.Visible;
             this.CommandButtonText.Content = command.Name;
+        }
+        public void MarkAsNotValidated()
+        {
+            validated = false;
+            this.MainLabel.Foreground = FindResource("Error") as SolidColorBrush;
         }
         public UC_TagFiller(FieldCreator fc, string path)
         {
@@ -377,6 +383,11 @@ namespace Incubator_2.Forms
             if (command.ScriptType == ScriptType.ValueChanged)
             {
                 PlayScript();
+            }
+            if (!validated)
+            {
+                validated = true;
+                this.MainLabel.Foreground = FindResource("GrayLight") as SolidColorBrush;
             }
         }
 

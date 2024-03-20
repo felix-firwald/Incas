@@ -233,21 +233,63 @@ namespace Incubator_2.Forms
                 bool result = true;
                 if (!string.IsNullOrEmpty(validateScript))
                 {
-                    ScriptScope ss = ScriptManager.GetEngine().CreateScope();
-                    ss.SetVariable("result", true);
-                    ss.SetVariable("failed_text", "Текст не установлен.");
-                    ScriptManager.Execute(validateScript, ss);
-                    result = ss.GetVariable("result");
+                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();
+                    scope.SetVariable("result", true);
+                    scope.SetVariable("fields", new List<string>());
+                    scope.SetVariable("failed_text", "Текст не установлен.");
+                    foreach (UC_TagFiller tf in TagFillers)
+                    {
+                        scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
+                    }
+                    ScriptManager.Execute(validateScript, scope);
+                    result = scope.GetVariable("result");
                     if (!result)
                     {
-                        ProgramState.ShowExclamationDialog(ss.GetVariable("failed_text"));
+                        ProgramState.ShowExclamationDialog(scope.GetVariable("failed_text"));
+                        dynamic fields = scope.GetVariable("fields");
+                        foreach (UC_TagFiller tf in TagFillers)
+                        {
+                            if (fields.Contains(tf.tag.name.Replace(" ", "_")))
+                            {
+                                tf.MarkAsNotValidated();
+                            }
+                        }
                     }
                 }
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                ProgramState.ShowErrorDialog("При выполнении скрипта валидации возникла ошибка:\n" + ex.Message);
                 return true;
+            }
+        }
+        private void PlaySavingScript()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(savingScript))
+                {
+                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();
+                    scope.SetVariable("file_name", this.Filename.Text);
+                    foreach (UC_TagFiller tf in TagFillers)
+                    {
+                        scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
+                    }
+                    ScriptManager.Execute(savingScript, scope);
+                    this.Filename.Text = scope.GetVariable("file_name");
+                    foreach (UC_TagFiller tf in TagFillers)
+                    {
+                        if (tf.tag.type != TypeOfTag.Generator)
+                        {
+                            tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog("При выполнении скрипта возникла ошибка:\n" + ex.Message);
             }
         }
         public void CreateFile(string newPath, bool async = true, bool save = true)
@@ -256,6 +298,7 @@ namespace Incubator_2.Forms
             {
                 if (CustomValidate())
                 {
+                    PlaySavingScript();
                     string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
                     System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
                     WordTemplator wt = new WordTemplator(newFile);
