@@ -72,7 +72,7 @@
             <avalonEdit:TextEditor x:Name="CodeEditor" 
                 xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                 FontFamily="JetBrains Mono"
-                SyntaxHighlighting="Python"
+                SyntaxHighlighting="Python" HorizontalScrollBarVisibility="Disabled"
                 MinHeight="300" ShowLineNumbers="True"
                 FontSize="12" Background="{DynamicResource Black}" Foreground="{DynamicResource Light}" LineNumbersForeground="{DynamicResource Element}">
                 <avalonEdit:TextEditor.ContextMenu>

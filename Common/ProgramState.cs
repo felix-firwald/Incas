@@ -91,6 +91,7 @@ namespace Common
             Directory.CreateDirectory(Messages);
             Directory.CreateDirectory(LogData);
             Directory.CreateDirectory(TemplatesRuntime);
+            DatabaseManager.ActualizeTables();
             CollectGarbage();
             ScriptManager.Execute("from Incas import Service", ScriptManager.GetEngine().CreateScope());
             //TelegramProcessor.StartBot("6911917508:AAHJeEhfNKzzOJjp0IlGtZ51lqNrE2LBnK4");

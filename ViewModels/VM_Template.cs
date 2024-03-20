@@ -11,9 +11,11 @@ namespace Incubator_2.ViewModels
     class VM_Template : VM_Base
     {
         private Template template_main;
+        private TemplateSettings templateSettings;
         public VM_Template(Template templ)
         {
             this.template_main = templ;
+            this.templateSettings = templ.GetTemplateSettings();
         }
         public bool IsEdit
         {
@@ -61,6 +63,42 @@ namespace Incubator_2.ViewModels
                     OnPropertyChanged("Category");
                 }
             }
+        }
+        public string OnSavingScript
+        {
+            get
+            {
+                if (templateSettings.OnSaving != null)
+                {
+                    return templateSettings.OnSaving;
+                }
+                return "";
+            }
+            set
+            {
+                templateSettings.OnSaving = value;
+                OnPropertyChanged(nameof(OnSavingScript));
+            }
+        }
+        public string ValidationScript
+        {
+            get
+            {
+                if (templateSettings.Validation != null)
+                {
+                    return templateSettings.Validation;
+                }
+                return "";
+            }
+            set
+            {
+                templateSettings.Validation = value;
+                OnPropertyChanged(nameof(ValidationScript));
+            }
+        }
+        public TemplateSettings GetSettings()
+        {
+            return templateSettings;
         }
     }
 }

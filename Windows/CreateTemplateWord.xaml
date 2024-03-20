@@ -67,18 +67,21 @@
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" Grid.Column="1" Grid.Row="1" ToolTip="Открыть справочную информацию" MouseDown="GetMoreInfoClick" />
                 </StackPanel>
             </Border>
-            <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="2" IsEnabled="{Binding IsEdit}">
+            <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="2">
                 <StackPanel>
-                    <Grid>
+                    <Grid Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Path Fill="{DynamicResource Yellow}" Data="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
 
-                        <Label Content="Триггеры:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                        <Label Content="Привязанные скрипты:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                     </Grid>
-                    <MenuItem Header="При сохранении документа" Click="AddCommandClick" />
+                    <MenuItem Style="{StaticResource Command}" Header="Действия при сохранении документа" Click="AddCommandClick" Tag="Save"/>
+                    <MenuItem Style="{StaticResource Command}" Header="Валидация" Click="AddCommandClick" Tag="Validate" />
+                    <Separator Background="{StaticResource LightBlack}"/>
+                    <Label Style="{StaticResource LabelElement}" Content="Иной функционал станет доступен позднее" HorizontalAlignment="Center" Foreground="{DynamicResource Area}"/>
                 </StackPanel>
             </Border>
             

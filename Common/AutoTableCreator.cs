@@ -95,7 +95,7 @@ namespace Incubator_2.Common
             return result;
         }
 
-        private static string SwitchOnType(Type type)
+        public static string SwitchOnType(Type type)
         {
             switch (Type.GetTypeCode(type.GetType()))
             {

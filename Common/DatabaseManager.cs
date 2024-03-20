@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 
 using System.Data.SQLite;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;
 
@@ -101,6 +102,47 @@ namespace Common
             q.DBPath = db;
             q.AddCustomRequest(GetMessageDefinition(atc))
              .ExecuteVoid();
+        }
+        public static void ActualizeTables()
+        {
+            CheckFieldsInTable(typeof(Parameter), "Parameters", DBConnectionType.SERVICE);
+            CheckFieldsInTable(typeof(Sector), "Sectors", DBConnectionType.SERVICE);
+            CheckFieldsInTable(typeof(User), "Users", DBConnectionType.SERVICE);
+            CheckFieldsInTable(typeof(Session), "Sessions", DBConnectionType.SERVICE);
+            CheckFieldsInTable(typeof(Database), "Databases", DBConnectionType.SERVICE);
+            CheckFieldsInTable(typeof(Command), "Commands", DBConnectionType.SERVICE);
+
+            CheckFieldsInTable(typeof(Template), "Templates", DBConnectionType.BASE);
+            CheckFieldsInTable(typeof(Tag), "Tags", DBConnectionType.BASE);
+            CheckFieldsInTable(typeof(GeneratedDocument), "GeneratedDocuments", DBConnectionType.BASE);
+        }
+        private static void CheckFieldsInTable(Type model, string tableName, DBConnectionType type)
+        {
+            Query q = new(tableName, type);
+            q.AddCustomRequest($"PRAGMA table_info([{tableName}]);");
+            DataTable dt = q.Execute();
+            List<string> names = new(dt.Rows.Count);
+            foreach (DataRow row in dt.Rows)
+            {
+                names.Add((string)row[1]);
+            }
+            bool needAlter = false;
+            string result = $"ALTER TABLE [{tableName}]\n";
+            foreach (PropertyInfo pi in model.GetProperties())
+            {
+                if (!names.Contains(pi.Name))
+                {
+                    needAlter = true;
+                    result += $"ADD COLUMN {pi.Name} {AutoTableCreator.SwitchOnType(pi.PropertyType)};\n";
+                }
+            }
+            if (needAlter)
+            {
+                ProgramState.ShowDatabaseErrorDialog($"В базе данных не было найдено поле для таблицы {tableName}. Таблица будет обновлена.", "Актуализация базы данных");
+                q.Clear();
+                q.AddCustomRequest(result);
+                q.ExecuteVoid();
+            }
         }
 
         #region Definitions

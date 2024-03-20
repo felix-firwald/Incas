@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
 
 
@@ -131,6 +132,7 @@ namespace Incubator_2.Windows
             {
                 ProgramState.ShowWaitCursor();
                 this.Close();
+                template.SaveTemplateSettings(this.VM_template.GetSettings());
                 if (isEdit)
                 {
                     template.UpdateTemplate();
@@ -266,7 +268,33 @@ namespace Incubator_2.Windows
 
         private void AddCommandClick(object sender, RoutedEventArgs e)
         {
-
+            CommandSettings cs = new();
+            bool isSave = false;
+            switch (((MenuItem)sender).Tag)
+            {
+                case "Save":
+                    cs.Name = "Действия при сохранении";
+                    cs.Script = this.VM_template.OnSavingScript;
+                    isSave = true;
+                    break;
+                case "Validate":
+                    cs.Name = "Валидация";
+                    cs.Script = this.VM_template.ValidationScript;
+                    break;
+            }
+            CreateTagCommand cc = new(cs);
+            cc.ShowDialog();
+            if (cc.Result == DialogStatus.Yes)
+            {
+                if (isSave)
+                {
+                    this.VM_template.OnSavingScript = cc.Command.Script;
+                }
+                else
+                {
+                    this.VM_template.ValidationScript = cc.Command.Script;
+                }
+            }
         }
     }
 }

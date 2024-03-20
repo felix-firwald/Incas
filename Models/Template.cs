@@ -1,4 +1,6 @@
 ﻿using Common;
+using Incubator_2.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,8 +9,8 @@ namespace Models
 {
     public struct TemplateSettings
     {
-        public CommandSettings Validation;
-        public CommandSettings OnSaving;
+        public string Validation;
+        public string OnSaving;
     }
     public enum TemplateType
     {
@@ -63,6 +65,7 @@ namespace Models
             template.suggestedPath = suggestedPath;
             template.parent = parent;
             template.type = type;
+            template.settings = settings;
             return template;
         }
 
@@ -168,7 +171,8 @@ namespace Models
                     { "path", path },
                     { "parent", isChild? parent.ToString(): Query.Null }, // раньше тут было просто null а теперь будет 'null'
                     { "suggestedPath", isChild? Query.Null : suggestedPath },
-                    { "type", type.ToString() } 
+                    { "type", type.ToString() } ,
+                    { "settings", settings }
                 })
                 .ExecuteVoid();
             this.id = int.Parse(
@@ -186,6 +190,7 @@ namespace Models
                 .Update("name", name)
                 .Update("path", path)
                 .Update("suggestedPath", suggestedPath)
+                .Update("settings", settings)
                 .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }
@@ -225,6 +230,21 @@ namespace Models
             this.Serialize(dr);
             return this;
 
+        }
+        public TemplateSettings GetTemplateSettings()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<TemplateSettings>(Cryptographer.DecryptString(this.settings));
+            }
+            catch (Exception)
+            {
+                return new();
+            }
+        }
+        public void SaveTemplateSettings(TemplateSettings ts)
+        {
+            this.settings = Cryptographer.EncryptString(JsonConvert.SerializeObject(ts));
         }
     }
 }

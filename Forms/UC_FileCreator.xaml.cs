@@ -25,6 +25,8 @@ namespace Incubator_2.Forms
         private List<Tag> tags;
         List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
         List<TableFiller> Tables = new List<TableFiller>();
+        private string validateScript;
+        private string savingScript;
 
         public delegate void TagAction(int tag, string value);
         public event TagAction OnInsertRequested;
@@ -37,6 +39,8 @@ namespace Incubator_2.Forms
             this.tags = tagsList;
             this.template = templ;
             FillContentPanel();
+            validateScript = templ.GetTemplateSettings().Validation;
+            savingScript = templ.GetTemplateSettings().OnSaving;
         }
 
         private void FillContentPanel()
@@ -222,60 +226,54 @@ namespace Incubator_2.Forms
             result.SaveFilledTags(filledTags);
             return result;
         }
+        private bool CustomValidate()
+        {
+            try
+            {
+                bool result = true;
+                if (!string.IsNullOrEmpty(validateScript))
+                {
+                    ScriptScope ss = ScriptManager.GetEngine().CreateScope();
+                    ss.SetVariable("result", true);
+                    ss.SetVariable("failed_text", "Текст не установлен.");
+                    ScriptManager.Execute(validateScript, ss);
+                    result = ss.GetVariable("result");
+                    if (!result)
+                    {
+                        ProgramState.ShowExclamationDialog(ss.GetVariable("failed_text"));
+                    }
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+                return true;
+            }
+        }
         public void CreateFile(string newPath, bool async = true, bool save = true)
         {
             try
             {
-                string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
-                System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
-                List<SGeneratedTag> filledTags = new();
-                WordTemplator wt = new WordTemplator(newFile);
-
-                List<string> tagsToReplace = new List<string>();
-                List<string> values = new List<string>();
-                this.Dispatcher.Invoke(() =>
+                if (CustomValidate())
                 {
-                    foreach (TableFiller tab in Tables)
+                    string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
+                    System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
+                    WordTemplator wt = new WordTemplator(newFile);
+                    List<SGeneratedTag> filledTags = new();
+                    this.Dispatcher.Invoke(() =>
                     {
-                        wt.CreateTable(tab.tag.name, tab.DataTable);
-                        filledTags.Add(tab.GetAsGeneratedTag());
-                    }
-                    foreach (UC_TagFiller tf in TagFillers)
+                        filledTags = wt.GenerateDocument(TagFillers, Tables, async);
+                    });
+                    if (save)
                     {
-                        int id = tf.GetId();
-                        string name = tf.GetTagName();
-                        string value = tf.GetValue();
-                        if (tf.tag.type != TypeOfTag.LocalConstant)
+                        using (GeneratedDocument doc = new())
                         {
-                            if (tf.tag.type == TypeOfTag.Generator || tf.tag.type == TypeOfTag.Date)
-                            {
-                                SGeneratedTag gtg = new();
-                                gtg.tag = id;
-                                gtg.value = tf.GetData();
-                                filledTags.Add(gtg);
-                            }
-                            else
-                            {
-                                SGeneratedTag gt = new();
-                                gt.tag = id;
-                                gt.value = value;
-                                filledTags.Add(gt);
-                            }
+                            doc.fileName = this.Filename.Text;
+                            doc.template = this.template.id;
+                            doc.templateName = this.template.name;
+                            doc.SaveFilledTags(filledTags);
+                            doc.AddRecord();
                         }
-                        tagsToReplace.Add(name);
-                        values.Add(value);
-                    }
-                    wt.Replace(tagsToReplace, values, async);
-                });
-                if (save)
-                {
-                    using (GeneratedDocument doc = new())
-                    {
-                        doc.fileName = this.Filename.Text;
-                        doc.template = this.template.id;
-                        doc.templateName = this.template.name;
-                        doc.SaveFilledTags(filledTags);
-                        doc.AddRecord();
                     }
                 }
             }

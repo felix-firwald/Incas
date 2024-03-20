@@ -8,6 +8,11 @@ using System.IO;
 using System.Data;
 using System.Windows.Automation.Peers;
 using Table = Xceed.Document.NET.Table;
+using Incubator_2.Forms;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Incubator_2.Models;
+using Models;
+using Font = Xceed.Document.NET.Font;
 
 namespace Common
 {
@@ -54,6 +59,44 @@ namespace Common
                 MakeReplace();
             }
             doc.Save();
+        }
+        public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, bool isAsync = true)
+        {
+            List<SGeneratedTag> filledTags = new();
+            List<string> tagsToReplace = new List<string>();
+            List<string> values = new List<string>();
+            foreach (TableFiller tab in tableFillers)
+            {
+                this.CreateTable(tab.tag.name, tab.DataTable);
+                filledTags.Add(tab.GetAsGeneratedTag());
+            }
+            foreach (UC_TagFiller tf in tagFillers)
+            {
+                int id = tf.GetId();
+                string name = tf.GetTagName();
+                string value = tf.GetValue();
+                if (tf.tag.type != TypeOfTag.LocalConstant)
+                {
+                    if (tf.tag.type == TypeOfTag.Generator || tf.tag.type == TypeOfTag.Date)
+                    {
+                        SGeneratedTag gtg = new();
+                        gtg.tag = id;
+                        gtg.value = tf.GetData();
+                        filledTags.Add(gtg);
+                    }
+                    else
+                    {
+                        SGeneratedTag gt = new();
+                        gt.tag = id;
+                        gt.value = value;
+                        filledTags.Add(gt);
+                    }
+                }
+                tagsToReplace.Add(name);
+                values.Add(value);
+            }
+            this.Replace(tagsToReplace, values, isAsync);
+            return filledTags;
         }
         //public void MakeFormatting(DocX doc)
         //{
