@@ -21,7 +21,7 @@ namespace Incubator_2
             try
             {
                 
-                if (DateTime.Now > DateTime.Parse("20.05.2024"))
+                if (DateTime.Now > DateTime.Parse("21.05.2024"))
                 {
                     ProgramState.ShowErrorDialog("Истек предельный срок для лицензии этой версии. Обновите программу.", "Лицензия истекла");
                     App.Current.Shutdown();

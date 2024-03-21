@@ -106,7 +106,6 @@ namespace Incubator_2.ViewModels
                     case TypeOfTag.LocalConstant:
                     case TypeOfTag.HiddenField:
                     case TypeOfTag.Generator:
-                    case TypeOfTag.Table:
                         return Visibility.Collapsed;
                 }
             }

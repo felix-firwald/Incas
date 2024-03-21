@@ -43,6 +43,8 @@ namespace Incubator_2.Forms.Templates
         public int TemplateId;
         public SGeneratedDocument Result;
         private string resultText;
+        public delegate void ValueChanged(object sender);
+        public event ValueChanged OnValueChanged;
         public Generator() // new
         {
             InitializeComponent();
@@ -62,6 +64,7 @@ namespace Incubator_2.Forms.Templates
             {
                 Result = data;
                 SetWarning(warning);
+                OnValueChanged?.Invoke(this);
             }
             catch (Exception)
             {
@@ -95,6 +98,7 @@ namespace Incubator_2.Forms.Templates
             this.InProcess.Visibility = Visibility.Collapsed;
             this.Contented.Visibility = Visibility.Visible;
             this.OpenButton.IsEnabled = true;
+            OnValueChanged?.Invoke(this);
         }
         private void SetNotContented()
         {

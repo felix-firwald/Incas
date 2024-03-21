@@ -56,7 +56,7 @@
             </ComboBox.ContextMenu>
         </ComboBox>
         <CustomControls:SelectionBox x:Name="SelectionBox" Grid.Column="1" Visibility="Hidden" OnValueChanged="SelectionBox_OnValueChanged" ToolTipService.InitialShowDelay="180"/>
-        <templates:Generator x:Name="Generator" Grid.Column="1" Visibility="Hidden" />
+        <templates:Generator x:Name="Generator" OnValueChanged="Generator_OnValueChanged" Grid.Column="1" Visibility="Hidden" />
         <DatePicker x:Name="DatePicker" Style="{DynamicResource DatePickerMain}" SelectedDateChanged="DatePicker_SelectedDateChanged" Visibility="Hidden" Grid.Column="1" Margin="5,5,5,5" Cursor="">
             <DatePicker.ContextMenu>
                 <ContextMenu>

@@ -410,5 +410,10 @@ namespace Incubator_2.Forms
         {
             CheckForScriptOnUpdate();
         }
+
+        private void Generator_OnValueChanged(object sender)
+        {
+            CheckForScriptOnUpdate();
+        }
     }
 }

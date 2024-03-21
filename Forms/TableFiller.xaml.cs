@@ -1,7 +1,9 @@
 ﻿using Common;
+using Incubator_2.Common;
 using Incubator_2.Models;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows.CustomDatabase;
+using Microsoft.Scripting.Hosting;
 using Models;
 using Newtonsoft.Json;
 using System;
@@ -29,6 +31,7 @@ namespace Incubator_2.Forms
     {
         private VM_TableFiller vm;
         public Tag tag;
+        private CommandSettings command;
         public DataTable DataTable { get { return vm.Grid; } }
         public TableFiller(Tag t)
         {
@@ -36,6 +39,18 @@ namespace Incubator_2.Forms
             tag = t;
             vm = new VM_TableFiller(t);
             this.DataContext = vm;
+            command = t.GetCommand();
+            this.Description.Content = t.description;
+            MakeButton();
+        }
+        private void MakeButton()
+        {
+            if (command.ScriptType == ScriptType.Button)
+            {
+                this.CommandButtonIcon.Data = FindResource(command.Icon.ToString()) as PathGeometry;
+                this.CommandButton.Visibility = Visibility.Visible;
+                this.CommandButtonText.Content = command.Name;
+            }
         }
         public void SetData(DataTable dt)
         {
@@ -56,12 +71,31 @@ namespace Incubator_2.Forms
             result.value = GetData();
             return result;
         }
-
-        private void InsertClick(object sender, RoutedEventArgs e)
+        private void RunScript()
         {
-            BindingSelector bs = ProgramState.ShowBindingSelector();
-            DatabaseSelection s = new(bs.SelectedDatabase, bs.SelectedTable, "");
-            s.ShowDialog();
+            try
+            {
+                string json = JsonConvert.SerializeObject(this.vm.Grid);
+                List<Dictionary<string, string>> data = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(json);
+                ScriptScope scope = ScriptManager.GetEngine().CreateScope();
+                scope.SetVariable("input_data", data);
+                ScriptManager.Execute(command.Script, scope);
+                List<Dictionary<string, string>> result = scope.GetVariable("output");
+                DataTable dt = JsonConvert.DeserializeObject<DataTable>(JsonConvert.SerializeObject(result));
+                SetData(dt);
+            }
+            catch (Exception ex)
+            {
+
+                ProgramState.ShowErrorDialog("При обработке скрипта произошла ошибка:\n" + ex.Message);
+            }
+
         }
+
+        private void CommandClick(object sender, RoutedEventArgs e)
+        {
+            RunScript();
+        }
+
     }
 }

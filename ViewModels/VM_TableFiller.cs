@@ -29,7 +29,7 @@ namespace Incubator_2.ViewModels
             set
             {
                 _data = value;
-                OnPropertyChanged(nameof(DataTable));
+                OnPropertyChanged(nameof(Grid));
             }
         }
     }
