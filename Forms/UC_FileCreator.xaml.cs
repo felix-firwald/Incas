@@ -20,6 +20,7 @@ namespace Incubator_2.Forms
     /// </summary>
     public partial class UC_FileCreator : UserControl
     {
+        private SGeneratedDocument document;
         private bool IsCollapsed = false;
         private Template template;
         private List<Tag> tags;
@@ -116,15 +117,17 @@ namespace Incubator_2.Forms
             });
         }
         
-        public void ApplyRecord(string fileName, List<SGeneratedTag> record)
+        public void ApplyRecord(SGeneratedDocument record)
         {
-            if (record == null)
+            if (record.filledTagsString == null)
             {
                 ProgramState.ShowDatabaseErrorDialog("Не удалось получить информацию о полях документа.", "Запись повреждена");
                 return;
             }
-            this.Filename.Text = fileName;
-            foreach (SGeneratedTag tag in record)
+            this.document.id = record.id;
+            this.document.status = record.status;
+            this.Filename.Text = record.fileName;
+            foreach (SGeneratedTag tag in record.GetFilledTags())
             {
                 foreach (UC_TagFiller tagfiller in TagFillers)
                 {
@@ -142,6 +145,10 @@ namespace Incubator_2.Forms
                         break;
                     }
                 }
+            }
+            if (record.status == DocumentStatus.Done)
+            {
+                this.ContentPanel.IsEnabled = false;
             }
         }
         public void ApplyFromExcel(Dictionary<string, string> pairs)
@@ -230,6 +237,11 @@ namespace Incubator_2.Forms
         {
             try
             {
+                if (this.document.status == DocumentStatus.Done)
+                {
+                    ProgramState.ShowAccessErrorDialog("Документ находится в статусе \"Завершен\", он будет пропущен.");
+                    return false;
+                }
                 bool result = true;
                 if (!string.IsNullOrEmpty(validateScript))
                 {
@@ -292,7 +304,7 @@ namespace Incubator_2.Forms
                 ProgramState.ShowErrorDialog("При выполнении скрипта возникла ошибка:\n" + ex.Message);
             }
         }
-        public void CreateFile(string newPath, bool async = true, bool save = true)
+        public void CreateFile(string newPath, string category, bool async = true, bool save = true)
         {
             try
             {
@@ -311,9 +323,10 @@ namespace Incubator_2.Forms
                     {
                         using (GeneratedDocument doc = new())
                         {
+                            doc.id = document.id;
                             doc.fileName = this.Filename.Text;
                             doc.template = this.template.id;
-                            doc.templateName = this.template.name;
+                            doc.templateName = category;
                             doc.SaveFilledTags(filledTags);
                             doc.AddRecord();
                         }
@@ -330,7 +343,6 @@ namespace Incubator_2.Forms
             {
                 ProgramState.ShowErrorDialog(e.Message);
             }
-
         }
 
         public void RenameByTag(string tag, string prefix = "", string postfix = "", bool additive = false)
@@ -414,8 +426,13 @@ namespace Incubator_2.Forms
 
         private void OpenFileClick(object sender, MouseButtonEventArgs e)
         {
+            if (this.document.status == DocumentStatus.Done)
+            {
+                ProgramState.ShowAccessErrorDialog("Функция генерации документа недоступна, пока он находится в статусе \"Завершен\".");
+                return;
+            }
             ProgramState.ShowWaitCursor();
-            CreateFile(ProgramState.TemplatesRuntime, false, false);
+            CreateFile(ProgramState.TemplatesRuntime, "", false, false);
             string filename = $"{ProgramState.TemplatesRuntime}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
             try
             {

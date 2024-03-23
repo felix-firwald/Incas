@@ -33,6 +33,7 @@ namespace Incubator_2.Windows
             InitializeComponent();
             this.template = t;
             this.Title = t.name;
+            this.CategoryName.Text = t.name;
             LoadTags();
             AddFileCreator();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
@@ -45,9 +46,10 @@ namespace Incubator_2.Windows
             this.Title = t.name;
             LoadTags();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
+            this.CategoryName.Text = records[0].templateName;
             foreach (SGeneratedDocument item in records)
             {
-                AddFileCreator().ApplyRecord(item.fileName, item.GetFilledTags());
+                AddFileCreator().ApplyRecord(item);
             }
             ProgramState.ShowWaitCursor(false);
         }
@@ -105,10 +107,11 @@ namespace Incubator_2.Windows
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             foreach (UC_FileCreator fc in creators)
             {
-                fc.CreateFile(this.dir.Text);
+                fc.CreateFile(this.dir.Text, this.CategoryName.Text);
             }
             DatabaseManager.ExecuteBackground();
             Mouse.OverrideCursor = null;
+            this.Close();
             ProgramState.OpenFolder(this.dir.Text);
         }
 

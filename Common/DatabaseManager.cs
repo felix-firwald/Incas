@@ -58,7 +58,6 @@ namespace Common
                 q.DBPath = customName;
             }
             q.AddCustomRequest(GetTaskDefinition(atc))
-             .AddCustomRequest(GetSubtaskDefinition(atc))
              .AddCustomRequest(GetTemplateDefinition(atc))
              .AddCustomRequest(GetTagDefinition(atc))
              .AddCustomRequest(GetGeneratedDocumentDefinition(atc))
@@ -197,12 +196,6 @@ namespace Common
         private static string GetTaskDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Task), "Tasks");
-            return atc.GetQueryText();
-        }
-        private static string GetSubtaskDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Subtask), "Subtasks");
-            atc.SetFK("task", "Tasks", "id");
             return atc.GetQueryText();
         }
         private static string GetTemplateDefinition(AutoTableCreator atc)

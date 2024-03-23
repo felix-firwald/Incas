@@ -9,6 +9,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Incubator_2.Models
 {
@@ -17,6 +18,14 @@ namespace Incubator_2.Models
         public int tag { get; set; }
         public string value { get; set; }
     }
+    public enum DocumentStatus
+    {
+        Draft = 0,
+        Created = 1,
+        Approved = 2,
+        Printed = 3,
+        Done = 4
+    }
     public struct SGeneratedDocument
     {
         public int id;
@@ -24,10 +33,10 @@ namespace Incubator_2.Models
         public string templateName;
         public DateTime generatedTime;
         public string fileName;
-        public string reference;
+        public DocumentStatus status { get; set; }
         public List<SGeneratedTag> filledTags;
         public string filledTagsString;
-
+        public string author;
         public List<SGeneratedTag> GetFilledTags()
         {
             if (filledTags == null)
@@ -49,8 +58,9 @@ namespace Incubator_2.Models
             d.templateName = templateName;
             d.generatedTime = generatedTime;
             d.fileName = fileName;
-            d.reference = reference;
+            d.status = status;
             d.content = filledTagsString;
+            d.author = author;
             return d;
         }
     }
@@ -61,8 +71,9 @@ namespace Incubator_2.Models
         public string templateName { get; set; }
         public DateTime generatedTime { get; set; }
         public string fileName { get; set; }
-        public string reference { get; set; }
+        public DocumentStatus status { get; set; }
         public string content { get; set; }
+        public string author { get; set; }
 
         public GeneratedDocument()
         {
@@ -76,7 +87,8 @@ namespace Incubator_2.Models
             d.templateName = templateName;
             d.generatedTime = generatedTime;
             d.fileName = fileName;
-            d.reference = reference;
+            d.status = status;
+            d.author = author;
             d.filledTagsString = content;
             return d;
         }
@@ -105,6 +117,7 @@ namespace Incubator_2.Models
             foreach (DataRow dr in dt.Rows)
             {
                 this.Serialize(dr);
+                this.status = ParseEnum(dr["status"], DocumentStatus.Draft);
                 result.Add(AsStruct());
             }
             return result;
@@ -126,25 +139,59 @@ namespace Incubator_2.Models
         }
         public void AddRecord()
         {
+            if (this.id > 0)
+            {
+                UpdateRecord();
+                return;
+            }
+            author = ProgramState.CurrentUser.fullname;
             generatedTime = DateTime.Now;
-            reference = $"{generatedTime.ToString("yyMMddHHmmss")}{ProgramState.GenerateSlug(4)}";
+            //reference = $"{generatedTime.ToString("yyMMddHHmmss")}{ProgramState.GenerateSlug(4)}";
             StartCommand()
                 .Insert(new()
                 {
                     {nameof(template), template.ToString() },
                     {nameof(templateName), templateName },
-                    {nameof(generatedTime), generatedTime.ToString() },
+                    {nameof(generatedTime), generatedTime.ToString("yyyy.MM.dd HH:mm") },
                     {nameof(fileName), fileName },
                     {nameof(content), content },
+                    {nameof(author), author }
                 })
                 .Accumulate();
         }
+        public void UpdateRecord()
+        {
+            generatedTime = DateTime.Now;
+            author = ProgramState.CurrentUser.fullname;
+            StartCommand()
+                .Update(nameof(content), content)
+                .Update(nameof(fileName), fileName)
+                .Update(nameof(author), author)
+                .Update(nameof(status), status.ToString())
+                .Update(nameof(templateName), templateName)
+                .WhereEqual(nameof(id), id)
+                .ExecuteVoid();
+        }
         public void RemoveRecord()
         {
-            StartCommand()
-                .Delete()
-                .WhereEqual("id", id.ToString())
-                .ExecuteVoid();
+            switch (status)
+            {
+                case DocumentStatus.Draft:
+                case DocumentStatus.Created:
+                case DocumentStatus.Approved:
+                    StartCommand()
+                        .Delete()
+                        .WhereEqual("id", id.ToString())
+                        .ExecuteVoid();
+                    break;
+                case DocumentStatus.Printed:
+                    ProgramState.ShowAccessErrorDialog($"Документ \"{fileName}\" помечен, как распечатанный. Распечатанный документ нельзя удалить!");
+                    break;
+                case DocumentStatus.Done:
+                    ProgramState.ShowAccessErrorDialog($"Документ \"{fileName}\" помечен, как завершенный. Завершенный документ нельзя удалить!");
+                    break;
+            }
+            
         }
         public void RemoveRecords(List<int> ids)
         {

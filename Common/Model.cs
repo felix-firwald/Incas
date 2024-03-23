@@ -204,9 +204,19 @@ namespace Common
                 }
             }
         }
+        protected static T ParseEnum<T>(object value, T defaultValue)
+        {
+            string input = value.ToString();
+            if (string.IsNullOrEmpty(input))
+            {
+                return defaultValue;
+            }
+            return (T)Enum.Parse(typeof(T), value.ToString(), true);
+
+        }
 
         #endregion
-        
+
         private DataRow GetOne(DataTable dt)
         {
             try

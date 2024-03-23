@@ -156,7 +156,6 @@
     <Style x:Key="SeparatorMain" TargetType="{x:Type Separator}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Background" Value="{StaticResource Element}"/>
+        <Setter Property="Background" Value="{StaticResource LightBlack}"/>
     </Style>
 </ResourceDictionary>

@@ -246,21 +246,6 @@ namespace Incubator_2.Windows
             }
         }
 
-        private void AddTransferClick(object sender, RoutedEventArgs e)
-        {
-            List<Tag> tags = new();
-            using (Tag tag = new Tag())
-            {
-                foreach (Tag t in tag.GetAllTagsByTemplate(template.id))
-                {
-                    tags.Add(t);
-                }
-            }
-
-            CreateTransfer ct = new(tags);
-            ct.ShowDialog();
-        }
-
         private void GetMoreInfoClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             ProgramState.OpenWebPage("https://teletype.in/@incas/UM8Uf15j2fB");
