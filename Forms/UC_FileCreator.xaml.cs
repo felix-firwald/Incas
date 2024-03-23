@@ -30,6 +30,8 @@ namespace Incubator_2.Forms
 
         public delegate void TagAction(int tag, string value);
         public event TagAction OnInsertRequested;
+        public delegate void FileCreatorAction(UC_FileCreator creator);
+        public event FileCreatorAction OnCreatorDestroy;
         public delegate void TagActionRecalculate(string tag);
         public event TagActionRecalculate OnRenameRequested;
         public bool SelectorChecked { get { return (bool)this.Selector.IsChecked; } }
@@ -197,8 +199,7 @@ namespace Incubator_2.Forms
         }
         private void Remove(object sender, MouseButtonEventArgs e)
         {
-            Panel parentPanel = (Panel)this.Parent;
-            parentPanel.Children.Remove(this);
+            OnCreatorDestroy?.Invoke(this);
         }
         private string RemoveUnresolvedChars(string input)
         {

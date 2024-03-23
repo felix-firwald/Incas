@@ -66,9 +66,15 @@ namespace Incubator_2.Windows
             UC_FileCreator fc = new UC_FileCreator(template, tags);
             fc.OnInsertRequested += InsertValuesByTag;
             fc.OnRenameRequested += SimpleRecalculateNames;
+            fc.OnCreatorDestroy += OnCreatorDestroy;
             this.ContentPanel.Children.Add(fc);
             creators.Add(fc);
             return fc;
+        }
+
+        private void OnCreatorDestroy(UC_FileCreator creator)
+        {
+            this.ContentPanel.Children.Remove(creator);
         }
 
         private void InsertValuesByTag(int tag, string value)
@@ -105,7 +111,7 @@ namespace Incubator_2.Windows
         private void CreateFiles()
         {
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-            foreach (UC_FileCreator fc in creators)
+            foreach (UC_FileCreator fc in this.ContentPanel.Children)
             {
                 fc.CreateFile(this.dir.Text, this.CategoryName.Text);
             }
