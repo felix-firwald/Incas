@@ -11,6 +11,8 @@ namespace Models
     {
         public string Validation;
         public string OnSaving;
+        public string NumberPrefix;
+        public string NumberPostfix;
     }
     public enum TemplateType
     {
@@ -53,8 +55,12 @@ namespace Models
 
         public Template()
         {
+            tableName = "Templates";           
+        }
+        public Template(int newId)
+        {
             tableName = "Templates";
-            
+            GetTemplateById(newId);
         }
         public STemplate AsStruct()
         {

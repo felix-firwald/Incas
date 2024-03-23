@@ -26,8 +26,7 @@ namespace Incubator_2.Forms
         private List<Tag> tags;
         List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
         List<TableFiller> Tables = new List<TableFiller>();
-        private string validateScript;
-        private string savingScript;
+        private TemplateSettings templateSettings;
 
         public delegate void TagAction(int tag, string value);
         public event TagAction OnInsertRequested;
@@ -40,8 +39,9 @@ namespace Incubator_2.Forms
             this.tags = tagsList;
             this.template = templ;
             FillContentPanel();
-            validateScript = templ.GetTemplateSettings().Validation;
-            savingScript = templ.GetTemplateSettings().OnSaving;
+            templateSettings = templ.GetTemplateSettings();
+            this.NumberPrefix.Content = templateSettings.NumberPrefix;
+            this.NumberPostfix.Content = templateSettings.NumberPostfix;
         }
 
         private void FillContentPanel()
@@ -127,6 +127,7 @@ namespace Incubator_2.Forms
             this.document.id = record.id;
             this.document.status = record.status;
             this.Filename.Text = record.fileName;
+            this.Number.Text = record.number;
             foreach (SGeneratedTag tag in record.GetFilledTags())
             {
                 foreach (UC_TagFiller tagfiller in TagFillers)
@@ -146,9 +147,15 @@ namespace Incubator_2.Forms
                     }
                 }
             }
-            if (record.status == DocumentStatus.Done)
+            switch (record.status)
             {
-                this.ContentPanel.IsEnabled = false;
+                case DocumentStatus.Approved:
+                    this.Number.IsEnabled = false;
+                    break;
+                case DocumentStatus.Done:
+                    this.ContentPanel.IsEnabled = false;
+                    this.Number.IsEnabled = false;
+                    break;
             }
         }
         public void ApplyFromExcel(Dictionary<string, string> pairs)
@@ -211,6 +218,7 @@ namespace Incubator_2.Forms
         {
             SGeneratedDocument result = new();
             result.template = this.template.id;
+            result.number = this.Number.Text;
             result.fileName = this.Filename.Text;
             List<SGeneratedTag> filledTags = new();
             foreach (UC_TagFiller tf in TagFillers)
@@ -243,17 +251,18 @@ namespace Incubator_2.Forms
                     return false;
                 }
                 bool result = true;
-                if (!string.IsNullOrEmpty(validateScript))
+                if (!string.IsNullOrEmpty(templateSettings.Validation))
                 {
                     ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                     scope.SetVariable("result", true);
+                    scope.SetVariable("document_number", this.Number.Text);
                     scope.SetVariable("fields", new List<string>());
                     scope.SetVariable("failed_text", "Текст не установлен.");
                     foreach (UC_TagFiller tf in TagFillers)
                     {
                         scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                     }
-                    ScriptManager.Execute(validateScript, scope);
+                    ScriptManager.Execute(templateSettings.Validation, scope);
                     result = scope.GetVariable("result");
                     if (!result)
                     {
@@ -280,16 +289,18 @@ namespace Incubator_2.Forms
         {
             try
             {
-                if (!string.IsNullOrEmpty(savingScript))
+                if (!string.IsNullOrEmpty(templateSettings.OnSaving))
                 {
-                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                    scope.SetVariable("file_name", this.Filename.Text);
+                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();                    
                     foreach (UC_TagFiller tf in TagFillers)
                     {
                         scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                     }
-                    ScriptManager.Execute(savingScript, scope);
+                    scope.SetVariable("file_name", this.Filename.Text);
+                    scope.SetVariable("document_number", this.Number.Text);
+                    ScriptManager.Execute(templateSettings.OnSaving, scope);
                     this.Filename.Text = scope.GetVariable("file_name");
+                    this.Number.Text = scope.GetVariable("document_number");
                     foreach (UC_TagFiller tf in TagFillers)
                     {
                         if (tf.tag.type != TypeOfTag.Generator)
@@ -304,6 +315,10 @@ namespace Incubator_2.Forms
                 ProgramState.ShowErrorDialog("При выполнении скрипта возникла ошибка:\n" + ex.Message);
             }
         }
+        public string GetNumber()
+        {
+            return this.templateSettings.NumberPrefix + this.Number.Text + this.templateSettings.NumberPostfix;
+        }
         public void CreateFile(string newPath, string category, bool async = true, bool save = true)
         {
             try
@@ -317,13 +332,15 @@ namespace Incubator_2.Forms
                     List<SGeneratedTag> filledTags = new();
                     this.Dispatcher.Invoke(() =>
                     {
-                        filledTags = wt.GenerateDocument(TagFillers, Tables, async);
+                        filledTags = wt.GenerateDocument(TagFillers, Tables, GetNumber(), async);
                     });
                     if (save)
                     {
                         using (GeneratedDocument doc = new())
                         {
                             doc.id = document.id;
+                            doc.number = this.Number.Text;
+                            doc.fullNumber = GetNumber();
                             doc.fileName = this.Filename.Text;
                             doc.template = this.template.id;
                             doc.templateName = category;

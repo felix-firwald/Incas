@@ -31,14 +31,19 @@ namespace Incubator_2.Forms
             InitializeComponent();
             record = rec;
             this.Counter.Content = counter;
-            this.Filename.Content = record.fileName;
+            SetTitle();
             this.AuthorName.Text = record.author;
             this.GenerationTime.Content = record.generatedTime.ToString("f") + ", Автор:";
             this.StatusBar.Value = (int)record.status;
-            if (record.status == DocumentStatus.Done )
+            if (record.status == DocumentStatus.Done)
             {
                 this.Selector.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private void SetTitle()
+        {
+            this.Filename.Content = $"N {record.fullNumber} {record.fileName}";
         }
 
         private void Selector_Checked(object sender, RoutedEventArgs e)
@@ -131,14 +136,36 @@ namespace Incubator_2.Forms
                 }
             }
         }
+        private bool CheckUnique()
+        {
+            bool result = this.record.AsModel().CheckUniqueNumber();
+            if (!result)
+            {
+                ProgramState.ShowExclamationDialog("Изменение статуса невозможно: номер документа не уникален!", "Сохранение прервано");
+            }
+            return result;
+        }
 
         private void SetStatusClick(object sender, RoutedEventArgs e)
         {
             DocumentStatus newStatus = (DocumentStatus)Enum.Parse(typeof(DocumentStatus), ((MenuItem)sender).Tag.ToString(), true);
-            if (newStatus < record.status)
+            if (newStatus < record.status && !Permission.IsUserHavePermission(PermissionGroup.Moderator))
             {
-                ProgramState.ShowAccessErrorDialog("Нельзя откатить статус документа, не обладая правами администратора!");
+                ProgramState.ShowAccessErrorDialog("Нельзя откатить статус документа, не обладая правами модератора!");
                 return;
+            }
+            switch (newStatus)
+            {
+
+                case DocumentStatus.Approved:
+                    if (!CheckUnique()) return;
+                    break;
+                case DocumentStatus.Printed:
+                    if (!CheckUnique()) return;
+                    break;
+                case DocumentStatus.Done:
+                    if (!CheckUnique()) return;
+                    break;
             }
             this.Selector.IsChecked = false;
             using (GeneratedDocument gd = record.AsModel())
@@ -149,6 +176,20 @@ namespace Incubator_2.Forms
                 this.StatusBar.Value = (int)record.status;
             }
 
+        }
+
+        private void ChangeNumberClick(object sender, RoutedEventArgs e)
+        {
+            string input = ProgramState.ShowInputBox("Новый номер", "Введите номер без префикса и постфикса");
+            TemplateSettings settings = new Template(this.record.template).GetTemplateSettings();
+            using (GeneratedDocument gd = record.AsModel())
+            {
+                gd.number = input;
+                gd.fullNumber = settings.NumberPrefix + input + settings.NumberPostfix; ;
+                gd.UpdateRecord();
+                record = gd.AsStruct();
+            }
+            SetTitle();
         }
     }
 }

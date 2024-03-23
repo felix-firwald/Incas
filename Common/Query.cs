@@ -454,6 +454,16 @@ namespace Common
             Result += ")";
             return this;
         }
+        public int GetCount(string column, string table, string condition)
+        {
+            Result = $"SELECT Count([{column}]) AS count FROM [{table}]";
+            if (!string.IsNullOrEmpty(condition))
+            {
+                Result += ("WHERE " + condition);
+            }
+            DataRow dr = this.Execute().Rows[0];
+            return int.Parse(dr["count"].ToString());
+        }
 
         #region Connection and Request
         public Query Combine(Query query)

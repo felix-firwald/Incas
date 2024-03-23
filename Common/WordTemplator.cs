@@ -60,11 +60,11 @@ namespace Common
             }
             doc.Save();
         }
-        public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, bool isAsync = true)
+        public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true)
         {
             List<SGeneratedTag> filledTags = new();
-            List<string> tagsToReplace = new List<string>();
-            List<string> values = new List<string>();
+            List<string> tagsToReplace = new List<string> { "N" };
+            List<string> values = new List<string> { number };
             foreach (TableFiller tab in tableFillers)
             {
                 this.CreateTable(tab.tag.name, tab.DataTable);

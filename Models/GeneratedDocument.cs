@@ -33,6 +33,8 @@ namespace Incubator_2.Models
         public string templateName;
         public DateTime generatedTime;
         public string fileName;
+        public string number;
+        public string fullNumber;
         public DocumentStatus status { get; set; }
         public List<SGeneratedTag> filledTags;
         public string filledTagsString;
@@ -58,6 +60,8 @@ namespace Incubator_2.Models
             d.templateName = templateName;
             d.generatedTime = generatedTime;
             d.fileName = fileName;
+            d.number = number;
+            d.fullNumber = fullNumber;
             d.status = status;
             d.content = filledTagsString;
             d.author = author;
@@ -71,6 +75,8 @@ namespace Incubator_2.Models
         public string templateName { get; set; }
         public DateTime generatedTime { get; set; }
         public string fileName { get; set; }
+        public string number { get; set; }
+        public string fullNumber { get; set; }
         public DocumentStatus status { get; set; }
         public string content { get; set; }
         public string author { get; set; }
@@ -87,6 +93,8 @@ namespace Incubator_2.Models
             d.templateName = templateName;
             d.generatedTime = generatedTime;
             d.fileName = fileName;
+            d.number = number;
+            d.fullNumber = fullNumber;
             d.status = status;
             d.author = author;
             d.filledTagsString = content;
@@ -154,6 +162,7 @@ namespace Incubator_2.Models
                     {nameof(templateName), templateName },
                     {nameof(generatedTime), generatedTime.ToString("yyyy.MM.dd HH:mm") },
                     {nameof(fileName), fileName },
+                    {nameof(number), number },
                     {nameof(content), content },
                     {nameof(author), author }
                 })
@@ -167,10 +176,16 @@ namespace Incubator_2.Models
                 .Update(nameof(content), content)
                 .Update(nameof(fileName), fileName)
                 .Update(nameof(author), author)
+                .Update(nameof(number), number)
+                .Update(nameof(fullNumber), fullNumber)
                 .Update(nameof(status), status.ToString())
                 .Update(nameof(templateName), templateName)
                 .WhereEqual(nameof(id), id)
                 .ExecuteVoid();
+        }
+        public bool CheckUniqueNumber()
+        {
+            return StartCommand().GetCount(nameof(fullNumber), tableName, $"fullNumber = '{fullNumber}' AND status IN ('Approved', 'Printed', 'Done')") < 2;
         }
         public void RemoveRecord()
         {

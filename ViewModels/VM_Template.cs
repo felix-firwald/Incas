@@ -96,6 +96,30 @@ namespace Incubator_2.ViewModels
                 OnPropertyChanged(nameof(ValidationScript));
             }
         }
+        public string NumberPrefix
+        {
+            get
+            {
+                return templateSettings.NumberPrefix;
+            }
+            set
+            {
+                templateSettings.NumberPrefix = value;
+                OnPropertyChanged(nameof(NumberPrefix));
+            }
+        }
+        public string NumberPostfix
+        {
+            get
+            {
+                return templateSettings.NumberPostfix;
+            }
+            set
+            {
+                templateSettings.NumberPostfix = value;
+                OnPropertyChanged(nameof(NumberPostfix));
+            }
+        }
         public TemplateSettings GetSettings()
         {
             return templateSettings;

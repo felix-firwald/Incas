@@ -47,6 +47,7 @@
                     <MenuItem Header="Распечатан" Click="SetStatusClick" Tag="Printed"/>
                     <MenuItem Header="Завершен" Click="SetStatusClick" Tag="Done"/>
                 </MenuItem>
+                <MenuItem Header="Сменить номер документа" Click="ChangeNumberClick"/>
                 <Separator Background="{StaticResource LightBlack}"/>
                 <MenuItem Header="Создать и открыть файл" Click="CreateFileClick"/>
                 <MenuItem Header="Создать и открыть файл у другого пользователя" Click="CreateFileForAnotherClick"/>
