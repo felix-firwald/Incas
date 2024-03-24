@@ -21,12 +21,13 @@ namespace Incubator_2
             try
             {
                 
-                if (DateTime.Now > DateTime.Parse("22.05.2024"))
+                if (DateTime.Now > DateTime.Parse("23.05.2024"))
                 {
                     ProgramState.ShowErrorDialog("Истек предельный срок для лицензии этой версии. Обновите программу.", "Лицензия истекла");
                     App.Current.Shutdown();
                 }
                 OpenIncubator oi = new OpenIncubator();
+                
                 if (oi.ShowDialog() == false)
                 {
                     

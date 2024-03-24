@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
+using System;
 using System.Windows;
+using Incubator_2.ViewModels;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Incubator_2.Windows
 {
@@ -19,9 +11,37 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class ContainerWindow : Window
     {
-        public ContainerWindow()
+        public ContainerWindow(UserControl control, string title)
         {
             InitializeComponent();
+            this.DataContext = new ContainerWindowViewModel(this);
+            this.MinHeight = control.MinHeight + 40;
+            this.MinWidth = control.MinWidth;
+            this.Title = title;
+            this.ContentPanel.Child = control;
         }
+
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
+        //private void MinimizeClick(object sender, RoutedEventArgs e)
+        //{
+        //    WindowState = WindowState.Minimized;
+        //}
+        //private void MaximizeClick(object sender, RoutedEventArgs e)
+        //{
+        //    WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        //}
+        //private void CloseClick(object sender, RoutedEventArgs e)
+        //{
+        //    this.Close();
+        //}
+
+        //private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        //{
+        //    this.DragMove();
+        //}
     }
 }

@@ -19,6 +19,7 @@ using System.Threading;
 using Incubator_2.Windows.Selectors;
 using System.Media;
 using Microsoft.Scripting.Hosting;
+using System.Windows.Controls;
 
 
 namespace Common
@@ -451,6 +452,16 @@ namespace Common
                 dialog.ShowDialog();     
             });
             return dialog.Input;
+        }
+        public static void ShowWindow(UserControl control, string title)
+        {
+            ContainerWindow cw = new(control, title);
+            cw.Show();
+        }
+        public static void ShowWindowDialog(UserControl control, string title)
+        {
+            ContainerWindow cw = new(control, title);
+            cw.ShowDialog();
         }
         public static BindingSelector ShowBindingSelector()
         {

@@ -1,6 +1,7 @@
 ﻿using Common;
 using DocumentFormat.OpenXml.InkML;
 using Incubator_2.Common;
+using Incubator_2.Forms;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
 using Incubator_2.Windows.ToolBar;

@@ -1,7 +1,7 @@
 ﻿using Common;
-//using System.AddIn.Contract;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Incubator_2.Common
 {
+    [Export]
     public static class PluginManager
     {
         public static void GetAddIns()
