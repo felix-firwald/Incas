@@ -11,7 +11,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Telegram.Bot.Types;
 
 namespace Incubator_2.Forms
 {
@@ -200,6 +199,7 @@ namespace Incubator_2.Forms
         private void Remove(object sender, MouseButtonEventArgs e)
         {
             OnCreatorDestroy?.Invoke(this);
+
         }
         private string RemoveUnresolvedChars(string input)
         {

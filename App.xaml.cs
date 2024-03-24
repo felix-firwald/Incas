@@ -1,12 +1,8 @@
 ﻿using Common;
-using Incubator_2.Common;
 using Incubator_2.Models;
 using Incubator_2.Windows;
-using Incubator_2.Windows.ToolBar;
 using System;
-using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Documents;
 
 namespace Incubator_2
 {
@@ -21,7 +17,7 @@ namespace Incubator_2
             try
             {
                 
-                if (DateTime.Now > DateTime.Parse("23.05.2024"))
+                if (DateTime.Now > DateTime.Parse("24.05.2024"))
                 {
                     ProgramState.ShowErrorDialog("Истек предельный срок для лицензии этой версии. Обновите программу.", "Лицензия истекла");
                     App.Current.Shutdown();

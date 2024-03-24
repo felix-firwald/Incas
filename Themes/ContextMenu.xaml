@@ -158,4 +158,22 @@
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Background" Value="{StaticResource LightBlack}"/>
     </Style>
+    <Style x:Key="PopupMain" TargetType="{x:Type Popup}">
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="AllowsTransparency" Value="True"/>
+    </Style>
+    <Style x:Key="PopupContentStyle" TargetType="{x:Type ContentControl}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Border CornerRadius="6" Margin="12" Padding="5" Background="{StaticResource Black}" BorderBrush="{DynamicResource LightBlack}" BorderThickness="1" UseLayoutRounding="True">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#1d1d1f" BlurRadius="2" ShadowDepth="5" Opacity="0.5"/>
+                        </Border.Effect>
+                        <ContentPresenter />
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

@@ -1,14 +1,11 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
 using Incubator_2.Models;
 using Incubator_2.Windows;
 using Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -39,6 +36,7 @@ namespace Incubator_2.Forms
             {
                 this.Selector.Visibility = Visibility.Collapsed;
             }
+            SetTooltip();
         }
 
         private void SetTitle()
@@ -136,6 +134,29 @@ namespace Incubator_2.Forms
                 }
             }
         }
+        private void SetTooltip()
+        {
+            string status = "";
+            switch (record.status)
+            {
+                case DocumentStatus.Draft:
+                    status = "Черновик\nДокумент можно полностью редактировать";
+                    break;
+                case DocumentStatus.Created:
+                    status = "Создан\nДокумент можно полностью редактировать";
+                    break;
+                case DocumentStatus.Approved:
+                    status = "Утвержден\nНомер документа изменить нельзя, поля редактировать можно";
+                    break;
+                case DocumentStatus.Printed:
+                    status = "Распечатан\nНомер документа изменить нельзя, поля редактировать можно";
+                    break;
+                case DocumentStatus.Done:
+                    status = "Готов (завершен)\nДокумент нельзя отредактировать или удалить";
+                    break;
+            }
+            this.ToolTip = "Статус документа: " + status;
+        }
         private bool CheckUnique()
         {
             bool result = this.record.AsModel().CheckUniqueNumber();
@@ -156,15 +177,20 @@ namespace Incubator_2.Forms
             }
             switch (newStatus)
             {
-
+                case DocumentStatus.Created:
+                    this.Selector.Visibility = Visibility.Visible;
+                    break;
                 case DocumentStatus.Approved:
+                    this.Selector.Visibility = Visibility.Visible;
                     if (!CheckUnique()) return;
                     break;
                 case DocumentStatus.Printed:
+                    this.Selector.Visibility = Visibility.Visible;
                     if (!CheckUnique()) return;
                     break;
                 case DocumentStatus.Done:
                     if (!CheckUnique()) return;
+                    this.Selector.Visibility = Visibility.Collapsed;
                     break;
             }
             this.Selector.IsChecked = false;
@@ -175,7 +201,7 @@ namespace Incubator_2.Forms
                 record = gd.AsStruct();
                 this.StatusBar.Value = (int)record.status;
             }
-
+            SetTooltip();
         }
 
         private void ChangeNumberClick(object sender, RoutedEventArgs e)
