@@ -132,14 +132,14 @@ namespace Common
                 if (!names.Contains(pi.Name))
                 {
                     needAlter = true;
-                    result += $"ADD COLUMN {pi.Name} {AutoTableCreator.SwitchOnType(pi.PropertyType)};\n";
+                    result += $"\nADD COLUMN {pi.Name} {AutoTableCreator.SwitchOnType(pi.PropertyType)}";
                 }
             }
             if (needAlter)
             {
                 ProgramState.ShowDatabaseErrorDialog($"В базе данных не было найдено поле для таблицы {tableName}. Таблица будет обновлена.", "Актуализация базы данных");
                 q.Clear();
-                q.AddCustomRequest(result);
+                q.AddCustomRequest(result + ";");
                 q.ExecuteVoid();
             }
         }
@@ -249,6 +249,10 @@ namespace Common
                     q.ExecuteVoid();
                 });
             } 
+        }
+        public static void NullifyBackground()
+        {
+            commandsText.Clear();
         }
         public static void TryFix(SQLiteException ex, DBConnectionType con)
         {

@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media;
 using Windows.UI.Notifications;
 
@@ -44,7 +45,7 @@ namespace Incubator_2
                     windowSet.ShowDialog();
                 }
             }
-            
+
             PlayEasterEgg();
         }
         private void PlayEasterEgg(string name = "Chicken")
@@ -88,101 +89,34 @@ namespace Incubator_2
             }
         }
 
-        private void WindowMinimize(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-        private void WindowMaximize(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (this.WindowState == WindowState.Maximized)
-            {
-                this.WindowState = WindowState.Normal;
-            }
-            else
-            {
-                this.WindowState = WindowState.Maximized;
-                this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-            }
-        }
-        private void WindowClose(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void WindowMove(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            try
-            {
-                DragMove();
-            }
-            catch
-            {
-                
-            }
-        }
-
         private void Logo_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             PlayEasterEgg("Rooster");
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
-        private void DashClick(object sender, RoutedEventArgs e)
+        private void window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            string target = ProgramState.ShowActiveUserSelector("Выберите пользователя для отправки процесса.").slug;
-            if (!string.IsNullOrEmpty(target))
+            switch (e.Key)
             {
-                Dictionary<string, string> filters = new()
-                {
-                    { "Excel", "Файлы Excel|*.xls;*.xlsx;*.xlsm" },
-                    { "Word", "Файлы Word|*.doc;*.docx" },
-                    { "Pdf", "Файлы PDF|*.pdf" }
-                };
-                string tag = ((System.Windows.Controls.Button)sender).Tag.ToString();
-                switch (tag)
-                {
-                    case "Clipboard":
-                        string result = ProgramState.ShowInputBox("Текст для буфера обмена", "Укажите текст для буфера обмена");
-                        ServerProcessor.SendCopyTextProcess(result, target);
-                        break;
-                    case "File":
-                        OpenFileDialog of = new();
-                        if (of.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                        {
-                            ServerProcessor.SendCopyFileProcess(of.SafeFileName, of.FileName, target);
-                        }
-                        break;
-                    case "Word":
-                    case "Excel":
-                    case "Pdf":
-                        OpenFileDialog of2 = new();
-                        of2.Filter = filters[tag];
-                        if (of2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                        {
-                            ServerProcessor.SendOpenFileProcess(of2.SafeFileName, of2.FileName, target);
-                        }
-                        break;
-                    case "Web":
-                        string url = ProgramState.ShowInputBox("Укажите адрес");
-                        if (!url.StartsWith("https://"))
-                        {
-                            ProgramState.ShowExclamationDialog("Введенный адрес либо не является адресом сети, либо небезопасен.", "Действие прервано");
-                            return;
-                        }
-                        ServerProcessor.SendOpenWebProcess(url, target);
-                        break;
-                }
+                case Key.F1:
+                    this.vm.DoCopyToClipBoard("");
+                    break;
+                case Key.F2:
+                    this.vm.DoCopyFile("");
+                    break;
+                case Key.F3:
+                    this.vm.DoOpenFile("Pdf");
+                    break;
+                case Key.F4:
+                    this.vm.DoOpenFile("Word");
+                    break;
+                case Key.F5:
+                    this.vm.DoOpenFile("Excel");
+                    break;
+                case Key.F6:
+                    this.vm.DoOpenWeb("");
+                    break;
             }
-        }
-
-        private void HandleCommandClick(object sender, RoutedEventArgs e)
-        {
-            CommandHandler.Handle(ProgramState.ShowInputBox("Введите команду"));
-        }
-
-        private void Logo_MouseDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
         }
     }
 }

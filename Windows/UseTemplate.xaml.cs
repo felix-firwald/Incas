@@ -113,7 +113,12 @@ namespace Incubator_2.Windows
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
             foreach (UC_FileCreator fc in this.ContentPanel.Children)
             {
-                fc.CreateFile(this.dir.Text, this.CategoryName.Text);
+                if (!fc.CreateFile(this.dir.Text, this.CategoryName.Text))
+                {
+                    Mouse.OverrideCursor = null;
+                    DatabaseManager.NullifyBackground();
+                    return;
+                }     
             }
             DatabaseManager.ExecuteBackground();
             Mouse.OverrideCursor = null;

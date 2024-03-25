@@ -21,6 +21,13 @@ using System.Windows.Shapes;
 
 namespace Incubator_2.Forms.Templates
 {
+    public class GeneratorUndefinedStateException : Exception
+    {
+        public GeneratorUndefinedStateException(string message) : base(message)
+        {
+
+        }
+    }
     public enum GeneratorStatus
     {
         NotContented,
@@ -74,6 +81,14 @@ namespace Incubator_2.Forms.Templates
 
         public string GetText()
         {
+            switch (Status)
+            {
+                case GeneratorStatus.InProcess:
+                    throw new GeneratorUndefinedStateException("Генератор ожидает получение ввода от другого пользователя. " +
+                        "Отзовите делегирование или дождитесь ввода.");
+                case GeneratorStatus.Warning:
+                    throw new GeneratorUndefinedStateException("Генератор требует подтверждения данных.");
+            }
             if (string.IsNullOrWhiteSpace(resultText))
             {
                 return "";

@@ -15,9 +15,9 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         
         private string _table;
         public CustomTable Requester = new();
-        private Command command;
+        private Models.Command command;
 
-        public VM_CreateCommand(Command cmd)
+        public VM_CreateCommand(Models.Command cmd)
         {
             command = cmd;
         }

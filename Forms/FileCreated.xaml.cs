@@ -16,9 +16,16 @@ namespace Incubator_2.Forms
 {
     /// <summary>
     /// Логика взаимодействия для FileCreated.xaml
+    /// Для долбоебов которые считают себя умнее других
+    /// этот контрол НЕ ИМЕЕТ ПРАВА использовать MVVM паттерн
+    /// его на странице могут быть одновременно открыты в количестве > 200 штук
+    /// 2 сотни сука инстансов на 200 мелких контролов? ага, щас
+    /// пока эта хуета загрузится в память юзер постареет
+    /// а куча НЕ РЕЗИНОВАЯ БЛЯТЬ и она запомнит этот финт ушами надолго
     /// </summary>
     public partial class FileCreated : UserControl
     {
+
         public SGeneratedDocument record { get; private set; }
         public delegate void SelectorNotify(FileCreated my);
         public event SelectorNotify OnSelectorChecked;
@@ -83,6 +90,12 @@ namespace Incubator_2.Forms
 
         private void CreateFileClick(object sender, RoutedEventArgs e)
         {
+            switch (record.status)
+            {
+                case DocumentStatus.Done:
+                    ProgramState.ShowExclamationDialog("Документ нельзя сгенерировать, если он находится на статусе \"Завершен\"");
+                    return;
+            }
             ProgramState.ShowWaitCursor();
             string plus = DateTime.Now.ToString("HH.mm.ss ");
             string filename = $"{ProgramState.TemplatesRuntime}\\{record.fileName}.docx";
@@ -206,6 +219,13 @@ namespace Incubator_2.Forms
 
         private void ChangeNumberClick(object sender, RoutedEventArgs e)
         {
+            switch (record.status)
+            {
+                case DocumentStatus.Printed:
+                case DocumentStatus.Done:
+                    ProgramState.ShowExclamationDialog("Статусы \"Распечатан\" и \"\" не позволяют менять номер документа.", "Номер неизменяем");
+                    return;
+            }
             string input = ProgramState.ShowInputBox("Новый номер", "Введите номер без префикса и постфикса");
             TemplateSettings settings = new Template(this.record.template).GetTemplateSettings();
             using (GeneratedDocument gd = record.AsModel())

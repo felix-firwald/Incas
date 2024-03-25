@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incubator_2.Common;
+using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
 using Incubator_2.Windows;
 using Microsoft.Scripting.Hosting;
@@ -125,8 +126,7 @@ namespace Incubator_2.Forms
                 ProgramState.ShowDatabaseErrorDialog("Не удалось получить информацию о полях документа.", "Запись повреждена");
                 return;
             }
-            this.document.id = record.id;
-            this.document.status = record.status;
+            this.document = record;
             this.Filename.Text = record.fileName;
             this.Number.Text = record.number;
             foreach (SGeneratedTag tag in record.GetFilledTags())
@@ -153,8 +153,12 @@ namespace Incubator_2.Forms
                 case DocumentStatus.Approved:
                     this.Number.IsEnabled = false;
                     break;
+                case DocumentStatus.Printed:
+                    this.Number.IsEnabled = false;
+                    break;
                 case DocumentStatus.Done:
                     this.ContentPanel.IsEnabled = false;
+                    this.Filename.IsEnabled = false;
                     this.Number.IsEnabled = false;
                     break;
             }
@@ -220,6 +224,8 @@ namespace Incubator_2.Forms
             SGeneratedDocument result = new();
             result.template = this.template.id;
             result.number = this.Number.Text;
+            result.fullNumber = this.GetNumber();
+            result.status = document.status;
             result.fileName = this.Filename.Text;
             List<SGeneratedTag> filledTags = new();
             foreach (UC_TagFiller tf in TagFillers)
@@ -320,7 +326,7 @@ namespace Incubator_2.Forms
         {
             return this.templateSettings.NumberPrefix + this.Number.Text + this.templateSettings.NumberPostfix;
         }
-        public void CreateFile(string newPath, string category, bool async = true, bool save = true)
+        public bool CreateFile(string newPath, string category, bool async = true, bool save = true)
         {
             try
             {
@@ -342,6 +348,7 @@ namespace Incubator_2.Forms
                             doc.id = document.id;
                             doc.number = this.Number.Text;
                             doc.fullNumber = GetNumber();
+                            doc.status = document.status;
                             doc.fileName = this.Filename.Text;
                             doc.template = this.template.id;
                             doc.templateName = category;
@@ -349,17 +356,26 @@ namespace Incubator_2.Forms
                             doc.AddRecord();
                         }
                     }
+                    return true;
                 }
+                return false;
+            }
+            catch (GeneratorUndefinedStateException ex)
+            {
+                ProgramState.ShowExclamationDialog(ex.Message, "Сохранение прервано");
+                return false;
             }
             catch (IOException)
             {
                 ProgramState.ShowErrorDialog($"При доступе к файлу \"{this.Filename.Text}\" или его папке возникла ошибка.\n" +
                     $"Возможно существует файл с таким же именем, который уже открыт другим пользователем.\n" +
                     $"Файл будет пропущен.");
+                return false;
             }
             catch (Exception e)
             {
                 ProgramState.ShowErrorDialog(e.Message);
+                return false;
             }
         }
 

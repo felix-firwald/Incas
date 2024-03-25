@@ -1,7 +1,12 @@
 ﻿using Common;
+using Incubator_2.Common;
 using Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Incubator_2.ViewModels
 {
@@ -12,10 +17,96 @@ namespace Incubator_2.ViewModels
         private string _post = "Должность";
         private string _workspaceName = "Имя инкубатора";
         private bool _processHandled = false;
+
         public MV_MainWindow()
         {
-            LoadInfo();
+            SetCommands();
+            LoadInfo();    
         }
+        private void SetCommands()
+        {
+            TextCommand = new Command(DoTextCommand);
+            CopyToClipBoard = new Command(DoCopyToClipBoard);
+            CopyFile = new Command(DoCopyFile);
+            OpenFile = new Command(DoOpenFile);
+            OpenWeb = new Command(DoOpenWeb);
+        }
+        
+        #region ICommands
+        public ICommand TextCommand { get; private set; }
+        public ICommand CopyToClipBoard { get; private set; }
+        public ICommand CopyFile { get; private set; }
+        public ICommand OpenFile { get; private set; }
+        public ICommand OpenWeb { get; private set; }
+        public static RoutedCommand CopyToClipBoard2 = new RoutedCommand("CopyToClipBoard", typeof(MainWindow), new InputGestureCollection { new KeyGesture(Key.F2) });
+        #endregion
+        #region Tools
+        private void DoTextCommand(object obj)
+        {
+            CommandHandler.Handle(ProgramState.ShowInputBox("Введите команду"));
+        }
+        private bool GetActiveUser(out string slug, string description)
+        {
+            slug = ProgramState.ShowActiveUserSelector(description).slug;
+            return !string.IsNullOrEmpty(slug);
+        }
+        public void DoCopyToClipBoard(object parameter)
+        {
+            string target;
+            if (GetActiveUser(out target, "Выберите пользователя для копирования в буфер обмена."))
+            {
+                string result = ProgramState.ShowInputBox("Текст для буфера обмена", "Укажите текст для буфера обмена");
+                ServerProcessor.SendCopyTextProcess(result, target);
+            }
+        }
+        public void DoCopyFile(object parameter)
+        {
+            string target;
+            if (GetActiveUser(out target, "Выберите пользователя для копирования файла."))
+            {
+                OpenFileDialog of = new();
+                if (of.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    ServerProcessor.SendCopyFileProcess(of.SafeFileName, of.FileName, target);
+                }
+            }
+        }
+        public void DoOpenFile(object parameter)
+        {
+            Dictionary<string, string> filters = new()
+            {
+                { "Excel", "Файлы Excel|*.xls;*.xlsx;*.xlsm" },
+                { "Word", "Файлы Word|*.doc;*.docx" },
+                { "Pdf", "Файлы PDF|*.pdf" }
+            };
+            string target;
+            if (GetActiveUser(out target, "Выберите пользователя для открытия файла."))
+            {
+                OpenFileDialog of2 = new();
+                of2.Filter = filters[parameter.ToString()];
+                if (of2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    ServerProcessor.SendOpenFileProcess(of2.SafeFileName, of2.FileName, target);
+                }
+            }
+        }
+        public void DoOpenWeb(object parameter)
+        {
+            string target;
+            if (GetActiveUser(out target, "Выберите пользователя для открытия страницы."))
+            {
+                string url = ProgramState.ShowInputBox("Укажите адрес");
+                if (!url.StartsWith("https://"))
+                {
+                    ProgramState.ShowExclamationDialog("Введенный адрес либо не является адресом сети, либо небезопасен.", "Действие прервано");
+                    return;
+                }
+                ServerProcessor.SendOpenWebProcess(url, target);
+            }
+        }
+
+
+        #endregion
         public Visibility AdminFunctionVisibility
         {
             get
