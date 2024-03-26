@@ -7,41 +7,44 @@
              mc:Ignorable="d" 
              d:DesignHeight="120" d:DesignWidth="600" Background="Transparent">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="29*"/>
-            <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="40"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="35"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <fa:FontAwesome x:Name="UseButton" Style="{StaticResource IconButton}" Icon="PlusCircle" FontSize="18" Cursor="Hand" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
-        <fa:FontAwesome x:Name="ParentIcon" Icon="ArrowCircleDown" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Foreground="{DynamicResource LightPurple}" Cursor="" />
+    <Border CornerRadius="5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="29*"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <fa:FontAwesome x:Name="UseButton" Style="{StaticResource IconButton}" Icon="PlusCircle" FontSize="18" Cursor="Hand" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
+            <fa:FontAwesome x:Name="ParentIcon" Icon="ArrowCircleDown" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Foreground="{DynamicResource LightPurple}" Cursor="" />
 
-        <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center" FontSize="11"/>
-        <fa:FontAwesome x:Name="CreateChild" Style="{StaticResource IconButton}" Grid.Column="2" Icon="CodeFork" FontSize="16" Cursor="Hand" MouseDown="CreateChildClick" ToolTip="Создать наследника от этого шаблона" Tag="Да"/>
-        <fa:FontAwesome Style="{StaticResource IconButton}" Grid.Column="3" Icon="Pencil" FontSize="16" Cursor="Hand" MouseDown="EditClick" ToolTip="Редактировать шаблон" Tag="Да"/>
-        <fa:FontAwesome Style="{StaticResource IconButton}" Grid.Column="4" Icon="Remove" FontSize="18" Cursor="Hand" MouseDown="RemoveClick" ToolTip="Удалить шаблон"/>
+            <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center" FontSize="11"/>
+            <fa:FontAwesome x:Name="CreateChild" Style="{StaticResource IconButton}" Grid.Column="2" Icon="CodeFork" FontSize="16" Cursor="Hand" MouseDown="CreateChildClick" ToolTip="Создать наследника от этого шаблона" Tag="Да"/>
+            <fa:FontAwesome Style="{StaticResource IconButton}" Grid.Column="3" Icon="Pencil" FontSize="16" Cursor="Hand" MouseDown="EditClick" ToolTip="Редактировать шаблон" Tag="Да"/>
+            <fa:FontAwesome Style="{StaticResource IconButton}" Grid.Column="4" Icon="Remove" FontSize="18" Cursor="Hand" MouseDown="RemoveClick" ToolTip="Удалить шаблон"/>
 
-        <StackPanel x:Name="ChildPanel" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4">
-            
-        </StackPanel>
-        <Border Grid.Row="1" Width="2" Background="{DynamicResource LightPurple}" CornerRadius="1.5" />
+            <StackPanel x:Name="ChildPanel" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4">
+
+            </StackPanel>
+            <Border Grid.Row="1" Width="2" Background="{DynamicResource LightPurple}" CornerRadius="1.5" />
         <!--<Rectangle Grid.Row="1" Width="2" Fill="{StaticResource LightPurple}" Cursor="" Margin="19,0,19,0"/>-->
-        <Grid.Style>
-            <Style TargetType="{x:Type Grid}">
+            
+        </Grid>
+        <Border.Style>
+            <Style TargetType="{x:Type Border}">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{StaticResource Element}"></Setter>
                     </Trigger>
                 </Style.Triggers>
             </Style>
-        </Grid.Style>
-    </Grid>
+        </Border.Style>
+    </Border>
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem Header="Открыть привязанные шаблоны" Click="ShowTransferClick"/>

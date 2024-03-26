@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Common;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
 using Incubator_2.Forms;
 using Incubator_2.Models;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Tag = Models.Tag;
 
 
 namespace Incubator_2.Windows
@@ -278,32 +280,28 @@ namespace Incubator_2.Windows
         }
 
         private void SendToUserClick(object sender, MouseButtonEventArgs e)
-        {
-            string recipient = ProgramState.ShowActiveUserSelector("Выберите пользователя для отправки формы.").slug;
-            ProgramState.ShowWaitCursor();
+        {            
             List<SGeneratedDocument> documents = new();
-            if (!string.IsNullOrEmpty(recipient))
+            foreach (UC_FileCreator fc in this.ContentPanel.Children)
             {
-                foreach (UC_FileCreator fc in this.ContentPanel.Children)
+                if (fc.SelectorChecked == true)
                 {
-                    if (fc.SelectorChecked == true)
-                    {
-                        documents.Add(fc.GetGeneratedDocument());
-                    }
-                }
-                ProgramState.ShowWaitCursor(false);
-                if (documents.Count == 0)
-                {
-                    ProgramState.ShowExclamationDialog("Не выбрано ни одного элемента для отправки! (используйте селекторы)", "Действие прервано");
-                }
-                else
-                {
-                    ServerProcessor.SendOpenSequencerProcess(documents, recipient);
+                    documents.Add(fc.GetGeneratedDocument());
                 }
             }
-
-        }
-
-       
+            if (documents.Count == 0)
+            {
+                ProgramState.ShowExclamationDialog("Не выбрано ни одного элемента для отправки! (используйте селекторы)", "Действие прервано");
+            }
+            else
+            {
+                Session session;
+                if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для отправки формы."))
+                {
+                    ServerProcessor.SendOpenSequencerProcess(documents, session.slug);
+                }
+                
+            }
+        }       
     }
 }

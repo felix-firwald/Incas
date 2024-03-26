@@ -487,7 +487,7 @@ namespace Common
             });
             return bd;
         }
-        public static Session ShowActiveUserSelector(string helpText)
+        public static bool ShowActiveUserSelector(out Session session, string helpText)
         {
             ActiveUserSelector au = new(helpText);
             Application.Current.Dispatcher.Invoke(() =>
@@ -496,14 +496,13 @@ namespace Common
             });
             if (au.SelectedSession != null)
             {
-                return au.SelectedSession;
+                session = au.SelectedSession;
+                return true;
             }
-            else
-            {
-                return new();
-            }
+            session = null;
+            return false;
         }
-        public static User ShowUserSelector()
+        public static bool ShowUserSelector(out User user)
         {
             UserSelector us = new();
             Application.Current.Dispatcher.Invoke(() =>
@@ -512,9 +511,11 @@ namespace Common
             });
             if (us.Result == DialogStatus.Yes)
             {
-                return us.SelectedUser;
+                user = us.SelectedUser;
+                return true;
             }
-            return new();
+            user = null;
+            return false;
         }
         public static Template ShowTemplateSelector(TemplateType type, string help)
         {

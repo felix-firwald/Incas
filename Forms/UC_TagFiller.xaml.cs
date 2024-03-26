@@ -347,8 +347,11 @@ namespace Incubator_2.Forms
 
         private void TextRequest(object sender, RoutedEventArgs e)
         {
-            string rec = ProgramState.ShowActiveUserSelector("Выберите пользователя для запроса данных").slug;
-            ServerProcessor.SendRequestTextProcess(this, rec);
+            Session session;
+            if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для запроса данных"))
+            {
+                ServerProcessor.SendRequestTextProcess(this, session.slug);
+            }            
         }
         private void PlayScript()
         {

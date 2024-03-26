@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Security.Authentication.OnlineId;
 
 namespace Incubator_2.Common
 {
@@ -111,8 +112,11 @@ namespace Incubator_2.Common
             switch (input)
             {
                 case "user":
-                    User u = ProgramState.ShowUserSelector();
-                    u.RemoveUser();
+                    User u;
+                    if (ProgramState.ShowUserSelector(out u))
+                    {
+                        u.RemoveUser();
+                    }                    
                     break;
             }
         }

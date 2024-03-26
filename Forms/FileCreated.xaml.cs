@@ -1,4 +1,5 @@
 ﻿using Common;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
 using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
@@ -31,7 +32,7 @@ namespace Incubator_2.Forms
         public delegate void SelectorNotify(FileCreated my);
         public event SelectorNotify OnSelectorChecked;
         public event SelectorNotify OnSelectorUnchecked;
-        public FileCreated(SGeneratedDocument rec, int counter = 1)
+        public FileCreated(ref SGeneratedDocument rec, int counter = 1)
         {
             InitializeComponent();
             record = rec;
@@ -130,12 +131,15 @@ namespace Incubator_2.Forms
                     ProgramState.ShowExclamationDialog("Документ нельзя сгенерировать, если он находится на статусе \"Завершен\"");
                     return;
             }
-            string recipient = ProgramState.ShowActiveUserSelector("Выберите пользователя для отправки файла").slug;
-            ProgramState.ShowWaitCursor();
-            string filename = $"{record.fileName}.docx";
-            CreateFile(ProgramState.Exchanges);
-            ProgramState.ShowWaitCursor(false);
-            ServerProcessor.SendOpenFileProcess(filename, ProgramState.Exchanges + "\\" + filename, recipient);
+            Session session;
+            if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для отправки файла"))
+            {
+                ProgramState.ShowWaitCursor();
+                string filename = $"{record.fileName}.docx";
+                CreateFile(ProgramState.Exchanges);
+                ProgramState.ShowWaitCursor(false);
+                ServerProcessor.SendOpenFileProcess(filename, ProgramState.Exchanges + "\\" + filename, session.slug);
+            }            
         }
 
         private void OpenClick(object sender, RoutedEventArgs e)

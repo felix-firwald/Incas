@@ -69,7 +69,7 @@ namespace Incubator_2.Forms
                     int counter = 1;
                     d.GetDocumentsByTemplate(templateName).ForEach(document =>
                     {
-                        FileCreated fc = new FileCreated(document, counter);
+                        FileCreated fc = new FileCreated(ref document, counter);
                         fc.OnSelectorChecked += AddToSelection;
                         fc.OnSelectorUnchecked += RemoveFromSelection;
                         content.Children.Add(fc);

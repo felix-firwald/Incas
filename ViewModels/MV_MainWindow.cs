@@ -45,29 +45,25 @@ namespace Incubator_2.ViewModels
         {
             CommandHandler.Handle(ProgramState.ShowInputBox("Введите команду"));
         }
-        private bool GetActiveUser(out string slug, string description)
-        {
-            slug = ProgramState.ShowActiveUserSelector(description).slug;
-            return !string.IsNullOrEmpty(slug);
-        }
+
         public void DoCopyToClipBoard(object parameter)
         {
-            string target;
-            if (GetActiveUser(out target, "Выберите пользователя для копирования в буфер обмена."))
+            Session target;
+            if (ProgramState.ShowActiveUserSelector(out target, "Выберите пользователя для копирования в буфер обмена."))
             {
                 string result = ProgramState.ShowInputBox("Текст для буфера обмена", "Укажите текст для буфера обмена");
-                ServerProcessor.SendCopyTextProcess(result, target);
+                ServerProcessor.SendCopyTextProcess(result, target.slug);
             }
         }
         public void DoCopyFile(object parameter)
         {
-            string target;
-            if (GetActiveUser(out target, "Выберите пользователя для копирования файла."))
+            Session target;
+            if (ProgramState.ShowActiveUserSelector(out target, "Выберите пользователя для копирования файла."))
             {
                 OpenFileDialog of = new();
                 if (of.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    ServerProcessor.SendCopyFileProcess(of.SafeFileName, of.FileName, target);
+                    ServerProcessor.SendCopyFileProcess(of.SafeFileName, of.FileName, target.slug);
                 }
             }
         }
@@ -79,21 +75,21 @@ namespace Incubator_2.ViewModels
                 { "Word", "Файлы Word|*.doc;*.docx" },
                 { "Pdf", "Файлы PDF|*.pdf" }
             };
-            string target;
-            if (GetActiveUser(out target, "Выберите пользователя для открытия файла."))
+            Session target;
+            if (ProgramState.ShowActiveUserSelector(out target, "Выберите пользователя для открытия файла."))
             {
                 OpenFileDialog of2 = new();
                 of2.Filter = filters[parameter.ToString()];
                 if (of2.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    ServerProcessor.SendOpenFileProcess(of2.SafeFileName, of2.FileName, target);
+                    ServerProcessor.SendOpenFileProcess(of2.SafeFileName, of2.FileName, target.slug);
                 }
             }
         }
         public void DoOpenWeb(object parameter)
         {
-            string target;
-            if (GetActiveUser(out target, "Выберите пользователя для открытия страницы."))
+            Session target;
+            if (ProgramState.ShowActiveUserSelector(out target, "Выберите пользователя для открытия страницы."))
             {
                 string url = ProgramState.ShowInputBox("Укажите адрес");
                 if (!url.StartsWith("https://"))
@@ -101,7 +97,7 @@ namespace Incubator_2.ViewModels
                     ProgramState.ShowExclamationDialog("Введенный адрес либо не является адресом сети, либо небезопасен.", "Действие прервано");
                     return;
                 }
-                ServerProcessor.SendOpenWebProcess(url, target);
+                ServerProcessor.SendOpenWebProcess(url, target.slug);
             }
         }
 

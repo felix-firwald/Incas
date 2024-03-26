@@ -170,13 +170,13 @@ namespace Incubator_2.Forms.Templates
                     SetNotContented();
                     break;
                 default:
-                    Session s = ProgramState.ShowActiveUserSelector("Выберите пользователя для заполнения этой части документа.");
-                    if (s.userId != 0)
+                    Session session;
+                    if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для заполнения этой части документа."))
                     {
                         Result.template = TemplateId;
-                        ServerProcessor.SendOpenGeneratorProcess(Result, this, s.slug);
-                        SetInProcess($"Делегировано: {s.user}");
-                    }
+                        ServerProcessor.SendOpenGeneratorProcess(Result, this, session.slug);
+                        SetInProcess($"Делегировано: {session.user}");
+                    }                   
                     break;
             }
         }
