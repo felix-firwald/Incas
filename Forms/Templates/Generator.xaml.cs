@@ -87,7 +87,21 @@ namespace Incubator_2.Forms.Templates
                     throw new GeneratorUndefinedStateException("Генератор ожидает получение ввода от другого пользователя. " +
                         "Отзовите делегирование или дождитесь ввода.");
                 case GeneratorStatus.Warning:
-                    throw new GeneratorUndefinedStateException("Генератор требует подтверждения данных.");
+                    using (Template t = new())
+                    {
+                        UseTemplateText utt = new(t.GetTemplateById(TemplateId), Result);
+                        try
+                        {
+                            Result = utt.GetData();
+                            resultText = utt.GetText();
+                            SetContented();
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new GeneratorUndefinedStateException("Генератор требует подтверждения данных.");
+                        }
+                    }
+                    break;
             }
             if (string.IsNullOrWhiteSpace(resultText))
             {

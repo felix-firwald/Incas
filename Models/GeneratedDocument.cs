@@ -154,6 +154,7 @@ namespace Incubator_2.Models
             }
             author = ProgramState.CurrentUser.fullname;
             generatedTime = DateTime.Now;
+            status = DocumentStatus.Created;
             //reference = $"{generatedTime.ToString("yyMMddHHmmss")}{ProgramState.GenerateSlug(4)}";
             StartCommand()
                 .Insert(new()
@@ -163,6 +164,8 @@ namespace Incubator_2.Models
                     {nameof(generatedTime), generatedTime.ToString("yyyy.MM.dd HH:mm") },
                     {nameof(fileName), fileName },
                     {nameof(number), number },
+                    {nameof(fullNumber), fullNumber },
+                    {nameof(status), status.ToString() },
                     {nameof(content), content },
                     {nameof(author), author }
                 })

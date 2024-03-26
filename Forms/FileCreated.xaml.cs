@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incubator_2.Common;
+using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
 using Incubator_2.Windows;
 using Models;
@@ -90,32 +91,45 @@ namespace Incubator_2.Forms
 
         private void CreateFileClick(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                switch (record.status)
+                {
+                    case DocumentStatus.Done:
+                        ProgramState.ShowExclamationDialog("Документ нельзя сгенерировать, если он находится на статусе \"Завершен\"");
+                        return;
+                }
+                ProgramState.ShowWaitCursor();
+                string plus = DateTime.Now.ToString("HH.mm.ss ");
+                string filename = $"{ProgramState.TemplatesRuntime}\\{record.fileName}.docx";
+                CreateFile(ProgramState.TemplatesRuntime);
+                ProgramState.ShowWaitCursor(false);
+                try
+                {
+                    System.Diagnostics.Process proc = new();
+                    proc.StartInfo.FileName = filename;
+                    proc.StartInfo.UseShellExecute = true;
+                    proc.Start();
+                }
+                catch (Exception ex)
+                {
+                    ProgramState.ShowErrorDialog($"Не удалось открыть файл:\n{ex}", "Действие невозможно");
+                }
+            }
+            catch (GeneratorUndefinedStateException ex)
+            {
+                ProgramState.ShowExclamationDialog(ex.Message);
+            }
+        }
+
+        private void CreateFileForAnotherClick(object sender, RoutedEventArgs e)
+        {
             switch (record.status)
             {
                 case DocumentStatus.Done:
                     ProgramState.ShowExclamationDialog("Документ нельзя сгенерировать, если он находится на статусе \"Завершен\"");
                     return;
             }
-            ProgramState.ShowWaitCursor();
-            string plus = DateTime.Now.ToString("HH.mm.ss ");
-            string filename = $"{ProgramState.TemplatesRuntime}\\{record.fileName}.docx";
-            CreateFile(ProgramState.TemplatesRuntime);
-            ProgramState.ShowWaitCursor(false);
-            try
-            {
-                System.Diagnostics.Process proc = new();
-                proc.StartInfo.FileName = filename;
-                proc.StartInfo.UseShellExecute = true;
-                proc.Start();
-            }
-            catch (Exception ex)
-            {
-                ProgramState.ShowErrorDialog($"Не удалось открыть файл:\n{ex}", "Действие невозможно");
-            }
-        }
-
-        private void CreateFileForAnotherClick(object sender, RoutedEventArgs e)
-        {
             string recipient = ProgramState.ShowActiveUserSelector("Выберите пользователя для отправки файла").slug;
             ProgramState.ShowWaitCursor();
             string filename = $"{record.fileName}.docx";
