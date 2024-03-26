@@ -235,10 +235,20 @@ namespace Incubator_2.Forms
                 string value = tf.GetValue();
                 if (tf.tag.type != TypeOfTag.LocalConstant)
                 {
-                    SGeneratedTag gt = new();
-                    gt.tag = id;
-                    gt.value = value;
-                    filledTags.Add(gt);
+                    if (tf.tag.type == TypeOfTag.Generator || tf.tag.type == TypeOfTag.Date)
+                    {
+                        SGeneratedTag gtg = new();
+                        gtg.tag = id;
+                        gtg.value = tf.GetData();
+                        filledTags.Add(gtg);
+                    }
+                    else
+                    {
+                        SGeneratedTag gt = new();
+                        gt.tag = id;
+                        gt.value = value;
+                        filledTags.Add(gt);
+                    }
                 }
             }
             foreach (TableFiller table in Tables)

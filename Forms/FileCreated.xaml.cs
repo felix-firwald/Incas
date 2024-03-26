@@ -237,7 +237,7 @@ namespace Incubator_2.Forms
             {
                 case DocumentStatus.Printed:
                 case DocumentStatus.Done:
-                    ProgramState.ShowExclamationDialog("Статусы \"Распечатан\" и \"\" не позволяют менять номер документа.", "Номер неизменяем");
+                    ProgramState.ShowExclamationDialog("Статусы \"Распечатан\" и \"Завершен\" не позволяют менять номер документа.", "Номер неизменяем");
                     return;
             }
             string input = ProgramState.ShowInputBox("Новый номер", "Введите номер без префикса и постфикса");
