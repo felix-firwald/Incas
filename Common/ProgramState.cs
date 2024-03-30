@@ -48,7 +48,7 @@ namespace Common
     static class ProgramState
     {
         public static string CommonPath { get; private set; }
-        public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incubator";
+        public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incas";
         public static string DatabasePath { get; private set; }
         public static string CustomDatabasePath { get { return Root + @"\Databases"; } }
         public static string ServiceDatabasePath { get { return Root + @"\service.dbinc"; } }
