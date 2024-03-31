@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Incubator_2.Common;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
-using Incubator_2.Common;
-using Models;
 //using Microsoft.Office.Core;
 
 namespace Common
@@ -23,9 +21,9 @@ namespace Common
         STR
     }
 
-    public class InvalidIstructionException : Exception 
+    public class InvalidIstructionException : Exception
     {
-        public InvalidIstructionException(string message) : base(message) 
+        public InvalidIstructionException(string message) : base(message)
         {
 
         }
@@ -41,7 +39,7 @@ namespace Common
         protected string tableName { get; set; }
 
         #region static 
-        public static Dictionary<Type, string> SqliteTypes = new Dictionary<Type, string> 
+        public static Dictionary<Type, string> SqliteTypes = new Dictionary<Type, string>
         {
             { typeof(string), "STRING" },
             { typeof(int), "INT" },
@@ -51,7 +49,7 @@ namespace Common
         #endregion
         public Model()
         {
-            
+
         }
         public override string ToString()
         {
@@ -114,7 +112,7 @@ namespace Common
         {
             return new Query(this.tableName, DBConnectionType.CUSTOM);
         }
-        
+
 
         #region Standart Requests
         protected DataTable GetAll()
@@ -161,11 +159,11 @@ namespace Common
         }
         protected int BoolToInt(bool value)
         {
-            return value? 1 : 0;
+            return value ? 1 : 0;
         }
         protected bool IntToBool(int value)
         {
-            return value == 0? false: true;
+            return value == 0 ? false : true;
         }
         protected bool IntToBool(long value)
         {

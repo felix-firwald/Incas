@@ -1,11 +1,7 @@
 ﻿using Common;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.Models
 {
@@ -57,7 +53,7 @@ namespace Incubator_2.Models
                     { nameof(sectors), sectors },
                 })
                 .ExecuteVoid();
-            
+
         }
         private List<SDatabase> ParseToList(DataTable dt)
         {

@@ -1,9 +1,5 @@
 ﻿using Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.ViewModels
 {
@@ -76,7 +72,7 @@ namespace Incubator_2.ViewModels
 
         public void SaveChanges()
         {
-            
+
             _task.AsModel().UpdateSubtasks();
             OnPropertyChanged(nameof(SubtasksPassedCount));
         }

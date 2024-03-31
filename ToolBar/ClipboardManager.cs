@@ -1,11 +1,6 @@
 ﻿using Common;
-using Incubator_2.Common;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.ToolBar
 {
@@ -24,7 +19,7 @@ namespace Incubator_2.ToolBar
             if (File.Exists(target))
             {
                 elements = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ClipboardElement>>(File.ReadAllText(target));
-                if (elements == null )
+                if (elements == null)
                 {
                     elements = new();
                 }

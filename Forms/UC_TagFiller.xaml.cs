@@ -1,17 +1,11 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
-using Irony.Parsing;
 using Microsoft.Scripting.Hosting;
 using Models;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -210,7 +204,7 @@ namespace Incubator_2.Forms
         }
         public string GetValue()
         {
-            
+
             switch (tag.type)
             {
                 case TypeOfTag.Variable:
@@ -235,7 +229,7 @@ namespace Incubator_2.Forms
         public string GetData()
         {
             switch (tag.type)
-            {    
+            {
                 case TypeOfTag.Generator:
                     return this.Generator.GetData();
                 case TypeOfTag.Date:
@@ -306,7 +300,7 @@ namespace Incubator_2.Forms
             {
                 this.Textbox.Text = this.Textbox.Text.ToLower();
             }
-            
+
         }
         private void RemoveWhitespacesClick(object sender, RoutedEventArgs e)
         {
@@ -351,7 +345,7 @@ namespace Incubator_2.Forms
             if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для запроса данных"))
             {
                 ServerProcessor.SendRequestTextProcess(this, session.slug);
-            }            
+            }
         }
         private void PlayScript()
         {

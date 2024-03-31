@@ -3,17 +3,13 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.ViewModels
 {
     class VM_OpenWorkspace : VM_Base
     {
         private List<string> _workspaces = RegistryData.GetWorkspaces();
-        public VM_OpenWorkspace() 
+        public VM_OpenWorkspace()
         {
             UpdateUsers();
             UpdateSelectedUser();
@@ -85,7 +81,7 @@ namespace Incubator_2.ViewModels
                 {
                     return RegistryData.GetWorkspacePath(SelectedWorkspace);
                 }
-                catch(Exception) { return ""; }
+                catch (Exception) { return ""; }
             }
             set
             {
@@ -125,7 +121,7 @@ namespace Incubator_2.ViewModels
                     }
                 }
             }
-            catch(Exception) { }
+            catch (Exception) { }
         }
         public User SelectedUser
         {
@@ -143,16 +139,16 @@ namespace Incubator_2.ViewModels
                     {
                         RegistryData.SetWorkspaceSelectedUser(SelectedWorkspace, value.id.ToString());
                     }
-                    
+
                 }
-                catch(Exception) { }
+                catch (Exception) { }
             }
         }
         public string Password
         {
             get
             {
-                
+
                 return RegistryData.GetWorkspacePassword(SelectedWorkspace);
             }
             set

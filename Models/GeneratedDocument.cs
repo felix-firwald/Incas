@@ -1,15 +1,8 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.InkML;
 using Incubator_2.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Incubator_2.Models
 {
@@ -44,7 +37,7 @@ namespace Incubator_2.Models
             if (filledTags == null)
             {
                 filledTags = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(Cryptographer.DecryptString(filledTagsString));
-            }            
+            }
             return filledTags;
         }
         public void SaveFilledTags(List<SGeneratedTag> tags)
@@ -209,7 +202,7 @@ namespace Incubator_2.Models
                     ProgramState.ShowAccessErrorDialog($"Документ \"{fileName}\" помечен, как завершенный. Завершенный документ нельзя удалить!");
                     break;
             }
-            
+
         }
         public void RemoveRecords(List<int> ids)
         {

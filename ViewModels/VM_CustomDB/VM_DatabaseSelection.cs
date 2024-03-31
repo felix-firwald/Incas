@@ -1,10 +1,5 @@
 ﻿using Incubator_2.Models;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
@@ -23,7 +18,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             get
             {
                 return requester.GetTable(_table, _database, "");
-                
+
             }
             set
             {

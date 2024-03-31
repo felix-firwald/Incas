@@ -1,30 +1,18 @@
 ﻿using ClosedXML.Excel;
 using Common;
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Office2016.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Incubator_2.Models;
 using Incubator_2.ViewModels.VM_CustomDB;
 using Incubator_2.Windows.CustomDatabase;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Incubator_2.Forms.Database
 {
@@ -128,7 +116,7 @@ namespace Incubator_2.Forms.Database
         {
             vm.CustomViewRequest = ReplaceParametersInQuery(((MenuItem)sender).Tag.ToString());
             vm.UpdateTable();
-            
+
         }
         private string GetParameterFormat(string parameter)
         {
@@ -170,11 +158,11 @@ namespace Incubator_2.Forms.Database
         private void UpdateCommandClick(object sender, RoutedEventArgs e)
         {
             string request = ((MenuItem)sender).Tag.ToString();
-            
+
             vm.CustomUpdateRequest(ReplaceParametersInQuery(request));
-            
+
         }
-        
+
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -254,14 +242,14 @@ namespace Incubator_2.Forms.Database
                     cell.Style.Font.Bold = true;
                     for (int r = 0; r < vm.Table.Rows.Count; r++) // rows
                     {
-                        ws.Cell(r+2, c+1).SetValue(vm.Table.Rows[r][c].ToString());
+                        ws.Cell(r + 2, c + 1).SetValue(vm.Table.Rows[r][c].ToString());
                     }
                 }
                 ws.SetAutoFilter();
                 try
                 {
                     wb.SaveAs(fb.SelectedPath + $"\\{fileName}.xlsx");
-                }    
+                }
                 catch (IOException)
                 {
                     ProgramState.ShowWaitCursor(false);
@@ -271,7 +259,7 @@ namespace Incubator_2.Forms.Database
                 ProgramState.ShowWaitCursor(false);
                 ProgramState.OpenFolder(fb.SelectedPath);
             }
-            
+
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
         public void ImportFromExcel(bool deleteOld = false)
@@ -310,7 +298,7 @@ namespace Incubator_2.Forms.Database
                                 $"Импорт из листа, не содержащего хотя бы одно из описанных в таблице полей, запрещен в целях обеспечения полноты данных.", "Действие прервано");
                             continue;
                         }
-                        
+
                         colCell = ws.Search(col, CompareOptions.IgnoreCase).FirstOrDefault();   // ищем заголовок столбца с именем аналогичным тегу
                         int columnNumber = colCell.WorksheetColumn().ColumnNumber();    // номер столбца в листе Excel
                         int rowNumber = colCell.WorksheetRow().RowNumber() + 1; // номер строки в листе Excel
@@ -321,8 +309,8 @@ namespace Incubator_2.Forms.Database
                             {
                                 output.Rows.Add();
                             }
-                            
-                            output.Rows[i-2][col] = ws.Cell(i, columnNumber).Value.ToString();
+
+                            output.Rows[i - 2][col] = ws.Cell(i, columnNumber).Value.ToString();
                         }
                     }
                     catch (Exception)
@@ -388,7 +376,7 @@ namespace Incubator_2.Forms.Database
                         if (ProgramState.ShowQuestionDialog("Старые данные будут стерты без возможности восстановления.", "Вы уверены?") == Windows.DialogStatus.Yes)
                         {
                             ImportFromExcel(true);
-                        }    
+                        }
                     }
                     else
                     {

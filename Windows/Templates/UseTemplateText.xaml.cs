@@ -6,9 +6,6 @@ using Microsoft.Scripting.Hosting;
 using Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 
@@ -33,7 +30,7 @@ namespace Incubator_2.Windows.Templates
             if (data.filledTags != null)
             {
                 ApplyData(data);
-            }            
+            }
         }
         private void GetTags()
         {
@@ -104,7 +101,7 @@ namespace Incubator_2.Windows.Templates
                 else
                 {
                     gt.value = tf.GetValue();
-                } 
+                }
                 tags.Add(gt);
             }
             result.filledTags = tags;
@@ -134,7 +131,7 @@ namespace Incubator_2.Windows.Templates
             {
                 OnFinishedEditing();
             }
-            
+
             Result = DialogStatus.Yes;
             this.Close();
         }

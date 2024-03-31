@@ -5,19 +5,9 @@ using Incubator_2.Windows.Templates;
 using Models;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Incubator_2.Forms.Templates
 {
@@ -115,7 +105,7 @@ namespace Incubator_2.Forms.Templates
         }
         private void ApplyGenerated(SGeneratedDocument data)
         {
-            Result = data;            
+            Result = data;
             SetContented();
         }
         private void SetContented()
@@ -176,7 +166,7 @@ namespace Incubator_2.Forms.Templates
                         Result.template = TemplateId;
                         ServerProcessor.SendOpenGeneratorProcess(Result, this, session.slug);
                         SetInProcess($"Делегировано: {session.user}");
-                    }                   
+                    }
                     break;
             }
         }
@@ -195,7 +185,7 @@ namespace Incubator_2.Forms.Templates
                         resultText = utt.GetText();
                         SetContented();
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {

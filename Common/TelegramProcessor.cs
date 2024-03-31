@@ -1,16 +1,12 @@
-﻿using Common;
-using Models;
+﻿using Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
-using Windows.Media.SpeechSynthesis;
 
 namespace Incubator_2.Common
 {
@@ -22,7 +18,7 @@ namespace Incubator_2.Common
         {
             client = new(token);
             client.StartReceiving(Update, Error);
-            
+
         }
 
 #pragma warning disable CS1998

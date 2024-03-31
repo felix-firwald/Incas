@@ -1,7 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Incubator_2.Common;
-using System;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 

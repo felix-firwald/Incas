@@ -1,5 +1,4 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
 using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
@@ -75,7 +74,7 @@ namespace Incubator_2.Forms
                 {
                     this.Selector.IsChecked = true;
                 }
-            } 
+            }
         }
         private void CreateFile(string folder)
         {
@@ -139,7 +138,7 @@ namespace Incubator_2.Forms
                 CreateFile(ProgramState.Exchanges);
                 ProgramState.ShowWaitCursor(false);
                 ServerProcessor.SendOpenFileProcess(filename, ProgramState.Exchanges + "\\" + filename, session.slug);
-            }            
+            }
         }
 
         private void OpenClick(object sender, RoutedEventArgs e)

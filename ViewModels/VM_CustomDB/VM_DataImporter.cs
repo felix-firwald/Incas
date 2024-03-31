@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
     public class VM_DataImporter : VM_Base
     {
         private DataTable _table;
-        
+
         public VM_DataImporter(DataTable dt)
         {
             Table = dt;

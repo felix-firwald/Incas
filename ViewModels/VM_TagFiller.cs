@@ -1,17 +1,12 @@
 ﻿
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.ViewModels
 {
     public class VM_TagFiller : VM_Base
     {
         Tag tag;
-        public VM_TagFiller(Tag t) 
+        public VM_TagFiller(Tag t)
         {
             tag = t;
         }

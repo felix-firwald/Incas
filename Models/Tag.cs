@@ -1,12 +1,9 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Spreadsheet;
 using Incubator_2.Common;
-using Incubator_2.Windows;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace Models
 {
@@ -67,7 +64,7 @@ namespace Models
         public int orderNumber { get; set; }
         public string description { get; set; }
         public string command { get; set; }
-        public Tag() 
+        public Tag()
         {
             tableName = "Tags";
         }
@@ -184,7 +181,7 @@ namespace Models
             {
                 this.Serialize(dr);
                 this.type = (TypeOfTag)Enum.Parse(typeof(TypeOfTag), dr["type"].ToString());
-            }           
+            }
         }
         public string GetKey()
         {

@@ -1,8 +1,6 @@
 ﻿
 using Models;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms.Design;
 
 
 namespace Incubator_2.ViewModels
@@ -14,7 +12,7 @@ namespace Incubator_2.ViewModels
         private string _child;
         private List<string> _childs;
 
-        public VM_FileCreator(Template template, List<string> childs) 
+        public VM_FileCreator(Template template, List<string> childs)
         {
             _template = template;
         }

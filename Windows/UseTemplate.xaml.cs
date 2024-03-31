@@ -1,7 +1,5 @@
 ﻿using ClosedXML.Excel;
 using Common;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Incubator_2.Common;
 using Incubator_2.Forms;
 using Incubator_2.Models;
@@ -60,7 +58,7 @@ namespace Incubator_2.Windows
             using (Tag t = new())
             {
                 tags = t.GetAllTagsByTemplate(template.id, template.parent);
-            } 
+            }
         }
 
         private UC_FileCreator AddFileCreator()
@@ -120,7 +118,7 @@ namespace Incubator_2.Windows
                     Mouse.OverrideCursor = null;
                     DatabaseManager.NullifyBackground();
                     return;
-                }     
+                }
             }
             DatabaseManager.ExecuteBackground();
             Mouse.OverrideCursor = null;
@@ -176,7 +174,7 @@ namespace Incubator_2.Windows
                     fc.RenameByTag(fr.SelectedTag, fr.Prefix, fr.Postfix, fr.IsAdditive);
                 }
             }
-            
+
         }
         private void SimpleRecalculateNames(string tag)
         {
@@ -190,7 +188,7 @@ namespace Incubator_2.Windows
         {
             OpenFileDialog fd = new OpenFileDialog();
             fd.Filter = "MS Excel|*.xlsx";
-            
+
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 ProgramState.ShowWaitCursor();
@@ -227,14 +225,14 @@ namespace Incubator_2.Windows
                             pairs[fileIndex].Add(tag.name, value);
                             fileIndex++;
                         }
-                        
+
                     }
                     catch (Exception)
                     {
                         continue;
                     }
                 }
-                foreach (Dictionary<string,string> item in pairs)
+                foreach (Dictionary<string, string> item in pairs)
                 {
                     var fc = AddFileCreator();
                     fc.ApplyFromExcel(item);
@@ -275,12 +273,12 @@ namespace Incubator_2.Windows
                     ProgramState.ShowErrorDialog("При попытке записать файл возникла ошибка,\nвозможно файл уже открыт." +
                         "\nЗакройте его и попробуйте снова", "Сохранение прервано");
                 }
-                
+
             }
         }
 
         private void SendToUserClick(object sender, MouseButtonEventArgs e)
-        {            
+        {
             List<SGeneratedDocument> documents = new();
             foreach (UC_FileCreator fc in this.ContentPanel.Children)
             {
@@ -300,8 +298,8 @@ namespace Incubator_2.Windows
                 {
                     ServerProcessor.SendOpenSequencerProcess(documents, session.slug);
                 }
-                
+
             }
-        }       
+        }
     }
 }

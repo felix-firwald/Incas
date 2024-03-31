@@ -16,17 +16,17 @@ namespace Incubator_2
             base.OnStartup(e);
             try
             {
-                
+
                 if (DateTime.Now > DateTime.Parse("27.05.2024"))
                 {
                     ProgramState.ShowErrorDialog("Истек предельный срок для лицензии этой версии. Обновите программу.", "Лицензия истекла");
                     App.Current.Shutdown();
                 }
                 OpenIncubator oi = new OpenIncubator();
-                
+
                 if (oi.ShowDialog() == false)
                 {
-                    
+
                 }
             }
             catch (DBParamNotFound p)
@@ -34,7 +34,7 @@ namespace Incubator_2
                 Dialog d = new Dialog($"Параметр с именем \"{p}\" не найден в базе данных рабочего пространства.\n" +
                     $"Вероятно, имело место быть ручное вмешательство в файл data.dbinc, в результате чего " +
                     $"параметр был удален.\nДальнейшее использование рабочей области находится под угрозой.", "Возникла критическая ошибка");
-                d.ShowDialog();               
+                d.ShowDialog();
             }
         }
 

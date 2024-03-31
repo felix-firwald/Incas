@@ -27,7 +27,7 @@ namespace Common
     {
         public UserAlreadyOnlineException() { }
     }
-    public class SessionBrokenException : Exception 
+    public class SessionBrokenException : Exception
     {
         public SessionBrokenException() { }
     }
@@ -145,7 +145,7 @@ namespace Common
         #endregion
 
         #region UserData
-        public static bool LoadUserData() 
+        public static bool LoadUserData()
         {
             if (IsRegistryContainsData())
             {
@@ -166,7 +166,7 @@ namespace Common
         {
             return DatabaseManager.InitializeService();
         }
-        public static Parameter GetParameter(ParameterType type, string name, string defaultValue="0", bool createIfNot = true)
+        public static Parameter GetParameter(ParameterType type, string name, string defaultValue = "0", bool createIfNot = true)
         {
             Parameter par = new Parameter();
             par.GetParameter(type, name, defaultValue, createIfNot);
@@ -195,7 +195,7 @@ namespace Common
                         par.name = "ws_locked";
                         par.WriteBoolValue(false);
                         par.CreateParameter();
-                        
+
                     }
                     ShowInfoDialog("Рабочее пространство успешно создано.");
                     using (Sector sector = new())
@@ -204,7 +204,7 @@ namespace Common
                         sector.name = "Базовый сектор";
                         sector.AddSector(false);
                     }
-                    
+
                     using (User user = new())
                     {
                         user.username = "admin";
@@ -299,7 +299,7 @@ namespace Common
             {
                 par.WriteBoolValue(locked);
                 par.UpdateValue();
-            } 
+            }
         }
         public static bool IsWorkspaceLocked()
         {
@@ -308,7 +308,7 @@ namespace Common
                 return par.GetValueAsBool();
             }
         }
-        
+
         #endregion
         public static void CheckLocked()
         {
@@ -331,7 +331,7 @@ namespace Common
                 ms.AddSession();
                 CurrentSession = ms;
                 ms.ClearOldestSessions();
-                
+
             }
             //Directory.CreateDirectory(ServerProcessor.Port);
         }
@@ -342,7 +342,7 @@ namespace Common
                 return ms.GetOpenedSessions();
             }
         }
-        public static void CloseSession() 
+        public static void CloseSession()
         {
             if (CurrentSession != null && CurrentSession.active)
             {
@@ -417,7 +417,7 @@ namespace Common
             {
                 PlaySound("UI-Attention");
                 Dialog d = new Dialog(message, title, Dialog.DialogIcon.Exclamation);
-            d.ShowDialog();
+                d.ShowDialog();
             });
         }
         public static void ShowInfoDialog(string message, string title = "Оповещение")
@@ -429,7 +429,7 @@ namespace Common
                 d.ShowDialog();
             });
         }
-        public static DialogStatus ShowQuestionDialog(string message, string title, string yesText="Да", string noText = "Нет")
+        public static DialogStatus ShowQuestionDialog(string message, string title, string yesText = "Да", string noText = "Нет")
         {
             DialogQuestion d = new DialogQuestion(message, title, yesText, noText);
             Application.Current.Dispatcher.Invoke(() =>
@@ -443,8 +443,8 @@ namespace Common
         {
             DialogInput dialog = new(title, description);
             Application.Current.Dispatcher.Invoke(() =>
-            {                
-                dialog.ShowDialog();     
+            {
+                dialog.ShowDialog();
             });
             return dialog.Input;
         }
@@ -462,7 +462,7 @@ namespace Common
         {
             BindingSelector bd = new();
             Application.Current.Dispatcher.Invoke(() =>
-            {                                
+            {
                 bd.ShowDialog();
             });
             return bd;

@@ -1,16 +1,11 @@
 ﻿using Common;
 using Incubator_2.Windows.CustomDatabase;
 using IronPython.Hosting;
-using IronPython.Runtime.Types;
 using Microsoft.Scripting.Hosting;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace Incas
 {
@@ -81,14 +76,14 @@ namespace Incas
 }
 namespace Incubator_2.Common
 {
-    
+
     public static class ScriptManager
     {
         private static ScriptEngine engine;
         static ScriptManager()
         {
             engine = Python.CreateEngine();
-            
+
         }
         public static ScriptEngine GetEngine()
         {
@@ -110,7 +105,7 @@ namespace Incubator_2.Common
                     minimum = "clr.AddReference('Incas')\n";
                 }
                 engine.Execute(minimum + script, scope);
-                
+
                 ProgramState.ShowWaitCursor(false);
             }
             catch (Exception ex)

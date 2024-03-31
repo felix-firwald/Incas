@@ -1,14 +1,9 @@
-﻿using Common;
-using Models;
-using System;
+﻿using Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.ViewModels.Selectors
 {
-    
+
     public class VM_TemplateSelector : VM_Base
     {
         private STemplate selectedTemplate;

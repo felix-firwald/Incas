@@ -1,25 +1,23 @@
-﻿using System.Collections.Generic;
-using Xceed.Words.NET;
-using Xceed.Document.NET;
-using System.Text.RegularExpressions;
-using Spire.Doc;
-using System;
-using System.IO;
-using System.Data;
-using System.Windows.Automation.Peers;
-using Table = Xceed.Document.NET.Table;
-using Incubator_2.Forms;
-using DocumentFormat.OpenXml.Spreadsheet;
+﻿using Incubator_2.Forms;
 using Incubator_2.Models;
 using Models;
+using Spire.Doc;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Text.RegularExpressions;
+using Xceed.Document.NET;
+using Xceed.Words.NET;
 using Font = Xceed.Document.NET.Font;
+using Table = Xceed.Document.NET.Table;
 
 namespace Common
 {
     public class WordTemplator
     {
         public readonly string Path;
-        public WordTemplator(string path) 
+        public WordTemplator(string path)
         {
             this.Path = path;
         }
@@ -149,7 +147,7 @@ namespace Common
                 tab.Rows[0].Cells[i].Paragraphs[0].Append(dt.Columns[i].ColumnName, head);
                 for (int row = 0; row < dt.Rows.Count; row++) // rows
                 {
-                    tab.Rows[row+1].Cells[i].Paragraphs[0].Append(dt.Rows[row][i].ToString(), rowStyle);
+                    tab.Rows[row + 1].Cells[i].Paragraphs[0].Append(dt.Rows[row][i].ToString(), rowStyle);
                 }
             }
             options.NewObject = tab;
@@ -164,7 +162,7 @@ namespace Common
             DocX doc = DocX.Load(this.Path);
             Regex regex = new Regex(@"\[[A-Za-zА-Яа-я ]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
             MatchCollection matches = regex.Matches(doc.Text);
-            
+
             foreach (Match match in matches)
             {
                 result.Add(match.Value.TrimStart('[').TrimEnd(']'));

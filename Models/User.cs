@@ -1,13 +1,8 @@
 ﻿using Common;
 using Incubator_2.Common;
 using Newtonsoft.Json;
-using Spire.Doc.Documents.Rendering;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Data;
-using System.Linq.Expressions;
-using System.Xml.Linq;
 
 namespace Models
 {
@@ -34,11 +29,11 @@ namespace Models
             user.fullname = fullname;
             user.post = post;
             user.sector = sector;
-            user.context = context; 
+            user.context = context;
             return user;
         }
     }
-    
+
     public class User : Model
     {
         public int id { get; set; }
@@ -51,7 +46,7 @@ namespace Models
         public string sector { get; set; }
         public string context { get; set; }
 
-        public User() 
+        public User()
         {
             tableName = "Users";
         }

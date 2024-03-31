@@ -1,9 +1,7 @@
 ﻿using Common;
 using Incubator_2.Common;
 using Models;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -18,7 +16,7 @@ namespace Incubator_2.ViewModels
         public MV_MainWindow()
         {
             SetCommands();
-            LoadInfo();    
+            LoadInfo();
         }
         private void SetCommands()
         {
@@ -28,7 +26,7 @@ namespace Incubator_2.ViewModels
             OpenFile = new Command(DoOpenFile);
             OpenWeb = new Command(DoOpenWeb);
         }
-        
+
         #region ICommands
         public ICommand TextCommand { get; private set; }
         public ICommand CopyToClipBoard { get; private set; }
@@ -137,14 +135,14 @@ namespace Incubator_2.ViewModels
 
         public string Surname
         {
-            get { return ProgramState.CurrentUser.surname; } 
+            get { return ProgramState.CurrentUser.surname; }
             set
             {
                 if (ProgramState.CurrentUser.surname != value)
                 {
                     ProgramState.CurrentUser.surname = value;
                     OnPropertyChanged(nameof(Surname));
-                }      
+                }
             }
         }
         public string SecondName

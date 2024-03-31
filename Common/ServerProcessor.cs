@@ -1,5 +1,4 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Drawing;
 using Incubator_2.Forms;
 using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
@@ -13,7 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Windows.ApplicationModel.Background;
 
 namespace Incubator_2.Common
 {
@@ -39,7 +37,7 @@ namespace Incubator_2.Common
         COPY_FILE = 215,
         OPEN_FILE = 216,
         OPEN_WEB = 217,
-        UPDATE_MAIN = 301,        
+        UPDATE_MAIN = 301,
     }
     enum ResponseCode
     {
@@ -170,7 +168,7 @@ namespace Incubator_2.Common
                     closed = s.GetOpenedSessions(false);
                 }
                 foreach (Session s in closed)
-                {    
+                {
                     File.Delete($"{ProgramState.ServerProcesses}\\{s.slug}.incport");
                 }
             }
@@ -302,7 +300,7 @@ namespace Incubator_2.Common
                 Thread.Sleep(500);
                 ProgramState.MainWindow.ProcessHandled = false;
             });
-            
+
         }
         #endregion
 
@@ -456,7 +454,7 @@ namespace Incubator_2.Common
                         SendQuestionResultResponse(process, ds);
                         break;
                 }
-                
+
             });
         }
         private static void ShowInputDialogHandle(Process oldProc)
@@ -495,7 +493,7 @@ namespace Incubator_2.Common
         private static Process CreateQueryProcess(string recipient)
         {
             Process process = new Process();
-            
+
             process.id = GenerateId();
             process.emitter = ProgramState.CurrentSession.slug;
             process.recipient = recipient;

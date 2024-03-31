@@ -1,11 +1,6 @@
 ﻿using Incubator_2.Common;
 using Incubator_2.Windows.AdminWindows;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
@@ -42,7 +37,7 @@ namespace Incubator_2.ViewModels.VMAdmin
                 {
                     return _session.timeFinished.ToString("G");
                 }
-                
+
             }
         }
         public bool IsActive

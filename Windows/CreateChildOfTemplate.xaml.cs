@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Forms;
-using Common;
+﻿using Common;
 using Incubator_2.Forms;
 using Incubator_2.ViewModels;
 using Models;
+using System.IO;
+using System.Windows;
+using System.Windows.Forms;
 
 namespace Incubator_2.Windows
 {

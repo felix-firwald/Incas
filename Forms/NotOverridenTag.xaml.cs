@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Models;
 using System.Windows;
 using System.Windows.Controls;
-using Incubator_2.Windows;
-using Models;
 
 namespace Incubator_2.Forms
 {

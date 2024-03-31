@@ -1,15 +1,5 @@
-﻿using Common;
-using DocumentFormat.OpenXml.Office2010.CustomUI;
-using Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Models;
 using System.Windows;
-using System.Windows.Input;
 
 namespace Incubator_2.ViewModels
 {
@@ -26,7 +16,7 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                switch(mainTag.type)
+                switch (mainTag.type)
                 {
                     case TypeOfTag.Variable:
                     case TypeOfTag.Text:
@@ -177,7 +167,7 @@ namespace Incubator_2.ViewModels
         }
         public string SerializeToInput(TypeOfTag tot)
         {
-            switch(tot)
+            switch (tot)
             {
                 case TypeOfTag.Variable:
                 default:

@@ -1,12 +1,6 @@
 ﻿using Common;
 using Incubator_2.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Windows.ApplicationModel.UserDataTasks;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {

@@ -1,23 +1,13 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Office2010.Excel;
 using Forms;
 using Incubator_2.Forms.OneInstance;
 using Incubator_2.Windows;
 using Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Incubator_2.Forms
 {
@@ -47,7 +37,7 @@ namespace Incubator_2.Forms
                 }
             });
         }
-        private void AddCategory(string category, bool selected=false)
+        private void AddCategory(string category, bool selected = false)
         {
             RadioButton rb = new RadioButton();
             rb.Style = FindResource("CategoryButton") as Style;
@@ -59,7 +49,7 @@ namespace Incubator_2.Forms
         private void LoadTemplatesByCategory(string category)
         {
             this.TemplatesArea.Children.Clear();
-            using (Template mt  = new Template())
+            using (Template mt = new Template())
             {
                 mt.GetWordTemplates(category).ForEach(c =>
                 {
@@ -101,7 +91,7 @@ namespace Incubator_2.Forms
                     });
                 }
             }
-            
+
         }
 
         private void SelectCategory(object sender, RoutedEventArgs e)
@@ -120,7 +110,7 @@ namespace Incubator_2.Forms
                 LoadChildrenForTemplates();
                 this.selectedCategory = "";
             }
-            
+
         }
 
         private void AddFC_Click(object sender, MouseButtonEventArgs e)
@@ -131,7 +121,7 @@ namespace Incubator_2.Forms
                 ctw.OnCreated += Refresh;
                 ctw.Show();
             }
-            
+
         }
         private void FindSelectedInRefreshedList()
         {

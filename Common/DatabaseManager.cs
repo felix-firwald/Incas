@@ -1,6 +1,5 @@
 ﻿using Incubator_2.Common;
 using Incubator_2.Models;
-using Incubator_2.Properties;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -8,8 +7,6 @@ using System.Data;
 
 using System.Data.SQLite;
 using System.Reflection;
-using System.Windows;
-using System.Windows.Markup;
 
 namespace Common
 {
@@ -79,7 +76,7 @@ namespace Common
              .AddCustomRequest(GetSessionDefinition(atc))
              .AddCustomRequest(GetDatabasesDefinition(atc))
              .AddCustomRequest(GetCommandDefinition(atc))
-             
+
              .ExecuteVoid();
             InitializeData();
             return true;
@@ -187,7 +184,7 @@ namespace Common
             atc.SetAsUnique("reference");
             return atc.GetQueryText();
         }
-        
+
         private static string GetTagDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Tag), "Tags");
@@ -224,7 +221,7 @@ namespace Common
                     q.EndTransaction();
                     q.ExecuteVoid();
                 });
-            } 
+            }
         }
         public static void NullifyBackground()
         {

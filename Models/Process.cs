@@ -1,11 +1,6 @@
 ﻿using Common;
-using Incubator_2.Common;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.Models
 {
@@ -34,7 +29,7 @@ namespace Incubator_2.Models
             DataTable dt = StartCommandToMyPort()
                 .Select()
                 .WhereEqual(nameof(received), "0")
-                .Execute();           
+                .Execute();
             List<string> result = new();
             if (dt.Rows.Count > 0)
             {

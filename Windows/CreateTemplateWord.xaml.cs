@@ -1,13 +1,10 @@
 ﻿using Common;
-using Incubator_2.Common;
 using Incubator_2.Forms;
 using Incubator_2.ViewModels;
-using Incubator_2.Windows.Templates;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -49,7 +46,7 @@ namespace Incubator_2.Windows
         private void GetTags()
         {
             Tag tag = new Tag();
-            foreach(Tag t in tag.GetAllTagsByTemplate(template.id))
+            foreach (Tag t in tag.GetAllTagsByTemplate(template.id))
             {
                 AddTag(t);
             }
@@ -77,7 +74,7 @@ namespace Incubator_2.Windows
         {
             if (!File.Exists(ProgramState.GetFullnameOfWordFile(template.path)))
             {
-                ProgramState.ShowErrorDialog($"Файл ({template.path}) не найден.","Сохранение прервано");
+                ProgramState.ShowErrorDialog($"Файл ({template.path}) не найден.", "Сохранение прервано");
                 return false;
             }
             if (!template.path.EndsWith(".docx"))
@@ -117,7 +114,7 @@ namespace Incubator_2.Windows
                 names.Add(tag.TagName.Text);
             }
 
-            
+
             return true;
         }
 
@@ -153,7 +150,7 @@ namespace Incubator_2.Windows
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
                 await System.Threading.Tasks.Task.Run(() =>
-                {     
+                {
                     tag.SaveTag(template.id, isEdit);
                 });
             }

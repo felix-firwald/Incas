@@ -1,10 +1,7 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 #pragma warning disable CA1416 // Проверка совместимости платформы
 namespace Common
@@ -123,12 +120,12 @@ namespace Common
 
         #endregion
         #region Templates
-        public static RegistryKey GetTemplatesData() 
+        public static RegistryKey GetTemplatesData()
         {
             return GetWorkspaceByName(GetSelectedWorkspace()).CreateSubKey("TemplatesData", true);
 
         }
-        
+
         public static RegistryKey AddTemplate(string name, string prPath, string prPrefix, string prPostfix)
         {
             RegistryKey rk = GetTemplatesData().CreateSubKey(name, true);

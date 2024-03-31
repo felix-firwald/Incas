@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 
 namespace Common
@@ -44,15 +43,15 @@ namespace Common
 
         public static bool IsUserHavePermission(
             PermissionGroup requiredGroup,
-            PermissionMode mode=PermissionMode.Rising
+            PermissionMode mode = PermissionMode.Rising
         )
         {
-            switch(mode)
+            switch (mode)
             {
                 case PermissionMode.Rising: return InRisingAccess(requiredGroup);
                 case PermissionMode.Monopoly: return InMonopolyAccess(requiredGroup);
                 case PermissionMode.Cascade: return InCascadeAccess(requiredGroup);
-                default: throw(new Exception($"Unknown type of permission mode: {mode} got."));
+                default: throw (new Exception($"Unknown type of permission mode: {mode} got."));
             }
         }
 

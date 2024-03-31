@@ -83,7 +83,7 @@ namespace Incubator_2.Forms
                     if (tf.tag.type != TypeOfTag.Generator)
                     {
                         tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
-                    }                   
+                    }
                 }
             }
             catch (Exception ex)
@@ -112,13 +112,13 @@ namespace Incubator_2.Forms
                         {
                             tf.SetValue(value);
                         });
-                        
+
                         break;
                     }
                 }
             });
         }
-        
+
         public void ApplyRecord(SGeneratedDocument record)
         {
             if (record.filledTagsString == null)
@@ -252,7 +252,7 @@ namespace Incubator_2.Forms
                 }
             }
             foreach (TableFiller table in Tables)
-            {               
+            {
                 filledTags.Add(table.GetAsGeneratedTag());
             }
             result.SaveFilledTags(filledTags);
@@ -308,7 +308,7 @@ namespace Incubator_2.Forms
             {
                 if (!string.IsNullOrEmpty(templateSettings.OnSaving))
                 {
-                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();                    
+                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                     foreach (UC_TagFiller tf in TagFillers)
                     {
                         scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
@@ -408,13 +408,13 @@ namespace Incubator_2.Forms
             {
                 this.Filename.Text = $"{prefix} {result} {postfix}".Trim();
             }
-            
+
         }
         public List<string> GetExcelRow()
         {
             List<string> output = new();
             foreach (UC_TagFiller tf in TagFillers)
-            {   
+            {
                 output.Add(tf.GetValue());
             }
             return output;
@@ -434,7 +434,7 @@ namespace Incubator_2.Forms
                 List<string> values = new List<string>();
                 Application.Current.Dispatcher.BeginInvoke(
                     DispatcherPriority.Normal,
-                    new Action(() => 
+                    new Action(() =>
                     {
                         foreach (UC_TagFiller tf in TagFillers)
                         {
@@ -453,9 +453,9 @@ namespace Incubator_2.Forms
                         PreviewWindow pr = new PreviewWindow(fileXPS);
                         pr.Show();
                     })
-                );  
+                );
             });
-            
+
         }
 
         private void OnSelectorChecked(object sender, RoutedEventArgs e)

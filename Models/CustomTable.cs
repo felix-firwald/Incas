@@ -1,11 +1,7 @@
 ﻿using Common;
 using Incubator_2.Common;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.Models
 {
@@ -49,7 +45,7 @@ namespace Incubator_2.Models
             DataTable dt = GetQuery(tableName, pathDb)
                 .AddCustomRequest("SELECT name FROM sqlite_schema WHERE " + query) // SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'
                 .Execute();
-            
+
             List<string> result = new();
             foreach (DataRow dr in dt.Rows)
             {
@@ -66,7 +62,7 @@ namespace Incubator_2.Models
             return GetQuery(table, pathDb).AddCustomRequest(custom).Execute();
         }
         public List<FieldCreator> GetTableFields(string table, string pathDb)
-        {           
+        {
             DataTable dt = GetQuery(tableName, pathDb).AddCustomRequest($"PRAGMA table_info(\"{table}\")")
                             .Execute();
             List<FieldCreator> creators = new();
@@ -114,7 +110,7 @@ namespace Incubator_2.Models
                 .AddCustomRequest($"PRAGMA foreign_key_list(\"{table}\")")
                 .Execute();
             List<FieldCreator> creators = GetTableFields(table, pathDb);
-            
+
             foreach (DataRow dr in dt.Rows)
             {
                 string field = dr["from"].ToString();
@@ -133,7 +129,7 @@ namespace Incubator_2.Models
             }
             return creators;
         }
-        
+
         public void InsertInTable(string table, string pathDb, Dictionary<string, string> pairs)
         {
             Query q = GetQuery(table, pathDb);

@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO.Compression;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Incubator_2.Models
 {
@@ -32,7 +30,7 @@ namespace Incubator_2.Models
             tableName = "Parameters";
             type = ParameterType.MISC;
         }
-        public Parameter GetParameter(ParameterType typeOf, string nameOf, string defaultValue = "0", bool createIfNotExists=true)
+        public Parameter GetParameter(ParameterType typeOf, string nameOf, string defaultValue = "0", bool createIfNotExists = true)
         {
             DataRow dr = StartCommandToService()
                         .Select()
@@ -91,7 +89,7 @@ namespace Incubator_2.Models
         }
         public Parameter WriteBoolValue(bool b)
         {
-            if (b) 
+            if (b)
             {
                 this.value = "1";
             }
@@ -104,7 +102,7 @@ namespace Incubator_2.Models
         public Parameter CreateParameter()
         {
             StartCommandToService()
-                .Insert(new Dictionary<string, string> 
+                .Insert(new Dictionary<string, string>
                     {
                         {"type", type.ToString()},
                         {"name", name},

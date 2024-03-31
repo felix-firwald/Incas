@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Incubator_2.ViewModels
+﻿namespace Incubator_2.ViewModels
 {
     public class VM_DefExistWorkspace : VM_Base
     {

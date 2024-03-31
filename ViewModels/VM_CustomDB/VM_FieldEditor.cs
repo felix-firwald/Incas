@@ -1,10 +1,4 @@
-﻿using DocumentFormat.OpenXml.VariantTypes;
-using Incubator_2.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Incubator_2.Common;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
@@ -14,7 +8,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         private bool _fk;
         public VM_FieldEditor()
         {
-            
+
         }
         public bool IsPK
         {

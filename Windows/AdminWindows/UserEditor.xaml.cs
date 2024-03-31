@@ -30,7 +30,7 @@ namespace Incubator_2.Windows
             {
                 ProgramState.ShowExclamationDialog("Одно или несколько обязательных полей не заполнены.", "Сохранение невозможно");
             }
-            
+
         }
     }
 }

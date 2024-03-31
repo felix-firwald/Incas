@@ -55,7 +55,7 @@ namespace Models
 
         public Template()
         {
-            tableName = "Templates";           
+            tableName = "Templates";
         }
         public Template(int newId)
         {
@@ -92,7 +92,7 @@ namespace Models
                 ProgramState.ShowErrorDialog("Шаблон с таким идентификатором не был найден.", "Ошибка");
                 return null;
             }
-            
+
         }
         private List<STemplate> GetAllTemplatesBy(TemplateType tt, string cat)
         {

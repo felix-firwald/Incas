@@ -1,14 +1,9 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Office2010.CustomUI;
 using Incubator_2.Common;
 using Incubator_2.Models;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Security.RightsManagement;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -107,7 +102,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
 
         public string CustomViewRequest;
 
-        
+
         public DataTable Table
         {
             get
@@ -209,11 +204,11 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             set
             {
                 _selectedTable = value;
-                
+
                 OnPropertyChanged(nameof(SelectedTable));
                 CustomViewRequest = null;
                 UpdateTable();
-                OnPropertyChanged(nameof(CanUserEditTable));               
+                OnPropertyChanged(nameof(CanUserEditTable));
                 UpdateListOfCommands();
                 OnPropertyChanged(nameof(Columns));
             }
@@ -237,7 +232,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             OnPropertyChanged(nameof(ReadCommands));
             OnPropertyChanged(nameof(UpdateCommands));
         }
-        
+
         public DataRow SelectedRow
         {
             get
@@ -306,11 +301,11 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             OnPropertyChanged(nameof(Databases));
             OnPropertyChanged(nameof(Tables));
-            
+
             OnPropertyChanged(nameof(Table));
         }
         public void ClearTableFromCustomView()
-        {           
+        {
             SearchText = string.Empty;
             SelectedTable = SelectedTable;
         }
@@ -338,8 +333,8 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             //this.RefreshTable();
             UpdateTable();
         }
-        
-        
+
+
         #endregion
     }
 }

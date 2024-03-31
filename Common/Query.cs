@@ -1,12 +1,8 @@
-﻿using DocumentFormat.OpenXml.VariantTypes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.IO;
-using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Windows;
 
 namespace Common
 {
@@ -16,7 +12,7 @@ namespace Common
         NO_ACTION,
         SET_NULL,
         SET_DEFAULT,
-        RESTRICT 
+        RESTRICT
     }
     public enum DBConnectionType
     {
@@ -39,7 +35,7 @@ namespace Common
         public string FKTable;
         public string FKField;
         public OnDeleteUpdate Constraint;
-        public Field(string name, string type, bool notnull=false, string fkt=null, string fkf="id", OnDeleteUpdate constraint=OnDeleteUpdate.CASCADE)
+        public Field(string name, string type, bool notnull = false, string fkt = null, string fkf = "id", OnDeleteUpdate constraint = OnDeleteUpdate.CASCADE)
         {
             Name = name;
             Type = type;
@@ -85,7 +81,7 @@ namespace Common
         private uint recursion = 0;
         public DBConnectionType typeOfConnection { get; set; }
         public string DBPath { get; set; }
-        public Query(string table, DBConnectionType type = DBConnectionType.BASE) 
+        public Query(string table, DBConnectionType type = DBConnectionType.BASE)
         {
             this.Table = table;
             this.typeOfConnection = type;
@@ -514,7 +510,7 @@ namespace Common
                     System.Diagnostics.Debug.WriteLine(this.DBPath);
                     System.Diagnostics.Debug.WriteLine(Result);
                     cmd.CommandText = GetRequest();
-                    
+
                     SQLiteDataReader sqlreader = cmd.ExecuteReader();
                     DataTable objDataTable = new DataTable();
                     objDataTable.Load(sqlreader);
@@ -573,7 +569,7 @@ namespace Common
                 }
 
             }
-            
+
             catch (SQLiteException ex)
             {
                 SwitchOnSqliteException(ex, ExecuteType.EXECUTE_VOID);

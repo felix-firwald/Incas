@@ -1,22 +1,11 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.InkML;
-using Incubator_2.Common;
-using Incubator_2.Forms;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
-using Incubator_2.Windows.ToolBar;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Media;
-using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using Windows.UI.Notifications;
 
 namespace Incubator_2
 {

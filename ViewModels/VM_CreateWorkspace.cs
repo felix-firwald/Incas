@@ -1,5 +1,4 @@
 ﻿using Common;
-using System.Windows.Input;
 
 namespace Incubator_2.ViewModels
 {

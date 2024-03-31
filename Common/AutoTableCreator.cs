@@ -1,13 +1,6 @@
-﻿using Common;
-using DocumentFormat.OpenXml.InkML;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace Incubator_2.Common
 {
@@ -20,7 +13,7 @@ namespace Incubator_2.Common
         public bool IsPK = false;
         public string FKtable = null;
         public string FKfield = null;
-        
+
         public FieldCreator(string nam, string typeOf)
         {
             Name = nam;
@@ -58,7 +51,7 @@ namespace Incubator_2.Common
     }
     public class AutoTableCreator
     {
-        private Dictionary<string,FieldCreator> definition = new Dictionary<string, FieldCreator>();
+        private Dictionary<string, FieldCreator> definition = new Dictionary<string, FieldCreator>();
         private string TableName;
         private Type modelClass;
         public AutoTableCreator()
@@ -85,7 +78,7 @@ namespace Incubator_2.Common
                 definition[prop.Name] = fc;
             }
         }
-        
+
 
         public string GetQueryText()
         {

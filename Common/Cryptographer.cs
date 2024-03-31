@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Text;
-using System.Security.Cryptography;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Incubator_2.Common
 {
@@ -20,7 +20,7 @@ namespace Incubator_2.Common
                 int multiplier = 32 - result.Length;
                 result += Enumerable.Repeat("b", multiplier);
             }
-            
+
             return result.Substring(0, 32);
         }
 
@@ -36,7 +36,7 @@ namespace Incubator_2.Common
         {
             byte[] iv = new byte[16];
             byte[] array;
-            
+
             using (Aes aes = Aes.Create())
             {
                 aes.Key = Encoding.UTF8.GetBytes(key);

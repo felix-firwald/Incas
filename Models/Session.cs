@@ -37,7 +37,7 @@ namespace Models
         public DateTime timeFinished { get; set; }
         public string computer { get; set; }
         public bool active { get; set; }
-        public Session() 
+        public Session()
         {
             tableName = "Sessions";
         }
@@ -73,7 +73,7 @@ namespace Models
         {
             DataTable dt = StartCommandToService()
                 .Select()
-                .WhereEqual("active", opened? 1 : 0)
+                .WhereEqual("active", opened ? 1 : 0)
                 .GroupBy("userId")
                 .Having("MAX(slug)")
                 .OrderByASC("user")
@@ -98,7 +98,7 @@ namespace Models
                     .ExecuteVoid();
             });
         }
-        
+
         private string GenerateSlug()
         {
             return DateTime.Now.ToString("yyMMddHHmmssffff");

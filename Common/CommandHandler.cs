@@ -4,11 +4,6 @@ using Incubator_2.Windows;
 using Incubator_2.Windows.CustomDatabase;
 using Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Security.Authentication.OnlineId;
 
 namespace Incubator_2.Common
 {
@@ -35,7 +30,7 @@ namespace Incubator_2.Common
         {
             switch (action)
             {
-                
+
                 case "#lock":
                 case "#set locked 1":
                     ProgramState.SetWorkspaceLocked(true);
@@ -116,7 +111,7 @@ namespace Incubator_2.Common
                     if (ProgramState.ShowUserSelector(out u))
                     {
                         u.RemoveUser();
-                    }                    
+                    }
                     break;
             }
         }
@@ -142,7 +137,7 @@ namespace Incubator_2.Common
                         {
                             return;
                         }
-                        
+
                     }
                     break;
                 case "nullify table":

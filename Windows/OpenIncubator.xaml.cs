@@ -1,7 +1,6 @@
 ﻿using Common;
 using Incubator_2.Common;
 using Incubator_2.ViewModels;
-using Models;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -24,7 +23,8 @@ namespace Incubator_2.Windows
 
         private void LogInClicked(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(this.cpath.Text) || string.IsNullOrEmpty(this.pwd.Text)) {
+            if (string.IsNullOrEmpty(this.cpath.Text) || string.IsNullOrEmpty(this.pwd.Text))
+            {
                 Dialog d = new Dialog("Одно из обязательных полей не заполнено!", "Вход невозможен");
                 d.ShowDialog();
             }
@@ -32,12 +32,12 @@ namespace Incubator_2.Windows
             {
                 ProgramState.SetCommonPath(this.cpath.Text);
                 ProgramState.GetDBFile();
-                
+
                 if (Directory.Exists(this.cpath.Text))
                 {
                     TryAuthenticate();
                 }
-            }  
+            }
         }
 
         private void TryAuthenticate()
@@ -76,7 +76,7 @@ namespace Incubator_2.Windows
             {
                 ProgramState.ShowExclamationDialog("Пользователь не выбран.", "Вход невозможен");
             }
-            
+
         }
 
         private void PathReview(object sender, RoutedEventArgs e)

@@ -7,7 +7,7 @@ using System.Data;
 
 namespace Incubator_2.Models
 {
-    
+
     public enum CommandType
     {
         [Description("Чтение")]

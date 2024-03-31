@@ -1,8 +1,5 @@
 ﻿using Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Incubator_2.ViewModels.VM_Tasks
 {

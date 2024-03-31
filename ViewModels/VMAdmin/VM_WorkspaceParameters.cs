@@ -13,7 +13,7 @@ namespace Incubator_2.ViewModels.VMAdmin
         private bool _terminateSessions = false;
         public VM_WorkspaceParameters()
         {
-            
+
         }
 
         public string WorkspaceName

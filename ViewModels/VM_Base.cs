@@ -17,7 +17,7 @@ namespace Incubator_2.ViewModels
 
         public void Execute(object parameter)
         {
-            
+
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

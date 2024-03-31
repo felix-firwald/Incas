@@ -1,6 +1,6 @@
-﻿using Models;
-using Common;
+﻿using Common;
 using Incubator_2.Windows;
+using Models;
 
 
 namespace Incubator_2.ViewModels.VMAdmin
@@ -40,9 +40,9 @@ namespace Incubator_2.ViewModels.VMAdmin
                         return "Оператор";
                 }
             }
-            set 
+            set
             {
-                OnPropertyChanged(nameof(UserStatus)); 
+                OnPropertyChanged(nameof(UserStatus));
             }
         }
         public string UserPost

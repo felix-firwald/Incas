@@ -1,10 +1,5 @@
 ﻿
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.ViewModels
 {
@@ -28,7 +23,7 @@ namespace Incubator_2.ViewModels
                 return true;
             }
         }
-        public string NameOfTemplate 
+        public string NameOfTemplate
         {
             get { return this.template_main.name; }
             set

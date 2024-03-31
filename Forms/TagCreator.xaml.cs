@@ -1,17 +1,12 @@
 ﻿using Common;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
 using Incubator_2.Windows.CustomDatabase;
 using Incubator_2.Windows.Templates;
 using Models;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 
 namespace Incubator_2.Forms
@@ -60,7 +55,7 @@ namespace Incubator_2.Forms
             }
         }
 
-        public void SaveTag(int templ, bool isEdit=false)
+        public void SaveTag(int templ, bool isEdit = false)
         {
             tag.template = templ;
             if (isEdit)
@@ -115,7 +110,7 @@ namespace Incubator_2.Forms
 
         private void AddVirtualTagClick(object sender, RoutedEventArgs e)
         {
-            int start = this.vm.DefaultValue is not null? this.vm.DefaultValue.Length : 0;
+            int start = this.vm.DefaultValue is not null ? this.vm.DefaultValue.Length : 0;
             this.vm.DefaultValue += "[Новый]";
             this.MainTextBox.SelectionStart = start + 1;
             this.MainTextBox.SelectionLength = 5;
@@ -169,7 +164,7 @@ namespace Incubator_2.Forms
             {
                 ProgramState.ShowErrorDialog("При попытке открытия генератора возникла ошибка:\n" + ex.Message);
             }
-            
+
         }
 
         private void EditScriptClick(object sender, RoutedEventArgs e)
