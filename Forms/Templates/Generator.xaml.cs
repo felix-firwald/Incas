@@ -96,7 +96,7 @@ namespace Incubator_2.Forms.Templates
                             resultText = utt.GetText();
                             SetContented();
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             throw new GeneratorUndefinedStateException("Генератор требует подтверждения данных.");
                         }

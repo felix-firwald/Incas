@@ -30,7 +30,7 @@ namespace Incubator_2.Windows
         public Dialog(string text, string title="Неизвестная ошибка", DialogIcon ic = DialogIcon.Error)
         {
             InitializeComponent();
-            this.Title.Content = title;
+            this.TitleText.Content = title;
             this.Description.Text = text;
             switch (ic)
             {

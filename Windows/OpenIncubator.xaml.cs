@@ -125,9 +125,5 @@ namespace Incubator_2.Windows
             this.vm.Refresh();
         }
 
-        private void OnRightClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            this.ContextMenu.IsOpen = true;
-        }
     }
 }

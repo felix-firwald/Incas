@@ -12,9 +12,6 @@ namespace Incubator_2.ViewModels
 {
     public class MV_MainWindow : VM_Base
     {
-        private string _surname = "Фамилия";
-        private string _fullname = "Имя";
-        private string _post = "Должность";
         private string _workspaceName = "Имя инкубатора";
         private bool _processHandled = false;
 

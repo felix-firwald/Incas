@@ -1,25 +1,20 @@
-﻿using Models;
+﻿using Incubator_2.Common;
+using Incubator_2.Models;
+using Incubator_2.ViewModels;
+using Incubator_2.Windows;
+using Incubator_2.Windows.CustomDatabase;
+using Incubator_2.Windows.Selectors;
 using Microsoft.Win32;
+using Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Incubator_2.Windows;
-using Incubator_2;
-using System.Windows;
-using Incubator_2.Models;
-using System.Runtime.CompilerServices;
-using Incubator_2.Common;
-using System.Windows.Documents;
-using System.Collections.Generic;
-using System.Windows.Input;
-using Incubator_2.Windows.CustomDatabase;
-using Incubator_2.ViewModels;
-using System.Data.SQLite;
-using System.Threading;
-using Incubator_2.Windows.Selectors;
 using System.Media;
-using Microsoft.Scripting.Hosting;
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 
 namespace Common

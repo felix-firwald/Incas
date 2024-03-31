@@ -21,7 +21,6 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         private string _columnFilter = "";
         private string _searchText = "";
         private DataTable _dataTable = new();
-        private bool isTableNeedUpdate = true;
         private DataGridSelectionUnit _selectionUnit = DataGridSelectionUnit.FullRow;
         private List<SCommand> _commands = new List<SCommand>();
         CustomTable requester = new();

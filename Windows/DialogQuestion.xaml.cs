@@ -29,7 +29,7 @@ namespace Incubator_2.Windows
         public DialogQuestion(string text, string title = "Выполнить действие?", string yesText = "Да", string noText = "Нет")
         {
             InitializeComponent();
-            this.Title.Content = title;
+            this.TitleText.Content = title;
             this.Description.Text = text;
             this.Yes.Content = yesText;
             this.No.Content = noText;

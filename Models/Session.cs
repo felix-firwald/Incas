@@ -140,7 +140,6 @@ namespace Models
                     .Select()
                     .WhereEqual("slug", this.slug)
                     .ExecuteOne();
-            Clear();
             this.Serialize(dr);
             if (this.active != true)
             {

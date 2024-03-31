@@ -6,8 +6,9 @@ namespace Incubator_2.ViewModels
     public class Command : ICommand
     {
         Action<object> executeMethod;
+#pragma warning disable CS0067
         public event EventHandler CanExecuteChanged;
-
+#pragma warning restore CS0067
         public Command(Action<object> method)
         {
             this.executeMethod = method;

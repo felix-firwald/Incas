@@ -55,6 +55,18 @@
     <AssemblyName>Incas</AssemblyName>
     <Version>0.9.6</Version>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>NU1701;CA1416</WarningsNotAsErrors>
+    <NoWarn>1701;1702;CA1416</NoWarn>
+    <WarningLevel>9999</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>NU1701;CA1416</WarningsNotAsErrors>
+    <NoWarn>1701;1702;CA1416</NoWarn>
+    <WarningLevel>9999</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="Fonts\RobotoMono-Bold.ttf" />
     <None Remove="Fonts\RobotoMono-BoldItalic.ttf" />

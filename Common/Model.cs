@@ -40,12 +40,6 @@ namespace Common
         private bool disposed = false;
         protected string tableName { get; set; }
 
-        #region Procedural Context
-        private string result;
-        private bool isWhereAlready;
-        private bool isUpdateAlready;
-        #endregion
-
         #region static 
         public static Dictionary<Type, string> SqliteTypes = new Dictionary<Type, string> 
         {
@@ -57,7 +51,7 @@ namespace Common
         #endregion
         public Model()
         {
-            Clear();
+            
         }
         public override string ToString()
         {
@@ -80,12 +74,6 @@ namespace Common
             }
         }
         #endregion
-        public void Clear()
-        {
-            isWhereAlready = false;
-            isUpdateAlready = false;
-            result = "";
-        }
 
         protected List<string> GetFields()
         {

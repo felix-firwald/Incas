@@ -84,24 +84,7 @@ namespace Common
             InitializeData();
             return true;
         }
-        public static void CreateChatDatabase(string chat, int user1, int user2)
-        {
-            using (Parameter p = new())
-            {
-                p.name = $"{user1}-{user2}";
-                p.type = ParameterType.CHAT;
-                p.value = chat;
-                p.CreateParameter();
-            }
-            string db = ProgramState.Messages + $"\\{chat}.dbinc";
-            SQLiteConnection.CreateFile(db);
-            AutoTableCreator atc = new AutoTableCreator();
-            Query q = new Query("");
-            q.typeOfConnection = DBConnectionType.OTHER;
-            q.DBPath = db;
-            q.AddCustomRequest(GetMessageDefinition(atc))
-             .ExecuteVoid();
-        }
+
         public static void ActualizeTables()
         {
             CheckFieldsInTable(typeof(Parameter), "Parameters", DBConnectionType.SERVICE);
@@ -167,13 +150,6 @@ namespace Common
             atc.SetNotNull("path", true);
             return atc.GetQueryText();
         }
-
-        private static string GetMessageDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Message), "Messages");
-            return atc.GetQueryText();
-        }
-
         private static string GetParameterDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Parameter), "Parameters");

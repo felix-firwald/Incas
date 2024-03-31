@@ -24,7 +24,7 @@ namespace Incubator_2.Windows
         public DialogInput(string title, string description = "Введите значение")
         {
             InitializeComponent();
-            this.Title.Content = title;
+            this.TitleText.Content = title;
             this.InputValue.Tag = description;
         }
 
