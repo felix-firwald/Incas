@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using static Common.Query;
 
 namespace Models
 {
@@ -75,6 +76,18 @@ namespace Models
             return template;
         }
 
+        public List<STemplate> Parse(DataTable dt)
+        {
+            List<STemplate> resulting = new();
+            foreach (DataRow dr in dt.Rows)
+            {
+                this.Serialize(dr);
+                this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
+                resulting.Add(this.AsStruct());
+            }
+            return resulting;
+        }
+
         public Template GetTemplateById(int id)
         {
             DataRow dr = StartCommand()
@@ -102,15 +115,19 @@ namespace Models
                 .WhereEqual("suggestedPath", cat)
                 .WhereNULL("parent")
                 .OrderByASC("name")
+                .Execute();            
+            return Parse(dt);
+        }
+        public List<STemplate> GetAllWordExcelTemplates(string cat)
+        {
+            DataTable dt = StartCommand()
+                .Select()
+                .WhereEqual("suggestedPath", cat)
+                .WhereIn("type", new List<string> { "Excel", "Word"})             
+                .WhereNULL("parent")
+                .OrderByASC("name")
                 .Execute();
-            List<STemplate> resulting = new();
-            foreach (DataRow dr in dt.Rows)
-            {
-                this.Serialize(dr);
-                this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
-                resulting.Add(this.AsStruct());
-            }
-            return resulting;
+            return Parse(dt);
         }
         public List<STemplate> GetAllWordTemplates()
         {
@@ -128,13 +145,7 @@ namespace Models
                 .OrderByASC("name")
                 .Execute();
             List<STemplate> resulting = new();
-            foreach (DataRow dr in dt.Rows)
-            {
-                this.Serialize(dr);
-                this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
-                resulting.Add(this.AsStruct());
-            }
-            return resulting;
+            return Parse(dt);
         }
         public Template GetTemplateByName(string nameOf)
         {
@@ -218,13 +229,7 @@ namespace Models
                 .WhereIn("parent", ids)
                 .OrderByASC("name")
                 .Execute();
-            List<STemplate> children = new();
-            foreach (DataRow dr in dt.Rows)
-            {
-                this.Serialize(dr);
-                children.Add(this.AsStruct());
-            }
-            return children;
+            return Parse(dt);
         }
         public Template GetChild(string name)
         {

@@ -56,7 +56,7 @@ namespace Incubator_2.Windows
         private void reviewClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fd = new OpenFileDialog();
-            fd.Filter = "MS Word|*.docx";
+            fd.Filter = "Word и Excel|*.docx;*.xlsx";
             fd.InitialDirectory = ProgramState.TemplatesSourcesWordPath;
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -67,6 +67,14 @@ namespace Incubator_2.Windows
                 }
                 result = fd.SafeFileName;
                 this.VM_template.Source = result;
+                if (fd.FileName.EndsWith(".docx"))
+                {
+                    template.type = TemplateType.Word;
+                }
+                else if (fd.FileName.EndsWith(".xlsx"))
+                {
+                    template.type = TemplateType.Excel;
+                }
             }
         }
 
@@ -77,9 +85,9 @@ namespace Incubator_2.Windows
                 ProgramState.ShowErrorDialog($"Файл ({template.path}) не найден.", "Сохранение прервано");
                 return false;
             }
-            if (!template.path.EndsWith(".docx"))
+            if (!template.path.EndsWith(".docx") && !template.path.EndsWith(".xlsx"))
             {
-                ProgramState.ShowExclamationDialog($"Исходный файл шаблона должен быть с расширением .docx, любое другое расширение использовать нельзя.", "Сохранение прервано");
+                ProgramState.ShowExclamationDialog($"Исходный файл шаблона должен быть с расширением .docx или .xlsx, любое другое расширение использовать нельзя.", "Сохранение прервано");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(this.nameOfTemplate.Text))

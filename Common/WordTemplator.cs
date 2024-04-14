@@ -14,7 +14,14 @@ using Table = Xceed.Document.NET.Table;
 
 namespace Common
 {
-    public class WordTemplator
+    public interface ITemplator
+    {
+        public void Replace(List<string> tags, List<string> values, bool async = true);
+        public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true);
+        public void CreateTable(string tag, DataTable dt);
+    }
+
+    public class WordTemplator : ITemplator
     {
         public readonly string Path;
         public WordTemplator(string path)

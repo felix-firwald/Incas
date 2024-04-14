@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Windows.ApplicationModel.Background;
 
 namespace Incubator_2.Forms
 {
@@ -343,14 +344,29 @@ namespace Incubator_2.Forms
                 if (CustomValidate())
                 {
                     PlaySavingScript();
-                    string newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
-                    System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
-                    WordTemplator wt = new WordTemplator(newFile);
+                    string newFile;
                     List<SGeneratedTag> filledTags = new();
-                    this.Dispatcher.Invoke(() =>
+                    switch (this.template.type)
                     {
-                        filledTags = wt.GenerateDocument(TagFillers, Tables, GetNumber(), async);
-                    });
+                        case TemplateType.Word:
+                            newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
+                            File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
+                            WordTemplator wt = new WordTemplator(newFile);
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                filledTags = wt.GenerateDocument(TagFillers, Tables, GetNumber(), async);
+                            });
+                            break;
+                        case TemplateType.Excel:
+                            newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
+                            File.Copy(ProgramState.GetFullnameOfExcelFile(template.path), newFile, true);
+                            ExcelTemplator et = new ExcelTemplator(newFile);                            
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                filledTags = et.GenerateDocument(TagFillers, Tables, GetNumber(), async);
+                            });
+                            break;
+                    }
                     if (save)
                     {
                         using (GeneratedDocument doc = new())

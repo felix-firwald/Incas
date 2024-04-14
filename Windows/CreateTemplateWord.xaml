@@ -27,7 +27,7 @@
                 <RowDefinition Height="40"/>
                 <!--кнопка создания файла или печати-->
             </Grid.RowDefinitions>
-            <TextBox x:Name="sourceFile" Style="{DynamicResource TextBoxMain}" Text="{Binding Source}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Файл шаблона в формате .docx" Grid.Column="0" Margin="5,0,5,0" Grid.ColumnSpan="2">
+            <TextBox x:Name="sourceFile" Style="{DynamicResource TextBoxMain}" Text="{Binding Source}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Файл шаблона в формате .docx или .xlsx" Grid.Column="0" Margin="5,0,5,0" Grid.ColumnSpan="2">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>

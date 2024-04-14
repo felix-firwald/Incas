@@ -220,7 +220,12 @@ namespace Common
         #endregion
 
         #region Where
-        private Query Where(string cell, string comparator, string value, bool isStr)
+        public enum WhereType
+        {
+            AND,
+            OR
+        }
+        private Query Where(string cell, string comparator, string value, bool isStr, WhereType wt)
         {
             string resulting;
             string c = "";
@@ -230,7 +235,7 @@ namespace Common
             }
             if (isWhereAlready)
             {
-                resulting = Result + $"\nAND [{cell}] {comparator} {c}{value}{c}\n";
+                resulting = Result + $"\n{wt} [{cell}] {comparator} {c}{value}{c}\n";
                 Result = resulting;
                 return this;
             }
@@ -247,145 +252,145 @@ namespace Common
         /// Where A is not NULL
         /// </summary>
         /// <returns></returns>
-        public Query WhereNotNULL(string cell)
+        public Query WhereNotNULL(string cell, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "is not ", $"NULL AND {cell} = ''", false);
+            return Where(cell, "is not ", $"NULL AND {cell} = ''", false, wt);
         }
         /// <summary>
         /// Where A is NULL
         /// </summary>
         /// <returns></returns>
-        public Query WhereNULL(string cell)
+        public Query WhereNULL(string cell, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "is ", $"NULL OR {cell} = ''", false);
+            return Where(cell, "is ", $"NULL OR {cell} = ''", false, wt);
         }
 
         /// <summary>
         /// Where A (left arg) = B (right arg)
         /// </summary>
         /// <returns></returns>
-        public Query WhereEqual(string cell, string value, bool isStr = true)
+        public Query WhereEqual(string cell, string value, bool isStr = true, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "=", value, isStr);
+            return Where(cell, "=", value, isStr, wt);
         }
-        public Query WhereEqual(string cell, int value)
+        public Query WhereEqual(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "=", value.ToString(), false);
+            return Where(cell, "=", value.ToString(), false, wt);
         }
 
         /// <summary>
         /// Where A (left arg) != B (right arg)
         /// </summary>
         /// <returns></returns>
-        public Query WhereNotEqual(string cell, string value, bool isStr = true)
+        public Query WhereNotEqual(string cell, string value, bool isStr = true, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "<>", value, isStr);
+            return Where(cell, "<>", value, isStr, wt);
         }
-        public Query WhereNotEqual(string cell, int value)
+        public Query WhereNotEqual(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "<>", value.ToString(), false);
+            return Where(cell, "<>", value.ToString(), false, wt);
         }
 
         /// <summary>
         /// Where A (left arg) < B (right arg)
         /// </summary>
         /// <returns></returns>
-        public Query WhereLess(string cell, string value, bool isStr = true)
+        public Query WhereLess(string cell, string value, bool isStr = true, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "<", value, isStr);
+            return Where(cell, "<", value, isStr, wt);
         }
-        public Query WhereLess(string cell, int value)
+        public Query WhereLess(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "<", value.ToString(), false);
+            return Where(cell, "<", value.ToString(), false, wt);
         }
 
         /// <summary>
         /// Where A (left arg) > B (right arg)
         /// </summary>
         /// <returns></returns>
-        public Query WhereMore(string cell, string value, bool isStr = true)
+        public Query WhereMore(string cell, string value, bool isStr = true, WhereType wt = WhereType.AND)
         {
-            return Where(cell, ">", value, isStr);
+            return Where(cell, ">", value, isStr, wt);
         }
-        public Query WhereMore(string cell, int value)
+        public Query WhereMore(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, ">", value.ToString(), false);
+            return Where(cell, ">", value.ToString(), false, wt);
         }
 
         /// <summary>
         /// Where A (left arg) BETWEEN B (central arg) AND C (right arg)
         /// </summary>
         /// <returns></returns>
-        public Query WhereBetween(string cell, int left, int right)
+        public Query WhereBetween(string cell, int left, int right, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "BETWEEN", $"{left} AND {right}", false);
+            return Where(cell, "BETWEEN", $"{left} AND {right}", false, wt);
         }
 
         /// <summary>
         /// Where A (left arg) IN (args)
         /// </summary>
         /// <returns></returns>
-        public Query WhereIn(string cell, List<string> args)
+        public Query WhereIn(string cell, List<string> args, WhereType wt = WhereType.AND)
         {
             string resultingString = "(\"";
             resultingString += string.Join("\", \"", args);
             resultingString += "\")";
-            return Where(cell, "IN", resultingString, false);
+            return Where(cell, "IN", resultingString, false, wt);
         }
-        public Query WhereIn(string cell, List<int> args)
+        public Query WhereIn(string cell, List<int> args, WhereType wt = WhereType.AND)
         {
             string resultingString = "(";
             resultingString += string.Join(", ", args);
             resultingString += ")\n";
-            return Where(cell, "IN", resultingString, false);
+            return Where(cell, "IN", resultingString, false, wt);
         }
-        public Query WhereLike(string cell, string value)
+        public Query WhereLike(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"%{value}%", true);
+            return Where(cell, "LIKE", $"%{value}%", true, wt);
         }
-        public Query WhereLike(string cell, int value)
+        public Query WhereLike(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"%{value}%", true);
+            return Where(cell, "LIKE", $"%{value}%", true, wt);
         }
-        public Query WhereNotLike(string cell, string value)
+        public Query WhereNotLike(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"%{value}%", true);
+            return Where(cell, "NOT LIKE", $"%{value}%", true, wt);
         }
-        public Query WhereNotLike(string cell, int value)
+        public Query WhereNotLike(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"%{value}%", true);
+            return Where(cell, "NOT LIKE", $"%{value}%", true, wt);
         }
-        public Query WhereStartsWith(string cell, string value)
+        public Query WhereStartsWith(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"{value}%", true);
+            return Where(cell, "LIKE", $"{value}%", true, wt);
         }
-        public Query WhereStartsWith(string cell, int value)
+        public Query WhereStartsWith(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"{value}%", true);
+            return Where(cell, "LIKE", $"{value}%", true, wt);
         }
-        public Query WhereNotStartsWith(string cell, string value)
+        public Query WhereNotStartsWith(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"{value}%", true);
+            return Where(cell, "NOT LIKE", $"{value}%", true, wt);
         }
-        public Query WhereNotStartsWith(string cell, int value)
+        public Query WhereNotStartsWith(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"{value}%", true);
+            return Where(cell, "NOT LIKE", $"{value}%", true, wt);
         }
-        public Query WhereEndsWith(string cell, string value)
+        public Query WhereEndsWith(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"%{value}", true);
+            return Where(cell, "LIKE", $"%{value}", true, wt);
         }
-        public Query WhereEndsWith(string cell, int value)
+        public Query WhereEndsWith(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"%{value}", true);
+            return Where(cell, "LIKE", $"%{value}", true, wt);
         }
-        public Query WhereNotEndsWith(string cell, string value)
+        public Query WhereNotEndsWith(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"%{value}", true);
+            return Where(cell, "NOT LIKE", $"%{value}", true, wt);
         }
-        public Query WhereNotEndsWith(string cell, int value)
+        public Query WhereNotEndsWith(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"%{value}", true);
+            return Where(cell, "NOT LIKE", $"%{value}", true, wt);
         }
 
         #endregion

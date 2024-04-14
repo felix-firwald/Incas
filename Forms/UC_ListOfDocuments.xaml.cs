@@ -51,7 +51,7 @@ namespace Incubator_2.Forms
             this.TemplatesArea.Children.Clear();
             using (Template mt = new Template())
             {
-                mt.GetWordTemplates(category).ForEach(c =>
+                mt.GetAllWordExcelTemplates(category).ForEach(c =>
                 {
                     UC_TemplateElement te = new UC_TemplateElement(c);
                     te.OnUpdated += Refresh;

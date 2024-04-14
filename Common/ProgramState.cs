@@ -161,6 +161,10 @@ namespace Common
         {
             return TemplatesSourcesWordPath + "\\" + name;
         }
+        public static string GetFullnameOfExcelFile(string name)
+        {
+            return TemplatesSourcesExcelPath + "\\" + name;
+        }
         #endregion
         private static bool CreateTablesInDatabase()
         {
