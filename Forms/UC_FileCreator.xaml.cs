@@ -45,6 +45,11 @@ namespace Incubator_2.Forms
             templateSettings = templ.GetTemplateSettings();
             this.NumberPrefix.Content = templateSettings.NumberPrefix;
             this.NumberPostfix.Content = templateSettings.NumberPostfix;
+            if (this.template.type == TemplateType.Excel)
+            {
+                this.EyeButton.Visibility = Visibility.Collapsed;
+                this.EyeButtonSeparator.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void FillContentPanel()
@@ -438,6 +443,11 @@ namespace Incubator_2.Forms
 
         private async void PreviewCLick(object sender, MouseButtonEventArgs e)
         {
+            if (this.template.type == TemplateType.Excel)
+            {
+                ProgramState.ShowExclamationDialog("Предпросмотр недоступен для шаблонов Excel", "Действие недоступно");
+                return;
+            }
             ProgramState.ShowWaitCursor();
             await System.Threading.Tasks.Task.Run(() =>
             {
@@ -493,7 +503,17 @@ namespace Incubator_2.Forms
             }
             ProgramState.ShowWaitCursor();
             CreateFile(ProgramState.TemplatesRuntime, "", false, false);
-            string filename = $"{ProgramState.TemplatesRuntime}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
+            string filename;
+            switch (this.template.type)
+            {
+                case TemplateType.Word:
+                default:
+                    filename = $"{ProgramState.TemplatesRuntime}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
+                    break;
+                case TemplateType.Excel:
+                    filename = $"{ProgramState.TemplatesRuntime}\\{RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
+                    break;
+            }            
             try
             {
                 System.Diagnostics.Process proc = new();
