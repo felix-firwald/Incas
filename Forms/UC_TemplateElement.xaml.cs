@@ -57,12 +57,12 @@ namespace Forms
             }
             else
             {
-                ProgramState.ShowErrorDialog($"Файл шаблона \"{template.name}\" ({ProgramState.TemplatesSourcesWordPath}\\{template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
+                ProgramState.ShowErrorDialog($"Файл шаблона \"{template.name}\" ({template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
             }
         }
         private bool IsFileExists()
         {
-            return File.Exists($"{ProgramState.TemplatesSourcesWordPath}\\{template.path}");
+            return File.Exists($"{ProgramState.TemplatesSourcesWordPath}\\{template.path}") || File.Exists($"{ProgramState.TemplatesSourcesExcelPath}\\{template.path}");
         }
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)

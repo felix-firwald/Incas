@@ -61,26 +61,31 @@ namespace Incubator_2.Windows
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string result;
-                if (!fd.FileName.StartsWith(ProgramState.TemplatesSourcesWordPath))
-                {
-                    File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesWordPath}\\{fd.SafeFileName}");
-                }
                 result = fd.SafeFileName;
                 this.VM_template.Source = result;
                 if (fd.FileName.EndsWith(".docx"))
                 {
+                    if (!fd.FileName.StartsWith(ProgramState.TemplatesSourcesWordPath))
+                    {
+                        File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesWordPath}\\{fd.SafeFileName}");
+                    }
                     template.type = TemplateType.Word;
                 }
                 else if (fd.FileName.EndsWith(".xlsx"))
                 {
+                    if (!fd.FileName.StartsWith(ProgramState.TemplatesSourcesExcelPath))
+                    {
+                        File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesExcelPath}\\{fd.SafeFileName}");
+                    }
                     template.type = TemplateType.Excel;
                 }
+                    
             }
         }
 
         private bool CheckForSave()
         {
-            if (!File.Exists(ProgramState.GetFullnameOfWordFile(template.path)))
+            if (!File.Exists(ProgramState.GetFullnameOfWordFile(template.path)) && !File.Exists(ProgramState.GetFullnameOfExcelFile(template.path)))
             {
                 ProgramState.ShowErrorDialog($"Файл ({template.path}) не найден.", "Сохранение прервано");
                 return false;
