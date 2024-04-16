@@ -237,7 +237,19 @@ namespace Incubator_2.Windows
 
         private void EditSourceClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            string pathFile = ProgramState.GetFullnameOfWordFile(template.path);
+            string pathFile = "";
+            switch (template.type)
+            {
+                case TemplateType.Excel:
+                    pathFile = ProgramState.GetFullnameOfExcelFile(template.path);
+                    break;
+                case TemplateType.Word:
+                    pathFile = ProgramState.GetFullnameOfWordFile(template.path);
+                    break;
+                default:
+                    break;
+            }
+            
             if (!File.Exists(pathFile))
             {
                 ProgramState.ShowExclamationDialog($"Файл ({template.path}) не существует!", "Действие прервано");

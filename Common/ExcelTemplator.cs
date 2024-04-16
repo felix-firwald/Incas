@@ -59,17 +59,11 @@ namespace Common
 
             Formatting rowStyle = new Formatting();
             head.FontFamily = new Font("Times New Roman");
-            for (int i = 0; i < dt.Columns.Count; i++) // cols
-            {
-                IXLCell cursor = worksheet.Cell(cell.WorksheetRow().RowNumber(), cell.WorksheetColumn().ColumnNumber());
-                for (int row = 0; row < dt.Rows.Count; row++) // rows
-                {
-                    cell.WorksheetRow().InsertRowsBelow(row);
-                    //tab.Rows[row + 1].Cells[i].Paragraphs[0].Append(dt.Rows[row][i].ToString(), rowStyle);
-                }
-            }
-            
-
+            worksheet.Row(cell.WorksheetRow().RowNumber() + 1).InsertRowsBelow(dt.Rows.Count-1);
+            IXLTable it = cell.InsertTable(dt, true);
+            it.Theme = new("Standart");
+            it.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+            it.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             workbook.Save();
         }
         public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true)

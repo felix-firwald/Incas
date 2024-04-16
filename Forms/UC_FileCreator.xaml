@@ -19,13 +19,13 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" >
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="10,0,10,0" MouseDown="ResizeClick" ToolTip="Свернуть / Развернуть окно"/>
-                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,0,0,0" />
+                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,5,0,5" Opacity="0.5" />
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="FileText" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть файл" Cursor="Hand" MouseDown="OpenFileClick" Margin="8,5,5,5"/>
-                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,0,5,0"/>
+                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,5,5,5" Opacity="0.5"/>
                 <fa:FontAwesome x:Name="EyeButton" Style="{DynamicResource IconButton}" Icon="Eye" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть средство предпросмотра" Cursor="Hand" MouseDown="PreviewCLick" Margin="5,5,1,5"/>
-                <Rectangle x:Name="EyeButtonSeparator" Width="1" Fill="{DynamicResource Element}" Margin="10,0,10,0"/>
+                <Rectangle x:Name="EyeButtonSeparator" Width="1" Fill="{DynamicResource Element}" Opacity="0.5" Margin="10,5,10,5"/>
                 <CheckBox x:Name="Selector" Style="{DynamicResource Selector}" Checked="OnSelectorChecked" Unchecked="OnSelectorUnchecked" Margin="-5,0,0,0"/>
-                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,0,5,0"/>
+                <Rectangle Width="1" Fill="{DynamicResource Element}" Opacity="0.5" Margin="5,5,5,5"/>
                 <Label Style="{DynamicResource LabelElement}" Content="N" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-5,0,0,0"/>
                 <Label x:Name="NumberPrefix" Style="{DynamicResource LabelElement}" Content="" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-5,0,-5,0"/>
 
@@ -38,7 +38,7 @@
                     </TextBox.ContextMenu>
                 </TextBox>
                 <Label x:Name="NumberPostfix" Style="{DynamicResource LabelElement}" Content="" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-5,0,0,0"/>
-                <Rectangle Fill="{DynamicResource Element}" HorizontalAlignment="Left" Grid.Column="1" Width="1" Margin="0,0,5,0"/>
+                <Rectangle Fill="{DynamicResource Element}" Opacity="0.5" HorizontalAlignment="Left" Grid.Column="1" Width="1" Margin="0,5,5,5"/>
 
                 <!--<Label Style="{DynamicResource LabelElement}" Content="—" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,0,0"/>-->
                 <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="Новый">
@@ -51,7 +51,7 @@
                 </TextBox>
                 <Label Style="{DynamicResource LabelElement}" Content=".docx" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-5,0,0,0"/>
             </StackPanel>
-            <Rectangle Fill="{DynamicResource Element}" HorizontalAlignment="Left" Grid.Column="1" Width="1"/>
+            <Rectangle Fill="{DynamicResource Element}" Opacity="0.5" HorizontalAlignment="Left" Grid.Column="1" Width="1" Margin="0,5,0,5"/>
             <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" MouseDown="Remove" ToolTip="Удалить файл" Cursor="Hand" Grid.Column="1"/>
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
             <StackPanel x:Name="ContentPanel" Grid.Row="2" Grid.ColumnSpan="2">
