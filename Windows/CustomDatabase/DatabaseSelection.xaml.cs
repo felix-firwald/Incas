@@ -1,6 +1,8 @@
 ﻿using Common;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows;
+using System.Windows.Documents;
 using Query = Common.Query;
 
 namespace Incubator_2.Windows.CustomDatabase
@@ -44,7 +46,22 @@ namespace Incubator_2.Windows.CustomDatabase
             q.DBPath = ProgramState.GetFullPathOfCustomDb(Database);
             q.AddCustomRequest($"SELECT * FROM [{Table}] {custom}");
             DataTable dt = q.Execute();
+            UpdateItemsSource(dt.Columns);
             this.Grid.ItemsSource = dt.DefaultView;
+        }
+        private void UpdateItemsSource(DataColumnCollection cols)
+        {
+            List<string> result = new();
+            foreach (DataColumn col in cols)
+            {
+                result.Add(col.ColumnName);
+            }
+            this.Fields.ItemsSource = result;
+            try
+            {
+                this.Fields.SelectedIndex = 0;
+            }
+            catch { }
         }
 
         private void SelectClick(object sender, RoutedEventArgs e)
@@ -58,5 +75,24 @@ namespace Incubator_2.Windows.CustomDatabase
             this.Close();
         }
 
+        private void SearchClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            FillList($"WHERE [{this.Fields.SelectedValue}] LIKE '%{this.SearchText.Text}%'");
+        }
+
+        private void ClearClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.SearchText.Text = "";
+            FillList("");
+        }
+
+        private void OnSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            try
+            {
+                this.SearchText.Text = SelectedValues[this.Fields.SelectedValue.ToString()].ToString();
+            }
+            catch { }
+        }
     }
 }

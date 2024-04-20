@@ -34,7 +34,7 @@ namespace Forms
             c.OnUpdated += UpdateList;
             if (this.ChildPanel.Children.Count > 0)
             {
-                this.MainLabel.Style = FindResource("LabelElementSpecial") as Style;
+                this.MainLabel.Style = FindResource("LabelElementSuccess") as Style;
                 this.UseButton.Visibility = Visibility.Hidden;
                 this.ParentIcon.Visibility = Visibility.Visible;
                 this.Line.Visibility = Visibility.Visible;

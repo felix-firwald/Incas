@@ -19,7 +19,8 @@ namespace Models
     {
         Word,
         Text,
-        Excel
+        Excel,
+        Mail
     }
     public struct STemplate
     {
