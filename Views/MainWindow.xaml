@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2"
         xmlns:vm="clr-namespace:Incubator_2.ViewModels"
-        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:tasks="clr-namespace:Incubator_2.Forms.Tasks" xmlns:database="clr-namespace:Incubator_2.Forms.Database" xmlns:usersettings="clr-namespace:Incubator_2.Forms.UserSettings" xmlns:handbook="clr-namespace:Incubator_2.Forms.Handbook" xmlns:communications="clr-namespace:Incubator_2.Forms.Communication" xmlns:adminpanel="clr-namespace:Incubator_2.Forms.AdminPanel" x:Name="window" x:Class="Incubator_2.MainWindow"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:Forms="clr-namespace:Forms" xmlns:ViewModels="clr-namespace:Incubator_2.ViewModels" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:database="clr-namespace:Incubator_2.Forms.Database" xmlns:usersettings="clr-namespace:Incubator_2.Forms.UserSettings" xmlns:handbook="clr-namespace:Incubator_2.Forms.Handbook" xmlns:communications="clr-namespace:Incubator_2.Forms.Communication" xmlns:adminpanel="clr-namespace:Incubator_2.Forms.AdminPanel" xmlns:mail="clr-namespace:Incubator_2.Forms.Mail" x:Name="window" x:Class="Incubator_2.MainWindow"
         mc:Ignorable="d"
         Height="900"
         Width="1300"
@@ -49,14 +49,14 @@
                     <TextBlock Text="Документы" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DocumentsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
-            <RadioButton x:Name="TasksRadio" Style="{DynamicResource MenuButton}" Visibility="{Binding TasksVisibility}">
+            <RadioButton x:Name="MailRadio" Style="{DynamicResource MenuButton}" Visibility="{Binding TasksVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Path Fill="{Binding ElementName=TasksRadio, Path=Foreground}" Data="M12.354 4.354a.5.5 0 0 0-.708-.708L5 10.293 1.854 7.146a.5.5 0 1 0-.708.708l3.5 3.5a.5.5 0 0 0 .708 0zm-4.208 7-.896-.897.707-.707.543.543 6.646-6.647a.5.5 0 0 1 .708.708l-7 7a.5.5 0 0 1-.708 0" />
-                    <TextBlock Text="Задачи" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=TasksRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
+                    <Path Fill="{Binding ElementName=MailRadio, Path=Foreground}" Data="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
+                    <TextBlock Text="Почта" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=MailRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
             <RadioButton x:Name="DatabaseRadio" Style="{DynamicResource MenuButton}" Cursor="Hand" Visibility="{Binding DatabaseVisibility}">
@@ -111,11 +111,8 @@
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=DocumentsRadio, Path=IsChecked}" Background="{x:Null}" BorderBrush="{x:Null}">
                     <Forms:UC_Templator />
                 </TabItem>
-                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=TasksRadio, Path=IsChecked}" Background="{x:Null}">
-                    <tasks:TasksMain/>
-                </TabItem>
-                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=CommunicationsRadio, Path=IsChecked}" Background="{x:Null}">
-                    <communications:CommunicationMain/>
+                <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=MailRadio, Path=IsChecked}" Background="{x:Null}">
+                    <mail:MailMain/>
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=DatabaseRadio, Path=IsChecked}" Background="{x:Null}">
                     <database:CustomDatabaseMain/>

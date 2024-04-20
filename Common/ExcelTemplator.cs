@@ -59,7 +59,7 @@ namespace Common
 
             Formatting rowStyle = new Formatting();
             head.FontFamily = new Font("Times New Roman");
-            worksheet.Row(cell.WorksheetRow().RowNumber() + 1).InsertRowsBelow(dt.Rows.Count-1);
+            worksheet.Row(cell.WorksheetRow().RowNumber() + 1).InsertRowsBelow(dt.Rows.Count);
             IXLTable it = cell.InsertTable(dt, true);
             it.Theme = new("Standart");
             it.Style.Border.InsideBorder = XLBorderStyleValues.Thin;

@@ -37,6 +37,8 @@ namespace Forms
                 this.MainLabel.Style = FindResource("LabelElementSpecial") as Style;
                 this.UseButton.Visibility = Visibility.Hidden;
                 this.ParentIcon.Visibility = Visibility.Visible;
+                this.Line.Visibility = Visibility.Visible;
+                this.ParentIconBottom.Visibility = Visibility.Visible;
             }
         }
         private void IsChild()
