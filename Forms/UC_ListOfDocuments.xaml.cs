@@ -67,35 +67,6 @@ namespace Incubator_2.Forms
             }
             GC.Collect();
         }
-        private void LoadChildrenForTemplates()
-        {
-            List<int> ids = new List<int>();
-            if (this.TemplatesArea.Children[0] is NoContent)
-            {
-                return;
-            }
-            foreach (UC_TemplateElement element in this.TemplatesArea.Children)
-            {
-                ids.Add(element.template.id);
-            }
-            if (ids.Count > 0)
-            {
-                using (Template mt = new Template())
-                {
-                    mt.GetAllChildren(ids).ForEach(c =>
-                    {
-                        foreach (UC_TemplateElement element in this.TemplatesArea.Children)
-                        {
-                            if (element.template.id == c.parent)
-                            {
-                                element.AddChild(c);
-                            }
-                        }
-                    });
-                }
-            }
-
-        }
 
         private void SelectCategory(object sender, RoutedEventArgs e)
         {
@@ -104,13 +75,11 @@ namespace Incubator_2.Forms
             if (text != "Без категории")
             {
                 LoadTemplatesByCategory(text);
-                LoadChildrenForTemplates();
                 this.selectedCategory = text;
             }
             else
             {
                 LoadTemplatesByCategory("");
-                LoadChildrenForTemplates();
                 this.selectedCategory = "";
             }
 
@@ -148,7 +117,6 @@ namespace Incubator_2.Forms
         {
             LoadCategories();
             FindSelectedInRefreshedList();
-            LoadChildrenForTemplates();
         }
 
         private void Refresh_Click(object sender, MouseButtonEventArgs e)

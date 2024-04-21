@@ -160,7 +160,7 @@ namespace Incubator_2.Windows.Templates
                 }
                 else
                 {
-                    template.AddTemplate(false);
+                    template.AddTemplate();
                     SaveTags(false);
                 }
                 OnCreated?.Invoke();

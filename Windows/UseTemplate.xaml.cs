@@ -57,7 +57,7 @@ namespace Incubator_2.Windows
         {
             using (Tag t = new())
             {
-                tags = t.GetAllTagsByTemplate(template.id, template.parent);
+                tags = t.GetAllTagsByTemplate(this.template.id, this.template.parent);
             }
         }
 

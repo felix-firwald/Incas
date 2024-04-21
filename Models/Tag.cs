@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Models
 {
@@ -69,59 +70,46 @@ namespace Models
             tableName = "Tags";
         }
 
-        public List<Tag> GetAllTagsByTemplate(int templ, int parent = 0)
+        public List<Tag> GetAllTagsByTemplate(int templ, string parents = "0")
         {
-            string req = $"SELECT * FROM Tags\nWHERE template = {templ}";
-            if (parent != 0)
-            {
-                req += $" OR template = {parent}";
-            }
+            List<string> parentsList = parents.Split(';').ToList();
+            parentsList.Add(templ.ToString());
             DataTable dt = this.StartCommand()
-                .AddCustomRequest(req)
-                .OrderByASC("orderNumber ASC, id")
+                .Select()
+                .WhereIn(nameof(template), parentsList)
+                .OrderByASC("template ASC, orderNumber")
                 .Execute();
-            List<Tag> parentTags = new List<Tag>();
-            List<Tag> childrenTags = new List<Tag>();
+
+            List<Tag> result = new List<Tag>();
             foreach (DataRow dr in dt.Rows)
             {
                 Tag mt = new Tag();
                 mt.Serialize(dr);
                 mt.type = (TypeOfTag)Enum.Parse(typeof(TypeOfTag), dr["type"].ToString());
-                if (mt.template == parent)
-                {
-                    parentTags.Add(mt);
-                }
-                else
-                {
-                    childrenTags.Add(mt);
-                }
+                result.Add(mt);
             }
-            if (parent == 0)    // если это теги НЕунаследованного шаблона
-            {
-                return childrenTags;
-            }
-            return ExludeTags(childrenTags, parentTags);
+            return result;
         }
-        private List<Tag> ExludeTags(List<Tag> childs, List<Tag> parents)
-        {
-            foreach (Tag child in childs)   // для каждого тега
-            {
-                if (child.parent != 0) // если у него есть родитель
-                {
-                    for (int i = 0; i < parents.Count; i++) // проходим по родителям
-                    {
-                        if (parents[i].id == child.parent) // если родитель найден
-                        {
-                            child.name = parents[i].name; // присвоить имя родителя наследнику
-                            parents.RemoveAt(i); // удалить родителя (нахуй не нужон)
-                            break;
-                        }
-                    }
-                }
-            }
-            parents.AddRange(childs);
-            return parents;
-        }
+        //private List<Tag> ExludeTags(List<Tag> childs, List<Tag> parents)
+        //{
+        //    foreach (Tag child in childs)   // для каждого тега
+        //    {
+        //        if (child.parent != 0) // если у него есть родитель
+        //        {
+        //            for (int i = 0; i < parents.Count; i++) // проходим по родителям
+        //            {
+        //                if (parents[i].id == child.parent) // если родитель найден
+        //                {
+        //                    child.name = parents[i].name; // присвоить имя родителя наследнику
+        //                    parents.RemoveAt(i); // удалить родителя (нахуй не нужон)
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    parents.AddRange(childs);
+        //    return parents;
+        //}
         public void AddTag()
         {
             StartCommand()

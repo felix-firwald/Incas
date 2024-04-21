@@ -180,7 +180,10 @@ namespace Incubator_2.Forms
                 tag.command = "";
             }
         }
-
+        public void SetOrderNumber(int orderNumber)
+        {
+            this.vm.OrderNumber = orderNumber;
+        }
         private void UpClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.vm.IncrementOrder();

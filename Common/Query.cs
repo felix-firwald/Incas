@@ -332,9 +332,9 @@ namespace Common
         /// <returns></returns>
         public Query WhereIn(string cell, List<string> args, WhereType wt = WhereType.AND)
         {
-            string resultingString = "(\"";
-            resultingString += string.Join("\", \"", args);
-            resultingString += "\")";
+            string resultingString = "('";
+            resultingString += string.Join("', '", args);
+            resultingString += "')";
             return Where(cell, "IN", resultingString, false, wt);
         }
         public Query WhereIn(string cell, List<int> args, WhereType wt = WhereType.AND)
@@ -503,6 +503,11 @@ namespace Common
                 Clear();
             }
             return tmp;
+        }
+        public Query ShowRequest()
+        {
+            ProgramState.ShowInfoDialog(this.Result);
+            return this;
         }
         public DataTable Execute()
         {

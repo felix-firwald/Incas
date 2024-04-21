@@ -19,20 +19,19 @@ namespace Incubator_2.Windows
     {
         Template template;
         private VM_Template VM_template;
-        private readonly bool isEdit = false;
 
         public delegate void Base();
         public event Base OnCreated;
-        public CreateTemplateWord(Template te = null)
+        public CreateTemplateWord(Template te = null, string parents = null)
         {
             InitializeComponent();
             if (te == null)
             {
                 template = new Template();
+                template.parent = parents;
             }
             else
             {
-                isEdit = true;
                 this.Title = $"Редактирование шаблона ({te.name})";
                 template = te;
                 this.FindInFileButton.IsEnabled = false;
@@ -143,14 +142,14 @@ namespace Incubator_2.Windows
                 ProgramState.ShowWaitCursor();
                 this.Close();
                 template.SaveTemplateSettings(this.VM_template.GetSettings());
-                if (isEdit)
+                if (template.id != 0)
                 {
                     template.UpdateTemplate();
                     SaveTags(true);
                 }
                 else
                 {
-                    template.AddTemplate(false);
+                    template.AddTemplate();
                     SaveTags(false);
                 }
                 OnCreated?.Invoke();
@@ -301,6 +300,16 @@ namespace Incubator_2.Windows
                 {
                     this.VM_template.ValidationScript = cc.Command.Script;
                 }
+            }
+        }
+
+        private void Sort(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            int order = 0;
+            foreach (TagCreator tag in this.ContentPanel.Children)
+            {
+                order++;
+                tag.SetOrderNumber(order);
             }
         }
     }

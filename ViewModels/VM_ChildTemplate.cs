@@ -10,20 +10,20 @@ namespace Incubator_2.ViewModels
         public List<Tag> childTags;
         public VM_ChildTemplate(int parent, Template child = null)
         {
-            if (child != null)
-            {
-                childTemplate = child;
-                childTemplate.parent = parent;
-                GetChildrenTag(childTemplate.id);
-            }
-            else
-            {
-                childTemplate = new Template();
-                childTemplate.parent = parent;
-                childTags = new List<Tag>();
-            }
+            //if (child != null)
+            //{
+            //    childTemplate = child;
+            //    childTemplate.parent = parent;
+            //    GetChildrenTag(childTemplate.id);
+            //}
+            //else
+            //{
+            //    childTemplate = new Template();
+            //    childTemplate.parent = parent;
+            //    childTags = new List<Tag>();
+            //}
 
-            GetParentTag(parent);
+            //GetParentTag(parent);
         }
 
         private void GetChildrenTag(int template)
@@ -64,7 +64,7 @@ namespace Incubator_2.ViewModels
             }
             else
             {
-                childTemplate.AddTemplate(true);
+                childTemplate.AddTemplate();
             }
 
         }

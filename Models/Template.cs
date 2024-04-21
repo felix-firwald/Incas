@@ -28,7 +28,7 @@ namespace Models
         public string name { get; set; }
         public string path { get; set; }
         public string suggestedPath { get; set; }
-        public int parent { get; set; }
+        public string parent { get; set; }
         public TemplateType type { get; set; }
         public string settings { get; set; }
 
@@ -52,7 +52,7 @@ namespace Models
         public string path { get; set; }
         public string suggestedPath { get; set; }
         public TemplateType type { get; set; }
-        public int parent { get; set; }
+        public string parent { get; set; }
         public string settings { get; set; }
 
         public Template()
@@ -86,6 +86,7 @@ namespace Models
                 this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
                 resulting.Add(this.AsStruct());
             }
+            
             return resulting;
         }
 
@@ -185,8 +186,9 @@ namespace Models
             return categories;
         }
 
-        public void AddTemplate(bool isChild)
+        public void AddTemplate()
         {
+            bool isChild = !string.IsNullOrWhiteSpace(parent);
             StartCommand()
                 .Insert(new Dictionary<string, string>
                 {
@@ -228,11 +230,36 @@ namespace Models
                     .Execute();
             }
         }
-        public List<STemplate> GetAllChildren(List<int> ids)
+        public List<STemplate> GetAllChildren(List<string> ids)
+        {
+            for (int i = 0; i < ids.Count; i++)
+            {
+                if (string.IsNullOrWhiteSpace(ids[i]))
+                {
+                    ids.RemoveAt(i);
+                }
+            }
+            string parents;
+            if (ids.Count < 2)
+            {
+                parents = ids[0];
+            }
+            else
+            {
+                parents = string.Join(';', ids);
+            }
+            DataTable dt = StartCommand()
+                .Select()
+                .WhereEqual("parent", parents)
+                .OrderByASC("name")
+                .Execute();
+            return Parse(dt);
+        }
+        public List<STemplate> GetAllChildren(int id)
         {
             DataTable dt = StartCommand()
                 .Select()
-                .WhereIn("parent", ids)
+                .WhereEqual("parent", id)
                 .OrderByASC("name")
                 .Execute();
             return Parse(dt);

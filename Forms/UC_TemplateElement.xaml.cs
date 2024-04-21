@@ -2,7 +2,9 @@
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
 using Models;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -25,28 +27,38 @@ namespace Forms
             InitializeComponent();
             template = t;
             this.MainLabel.Content = template.name;
-            IsChild();
+            FindChilds();
         }
-        public void AddChild(STemplate t)
+
+        private async void FindChilds()
         {
-            UC_TemplateElement c = new UC_TemplateElement(t);
-            this.ChildPanel.Children.Add(c);
-            c.OnUpdated += UpdateList;
-            if (this.ChildPanel.Children.Count > 0)
+            await System.Threading.Tasks.Task.Run(() =>
             {
-                this.MainLabel.Style = FindResource("LabelElementSuccess") as Style;
-                this.UseButton.Visibility = Visibility.Hidden;
-                this.ParentIcon.Visibility = Visibility.Visible;
-                this.Line.Visibility = Visibility.Visible;
-                this.ParentIconBottom.Visibility = Visibility.Visible;
-            }
-        }
-        private void IsChild()
-        {
-            if (this.template.parent != 0)
-            {
-                this.CreateChild.Visibility = Visibility.Collapsed;
-            }
+                List<string> parents = template.parent.Split(";").ToList();
+                parents.Add(template.id.ToString());
+                List<STemplate> children = template.AsModel().GetAllChildren(parents);
+                if (children.Count > 0)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        foreach (STemplate item in children)
+                        {
+                            UC_TemplateElement c = new UC_TemplateElement(item);
+                            this.ChildPanel.Children.Add(c);
+                            c.OnUpdated += UpdateList;
+                        }
+                        if (this.ChildPanel.Children.Count > 0)
+                        {
+                            this.MainLabel.Style = FindResource("LabelElementSuccess") as Style;
+                            this.UseButton.Visibility = Visibility.Hidden;
+                            this.ParentIcon.Visibility = Visibility.Visible;
+                            this.Line.Visibility = Visibility.Visible;
+                            this.ParentIconBottom.Visibility = Visibility.Visible;
+                        }
+                    });
+                }
+                
+            });
         }
 
         private void AddClick(object sender, MouseButtonEventArgs e)
@@ -100,19 +112,9 @@ namespace Forms
                 if (ProgramState.IsWorkspaceOpened())
                 {
                     ProgramState.ShowWaitCursor();
-                    if (this.template.parent != 0)  // если это ребенок
-                    {
-                        VM_ChildTemplate vm = new VM_ChildTemplate(this.template.parent, this.template.AsModel());
-                        CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
-                        cc.OnCreated += UpdateList;
-                        cc.ShowDialog();
-                    }
-                    else
-                    {
-                        CreateTemplateWord ctw = new CreateTemplateWord(this.template.AsModel());
-                        ctw.OnCreated += UpdateList;
-                        ctw.ShowDialog();
-                    }
+                    CreateTemplateWord ctw = new CreateTemplateWord(this.template.AsModel());
+                    ctw.OnCreated += UpdateList;
+                    ctw.ShowDialog();
                 }
             }
             else
@@ -127,10 +129,14 @@ namespace Forms
             {
                 if (ProgramState.IsWorkspaceOpened())
                 {
-                    VM_ChildTemplate vm = new VM_ChildTemplate(this.template.id);
-                    CreateChildOfTemplate cc = new CreateChildOfTemplate(vm);
-                    cc.OnCreated += UpdateList;
-                    cc.ShowDialog();
+                    string parents = this.template.id.ToString();
+                    if (!string.IsNullOrWhiteSpace(this.template.parent))
+                    {
+                        parents = this.template.parent + ";" + parents;
+                    }
+                    CreateTemplateWord ctw = new CreateTemplateWord(parents: parents);
+                    ctw.OnCreated += UpdateList;
+                    ctw.ShowDialog();
                 }
             }
             else
