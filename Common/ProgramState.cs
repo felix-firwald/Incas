@@ -433,6 +433,16 @@ namespace Common
                 d.ShowDialog();
             });
         }
+        // for dev only
+        public static void ShowInfoDialog(object message, string title = "Оповещение")
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                PlaySound("UI-Attention");
+                Dialog d = new Dialog(message.ToString(), title, Dialog.DialogIcon.Info);
+                d.ShowDialog();
+            });
+        }
         public static DialogStatus ShowQuestionDialog(string message, string title, string yesText = "Да", string noText = "Нет")
         {
             DialogQuestion d = new DialogQuestion(message, title, yesText, noText);
