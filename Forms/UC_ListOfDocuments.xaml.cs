@@ -8,9 +8,11 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Windows.Storage.Streams;
 
 namespace Incubator_2.Forms
 {
+
     /// <summary>
     /// Логика взаимодействия для UC_ListOfDocuments.xaml
     /// </summary>
@@ -29,7 +31,7 @@ namespace Incubator_2.Forms
             this.Categories.Children.Clear();
             AddCategory("Без категории", true);
             Template mt = new Template();
-            mt.GetCategories().ForEach(c =>
+            mt.GetCategories(new() { "Excel", "Word" }).ForEach(c =>
             {
                 if (!string.IsNullOrEmpty(c))
                 {

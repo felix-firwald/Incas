@@ -30,7 +30,6 @@ namespace Incubator_2.Forms
             vm = new VM_TableFiller(t);
             this.DataContext = vm;
             command = t.GetCommand();
-            this.Description.Content = t.description;
             MakeButton();
         }
         private void MakeButton()
@@ -87,5 +86,18 @@ namespace Incubator_2.Forms
             RunScript();
         }
 
+        private void AddClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.Grid.Rows.Add();
+        }
+
+        private void RemoveClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                this.vm.Grid.Rows.RemoveAt(this.Table.SelectedIndex);
+            }
+            catch { }
+        }
     }
 }

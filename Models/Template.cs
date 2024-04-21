@@ -138,6 +138,10 @@ namespace Models
         {
             return GetAllByType(TemplateType.Text);
         }
+        public List<STemplate> GetAllMailTemplates()
+        {
+            return GetAllByType(TemplateType.Mail);
+        }
         private List<STemplate> GetAllByType(TemplateType type)
         {
             DataTable dt = StartCommand()
@@ -166,11 +170,12 @@ namespace Models
         {
             return GetAllTemplatesBy(TemplateType.Excel, "");
         }
-        public List<string> GetCategories()
+        public List<string> GetCategories(List<string> types)
         {
             DataTable dt = StartCommand()
                 .SelectUnique("suggestedPath")
-                .OrderByASC("suggestedPath")
+                .WhereIn("type", types)
+                .OrderByASC("suggestedPath")               
                 .Execute();
             List<string> categories = new List<string>();
             foreach (DataRow dr in dt.Rows)

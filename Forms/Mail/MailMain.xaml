@@ -6,7 +6,25 @@
              xmlns:local="clr-namespace:Incubator_2.Forms.Mail"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <GroupBox Style="{DynamicResource MainGroupBox}" Header="УПРАВЛЕНИЕ ПОЧТОЙ">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="200" />
+            <RowDefinition MinHeight="200" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="180" MaxWidth="500" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ПРОФИЛИ" Margin="5,5,5,5" Grid.Column="0"/>
+        <GridSplitter Style="{StaticResource SplitterHorizontal}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Grid.Row="1"/>
+        <GroupBox Style="{DynamicResource MainGroupBox}" Header="АДРЕСАТЫ" Margin="5,5,5,5" Grid.Column="0" Grid.Row="1"/>
+        <GridSplitter Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
+        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ШАБЛОНЫ ПИСЕМ" Margin="5,5,5,5" Grid.Column="1" Grid.RowSpan="2">
+            <ScrollViewer Style="{StaticResource ScrollViewerBase}" Margin="5,0,0,5" Grid.Column="1" Grid.Row="0" Cursor="">
+                <StackPanel x:Name="TemplatesArea" Grid.Row="0" ScrollViewer.CanContentScroll="True">
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
+    </Grid>
 
-    </GroupBox>
 </UserControl>

@@ -600,7 +600,7 @@ namespace Common
             {
                 case 1:
                     ProgramState.ShowDatabaseErrorDialog(
-                        $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}" +
+                        $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}\nЗапрос: {this.Result}" +
                         $"\nINCAS попытается исправить проблему, если она связана с конфигурацией служебной базы данных.");
                     if (typeOfConnection == DBConnectionType.BASE || typeOfConnection == DBConnectionType.SERVICE)
                     {

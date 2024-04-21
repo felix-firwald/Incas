@@ -79,7 +79,7 @@ namespace Incubator_2.Common
                 case "NEWDOC":
                     using (Template t = new())
                     {
-                        List<string> categories = t.GetCategories();
+                        List<string> categories = t.GetCategories(new() { "Excel", "Word" });
                         string result = "Выберите *одну* из категорий ниже:";
                         foreach (string category in categories)
                         {

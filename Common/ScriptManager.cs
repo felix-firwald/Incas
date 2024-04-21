@@ -54,7 +54,7 @@ namespace Incas
         {
             using (Template t = new())
             {
-                return t.GetCategories();
+                return t.GetCategories(new() { "Excel", "Word"});
             }
         }
         public static List<STemplate> GetWordTemplates(string category)

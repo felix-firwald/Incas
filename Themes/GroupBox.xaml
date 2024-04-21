@@ -7,26 +7,32 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="GroupBox">
-                    <Border CornerRadius="5" Background="{StaticResource Area}" BorderBrush="{StaticResource Element}" BorderThickness="2">
+                    <Border CornerRadius="6" BorderBrush="{StaticResource Focus}" BorderThickness="2">
 
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="40" />
+                                <RowDefinition Height="45" />
                                 <RowDefinition Height="2" />
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
 
-                            <Border Grid.Row="0">
-                                <Label Foreground="{StaticResource DarkLight}" Background="{StaticResource Area}" FontSize="16" FontFamily="/Fonts/#JetBrains Mono" FontWeight="ExtraLight" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" />
+                            <Border Grid.Row="0" CornerRadius="6" Background="Transparent" BorderBrush="{StaticResource Element}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35">
+                                <Label x:Name="HeaderLabel" FontSize="16" FontFamily="/Fonts/#JetBrains Mono" FontWeight="ExtraLight" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource DarkLight}">
+                                    <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" >
+                                    </ContentPresenter>
                                 </Label>
                             </Border>
 
-                            <Rectangle Grid.Row="1" Fill="{StaticResource Element}" >
-                            </Rectangle>
-                            <Border Grid.Row="2" BorderThickness="0" BorderBrush="#25A0DA">
-                                <ContentPresenter Margin="4" />
+
+
+
+                            <!--<Rectangle Grid.Row="2" Fill="{StaticResource Area}"  HorizontalAlignment="Stretch" Width="2" Margin="5,-8,0,0"/>-->
+                            <Border Grid.Row="2" BorderThickness="0,2,0,0" CornerRadius="0" BorderBrush="{StaticResource Element}" Margin="0,0,0,0" Background="{DynamicResource Area}">
+                                <ContentPresenter Margin="4,8,4,4" />
                             </Border>
+                            <Popup IsOpen="True" StaysOpen="True">
+
+                            </Popup>
                         </Grid>
                     </Border>
                 </ControlTemplate>

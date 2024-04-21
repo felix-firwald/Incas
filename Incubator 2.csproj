@@ -93,6 +93,7 @@
     <None Remove="Static\Rooster.wav" />
     <None Remove="Static\UI-Attention.wav" />
     <None Remove="Static\UI-Exclamation.wav" />
+    <None Remove="Themes\Tile.png" />
     <None Remove="Views\Logo64.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +148,7 @@
     <Resource Include="Fonts\VelaSans-Medium.ttf" />
     <Resource Include="Fonts\VelaSans-Regular.ttf" />
     <Resource Include="Fonts\VelaSans-SemiBold.ttf" />
+    <Resource Include="Themes\Tile.png" />
     <Resource Include="Views\Logo64.ico" />
   </ItemGroup>
   <ItemGroup>
