@@ -11,6 +11,17 @@ namespace Incubator_2.ViewModels
         {
             this.mainTag = tag;
         }
+        public string VisibleName
+        {
+            get
+            {
+                return mainTag.visibleName;
+            }
+            set
+            {
+                mainTag.visibleName = value;
+            }
+        }
 
         public string DescriptionText
         {

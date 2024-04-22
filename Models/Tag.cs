@@ -59,9 +59,10 @@ namespace Models
         public int id { get; set; }
         public int template { get; set; }
         public string name { get; set; }
+        public string visibleName { get; set; }
         public TypeOfTag type { get; set; }
         public string value { get; set; }
-        public int parent { get; set; }
+        
         public int orderNumber { get; set; }
         public string description { get; set; }
         public string command { get; set; }
@@ -90,26 +91,7 @@ namespace Models
             }
             return result;
         }
-        //private List<Tag> ExludeTags(List<Tag> childs, List<Tag> parents)
-        //{
-        //    foreach (Tag child in childs)   // для каждого тега
-        //    {
-        //        if (child.parent != 0) // если у него есть родитель
-        //        {
-        //            for (int i = 0; i < parents.Count; i++) // проходим по родителям
-        //            {
-        //                if (parents[i].id == child.parent) // если родитель найден
-        //                {
-        //                    child.name = parents[i].name; // присвоить имя родителя наследнику
-        //                    parents.RemoveAt(i); // удалить родителя (нахуй не нужон)
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    parents.AddRange(childs);
-        //    return parents;
-        //}
+
         public void AddTag()
         {
             StartCommand()
@@ -117,9 +99,9 @@ namespace Models
                 {
                     { "template", template.ToString() },
                     { "name", name },
+                    { "visibleName", visibleName },
                     { "type", type.ToString() },
-                    { "value", value },
-                    { "parent", parent > 0? parent.ToString(): Common.Query.Null },
+                    { "value", value },                   
                     { "description", description },
                     { "command", command },
                     { "orderNumber", orderNumber.ToString() }
@@ -135,6 +117,7 @@ namespace Models
             }
             StartCommand()
                 .Update("name", name)
+                .Update("visibleName", visibleName)
                 .Update("type", type.ToString())
                 .Update("value", value)
                 .Update("description", description)

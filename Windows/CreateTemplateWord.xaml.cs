@@ -207,6 +207,7 @@ namespace Incubator_2.Windows
                 {
                     Tag tag = new Tag();
                     tag.name = tagname;
+                    tag.visibleName = tagname;
                     AddTag(tag);
                 }
             }

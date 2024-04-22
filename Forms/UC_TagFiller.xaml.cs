@@ -47,8 +47,15 @@ namespace Incubator_2.Forms
             InitializeComponent();
             Mode = FillerMode.Tag;
             this.tag = t;
-            this.MainLabel.Text = this.tag.name + ":";
-            //this.CommandIcon.Data = FindResource("Regex") as Geometry;
+            if (string.IsNullOrWhiteSpace(this.tag.visibleName))
+            {
+                this.MainLabel.Text = this.tag.name + ":";
+            }
+            else
+            {
+                this.MainLabel.Text = this.tag.visibleName + ":";
+            }
+            
             switch (tag.type)
             {
                 case TypeOfTag.Variable:

@@ -28,15 +28,14 @@ namespace Incubator_2.Forms
             tag = t;
             vm = new(t);
             this.DataContext = vm;
-            if (t.parent is not 0)
-            {
-                this.OverridenLabel.Visibility = System.Windows.Visibility.Visible;
-                this.TagName.IsEnabled = false;
-            }
         }
 
         public bool Check()
         {
+            if (string.IsNullOrWhiteSpace(this.tag.visibleName))
+            {
+                return false;
+            }
             switch (this.tag.type)
             {
                 case TypeOfTag.Variable:
