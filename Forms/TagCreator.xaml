@@ -40,11 +40,9 @@
                 <TextBox Style="{DynamicResource TextBoxMain}" Tag="Отображаемое название" Text="{Binding VisibleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" TextWrapping="Wrap">
                     <TextBox.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Очистить" Click="ClearClick"/>
                             <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
-                            <MenuItem Header="Копировать все" Click="CopyAllClick"/>
                             <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
-                            <MenuItem Header="Вставить виртуальный тег" Click="AddVirtualTagClick"/>
+                            <MenuItem Header="Применить наименование" Click="CopyNameToVisible"/>
                         </ContextMenu>
                     </TextBox.ContextMenu>
                 </TextBox>

@@ -72,32 +72,41 @@
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" Grid.Column="1" Grid.Row="1" ToolTip="Открыть справочную информацию" MouseDown="GetMoreInfoClick" />
                 </StackPanel>
             </Border>
-            <Border CornerRadius="5" Margin="5,5,5,5" Padding="2" Background="{DynamicResource Black}" Grid.Row="2">
+            <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="2">
                 <StackPanel>
-                    <Grid Margin="0,5,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Path Fill="{DynamicResource Yellow}" Data="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                    <Border Background="{StaticResource Dark}" CornerRadius="5" Margin="5">
+                        <StackPanel>
+                            <Grid Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Path Fill="{DynamicResource Yellow}" Data="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
 
-                        <Label Content="Привязанные скрипты:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
-                    </Grid>
-                    <MenuItem Style="{StaticResource Command}" Header="Действия при сохранении документа" Click="AddCommandClick" Tag="Save"/>
-                    <MenuItem Style="{StaticResource Command}" Header="Валидация" Click="AddCommandClick" Tag="Validate" />
-                    <Separator Background="{StaticResource LightBlack}"/>
-                    <Grid Margin="0,5,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Path Fill="{DynamicResource Yellow}" Data="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                            <Label Content="Привязанные скрипты:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                        </Grid>
+                        <MenuItem Style="{StaticResource Command}" Header="Действия при сохранении документа" Click="AddCommandClick" Tag="Save"/>
+                        <MenuItem Style="{StaticResource Command}" Header="Валидация" Click="AddCommandClick" Tag="Validate" />
+                        </StackPanel>
+                    </Border>
+                    
+                    <!--<Separator Background="{StaticResource LightBlack}"/>-->
+                    <Border Background="{StaticResource Dark}" CornerRadius="5" Margin="5">
+                        <StackPanel>
+                            <Grid Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Path Fill="{DynamicResource Yellow}" Data="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
 
-                        <Label Content="Номер документа:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
-                    </Grid>
-                    <TextBlock Style="{StaticResource TextBlockMain}" Text="Чтобы номер проставился в файле, используйте конструкцию [N]" Foreground="{DynamicResource Area}" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>
-                    <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding NumberPrefix}" Tag="Префикс" MaxLength="12"/>
-                    <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding NumberPostfix}" Tag="Постфикс" MaxLength="12"/>
+                                <Label Content="Номер документа:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                            </Grid>
+                            <TextBlock Style="{StaticResource TextBlockMain}" Text="Чтобы номер проставился в файле, используйте конструкцию [N]" Foreground="{DynamicResource Element}" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>
+                            <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding NumberPrefix}" Tag="Префикс" MaxLength="12"/>
+                            <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding NumberPostfix}" Tag="Постфикс" MaxLength="12"/>
+                        </StackPanel>
+                    </Border>
                     <Separator Background="{StaticResource LightBlack}"/>
                     <Label Style="{StaticResource LabelElement}" Content="Иной функционал станет доступен позднее" HorizontalAlignment="Center" Foreground="{DynamicResource Area}"/>
                 </StackPanel>

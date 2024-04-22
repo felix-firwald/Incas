@@ -20,6 +20,7 @@ namespace Incubator_2.ViewModels
             set
             {
                 mainTag.visibleName = value;
+                OnPropertyChanged(nameof(VisibleName));
             }
         }
 

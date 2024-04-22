@@ -9,8 +9,8 @@
              d:DesignHeight="800" d:DesignWidth="1200">
     <Grid Background="#2f3239">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" MinWidth="400"/>
-            <ColumnDefinition Width="2*" MinWidth="400"/>
+            <ColumnDefinition Width="3*" MinWidth="200"/>
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0"/>

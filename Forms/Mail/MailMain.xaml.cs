@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Common;
+using Forms;
+using Incubator_2.Forms.OneInstance;
+using Incubator_2.Windows;
+using Models;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Incubator_2.Forms.Mail
 {
@@ -20,9 +15,114 @@ namespace Incubator_2.Forms.Mail
     /// </summary>
     public partial class MailMain : UserControl
     {
+        private string selectedCategory = "";
         public MailMain()
         {
             InitializeComponent();
+            LoadCategories();
+            LoadTemplatesByCategory("");
+        }
+        private void LoadCategories()
+        {
+            this.Categories.Children.Clear();
+            AddCategory("Без категории", true);
+            Template mt = new Template();
+            mt.GetCategories(new() { "Mail" }).ForEach(c =>
+            {
+                if (!string.IsNullOrEmpty(c))
+                {
+                    AddCategory(c);
+                }
+            });
+        }
+        private void AddCategory(string category, bool selected = false)
+        {
+            RadioButton rb = new RadioButton();
+            rb.Style = FindResource("CategoryButton") as Style;
+            rb.Content = category;
+            rb.Click += new RoutedEventHandler(this.SelectCategory);
+            rb.IsChecked = selected;
+            this.Categories.Children.Add(rb);
+        }
+        private void LoadTemplatesByCategory(string category)
+        {
+            this.TemplatesArea.Children.Clear();
+            using (Template mt = new Template())
+            {
+                mt.GetAllMailTemplates(category).ForEach(c =>
+                {
+                    UC_TemplateElement te = new UC_TemplateElement(c);
+                    te.OnUpdated += Refresh;
+                    this.TemplatesArea.Children.Add(te);
+                });
+                if (this.TemplatesArea.Children.Count == 0)
+                {
+                    this.TemplatesArea.Children.Add(new NoContent());
+                }
+            }
+            GC.Collect();
+        }
+
+        private void SelectCategory(object sender, RoutedEventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            string text = rb.Content.ToString();
+            if (text != "Без категории")
+            {
+                LoadTemplatesByCategory(text);
+                this.selectedCategory = text;
+            }
+            else
+            {
+                LoadTemplatesByCategory("");
+                this.selectedCategory = "";
+            }
+
+        }
+
+        private void AddFC_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (ProgramState.IsWorkspaceOpened())
+            {
+                CreateTemplateWord ctw = new CreateTemplateWord();
+                ctw.OnCreated += Refresh;
+                ctw.Show();
+            }
+
+        }
+        private void FindSelectedInRefreshedList()
+        {
+            foreach (RadioButton rb in this.Categories.Children)
+            {
+                if (rb.Content.ToString() == selectedCategory)
+                {
+                    rb.IsChecked = true;
+                    LoadTemplatesByCategory(selectedCategory);
+                    return;
+                }
+            }
+            RadioButton def = (RadioButton)this.Categories.Children[0];
+            def.IsChecked = true;
+            selectedCategory = "";
+            LoadTemplatesByCategory("");
+            return;
+        }
+
+        public void Refresh()
+        {
+            LoadCategories();
+            FindSelectedInRefreshedList();
+        }
+
+
+        private void CreateTemplateClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void RefreshClick(object sender, MouseButtonEventArgs e)
+        {
+            Refresh();
         }
     }
 }

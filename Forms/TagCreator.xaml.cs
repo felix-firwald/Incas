@@ -192,5 +192,10 @@ namespace Incubator_2.Forms
         {
             this.vm.DecrementOrder();
         }
+
+        private void CopyNameToVisible(object sender, RoutedEventArgs e)
+        {
+            this.vm.VisibleName = this.vm.NameOfTag;
+        }
     }
 }

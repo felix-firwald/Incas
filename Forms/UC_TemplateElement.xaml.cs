@@ -63,16 +63,25 @@ namespace Forms
 
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
-            if (IsFileExists())
+            ProgramState.ShowWaitCursor();
+            switch (this.template.type)
             {
-                ProgramState.ShowWaitCursor();
-                UseTemplate ut = new UseTemplate(template.AsModel());
-                ut.Show();
-            }
-            else
-            {
-                ProgramState.ShowErrorDialog($"Файл шаблона \"{template.name}\" ({template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
-            }
+                case TemplateType.Word:
+                case TemplateType.Excel:
+                    if (IsFileExists())
+                    {
+                        UseTemplate ut = new UseTemplate(template.AsModel());
+                        ut.Show();
+                    }
+                    else
+                    {
+                        ProgramState.ShowErrorDialog($"Файл шаблона \"{template.name}\" ({template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
+                    }
+                    break;
+                case TemplateType.Mail:
+                    break;
+            }                
+            
         }
         private bool IsFileExists()
         {

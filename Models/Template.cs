@@ -139,9 +139,16 @@ namespace Models
         {
             return GetAllByType(TemplateType.Text);
         }
-        public List<STemplate> GetAllMailTemplates()
+        public List<STemplate> GetAllMailTemplates(string category)
         {
-            return GetAllByType(TemplateType.Mail);
+            DataTable dt = StartCommand()
+                .Select()
+                .WhereEqual("suggestedPath", category)
+                .WhereIn("type", new List<string> { "Mail" })
+                .WhereNULL("parent")
+                .OrderByASC("name")
+                .Execute();
+            return Parse(dt);
         }
         private List<STemplate> GetAllByType(TemplateType type)
         {

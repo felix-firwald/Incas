@@ -20,8 +20,8 @@
             <ColumnDefinition Width="45"/>
         </Grid.ColumnDefinitions>
 
-        <fa:FontAwesome Icon="User" FontSize="70" VerticalAlignment="Bottom" Foreground="{DynamicResource Element}" HorizontalAlignment="Center" Grid.ColumnSpan="2"  />
-
+        <Path VerticalAlignment="Center" Fill="{DynamicResource Element}" HorizontalAlignment="Center" Grid.ColumnSpan="2" Data="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" Width="50" Height="50" Stretch="Fill" Margin="0,12,0,0" />
+        <Path VerticalAlignment="Center" Fill="{DynamicResource LightPurple}" HorizontalAlignment="Center" Grid.ColumnSpan="2" Data="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" Width="35" Height="35" Stretch="Fill" Margin="0,12,0,0" />
         <Label Style="{DynamicResource LabelElement}" Content="Вход в рабочее пространство" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="24" Width="204" Grid.ColumnSpan="2"/>
 
         <TextBox x:Name="cpath" Visibility="Collapsed" Text="{Binding Path}" Grid.Row="3" Grid.ColumnSpan="2" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" />
