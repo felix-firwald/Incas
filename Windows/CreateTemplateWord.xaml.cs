@@ -2,6 +2,7 @@
 using Incubator_2.Forms;
 using Incubator_2.ViewModels;
 using Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +19,7 @@ namespace Incubator_2.Windows
     public partial class CreateTemplateWord : Window
     {
         Template template;
-        private VM_Template VM_template;
+        private VM_Template vm;
 
         public delegate void Base();
         public event Base OnCreated;
@@ -37,8 +38,8 @@ namespace Incubator_2.Windows
                 this.FindInFileButton.IsEnabled = false;
                 GetTags();
             }
-            VM_template = new VM_Template(this.template);
-            this.DataContext = VM_template;
+            vm = new VM_Template(this.template);
+            this.DataContext = vm;
             ProgramState.ShowWaitCursor(false);
         }
 
@@ -61,7 +62,7 @@ namespace Incubator_2.Windows
             {
                 string result;
                 result = fd.SafeFileName;
-                this.VM_template.Source = result;
+                this.vm.Source = result;
                 if (fd.FileName.EndsWith(".docx"))
                 {
                     if (!fd.FileName.StartsWith(ProgramState.TemplatesSourcesWordPath))
@@ -141,7 +142,7 @@ namespace Incubator_2.Windows
             {
                 ProgramState.ShowWaitCursor();
                 this.Close();
-                template.SaveTemplateSettings(this.VM_template.GetSettings());
+                template.SaveTemplateSettings(this.vm.GetSettings());
                 if (template.id != 0)
                 {
                     template.UpdateTemplate();
@@ -281,12 +282,12 @@ namespace Incubator_2.Windows
             {
                 case "Save":
                     cs.Name = "Действия при сохранении";
-                    cs.Script = this.VM_template.OnSavingScript;
+                    cs.Script = this.vm.OnSavingScript;
                     isSave = true;
                     break;
                 case "Validate":
                     cs.Name = "Валидация";
-                    cs.Script = this.VM_template.ValidationScript;
+                    cs.Script = this.vm.ValidationScript;
                     break;
             }
             CreateTagCommand cc = new(cs);
@@ -295,11 +296,11 @@ namespace Incubator_2.Windows
             {
                 if (isSave)
                 {
-                    this.VM_template.OnSavingScript = cc.Command.Script;
+                    this.vm.OnSavingScript = cc.Command.Script;
                 }
                 else
                 {
-                    this.VM_template.ValidationScript = cc.Command.Script;
+                    this.vm.ValidationScript = cc.Command.Script;
                 }
             }
         }
@@ -311,6 +312,80 @@ namespace Incubator_2.Windows
             {
                 order++;
                 tag.SetOrderNumber(order);
+            }
+        }
+
+        private void Download(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (CheckForSave())
+            {
+                TemplatePort tp = new();
+                FolderBrowserDialog folder = new FolderBrowserDialog();
+                if (folder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    if (!string.IsNullOrWhiteSpace(template.parent))
+                    {
+                        DialogStatus ds = ProgramState.ShowQuestionDialog("Этот шаблон унаследован, вы можете применить все родительские теги к ниму.", "Учитывать родителей?", "Применить родителей", "Не применять");
+                        if (ds == DialogStatus.Yes)
+                        {
+                            tp.FillData(template, true);
+                        }
+                        else
+                        {
+                            tp.FillData(template, false);
+                        }
+                    }
+                    else
+                    {
+                        tp.FillData(template, false);
+                    }
+                    tp.ToFile(folder.SelectedPath);
+                }
+                
+
+            }
+        }
+
+        private void Upload(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (template.id != 0)
+            {
+                ProgramState.ShowExclamationDialog("Невозможно применить импорт, поскольку это грозит утерей текущего шаблона", "Импорт прерван");
+                return;
+            }
+            try
+            {
+                OpenFileDialog fd = new OpenFileDialog();
+                fd.Filter = "Шаблоны INCAS|*.tinc";
+                fd.InitialDirectory = ProgramState.TemplatesSourcesWordPath;
+                if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    TemplatePort tp = JsonConvert.DeserializeObject<TemplatePort>(File.ReadAllText(fd.FileName));
+                    switch (tp.SourceTemplate.type)
+                    {
+                        case TemplateType.Word:
+                            if (!File.Exists(ProgramState.GetFullnameOfWordFile(tp.SourceTemplate.path)))
+                            {
+                                File.WriteAllText(ProgramState.GetFullnameOfWordFile(tp.SourceTemplate.path), tp.Source);
+                            }
+                            break;
+                        case TemplateType.Excel:
+                            if (!File.Exists(ProgramState.GetFullnameOfExcelFile(tp.SourceTemplate.path)))
+                            {
+                                File.WriteAllText(ProgramState.GetFullnameOfExcelFile(tp.SourceTemplate.path), tp.Source);
+                            }
+                            break;
+                    }
+                    this.vm.ApplyNewTemplate(tp.SourceTemplate);
+                    foreach (Tag t in tp.Tags)
+                    {
+                        AddTag(t);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog(ex.Message);
             }
         }
     }

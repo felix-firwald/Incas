@@ -4,10 +4,53 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using static Common.Query;
 
 namespace Models
 {
+    public class TemplatePort
+    {
+        public Template SourceTemplate { get; set; }
+        public List<Tag> Tags { get; set; }
+        public string Source { get; set; }
+
+        public void FillData(Template temp, bool applyParent)
+        {
+            SourceTemplate = temp;
+            using (Tag tag = new())
+            {
+                if (applyParent)
+                {
+                    Tags = tag.GetAllTagsByTemplate(SourceTemplate.id, SourceTemplate.parent);
+                }
+                else
+                {
+                    Tags = tag.GetAllTagsByTemplate(SourceTemplate.id);
+                }                
+            }
+            foreach (Tag tag in Tags)
+            {
+                tag.id = 0;
+            }
+            SourceTemplate.id = 0;
+            SourceTemplate.parent = "";
+            switch (SourceTemplate.type)
+            {
+                case TemplateType.Word:
+                    Source = File.ReadAllText(ProgramState.GetFullnameOfWordFile(SourceTemplate.path));
+                    break;
+                case TemplateType.Excel:
+                    Source = File.ReadAllText(ProgramState.GetFullnameOfExcelFile(SourceTemplate.path));
+                    break;
+            }
+        }
+        public void ToFile(string folder)
+        {
+            File.WriteAllText($"{folder}\\{SourceTemplate.name}.tinc", JsonConvert.SerializeObject(this));
+        }
+
+    }
     public struct TemplateSettings
     {
         public string Validation;

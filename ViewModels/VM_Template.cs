@@ -12,6 +12,17 @@ namespace Incubator_2.ViewModels
             this.template_main = templ;
             this.templateSettings = templ.GetTemplateSettings();
         }
+        public void ApplyNewTemplate(Template templ)
+        {
+            this.template_main = templ;
+            this.templateSettings = templ.GetTemplateSettings();
+            OnPropertyChanged(nameof(NameOfTemplate));
+            OnPropertyChanged(nameof(Source));
+            OnPropertyChanged(nameof(OnSavingScript));
+            OnPropertyChanged(nameof(Category));
+            OnPropertyChanged(nameof(ValidationScript));
+            OnPropertyChanged(nameof(NumberPostfix));
+        }
         public bool IsEdit
         {
             get
