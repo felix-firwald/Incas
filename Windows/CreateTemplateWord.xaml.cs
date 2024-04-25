@@ -100,7 +100,7 @@ namespace Incubator_2.Windows
                 ProgramState.ShowExclamationDialog($"Неверное имя шаблона.", "Сохранение прервано");
                 return false;
             }
-            if (this.ContentPanel.Children.Count == 0)
+            if (this.ContentPanel.Children.Count == 0 && string.IsNullOrWhiteSpace(this.template.parent))
             {
                 ProgramState.ShowExclamationDialog($"Шаблон без единого тега не является шаблоном.", "Сохранение прервано");
                 return false;

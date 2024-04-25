@@ -73,7 +73,7 @@ namespace Common
 
         private static DateTime LastGarbageCollect = DateTime.Now;
         #region Path and init
-        public static void SetCommonPath(string path)
+        public static void SetCommonPath(string path, bool checkout = true)
         {
             CommonPath = path;
             DatabasePath = path + @"\data.dbinc";
@@ -87,7 +87,10 @@ namespace Common
             Directory.CreateDirectory(Messages);
             Directory.CreateDirectory(LogData);
             Directory.CreateDirectory(TemplatesRuntime);
-            DatabaseManager.ActualizeTables();
+            if (checkout)
+            {
+                DatabaseManager.ActualizeTables();
+            }           
             CollectGarbage();
             ScriptManager.Execute("from Incas import Service", ScriptManager.GetEngine().CreateScope());
             //TelegramProcessor.StartBot("6911917508:AAHJeEhfNKzzOJjp0IlGtZ51lqNrE2LBnK4");
@@ -243,7 +246,7 @@ namespace Common
             }
             ShowWaitCursor();
             Permission.CurrentUserPermission = PermissionGroup.Admin;
-            SetCommonPath(data.workspacePath);
+            SetCommonPath(data.workspacePath, false);
             if (CreateTablesInDatabase())
             {
                 ShowWaitCursor(false);

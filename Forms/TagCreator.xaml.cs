@@ -69,13 +69,13 @@ namespace Incubator_2.Forms
         public void Minimize()
         {
             this.MainBorder.Height = 40;
-            this.IsCollapsed = !this.IsCollapsed;
+            this.IsCollapsed = true;
             this.NumberUp.Visibility = Visibility.Visible;
         }
         public void Maximize()
         {
             this.MainBorder.Height = this.ContentPanel.Height + 40;
-            this.IsCollapsed = !this.IsCollapsed;
+            this.IsCollapsed = false;
             this.NumberUp.Visibility = Visibility.Collapsed;
         }
 

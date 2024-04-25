@@ -305,7 +305,7 @@ namespace Incubator_2.Common
         #endregion
 
         #region Handling Queries
-        private static void TerminateProcessHandle()
+        public static void TerminateProcessHandle()
         {
             if (Permission.CurrentUserPermission != PermissionGroup.Admin)
             {

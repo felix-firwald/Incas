@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*" MinWidth="250" MaxWidth="400"/>
+                <ColumnDefinition Width="4*" MinWidth="250" MaxWidth="500"/>
                 <ColumnDefinition Width="6*"/>
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
@@ -139,8 +139,8 @@
                 
                 </StackPanel>
             </Border>
-            
-            <Border Grid.Row="2" CornerRadius="5" Margin="5" Background="{DynamicResource Black}" Grid.Column="1" ScrollViewer.CanContentScroll="True">
+
+            <Border Grid.Row="2" CornerRadius="5" Margin="5" Background="{StaticResource Black}" Grid.Column="1" ScrollViewer.CanContentScroll="True">
                 <ScrollViewer Style="{DynamicResource ScrollViewerBase}" HorizontalContentAlignment="Stretch" Grid.Row="2" Grid.Column="1">
                     <StackPanel x:Name="ContentPanel"/>
                 </ScrollViewer>

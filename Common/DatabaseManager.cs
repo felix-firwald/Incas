@@ -273,8 +273,8 @@ namespace Common
                         return;
                 }
                 q.ExecuteVoid();
-                ProgramState.ShowInfoDialog("INCAS исправил ошибку. Программа будет перезапущена.");
-                ServerProcessor.RestartProcessHandle(force: true);
+                ProgramState.ShowInfoDialog("INCAS исправил ошибку. Программа будет закрыта.");
+                ServerProcessor.TerminateProcessHandle();
             }
         }
     }

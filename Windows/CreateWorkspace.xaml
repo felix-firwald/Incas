@@ -5,31 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:customcontrols="clr-namespace:Incubator_2.CustomControls"
         mc:Ignorable="d"
-        Title="CreateWorkspace" Height="300" Width="500" Style="{DynamicResource Dialog}" WindowStartupLocation="CenterScreen">
+        Title="CreateWorkspace" Height="400" Width="500" Style="{DynamicResource Dialog}" Background="{StaticResource Black}" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="3*"/>
+
             <RowDefinition Height="40"/>
 
         </Grid.RowDefinitions>
         <Label Style="{DynamicResource LabelIncubator}" Content="Создание нового рабочего пространства" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource LightPurple}" Grid.ColumnSpan="2" Margin="112,0,0,0"/>
-        <TextBox Grid.Row="1" Style="{DynamicResource TextBoxMain}" Tag="Введите имя рабочей области" Grid.ColumnSpan="2" Text="{Binding WorkspaceName}" />
-        <TextBox Grid.Row="2" Style="{DynamicResource TextBoxMain}" Tag="Введите путь, где будет создана рабочая область" Grid.ColumnSpan="2" Text="{Binding WorkspacePath}" />
         
-        <TextBlock TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="Будет автоматически создан первый пользователь (Вы) в качестве администратора:" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-
-        <TextBox Grid.Row="4" Style="{DynamicResource TextBoxMain}" Tag="Введите вашу фамилию" Grid.ColumnSpan="1" Text="{Binding UserSurname}" />
-        <TextBox Grid.Row="4" Style="{DynamicResource TextBoxMain}" Tag="Введите ваше имя (и отчество)" Grid.ColumnSpan="1" Grid.Column="1" Text="{Binding UserFullname}"/>
-        <TextBox Grid.Row="5" Style="{DynamicResource TextBoxMain}" Tag="Введите ваш пароль для входа" Grid.ColumnSpan="2" Text="{Binding UserPassword}" />
+        <StackPanel Grid.Row="1">
+            <Border CornerRadius="5" Background="{StaticResource Dark}" Margin="5" >
+                <StackPanel>
+                    <TextBox Style="{DynamicResource TextBoxMain}" Tag="Введите имя рабочей области" Grid.ColumnSpan="2" Text="{Binding WorkspaceName}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Style="{DynamicResource TextBoxMain}" Tag="Введите путь, где будет создана рабочая область" Text="{Binding WorkspacePath}" />
+                        <Button Style="{StaticResource ButtonMain}" Grid.Column="1" Click="DefinePathClick">
+                            <Path Fill="White" Data="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z"/>
+                        </Button>
+                    </Grid>
+                    
+                </StackPanel>
+            </Border>
+            
+            <TextBlock TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="Будет автоматически создан первый пользователь (Вы) в качестве администратора:" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+            <Border CornerRadius="5" Background="{StaticResource Dark}" Margin="5" >
+                <StackPanel>
+                    <TextBox Style="{DynamicResource TextBoxMain}" Tag="Введите вашу фамилию" Grid.ColumnSpan="1" Text="{Binding UserSurname}" />
+                    <TextBox Style="{DynamicResource TextBoxMain}" Tag="Введите ваше имя (и отчество)" Grid.ColumnSpan="1" Grid.Column="1" Text="{Binding UserFullname}"/>
+                    <TextBox Style="{DynamicResource TextBoxMain}" Tag="Введите ваш пароль для входа" Grid.ColumnSpan="2" Text="{Binding UserPassword}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        
         <Button Grid.Row="6" Style="{DynamicResource ButtonMain}" Content="Создать рабочее пространство" Grid.ColumnSpan="2" Click="SaveButton" IsDefault="True" />
     </Grid>
 </Window>
