@@ -339,7 +339,7 @@ namespace Incubator_2.Forms
 
         private void InsertToOther(object sender, RoutedEventArgs e)
         {
-            OnInsert?.Invoke(this.tag.id, this.Textbox.Text);
+            OnInsert?.Invoke(this.tag.id, this.GetData());
         }
         private void RecalculateNamesClick(object sender, RoutedEventArgs e)
         {

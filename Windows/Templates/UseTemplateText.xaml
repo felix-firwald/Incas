@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows.Templates"
         mc:Ignorable="d"
-        Title="Генератор" Height="600" MinHeight="550" MaxHeight="700" Width="550" MinWidth="550" Background="{DynamicResource Basic}" SizeToContent="Height" WindowStartupLocation="CenterScreen" Topmost="True">
+        Title="Генератор" Height="600" MinHeight="550" MaxHeight="700" Width="600" MinWidth="600" Background="{DynamicResource Basic}" SizeToContent="Height" WindowStartupLocation="CenterScreen" Topmost="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>

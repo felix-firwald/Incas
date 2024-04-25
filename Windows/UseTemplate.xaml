@@ -32,7 +32,9 @@
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
-            <Button Style="{StaticResource ButtonMain}" Content=". . ." Click="review_Click" Grid.Row="0" Grid.Column="2" Margin="5,5,5,5" Cursor="Hand" />
+            <Button Style="{StaticResource ButtonMain}" Click="review_Click" Grid.Row="0" Grid.Column="2" Margin="5,5,5,5" Cursor="Hand">
+                <Path Fill="White" Data="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z"/>
+            </Button>
             <Border Grid.Row="1" Grid.Column="2" Margin="5,5,5,5" Background="{StaticResource Black}" CornerRadius="5" Grid.RowSpan="2">
                 <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" >
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" MouseDown="AddFC_Click" ToolTip="Добавить ещё один файл" />
@@ -44,6 +46,7 @@
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="WindowMaximize" Grid.Column="1" Grid.Row="1" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAll" />
                     <Rectangle Fill="{StaticResource LightBlack}" Height="1" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Calculator" Grid.Column="1" Grid.Row="1" MouseDown="RecalculateNamesClick" ToolTip="Пересчитать имена файлов"/>
+                    
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Send" Grid.Column="1" Grid.Row="1" MouseDown="SendToUserClick" ToolTip="Отправить выбранные документы пользователю"/>
 
                 </StackPanel>

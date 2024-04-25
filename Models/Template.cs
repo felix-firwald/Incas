@@ -57,6 +57,9 @@ namespace Models
         public string OnSaving;
         public string NumberPrefix;
         public string NumberPostfix;
+        public string FileNameTemplate;
+        public bool RequiresSave;
+        public bool PreventSave;
     }
     public enum TemplateType
     {

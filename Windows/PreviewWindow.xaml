@@ -11,7 +11,11 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <ScrollViewer>
-            <DocumentViewer x:Name="Preview" Grid.Row="1" Background="{DynamicResource Basic}" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" Zoom="80" />
+            <DocumentViewer x:Name="Preview" Grid.Row="1" Background="{DynamicResource Basic}" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" Zoom="80">
+                <DocumentViewer.CommandBindings>
+                    <CommandBinding Command="ApplicationCommands.Print" Executed="CommandBinding_Executed" />
+                </DocumentViewer.CommandBindings>
+            </DocumentViewer>
         </ScrollViewer>
     </Grid>
 </Window>

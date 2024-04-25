@@ -1,6 +1,7 @@
 ﻿using Common;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
+using Incubator_2.Windows.Templates;
 using Models;
 using System.Collections.Generic;
 using System.IO;
@@ -79,6 +80,8 @@ namespace Forms
                     }
                     break;
                 case TemplateType.Mail:
+                    UseTemplateMail utm = new(template.AsModel());
+                    utm.Show();
                     break;
             }                
             

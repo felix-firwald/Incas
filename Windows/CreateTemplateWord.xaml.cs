@@ -317,11 +317,15 @@ namespace Incubator_2.Windows
 
         private void Download(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (CheckForSave())
+            if (!CheckForSave())
             {
-                TemplatePort tp = new();
-                FolderBrowserDialog folder = new FolderBrowserDialog();
-                if (folder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                return;
+            }
+            TemplatePort tp = new();
+            FolderBrowserDialog folder = new FolderBrowserDialog();
+            if (folder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
                 {
                     if (!string.IsNullOrWhiteSpace(template.parent))
                     {
@@ -341,8 +345,10 @@ namespace Incubator_2.Windows
                     }
                     tp.ToFile(folder.SelectedPath);
                 }
-                
-
+                catch (Exception ex)
+                {
+                    ProgramState.ShowErrorDialog("При попытке экспорта шаблона возникла ошибка:\n" + ex.Message);
+                }
             }
         }
 
@@ -385,7 +391,7 @@ namespace Incubator_2.Windows
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog(ex.Message);
+                ProgramState.ShowErrorDialog("При попытке импорта шаблона возникла ошибка:\n" + ex.Message);
             }
         }
     }

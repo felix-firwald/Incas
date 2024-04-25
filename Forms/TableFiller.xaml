@@ -37,7 +37,9 @@
             </Button>
         </Grid>
 
-        <DataGrid x:Name="Table" MinHeight="160" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" AutoGenerateColumns="True" Grid.Row="1"/>
+        <DataGrid x:Name="Table" MinHeight="160" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" AutoGenerateColumns="True" Grid.Row="1">
+            
+        </DataGrid>
     </Grid>
 
 </UserControl>

@@ -342,12 +342,25 @@ namespace Incubator_2.Forms
         {
             return this.templateSettings.NumberPrefix + this.Number.Text + this.templateSettings.NumberPostfix;
         }
+        private void ApplyNameByTemplate()
+        {            
+            if (!string.IsNullOrWhiteSpace(templateSettings.FileNameTemplate))
+            {
+                string result = templateSettings.FileNameTemplate;
+                foreach (UC_TagFiller tf in TagFillers)
+                {
+                    result = result.Replace("[" + tf.GetTagName() + "]", tf.GetValue());
+                }
+                this.Filename.Text = result;
+            }
+        }
         public bool CreateFile(string newPath, string category, bool async = true, bool save = true)
         {
             try
             {
                 if (CustomValidate())
                 {
+                    ApplyNameByTemplate();
                     PlaySavingScript();
                     string newFile;
                     List<SGeneratedTag> filledTags = new();
@@ -476,7 +489,7 @@ namespace Incubator_2.Forms
                         }
                         string fileXPS = wt.TurnToXPS();
                         ProgramState.ShowWaitCursor(false);
-                        PreviewWindow pr = new PreviewWindow(fileXPS);
+                        PreviewWindow pr = new PreviewWindow(fileXPS, !this.templateSettings.RequiresSave);
                         pr.Show();
                     })
                 );
@@ -499,6 +512,11 @@ namespace Incubator_2.Forms
             if (this.document.status == DocumentStatus.Done)
             {
                 ProgramState.ShowAccessErrorDialog("Функция генерации документа недоступна, пока он находится в статусе \"Завершен\".");
+                return;
+            }
+            if (this.templateSettings.RequiresSave)
+            {
+                ProgramState.ShowExclamationDialog("Этот тип документа требует сохранения в историю, для создания файла используйте кнопку \"Создать файлы по шаблону\".", "Генерация прервана");
                 return;
             }
             ProgramState.ShowWaitCursor();

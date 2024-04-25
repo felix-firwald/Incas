@@ -126,6 +126,42 @@ namespace Incubator_2.ViewModels
                 OnPropertyChanged(nameof(NumberPostfix));
             }
         }
+        public string FileNameTemplate
+        {
+            get
+            {
+                return templateSettings.FileNameTemplate;
+            }
+            set
+            {
+                templateSettings.FileNameTemplate = value;
+                OnPropertyChanged(nameof(FileNameTemplate));
+            }
+        }
+        public bool RequiresSave
+        {
+            get
+            {
+                return templateSettings.RequiresSave;
+            }
+            set
+            {
+                templateSettings.RequiresSave = value;
+                OnPropertyChanged(nameof(RequiresSave));
+            }
+        }
+        public bool NeverSave
+        {
+            get
+            {
+                return templateSettings.PreventSave;
+            }
+            set
+            {
+                templateSettings.PreventSave = value;
+                OnPropertyChanged(nameof(NeverSave));
+            }
+        }
         public TemplateSettings GetSettings()
         {
             return templateSettings;
