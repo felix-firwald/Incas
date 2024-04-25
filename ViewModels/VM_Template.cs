@@ -147,6 +147,10 @@ namespace Incubator_2.ViewModels
             set
             {
                 templateSettings.RequiresSave = value;
+                if (RequiresSave)
+                {
+                    NeverSave = false;
+                }
                 OnPropertyChanged(nameof(RequiresSave));
             }
         }
@@ -159,6 +163,10 @@ namespace Incubator_2.ViewModels
             set
             {
                 templateSettings.PreventSave = value;
+                if (NeverSave)
+                {
+                    RequiresSave = false;
+                }
                 OnPropertyChanged(nameof(NeverSave));
             }
         }

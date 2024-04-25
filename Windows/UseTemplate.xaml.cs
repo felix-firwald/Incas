@@ -111,9 +111,10 @@ namespace Incubator_2.Windows
         private void CreateFiles()
         {
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+            bool needSave = !this.template.GetTemplateSettings().PreventSave;
             foreach (UC_FileCreator fc in this.ContentPanel.Children)
             {
-                if (!fc.CreateFile(this.dir.Text, this.CategoryName.Text))
+                if (!fc.CreateFile(this.dir.Text, this.CategoryName.Text, true, needSave))
                 {
                     Mouse.OverrideCursor = null;
                     DatabaseManager.NullifyBackground();
