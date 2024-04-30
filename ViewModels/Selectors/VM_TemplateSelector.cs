@@ -17,12 +17,12 @@ namespace Incubator_2.ViewModels.Selectors
         {
             get
             {
-                return _templateType;
+                return this._templateType;
             }
             set
             {
-                _templateType = value;
-                OnPropertyChanged(nameof(TemplateType));
+                this._templateType = value;
+                this.OnPropertyChanged(nameof(this.TemplateType));
             }
         }
 
@@ -30,33 +30,31 @@ namespace Incubator_2.ViewModels.Selectors
         {
             get
             {
-                return helptext;
+                return this.helptext;
             }
             set
             {
-                helptext = value;
-                OnPropertyChanged(nameof(HelpTextTitle));
+                this.helptext = value;
+                this.OnPropertyChanged(nameof(this.HelpTextTitle));
             }
         }
         public List<STemplate> Templates
         {
             get
             {
-                using (Template t = new Template())
+                using Template t = new Template();
+                switch (this.TemplateType)
                 {
-                    switch (TemplateType)
-                    {
-                        case TemplateType.Word:
-                        default:
-                            return t.GetAllWordTemplates();
-                        case TemplateType.Text:
-                            return t.GetAllTextTemplates();
-                    }
+                    case TemplateType.Word:
+                    default:
+                        return t.GetAllWordTemplates();
+                    case TemplateType.Text:
+                        return t.GetAllTextTemplates();
                 }
             }
             set
             {
-                OnPropertyChanged(nameof(Templates));
+                this.OnPropertyChanged(nameof(this.Templates));
 
             }
 
@@ -64,11 +62,11 @@ namespace Incubator_2.ViewModels.Selectors
 
         public STemplate SelectedTemplate
         {
-            get { return selectedTemplate; }
+            get { return this.selectedTemplate; }
             set
             {
-                selectedTemplate = value;
-                OnPropertyChanged(nameof(SelectedTemplate));
+                this.selectedTemplate = value;
+                this.OnPropertyChanged(nameof(this.SelectedTemplate));
             }
         }
     }

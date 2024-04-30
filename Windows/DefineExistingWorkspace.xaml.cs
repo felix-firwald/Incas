@@ -10,12 +10,12 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class DefineExistingWorkspace : Window
     {
-        VM_DefExistWorkspace vm;
+        private VM_DefExistWorkspace vm;
         public DefineExistingWorkspace(VM_DefExistWorkspace vmedit = null)
         {
             InitializeComponent();
 
-            if (vm != null)
+            if (this.vm != null)
             {
                 this.DataContext = vmedit;
                 this.name.IsEnabled = false;
@@ -45,7 +45,7 @@ namespace Incubator_2.Windows
                 ProgramState.ShowErrorDialog("Рабочее пространство не найдено.", "Сохранение прервано");
                 return;
             }
-            RegistryData.SetWorkspacePath(vm.WorkspaceName, vm.WorkspacePath);
+            RegistryData.SetWorkspacePath(this.vm.WorkspaceName, this.vm.WorkspacePath);
             this.Close();
         }
     }

@@ -50,8 +50,8 @@ namespace Incubator_2.Forms.Templates
         {
             try
             {
-                Result = JsonConvert.DeserializeObject<SGeneratedDocument>(data);
-                SetWarning("Требуется открыть для обновления");
+                this.Result = JsonConvert.DeserializeObject<SGeneratedDocument>(data);
+                this.SetWarning("Требуется открыть для обновления");
             }
             catch { }
         }
@@ -59,19 +59,19 @@ namespace Incubator_2.Forms.Templates
         {
             try
             {
-                Result = data;
-                SetWarning(warning);
+                this.Result = data;
+                this.SetWarning(warning);
                 OnValueChanged?.Invoke(this);
             }
             catch (Exception)
             {
-                SetNotContented();
+                this.SetNotContented();
             }
         }
 
         public string GetText()
         {
-            switch (Status)
+            switch (this.Status)
             {
                 case GeneratorStatus.InProcess:
                     throw new GeneratorUndefinedStateException("Генератор ожидает получение ввода от другого пользователя. " +
@@ -79,12 +79,12 @@ namespace Incubator_2.Forms.Templates
                 case GeneratorStatus.Warning:
                     using (Template t = new())
                     {
-                        UseTemplateText utt = new(t.GetTemplateById(TemplateId), Result);
+                        UseTemplateText utt = new(t.GetTemplateById(this.TemplateId), this.Result);
                         try
                         {
-                            Result = utt.GetData();
-                            resultText = utt.GetText();
-                            SetContented();
+                            this.Result = utt.GetData();
+                            this.resultText = utt.GetText();
+                            this.SetContented();
                         }
                         catch (Exception)
                         {
@@ -93,20 +93,20 @@ namespace Incubator_2.Forms.Templates
                     }
                     break;
             }
-            if (string.IsNullOrWhiteSpace(resultText))
+            if (string.IsNullOrWhiteSpace(this.resultText))
             {
                 return "";
             }
-            return resultText;
+            return this.resultText;
         }
         public string GetData()
         {
-            return JsonConvert.SerializeObject(Result);
+            return JsonConvert.SerializeObject(this.Result);
         }
         private void ApplyGenerated(SGeneratedDocument data)
         {
-            Result = data;
-            SetContented();
+            this.Result = data;
+            this.SetContented();
         }
         private void SetContented()
         {
@@ -157,15 +157,15 @@ namespace Incubator_2.Forms.Templates
             {
                 case GeneratorStatus.InProcess:
                     WaitControls.RemoveGenerator(this);
-                    SetNotContented();
+                    this.SetNotContented();
                     break;
                 default:
                     Session session;
                     if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для заполнения этой части документа."))
                     {
-                        Result.template = TemplateId;
-                        ServerProcessor.SendOpenGeneratorProcess(Result, this, session.slug);
-                        SetInProcess($"Делегировано: {session.user}");
+                        this.Result.template = this.TemplateId;
+                        ServerProcessor.SendOpenGeneratorProcess(this.Result, this, session.slug);
+                        this.SetInProcess($"Делегировано: {session.user}");
                     }
                     break;
             }
@@ -173,36 +173,34 @@ namespace Incubator_2.Forms.Templates
 
         private void OpenClick(object sender, MouseButtonEventArgs e)
         {
-            using (Template t = new())
+            using Template t = new();
+            UseTemplateText utt = new(t.GetTemplateById(this.TemplateId), this.Result);
+            utt.ShowDialog();
+            try
             {
-                UseTemplateText utt = new(t.GetTemplateById(TemplateId), Result);
-                utt.ShowDialog();
-                try
+                if (utt.Result == Windows.DialogStatus.Yes)
                 {
-                    if (utt.Result == Windows.DialogStatus.Yes)
-                    {
-                        Result = utt.GetData();
-                        resultText = utt.GetText();
-                        SetContented();
-                    }
+                    this.Result = utt.GetData();
+                    this.resultText = utt.GetText();
+                    this.SetContented();
+                }
 
-                }
-                catch (Exception ex)
-                {
-                    ProgramState.ShowErrorDialog(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog(ex.Message);
             }
         }
 
         private void ShowTextClick(object sender, MouseButtonEventArgs e)
         {
-            this.TextBoxResult.Text = resultText;
+            this.TextBoxResult.Text = this.resultText;
             this.PopupText.IsOpen = !this.PopupText.IsOpen;
         }
 
         private void CopyResultClick(object sender, MouseButtonEventArgs e)
         {
-            Clipboard.SetText(resultText);
+            Clipboard.SetText(this.resultText);
         }
     }
 }

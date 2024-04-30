@@ -25,22 +25,22 @@ namespace Incubator_2.Windows.CustomDatabase
             "WHERE",
             "SET"
         };
-        VM_CreateCommand vm;
+        private VM_CreateCommand vm;
         public CreateCommand(string database, string table)
         {
             InitializeComponent();
             Command c = new();
             c.database = database;
             c.table = table;
-            vm = new(c);
-            this.DataContext = vm;
+            this.vm = new(c);
+            this.DataContext = this.vm;
         }
         public CreateCommand(SCommand com)
         {
             InitializeComponent();
             Command c = com.AsModel();
-            vm = new(c);
-            this.DataContext = vm;
+            this.vm = new(c);
+            this.DataContext = this.vm;
         }
 
 
@@ -50,49 +50,49 @@ namespace Incubator_2.Windows.CustomDatabase
             switch (btn.Tag.ToString())
             {
                 case "SELECT":
-                    this.vm.Query = GetSelectQueryExample();
+                    this.vm.Query = this.GetSelectQueryExample();
                     break;
                 case "UPDATE":
-                    this.vm.Query = GetUpdateExample();
+                    this.vm.Query = this.GetUpdateExample();
                     break;
                 case "DELETE":
-                    this.vm.Query = $"DELETE *\nFROM [{vm.Table}]";
+                    this.vm.Query = $"DELETE *\nFROM [{this.vm.Table}]";
                     break;
                 case "WHERE":
-                    this.vm.Query += GetWhereExample();
+                    this.vm.Query += this.GetWhereExample();
                     break;
                 case "WHERE NOT EQUAL":
-                    this.vm.Query += GetWhereExample("<>");
+                    this.vm.Query += this.GetWhereExample("<>");
                     break;
                 case "WHERE LESS":
-                    this.vm.Query += GetWhereExample("<", "");
+                    this.vm.Query += this.GetWhereExample("<", "");
                     break;
                 case "WHERE MORE":
-                    this.vm.Query += GetWhereExample(">", "");
+                    this.vm.Query += this.GetWhereExample(">", "");
                     break;
                 case "WHEREPK":
-                    this.vm.Query += GetWherePKExample();
+                    this.vm.Query += this.GetWherePKExample();
                     break;
                 case "PARAMFIELD":
-                    this.vm.Query += GetParameterField();
+                    this.vm.Query += this.GetParameterField();
                     break;
                 case "PARAMTIME":
                     this.vm.Query += "\n{%TIME%}";
                     break;
                 case "JOIN":
-                    this.vm.Query = GetJoinExample();
+                    this.vm.Query = this.GetJoinExample();
                     break;
                 case "ORDERASC":
-                    this.vm.Query += GetOrderByExample("ASC");
+                    this.vm.Query += this.GetOrderByExample("ASC");
                     break;
                 case "ORDERDESC":
-                    this.vm.Query += GetOrderByExample("DESC");
+                    this.vm.Query += this.GetOrderByExample("DESC");
                     break;
             }
         }
         private List<string> GetFieldsDefinition(string table)
         {
-            List<string> fields = vm.Requester.GetTableFieldsSimple(table, vm.Database);
+            List<string> fields = this.vm.Requester.GetTableFieldsSimple(table, this.vm.Database);
             for (int f = 0; f < fields.Count; f++)
             {
                 fields[f] = $"[{table}].[{fields[f]}]";
@@ -111,8 +111,8 @@ namespace Incubator_2.Windows.CustomDatabase
         private string GetSelectQueryExample()
         {
             string result = "SELECT ";
-            result += string.Join(",\n       ", GetFieldsDefinition(vm.Table));
-            return result += $"\nFROM   [{vm.Table}]";
+            result += string.Join(",\n       ", this.GetFieldsDefinition(this.vm.Table));
+            return result += $"\nFROM   [{this.vm.Table}]";
         }
         private string GetUpdateExample()
         {
@@ -121,7 +121,7 @@ namespace Incubator_2.Windows.CustomDatabase
             {
                 if (!this.vm.Query.Contains("UPDATE"))
                 {
-                    result = $"UPDATE [{vm.Table}]\nSET  ";
+                    result = $"UPDATE [{this.vm.Table}]\nSET  ";
                 }
                 else
                 {
@@ -130,9 +130,9 @@ namespace Incubator_2.Windows.CustomDatabase
             }
             else
             {
-                result = $"UPDATE [{vm.Table}]\nSET  ";
+                result = $"UPDATE [{this.vm.Table}]\nSET  ";
             }
-            BindingSelector bs = ProgramState.ShowBindingSelector(vm.Database, vm.Table, false, false);
+            BindingSelector bs = ProgramState.ShowBindingSelector(this.vm.Database, this.vm.Table, false, false);
             if (bs.Result == DialogStatus.Yes)
             {
                 string value = ProgramState.ShowInputBox("Введите новое значение", $"Новое значение для поля '{bs.SelectedField}'");
@@ -143,57 +143,57 @@ namespace Incubator_2.Windows.CustomDatabase
         }
         private string GetWhereExample(string comparator = "=", string mark = "'")
         {
-            BindingSelector bd = new(vm.Database, vm.Table, false);
+            BindingSelector bd = new(this.vm.Database, this.vm.Table, false);
             bd.ShowDialog();
             if (bd.Result == DialogStatus.Yes)
             {
                 string value = ProgramState.ShowInputBox("Введите значение", $"Значение для условия к полю '{bd.SelectedField}'");
-                return $"{GetWhereByContext()} [{bd.SelectedTable}].[{bd.SelectedField}] {comparator} {mark}{value}{mark}";
+                return $"{this.GetWhereByContext()} [{bd.SelectedTable}].[{bd.SelectedField}] {comparator} {mark}{value}{mark}";
             }
             return "";
         }
         private string GetWherePKExample()
         {
-            return $"{GetWhereByContext()} [{vm.Table}].[{vm.GetPKField()}] in ({{%SELECTED%}})";
+            return $"{this.GetWhereByContext()} [{this.vm.Table}].[{this.vm.GetPKField()}] in ({{%SELECTED%}})";
         }
         private string GetParameterField()
         {
-            BindingSelector bd = ProgramState.ShowBindingSelector(vm.Database, vm.Table, false, false);
+            BindingSelector bd = ProgramState.ShowBindingSelector(this.vm.Database, this.vm.Table, false, false);
             return $"\n{{%SELECTED#{bd.SelectedField}%}}";
         }
 
         private string GetJoinExample()
         {
-            BindingSelector bs = new(vm.Database, false);
+            BindingSelector bs = new(this.vm.Database, false);
             bs.ShowDialog();
             string result;
-            if (string.IsNullOrEmpty(vm.Query) || !vm.Query.Contains("JOIN"))
+            if (string.IsNullOrEmpty(this.vm.Query) || !this.vm.Query.Contains("JOIN"))
             {
                 result = "SELECT ";
-                List<string> fields = GetFieldsDefinition(vm.Table);
-                List<string> joinFields = GetFieldsDefinition(bs.SelectedTable);
+                List<string> fields = this.GetFieldsDefinition(this.vm.Table);
+                List<string> joinFields = this.GetFieldsDefinition(bs.SelectedTable);
                 fields.AddRange(joinFields);
                 result += string.Join(",\n       ", fields);
-                return result += $"\nFROM   [{vm.Table}]\nJOIN [{bs.SelectedTable}]\n    ON [{bs.SelectedTable}].[{bs.SelectedField}] = [{vm.Table}].[Поле]";
+                return result += $"\nFROM   [{this.vm.Table}]\nJOIN [{bs.SelectedTable}]\n    ON [{bs.SelectedTable}].[{bs.SelectedField}] = [{this.vm.Table}].[Поле]";
             }
             else
             {
-                List<string> joinFields = GetFieldsDefinition(bs.SelectedTable);
-                result = vm.Query.Replace("FROM", $"       {string.Join(",\n       ", joinFields)}\nFROM");
-                return result += $"\nJOIN [{bs.SelectedTable}]\n    ON [{bs.SelectedTable}].[{bs.SelectedField}] = [{vm.Table}].[Поле]";
+                List<string> joinFields = this.GetFieldsDefinition(bs.SelectedTable);
+                result = this.vm.Query.Replace("FROM", $"       {string.Join(",\n       ", joinFields)}\nFROM");
+                return result += $"\nJOIN [{bs.SelectedTable}]\n    ON [{bs.SelectedTable}].[{bs.SelectedField}] = [{this.vm.Table}].[Поле]";
             }
         }
         private string GetOrderByExample(string type = "ASC")
         {
-            BindingSelector bs = new(vm.Database, vm.Table, false, false);
+            BindingSelector bs = new(this.vm.Database, this.vm.Table, false, false);
             bs.ShowDialog();
-            if (!vm.Query.Contains("ORDER BY"))
+            if (!this.vm.Query.Contains("ORDER BY"))
             {
-                return $"\nORDER BY [{vm.Table}].[{bs.SelectedField}] {type}";
+                return $"\nORDER BY [{this.vm.Table}].[{bs.SelectedField}] {type}";
             }
             else
             {
-                return $",\n [{vm.Table}].[{bs.SelectedField}] {type}";
+                return $",\n [{this.vm.Table}].[{bs.SelectedField}] {type}";
             }
         }
         private void OnTextChanged(object sender, TextChangedEventArgs e)
@@ -215,9 +215,9 @@ namespace Incubator_2.Windows.CustomDatabase
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            if (vm.ValidateQuery())
+            if (this.vm.ValidateQuery())
             {
-                vm.Save();
+                this.vm.Save();
                 this.Close();
             }
         }

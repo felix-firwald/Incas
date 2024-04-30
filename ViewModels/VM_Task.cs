@@ -8,18 +8,18 @@ namespace Incubator_2.ViewModels
         private STask _task;
         public VM_Task(STask task)
         {
-            _task = task;
+            this._task = task;
         }
         public string TaskName
         {
             get
             {
-                return _task.name;
+                return this._task.name;
             }
             set
             {
-                _task.name = value;
-                OnPropertyChanged(nameof(TaskName));
+                this._task.name = value;
+                this.OnPropertyChanged(nameof(this.TaskName));
             }
         }
 
@@ -27,7 +27,7 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                return _task.text;
+                return this._task.text;
             }
         }
 
@@ -36,7 +36,7 @@ namespace Incubator_2.ViewModels
             get
             {
                 int counter = 0;
-                foreach (SSubTask task in _task.subtasks)
+                foreach (SSubTask task in this._task.subtasks)
                 {
                     if (task.passed)
                     {
@@ -47,34 +47,34 @@ namespace Incubator_2.ViewModels
             }
             set
             {
-                OnPropertyChanged(nameof(SubtasksPassedCount));
+                this.OnPropertyChanged(nameof(this.SubtasksPassedCount));
             }
         }
         public int SubtasksCount
         {
             get
             {
-                return _task.subtasks.Count;
+                return this._task.subtasks.Count;
             }
         }
         public List<SSubTask> Subtasks
         {
             get
             {
-                return _task.subtasks;
+                return this._task.subtasks;
             }
             set
             {
-                _task.subtasks = value;
-                OnPropertyChanged(nameof(Subtasks));
+                this._task.subtasks = value;
+                this.OnPropertyChanged(nameof(this.Subtasks));
             }
         }
 
         public void SaveChanges()
         {
 
-            _task.AsModel().UpdateSubtasks();
-            OnPropertyChanged(nameof(SubtasksPassedCount));
+            this._task.AsModel().UpdateSubtasks();
+            this.OnPropertyChanged(nameof(this.SubtasksPassedCount));
         }
     }
 }

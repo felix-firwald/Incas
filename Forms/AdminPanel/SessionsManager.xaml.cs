@@ -14,7 +14,7 @@ namespace Incubator_2.Forms.AdminPanel
         public SessionsManager()
         {
             InitializeComponent();
-            FillContentPanel();
+            this.FillContentPanel();
         }
         public void FillContentPanel()
         {
@@ -32,7 +32,7 @@ namespace Incubator_2.Forms.AdminPanel
 
         private void RefreshClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            FillContentPanel();
+            this.FillContentPanel();
         }
     }
 }

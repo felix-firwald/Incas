@@ -16,11 +16,11 @@ namespace Incubator_2.Forms
     /// </summary>
     public partial class ListOfGenerations : UserControl
     {
-        List<FileCreated> Selection = new List<FileCreated>();
+        private List<FileCreated> Selection = new List<FileCreated>();
         public ListOfGenerations()
         {
             InitializeComponent();
-            UpdateList();
+            this.UpdateList();
         }
         public void UpdateList()
         {
@@ -31,8 +31,8 @@ namespace Incubator_2.Forms
                 {
                     Expander exp = new();
                     exp.Header = template;
-                    exp.Expanded += CurrentExpander_Expanded;
-                    exp.Style = FindResource("ExpanderMain") as Style;
+                    exp.Expanded += this.CurrentExpander_Expanded;
+                    exp.Style = this.FindResource("ExpanderMain") as Style;
                     this.ContentPanel.Children.Add(exp);
                 }
             }
@@ -45,53 +45,51 @@ namespace Incubator_2.Forms
         private void CurrentExpander_Expanded(object sender, RoutedEventArgs e)
         {
             Expander exp = (Expander)sender;
-            FillExpander(exp, exp.Header.ToString());
+            this.FillExpander(exp, exp.Header.ToString());
         }
 
         public void FillExpander(Expander exp, string templateName)
         {
             if (exp.Content == null)
             {
-                using (GeneratedDocument d = new())
+                using GeneratedDocument d = new();
+                StackPanel content = new();
+                int counter = 1;
+                d.GetDocumentsByTemplate(templateName).ForEach(document =>
                 {
-                    StackPanel content = new();
-                    int counter = 1;
-                    d.GetDocumentsByTemplate(templateName).ForEach(document =>
-                    {
-                        FileCreated fc = new FileCreated(ref document, counter);
-                        fc.OnSelectorChecked += AddToSelection;
-                        fc.OnSelectorUnchecked += RemoveFromSelection;
-                        content.Children.Add(fc);
-                        counter++;
-                    });
-                    exp.Content = content;
-                }
+                    FileCreated fc = new FileCreated(ref document, counter);
+                    fc.OnSelectorChecked += this.AddToSelection;
+                    fc.OnSelectorUnchecked += this.RemoveFromSelection;
+                    content.Children.Add(fc);
+                    counter++;
+                });
+                exp.Content = content;
             }
         }
 
         private void AddToSelection(FileCreated fc)
         {
-            Selection.Add(fc);
+            this.Selection.Add(fc);
         }
         private void RemoveFromSelection(FileCreated fc)
         {
-            Selection.Remove(fc);
+            this.Selection.Remove(fc);
         }
 
         private void UpdateClick(object sender, MouseButtonEventArgs e)
         {
-            Selection.Clear();
-            UpdateList();
+            this.Selection.Clear();
+            this.UpdateList();
         }
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
             if (ProgramState.IsWorkspaceOpened())
             {
-                if (Selection.Count > 0)
+                if (this.Selection.Count > 0)
                 {
                     List<int> docs = new();
-                    foreach (FileCreated item in Selection)
+                    foreach (FileCreated item in this.Selection)
                     {
                         docs.Add(item.record.id);
                     }
@@ -113,28 +111,26 @@ namespace Incubator_2.Forms
 
         private void UseClick(object sender, MouseButtonEventArgs e)
         {
-            if (Selection.Count > 0)
+            if (this.Selection.Count > 0)
             {
-                using (Template tm = new())
+                using Template tm = new();
+                ProgramState.ShowWaitCursor();
+                if (tm.GetTemplateById(this.Selection[0].record.template) != null)
                 {
-                    ProgramState.ShowWaitCursor();
-                    if (tm.GetTemplateById(Selection[0].record.template) != null)
+                    try
                     {
-                        try
+                        List<SGeneratedDocument> tj = new();
+                        foreach (FileCreated fc in this.Selection)
                         {
-                            List<SGeneratedDocument> tj = new();
-                            foreach (FileCreated fc in Selection)
-                            {
-                                tj.Add(fc.record);
-                            }
-                            UseTemplate ut = new UseTemplate(tm, tj);
-                            ut.Show();
+                            tj.Add(fc.record);
                         }
-                        catch (IOException ex)
-                        {
-                            ProgramState.ShowWaitCursor(false);
-                            ProgramState.ShowErrorDialog($"Один из файлов поврежден или удален. Пожалуйста, попробуйте ещё раз.\n{ex}");
-                        }
+                        UseTemplate ut = new UseTemplate(tm, tj);
+                        ut.Show();
+                    }
+                    catch (IOException ex)
+                    {
+                        ProgramState.ShowWaitCursor(false);
+                        ProgramState.ShowErrorDialog($"Один из файлов поврежден или удален. Пожалуйста, попробуйте ещё раз.\n{ex}");
                     }
                 }
             }

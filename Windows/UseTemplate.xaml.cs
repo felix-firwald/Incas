@@ -23,10 +23,11 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class UseTemplate : Window
     {
-        Template template;
-        List<Tag> tags;
-        List<UC_FileCreator> creators = new List<UC_FileCreator>();
-        delegate void UpdateProgressBarDelegate(DependencyProperty dp, object value);
+        private Template template;
+        private List<Tag> tags;
+        private List<UC_FileCreator> creators = new List<UC_FileCreator>();
+
+        private delegate void UpdateProgressBarDelegate(DependencyProperty dp, object value);
         private readonly BackgroundWorker worker = new BackgroundWorker();
         public UseTemplate(Template t)
         {
@@ -34,8 +35,8 @@ namespace Incubator_2.Windows
             this.template = t;
             this.Title = t.name;
             this.CategoryName.Text = t.name;
-            LoadTags();
-            AddFileCreator();
+            this.LoadTags();
+            this.AddFileCreator();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
             ProgramState.ShowWaitCursor(false);
         }
@@ -44,31 +45,29 @@ namespace Incubator_2.Windows
             InitializeComponent();
             this.template = t;
             this.Title = t.name;
-            LoadTags();
+            this.LoadTags();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
             this.CategoryName.Text = records[0].templateName;
             foreach (SGeneratedDocument item in records)
             {
-                AddFileCreator().ApplyRecord(item);
+                this.AddFileCreator().ApplyRecord(item);
             }
             ProgramState.ShowWaitCursor(false);
         }
         private void LoadTags()
         {
-            using (Tag t = new())
-            {
-                tags = t.GetAllTagsByTemplate(this.template.id, this.template.parent);
-            }
+            using Tag t = new();
+            this.tags = t.GetAllTagsByTemplate(this.template.id, this.template.parent);
         }
 
         private UC_FileCreator AddFileCreator()
         {
-            UC_FileCreator fc = new UC_FileCreator(template, tags);
-            fc.OnInsertRequested += InsertValuesByTag;
-            fc.OnRenameRequested += SimpleRecalculateNames;
-            fc.OnCreatorDestroy += OnCreatorDestroy;
+            UC_FileCreator fc = new UC_FileCreator(this.template, this.tags);
+            fc.OnInsertRequested += this.InsertValuesByTag;
+            fc.OnRenameRequested += this.SimpleRecalculateNames;
+            fc.OnCreatorDestroy += this.OnCreatorDestroy;
             this.ContentPanel.Children.Add(fc);
-            creators.Add(fc);
+            this.creators.Add(fc);
             return fc;
         }
 
@@ -79,7 +78,7 @@ namespace Incubator_2.Windows
 
         private void InsertValuesByTag(int tag, string value)
         {
-            foreach (UC_FileCreator fc in creators)
+            foreach (UC_FileCreator fc in this.creators)
             {
                 fc.InsertTagValue(tag, value);
             }
@@ -97,10 +96,10 @@ namespace Incubator_2.Windows
 
         private void CreateFilesClick(object sender, RoutedEventArgs e)
         {
-            if (ValidateContent())
+            if (this.ValidateContent())
             {
                 RegistryData.SetTemplatePreferredPath(this.template.id.ToString(), this.dir.Text);
-                CreateFiles();
+                this.CreateFiles();
             }
         }
         private void OnProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -129,7 +128,7 @@ namespace Incubator_2.Windows
 
         private void AddFC_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            AddFileCreator();
+            this.AddFileCreator();
         }
 
         private void review_Click(object sender, RoutedEventArgs e)
@@ -159,7 +158,7 @@ namespace Incubator_2.Windows
         private void RecalculateNamesClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             List<string> names = new List<string>();
-            foreach (Tag tag in tags)
+            foreach (Tag tag in this.tags)
             {
                 if (tag.type != TypeOfTag.LocalConstant && tag.type != TypeOfTag.Text && tag.type != TypeOfTag.Table)
                 {
@@ -207,7 +206,7 @@ namespace Incubator_2.Windows
                 }
                 this.ContentPanel.Children.Clear();
                 this.creators.Clear();
-                foreach (Tag tag in tags)
+                foreach (Tag tag in this.tags)
                 {
                     IXLCell colCell;
                     try
@@ -235,7 +234,7 @@ namespace Incubator_2.Windows
                 }
                 foreach (Dictionary<string, string> item in pairs)
                 {
-                    var fc = AddFileCreator();
+                    UC_FileCreator fc = this.AddFileCreator();
                     fc.ApplyFromExcel(item);
                 }
                 ProgramState.ShowWaitCursor(false);
@@ -244,13 +243,13 @@ namespace Incubator_2.Windows
 
         private void SendToExcel(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (ValidateContent())
+            if (this.ValidateContent())
             {
                 XLWorkbook wb = new XLWorkbook();
                 IXLWorksheet ws = wb.AddWorksheet("Из инкубатора");
-                for (int i = 0; i < tags.Count; i++) // columns
+                for (int i = 0; i < this.tags.Count; i++) // columns
                 {
-                    IXLCell c = ws.Cell(1, i + 1).SetValue(tags[i].name);
+                    IXLCell c = ws.Cell(1, i + 1).SetValue(this.tags[i].name);
                     c.Style.Font.Bold = true;
                 }
                 int row = 2;

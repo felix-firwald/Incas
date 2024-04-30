@@ -15,16 +15,16 @@ namespace Incubator_2.ViewModels
 
         public MV_MainWindow()
         {
-            SetCommands();
-            LoadInfo();
+            this.SetCommands();
+            this.LoadInfo();
         }
         private void SetCommands()
         {
-            TextCommand = new Command(DoTextCommand);
-            CopyToClipBoard = new Command(DoCopyToClipBoard);
-            CopyFile = new Command(DoCopyFile);
-            OpenFile = new Command(DoOpenFile);
-            OpenWeb = new Command(DoOpenWeb);
+            this.TextCommand = new Command(this.DoTextCommand);
+            this.CopyToClipBoard = new Command(this.DoCopyToClipBoard);
+            this.CopyFile = new Command(this.DoCopyFile);
+            this.OpenFile = new Command(this.DoOpenFile);
+            this.OpenWeb = new Command(this.DoOpenWeb);
         }
 
         #region ICommands
@@ -124,12 +124,12 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                return _processHandled;
+                return this._processHandled;
             }
             set
             {
-                _processHandled = value;
-                OnPropertyChanged(nameof(ProcessHandled));
+                this._processHandled = value;
+                this.OnPropertyChanged(nameof(this.ProcessHandled));
             }
         }
 
@@ -141,7 +141,7 @@ namespace Incubator_2.ViewModels
                 if (ProgramState.CurrentUser.surname != value)
                 {
                     ProgramState.CurrentUser.surname = value;
-                    OnPropertyChanged(nameof(Surname));
+                    this.OnPropertyChanged(nameof(this.Surname));
                 }
             }
         }
@@ -153,7 +153,7 @@ namespace Incubator_2.ViewModels
                 if (ProgramState.CurrentUser.secondName != value)
                 {
                     ProgramState.CurrentUser.secondName = value;
-                    OnPropertyChanged(nameof(SecondName));
+                    this.OnPropertyChanged(nameof(this.SecondName));
                 }
             }
         }
@@ -166,20 +166,20 @@ namespace Incubator_2.ViewModels
                 if (ProgramState.CurrentUser.post != value)
                 {
                     ProgramState.CurrentUser.post = value;
-                    OnPropertyChanged(nameof(Post));
+                    this.OnPropertyChanged(nameof(this.Post));
                 }
             }
         }
 
         public string WorkspaceName
         {
-            get { return _workspaceName; }
+            get { return this._workspaceName; }
             set
             {
-                if (_workspaceName != value)
+                if (this._workspaceName != value)
                 {
-                    _workspaceName = value;
-                    OnPropertyChanged("WorkspaceName");
+                    this._workspaceName = value;
+                    this.OnPropertyChanged("WorkspaceName");
                 }
             }
         }
@@ -191,7 +191,7 @@ namespace Incubator_2.ViewModels
                 if (ProgramState.CurrentSector.name != value)
                 {
                     ProgramState.CurrentSector.name = value;
-                    OnPropertyChanged("SectorName");
+                    this.OnPropertyChanged("SectorName");
                 }
             }
         }
@@ -211,21 +211,21 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                return VisibilityConverter(ProgramState.CurrentUserParameters.tasks_visibility);
+                return this.VisibilityConverter(ProgramState.CurrentUserParameters.tasks_visibility);
             }
         }
         public Visibility CommunicationVisibility
         {
             get
             {
-                return VisibilityConverter(ProgramState.CurrentUserParameters.communication_visibility);
+                return this.VisibilityConverter(ProgramState.CurrentUserParameters.communication_visibility);
             }
         }
         public Visibility DatabaseVisibility
         {
             get
             {
-                return VisibilityConverter(ProgramState.CurrentUserParameters.database_visibility);
+                return this.VisibilityConverter(ProgramState.CurrentUserParameters.database_visibility);
             }
         }
 

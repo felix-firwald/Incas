@@ -24,29 +24,29 @@ namespace Incubator_2.Windows.Templates
         public UseTemplateText(Template templ, SGeneratedDocument data)
         {
             InitializeComponent();
-            template = templ;
-            this.Title = template.name;
-            GetTags();
+            this.template = templ;
+            this.Title = this.template.name;
+            this.GetTags();
             if (data.filledTags != null)
             {
-                ApplyData(data);
+                this.ApplyData(data);
             }
         }
         private void GetTags()
         {
             using (Tag tag = new())
             {
-                this.tags = tag.GetAllTagsByTemplate(template.id);
+                this.tags = tag.GetAllTagsByTemplate(this.template.id);
             }
             foreach (Tag tag in this.tags)
             {
-                AddField(tag);
+                this.AddField(tag);
             }
         }
         private void AddField(Tag t)
         {
             UC_TagFiller tf = new(t);
-            tf.OnScriptRequested += OnScriptRequested;
+            tf.OnScriptRequested += this.OnScriptRequested;
             this.ContentPanel.Children.Add(tf);
         }
 
@@ -88,7 +88,7 @@ namespace Incubator_2.Windows.Templates
         public SGeneratedDocument GetData()
         {
             SGeneratedDocument result = new();
-            result.id = template.id;
+            result.id = this.template.id;
             List<SGeneratedTag> tags = new();
             foreach (UC_TagFiller tf in this.ContentPanel.Children)
             {
@@ -109,7 +109,7 @@ namespace Incubator_2.Windows.Templates
         }
         public string GetText()
         {
-            string result = template.path;
+            string result = this.template.path;
             foreach (UC_TagFiller tf in this.ContentPanel.Children)
             {
                 result = result.Replace($"[{tf.tag.name}]", tf.GetValue());
@@ -132,12 +132,12 @@ namespace Incubator_2.Windows.Templates
                 OnFinishedEditing();
             }
 
-            Result = DialogStatus.Yes;
+            this.Result = DialogStatus.Yes;
             this.Close();
         }
         private void UpdateClick(object sender, RoutedEventArgs e)
         {
-            this.ResultView.Text = GetText();
+            this.ResultView.Text = this.GetText();
         }
     }
 }

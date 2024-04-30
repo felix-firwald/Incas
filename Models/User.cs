@@ -21,15 +21,15 @@ namespace Models
         public User AsModel()
         {
             User user = new();
-            user.id = id;
-            user.username = username;
-            user.sign = sign;
-            user.surname = surname;
-            user.secondName = secondName;
-            user.fullname = fullname;
-            user.post = post;
-            user.sector = sector;
-            user.context = context;
+            user.id = this.id;
+            user.username = this.username;
+            user.sign = this.sign;
+            user.surname = this.surname;
+            user.secondName = this.secondName;
+            user.fullname = this.fullname;
+            user.post = this.post;
+            user.sector = this.sector;
+            user.context = this.context;
             return user;
         }
     }
@@ -48,13 +48,13 @@ namespace Models
 
         public User()
         {
-            tableName = "Users";
+            this.tableName = "Users";
         }
         #region Base
         public List<User> GetAllUsers()
         {
             List<User> output = new List<User>();
-            DataTable dt = StartCommandToService()
+            DataTable dt = this.StartCommandToService()
                 .Select()
                 .OrderByASC("fullname")
                 .Execute();
@@ -68,13 +68,13 @@ namespace Models
         }
         public DataTable GetAllUsersAsDT()
         {
-            return StartCommandToService()
+            return this.StartCommandToService()
                 .Select()
                 .Execute();
         }
         public User GetUserByName()
         {
-            DataRow dr = StartCommandToService()
+            DataRow dr = this.StartCommandToService()
                     .Select()
                     .WhereEqual("username", this.username)
                     .ExecuteOne();
@@ -91,52 +91,52 @@ namespace Models
         }
         public void UpdateUser()
         {
-            StartCommandToService()
-                .Update("sign", sign)
-                .Update("surname", surname)
-                .Update("secondName", secondName)
-                .Update("fullname", fullname)
-                .Update("post", post)
-                .Update("sector", sector)
-                .Update("context", context)
-                .WhereEqual("id", id.ToString())
+            this.StartCommandToService()
+                .Update("sign", this.sign)
+                .Update("surname", this.surname)
+                .Update("secondName", this.secondName)
+                .Update("fullname", this.fullname)
+                .Update("post", this.post)
+                .Update("sector", this.sector)
+                .Update("context", this.context)
+                .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
         }
         public void AddUser()
         {
-            if (string.IsNullOrEmpty(sign))
+            if (string.IsNullOrEmpty(this.sign))
             {
-                GenerateSign();
+                this.GenerateSign();
             }
-            StartCommandToService()
+            this.StartCommandToService()
                 .Insert(new Dictionary<string, string>
                 {
-                    { "username", username},
-                    { "sign", sign },
-                    { "surname", surname },
-                    { "secondName", secondName },
-                    { "fullname", fullname },
-                    { "post", post },
-                    { "sector", sector },
-                    { "context", context }
+                    { "username", this.username},
+                    { "sign", this.sign },
+                    { "surname", this.surname },
+                    { "secondName", this.secondName },
+                    { "fullname", this.fullname },
+                    { "post", this.post },
+                    { "sector", this.sector },
+                    { "context", this.context }
                 })
                 .ExecuteVoid();
-            GetUserByName();
+            this.GetUserByName();
         }
         public void SaveUser()
         {
-            if (id == 0)
+            if (this.id == 0)
             {
-                AddUser();
+                this.AddUser();
             }
             else
             {
-                UpdateUser();
+                this.UpdateUser();
             }
         }
         public bool DoesUserExists(string username)
         {
-            DataTable dt = StartCommandToService()
+            DataTable dt = this.StartCommandToService()
                 .Select("username")
                 .WhereEqual("username", username)
                 .Execute();
@@ -153,9 +153,9 @@ namespace Models
 
         public void RemoveUser()
         {
-            StartCommandToService()
+            this.StartCommandToService()
                 .Delete()
-                .WhereEqual("username", username)
+                .WhereEqual("username", this.username)
                 .ExecuteVoid();
         }
         #endregion
@@ -166,11 +166,11 @@ namespace Models
         }
         public UserParameters GetParametersContext()
         {
-            return JsonConvert.DeserializeObject<UserParameters>(Cryptographer.DecryptString(GetKey(), this.context));
+            return JsonConvert.DeserializeObject<UserParameters>(Cryptographer.DecryptString(this.GetKey(), this.context));
         }
         public void SaveParametersContext(UserParameters parameters)
         {
-            this.context = Cryptographer.EncryptString(GetKey(), JsonConvert.SerializeObject(parameters));
+            this.context = Cryptographer.EncryptString(this.GetKey(), JsonConvert.SerializeObject(parameters));
         }
     }
 }

@@ -11,13 +11,13 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class AdminPanel : Window
     {
-        VM_AdminPanel vm;
+        private VM_AdminPanel vm;
         public AdminPanel()
         {
             InitializeComponent();
             this.vm = new VM_AdminPanel();
-            this.DataContext = vm;
-            if (!vm.IsAdmin)
+            this.DataContext = this.vm;
+            if (!this.vm.IsAdmin)
             {
                 this.rbWorkspace.Visibility = Visibility.Collapsed;
                 this.rbUsers.Visibility = Visibility.Collapsed;

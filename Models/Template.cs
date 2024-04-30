@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using static Common.Query;
 
 namespace Models
 {
@@ -17,37 +16,37 @@ namespace Models
 
         public void FillData(Template temp, bool applyParent)
         {
-            SourceTemplate = temp;
+            this.SourceTemplate = temp;
             using (Tag tag = new())
             {
                 if (applyParent)
                 {
-                    Tags = tag.GetAllTagsByTemplate(SourceTemplate.id, SourceTemplate.parent);
+                    this.Tags = tag.GetAllTagsByTemplate(this.SourceTemplate.id, this.SourceTemplate.parent);
                 }
                 else
                 {
-                    Tags = tag.GetAllTagsByTemplate(SourceTemplate.id);
-                }                
+                    this.Tags = tag.GetAllTagsByTemplate(this.SourceTemplate.id);
+                }
             }
-            foreach (Tag tag in Tags)
+            foreach (Tag tag in this.Tags)
             {
                 tag.id = 0;
             }
-            SourceTemplate.id = 0;
-            SourceTemplate.parent = "";
-            switch (SourceTemplate.type)
+            this.SourceTemplate.id = 0;
+            this.SourceTemplate.parent = "";
+            switch (this.SourceTemplate.type)
             {
                 case TemplateType.Word:
-                    Source = File.ReadAllText(ProgramState.GetFullnameOfWordFile(SourceTemplate.path));
+                    this.Source = File.ReadAllText(ProgramState.GetFullnameOfWordFile(this.SourceTemplate.path));
                     break;
                 case TemplateType.Excel:
-                    Source = File.ReadAllText(ProgramState.GetFullnameOfExcelFile(SourceTemplate.path));
+                    this.Source = File.ReadAllText(ProgramState.GetFullnameOfExcelFile(this.SourceTemplate.path));
                     break;
             }
         }
         public void ToFile(string folder)
         {
-            File.WriteAllText($"{folder}\\{SourceTemplate.name}.tinc", JsonConvert.SerializeObject(this));
+            File.WriteAllText($"{folder}\\{this.SourceTemplate.name}.tinc", JsonConvert.SerializeObject(this));
         }
 
     }
@@ -60,6 +59,7 @@ namespace Models
         public string FileNameTemplate;
         public bool RequiresSave;
         public bool PreventSave;
+        public string OnOpening;
     }
     public enum TemplateType
     {
@@ -81,13 +81,13 @@ namespace Models
         public Template AsModel()
         {
             Template template = new();
-            template.id = id;
-            template.name = name;
-            template.path = path;
-            template.suggestedPath = suggestedPath;
-            template.parent = parent;
-            template.type = type;
-            template.settings = settings;
+            template.id = this.id;
+            template.name = this.name;
+            template.path = this.path;
+            template.suggestedPath = this.suggestedPath;
+            template.parent = this.parent;
+            template.type = this.type;
+            template.settings = this.settings;
             return template;
         }
     }
@@ -103,23 +103,23 @@ namespace Models
 
         public Template()
         {
-            tableName = "Templates";
+            this.tableName = "Templates";
         }
         public Template(int newId)
         {
-            tableName = "Templates";
-            GetTemplateById(newId);
+            this.tableName = "Templates";
+            this.GetTemplateById(newId);
         }
         public STemplate AsStruct()
         {
             STemplate template = new();
-            template.id = id;
-            template.name = name;
-            template.path = path;
-            template.suggestedPath = suggestedPath;
-            template.parent = parent;
-            template.type = type;
-            template.settings = settings;
+            template.id = this.id;
+            template.name = this.name;
+            template.path = this.path;
+            template.suggestedPath = this.suggestedPath;
+            template.parent = this.parent;
+            template.type = this.type;
+            template.settings = this.settings;
             return template;
         }
 
@@ -132,13 +132,13 @@ namespace Models
                 this.type = (TemplateType)Enum.Parse(typeof(TemplateType), dr["type"].ToString());
                 resulting.Add(this.AsStruct());
             }
-            
+
             return resulting;
         }
 
         public Template GetTemplateById(int id)
         {
-            DataRow dr = StartCommand()
+            DataRow dr = this.StartCommand()
                 .Select()
                 .WhereEqual("id", id.ToString())
                 .ExecuteOne();
@@ -157,58 +157,58 @@ namespace Models
         }
         private List<STemplate> GetAllTemplatesBy(TemplateType tt, string cat)
         {
-            DataTable dt = StartCommand()
+            DataTable dt = this.StartCommand()
                 .Select()
                 .WhereEqual("type", tt.ToString())
                 .WhereEqual("suggestedPath", cat)
                 .WhereNULL("parent")
                 .OrderByASC("name")
-                .Execute();            
-            return Parse(dt);
+                .Execute();
+            return this.Parse(dt);
         }
         public List<STemplate> GetAllWordExcelTemplates(string cat)
         {
-            DataTable dt = StartCommand()
+            DataTable dt = this.StartCommand()
                 .Select()
                 .WhereEqual("suggestedPath", cat)
-                .WhereIn("type", new List<string> { "Excel", "Word"})             
+                .WhereIn("type", new List<string> { "Excel", "Word" })
                 .WhereNULL("parent")
                 .OrderByASC("name")
                 .Execute();
-            return Parse(dt);
+            return this.Parse(dt);
         }
         public List<STemplate> GetAllWordTemplates()
         {
-            return GetAllByType(TemplateType.Word);
+            return this.GetAllByType(TemplateType.Word);
         }
         public List<STemplate> GetAllTextTemplates()
         {
-            return GetAllByType(TemplateType.Text);
+            return this.GetAllByType(TemplateType.Text);
         }
         public List<STemplate> GetAllMailTemplates(string category)
         {
-            DataTable dt = StartCommand()
+            DataTable dt = this.StartCommand()
                 .Select()
                 .WhereEqual("suggestedPath", category)
                 .WhereIn("type", new List<string> { "Mail" })
                 .WhereNULL("parent")
                 .OrderByASC("name")
                 .Execute();
-            return Parse(dt);
+            return this.Parse(dt);
         }
         private List<STemplate> GetAllByType(TemplateType type)
         {
-            DataTable dt = StartCommand()
+            DataTable dt = this.StartCommand()
                 .Select()
                 .WhereEqual("type", type.ToString())
                 .OrderByASC("name")
                 .Execute();
             List<STemplate> resulting = new();
-            return Parse(dt);
+            return this.Parse(dt);
         }
         public Template GetTemplateByName(string nameOf)
         {
-            DataRow dt = StartCommand()
+            DataRow dt = this.StartCommand()
                     .Select()
                     .WhereEqual("name", nameOf)
                     .ExecuteOne();
@@ -218,18 +218,18 @@ namespace Models
         }
         public List<STemplate> GetWordTemplates(string category)
         {
-            return GetAllTemplatesBy(TemplateType.Word, category);
+            return this.GetAllTemplatesBy(TemplateType.Word, category);
         }
         public List<STemplate> GetExcelTemplates()
         {
-            return GetAllTemplatesBy(TemplateType.Excel, "");
+            return this.GetAllTemplatesBy(TemplateType.Excel, "");
         }
         public List<string> GetCategories(List<string> types)
         {
-            DataTable dt = StartCommand()
+            DataTable dt = this.StartCommand()
                 .SelectUnique("suggestedPath")
                 .WhereIn("type", types)
-                .OrderByASC("suggestedPath")               
+                .OrderByASC("suggestedPath")
                 .Execute();
             List<string> categories = new List<string>();
             foreach (DataRow dr in dt.Rows)
@@ -241,35 +241,40 @@ namespace Models
 
         public void AddTemplate()
         {
-            bool isChild = !string.IsNullOrWhiteSpace(parent);
-            StartCommand()
+            bool isChild = !string.IsNullOrWhiteSpace(this.parent);
+            this.StartCommand()
                 .Insert(new Dictionary<string, string>
                 {
-                    { "name", name },
-                    { "path", path },
-                    { "parent", isChild? parent.ToString(): Query.Null }, // раньше тут было просто null а теперь будет 'null'
-                    { "suggestedPath", isChild? Query.Null : suggestedPath },
-                    { "type", type.ToString() } ,
-                    { "settings", settings }
+                    { "name", this.name },
+                    { "path", this.path },
+                    { "parent", isChild? this.parent.ToString(): Query.Null }, // раньше тут было просто null а теперь будет 'null'
+                    { "suggestedPath", isChild? Query.Null : this.suggestedPath },
+                    { "type", this.type.ToString() } ,
+                    { "settings", this.settings }
                 })
                 .ExecuteVoid();
             this.id = int.Parse(
-                        StartCommand()
+                        this.StartCommand()
                             .Select()
-                            .WhereEqual("name", name)
-                            .WhereEqual("path", path)
+                            .WhereEqual("name", this.name)
+                            .WhereEqual("path", this.path)
                             .OrderByDESC("id")
                             .ExecuteOne()["id"].ToString()
                 );
         }
         public void UpdateTemplate()
         {
-            StartCommand()
-                .Update("name", name)
-                .Update("path", path)
-                .Update("suggestedPath", suggestedPath)
-                .Update("settings", settings)
-                .WhereEqual("id", id.ToString())
+            if (this.id == 0)
+            {
+                this.AddTemplate();
+                return;
+            }
+            this.StartCommand()
+                .Update("name", this.name)
+                .Update("path", this.path)
+                .Update("suggestedPath", this.suggestedPath)
+                .Update("settings", this.settings)
+                .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
         }
 
@@ -277,9 +282,9 @@ namespace Models
         {
             if (ProgramState.IsWorkspaceOpened())
             {
-                StartCommand()
+                this.StartCommand()
                     .Delete()
-                    .WhereEqual("id", id.ToString())
+                    .WhereEqual("id", this.id.ToString())
                     .Execute();
             }
         }
@@ -301,25 +306,25 @@ namespace Models
             {
                 parents = string.Join(';', ids);
             }
-            DataTable dt = StartCommand()
+            DataTable dt = this.StartCommand()
                 .Select()
                 .WhereEqual("parent", parents)
                 .OrderByASC("name")
                 .Execute();
-            return Parse(dt);
+            return this.Parse(dt);
         }
         public List<STemplate> GetAllChildren(int id)
         {
-            DataTable dt = StartCommand()
+            DataTable dt = this.StartCommand()
                 .Select()
                 .WhereEqual("parent", id)
                 .OrderByASC("name")
                 .Execute();
-            return Parse(dt);
+            return this.Parse(dt);
         }
         public Template GetChild(string name)
         {
-            DataRow dr = StartCommand()
+            DataRow dr = this.StartCommand()
                 .Select()
                 .WhereEqual("parent", this.id.ToString())
                 .WhereEqual("name", name)

@@ -16,10 +16,10 @@ namespace Incubator_2.Windows.AdminWindows
 
         private void SendClick(object sender, RoutedEventArgs e)
         {
-            message.header = this.Header.Text;
-            message.message = this.MainText.Text;
-            message.message_type = GetEnumFromCombo();
-            DialogResult = true;
+            this.message.header = this.Header.Text;
+            this.message.message = this.MainText.Text;
+            this.message.message_type = this.GetEnumFromCombo();
+            this.DialogResult = true;
         }
         private AdminMessageType GetEnumFromCombo()
         {
@@ -37,7 +37,7 @@ namespace Incubator_2.Windows.AdminWindows
 
         private void CloseClick(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            this.DialogResult = false;
         }
     }
 }

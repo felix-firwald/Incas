@@ -3,28 +3,28 @@ using System.Data;
 
 namespace Incubator_2.ViewModels
 {
-    class VM_TableFiller : VM_Base
+    internal class VM_TableFiller : VM_Base
     {
         private DataTable _data;
         public VM_TableFiller(Tag t)
         {
-            _data = new DataTable();
-            MakeColumns(t.value);
+            this._data = new DataTable();
+            this.MakeColumns(t.value);
         }
         private void MakeColumns(string columns)
         {
             foreach (string c in columns.Split(';'))
             {
-                Grid.Columns.Add(c);
+                this.Grid.Columns.Add(c);
             }
         }
         public DataTable Grid
         {
-            get { return _data; }
+            get { return this._data; }
             set
             {
-                _data = value;
-                OnPropertyChanged(nameof(Grid));
+                this._data = value;
+                this.OnPropertyChanged(nameof(this.Grid));
             }
         }
     }

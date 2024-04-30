@@ -10,27 +10,27 @@ namespace Incubator_2.Forms.AdminPanel
     /// </summary>
     public partial class SessionElement : UserControl
     {
-        VM_SessionElement vm;
+        private VM_SessionElement vm;
         public SessionElement(SSession session)
         {
             InitializeComponent();
-            vm = new(ref session);
-            this.DataContext = vm;
+            this.vm = new(ref session);
+            this.DataContext = this.vm;
         }
 
         private void TerminateClick(object sender, MouseButtonEventArgs e)
         {
-            vm.Terminate();
+            this.vm.Terminate();
         }
 
         private void RestartClick(object sender, MouseButtonEventArgs e)
         {
-            vm.Restart();
+            this.vm.Restart();
         }
 
         private void ShowExplicitClick(object sender, MouseButtonEventArgs e)
         {
-            vm.ShowExplicit();
+            this.vm.ShowExplicit();
         }
     }
 }

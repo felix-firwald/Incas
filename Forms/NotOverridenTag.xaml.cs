@@ -15,15 +15,15 @@ namespace Incubator_2.Forms
         public NotOverridenTag(Tag t)
         {
             InitializeComponent();
-            tag = t;
-            this.TagName.Content = tag.name;
+            this.tag = t;
+            this.TagName.Content = this.tag.name;
         }
 
         public void OverrideTag(bool notify = true)
         {
             this.IsEnabled = false;
             this.Override.Visibility = Visibility.Collapsed;
-            if (notify) { onOverride(tag); }
+            if (notify) { onOverride(this.tag); }
         }
         public void DeOverrideTag()
         {
@@ -33,7 +33,7 @@ namespace Incubator_2.Forms
 
         private void OverrideClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            OverrideTag();
+            this.OverrideTag();
         }
     }
 }

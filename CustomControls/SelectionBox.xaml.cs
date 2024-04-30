@@ -22,9 +22,9 @@ namespace Incubator_2.CustomControls
             {
                 try
                 {
-                    Database = value.Split('.')[0];
-                    Table = value.Split('.')[1];
-                    Field = value.Split('.')[2];
+                    this.Database = value.Split('.')[0];
+                    this.Table = value.Split('.')[1];
+                    this.Field = value.Split('.')[2];
                 }
                 catch (Exception ex)
                 {
@@ -41,7 +41,7 @@ namespace Incubator_2.CustomControls
 
         private void ButtonClick(object sender, MouseButtonEventArgs e)
         {
-            DatabaseSelection s = new(Database, Table, Field);
+            DatabaseSelection s = new(this.Database, this.Table, this.Field);
             s.ShowDialog();
             if (s.Result == Windows.DialogStatus.Yes)
             {

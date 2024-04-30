@@ -17,19 +17,19 @@ namespace Incubator_2.Forms
         public UserElement(User user)
         {
             InitializeComponent();
-            vm = new(user);
-            this.DataContext = vm;
+            this.vm = new(user);
+            this.DataContext = this.vm;
         }
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
-            vm.RemoveUser();
+            this.vm.RemoveUser();
             OnDeleted?.Invoke(this);
         }
 
         private void EditClick(object sender, MouseButtonEventArgs e)
         {
-            vm.EditUser();
+            this.vm.EditUser();
         }
     }
 }

@@ -65,13 +65,13 @@ namespace Incubator_2.Common
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetCursorPos(out POINT lpPoint);
+        private static extern bool GetCursorPos(out POINT lpPoint);
 
         [DllImport("user32.dll")]
-        static extern bool GetMonitorInfo(IntPtr hMonitor, MONITORINFO lpmi);
+        private static extern bool GetMonitorInfo(IntPtr hMonitor, MONITORINFO lpmi);
 
         [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr MonitorFromPoint(POINT pt, MonitorOptions dwFlags);
+        private static extern IntPtr MonitorFromPoint(POINT pt, MonitorOptions dwFlags);
 
         #endregion
 
@@ -93,16 +93,16 @@ namespace Incubator_2.Common
         /// <param name="adjustSize">The callback for the host to adjust the maximum available size if needed</param>
         public WindowResizer(Window window)
         {
-            mWindow = window;
+            this.mWindow = window;
 
             // Create transform visual (for converting WPF size to pixel size)
-            GetTransform();
+            this.GetTransform();
 
             // Listen out for source initialized to setup
-            mWindow.SourceInitialized += Window_SourceInitialized;
+            this.mWindow.SourceInitialized += this.Window_SourceInitialized;
 
             // Monitor for edge docking
-            mWindow.SizeChanged += Window_SizeChanged;
+            this.mWindow.SizeChanged += this.Window_SizeChanged;
         }
 
         #endregion
@@ -115,17 +115,17 @@ namespace Incubator_2.Common
         private void GetTransform()
         {
             // Get the visual source
-            var source = PresentationSource.FromVisual(mWindow);
+            PresentationSource source = PresentationSource.FromVisual(this.mWindow);
 
             // Reset the transform to default
-            mTransformToDevice = default(Matrix);
+            this.mTransformToDevice = default(Matrix);
 
             // If we cannot get the source, ignore
             if (source == null)
                 return;
 
             // Otherwise, get the new transform object
-            mTransformToDevice = source.CompositionTarget.TransformToDevice;
+            this.mTransformToDevice = source.CompositionTarget.TransformToDevice;
         }
 
         /// <summary>
@@ -136,15 +136,15 @@ namespace Incubator_2.Common
         private void Window_SourceInitialized(object sender, System.EventArgs e)
         {
             // Get the handle of this window
-            var handle = (new WindowInteropHelper(mWindow)).Handle;
-            var handleSource = HwndSource.FromHwnd(handle);
+            nint handle = (new WindowInteropHelper(this.mWindow)).Handle;
+            HwndSource handleSource = HwndSource.FromHwnd(handle);
 
             // If not found, end
             if (handleSource == null)
                 return;
 
             // Hook into it's Windows messages
-            handleSource.AddHook(WindowProc);
+            handleSource.AddHook(this.WindowProc);
         }
 
         #endregion
@@ -159,30 +159,30 @@ namespace Incubator_2.Common
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // We cannot find positioning until the window transform has been established
-            if (mTransformToDevice == default(Matrix))
+            if (this.mTransformToDevice == default(Matrix))
                 return;
 
             // Get the WPF size
-            var size = e.NewSize;
+            Size size = e.NewSize;
 
             // Get window rectangle
-            var top = mWindow.Top;
-            var left = mWindow.Left;
-            var bottom = top + size.Height;
-            var right = left + mWindow.Width;
+            double top = this.mWindow.Top;
+            double left = this.mWindow.Left;
+            double bottom = top + size.Height;
+            double right = left + this.mWindow.Width;
 
             // Get window position/size in device pixels
-            var windowTopLeft = mTransformToDevice.Transform(new Point(left, top));
-            var windowBottomRight = mTransformToDevice.Transform(new Point(right, bottom));
+            Point windowTopLeft = this.mTransformToDevice.Transform(new Point(left, top));
+            Point windowBottomRight = this.mTransformToDevice.Transform(new Point(right, bottom));
 
             // Check for edges docked
-            var edgedTop = windowTopLeft.Y <= (mScreenSize.Top + mEdgeTolerance);
-            var edgedLeft = windowTopLeft.X <= (mScreenSize.Left + mEdgeTolerance);
-            var edgedBottom = windowBottomRight.Y >= (mScreenSize.Bottom - mEdgeTolerance);
-            var edgedRight = windowBottomRight.X >= (mScreenSize.Right - mEdgeTolerance);
+            bool edgedTop = windowTopLeft.Y <= (this.mScreenSize.Top + this.mEdgeTolerance);
+            bool edgedLeft = windowTopLeft.X <= (this.mScreenSize.Left + this.mEdgeTolerance);
+            bool edgedBottom = windowBottomRight.Y >= (this.mScreenSize.Bottom - this.mEdgeTolerance);
+            bool edgedRight = windowBottomRight.X >= (this.mScreenSize.Right - this.mEdgeTolerance);
 
             // Get docked position
-            var dock = WindowDockPosition.Undocked;
+            WindowDockPosition dock = WindowDockPosition.Undocked;
 
             // Left docking
             if (edgedTop && edgedBottom && edgedLeft)
@@ -194,12 +194,12 @@ namespace Incubator_2.Common
                 dock = WindowDockPosition.Undocked;
 
             // If dock has changed
-            if (dock != mLastDock)
+            if (dock != this.mLastDock)
                 // Inform listeners
                 WindowDockChanged(dock);
 
             // Save last dock position
-            mLastDock = dock;
+            this.mLastDock = dock;
         }
 
         #endregion
@@ -221,7 +221,7 @@ namespace Incubator_2.Common
             {
                 // Handle the GetMinMaxInfo of the Window
                 case 0x0024:/* WM_GETMINMAXINFO */
-                    WmGetMinMaxInfo(hwnd, lParam);
+                    this.WmGetMinMaxInfo(hwnd, lParam);
                     handled = true;
                     break;
             }
@@ -244,25 +244,25 @@ namespace Incubator_2.Common
             GetCursorPos(out lMousePosition);
 
             // Get the primary monitor at cursor position 0,0
-            var lPrimaryScreen = MonitorFromPoint(new POINT(0, 0), MonitorOptions.MONITOR_DEFAULTTOPRIMARY);
+            nint lPrimaryScreen = MonitorFromPoint(new POINT(0, 0), MonitorOptions.MONITOR_DEFAULTTOPRIMARY);
 
             // Try and get the primary screen information
-            var lPrimaryScreenInfo = new MONITORINFO();
+            MONITORINFO lPrimaryScreenInfo = new MONITORINFO();
             if (GetMonitorInfo(lPrimaryScreen, lPrimaryScreenInfo) == false)
                 return;
 
             // Now get the current screen
-            var lCurrentScreen = MonitorFromPoint(lMousePosition, MonitorOptions.MONITOR_DEFAULTTONEAREST);
+            nint lCurrentScreen = MonitorFromPoint(lMousePosition, MonitorOptions.MONITOR_DEFAULTTONEAREST);
 
             // If this has changed from the last one, update the transform
-            if (lCurrentScreen != mLastScreen || mTransformToDevice == default(Matrix))
-                GetTransform();
+            if (lCurrentScreen != this.mLastScreen || this.mTransformToDevice == default(Matrix))
+                this.GetTransform();
 
             // Store last know screen
-            mLastScreen = lCurrentScreen;
+            this.mLastScreen = lCurrentScreen;
 
             // Get min/max structure to fill with information
-            var lMmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
+            MINMAXINFO lMmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
 
             // If it is the primary screen, use the rcWork variable
             if (lPrimaryScreen.Equals(lCurrentScreen) == true)
@@ -282,13 +282,13 @@ namespace Incubator_2.Common
             }
 
             // Set min size
-            var minSize = mTransformToDevice.Transform(new Point(mWindow.MinWidth, mWindow.MinHeight));
+            Point minSize = this.mTransformToDevice.Transform(new Point(this.mWindow.MinWidth, this.mWindow.MinHeight));
 
             lMmi.ptMinTrackSize.X = (int)minSize.X;
             lMmi.ptMinTrackSize.Y = (int)minSize.Y;
 
             // Store new size
-            mScreenSize = new Rect(lMmi.ptMaxPosition.X, lMmi.ptMaxPosition.Y, lMmi.ptMaxSize.X, lMmi.ptMaxSize.Y);
+            this.mScreenSize = new Rect(lMmi.ptMaxPosition.X, lMmi.ptMaxPosition.Y, lMmi.ptMaxSize.X, lMmi.ptMaxSize.Y);
 
             // Now we have the max size, allow the host to tweak as needed
             Marshal.StructureToPtr(lMmi, lParam, true);
@@ -297,7 +297,7 @@ namespace Incubator_2.Common
 
     #region Dll Helper Structures
 
-    enum MonitorOptions : uint
+    internal enum MonitorOptions : uint
     {
         MONITOR_DEFAULTTONULL = 0x00000000,
         MONITOR_DEFAULTTOPRIMARY = 0x00000001,

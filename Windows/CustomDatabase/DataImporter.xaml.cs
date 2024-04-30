@@ -9,19 +9,19 @@ namespace Incubator_2.Windows.CustomDatabase
     /// </summary>
     public partial class DataImporter : Window
     {
-        VM_DataImporter vm;
+        private VM_DataImporter vm;
         public DialogStatus Result = DialogStatus.Undefined;
-        public DataTable ResultTable { get { return vm.Table; } }
+        public DataTable ResultTable { get { return this.vm.Table; } }
         public DataImporter(DataTable dt)
         {
             InitializeComponent();
-            vm = new(dt);
-            this.DataContext = vm;
+            this.vm = new(dt);
+            this.DataContext = this.vm;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Result = DialogStatus.Yes;
+            this.Result = DialogStatus.Yes;
             this.Close();
         }
     }

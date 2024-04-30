@@ -18,13 +18,13 @@ namespace Models
         public Session AsModel()
         {
             Session session = new();
-            session.slug = slug;
-            session.user = user;
-            session.userId = userId;
-            session.timeStarted = timeStarted;
-            session.timeFinished = timeFinished;
-            session.computer = computer;
-            session.active = active;
+            session.slug = this.slug;
+            session.user = this.user;
+            session.userId = this.userId;
+            session.timeStarted = this.timeStarted;
+            session.timeFinished = this.timeFinished;
+            session.computer = this.computer;
+            session.active = this.active;
             return session;
         }
     }
@@ -39,24 +39,24 @@ namespace Models
         public bool active { get; set; }
         public Session()
         {
-            tableName = "Sessions";
+            this.tableName = "Sessions";
         }
         public SSession AsStruct()
         {
             SSession s = new();
-            s.slug = slug;
-            s.user = user;
-            s.userId = userId;
-            s.timeStarted = timeStarted;
-            s.timeFinished = timeFinished;
-            s.computer = computer;
-            s.active = active;
+            s.slug = this.slug;
+            s.user = this.user;
+            s.userId = this.userId;
+            s.timeStarted = this.timeStarted;
+            s.timeFinished = this.timeFinished;
+            s.computer = this.computer;
+            s.active = this.active;
             return s;
         }
 
         public List<SSession> GetAllSessions()
         {
-            DataTable dt = StartCommandToService()
+            DataTable dt = this.StartCommandToService()
                 .Select()
                 .OrderByDESC("slug")
                 .Limit(40)
@@ -71,7 +71,7 @@ namespace Models
         }
         public List<Session> GetOpenedSessions(bool opened = true)
         {
-            DataTable dt = StartCommandToService()
+            DataTable dt = this.StartCommandToService()
                 .Select()
                 .WhereEqual("active", opened ? 1 : 0)
                 .GroupBy("userId")
@@ -92,7 +92,7 @@ namespace Models
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                StartCommandToService()
+                this.StartCommandToService()
                     .Delete()
                     .WhereLess("slug", DateTime.Now.AddDays(-7).ToString("yyMMddHHmmssffff"), false)
                     .ExecuteVoid();
@@ -105,7 +105,7 @@ namespace Models
         }
         public async void AddSession()
         {
-            this.slug = GenerateSlug();
+            this.slug = this.GenerateSlug();
             this.user = $"{ProgramState.CurrentUser.fullname}";
             this.userId = ProgramState.CurrentUser.id;
             this.timeStarted = DateTime.Now;
@@ -113,22 +113,22 @@ namespace Models
             this.active = true;
             await System.Threading.Tasks.Task.Run(() =>
             {
-                StartCommandToService()
+                this.StartCommandToService()
                     .Insert(new Dictionary<string, string>
                     {
-                        {"slug", slug },
-                        { "user", user },
-                        { "userId", userId.ToString() },
-                        { "timeStarted", timeStarted.ToString() },
-                        { "computer", computer },
-                        { "active", BoolToInt(active).ToString() },
+                        {"slug", this.slug },
+                        { "user", this.user },
+                        { "userId", this.userId.ToString() },
+                        { "timeStarted", this.timeStarted.ToString() },
+                        { "computer", this.computer },
+                        { "active", this.BoolToInt(this.active).ToString() },
                     })
                     .ExecuteVoid();
             });
         }
         public void CloseSession()
         {
-            StartCommandToService()
+            this.StartCommandToService()
                 .Update("active", "0")
                 .Update("timeFinished", $"{DateTime.Now}")
                 .WhereEqual("slug", this.slug)
@@ -136,7 +136,7 @@ namespace Models
         }
         public bool IsSessionActive()
         {
-            DataRow dr = StartCommandToService()
+            DataRow dr = this.StartCommandToService()
                     .Select()
                     .WhereEqual("slug", this.slug)
                     .ExecuteOne();

@@ -6,7 +6,7 @@ using System.Linq;
 #pragma warning disable CA1416 // Проверка совместимости платформы
 namespace Common
 {
-    struct FilesManagerSetting
+    internal struct FilesManagerSetting
     {
         public string preffered_path = "";
         public bool filter_start_cb = false;
@@ -24,7 +24,8 @@ namespace Common
 
         }
     }
-    static class RegistryData
+
+    internal static class RegistryData
     {
         public static RegistryKey GetRoot()
         {

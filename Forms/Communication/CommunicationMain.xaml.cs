@@ -8,12 +8,12 @@ namespace Incubator_2.Forms.Communication
     /// </summary>
     public partial class CommunicationMain : UserControl
     {
-        VM_CommunicationMain vm;
+        private VM_CommunicationMain vm;
         public CommunicationMain()
         {
             InitializeComponent();
-            vm = new();
-            this.DataContext = vm;
+            this.vm = new();
+            this.DataContext = this.vm;
         }
 
     }

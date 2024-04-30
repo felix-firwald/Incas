@@ -12,7 +12,7 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class OpenIncubator : Window
     {
-        VM_OpenWorkspace vm;
+        private VM_OpenWorkspace vm;
         public OpenIncubator()
         {
             InitializeComponent();
@@ -35,7 +35,7 @@ namespace Incubator_2.Windows
 
                 if (Directory.Exists(this.cpath.Text))
                 {
-                    TryAuthenticate();
+                    this.TryAuthenticate();
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace Incubator_2.Windows
                         ProgramState.OpenSession();
                         ServerProcessor.Listen();
                         ProgramState.ShowWaitCursor(false);
-                        DialogResult = true;
+                        this.DialogResult = true;
                         this.Close();
                     }
 

@@ -12,22 +12,20 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                using (User u = new())
-                {
-                    return u.GetAllUsers();
-                }
+                using User u = new();
+                return u.GetAllUsers();
             }
         }
         public User SelectedUser
         {
             get
             {
-                return _selected;
+                return this._selected;
             }
             set
             {
-                _selected = value;
-                OnPropertyChanged(nameof(SelectedUser));
+                this._selected = value;
+                this.OnPropertyChanged(nameof(this.SelectedUser));
             }
         }
     }

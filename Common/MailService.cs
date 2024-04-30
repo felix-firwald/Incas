@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace Incubator_2.Common
 {
-    
+
     public static class MailService
     {
-        public async static Task SendEmailAsync(string email, string subject, string message, MailProfile profile)
+        public static async Task SendEmailAsync(string email, string subject, string message, MailProfile profile)
         {
-            using var emailMessage = new MimeMessage();
+            using MimeMessage emailMessage = new MimeMessage();
 
             emailMessage.From.Add(new MailboxAddress(profile.name, profile.email));
             emailMessage.To.Add(new MailboxAddress("", email));
@@ -20,13 +20,11 @@ namespace Incubator_2.Common
                 Text = message
             };
 
-            using (var client = new SmtpClient())
-            {
-                await client.ConnectAsync(profile.host, profile.port, MailKit.Security.SecureSocketOptions.StartTls);
-                await client.AuthenticateAsync(profile.email, profile.password);
-                await client.SendAsync(emailMessage);
-                await client.DisconnectAsync(true);
-            }
+            using SmtpClient client = new SmtpClient();
+            await client.ConnectAsync(profile.host, profile.port, MailKit.Security.SecureSocketOptions.StartTls);
+            await client.AuthenticateAsync(profile.email, profile.password);
+            await client.SendAsync(emailMessage);
+            await client.DisconnectAsync(true);
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Windows.Controls;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
-    class VM_CustomDatabase : VM_Base
+    internal class VM_CustomDatabase : VM_Base
     {
         private string _selectedTable = "";
         private DataRow _selectedRow;
@@ -18,7 +18,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         private DataTable _dataTable = new();
         private DataGridSelectionUnit _selectionUnit = DataGridSelectionUnit.FullRow;
         private List<SCommand> _commands = new List<SCommand>();
-        CustomTable requester = new();
+        private CustomTable requester = new();
 
         public VM_CustomDatabase() { }
 
@@ -44,7 +44,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                if (SelectedDatabase.id == 0)
+                if (this.SelectedDatabase.id == 0)
                 {
                     return Visibility.Collapsed;
                 }
@@ -56,7 +56,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                if (SelectionUnit == DataGridSelectionUnit.FullRow)
+                if (this.SelectionUnit == DataGridSelectionUnit.FullRow)
                 {
                     return Visibility.Visible;
                 }
@@ -70,7 +70,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                if (SelectionUnit == DataGridSelectionUnit.FullRow)
+                if (this.SelectionUnit == DataGridSelectionUnit.FullRow)
                 {
                     return true;
                 }
@@ -85,16 +85,16 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                return _selectionUnit;
+                return this._selectionUnit;
             }
             set
             {
-                if (_selectionUnit != value)
+                if (this._selectionUnit != value)
                 {
-                    _selectionUnit = value;
-                    OnPropertyChanged(nameof(SelectionUnit));
-                    OnPropertyChanged(nameof(EditingVisibility));
-                    OnPropertyChanged(nameof(EditingEnabled));
+                    this._selectionUnit = value;
+                    this.OnPropertyChanged(nameof(this.SelectionUnit));
+                    this.OnPropertyChanged(nameof(this.EditingVisibility));
+                    this.OnPropertyChanged(nameof(this.EditingEnabled));
                 }
             }
         }
@@ -107,9 +107,9 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                if (!string.IsNullOrEmpty(_selectedTable))
+                if (!string.IsNullOrEmpty(this._selectedTable))
                 {
-                    return _dataTable;
+                    return this._dataTable;
                 }
                 else
                 {
@@ -122,13 +122,13 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             get
             {
                 List<string> columns = new();
-                foreach (DataColumn col in _dataTable.Columns)
+                foreach (DataColumn col in this._dataTable.Columns)
                 {
                     columns.Add(col.ColumnName);
                 }
                 if (columns.Count > 0)
                 {
-                    ColumnFilter = columns[0];
+                    this.ColumnFilter = columns[0];
                 }
                 return columns;
             }
@@ -137,24 +137,24 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                return _columnFilter;
+                return this._columnFilter;
             }
             set
             {
-                _columnFilter = value;
-                OnPropertyChanged(nameof(ColumnFilter));
+                this._columnFilter = value;
+                this.OnPropertyChanged(nameof(this.ColumnFilter));
             }
         }
         public string SearchText
         {
             get
             {
-                return _searchText;
+                return this._searchText;
             }
             set
             {
-                _searchText = value;
-                OnPropertyChanged(nameof(SearchText));
+                this._searchText = value;
+                this.OnPropertyChanged(nameof(this.SearchText));
             }
         }
 
@@ -162,10 +162,8 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                using (Database db = new())
-                {
-                    return db.GetActualDatabases();
-                }
+                using Database db = new();
+                return db.GetActualDatabases();
             }
         }
         public SDatabase _selectedDatabase;
@@ -173,53 +171,53 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                return _selectedDatabase;
+                return this._selectedDatabase;
             }
             set
             {
-                _selectedDatabase = value;
-                OnPropertyChanged(nameof(SelectedDatabase));
-                OnPropertyChanged(nameof(Tables));
-                OnPropertyChanged(nameof(TablesVisibility));
-                SelectedTable = Tables.FirstOrDefault();
+                this._selectedDatabase = value;
+                this.OnPropertyChanged(nameof(this.SelectedDatabase));
+                this.OnPropertyChanged(nameof(this.Tables));
+                this.OnPropertyChanged(nameof(this.TablesVisibility));
+                this.SelectedTable = this.Tables.FirstOrDefault();
             }
         }
         public List<string> Tables
         {
             get
             {
-                return requester.GetTablesList(SelectedDatabase.path);
+                return this.requester.GetTablesList(this.SelectedDatabase.path);
             }
             set
             {
-                OnPropertyChanged(nameof(Tables));
+                this.OnPropertyChanged(nameof(this.Tables));
             }
         }
         public string SelectedTable
         {
             get
             {
-                return _selectedTable;
+                return this._selectedTable;
             }
             set
             {
-                _selectedTable = value;
+                this._selectedTable = value;
 
-                OnPropertyChanged(nameof(SelectedTable));
-                CustomViewRequest = null;
-                UpdateTable();
-                OnPropertyChanged(nameof(CanUserEditTable));
-                UpdateListOfCommands();
-                OnPropertyChanged(nameof(Columns));
+                this.OnPropertyChanged(nameof(this.SelectedTable));
+                this.CustomViewRequest = null;
+                this.UpdateTable();
+                this.OnPropertyChanged(nameof(this.CanUserEditTable));
+                this.UpdateListOfCommands();
+                this.OnPropertyChanged(nameof(this.Columns));
             }
         }
         public void UpdateTable()
         {
-            if (!string.IsNullOrEmpty(SelectedTable))
+            if (!string.IsNullOrEmpty(this.SelectedTable))
             {
                 ProgramState.ShowWaitCursor();
-                _dataTable = requester.GetTable(SelectedTable, SelectedDatabase.path, CustomViewRequest);
-                OnPropertyChanged(nameof(Table));
+                this._dataTable = this.requester.GetTable(this.SelectedTable, this.SelectedDatabase.path, this.CustomViewRequest);
+                this.OnPropertyChanged(nameof(this.Table));
                 ProgramState.ShowWaitCursor(false);
             }
         }
@@ -227,55 +225,55 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             using (Models.Command c = new())
             {
-                Commands = c.GetCommandsOfTable(SelectedDatabase.path, SelectedTable);
+                this.Commands = c.GetCommandsOfTable(this.SelectedDatabase.path, this.SelectedTable);
             }
-            OnPropertyChanged(nameof(ReadCommands));
-            OnPropertyChanged(nameof(UpdateCommands));
+            this.OnPropertyChanged(nameof(this.ReadCommands));
+            this.OnPropertyChanged(nameof(this.UpdateCommands));
         }
 
         public DataRow SelectedRow
         {
             get
             {
-                return _selectedRow;
+                return this._selectedRow;
             }
             set
             {
-                _selectedRow = value;
-                OnPropertyChanged(nameof(SelectedRow));
+                this._selectedRow = value;
+                this.OnPropertyChanged(nameof(this.SelectedRow));
             }
         }
         public List<SCommand> Commands
         {
             get
             {
-                return _commands;
+                return this._commands;
             }
             set
             {
-                _commands = value;
-                OnPropertyChanged(nameof(Commands));
-                OnPropertyChanged(nameof(ReadCommands));
-                OnPropertyChanged(nameof(UpdateCommands));
+                this._commands = value;
+                this.OnPropertyChanged(nameof(this.Commands));
+                this.OnPropertyChanged(nameof(this.ReadCommands));
+                this.OnPropertyChanged(nameof(this.UpdateCommands));
             }
         }
         public List<SCommand> ReadCommands
         {
             get
             {
-                return _commands.Where(x => x.type == Models.CommandType.Read).ToList();
+                return this._commands.Where(x => x.type == Models.CommandType.Read).ToList();
             }
         }
         public List<SCommand> UpdateCommands
         {
             get
             {
-                return _commands.Where(x => x.type == Models.CommandType.Update).ToList();
+                return this._commands.Where(x => x.type == Models.CommandType.Update).ToList();
             }
         }
         public SCommand GetCommand(int id)
         {
-            foreach (SCommand command in Commands)
+            foreach (SCommand command in this.Commands)
             {
                 if (command.id == id)
                 {
@@ -286,52 +284,52 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         }
         public List<FieldCreator> GetTableDefinition()
         {
-            return requester.GetTableDefinition(SelectedTable, SelectedDatabase.path);
+            return this.requester.GetTableDefinition(this.SelectedTable, this.SelectedDatabase.path);
         }
         #region other
         public string GetPK()
         {
-            return requester.GetPKField(SelectedTable, SelectedDatabase.path);
+            return this.requester.GetPKField(this.SelectedTable, this.SelectedDatabase.path);
         }
         public List<string> GetFieldsSimple()
         {
-            return requester.GetTableFieldsSimple(SelectedTable, SelectedDatabase.path);
+            return this.requester.GetTableFieldsSimple(this.SelectedTable, this.SelectedDatabase.path);
         }
         public void RefreshTable()
         {
-            OnPropertyChanged(nameof(Databases));
-            OnPropertyChanged(nameof(Tables));
+            this.OnPropertyChanged(nameof(this.Databases));
+            this.OnPropertyChanged(nameof(this.Tables));
 
-            OnPropertyChanged(nameof(Table));
+            this.OnPropertyChanged(nameof(this.Table));
         }
         public void ClearTableFromCustomView()
         {
-            SearchText = string.Empty;
-            SelectedTable = SelectedTable;
+            this.SearchText = string.Empty;
+            this.SelectedTable = this.SelectedTable;
         }
         public void RefreshCommands()
         {
-            UpdateListOfCommands();
-            OnPropertyChanged(nameof(Commands));
-            OnPropertyChanged(nameof(ReadCommands));
-            OnPropertyChanged(nameof(UpdateCommands));
+            this.UpdateListOfCommands();
+            this.OnPropertyChanged(nameof(this.Commands));
+            this.OnPropertyChanged(nameof(this.ReadCommands));
+            this.OnPropertyChanged(nameof(this.UpdateCommands));
         }
         public void SwitchSelectionUnit()
         {
-            if (_selectionUnit == DataGridSelectionUnit.Cell)
+            if (this._selectionUnit == DataGridSelectionUnit.Cell)
             {
-                SelectionUnit = DataGridSelectionUnit.FullRow;
+                this.SelectionUnit = DataGridSelectionUnit.FullRow;
             }
             else
             {
-                SelectionUnit = DataGridSelectionUnit.Cell;
+                this.SelectionUnit = DataGridSelectionUnit.Cell;
             }
         }
         public void CustomUpdateRequest(string query)
         {
-            requester.CustomRequest(SelectedDatabase.path, query);
+            this.requester.CustomRequest(this.SelectedDatabase.path, query);
             //this.RefreshTable();
-            UpdateTable();
+            this.UpdateTable();
         }
 
 

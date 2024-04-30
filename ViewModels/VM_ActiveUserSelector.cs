@@ -16,12 +16,12 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                return helptext;
+                return this.helptext;
             }
             set
             {
-                helptext = value;
-                OnPropertyChanged(nameof(HelpTextTitle));
+                this.helptext = value;
+                this.OnPropertyChanged(nameof(this.HelpTextTitle));
             }
         }
         public List<Session> Sessions
@@ -32,7 +32,7 @@ namespace Incubator_2.ViewModels
             }
             set
             {
-                OnPropertyChanged(nameof(Sessions));
+                this.OnPropertyChanged(nameof(this.Sessions));
 
             }
 
@@ -40,11 +40,11 @@ namespace Incubator_2.ViewModels
 
         public Session SelectedSession
         {
-            get { return selectedSession; }
+            get { return this.selectedSession; }
             set
             {
-                selectedSession = value;
-                OnPropertyChanged(nameof(SelectedSession));
+                this.selectedSession = value;
+                this.OnPropertyChanged(nameof(this.SelectedSession));
             }
         }
 

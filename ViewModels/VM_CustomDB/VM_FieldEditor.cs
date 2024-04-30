@@ -14,53 +14,53 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                return creator.IsPK;
+                return this.creator.IsPK;
             }
             set
             {
-                creator.IsPK = value;
-                OnPropertyChanged(nameof(IsPK));
+                this.creator.IsPK = value;
+                this.OnPropertyChanged(nameof(this.IsPK));
             }
         }
         public bool IsFK
         {
             get
             {
-                return _fk;
+                return this._fk;
             }
             set
             {
-                _fk = value;
-                OnPropertyChanged(nameof(IsFK));
+                this._fk = value;
+                this.OnPropertyChanged(nameof(this.IsFK));
             }
         }
         public bool IsUnique
         {
             get
             {
-                return creator.IsUNIQUE;
+                return this.creator.IsUNIQUE;
             }
             set
             {
-                creator.IsUNIQUE = value;
-                OnPropertyChanged(nameof(IsUnique));
+                this.creator.IsUNIQUE = value;
+                this.OnPropertyChanged(nameof(this.IsUnique));
             }
         }
         public bool IsNotNull
         {
             get
             {
-                return creator.NotNULL;
+                return this.creator.NotNULL;
             }
             set
             {
-                creator.NotNULL = value;
-                OnPropertyChanged(nameof(IsNotNull));
+                this.creator.NotNULL = value;
+                this.OnPropertyChanged(nameof(this.IsNotNull));
             }
         }
         public string GetDefinition()
         {
-            return creator.ToString();
+            return this.creator.ToString();
         }
     }
 }

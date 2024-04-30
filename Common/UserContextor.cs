@@ -27,11 +27,11 @@ namespace Incubator_2.Common
 
         public bool IsRightPassword(string input)
         {
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(this.password))
             {
-                return input == startup_password;
+                return input == this.startup_password;
             }
-            return input == password;
+            return input == this.password;
         }
         //public void Show()
         //{
@@ -40,23 +40,23 @@ namespace Incubator_2.Common
 
         public void ApplyStandartProperties(string pwd)
         {
-            tasks_visibility = true;
-            communication_visibility = true;
-            database_visibility = false;
-            create_templates = false;
-            modify_templates = false;
-            startup_password = pwd;
-            permission_group = PermissionGroup.Operator;
+            this.tasks_visibility = true;
+            this.communication_visibility = true;
+            this.database_visibility = false;
+            this.create_templates = false;
+            this.modify_templates = false;
+            this.startup_password = pwd;
+            this.permission_group = PermissionGroup.Operator;
         }
         public void ApplyAdminProperties(string pwd)
         {
-            tasks_visibility = true;
-            communication_visibility = true;
-            database_visibility = true;
-            create_templates = true;
-            modify_templates = true;
-            startup_password = pwd;
-            permission_group = PermissionGroup.Admin;
+            this.tasks_visibility = true;
+            this.communication_visibility = true;
+            this.database_visibility = true;
+            this.create_templates = true;
+            this.modify_templates = true;
+            this.startup_password = pwd;
+            this.permission_group = PermissionGroup.Admin;
         }
 
     }

@@ -206,7 +206,7 @@ namespace Common
         {
             commandsText.Add(q.Result);
         }
-        public async static void ExecuteBackground()
+        public static async void ExecuteBackground()
         {
             if (commandsText.Count > 0)
             {

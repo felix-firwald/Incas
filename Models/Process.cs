@@ -11,29 +11,29 @@ namespace Incubator_2.Models
         public bool received { get; set; }
         public Process()
         {
-            tableName = "Processes";
+            this.tableName = "Processes";
         }
         public void Send(string port)
         {
-            StartCommandToOtherPort(port)
+            this.StartCommandToOtherPort(port)
                 .Insert(new()
                 {
-                    { nameof(identifier), identifier },
-                    { nameof(content), content },
-                    { nameof(received), "0" }
+                    { nameof(this.identifier), this.identifier },
+                    { nameof(this.content), this.content },
+                    { nameof(this.received), "0" }
                 })
                 .ExecuteVoid();
         }
         public List<string> GetNewProcesses()
         {
-            DataTable dt = StartCommandToMyPort()
+            DataTable dt = this.StartCommandToMyPort()
                 .Select()
-                .WhereEqual(nameof(received), "0")
+                .WhereEqual(nameof(this.received), "0")
                 .Execute();
             List<string> result = new();
             if (dt.Rows.Count > 0)
             {
-                SetReceived();
+                this.SetReceived();
                 foreach (DataRow dr in dt.Rows)
                 {
                     result.Add(dr["content"].ToString());
@@ -43,8 +43,8 @@ namespace Incubator_2.Models
         }
         private void SetReceived()
         {
-            StartCommandToMyPort()
-                .Update(nameof(received), "1")
+            this.StartCommandToMyPort()
+                .Update(nameof(this.received), "1")
                 .ExecuteVoid();
         }
     }

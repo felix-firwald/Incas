@@ -22,20 +22,20 @@ namespace Incubator_2.Windows
             this.Command = cs;
             this.vm = new(cs);
             this.CodeEditor.Text = this.vm.Script;
-            this.DataContext = vm;
+            this.DataContext = this.vm;
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
             this.vm.Script = this.CodeEditor.Text;
             this.Command = this.vm.GetData();
-            Result = DialogStatus.Yes;
+            this.Result = DialogStatus.Yes;
             this.Close();
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
         {
-            Result = DialogStatus.No;
+            this.Result = DialogStatus.No;
             this.Close();
         }
 
@@ -54,26 +54,26 @@ namespace Incubator_2.Windows
             switch (((MenuItem)sender).Tag)
             {
                 case "IncasLibrary":
-                    Append("from Incas import Service");
+                    this.Append("from Incas import Service");
                     break;
                 case "AffectsOther":
-                    Append("# [affects other]");
+                    this.Append("# [affects other]");
                     break;
                 case "CurrentDate":
-                    Append("import datetime\n\ndatetime.datetime.strftime(datetime.datetime.now(), \"%d.%m.%Y\")");
+                    this.Append("import datetime\n\ndatetime.datetime.strftime(datetime.datetime.now(), \"%d.%m.%Y\")");
                     break;
                 case "CurrentUserFullname":
-                    Append("Service.GetUserFullname()");
+                    this.Append("Service.GetUserFullname()");
                     break;
                 case "ShowInfo":
-                    Append("Service.ShowInfoDialog(\"Описание\", \"Заголовок\")");
+                    this.Append("Service.ShowInfoDialog(\"Описание\", \"Заголовок\")");
                     break;
                 case "ShowInputBox":
-                    Append("Service.ShowInputBox(\"Описание\", \"Заголовок\")");
+                    this.Append("Service.ShowInputBox(\"Описание\", \"Заголовок\")");
                     break;
                 case "ShowDatabaseSelection":
                     BindingSelector bs = ProgramState.ShowBindingSelector();
-                    Append($"Service.ShowDatabaseSelection(\"{bs.SelectedDatabase}\", \"{bs.SelectedTable}\", \"{bs.SelectedField}\")");
+                    this.Append($"Service.ShowDatabaseSelection(\"{bs.SelectedDatabase}\", \"{bs.SelectedTable}\", \"{bs.SelectedField}\")");
                     break;
             }
         }

@@ -11,25 +11,25 @@ namespace Incubator_2.ViewModels.VM_CustomDB
 
         public VM_CreateCommand(Models.Command cmd)
         {
-            command = cmd;
+            this.command = cmd;
         }
         public string CommandName
         {
             get
             {
-                return command.name;
+                return this.command.name;
             }
             set
             {
-                command.name = value;
-                OnPropertyChanged(nameof(CommandName));
+                this.command.name = value;
+                this.OnPropertyChanged(nameof(this.CommandName));
             }
         }
         public string Database
         {
             get
             {
-                return command.database;
+                return this.command.database;
             }
         }
 
@@ -37,26 +37,26 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                return command.table;
+                return this.command.table;
             }
         }
         public string Query
         {
             get
             {
-                return command.query;
+                return this.command.query;
             }
             set
             {
-                command.query = value;
-                OnPropertyChanged(nameof(Query));
+                this.command.query = value;
+                this.OnPropertyChanged(nameof(this.Query));
             }
         }
         public bool IsEditCommandType
         {
             get
             {
-                if (command.type == CommandType.Read)
+                if (this.command.type == CommandType.Read)
                 {
                     return false;
                 }
@@ -66,37 +66,35 @@ namespace Incubator_2.ViewModels.VM_CustomDB
             {
                 if (value == true)
                 {
-                    command.type = CommandType.Update;
+                    this.command.type = CommandType.Update;
                 }
                 else
                 {
-                    command.type = CommandType.Read;
+                    this.command.type = CommandType.Read;
                 }
-                OnPropertyChanged(nameof(IsEditCommandType));
+                this.OnPropertyChanged(nameof(this.IsEditCommandType));
             }
         }
         public CommandType CommandType
         {
             get
             {
-                return command.type;
+                return this.command.type;
             }
             set
             {
-                command.type = value;
-                OnPropertyChanged(nameof(CommandType));
+                this.command.type = value;
+                this.OnPropertyChanged(nameof(this.CommandType));
             }
         }
         public string GetPKField()
         {
-            using (CustomTable ct = new())
-            {
-                return ct.GetPKField(Table, Database);
-            }
+            using CustomTable ct = new();
+            return ct.GetPKField(this.Table, this.Database);
         }
         public bool ValidateQuery()
         {
-            if (!IsEditCommandType)
+            if (!this.IsEditCommandType)
             {
                 List<string> unresolved = new()
                 {
@@ -104,7 +102,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
                 };
                 foreach (string word in unresolved)
                 {
-                    if (Query.Contains(word))
+                    if (this.Query.Contains(word))
                     {
                         ProgramState.ShowExclamationDialog($"Обнаружено ключевое слово ({word}), " +
                             "которое не может быть использовано в режиме чтения", "Сохранение прервано");
@@ -116,7 +114,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         }
         public void Save()
         {
-            command.AddCommand();
+            this.command.AddCommand();
         }
     }
 }

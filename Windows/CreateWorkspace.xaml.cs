@@ -9,17 +9,17 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class CreateWorkspace : Window
     {
-        VM_CreateWorkspace vm;
+        private VM_CreateWorkspace vm;
         public CreateWorkspace()
         {
             InitializeComponent();
-            vm = new VM_CreateWorkspace();
-            this.DataContext = vm;
+            this.vm = new VM_CreateWorkspace();
+            this.DataContext = this.vm;
         }
 
         private void SaveButton(object sender, RoutedEventArgs e)
         {
-            vm.RunInitializing();
+            this.vm.RunInitializing();
             this.Close();
         }
 

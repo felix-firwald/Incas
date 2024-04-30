@@ -4,38 +4,38 @@ using Models;
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
-    class VM_SessionElement : VM_Base
+    internal class VM_SessionElement : VM_Base
     {
-        SSession _session;
+        private SSession _session;
         public VM_SessionElement(ref SSession s)
         {
-            _session = s;
+            this._session = s;
         }
         public string Username
         {
             get
             {
-                return _session.user;
+                return this._session.user;
             }
         }
         public string StartTime
         {
             get
             {
-                return _session.timeStarted.ToString("G");
+                return this._session.timeStarted.ToString("G");
             }
         }
         public string EndTime
         {
             get
             {
-                if (IsActive)
+                if (this.IsActive)
                 {
                     return "В сети";
                 }
                 else
                 {
-                    return _session.timeFinished.ToString("G");
+                    return this._session.timeFinished.ToString("G");
                 }
 
             }
@@ -44,23 +44,23 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                return _session.active;
+                return this._session.active;
             }
         }
         public void Terminate()
         {
-            ServerProcessor.SendTerminateProcess(_session.slug);
+            ServerProcessor.SendTerminateProcess(this._session.slug);
         }
         public void Restart()
         {
-            ServerProcessor.SendRestartProcess(_session.slug);
+            ServerProcessor.SendRestartProcess(this._session.slug);
         }
         public void ShowExplicit()
         {
             MakeExplicit d = new();
             if (d.ShowDialog() == true)
             {
-                ServerProcessor.SendExplicitProcess(d.message, _session.slug);
+                ServerProcessor.SendExplicitProcess(d.message, this._session.slug);
             }
         }
     }

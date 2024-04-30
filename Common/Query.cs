@@ -37,38 +37,38 @@ namespace Common
         public OnDeleteUpdate Constraint;
         public Field(string name, string type, bool notnull = false, string fkt = null, string fkf = "id", OnDeleteUpdate constraint = OnDeleteUpdate.CASCADE)
         {
-            Name = name;
-            Type = type;
-            NotNull = notnull;
+            this.Name = name;
+            this.Type = type;
+            this.NotNull = notnull;
             if (fkt != null)
             {
-                FKTable = fkt;
-                FKField = fkf;
-                Constraint = constraint;
+                this.FKTable = fkt;
+                this.FKField = fkf;
+                this.Constraint = constraint;
             }
             else
             {
-                FKTable = "";
-                FKField = "";
-                Constraint = OnDeleteUpdate.CASCADE;
+                this.FKTable = "";
+                this.FKField = "";
+                this.Constraint = OnDeleteUpdate.CASCADE;
             }
 
         }
         private string GetNotNull()
         {
-            return NotNull ? " NOT NULL" : "";
+            return this.NotNull ? " NOT NULL" : "";
         }
         private string GetFK()
         {
-            if (!string.IsNullOrEmpty(FKTable))
+            if (!string.IsNullOrEmpty(this.FKTable))
             {
-                return $" REFERENCES {FKTable} ({FKField})";
+                return $" REFERENCES {this.FKTable} ({this.FKField})";
             }
             return "";
         }
         public override string ToString()
         {
-            return $"{Name} {Type}{GetFK()}{GetNotNull()}";
+            return $"{this.Name} {this.Type}{this.GetFK()}{this.GetNotNull()}";
         }
     }
     public sealed class Query
@@ -94,17 +94,17 @@ namespace Common
         }
         public override string ToString()
         {
-            return Table;
+            return this.Table;
         }
         public void Clear()
         {
-            isWhereAlready = false;
-            isUpdateAlready = false;
-            Result = "";
+            this.isWhereAlready = false;
+            this.isUpdateAlready = false;
+            this.Result = "";
         }
         public Query AddCustomRequest(string text)
         {
-            Result += $"\n{text}";
+            this.Result += $"\n{text}";
             return this;
         }
         #region Select
@@ -115,8 +115,8 @@ namespace Common
         public Query Select(string selection = "*")
         {
             string resulting;
-            resulting = $"SELECT {selection}\nFROM [{Table}]\n";
-            Result = resulting;
+            resulting = $"SELECT {selection}\nFROM [{this.Table}]\n";
+            this.Result = resulting;
             return this;
         }
 
@@ -126,7 +126,7 @@ namespace Common
         /// <returns></returns>
         public Query SelectUnique(string selection = "*")
         {
-            Select($"DISTINCT {selection}");
+            this.Select($"DISTINCT {selection}");
             return this;
         }
         /// <summary>
@@ -135,7 +135,7 @@ namespace Common
         /// <returns></returns>
         public Query Count(string selection = "*")
         {
-            Select($"Count({selection}) AS count");
+            this.Select($"Count({selection}) AS count");
             return this;
         }
         #endregion
@@ -143,33 +143,33 @@ namespace Common
         #region Limit
         public Query Limit(int limit)
         {
-            Result += $"\nLIMIT {limit}";
+            this.Result += $"\nLIMIT {limit}";
             return this;
         }
         #endregion
 
         public Query SeparateCommand()
         {
-            Result += ";\n";
+            this.Result += ";\n";
             return this;
         }
         private void IfNotExists()
         {
-            Result += " if not exists";
+            this.Result += " if not exists";
         }
         private void ReplaceNull()
         {
-            Result = Result.Replace($"'{Null}'", "null");
+            this.Result = this.Result.Replace($"'{Null}'", "null");
         }
         #region Transaction
         public Query BeginTransaction()
         {
-            Result += "BEGIN TRANSACTION;\n";
+            this.Result += "BEGIN TRANSACTION;\n";
             return this;
         }
         public Query EndTransaction()
         {
-            Result += "\nEND TRANSACTION;";
+            this.Result += "\nEND TRANSACTION;";
             return this;
         }
         #endregion
@@ -181,30 +181,30 @@ namespace Common
             {
                 start = "INSERT OR REPLACE INTO";
             }
-            Result += $"{start} [{Table}] ([{string.Join("], [", dict.Keys)}])\nVALUES ('{string.Join("', '", dict.Values)}')";
-            ReplaceNull();
+            this.Result += $"{start} [{this.Table}] ([{string.Join("], [", dict.Keys)}])\nVALUES ('{string.Join("', '", dict.Values)}')";
+            this.ReplaceNull();
             return this;
         }
         public Query Update(string cell, string value, bool isStr = true)
         {
             string c = "'";
             //if (!isStr) { c = ""; }
-            if (isUpdateAlready)
+            if (this.isUpdateAlready)
             {
-                Result += $",\n" +
+                this.Result += $",\n" +
                 $"[{cell}] = {c}{value}{c}";
             }
             else
             {
-                Result += $"UPDATE [{Table}]\n" +
+                this.Result += $"UPDATE [{this.Table}]\n" +
                 $"SET [{cell}] = {c}{value}{c}";
-                isUpdateAlready = true;
+                this.isUpdateAlready = true;
             }
             return this;
         }
         public Query Delete()
         {
-            Result += $"DELETE FROM [{Table}]\n";
+            this.Result += $"DELETE FROM [{this.Table}]\n";
             return this;
         }
         #endregion
@@ -213,8 +213,8 @@ namespace Common
         public Query InnerJoin(string innerTable, string fieldBaseTable, string fieldJoinedTable)
         {
             string resulting;
-            resulting = Result + $"INNER JOIN [{innerTable}]\nON {Table}.{fieldBaseTable}={innerTable}.{fieldJoinedTable}\n";
-            Result = resulting;
+            resulting = this.Result + $"INNER JOIN [{innerTable}]\nON {this.Table}.{fieldBaseTable}={innerTable}.{fieldJoinedTable}\n";
+            this.Result = resulting;
             return this;
         }
         #endregion
@@ -233,17 +233,17 @@ namespace Common
             {
                 c = "'";
             }
-            if (isWhereAlready)
+            if (this.isWhereAlready)
             {
-                resulting = Result + $"\n{wt} [{cell}] {comparator} {c}{value}{c}\n";
-                Result = resulting;
+                resulting = this.Result + $"\n{wt} [{cell}] {comparator} {c}{value}{c}\n";
+                this.Result = resulting;
                 return this;
             }
             else
             {
-                isWhereAlready = true;
-                resulting = Result + $"\nWHERE [{cell}] {comparator} {c}{value}{c}\n";
-                Result = resulting;
+                this.isWhereAlready = true;
+                resulting = this.Result + $"\nWHERE [{cell}] {comparator} {c}{value}{c}\n";
+                this.Result = resulting;
                 return this;
             }
 
@@ -254,7 +254,7 @@ namespace Common
         /// <returns></returns>
         public Query WhereNotNULL(string cell, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "is not ", $"NULL AND {cell} = ''", false, wt);
+            return this.Where(cell, "is not ", $"NULL AND {cell} = ''", false, wt);
         }
         /// <summary>
         /// Where A is NULL
@@ -262,7 +262,7 @@ namespace Common
         /// <returns></returns>
         public Query WhereNULL(string cell, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "is ", $"NULL OR {cell} = ''", false, wt);
+            return this.Where(cell, "is ", $"NULL OR {cell} = ''", false, wt);
         }
 
         /// <summary>
@@ -271,11 +271,11 @@ namespace Common
         /// <returns></returns>
         public Query WhereEqual(string cell, string value, bool isStr = true, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "=", value, isStr, wt);
+            return this.Where(cell, "=", value, isStr, wt);
         }
         public Query WhereEqual(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "=", value.ToString(), false, wt);
+            return this.Where(cell, "=", value.ToString(), false, wt);
         }
 
         /// <summary>
@@ -284,11 +284,11 @@ namespace Common
         /// <returns></returns>
         public Query WhereNotEqual(string cell, string value, bool isStr = true, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "<>", value, isStr, wt);
+            return this.Where(cell, "<>", value, isStr, wt);
         }
         public Query WhereNotEqual(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "<>", value.ToString(), false, wt);
+            return this.Where(cell, "<>", value.ToString(), false, wt);
         }
 
         /// <summary>
@@ -297,11 +297,11 @@ namespace Common
         /// <returns></returns>
         public Query WhereLess(string cell, string value, bool isStr = true, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "<", value, isStr, wt);
+            return this.Where(cell, "<", value, isStr, wt);
         }
         public Query WhereLess(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "<", value.ToString(), false, wt);
+            return this.Where(cell, "<", value.ToString(), false, wt);
         }
 
         /// <summary>
@@ -310,11 +310,11 @@ namespace Common
         /// <returns></returns>
         public Query WhereMore(string cell, string value, bool isStr = true, WhereType wt = WhereType.AND)
         {
-            return Where(cell, ">", value, isStr, wt);
+            return this.Where(cell, ">", value, isStr, wt);
         }
         public Query WhereMore(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, ">", value.ToString(), false, wt);
+            return this.Where(cell, ">", value.ToString(), false, wt);
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace Common
         /// <returns></returns>
         public Query WhereBetween(string cell, int left, int right, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "BETWEEN", $"{left} AND {right}", false, wt);
+            return this.Where(cell, "BETWEEN", $"{left} AND {right}", false, wt);
         }
 
         /// <summary>
@@ -335,62 +335,62 @@ namespace Common
             string resultingString = "('";
             resultingString += string.Join("', '", args);
             resultingString += "')";
-            return Where(cell, "IN", resultingString, false, wt);
+            return this.Where(cell, "IN", resultingString, false, wt);
         }
         public Query WhereIn(string cell, List<int> args, WhereType wt = WhereType.AND)
         {
             string resultingString = "(";
             resultingString += string.Join(", ", args);
             resultingString += ")\n";
-            return Where(cell, "IN", resultingString, false, wt);
+            return this.Where(cell, "IN", resultingString, false, wt);
         }
         public Query WhereLike(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"%{value}%", true, wt);
+            return this.Where(cell, "LIKE", $"%{value}%", true, wt);
         }
         public Query WhereLike(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"%{value}%", true, wt);
+            return this.Where(cell, "LIKE", $"%{value}%", true, wt);
         }
         public Query WhereNotLike(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"%{value}%", true, wt);
+            return this.Where(cell, "NOT LIKE", $"%{value}%", true, wt);
         }
         public Query WhereNotLike(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"%{value}%", true, wt);
+            return this.Where(cell, "NOT LIKE", $"%{value}%", true, wt);
         }
         public Query WhereStartsWith(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"{value}%", true, wt);
+            return this.Where(cell, "LIKE", $"{value}%", true, wt);
         }
         public Query WhereStartsWith(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"{value}%", true, wt);
+            return this.Where(cell, "LIKE", $"{value}%", true, wt);
         }
         public Query WhereNotStartsWith(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"{value}%", true, wt);
+            return this.Where(cell, "NOT LIKE", $"{value}%", true, wt);
         }
         public Query WhereNotStartsWith(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"{value}%", true, wt);
+            return this.Where(cell, "NOT LIKE", $"{value}%", true, wt);
         }
         public Query WhereEndsWith(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"%{value}", true, wt);
+            return this.Where(cell, "LIKE", $"%{value}", true, wt);
         }
         public Query WhereEndsWith(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "LIKE", $"%{value}", true, wt);
+            return this.Where(cell, "LIKE", $"%{value}", true, wt);
         }
         public Query WhereNotEndsWith(string cell, string value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"%{value}", true, wt);
+            return this.Where(cell, "NOT LIKE", $"%{value}", true, wt);
         }
         public Query WhereNotEndsWith(string cell, int value, WhereType wt = WhereType.AND)
         {
-            return Where(cell, "NOT LIKE", $"%{value}", true, wt);
+            return this.Where(cell, "NOT LIKE", $"%{value}", true, wt);
         }
 
         #endregion
@@ -398,7 +398,7 @@ namespace Common
         #region Order By
         private Query OrderBy(string columns, string type)
         {
-            Result += $"\nORDER BY {columns} {type}";
+            this.Result += $"\nORDER BY {columns} {type}";
             return this;
         }
 
@@ -409,7 +409,7 @@ namespace Common
         /// <returns></returns>
         public Query OrderByASC(string column)
         {
-            OrderBy(column, "ASC");
+            this.OrderBy(column, "ASC");
             return this;
         }
 
@@ -420,17 +420,17 @@ namespace Common
         /// <returns></returns>
         public Query OrderByDESC(string column)
         {
-            OrderBy(column, "DESC");
+            this.OrderBy(column, "DESC");
             return this;
         }
         public Query OrderByDateASC(string column)
         {
-            OrderBy($"date({column})", "ASC");
+            this.OrderBy($"date({column})", "ASC");
             return this;
         }
         public Query OrderByDateDESC(string column)
         {
-            OrderBy($"date({column})", "DESC");
+            this.OrderBy($"date({column})", "DESC");
             return this;
         }
         #endregion
@@ -438,29 +438,29 @@ namespace Common
         #region Group By
         public Query GroupBy(string column)
         {
-            Result += $" GROUP BY {column}";
+            this.Result += $" GROUP BY {column}";
             return this;
         }
         public Query Having(string condition)
         {
-            Result += $" HAVING {condition}";
+            this.Result += $" HAVING {condition}";
             return this;
         }
         #endregion
 
         public Query CreateTable(string tab, Field[] fields)
         {
-            Result = $"CREATE TABLE {tab} (\n";
-            Result += string.Join(",\n", fields.ToString());
-            Result += ")";
+            this.Result = $"CREATE TABLE {tab} (\n";
+            this.Result += string.Join(",\n", fields.ToString());
+            this.Result += ")";
             return this;
         }
         public int GetCount(string column, string table, string condition)
         {
-            Result = $"SELECT Count([{column}]) AS count FROM [{table}]";
+            this.Result = $"SELECT Count([{column}]) AS count FROM [{table}]";
             if (!string.IsNullOrEmpty(condition))
             {
-                Result += ("WHERE " + condition);
+                this.Result += ("WHERE " + condition);
             }
             DataRow dr = this.Execute().Rows[0];
             return int.Parse(dr["count"].ToString());
@@ -475,7 +475,7 @@ namespace Common
         private SQLiteConnection GetConnection()
         {
             string path;
-            switch (typeOfConnection)
+            switch (this.typeOfConnection)
             {
                 case DBConnectionType.BASE:
                 default:
@@ -496,11 +496,11 @@ namespace Common
         }
         private string GetRequest(bool clear = false)
         {
-            string tmp = Result;
+            string tmp = this.Result;
             Console.WriteLine($"[{DateTime.Now}] {tmp}");
             if (clear)
             {
-                Clear();
+                this.Clear();
             }
             return tmp;
         }
@@ -513,25 +513,23 @@ namespace Common
         {
             try
             {
-                using (SQLiteConnection conn = GetConnection())
-                {
-                    conn.Open();
-                    SQLiteCommand cmd = conn.CreateCommand();
-                    System.Diagnostics.Debug.WriteLine(this.DBPath);
-                    System.Diagnostics.Debug.WriteLine(Result);
-                    cmd.CommandText = GetRequest();
+                using SQLiteConnection conn = this.GetConnection();
+                conn.Open();
+                SQLiteCommand cmd = conn.CreateCommand();
+                System.Diagnostics.Debug.WriteLine(this.DBPath);
+                System.Diagnostics.Debug.WriteLine(this.Result);
+                cmd.CommandText = this.GetRequest();
 
-                    SQLiteDataReader sqlreader = cmd.ExecuteReader();
-                    DataTable objDataTable = new DataTable();
-                    objDataTable.Load(sqlreader);
-                    conn.Close();
-                    return objDataTable;
-                }
+                SQLiteDataReader sqlreader = cmd.ExecuteReader();
+                DataTable objDataTable = new DataTable();
+                objDataTable.Load(sqlreader);
+                conn.Close();
+                return objDataTable;
 
             }
             catch (SQLiteException ex)
             {
-                SwitchOnSqliteException(ex, ExecuteType.EXECUTE);
+                this.SwitchOnSqliteException(ex, ExecuteType.EXECUTE);
                 return new DataTable();
             }
         }
@@ -539,28 +537,26 @@ namespace Common
         {
             try
             {
-                using (SQLiteConnection conn = GetConnection())
+                using SQLiteConnection conn = this.GetConnection();
+                conn.Open();
+                SQLiteCommand cmd = conn.CreateCommand();
+                System.Diagnostics.Debug.WriteLine(this.DBPath);
+                System.Diagnostics.Debug.WriteLine(this.Result);
+                cmd.CommandText = this.GetRequest();
+                SQLiteDataReader sqlreader = cmd.ExecuteReader();
+                DataTable objDataTable = new DataTable();
+                objDataTable.Load(sqlreader);
+                if (objDataTable.Rows.Count > 0)
                 {
-                    conn.Open();
-                    SQLiteCommand cmd = conn.CreateCommand();
-                    System.Diagnostics.Debug.WriteLine(this.DBPath);
-                    System.Diagnostics.Debug.WriteLine(Result);
-                    cmd.CommandText = GetRequest();
-                    SQLiteDataReader sqlreader = cmd.ExecuteReader();
-                    DataTable objDataTable = new DataTable();
-                    objDataTable.Load(sqlreader);
-                    if (objDataTable.Rows.Count > 0)
-                    {
-                        return objDataTable.Rows[0];
-                    }
-                    conn.Close();
-                    return null;
+                    return objDataTable.Rows[0];
                 }
+                conn.Close();
+                return null;
 
             }
             catch (SQLiteException ex)
             {
-                SwitchOnSqliteException(ex, ExecuteType.EXECUTE_ONE);
+                this.SwitchOnSqliteException(ex, ExecuteType.EXECUTE_ONE);
                 return null;
             }
         }
@@ -568,33 +564,31 @@ namespace Common
         {
             try
             {
-                using (SQLiteConnection conn = GetConnection())
-                {
-                    conn.Open();
-                    SQLiteCommand cmd = conn.CreateCommand();
-                    cmd.CommandText = GetRequest();
-                    cmd.ExecuteNonQuery();
-                    conn.Close();
-                    return;
-                }
+                using SQLiteConnection conn = this.GetConnection();
+                conn.Open();
+                SQLiteCommand cmd = conn.CreateCommand();
+                cmd.CommandText = this.GetRequest();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                return;
 
             }
 
             catch (SQLiteException ex)
             {
-                SwitchOnSqliteException(ex, ExecuteType.EXECUTE_VOID);
+                this.SwitchOnSqliteException(ex, ExecuteType.EXECUTE_VOID);
             }
             catch (Exception)
             {
                 Thread.Sleep(50);
-                recursion++;
-                if (recursion < 10)
+                this.recursion++;
+                if (this.recursion < 10)
                 {
-                    ExecuteVoid();
+                    this.ExecuteVoid();
                 }
                 else
                 {
-                    recursion = 0;
+                    this.recursion = 0;
                     ProgramState.ShowDatabaseErrorDialog("База данных блокируется другим процессом.");
                 }
             }
@@ -607,33 +601,33 @@ namespace Common
                     ProgramState.ShowDatabaseErrorDialog(
                         $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}\nЗапрос: {this.Result}" +
                         $"\nINCAS попытается исправить проблему, если она связана с конфигурацией служебной базы данных.");
-                    if (typeOfConnection == DBConnectionType.BASE || typeOfConnection == DBConnectionType.SERVICE)
+                    if (this.typeOfConnection == DBConnectionType.BASE || this.typeOfConnection == DBConnectionType.SERVICE)
                     {
-                        DatabaseManager.TryFix(ex, typeOfConnection);
+                        DatabaseManager.TryFix(ex, this.typeOfConnection);
                     }
                     break;
                 case 5: // busy
                 case 6: // locked
                     Thread.Sleep(50);
-                    recursion++;
-                    if (recursion < 20)
+                    this.recursion++;
+                    if (this.recursion < 20)
                     {
                         switch (executeType)
                         {
                             case ExecuteType.EXECUTE:
-                                Execute();
+                                this.Execute();
                                 break;
                             case ExecuteType.EXECUTE_VOID:
-                                ExecuteVoid();
+                                this.ExecuteVoid();
                                 break;
                             case ExecuteType.EXECUTE_ONE:
-                                ExecuteOne();
+                                this.ExecuteOne();
                                 break;
                         }
                     }
                     else
                     {
-                        recursion = 0;
+                        this.recursion = 0;
                         ProgramState.ShowDatabaseErrorDialog("Не удалось выполнить запрос, поскольку база данных занята другим процессом.");
                     }
                     break;
@@ -654,7 +648,7 @@ namespace Common
         public void Accumulate()
         {
             DatabaseManager.AppendBackgroundQuery(this);
-            Clear();
+            this.Clear();
         }
         #endregion
     }

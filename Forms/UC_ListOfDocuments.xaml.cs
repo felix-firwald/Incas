@@ -4,12 +4,9 @@ using Incubator_2.Forms.OneInstance;
 using Incubator_2.Windows;
 using Models;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Windows.Storage.Streams;
 
 namespace Incubator_2.Forms
 {
@@ -23,27 +20,27 @@ namespace Incubator_2.Forms
         public UC_ListOfDocuments()
         {
             InitializeComponent();
-            LoadCategories();
-            LoadTemplatesByCategory("");
+            this.LoadCategories();
+            this.LoadTemplatesByCategory("");
             //LoadChildrenForTemplates("");
         }
         private void LoadCategories()
         {
             this.Categories.Children.Clear();
-            AddCategory("Без категории", true);
+            this.AddCategory("Без категории", true);
             Template mt = new Template();
             mt.GetCategories(new() { "Excel", "Word" }).ForEach(c =>
             {
                 if (!string.IsNullOrEmpty(c))
                 {
-                    AddCategory(c);
+                    this.AddCategory(c);
                 }
             });
         }
         private void AddCategory(string category, bool selected = false)
         {
             RadioButton rb = new RadioButton();
-            rb.Style = FindResource("CategoryButton") as Style;
+            rb.Style = this.FindResource("CategoryButton") as Style;
             rb.Content = category;
             rb.Click += new RoutedEventHandler(this.SelectCategory);
             rb.IsChecked = selected;
@@ -57,7 +54,7 @@ namespace Incubator_2.Forms
                 mt.GetAllWordExcelTemplates(category).ForEach(c =>
                 {
                     UC_TemplateElement te = new UC_TemplateElement(c);
-                    te.OnUpdated += Refresh;
+                    te.OnUpdated += this.Refresh;
                     this.TemplatesArea.Children.Add(te);
                 });
                 if (this.TemplatesArea.Children.Count == 0)
@@ -74,12 +71,12 @@ namespace Incubator_2.Forms
             string text = rb.Content.ToString();
             if (text != "Без категории")
             {
-                LoadTemplatesByCategory(text);
+                this.LoadTemplatesByCategory(text);
                 this.selectedCategory = text;
             }
             else
             {
-                LoadTemplatesByCategory("");
+                this.LoadTemplatesByCategory("");
                 this.selectedCategory = "";
             }
 
@@ -90,7 +87,7 @@ namespace Incubator_2.Forms
             if (ProgramState.IsWorkspaceOpened())
             {
                 CreateTemplateWord ctw = new CreateTemplateWord();
-                ctw.OnCreated += Refresh;
+                ctw.OnCreated += this.Refresh;
                 ctw.Show();
             }
 
@@ -99,29 +96,29 @@ namespace Incubator_2.Forms
         {
             foreach (RadioButton rb in this.Categories.Children)
             {
-                if (rb.Content.ToString() == selectedCategory)
+                if (rb.Content.ToString() == this.selectedCategory)
                 {
                     rb.IsChecked = true;
-                    LoadTemplatesByCategory(selectedCategory);
+                    this.LoadTemplatesByCategory(this.selectedCategory);
                     return;
                 }
             }
             RadioButton def = (RadioButton)this.Categories.Children[0];
             def.IsChecked = true;
-            selectedCategory = "";
-            LoadTemplatesByCategory("");
+            this.selectedCategory = "";
+            this.LoadTemplatesByCategory("");
             return;
         }
 
         public void Refresh()
         {
-            LoadCategories();
-            FindSelectedInRefreshedList();
+            this.LoadCategories();
+            this.FindSelectedInRefreshedList();
         }
 
         private void Refresh_Click(object sender, MouseButtonEventArgs e)
         {
-            Refresh();
+            this.Refresh();
         }
     }
 }

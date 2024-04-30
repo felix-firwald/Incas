@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace Incubator_2.ViewModels
 {
-    class VM_Tag : VM_Base
+    internal class VM_Tag : VM_Base
     {
         private Tag mainTag;
         // сделать проверку по id, если id есть, то update, если нет - add
@@ -15,12 +15,12 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                return mainTag.visibleName;
+                return this.mainTag.visibleName;
             }
             set
             {
-                mainTag.visibleName = value;
-                OnPropertyChanged(nameof(VisibleName));
+                this.mainTag.visibleName = value;
+                this.OnPropertyChanged(nameof(this.VisibleName));
             }
         }
 
@@ -28,7 +28,7 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                switch (mainTag.type)
+                switch (this.mainTag.type)
                 {
                     case TypeOfTag.Variable:
                     case TypeOfTag.Text:
@@ -53,47 +53,47 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                return mainTag.orderNumber;
+                return this.mainTag.orderNumber;
             }
             set
             {
                 if (value >= 0 && value <= 50)
                 {
-                    mainTag.orderNumber = value;
-                    OnPropertyChanged(nameof(OrderNumber));
+                    this.mainTag.orderNumber = value;
+                    this.OnPropertyChanged(nameof(this.OrderNumber));
                 }
             }
         }
         public void IncrementOrder()
         {
-            OrderNumber++;
+            this.OrderNumber++;
         }
         public void DecrementOrder()
         {
-            OrderNumber--;
+            this.OrderNumber--;
         }
 
         public string NameOfTag
         {
-            get { return mainTag.name; }
+            get { return this.mainTag.name; }
             set
             {
-                if (value != mainTag.name)
+                if (value != this.mainTag.name)
                 {
-                    mainTag.name = value;
-                    OnPropertyChanged(nameof(NameOfTag));
+                    this.mainTag.name = value;
+                    this.OnPropertyChanged(nameof(this.NameOfTag));
                 }
             }
         }
         public string DefaultValue
         {
-            get { return mainTag.value; }
+            get { return this.mainTag.value; }
             set
             {
-                if (value != mainTag.value)
+                if (value != this.mainTag.value)
                 {
-                    mainTag.value = value;
-                    OnPropertyChanged(nameof(DefaultValue));
+                    this.mainTag.value = value;
+                    this.OnPropertyChanged(nameof(this.DefaultValue));
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                switch (mainTag.type)
+                switch (this.mainTag.type)
                 {
                     default:
                         return Visibility.Visible;
@@ -117,30 +117,30 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                return mainTag.description;
+                return this.mainTag.description;
             }
             set
             {
-                if (value != mainTag.description)
+                if (value != this.mainTag.description)
                 {
-                    mainTag.description = value;
-                    OnPropertyChanged(nameof(Description));
+                    this.mainTag.description = value;
+                    this.OnPropertyChanged(nameof(this.Description));
                 }
             }
         }
 
         public string TypeOfTagValue
         {
-            get { return SerializeToInput(mainTag.type); }
+            get { return this.SerializeToInput(this.mainTag.type); }
             set
             {
-                mainTag.type = SerializeFromInput(value);
-                OnPropertyChanged(nameof(TypeOfTagValue));
-                OnPropertyChanged(nameof(DescriptionText));
-                OnPropertyChanged(nameof(ButtonRelationVisibility));
-                OnPropertyChanged(nameof(ButtonGeneratorVisibility));
-                OnPropertyChanged(nameof(DefaultValueVisibility));
-                OnPropertyChanged(nameof(DescriptionVisibility));
+                this.mainTag.type = this.SerializeFromInput(value);
+                this.OnPropertyChanged(nameof(this.TypeOfTagValue));
+                this.OnPropertyChanged(nameof(this.DescriptionText));
+                this.OnPropertyChanged(nameof(this.ButtonRelationVisibility));
+                this.OnPropertyChanged(nameof(this.ButtonGeneratorVisibility));
+                this.OnPropertyChanged(nameof(this.DefaultValueVisibility));
+                this.OnPropertyChanged(nameof(this.DescriptionVisibility));
             }
         }
 
@@ -163,17 +163,17 @@ namespace Incubator_2.ViewModels
                 case "4":
                     return TypeOfTag.Date;
                 case "5":
-                    Description = "";
+                    this.Description = "";
                     return TypeOfTag.LocalConstant;
                 case "6":
-                    Description = "";
+                    this.Description = "";
                     return TypeOfTag.HiddenField;
                 case "7":
-                    Description = "";
-                    DefaultValue = "";
+                    this.Description = "";
+                    this.DefaultValue = "";
                     return TypeOfTag.Generator;
                 case "8":
-                    Description = "";
+                    this.Description = "";
                     return TypeOfTag.Table;
             }
         }

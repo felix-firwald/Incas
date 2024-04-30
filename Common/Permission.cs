@@ -16,7 +16,8 @@ namespace Common
         Rising,     // восходящий режим - эта группа и те, что ВЫШЕ, имеют право
         Cascade,    // каскадный режим - эта группа и те, что НИЖЕ, имеют право
     }
-    static class Permission
+
+    internal static class Permission
     {
 
         public static PermissionGroup CurrentUserPermission = PermissionGroup.Operator;

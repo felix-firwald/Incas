@@ -14,7 +14,7 @@ namespace Incubator_2
     /// </summary>
     public partial class MainWindow : Window
     {
-        MV_MainWindow vm;
+        private MV_MainWindow vm;
         public MainWindow()
         {
             InitializeComponent();
@@ -22,9 +22,9 @@ namespace Incubator_2
             {
                 System.Windows.Application.Current.Shutdown();
             }
-            vm = new MV_MainWindow();
-            ProgramState.MainWindow = vm;
-            this.DataContext = vm;
+            this.vm = new MV_MainWindow();
+            ProgramState.MainWindow = this.vm;
+            this.DataContext = this.vm;
             if (string.IsNullOrEmpty(ProgramState.CurrentUserParameters.password))
             {
                 if (ProgramState.ShowQuestionDialog("Текущий пароль, использованный вами для входа, " +
@@ -35,7 +35,7 @@ namespace Incubator_2
                 }
             }
 
-            PlayEasterEgg();
+            this.PlayEasterEgg();
         }
         private void PlayEasterEgg(string name = "Chicken")
         {
@@ -43,12 +43,10 @@ namespace Incubator_2
             {
                 if (RegistryData.IsRoosterExists())
                 {
-                    using (FileStream stream = File.Open($"Static\\{name}.wav", FileMode.Open))
-                    {
-                        SoundPlayer myNewSound = new SoundPlayer(stream);
-                        myNewSound.Load();
-                        myNewSound.Play();
-                    }
+                    using FileStream stream = File.Open($"Static\\{name}.wav", FileMode.Open);
+                    SoundPlayer myNewSound = new SoundPlayer(stream);
+                    myNewSound.Load();
+                    myNewSound.Play();
                 }
             }
             catch { }
@@ -80,7 +78,7 @@ namespace Incubator_2
 
         private void Logo_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            PlayEasterEgg("Rooster");
+            this.PlayEasterEgg("Rooster");
         }
 
         private void window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

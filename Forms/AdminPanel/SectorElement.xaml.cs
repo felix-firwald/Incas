@@ -11,17 +11,17 @@ namespace Incubator_2.Forms.AdminPanel
     /// </summary>
     public partial class SectorElement : UserControl
     {
-        VM_SectorElement vm;
+        private VM_SectorElement vm;
         public SectorElement(Sector s)
         {
             InitializeComponent();
-            vm = new(s);
-            this.DataContext = vm;
+            this.vm = new(s);
+            this.DataContext = this.vm;
         }
 
         private void EditClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            SectorEditor se = new(vm.sector);
+            SectorEditor se = new(this.vm.sector);
             se.ShowDialog();
         }
         private void DeleteClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

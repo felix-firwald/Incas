@@ -62,13 +62,13 @@ namespace Models
         public string visibleName { get; set; }
         public TypeOfTag type { get; set; }
         public string value { get; set; }
-        
+
         public int orderNumber { get; set; }
         public string description { get; set; }
         public string command { get; set; }
         public Tag()
         {
-            tableName = "Tags";
+            this.tableName = "Tags";
         }
 
         public List<Tag> GetAllTagsByTemplate(int templ, string parents = "0")
@@ -77,7 +77,7 @@ namespace Models
             parentsList.Add(templ.ToString());
             DataTable dt = this.StartCommand()
                 .Select()
-                .WhereIn(nameof(template), parentsList)
+                .WhereIn(nameof(this.template), parentsList)
                 .OrderByASC("template ASC, orderNumber")
                 .Execute();
 
@@ -94,48 +94,48 @@ namespace Models
 
         public void AddTag()
         {
-            StartCommand()
+            this.StartCommand()
                 .Insert(new Dictionary<string, string>
                 {
-                    { "template", template.ToString() },
-                    { "name", name },
-                    { "visibleName", visibleName },
-                    { "type", type.ToString() },
-                    { "value", value },                   
-                    { "description", description },
-                    { "command", command },
-                    { "orderNumber", orderNumber.ToString() }
+                    { "template", this.template.ToString() },
+                    { "name", this.name },
+                    { "visibleName", this.visibleName },
+                    { "type", this.type.ToString() },
+                    { "value", this.value },
+                    { "description", this.description },
+                    { "command", this.command },
+                    { "orderNumber", this.orderNumber.ToString() }
                 })
                 .ExecuteVoid();
         }
         public void UpdateTag()
         {
-            if (id is 0)
+            if (this.id is 0)
             {
-                AddTag();
+                this.AddTag();
                 return;
             }
-            StartCommand()
-                .Update("name", name)
-                .Update("visibleName", visibleName)
-                .Update("type", type.ToString())
-                .Update("value", value)
-                .Update("description", description)
-                .Update("command", command)
-                .Update("orderNumber", orderNumber.ToString())
-                .WhereEqual("id", id.ToString())
+            this.StartCommand()
+                .Update("name", this.name)
+                .Update("visibleName", this.visibleName)
+                .Update("type", this.type.ToString())
+                .Update("value", this.value)
+                .Update("description", this.description)
+                .Update("command", this.command)
+                .Update("orderNumber", this.orderNumber.ToString())
+                .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
         }
         public void RemoveTag()
         {
-            StartCommand()
+            this.StartCommand()
                 .Delete()
-                .WhereEqual("id", id.ToString())
+                .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
         }
         public void RemoveAllTagsByTemplate(int templ)
         {
-            StartCommand()
+            this.StartCommand()
                 .Delete()
                 .WhereEqual("template", templ.ToString())
                 .ExecuteVoid();
@@ -143,10 +143,10 @@ namespace Models
         // для работы функции ниже должен быть предварительно обновлен template
         public void GetChild()
         {
-            DataRow dr = StartCommand()
+            DataRow dr = this.StartCommand()
                             .Select()
-                            .WhereEqual("template", template.ToString())
-                            .WhereEqual("parent", id.ToString())
+                            .WhereEqual("template", this.template.ToString())
+                            .WhereEqual("parent", this.id.ToString())
                             .ExecuteOne();
             if (dr != null)
             {

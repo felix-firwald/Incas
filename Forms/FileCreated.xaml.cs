@@ -34,22 +34,22 @@ namespace Incubator_2.Forms
         public FileCreated(ref SGeneratedDocument rec, int counter = 1)
         {
             InitializeComponent();
-            record = rec;
+            this.record = rec;
             this.Counter.Content = counter;
-            SetTitle();
-            this.AuthorName.Text = record.author;
-            this.GenerationTime.Content = record.generatedTime.ToString("f") + ", Автор:";
-            this.StatusBar.Value = (int)record.status;
-            if (record.status == DocumentStatus.Done)
+            this.SetTitle();
+            this.AuthorName.Text = this.record.author;
+            this.GenerationTime.Content = this.record.generatedTime.ToString("f") + ", Автор:";
+            this.StatusBar.Value = (int)this.record.status;
+            if (this.record.status == DocumentStatus.Done)
             {
                 this.Selector.Visibility = Visibility.Collapsed;
             }
-            SetTooltip();
+            this.SetTooltip();
         }
 
         private void SetTitle()
         {
-            this.Filename.Content = $"N {record.fullNumber} {record.fileName}";
+            this.Filename.Content = $"N {this.record.fullNumber} {this.record.fileName}";
         }
 
         private void Selector_Checked(object sender, RoutedEventArgs e)
@@ -78,22 +78,18 @@ namespace Incubator_2.Forms
         }
         private void CreateFile(string folder)
         {
-            using (Template templ = new())
-            {
-                using (Tag t = new())
-                {
-                    UC_FileCreator fc = new(templ.GetTemplateById(record.template), t.GetAllTagsByTemplate(record.template));
-                    fc.ApplyRecord(record);
-                    fc.CreateFile(folder, record.templateName, false, false);
-                }
-            }
+            using Template templ = new();
+            using Tag t = new();
+            UC_FileCreator fc = new(templ.GetTemplateById(this.record.template), t.GetAllTagsByTemplate(this.record.template));
+            fc.ApplyRecord(this.record);
+            fc.CreateFile(folder, this.record.templateName, false, false);
         }
 
         private void CreateFileClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                switch (record.status)
+                switch (this.record.status)
                 {
                     case DocumentStatus.Done:
                         ProgramState.ShowExclamationDialog("Документ нельзя сгенерировать, если он находится на статусе \"Завершен\"");
@@ -101,8 +97,8 @@ namespace Incubator_2.Forms
                 }
                 ProgramState.ShowWaitCursor();
                 string plus = DateTime.Now.ToString("HH.mm.ss ");
-                string filename = $"{ProgramState.TemplatesRuntime}\\{record.fileName}.docx";
-                CreateFile(ProgramState.TemplatesRuntime);
+                string filename = $"{ProgramState.TemplatesRuntime}\\{this.record.fileName}.docx";
+                this.CreateFile(ProgramState.TemplatesRuntime);
                 ProgramState.ShowWaitCursor(false);
                 try
                 {
@@ -124,7 +120,7 @@ namespace Incubator_2.Forms
 
         private void CreateFileForAnotherClick(object sender, RoutedEventArgs e)
         {
-            switch (record.status)
+            switch (this.record.status)
             {
                 case DocumentStatus.Done:
                     ProgramState.ShowExclamationDialog("Документ нельзя сгенерировать, если он находится на статусе \"Завершен\"");
@@ -134,8 +130,8 @@ namespace Incubator_2.Forms
             if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для отправки файла"))
             {
                 ProgramState.ShowWaitCursor();
-                string filename = $"{record.fileName}.docx";
-                CreateFile(ProgramState.Exchanges);
+                string filename = $"{this.record.fileName}.docx";
+                this.CreateFile(ProgramState.Exchanges);
                 ProgramState.ShowWaitCursor(false);
                 ServerProcessor.SendOpenFileProcess(filename, ProgramState.Exchanges + "\\" + filename, session.slug);
             }
@@ -145,29 +141,27 @@ namespace Incubator_2.Forms
         {
             this.Selector.IsChecked = false;
             OnSelectorUnchecked?.Invoke(this);
-            using (Template tm = new())
+            using Template tm = new();
+            ProgramState.ShowWaitCursor();
+            if (tm.GetTemplateById(this.record.template) != null)
             {
-                ProgramState.ShowWaitCursor();
-                if (tm.GetTemplateById(this.record.template) != null)
+                try
                 {
-                    try
-                    {
-                        List<SGeneratedDocument> tj = [this.record];
-                        UseTemplate ut = new UseTemplate(tm, tj);
-                        ut.Show();
-                    }
-                    catch (IOException ex)
-                    {
-                        ProgramState.ShowWaitCursor(false);
-                        ProgramState.ShowErrorDialog($"Файл поврежден или удален. Пожалуйста, попробуйте ещё раз.\n{ex}");
-                    }
+                    List<SGeneratedDocument> tj = [this.record];
+                    UseTemplate ut = new UseTemplate(tm, tj);
+                    ut.Show();
+                }
+                catch (IOException ex)
+                {
+                    ProgramState.ShowWaitCursor(false);
+                    ProgramState.ShowErrorDialog($"Файл поврежден или удален. Пожалуйста, попробуйте ещё раз.\n{ex}");
                 }
             }
         }
         private void SetTooltip()
         {
             string status = "";
-            switch (record.status)
+            switch (this.record.status)
             {
                 case DocumentStatus.Draft:
                     status = "Черновик\nДокумент можно полностью редактировать";
@@ -200,7 +194,7 @@ namespace Incubator_2.Forms
         private void SetStatusClick(object sender, RoutedEventArgs e)
         {
             DocumentStatus newStatus = (DocumentStatus)Enum.Parse(typeof(DocumentStatus), ((MenuItem)sender).Tag.ToString(), true);
-            if (newStatus < record.status && !Permission.IsUserHavePermission(PermissionGroup.Moderator))
+            if (newStatus < this.record.status && !Permission.IsUserHavePermission(PermissionGroup.Moderator))
             {
                 ProgramState.ShowAccessErrorDialog("Нельзя откатить статус документа, не обладая правами модератора!");
                 return;
@@ -212,31 +206,31 @@ namespace Incubator_2.Forms
                     break;
                 case DocumentStatus.Approved:
                     this.Selector.Visibility = Visibility.Visible;
-                    if (!CheckUnique()) return;
+                    if (!this.CheckUnique()) return;
                     break;
                 case DocumentStatus.Printed:
                     this.Selector.Visibility = Visibility.Visible;
-                    if (!CheckUnique()) return;
+                    if (!this.CheckUnique()) return;
                     break;
                 case DocumentStatus.Done:
-                    if (!CheckUnique()) return;
+                    if (!this.CheckUnique()) return;
                     this.Selector.Visibility = Visibility.Collapsed;
                     break;
             }
             this.Selector.IsChecked = false;
-            using (GeneratedDocument gd = record.AsModel())
+            using (GeneratedDocument gd = this.record.AsModel())
             {
                 gd.status = newStatus;
                 gd.UpdateRecord();
-                record = gd.AsStruct();
-                this.StatusBar.Value = (int)record.status;
+                this.record = gd.AsStruct();
+                this.StatusBar.Value = (int)this.record.status;
             }
-            SetTooltip();
+            this.SetTooltip();
         }
 
         private void ChangeNumberClick(object sender, RoutedEventArgs e)
         {
-            switch (record.status)
+            switch (this.record.status)
             {
                 case DocumentStatus.Printed:
                 case DocumentStatus.Done:
@@ -245,14 +239,14 @@ namespace Incubator_2.Forms
             }
             string input = ProgramState.ShowInputBox("Новый номер", "Введите номер без префикса и постфикса");
             TemplateSettings settings = new Template(this.record.template).GetTemplateSettings();
-            using (GeneratedDocument gd = record.AsModel())
+            using (GeneratedDocument gd = this.record.AsModel())
             {
                 gd.number = input;
                 gd.fullNumber = settings.NumberPrefix + input + settings.NumberPostfix; ;
                 gd.UpdateRecord();
-                record = gd.AsStruct();
+                this.record = gd.AsStruct();
             }
-            SetTitle();
+            this.SetTitle();
         }
     }
 }

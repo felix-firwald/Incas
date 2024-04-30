@@ -19,7 +19,7 @@ namespace Incubator_2.Windows
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(Input))
+            if (string.IsNullOrEmpty(this.Input))
             {
                 ProgramState.ShowExclamationDialog("Поле пустое!", "Действие невозможно");
                 return;

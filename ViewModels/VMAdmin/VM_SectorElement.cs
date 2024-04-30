@@ -2,26 +2,26 @@
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
-    class VM_SectorElement : VM_Base
+    internal class VM_SectorElement : VM_Base
     {
         public Sector sector;
         public VM_SectorElement(Sector s)
         {
-            sector = s;
+            this.sector = s;
         }
         public string SectorName
         {
             get
             {
-                return sector.name;
+                return this.sector.name;
             }
-            set { sector.name = value; }
+            set { this.sector.name = value; }
         }
         public bool CanDelete
         {
             get
             {
-                if (sector.slug == "data")
+                if (this.sector.slug == "data")
                 {
                     return false;
                 }
@@ -30,7 +30,7 @@ namespace Incubator_2.ViewModels.VMAdmin
         }
         public void Save()
         {
-            sector.SaveSector();
+            this.sector.SaveSector();
         }
     }
 }

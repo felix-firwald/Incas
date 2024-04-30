@@ -12,17 +12,17 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class UserEditor : Window
     {
-        VM_UserEditor vm;
+        private VM_UserEditor vm;
         public UserEditor(User user)
         {
             InitializeComponent();
-            vm = new(user);
-            this.DataContext = vm;
+            this.vm = new(user);
+            this.DataContext = this.vm;
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            if (vm.Save() == true)
+            if (this.vm.Save() == true)
             {
                 this.Close();
             }

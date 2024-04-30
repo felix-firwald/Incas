@@ -5,29 +5,29 @@ using Models;
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
-    class VM_UserElement : VM_Base
+    internal class VM_UserElement : VM_Base
     {
         private readonly User _user;
         public VM_UserElement(User user)
         {
-            _user = user;
+            this._user = user;
         }
         public string UserName
         {
             get
             {
-                return _user.fullname;
+                return this._user.fullname;
             }
             set
             {
-                OnPropertyChanged(nameof(UserName));
+                this.OnPropertyChanged(nameof(this.UserName));
             }
         }
         public string UserStatus
         {
             get
             {
-                switch (_user.GetParametersContext().permission_group)
+                switch (this._user.GetParametersContext().permission_group)
                 {
                     case PermissionGroup.Admin:
                         return "Администратор";
@@ -42,25 +42,25 @@ namespace Incubator_2.ViewModels.VMAdmin
             }
             set
             {
-                OnPropertyChanged(nameof(UserStatus));
+                this.OnPropertyChanged(nameof(this.UserStatus));
             }
         }
         public string UserPost
         {
             get
             {
-                return _user.post;
+                return this._user.post;
             }
             set
             {
-                OnPropertyChanged(nameof(UserPost));
+                this.OnPropertyChanged(nameof(this.UserPost));
             }
         }
         public bool IsRemovable
         {
             get
             {
-                if (_user.id == 1 || _user.username == "admin")
+                if (this._user.id == 1 || this._user.username == "admin")
                 {
                     return false;
                 }
@@ -69,15 +69,15 @@ namespace Incubator_2.ViewModels.VMAdmin
         }
         public void RemoveUser()
         {
-            _user.RemoveUser();
+            this._user.RemoveUser();
         }
         public void EditUser()
         {
-            UserEditor editor = new(_user);
+            UserEditor editor = new(this._user);
             editor.ShowDialog();
-            OnPropertyChanged(nameof(UserName));
-            OnPropertyChanged(nameof(UserStatus));
-            OnPropertyChanged(nameof(UserPost));
+            this.OnPropertyChanged(nameof(this.UserName));
+            this.OnPropertyChanged(nameof(this.UserStatus));
+            this.OnPropertyChanged(nameof(this.UserPost));
         }
     }
 }

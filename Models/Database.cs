@@ -14,10 +14,10 @@ namespace Incubator_2.Models
         public Database AsModel()
         {
             Database db = new();
-            db.id = id;
-            db.name = name;
-            db.sectors = sectors;
-            db.path = path;
+            db.id = this.id;
+            db.name = this.name;
+            db.sectors = this.sectors;
+            db.path = this.path;
             return db;
         }
     }
@@ -30,27 +30,27 @@ namespace Incubator_2.Models
 
         public Database()
         {
-            tableName = "Databases";
+            this.tableName = "Databases";
         }
         public SDatabase AsStruct()
         {
             SDatabase db = new();
-            db.id = id;
-            db.name = name;
-            db.sectors = sectors;
-            db.path = path;
+            db.id = this.id;
+            db.name = this.name;
+            db.sectors = this.sectors;
+            db.path = this.path;
             return db;
         }
         public void AddDatabase()
         {
-            path = ProgramState.GenerateSlug(12);
-            SQLiteConnection.CreateFile($"{ProgramState.CustomDatabasePath}\\{path}.dbinc");
-            StartCommandToService()
+            this.path = ProgramState.GenerateSlug(12);
+            SQLiteConnection.CreateFile($"{ProgramState.CustomDatabasePath}\\{this.path}.dbinc");
+            this.StartCommandToService()
                 .Insert(new()
                 {
-                    { nameof(name), name },
-                    { nameof(path), path },
-                    { nameof(sectors), sectors },
+                    { nameof(this.name), this.name },
+                    { nameof(this.path), this.path },
+                    { nameof(this.sectors), this.sectors },
                 })
                 .ExecuteVoid();
 
@@ -67,18 +67,18 @@ namespace Incubator_2.Models
         }
         public List<SDatabase> GetActualDatabases()
         {
-            DataTable dt = StartCommandToService()
+            DataTable dt = this.StartCommandToService()
                 .Select()
-                .WhereLike(nameof(sectors), ProgramState.CurrentSector.slug)
+                .WhereLike(nameof(this.sectors), ProgramState.CurrentSector.slug)
                 .Execute();
-            return ParseToList(dt);
+            return this.ParseToList(dt);
         }
         public List<SDatabase> GetAllDatabases()
         {
-            DataTable dt = StartCommandToService()
+            DataTable dt = this.StartCommandToService()
                 .Select()
                 .Execute();
-            return ParseToList(dt);
+            return this.ParseToList(dt);
         }
     }
 }

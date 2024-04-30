@@ -6,52 +6,52 @@ using System.Collections.ObjectModel;
 
 namespace Incubator_2.ViewModels
 {
-    class VM_OpenWorkspace : VM_Base
+    internal class VM_OpenWorkspace : VM_Base
     {
         private List<string> _workspaces = RegistryData.GetWorkspaces();
         public VM_OpenWorkspace()
         {
-            UpdateUsers();
-            UpdateSelectedUser();
+            this.UpdateUsers();
+            this.UpdateSelectedUser();
         }
 
         private void UpdateUsers()
         {
-            if (RegistryData.IsWorkspaceExists(SelectedWorkspace))
+            if (RegistryData.IsWorkspaceExists(this.SelectedWorkspace))
             {
                 using (User user = new())
                 {
-                    _users.Clear();
-                    _users = user.GetAllUsers();
+                    this._users.Clear();
+                    this._users = user.GetAllUsers();
                 }
-                UpdateSelectedUser();
+                this.UpdateSelectedUser();
             }
         }
 
         public void Refresh()
         {
-            _workspaces = RegistryData.GetWorkspaces();
-            OnPropertyChanged(nameof(Workspaces));
-            OnPropertyChanged(nameof(SelectedWorkspace));
-            OnPropertyChanged(nameof(Path));
-            OnPropertyChanged(nameof(Password));
+            this._workspaces = RegistryData.GetWorkspaces();
+            this.OnPropertyChanged(nameof(this.Workspaces));
+            this.OnPropertyChanged(nameof(this.SelectedWorkspace));
+            this.OnPropertyChanged(nameof(this.Path));
+            this.OnPropertyChanged(nameof(this.Password));
         }
 
         public void RemoveSelected()
         {
-            RegistryData.RemoveWorkspace(SelectedWorkspace);
+            RegistryData.RemoveWorkspace(this.SelectedWorkspace);
             RegistryData.SetSelectedWorkspace("");
-            Refresh();
+            this.Refresh();
         }
 
         #region Public Properties
         public List<string> Workspaces
         {
-            get { return _workspaces; }
+            get { return this._workspaces; }
             set
             {
-                _workspaces = value;
-                OnPropertyChanged(nameof(Workspaces));
+                this._workspaces = value;
+                this.OnPropertyChanged(nameof(this.Workspaces));
             }
         }
         public string SelectedWorkspace
@@ -65,12 +65,12 @@ namespace Incubator_2.ViewModels
             {
                 RegistryData.SetSelectedWorkspace(value);
 
-                ProgramState.SetCommonPath(Path);
-                OnPropertyChanged(nameof(SelectedWorkspace));
-                OnPropertyChanged(nameof(Path));
-                UpdateUsers();
-                OnPropertyChanged(nameof(Password));
-                OnPropertyChanged(nameof(Users));
+                ProgramState.SetCommonPath(this.Path);
+                this.OnPropertyChanged(nameof(this.SelectedWorkspace));
+                this.OnPropertyChanged(nameof(this.Path));
+                this.UpdateUsers();
+                this.OnPropertyChanged(nameof(this.Password));
+                this.OnPropertyChanged(nameof(this.Users));
             }
         }
         public string Path
@@ -79,17 +79,17 @@ namespace Incubator_2.ViewModels
             {
                 try
                 {
-                    return RegistryData.GetWorkspacePath(SelectedWorkspace);
+                    return RegistryData.GetWorkspacePath(this.SelectedWorkspace);
                 }
                 catch (Exception) { return ""; }
             }
             set
             {
-                RegistryData.SetWorkspacePath(SelectedWorkspace, value);
-                if (RegistryData.IsWorkspaceExists(SelectedWorkspace))
+                RegistryData.SetWorkspacePath(this.SelectedWorkspace, value);
+                if (RegistryData.IsWorkspaceExists(this.SelectedWorkspace))
                 {
-                    OnPropertyChanged(nameof(Path));
-                    OnPropertyChanged(nameof(Users));
+                    this.OnPropertyChanged(nameof(this.Path));
+                    this.OnPropertyChanged(nameof(this.Users));
                 }
             }
         }
@@ -98,25 +98,25 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                return new ObservableCollection<User>(_users);
+                return new ObservableCollection<User>(this._users);
             }
             set
             {
-                _users = new List<User>(value);
-                OnPropertyChanged(nameof(Users));
+                this._users = new List<User>(value);
+                this.OnPropertyChanged(nameof(this.Users));
             }
         }
         public void UpdateSelectedUser()
         {
             try
             {
-                string selected = RegistryData.GetWorkspaceSelectedUser(SelectedWorkspace);
-                foreach (User user in _users)
+                string selected = RegistryData.GetWorkspaceSelectedUser(this.SelectedWorkspace);
+                foreach (User user in this._users)
                 {
                     if (user.id.ToString() == selected)
                     {
                         ProgramState.CurrentUser = user;
-                        OnPropertyChanged(nameof(SelectedUser));
+                        this.OnPropertyChanged(nameof(this.SelectedUser));
                         break;
                     }
                 }
@@ -132,12 +132,12 @@ namespace Incubator_2.ViewModels
             set
             {
                 ProgramState.CurrentUser = value;
-                OnPropertyChanged(nameof(SelectedUser));
+                this.OnPropertyChanged(nameof(this.SelectedUser));
                 try
                 {
                     if (value != null)
                     {
-                        RegistryData.SetWorkspaceSelectedUser(SelectedWorkspace, value.id.ToString());
+                        RegistryData.SetWorkspaceSelectedUser(this.SelectedWorkspace, value.id.ToString());
                     }
 
                 }
@@ -149,12 +149,12 @@ namespace Incubator_2.ViewModels
             get
             {
 
-                return RegistryData.GetWorkspacePassword(SelectedWorkspace);
+                return RegistryData.GetWorkspacePassword(this.SelectedWorkspace);
             }
             set
             {
-                RegistryData.SetWorkspacePassword(SelectedWorkspace, value);
-                OnPropertyChanged(nameof(Password));
+                RegistryData.SetWorkspacePassword(this.SelectedWorkspace, value);
+                this.OnPropertyChanged(nameof(this.Password));
             }
         }
 

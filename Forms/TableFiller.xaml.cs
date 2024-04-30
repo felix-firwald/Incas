@@ -22,23 +22,23 @@ namespace Incubator_2.Forms
         private VM_TableFiller vm;
         public Tag tag;
         private CommandSettings command;
-        public DataTable DataTable { get { return vm.Grid; } }
+        public DataTable DataTable { get { return this.vm.Grid; } }
         public TableFiller(Tag t)
         {
             InitializeComponent();
-            tag = t;
-            vm = new VM_TableFiller(t);
-            this.DataContext = vm;
-            command = t.GetCommand();
-            MakeButton();
+            this.tag = t;
+            this.vm = new VM_TableFiller(t);
+            this.DataContext = this.vm;
+            this.command = t.GetCommand();
+            this.MakeButton();
         }
         private void MakeButton()
         {
-            if (command.ScriptType == ScriptType.Button)
+            if (this.command.ScriptType == ScriptType.Button)
             {
-                this.CommandButtonIcon.Data = FindResource(command.Icon.ToString()) as PathGeometry;
+                this.CommandButtonIcon.Data = this.FindResource(this.command.Icon.ToString()) as PathGeometry;
                 this.CommandButton.Visibility = Visibility.Visible;
-                this.CommandButtonText.Content = command.Name;
+                this.CommandButtonText.Content = this.command.Name;
             }
         }
         public void SetData(DataTable dt)
@@ -57,7 +57,7 @@ namespace Incubator_2.Forms
         {
             SGeneratedTag result = new();
             result.tag = this.tag.id;
-            result.value = GetData();
+            result.value = this.GetData();
             return result;
         }
         private void RunScript()
@@ -68,10 +68,10 @@ namespace Incubator_2.Forms
                 List<Dictionary<string, string>> data = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(json);
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                 scope.SetVariable("input_data", data);
-                ScriptManager.Execute(command.Script, scope);
+                ScriptManager.Execute(this.command.Script, scope);
                 List<Dictionary<string, string>> result = scope.GetVariable("output");
                 DataTable dt = JsonConvert.DeserializeObject<DataTable>(JsonConvert.SerializeObject(result));
-                SetData(dt);
+                this.SetData(dt);
             }
             catch (Exception ex)
             {
@@ -83,7 +83,7 @@ namespace Incubator_2.Forms
 
         private void CommandClick(object sender, RoutedEventArgs e)
         {
-            RunScript();
+            this.RunScript();
         }
 
         private void AddClick(object sender, RoutedEventArgs e)

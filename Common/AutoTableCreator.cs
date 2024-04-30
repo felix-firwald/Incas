@@ -16,25 +16,25 @@ namespace Incubator_2.Common
 
         public FieldCreator(string nam, string typeOf)
         {
-            Name = nam;
-            TypeOf = typeOf;
+            this.Name = nam;
+            this.TypeOf = typeOf;
         }
         private string GetNull()
         {
-            return NotNULL ? "NOT NULL" : "";
+            return this.NotNULL ? "NOT NULL" : "";
         }
         private string GetFK()
         {
-            if (FKtable != null)
+            if (this.FKtable != null)
             {
-                return $"REFERENCES [{FKtable}] ([{FKfield}]) ON DELETE CASCADE";
+                return $"REFERENCES [{this.FKtable}] ([{this.FKfield}]) ON DELETE CASCADE";
             }
             return "";
         }
 
         private string GetUniq()
         {
-            if (IsUNIQUE)
+            if (this.IsUNIQUE)
             {
                 return "UNIQUE ON CONFLICT ROLLBACK";
             }
@@ -42,11 +42,11 @@ namespace Incubator_2.Common
         }
         public override string ToString()
         {
-            if (IsPK)
+            if (this.IsPK)
             {
-                return $"[{Name}] INTEGER PRIMARY KEY AUTOINCREMENT";
+                return $"[{this.Name}] INTEGER PRIMARY KEY AUTOINCREMENT";
             }
-            return $"[{Name}] {TypeOf} {GetNull()} {GetUniq()} {GetFK()}".Trim();
+            return $"[{this.Name}] {this.TypeOf} {this.GetNull()} {this.GetUniq()} {this.GetFK()}".Trim();
         }
     }
     public class AutoTableCreator
@@ -59,31 +59,31 @@ namespace Incubator_2.Common
         }
         public AutoTableCreator Initialize(Type type, string name)
         {
-            definition.Clear();
-            TableName = name;
-            modelClass = type;
-            ParseToDict();
+            this.definition.Clear();
+            this.TableName = name;
+            this.modelClass = type;
+            this.ParseToDict();
             return this;
         }
         #region Common
         public void ParseToDict()
         {
-            foreach (PropertyInfo prop in modelClass.GetProperties())
+            foreach (PropertyInfo prop in this.modelClass.GetProperties())
             {
                 FieldCreator fc = new FieldCreator(prop.Name, SwitchOnType(prop.PropertyType));
                 if (prop.Name == "id")
                 {
                     fc.IsPK = true;
                 }
-                definition[prop.Name] = fc;
+                this.definition[prop.Name] = fc;
             }
         }
 
 
         public string GetQueryText()
         {
-            string result = $"CREATE TABLE IF NOT EXISTS [{TableName}] (\n";
-            result += string.Join(",\n", definition.Values);
+            string result = $"CREATE TABLE IF NOT EXISTS [{this.TableName}] (\n";
+            result += string.Join(",\n", this.definition.Values);
             result += "\n);";
             return result;
         }
@@ -134,28 +134,28 @@ namespace Incubator_2.Common
 
         public void SetNotNull(string name, bool inNotNull)
         {
-            FieldCreator fc = definition[name];
+            FieldCreator fc = this.definition[name];
             fc.NotNULL = inNotNull;
-            definition[name] = fc;
+            this.definition[name] = fc;
         }
         public void SetAsUnique(string name)
         {
-            FieldCreator fc = definition[name];
+            FieldCreator fc = this.definition[name];
             fc.IsUNIQUE = true;
-            definition[name] = fc;
+            this.definition[name] = fc;
         }
         public void SetFK(string name, string table, string field)
         {
-            FieldCreator fc = definition[name];
+            FieldCreator fc = this.definition[name];
             fc.FKtable = table;
             fc.FKfield = field;
-            definition[name] = fc;
+            this.definition[name] = fc;
         }
         public void SetTextType(string name)
         {
-            FieldCreator fc = definition[name];
+            FieldCreator fc = this.definition[name];
             fc.TypeOf = "TEXT";
-            definition[name] = fc;
+            this.definition[name] = fc;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                if (!_dbEnable && !_tableEnable)
+                if (!this._dbEnable && !this._tableEnable)
                 {
                     return Visibility.Collapsed;
                 }
@@ -31,26 +31,26 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                return _dbEnable;
+                return this._dbEnable;
             }
             set
             {
-                _dbEnable = value;
-                OnPropertyChanged(nameof(DatabaseSelectionEnable));
-                OnPropertyChanged(nameof(TopPanelVisibility));
+                this._dbEnable = value;
+                this.OnPropertyChanged(nameof(this.DatabaseSelectionEnable));
+                this.OnPropertyChanged(nameof(this.TopPanelVisibility));
             }
         }
         public bool TableSelectionEnable
         {
             get
             {
-                return _tableEnable;
+                return this._tableEnable;
             }
             set
             {
-                _tableEnable = value;
-                OnPropertyChanged(nameof(TableSelectionEnable));
-                OnPropertyChanged(nameof(TopPanelVisibility));
+                this._tableEnable = value;
+                this.OnPropertyChanged(nameof(this.TableSelectionEnable));
+                this.OnPropertyChanged(nameof(this.TopPanelVisibility));
             }
         }
 
@@ -58,19 +58,17 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                using (Database db = new())
-                {
-                    return db.GetActualDatabases();
-                }
+                using Database db = new();
+                return db.GetActualDatabases();
             }
         }
         public void SetSelectedDatabase(string path)
         {
-            foreach (SDatabase db in Databases)
+            foreach (SDatabase db in this.Databases)
             {
                 if (db.path == path)
                 {
-                    SelectedDatabase = db;
+                    this.SelectedDatabase = db;
                 }
             }
         }
@@ -78,63 +76,59 @@ namespace Incubator_2.ViewModels.VM_CustomDB
         {
             get
             {
-                return _selectedDB;
+                return this._selectedDB;
             }
             set
             {
-                _selectedDB = value;
-                OnPropertyChanged(nameof(SelectedDatabase));
-                OnPropertyChanged(nameof(Tables));
+                this._selectedDB = value;
+                this.OnPropertyChanged(nameof(this.SelectedDatabase));
+                this.OnPropertyChanged(nameof(this.Tables));
             }
         }
         public List<string> Tables
         {
             get
             {
-                using (CustomTable ct = new())
-                {
-                    return ct.GetTablesList(SelectedDatabase.path, TableType.All);
-                }
+                using CustomTable ct = new();
+                return ct.GetTablesList(this.SelectedDatabase.path, TableType.All);
             }
         }
         public string SelectedTable
         {
             get
             {
-                return _selectedTable;
+                return this._selectedTable;
             }
             set
             {
-                _selectedTable = value;
-                OnPropertyChanged(nameof(SelectedTable));
-                OnPropertyChanged(nameof(Fields));
+                this._selectedTable = value;
+                this.OnPropertyChanged(nameof(this.SelectedTable));
+                this.OnPropertyChanged(nameof(this.Fields));
             }
         }
         public List<string> Fields
         {
             get
             {
-                using (CustomTable ct = new())
-                {
-                    return ct.GetTableFieldsSimple(SelectedTable, SelectedDatabase.path);
-                }
+                using CustomTable ct = new();
+                return ct.GetTableFieldsSimple(this.SelectedTable, this.SelectedDatabase.path);
             }
         }
         public string SelectedField
         {
             get
             {
-                return _selectedField;
+                return this._selectedField;
             }
             set
             {
-                _selectedField = value;
-                OnPropertyChanged(nameof(SelectedField));
+                this._selectedField = value;
+                this.OnPropertyChanged(nameof(this.SelectedField));
             }
         }
         public bool ValidateContent()
         {
-            if (SelectedField == null)
+            if (this.SelectedField == null)
             {
                 ProgramState.ShowExclamationDialog("Поле не выбрано!", "Действие невозможно");
                 return false;

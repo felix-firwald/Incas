@@ -53,12 +53,12 @@ namespace Common
         }
         public override string ToString()
         {
-            return tableName;
+            return this.tableName;
         }
         #region Service
         public void Dispose()
         {
-            CleanUp(true);
+            this.CleanUp(true);
             GC.SuppressFinalize(this);
         }
         private void CleanUp(bool clean)
@@ -76,7 +76,7 @@ namespace Common
         protected List<string> GetFields()
         {
             List<string> result = new List<string>();
-            foreach (var prop in this.GetType().GetProperties())
+            foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
             {
                 result.Add(prop.Name);
             }
@@ -117,19 +117,19 @@ namespace Common
         #region Standart Requests
         protected DataTable GetAll()
         {
-            return StartCommand().Select().Execute();
+            return this.StartCommand().Select().Execute();
         }
         protected DataRow GetById(int id)
         {
-            return StartCommand().Select().WhereEqual("id", id.ToString()).Execute().Rows[0];
+            return this.StartCommand().Select().WhereEqual("id", id.ToString()).Execute().Rows[0];
         }
         protected DataTable GetByField(string field, string value)
         {
-            return StartCommand().Select().WhereEqual(field, value).Execute();
+            return this.StartCommand().Select().WhereEqual(field, value).Execute();
         }
         protected void DeleteById(int id)
         {
-            StartCommand().Delete().WhereEqual("id", id.ToString()).ExecuteVoid();
+            this.StartCommand().Delete().WhereEqual("id", id.ToString()).ExecuteVoid();
         }
         #endregion
 
@@ -178,7 +178,7 @@ namespace Common
         /// </summary>
         protected void Serialize(DataRow dr)
         {
-            foreach (var property in this.GetType().GetProperties())
+            foreach (System.Reflection.PropertyInfo property in this.GetType().GetProperties())
             {
                 try
                 {
@@ -217,7 +217,7 @@ namespace Common
         protected int ParseCount(DataTable dt)
         {
             if (dt.Rows.Count == 0) return 0;
-            DataRow dr = GetOne(dt);
+            DataRow dr = this.GetOne(dt);
             return int.Parse(dr["count"].ToString());
         }
 

@@ -11,20 +11,20 @@ namespace Incubator_2.Windows
     public partial class UserSelector : Window
     {
         public DialogStatus Result = DialogStatus.Undefined;
-        VM_UserSelector vm;
-        public User SelectedUser { get { return vm.SelectedUser; } }
+        private VM_UserSelector vm;
+        public User SelectedUser { get { return this.vm.SelectedUser; } }
         public UserSelector()
         {
             InitializeComponent();
-            vm = new();
-            this.DataContext = vm;
+            this.vm = new();
+            this.DataContext = this.vm;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedUser != null)
+            if (this.SelectedUser != null)
             {
-                Result = DialogStatus.Yes;
+                this.Result = DialogStatus.Yes;
                 this.Close();
             }
             else

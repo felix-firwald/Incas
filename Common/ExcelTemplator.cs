@@ -5,9 +5,7 @@ using Models;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Windows;
 using Xceed.Document.NET;
-using Xceed.Words.NET;
 
 namespace Common
 {
@@ -17,8 +15,8 @@ namespace Common
         public IXLWorksheet worksheet;
         public ExcelTemplator(string path)
         {
-            workbook = new XLWorkbook(path);
-            worksheet = workbook.Worksheet(1);
+            this.workbook = new XLWorkbook(path);
+            this.worksheet = this.workbook.Worksheet(1);
         }
         private string ConvertTag(string tag)
         {
@@ -30,8 +28,8 @@ namespace Common
             {
                 for (int i = 0; i < tags.Count; i++)
                 {
-                    IXLCells c = worksheet.Search(ConvertTag(tags[i]));
-                    foreach (var item in c)
+                    IXLCells c = this.worksheet.Search(this.ConvertTag(tags[i]));
+                    foreach (IXLCell item in c)
                     {
                         item.Value = values[i];
                     }
@@ -48,23 +46,23 @@ namespace Common
             {
                 MakeReplace();
             }
-            workbook.Save();
+            this.workbook.Save();
         }
         public void CreateTable(string tag, DataTable dt)
         {
-            IXLCell cell = worksheet.Search(ConvertTag(tag), System.Globalization.CompareOptions.IgnoreCase, false).FirstOrDefault();
+            IXLCell cell = this.worksheet.Search(this.ConvertTag(tag), System.Globalization.CompareOptions.IgnoreCase, false).FirstOrDefault();
             Formatting head = new Formatting();
             head.Bold = true;
             head.FontFamily = new Font("Times New Roman");
 
             Formatting rowStyle = new Formatting();
             head.FontFamily = new Font("Times New Roman");
-            worksheet.Row(cell.WorksheetRow().RowNumber() + 1).InsertRowsBelow(dt.Rows.Count);
+            this.worksheet.Row(cell.WorksheetRow().RowNumber() + 1).InsertRowsBelow(dt.Rows.Count);
             IXLTable it = cell.InsertTable(dt, true);
             it.Theme = new("Standart");
             it.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
             it.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-            workbook.Save();
+            this.workbook.Save();
         }
         public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true)
         {

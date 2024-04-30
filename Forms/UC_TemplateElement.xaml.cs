@@ -1,5 +1,4 @@
 ﻿using Common;
-using Incubator_2.ViewModels;
 using Incubator_2.Windows;
 using Incubator_2.Windows.Templates;
 using Models;
@@ -26,18 +25,18 @@ namespace Forms
         public UC_TemplateElement(STemplate t)
         {
             InitializeComponent();
-            template = t;
-            this.MainLabel.Content = template.name;
-            FindChilds();
+            this.template = t;
+            this.MainLabel.Content = this.template.name;
+            this.FindChilds();
         }
 
         private async void FindChilds()
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                List<string> parents = template.parent.Split(";").ToList();
-                parents.Add(template.id.ToString());
-                List<STemplate> children = template.AsModel().GetAllChildren(parents);
+                List<string> parents = this.template.parent.Split(";").ToList();
+                parents.Add(this.template.id.ToString());
+                List<STemplate> children = this.template.AsModel().GetAllChildren(parents);
                 if (children.Count > 0)
                 {
                     Application.Current.Dispatcher.Invoke(() =>
@@ -46,11 +45,11 @@ namespace Forms
                         {
                             UC_TemplateElement c = new UC_TemplateElement(item);
                             this.ChildPanel.Children.Add(c);
-                            c.OnUpdated += UpdateList;
+                            c.OnUpdated += this.UpdateList;
                         }
                         if (this.ChildPanel.Children.Count > 0)
                         {
-                            this.MainLabel.Style = FindResource("LabelElementSuccess") as Style;
+                            this.MainLabel.Style = this.FindResource("LabelElementSuccess") as Style;
                             this.UseButton.Visibility = Visibility.Hidden;
                             this.ParentIcon.Visibility = Visibility.Visible;
                             this.Line.Visibility = Visibility.Visible;
@@ -58,7 +57,7 @@ namespace Forms
                         }
                     });
                 }
-                
+
             });
         }
 
@@ -69,26 +68,26 @@ namespace Forms
             {
                 case TemplateType.Word:
                 case TemplateType.Excel:
-                    if (IsFileExists())
+                    if (this.IsFileExists())
                     {
-                        UseTemplate ut = new UseTemplate(template.AsModel());
+                        UseTemplate ut = new UseTemplate(this.template.AsModel());
                         ut.Show();
                     }
                     else
                     {
-                        ProgramState.ShowErrorDialog($"Файл шаблона \"{template.name}\" ({template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
+                        ProgramState.ShowErrorDialog($"Файл шаблона \"{this.template.name}\" ({this.template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
                     }
                     break;
                 case TemplateType.Mail:
-                    UseTemplateMail utm = new(template.AsModel());
+                    UseTemplateMail utm = new(this.template.AsModel());
                     utm.Show();
                     break;
-            }                
-            
+            }
+
         }
         private bool IsFileExists()
         {
-            return File.Exists($"{ProgramState.TemplatesSourcesWordPath}\\{template.path}") || File.Exists($"{ProgramState.TemplatesSourcesExcelPath}\\{template.path}");
+            return File.Exists($"{ProgramState.TemplatesSourcesWordPath}\\{this.template.path}") || File.Exists($"{ProgramState.TemplatesSourcesExcelPath}\\{this.template.path}");
         }
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
@@ -102,12 +101,12 @@ namespace Forms
                         ProgramState.ShowExclamationDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
                         return;
                     }
-                    if (ProgramState.ShowQuestionDialog($"Шаблон \"{template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
+                    if (ProgramState.ShowQuestionDialog($"Шаблон \"{this.template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
                     {
                         Models.Tag tag = new Models.Tag();
-                        tag.RemoveAllTagsByTemplate(template.id);
-                        template.AsModel().RemoveTemplate();
-                        UpdateList();
+                        tag.RemoveAllTagsByTemplate(this.template.id);
+                        this.template.AsModel().RemoveTemplate();
+                        this.UpdateList();
                     }
                 }
             }
@@ -125,7 +124,7 @@ namespace Forms
                 {
                     ProgramState.ShowWaitCursor();
                     CreateTemplateWord ctw = new CreateTemplateWord(this.template.AsModel());
-                    ctw.OnCreated += UpdateList;
+                    ctw.OnCreated += this.UpdateList;
                     ctw.ShowDialog();
                 }
             }
@@ -147,7 +146,7 @@ namespace Forms
                         parents = this.template.parent + ";" + parents;
                     }
                     CreateTemplateWord ctw = new CreateTemplateWord(parents: parents);
-                    ctw.OnCreated += UpdateList;
+                    ctw.OnCreated += this.UpdateList;
                     ctw.ShowDialog();
                 }
             }

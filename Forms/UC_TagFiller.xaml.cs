@@ -45,7 +45,7 @@ namespace Incubator_2.Forms
         public UC_TagFiller(Tag t)
         {
             InitializeComponent();
-            Mode = FillerMode.Tag;
+            this.Mode = FillerMode.Tag;
             this.tag = t;
             if (string.IsNullOrWhiteSpace(this.tag.visibleName))
             {
@@ -55,20 +55,20 @@ namespace Incubator_2.Forms
             {
                 this.MainLabel.Text = this.tag.visibleName + ":";
             }
-            
-            switch (tag.type)
+
+            switch (this.tag.type)
             {
                 case TypeOfTag.Variable:
                 default:
-                    SetTextBoxMode();
+                    this.SetTextBoxMode();
                     this.Textbox.Text = this.tag.value;
                     this.Textbox.MaxLength = 120;
                     this.Textbox.Tag = this.tag.description;
                     break;
                 case TypeOfTag.Text:
-                    SetTextBoxMode();
+                    this.SetTextBoxMode();
                     this.Textbox.Text = this.tag.value;
-                    this.Textbox.Style = FindResource("TextBoxBig") as System.Windows.Style;
+                    this.Textbox.Style = this.FindResource("TextBoxBig") as System.Windows.Style;
                     this.Textbox.MaxLength = 1200;
                     this.Textbox.Tag = this.tag.description;
                     break;
@@ -78,7 +78,7 @@ namespace Incubator_2.Forms
                     this.Visibility = Visibility.Collapsed;
                     break;
                 case TypeOfTag.LocalEnumeration:
-                    SetComboBoxMode();
+                    this.SetComboBoxMode();
                     this.Combobox.ItemsSource = this.tag.value.Split(';');
                     this.Combobox.SelectedIndex = 0;
                     if (!string.IsNullOrWhiteSpace(this.tag.description))
@@ -100,35 +100,35 @@ namespace Incubator_2.Forms
                     this.Generator.TemplateId = int.Parse(this.tag.value);
                     break;
             }
-            MakeButton();
+            this.MakeButton();
         }
         private void MakeButton()
         {
-            command = tag.GetCommand();
-            if (command.ScriptType != ScriptType.Button)
+            this.command = this.tag.GetCommand();
+            if (this.command.ScriptType != ScriptType.Button)
             {
                 return;
             }
-            this.CommandButtonIcon.Data = FindResource(command.Icon.ToString()) as PathGeometry;
+            this.CommandButtonIcon.Data = this.FindResource(this.command.Icon.ToString()) as PathGeometry;
             this.CommandButton.Visibility = Visibility.Visible;
-            this.CommandButtonText.Content = command.Name;
+            this.CommandButtonText.Content = this.command.Name;
         }
         public void MarkAsNotValidated()
         {
-            validated = false;
-            this.MainLabel.Foreground = FindResource("Error") as SolidColorBrush;
+            this.validated = false;
+            this.MainLabel.Foreground = this.FindResource("Error") as SolidColorBrush;
         }
         public UC_TagFiller(FieldCreator fc, string path)
         {
             InitializeComponent();
             this.tag = new();
-            Mode = FillerMode.RecordField;
-            tag.name = fc.Name;
-            this.MainLabel.Text = tag.name + ":";
-            isRequired = fc.NotNULL;
+            this.Mode = FillerMode.RecordField;
+            this.tag.name = fc.Name;
+            this.MainLabel.Text = this.tag.name + ":";
+            this.isRequired = fc.NotNULL;
             if (fc.FKtable != null)
             {
-                tag.type = TypeOfTag.Relation;
+                this.tag.type = TypeOfTag.Relation;
                 this.SelectionBox.Visibility = Visibility.Visible;
                 this.SelectionBox.Database = path;
                 this.SelectionBox.Table = fc.FKtable;
@@ -136,14 +136,14 @@ namespace Incubator_2.Forms
             }
             else
             {
-                tag.type = TypeOfTag.Text;
-                SetTextBoxMode();
+                this.tag.type = TypeOfTag.Text;
+                this.SetTextBoxMode();
             }
         }
 
         public void SetValue(string value)
         {
-            switch (tag.type)
+            switch (this.tag.type)
             {
                 case TypeOfTag.Variable:
                 case TypeOfTag.Text:
@@ -187,11 +187,11 @@ namespace Incubator_2.Forms
         }
         public bool ValidateContent()
         {
-            if (tag.type == TypeOfTag.Variable || tag.type == TypeOfTag.Text)
+            if (this.tag.type == TypeOfTag.Variable || this.tag.type == TypeOfTag.Text)
             {
-                if (isRequired && string.IsNullOrEmpty(this.Textbox.Text))
+                if (this.isRequired && string.IsNullOrEmpty(this.Textbox.Text))
                 {
-                    ProgramState.ShowExclamationDialog($"Поле \"{tag.name}\" обязательно для заполнения!", "Действие прервано");
+                    ProgramState.ShowExclamationDialog($"Поле \"{this.tag.name}\" обязательно для заполнения!", "Действие прервано");
                     return false;
                 }
             }
@@ -212,7 +212,7 @@ namespace Incubator_2.Forms
         public string GetValue()
         {
 
-            switch (tag.type)
+            switch (this.tag.type)
             {
                 case TypeOfTag.Variable:
                 default:
@@ -228,14 +228,14 @@ namespace Incubator_2.Forms
                     }
                     return "";
                 case TypeOfTag.Date:
-                    return GetDateInFormat();
+                    return this.GetDateInFormat();
                 case TypeOfTag.Generator:
                     return this.Generator.GetText();
             }
         }
         public string GetData()
         {
-            switch (tag.type)
+            switch (this.tag.type)
             {
                 case TypeOfTag.Generator:
                     return this.Generator.GetData();
@@ -245,7 +245,7 @@ namespace Incubator_2.Forms
                         return ((DateTime)this.DatePicker.SelectedDate).ToString("dd.MM.yyyy");
                     }
                     return "";
-                default: return GetValue();
+                default: return this.GetValue();
 
             }
         }
@@ -277,7 +277,7 @@ namespace Incubator_2.Forms
         }
         private void MakeTitleClick(object sender, RoutedEventArgs e)
         {
-            if (IsAnythingSelected())
+            if (this.IsAnythingSelected())
             {
                 this.Textbox.SelectedText = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(this.Textbox.SelectedText.ToLower());
             }
@@ -288,7 +288,7 @@ namespace Incubator_2.Forms
         }
         private void MakeUpperClick(object sender, RoutedEventArgs e)
         {
-            if (IsAnythingSelected())
+            if (this.IsAnythingSelected())
             {
                 this.Textbox.SelectedText = this.Textbox.SelectedText.ToUpper();
             }
@@ -299,7 +299,7 @@ namespace Incubator_2.Forms
         }
         private void MakeLowerClick(object sender, RoutedEventArgs e)
         {
-            if (IsAnythingSelected())
+            if (this.IsAnythingSelected())
             {
                 this.Textbox.SelectedText = this.Textbox.SelectedText.ToLower();
             }
@@ -319,7 +319,7 @@ namespace Incubator_2.Forms
         }
         private void WrapAsQuoteClick(object sender, RoutedEventArgs e)
         {
-            if (IsAnythingSelected())
+            if (this.IsAnythingSelected())
             {
                 this.Textbox.SelectedText = $"«{this.Textbox.SelectedText}»";
             }
@@ -358,15 +358,15 @@ namespace Incubator_2.Forms
         {
             try
             {
-                if (command.Script.Contains("# [affects other]"))
+                if (this.command.Script.Contains("# [affects other]"))
                 {
-                    OnScriptRequested?.Invoke(command.Script);
+                    OnScriptRequested?.Invoke(this.command.Script);
                 }
                 else
                 {
                     ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                     scope.SetVariable("input_data", this.GetValue());
-                    ScriptManager.Execute(command.Script, scope);
+                    ScriptManager.Execute(this.command.Script, scope);
 
                     this.SetValue((string)scope.GetVariable("output"));
                 }
@@ -380,44 +380,44 @@ namespace Incubator_2.Forms
         }
         private void CommandClick(object sender, RoutedEventArgs e)
         {
-            PlayScript();
+            this.PlayScript();
         }
         private void CheckForScriptOnUpdate()
         {
-            if (command.ScriptType == ScriptType.ValueChanged)
+            if (this.command.ScriptType == ScriptType.ValueChanged)
             {
-                PlayScript();
+                this.PlayScript();
             }
-            if (!validated)
+            if (!this.validated)
             {
-                validated = true;
-                this.MainLabel.Foreground = FindResource("GrayLight") as SolidColorBrush;
+                this.validated = true;
+                this.MainLabel.Foreground = this.FindResource("GrayLight") as SolidColorBrush;
             }
         }
 
         private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CheckForScriptOnUpdate();
+            this.CheckForScriptOnUpdate();
         }
 
         private void Textbox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CheckForScriptOnUpdate();
+            this.CheckForScriptOnUpdate();
         }
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            CheckForScriptOnUpdate();
+            this.CheckForScriptOnUpdate();
         }
 
         private void SelectionBox_OnValueChanged(object sender, TextChangedEventArgs e)
         {
-            CheckForScriptOnUpdate();
+            this.CheckForScriptOnUpdate();
         }
 
         private void Generator_OnValueChanged(object sender)
         {
-            CheckForScriptOnUpdate();
+            this.CheckForScriptOnUpdate();
         }
     }
 }

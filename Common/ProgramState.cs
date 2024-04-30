@@ -31,7 +31,8 @@ namespace Common
     {
         public SessionBrokenException() { }
     }
-    struct FirstWorkspaceData
+
+    internal struct FirstWorkspaceData
     {
         public string workspacePath;
         public string workspaceName;
@@ -40,7 +41,7 @@ namespace Common
         public string userPassword;
     }
 
-    static class ProgramState
+    internal static class ProgramState
     {
         public static string CommonPath { get; private set; }
         public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incas";
@@ -90,7 +91,7 @@ namespace Common
             if (checkout)
             {
                 DatabaseManager.ActualizeTables();
-            }           
+            }
             CollectGarbage();
             ScriptManager.Execute("from Incas import Service", ScriptManager.GetEngine().CreateScope());
             //TelegramProcessor.StartBot("6911917508:AAHJeEhfNKzzOJjp0IlGtZ51lqNrE2LBnK4");
@@ -212,24 +213,22 @@ namespace Common
                         sector.AddSector(false);
                     }
 
-                    using (User user = new())
-                    {
-                        user.username = "admin";
-                        user.post = "Администратор рабочего пространства";
-                        user.surname = data.userSurname;
-                        user.secondName = data.userFullname;
-                        user.fullname = $"{user.surname} {user.secondName}";
-                        user.sector = "data";
-                        UserParameters up = new();
-                        up.permission_group = PermissionGroup.Admin;
-                        up.tasks_visibility = true;
-                        up.communication_visibility = true;
-                        up.database_visibility = true;
-                        up.password = data.userPassword;
-                        user.GenerateSign();
-                        user.SaveParametersContext(up);
-                        user.AddUser();
-                    }
+                    using User user = new();
+                    user.username = "admin";
+                    user.post = "Администратор рабочего пространства";
+                    user.surname = data.userSurname;
+                    user.secondName = data.userFullname;
+                    user.fullname = $"{user.surname} {user.secondName}";
+                    user.sector = "data";
+                    UserParameters up = new();
+                    up.permission_group = PermissionGroup.Admin;
+                    up.tasks_visibility = true;
+                    up.communication_visibility = true;
+                    up.database_visibility = true;
+                    up.password = data.userPassword;
+                    user.GenerateSign();
+                    user.SaveParametersContext(up);
+                    user.AddUser();
                 }
                 catch (IOException)
                 {
@@ -256,44 +255,36 @@ namespace Common
         }
         public static string GetWorkspaceName()
         {
-            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name", "Рабочая область"))
-            {
-                return par.value;
-            }
+            using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name", "Рабочая область");
+            return par.value;
         }
         public static void SetWorkspaceName(string name)
         {
-            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name", "Рабочая область"))
-            {
-                par.value = name;
-                par.UpdateValue();
-            }
+            using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name", "Рабочая область");
+            par.value = name;
+            par.UpdateValue();
         }
         public static void SetWorkspaceOpened(bool opened)
         {
-            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1"))
-            {
-                par.WriteBoolValue(opened);
-                par.UpdateValue();
-            }
+            using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1");
+            par.WriteBoolValue(opened);
+            par.UpdateValue();
         }
         public static bool IsWorkspaceOpened()
         {
             if (Permission.CurrentUserPermission != PermissionGroup.Admin)
             {
-                using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1"))
+                using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1");
+                bool result = par.GetValueAsBool();
+                if (!result)
                 {
-                    bool result = par.GetValueAsBool();
-                    if (!result)
-                    {
-                        ShowErrorDialog("Действия по добавлению, изменению " +
-                            "или удалению информации из базы данных недоступны, " +
-                            "пока рабочее пространство находится в статусе \"Закрыто\".\n" +
-                            "Рабочее пространство по-прежнему можно использовать, однако " +
-                            "только для чтения.", "Рабочее пространство закрыто");
-                    }
-                    return result;
+                    ShowErrorDialog("Действия по добавлению, изменению " +
+                        "или удалению информации из базы данных недоступны, " +
+                        "пока рабочее пространство находится в статусе \"Закрыто\".\n" +
+                        "Рабочее пространство по-прежнему можно использовать, однако " +
+                        "только для чтения.", "Рабочее пространство закрыто");
                 }
+                return result;
             }
             else
             {
@@ -302,18 +293,14 @@ namespace Common
         }
         public static void SetWorkspaceLocked(bool locked)
         {
-            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked"))
-            {
-                par.WriteBoolValue(locked);
-                par.UpdateValue();
-            }
+            using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked");
+            par.WriteBoolValue(locked);
+            par.UpdateValue();
         }
         public static bool IsWorkspaceLocked()
         {
-            using (Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked"))
-            {
-                return par.GetValueAsBool();
-            }
+            using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked");
+            return par.GetValueAsBool();
         }
 
         #endregion
@@ -333,21 +320,16 @@ namespace Common
         }
         public static void OpenSession()
         {
-            using (Session ms = new Session())
-            {
-                ms.AddSession();
-                CurrentSession = ms;
-                ms.ClearOldestSessions();
-
-            }
+            using Session ms = new Session();
+            ms.AddSession();
+            CurrentSession = ms;
+            ms.ClearOldestSessions();
             //Directory.CreateDirectory(ServerProcessor.Port);
         }
         public static List<Session> GetActiveSessions()
         {
-            using (Session ms = new Session())
-            {
-                return ms.GetOpenedSessions();
-            }
+            using Session ms = new Session();
+            return ms.GetOpenedSessions();
         }
         public static void CloseSession()
         {
@@ -362,13 +344,11 @@ namespace Common
         {
             try
             {
-                using (FileStream stream = File.Open($"Static\\{path}.wav", FileMode.Open))
-                {
-                    SoundPlayer myNewSound = new SoundPlayer(stream);
-                    myNewSound.Load();
-                    myNewSound.Play();
-                    myNewSound.Dispose();
-                }
+                using FileStream stream = File.Open($"Static\\{path}.wav", FileMode.Open);
+                SoundPlayer myNewSound = new SoundPlayer(stream);
+                myNewSound.Load();
+                myNewSound.Play();
+                myNewSound.Dispose();
             }
             catch { }
         }
@@ -558,17 +538,15 @@ namespace Common
             if (File.Exists(result))
             {
                 DatabasePath = result;
-                using (Sector s = new())
-                {
-                    s.slug = user.sector;
-                    s.GetSector();
-                    CurrentSector = s;
-                }
+                using Sector s = new();
+                s.slug = user.sector;
+                s.GetSector();
+                CurrentSector = s;
             }
         }
         #endregion
 
-        public async static void ClearRuntimeFiles()
+        public static async void ClearRuntimeFiles()
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
@@ -589,7 +567,7 @@ namespace Common
         {
             System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", path);
         }
-        private async static void RemoveFilesOlderThan(string folder, DateTime time)
+        private static async void RemoveFilesOlderThan(string folder, DateTime time)
         {
             await System.Threading.Tasks.Task.Run(() =>
             {

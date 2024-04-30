@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace Incubator_2.ViewModels
 {
-    class ContainerWindowViewModel : VM_Base
+    internal class ContainerWindowViewModel : VM_Base
     {
         #region Private Member
 
@@ -46,7 +46,7 @@ namespace Incubator_2.ViewModels
         /// <summary>
         /// True if the window should be borderless because it is docked or maximized
         /// </summary>
-        public bool Borderless { get { return (mWindow.WindowState == WindowState.Maximized || mDockPosition != WindowDockPosition.Undocked); } }
+        public bool Borderless { get { return (this.mWindow.WindowState == WindowState.Maximized || this.mDockPosition != WindowDockPosition.Undocked); } }
 
         /// <summary>
         /// The size of the resize border around the window
@@ -56,12 +56,12 @@ namespace Incubator_2.ViewModels
         /// <summary>
         /// The size of the resize border around the window, taking into account the outer margin
         /// </summary>
-        public Thickness ResizeBorderThickness { get { return new Thickness(ResizeBorder + OuterMarginSize); } }
+        public Thickness ResizeBorderThickness { get { return new Thickness(this.ResizeBorder + this.OuterMarginSize); } }
 
         /// <summary>
         /// The padding of the inner content of the main window
         /// </summary>
-        public Thickness InnerContentPadding { get { return new Thickness(ResizeBorder); } }
+        public Thickness InnerContentPadding { get { return new Thickness(this.ResizeBorder); } }
 
         /// <summary>
         /// The margin around the window to allow for a drop shadow
@@ -71,18 +71,18 @@ namespace Incubator_2.ViewModels
             get
             {
                 // If it is maximized or docked, no border
-                return Borderless ? 0 : mOuterMarginSize;
+                return this.Borderless ? 0 : this.mOuterMarginSize;
             }
             set
             {
-                mOuterMarginSize = value;
+                this.mOuterMarginSize = value;
             }
         }
 
         /// <summary>
         /// The margin around the window to allow for a drop shadow
         /// </summary>
-        public Thickness OuterMarginSizeThickness { get { return new Thickness(OuterMarginSize); } }
+        public Thickness OuterMarginSizeThickness { get { return new Thickness(this.OuterMarginSize); } }
 
         /// <summary>
         /// The radius of the edges of the window
@@ -92,18 +92,18 @@ namespace Incubator_2.ViewModels
             get
             {
                 // If it is maximized or docked, no border
-                return Borderless ? 0 : mWindowRadius;
+                return this.Borderless ? 0 : this.mWindowRadius;
             }
             set
             {
-                mWindowRadius = value;
+                this.mWindowRadius = value;
             }
         }
 
         /// <summary>
         /// The radius of the edges of the window
         /// </summary>
-        public CornerRadius WindowCornerRadius { get { return new CornerRadius(WindowRadius); } }
+        public CornerRadius WindowCornerRadius { get { return new CornerRadius(this.WindowRadius); } }
 
         /// <summary>
         /// The height of the title bar / caption of the window
@@ -112,7 +112,7 @@ namespace Incubator_2.ViewModels
         /// <summary>
         /// The height of the title bar / caption of the window
         /// </summary>
-        public GridLength TitleHeightGridLength { get { return new GridLength(TitleHeight + ResizeBorder); } }
+        public GridLength TitleHeightGridLength { get { return new GridLength(this.TitleHeight + this.ResizeBorder); } }
 
         #endregion
 
@@ -147,32 +147,32 @@ namespace Incubator_2.ViewModels
         /// </summary>
         public ContainerWindowViewModel(Window window)
         {
-            mWindow = window;
+            this.mWindow = window;
 
             // Listen out for the window resizing
-            mWindow.StateChanged += (sender, e) =>
+            this.mWindow.StateChanged += (sender, e) =>
             {
                 // Fire off events for all properties that are affected by a resize
-                WindowResized();
+                this.WindowResized();
             };
 
             // Create commands
-            MinimizeCommand = new RelayCommand(() => mWindow.WindowState = WindowState.Minimized);
-            MaximizeCommand = new RelayCommand(() => mWindow.WindowState ^= WindowState.Maximized);
-            CloseCommand = new RelayCommand(() => mWindow.Close());
-            MenuCommand = new RelayCommand(() => SystemCommands.ShowSystemMenu(mWindow, GetMousePosition()));
+            this.MinimizeCommand = new RelayCommand(() => this.mWindow.WindowState = WindowState.Minimized);
+            this.MaximizeCommand = new RelayCommand(() => this.mWindow.WindowState ^= WindowState.Maximized);
+            this.CloseCommand = new RelayCommand(() => this.mWindow.Close());
+            this.MenuCommand = new RelayCommand(() => SystemCommands.ShowSystemMenu(this.mWindow, this.GetMousePosition()));
 
             // Fix window resize issue
-            var resizer = new WindowResizer(mWindow);
+            WindowResizer resizer = new WindowResizer(this.mWindow);
 
             // Listen out for dock changes
             resizer.WindowDockChanged += (dock) =>
             {
                 // Store last position
-                mDockPosition = dock;
+                this.mDockPosition = dock;
 
                 // Fire off resize events
-                WindowResized();
+                this.WindowResized();
             };
         }
 
@@ -187,10 +187,10 @@ namespace Incubator_2.ViewModels
         private Point GetMousePosition()
         {
             // Position of the mouse relative to the window
-            var position = Mouse.GetPosition(mWindow);
+            Point position = Mouse.GetPosition(this.mWindow);
 
             // Add the window position so its a "ToScreen"
-            return new Point(position.X + mWindow.Left, position.Y + mWindow.Top);
+            return new Point(position.X + this.mWindow.Left, position.Y + this.mWindow.Top);
         }
 
         /// <summary>
@@ -200,12 +200,12 @@ namespace Incubator_2.ViewModels
         private void WindowResized()
         {
             // Fire off events for all properties that are affected by a resize
-            OnPropertyChanged(nameof(Borderless));
-            OnPropertyChanged(nameof(ResizeBorderThickness));
-            OnPropertyChanged(nameof(OuterMarginSize));
-            OnPropertyChanged(nameof(OuterMarginSizeThickness));
-            OnPropertyChanged(nameof(WindowRadius));
-            OnPropertyChanged(nameof(WindowCornerRadius));
+            this.OnPropertyChanged(nameof(this.Borderless));
+            this.OnPropertyChanged(nameof(this.ResizeBorderThickness));
+            this.OnPropertyChanged(nameof(this.OuterMarginSize));
+            this.OnPropertyChanged(nameof(this.OuterMarginSizeThickness));
+            this.OnPropertyChanged(nameof(this.WindowRadius));
+            this.OnPropertyChanged(nameof(this.WindowCornerRadius));
         }
 
 

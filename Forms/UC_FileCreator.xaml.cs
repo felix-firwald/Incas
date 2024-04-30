@@ -12,7 +12,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Windows.ApplicationModel.Background;
 
 namespace Incubator_2.Forms
 {
@@ -25,8 +24,8 @@ namespace Incubator_2.Forms
         private bool IsCollapsed = false;
         private Template template;
         private List<Tag> tags;
-        List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
-        List<TableFiller> Tables = new List<TableFiller>();
+        private List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
+        private List<TableFiller> Tables = new List<TableFiller>();
         private TemplateSettings templateSettings;
 
         public delegate void TagAction(int tag, string value);
@@ -41,10 +40,10 @@ namespace Incubator_2.Forms
             InitializeComponent();
             this.tags = tagsList;
             this.template = templ;
-            FillContentPanel();
-            templateSettings = templ.GetTemplateSettings();
-            this.NumberPrefix.Content = templateSettings.NumberPrefix;
-            this.NumberPostfix.Content = templateSettings.NumberPostfix;
+            this.FillContentPanel();
+            this.templateSettings = templ.GetTemplateSettings();
+            this.NumberPrefix.Content = this.templateSettings.NumberPrefix;
+            this.NumberPostfix.Content = this.templateSettings.NumberPostfix;
             if (this.template.type == TemplateType.Excel)
             {
                 this.EyeButton.Visibility = Visibility.Collapsed;
@@ -59,17 +58,17 @@ namespace Incubator_2.Forms
                 if (t.type != TypeOfTag.Table)
                 {
                     UC_TagFiller tf = new UC_TagFiller(t);
-                    tf.OnInsert += OnInsert;
-                    tf.OnRename += OnRename;
-                    tf.OnScriptRequested += OnScriptRequested;
+                    tf.OnInsert += this.OnInsert;
+                    tf.OnRename += this.OnRename;
+                    tf.OnScriptRequested += this.OnScriptRequested;
                     this.ContentPanel.Children.Add(tf);
-                    TagFillers.Add(tf);
+                    this.TagFillers.Add(tf);
                 }
                 else
                 {
                     TableFiller tf = new TableFiller(t);
                     this.ContentPanel.Children.Add(tf);
-                    Tables.Add(tf);
+                    this.Tables.Add(tf);
                 }
             });
         }
@@ -79,12 +78,12 @@ namespace Incubator_2.Forms
             try
             {
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                foreach (UC_TagFiller tf in TagFillers)
+                foreach (UC_TagFiller tf in this.TagFillers)
                 {
                     scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
-                foreach (UC_TagFiller tf in TagFillers)
+                foreach (UC_TagFiller tf in this.TagFillers)
                 {
                     if (tf.tag.type != TypeOfTag.Generator)
                     {
@@ -110,7 +109,7 @@ namespace Incubator_2.Forms
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                foreach (UC_TagFiller tf in TagFillers)
+                foreach (UC_TagFiller tf in this.TagFillers)
                 {
                     if (tf.tag.id == tag)
                     {
@@ -137,7 +136,7 @@ namespace Incubator_2.Forms
             this.Number.Text = record.number;
             foreach (SGeneratedTag tag in record.GetFilledTags())
             {
-                foreach (UC_TagFiller tagfiller in TagFillers)
+                foreach (UC_TagFiller tagfiller in this.TagFillers)
                 {
                     if (tagfiller.tag.id == tag.tag)
                     {
@@ -145,7 +144,7 @@ namespace Incubator_2.Forms
                         break;
                     }
                 }
-                foreach (TableFiller table in Tables)
+                foreach (TableFiller table in this.Tables)
                 {
                     if (table.tag.id == tag.tag)
                     {
@@ -198,11 +197,11 @@ namespace Incubator_2.Forms
         {
             if (this.IsCollapsed)
             {
-                Maximize();
+                this.Maximize();
             }
             else
             {
-                Minimize();
+                this.Minimize();
             }
 
         }
@@ -231,10 +230,10 @@ namespace Incubator_2.Forms
             result.template = this.template.id;
             result.number = this.Number.Text;
             result.fullNumber = this.GetNumber();
-            result.status = document.status;
+            result.status = this.document.status;
             result.fileName = this.Filename.Text;
             List<SGeneratedTag> filledTags = new();
-            foreach (UC_TagFiller tf in TagFillers)
+            foreach (UC_TagFiller tf in this.TagFillers)
             {
                 int id = tf.GetId();
                 string name = tf.GetTagName();
@@ -257,7 +256,7 @@ namespace Incubator_2.Forms
                     }
                 }
             }
-            foreach (TableFiller table in Tables)
+            foreach (TableFiller table in this.Tables)
             {
                 filledTags.Add(table.GetAsGeneratedTag());
             }
@@ -274,24 +273,24 @@ namespace Incubator_2.Forms
                     return false;
                 }
                 bool result = true;
-                if (!string.IsNullOrEmpty(templateSettings.Validation))
+                if (!string.IsNullOrEmpty(this.templateSettings.Validation))
                 {
                     ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                     scope.SetVariable("result", true);
                     scope.SetVariable("document_number", this.Number.Text);
                     scope.SetVariable("fields", new List<string>());
                     scope.SetVariable("failed_text", "Текст не установлен.");
-                    foreach (UC_TagFiller tf in TagFillers)
+                    foreach (UC_TagFiller tf in this.TagFillers)
                     {
                         scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                     }
-                    ScriptManager.Execute(templateSettings.Validation, scope);
+                    ScriptManager.Execute(this.templateSettings.Validation, scope);
                     result = scope.GetVariable("result");
                     if (!result)
                     {
                         ProgramState.ShowExclamationDialog(scope.GetVariable("failed_text"));
                         dynamic fields = scope.GetVariable("fields");
-                        foreach (UC_TagFiller tf in TagFillers)
+                        foreach (UC_TagFiller tf in this.TagFillers)
                         {
                             if (fields.Contains(tf.tag.name.Replace(" ", "_")))
                             {
@@ -312,19 +311,19 @@ namespace Incubator_2.Forms
         {
             try
             {
-                if (!string.IsNullOrEmpty(templateSettings.OnSaving))
+                if (!string.IsNullOrEmpty(this.templateSettings.OnSaving))
                 {
                     ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                    foreach (UC_TagFiller tf in TagFillers)
+                    foreach (UC_TagFiller tf in this.TagFillers)
                     {
                         scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                     }
                     scope.SetVariable("file_name", this.Filename.Text);
                     scope.SetVariable("document_number", this.Number.Text);
-                    ScriptManager.Execute(templateSettings.OnSaving, scope);
+                    ScriptManager.Execute(this.templateSettings.OnSaving, scope);
                     this.Filename.Text = scope.GetVariable("file_name");
                     this.Number.Text = scope.GetVariable("document_number");
-                    foreach (UC_TagFiller tf in TagFillers)
+                    foreach (UC_TagFiller tf in this.TagFillers)
                     {
                         if (tf.tag.type != TypeOfTag.Generator)
                         {
@@ -343,11 +342,11 @@ namespace Incubator_2.Forms
             return this.templateSettings.NumberPrefix + this.Number.Text + this.templateSettings.NumberPostfix;
         }
         private void ApplyNameByTemplate()
-        {            
-            if (!string.IsNullOrWhiteSpace(templateSettings.FileNameTemplate))
+        {
+            if (!string.IsNullOrWhiteSpace(this.templateSettings.FileNameTemplate))
             {
-                string result = templateSettings.FileNameTemplate;
-                foreach (UC_TagFiller tf in TagFillers)
+                string result = this.templateSettings.FileNameTemplate;
+                foreach (UC_TagFiller tf in this.TagFillers)
                 {
                     result = result.Replace("[" + tf.GetTagName() + "]", tf.GetValue());
                 }
@@ -358,47 +357,45 @@ namespace Incubator_2.Forms
         {
             try
             {
-                if (CustomValidate())
+                if (this.CustomValidate())
                 {
-                    ApplyNameByTemplate();
-                    PlaySavingScript();
+                    this.ApplyNameByTemplate();
+                    this.PlaySavingScript();
                     string newFile;
                     List<SGeneratedTag> filledTags = new();
                     switch (this.template.type)
                     {
                         case TemplateType.Word:
                             newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
-                            File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
+                            File.Copy(ProgramState.GetFullnameOfWordFile(this.template.path), newFile, true);
                             WordTemplator wt = new WordTemplator(newFile);
                             this.Dispatcher.Invoke(() =>
                             {
-                                filledTags = wt.GenerateDocument(TagFillers, Tables, GetNumber(), async);
+                                filledTags = wt.GenerateDocument(this.TagFillers, this.Tables, this.GetNumber(), async);
                             });
                             break;
                         case TemplateType.Excel:
                             newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
-                            File.Copy(ProgramState.GetFullnameOfExcelFile(template.path), newFile, true);
-                            ExcelTemplator et = new ExcelTemplator(newFile);                            
+                            File.Copy(ProgramState.GetFullnameOfExcelFile(this.template.path), newFile, true);
+                            ExcelTemplator et = new ExcelTemplator(newFile);
                             this.Dispatcher.Invoke(() =>
                             {
-                                filledTags = et.GenerateDocument(TagFillers, Tables, GetNumber(), async);
+                                filledTags = et.GenerateDocument(this.TagFillers, this.Tables, this.GetNumber(), async);
                             });
                             break;
                     }
                     if (save)
                     {
-                        using (GeneratedDocument doc = new())
-                        {
-                            doc.id = document.id;
-                            doc.number = this.Number.Text;
-                            doc.fullNumber = GetNumber();
-                            doc.status = document.status;
-                            doc.fileName = this.Filename.Text;
-                            doc.template = this.template.id;
-                            doc.templateName = category;
-                            doc.SaveFilledTags(filledTags);
-                            doc.AddRecord();
-                        }
+                        using GeneratedDocument doc = new();
+                        doc.id = this.document.id;
+                        doc.number = this.Number.Text;
+                        doc.fullNumber = this.GetNumber();
+                        doc.status = this.document.status;
+                        doc.fileName = this.Filename.Text;
+                        doc.template = this.template.id;
+                        doc.templateName = category;
+                        doc.SaveFilledTags(filledTags);
+                        doc.AddRecord();
                     }
                     return true;
                 }
@@ -426,7 +423,7 @@ namespace Incubator_2.Forms
         public void RenameByTag(string tag, string prefix = "", string postfix = "", bool additive = false)
         {
             string result = "";
-            foreach (UC_TagFiller tf in TagFillers)
+            foreach (UC_TagFiller tf in this.TagFillers)
             {
                 if (tf.GetTagName() == tag)
                 {
@@ -447,7 +444,7 @@ namespace Incubator_2.Forms
         public List<string> GetExcelRow()
         {
             List<string> output = new();
-            foreach (UC_TagFiller tf in TagFillers)
+            foreach (UC_TagFiller tf in this.TagFillers)
             {
                 output.Add(tf.GetValue());
             }
@@ -466,7 +463,7 @@ namespace Incubator_2.Forms
             {
 
                 string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.docx";
-                System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(template.path), newFile, true);
+                System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(this.template.path), newFile, true);
                 WordTemplator wt = new WordTemplator(newFile);
 
                 List<string> tagsToReplace = new List<string>();
@@ -475,7 +472,7 @@ namespace Incubator_2.Forms
                     DispatcherPriority.Normal,
                     new Action(() =>
                     {
-                        foreach (UC_TagFiller tf in TagFillers)
+                        foreach (UC_TagFiller tf in this.TagFillers)
                         {
                             string nameOf = tf.GetTagName();
                             string value = tf.GetValue();
@@ -483,7 +480,7 @@ namespace Incubator_2.Forms
                             values.Add(value);
                         }
                         wt.Replace(tagsToReplace, values, false);
-                        foreach (TableFiller tab in Tables)
+                        foreach (TableFiller tab in this.Tables)
                         {
                             wt.CreateTable(tab.tag.name, tab.DataTable);
                         }
@@ -520,7 +517,7 @@ namespace Incubator_2.Forms
                 return;
             }
             ProgramState.ShowWaitCursor();
-            CreateFile(ProgramState.TemplatesRuntime, "", false, false);
+            this.CreateFile(ProgramState.TemplatesRuntime, "", false, false);
             string filename;
             switch (this.template.type)
             {
@@ -531,7 +528,7 @@ namespace Incubator_2.Forms
                 case TemplateType.Excel:
                     filename = $"{ProgramState.TemplatesRuntime}\\{RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
                     break;
-            }            
+            }
             try
             {
                 System.Diagnostics.Process proc = new();

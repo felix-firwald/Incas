@@ -36,13 +36,13 @@ namespace Incubator_2.Models
         public Command AsModel()
         {
             Command cmd = new();
-            cmd.id = id;
-            cmd.database = database;
-            cmd.table = table;
-            cmd.name = name;
-            cmd.query = query;
-            cmd.type = type;
-            cmd.restrictions = restrictions;
+            cmd.id = this.id;
+            cmd.database = this.database;
+            cmd.table = this.table;
+            cmd.name = this.name;
+            cmd.query = this.query;
+            cmd.type = this.type;
+            cmd.restrictions = this.restrictions;
             return cmd;
         }
     }
@@ -58,18 +58,18 @@ namespace Incubator_2.Models
         public string restrictions { get; set; }
         public Command()
         {
-            tableName = "Commands";
+            this.tableName = "Commands";
         }
         public SCommand AsStruct()
         {
             SCommand result = new();
-            result.id = id;
-            result.database = database;
-            result.table = table;
-            result.name = name;
-            result.query = query;
-            result.type = type;
-            result.restrictions = restrictions;
+            result.id = this.id;
+            result.database = this.database;
+            result.table = this.table;
+            result.name = this.name;
+            result.query = this.query;
+            result.type = this.type;
+            result.restrictions = this.restrictions;
             return result;
         }
         private List<SCommand> SerializeList(DataTable dt)
@@ -79,71 +79,71 @@ namespace Incubator_2.Models
             {
                 this.Serialize(dr);
                 this.type = (CommandType)Enum.Parse(typeof(CommandType), dr["type"].ToString());
-                DecryptQuery();
+                this.DecryptQuery();
                 commands.Add(this.AsStruct());
             }
             return commands;
         }
         public List<SCommand> GetCommandsOfTable(string db, string table)
         {
-            DataTable dt = StartCommandToService()
+            DataTable dt = this.StartCommandToService()
                 .Select()
-                .WhereEqual(nameof(database), db)
+                .WhereEqual(nameof(this.database), db)
                 .WhereEqual(nameof(table), table)
-                .OrderByASC(nameof(name))
+                .OrderByASC(nameof(this.name))
                 .Execute();
-            return SerializeList(dt);
+            return this.SerializeList(dt);
         }
 
         public List<SCommand> GetAllCommands()
         {
-            DataTable dt = StartCommandToService()
+            DataTable dt = this.StartCommandToService()
                 .Select()
                 .Execute();
-            return SerializeList(dt);
+            return this.SerializeList(dt);
         }
         public void AddCommand()
         {
-            if (id > 0)
+            if (this.id > 0)
             {
-                Update();
+                this.Update();
                 return;
             }
-            StartCommandToService()
+            this.StartCommandToService()
                 .Insert(new()
                 {
-                    { nameof(database), database },
-                    { nameof(table), table },
-                    { nameof(name), name },
-                    { nameof(query), EncryptQuery() },
-                    { nameof(type), type.ToString() },
-                    { nameof(restrictions), restrictions },
+                    { nameof(this.database), this.database },
+                    { nameof(this.table), this.table },
+                    { nameof(this.name), this.name },
+                    { nameof(this.query), this.EncryptQuery() },
+                    { nameof(this.type), this.type.ToString() },
+                    { nameof(this.restrictions), this.restrictions },
                 })
                 .ExecuteVoid();
         }
         public void Update()
         {
-            StartCommandToService()
-                .Update(nameof(name), name)
-                .Update(nameof(query), EncryptQuery())
-                .Update(nameof(type), type.ToString())
-                .Update(nameof(restrictions), restrictions)
-                .WhereEqual(nameof(id), id)
+            this.StartCommandToService()
+                .Update(nameof(this.name), this.name)
+                .Update(nameof(this.query), this.EncryptQuery())
+                .Update(nameof(this.type), this.type.ToString())
+                .Update(nameof(this.restrictions), this.restrictions)
+                .WhereEqual(nameof(this.id), this.id)
                 .ExecuteVoid();
         }
         public string EncryptQuery()
         {
-            return Cryptographer.EncryptString(Cryptographer.GenerateKey(database + table), query);
+            return Cryptographer.EncryptString(Cryptographer.GenerateKey(this.database + this.table), this.query);
         }
         public void DecryptQuery()
         {
-            query = Cryptographer.DecryptString(Cryptographer.GenerateKey(database + table), query);
+            this.query = Cryptographer.DecryptString(Cryptographer.GenerateKey(this.database + this.table), this.query);
         }
         public void DeleteCommand()
         {
-            StartCommandToService()
+            this.StartCommandToService()
                 .Delete()
-                .WhereEqual(nameof(id), id)
+                .WhereEqual(nameof(this.id), this.id)
                 .ExecuteVoid();
         }
     }

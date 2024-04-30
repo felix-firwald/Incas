@@ -2,9 +2,7 @@
 using System;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Xps.Packaging;
 
 namespace Incubator_2.Windows
@@ -14,16 +12,16 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class PreviewWindow : Window
     {
-        string XPSpath;
-        XpsDocument document;
+        private string XPSpath;
+        private XpsDocument document;
         private bool printEnabled;
         public PreviewWindow(string path, bool printEnabled = true)
         {
             InitializeComponent();
-            XPSpath = path;
-            document = new XpsDocument(XPSpath, FileAccess.Read);
-            this.Preview.Document = document.GetFixedDocumentSequence();
-            document.Close();
+            this.XPSpath = path;
+            this.document = new XpsDocument(this.XPSpath, FileAccess.Read);
+            this.Preview.Document = this.document.GetFixedDocumentSequence();
+            this.document.Close();
             this.printEnabled = printEnabled;
         }
 
@@ -31,7 +29,7 @@ namespace Incubator_2.Windows
         {
             try
             {
-                File.Delete(XPSpath);
+                File.Delete(this.XPSpath);
             }
             catch { }
             GC.Collect();
@@ -51,12 +49,12 @@ namespace Incubator_2.Windows
             if (isPrinted != true)
             {
                 return;
-            }                
+            }
             try
             {
                 // Open the selected document.
-                XpsDocument xpsDocument = new(XPSpath, FileAccess.Read);
-                
+                XpsDocument xpsDocument = new(this.XPSpath, FileAccess.Read);
+
                 // Get a fixed document sequence for the selected document.
                 FixedDocumentSequence fixedDocSeq = xpsDocument.GetFixedDocumentSequence();
 
@@ -64,7 +62,7 @@ namespace Incubator_2.Windows
                 DocumentPaginator docPaginator = fixedDocSeq.DocumentPaginator;
 
                 // Print to a new file.
-                printDialog.PrintDocument(docPaginator, $"Печать документа {Path.GetFileName(XPSpath)}");
+                printDialog.PrintDocument(docPaginator, $"Печать документа {Path.GetFileName(this.XPSpath)}");
             }
             catch (Exception)
             {

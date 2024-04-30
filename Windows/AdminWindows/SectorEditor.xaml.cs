@@ -9,18 +9,18 @@ namespace Incubator_2.Windows.AdminWindows
     /// </summary>
     public partial class SectorEditor : Window
     {
-        VM_SectorElement vm;
+        private VM_SectorElement vm;
         public SectorEditor(Sector s)
         {
             InitializeComponent();
-            vm = new(s);
-            this.DataContext = vm;
+            this.vm = new(s);
+            this.DataContext = this.vm;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-            vm.Save();
+            this.vm.Save();
         }
     }
 }

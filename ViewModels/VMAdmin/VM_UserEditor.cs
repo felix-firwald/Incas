@@ -6,8 +6,7 @@ using System.Collections.Generic;
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
-
-    class VM_UserEditor : VM_Base
+    internal class VM_UserEditor : VM_Base
     {
         private User _user;
         private UserParameters _userParameters;
@@ -15,30 +14,28 @@ namespace Incubator_2.ViewModels.VMAdmin
         private Sector _selectedSector;
         public VM_UserEditor(User user)
         {
-            _user = user;
+            this._user = user;
             if (user.id > 0)
             {
-                _userParameters = user.GetParametersContext();
-                using (Sector s = new())
-                {
-                    Sectors = s.GetSectors();
-                    s.slug = _user.sector;
-                    _selectedSector = FindSector(s.slug);
-                    OnPropertyChanged(nameof(SelectedSector));
-                }
+                this._userParameters = user.GetParametersContext();
+                using Sector s = new();
+                this.Sectors = s.GetSectors();
+                s.slug = this._user.sector;
+                this._selectedSector = this.FindSector(s.slug);
+                this.OnPropertyChanged(nameof(this.SelectedSector));
             }
             else
             {
                 using (Sector s = new())
                 {
-                    Sectors = s.GetSectors();
+                    this.Sectors = s.GetSectors();
                 }
-                _userParameters = new();
+                this._userParameters = new();
             }
         }
         private Sector FindSector(string slug)
         {
-            foreach (Sector s in Sectors)
+            foreach (Sector s in this.Sectors)
             {
                 if (s.slug == slug)
                 {
@@ -51,12 +48,12 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                return _sectors;
+                return this._sectors;
             }
             set
             {
-                _sectors = value;
-                OnPropertyChanged(nameof(Sectors));
+                this._sectors = value;
+                this.OnPropertyChanged(nameof(this.Sectors));
             }
         }
 
@@ -64,12 +61,12 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                return _selectedSector;
+                return this._selectedSector;
             }
             set
             {
-                _selectedSector = value;
-                OnPropertyChanged(nameof(SelectedSector));
+                this._selectedSector = value;
+                this.OnPropertyChanged(nameof(this.SelectedSector));
             }
         }
 
@@ -77,16 +74,16 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                if (_user.id == 1)
+                if (this._user.id == 1)
                 {
-                    return ParseFromEnum(PermissionGroup.Admin);
+                    return this.ParseFromEnum(PermissionGroup.Admin);
                 }
-                return ParseFromEnum(_userParameters.permission_group);
+                return this.ParseFromEnum(this._userParameters.permission_group);
             }
             set
             {
-                _userParameters.permission_group = ParseToEnum(value);
-                OnPropertyChanged(nameof(PermissionStatus));
+                this._userParameters.permission_group = this.ParseToEnum(value);
+                this.OnPropertyChanged(nameof(this.PermissionStatus));
             }
         }
         private string ParseFromEnum(PermissionGroup permission)
@@ -123,7 +120,7 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                if (_user.id == 1 || _user.username == "admin") // если это первый админ
+                if (this._user.id == 1 || this._user.username == "admin") // если это первый админ
                 {
                     return false;
                 }
@@ -134,43 +131,43 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                return _user.id == 0;
+                return this._user.id == 0;
             }
         }
         public string Username
         {
             get
             {
-                return _user.username;
+                return this._user.username;
             }
             set
             {
-                _user.username = value;
-                OnPropertyChanged(nameof(Username));
+                this._user.username = value;
+                this.OnPropertyChanged(nameof(this.Username));
             }
         }
         public string Surname
         {
             get
             {
-                return _user.surname;
+                return this._user.surname;
             }
             set
             {
-                _user.surname = value;
-                OnPropertyChanged(nameof(Surname));
+                this._user.surname = value;
+                this.OnPropertyChanged(nameof(this.Surname));
             }
         }
         public string SecondName
         {
             get
             {
-                return _user.secondName;
+                return this._user.secondName;
             }
             set
             {
-                _user.secondName = value;
-                OnPropertyChanged(nameof(SecondName));
+                this._user.secondName = value;
+                this.OnPropertyChanged(nameof(this.SecondName));
             }
         }
 
@@ -178,24 +175,24 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                return _user.post;
+                return this._user.post;
             }
             set
             {
-                _user.post = value;
-                OnPropertyChanged(nameof(Post));
+                this._user.post = value;
+                this.OnPropertyChanged(nameof(this.Post));
             }
         }
         public string Password
         {
             get
             {
-                return _userParameters.startup_password;
+                return this._userParameters.startup_password;
             }
             set
             {
-                _userParameters.startup_password = value;
-                OnPropertyChanged(nameof(Password));
+                this._userParameters.startup_password = value;
+                this.OnPropertyChanged(nameof(this.Password));
             }
         }
 
@@ -203,98 +200,98 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                return _userParameters.tasks_visibility;
+                return this._userParameters.tasks_visibility;
             }
             set
             {
-                _userParameters.tasks_visibility = value;
-                OnPropertyChanged(nameof(CanViewTasks));
+                this._userParameters.tasks_visibility = value;
+                this.OnPropertyChanged(nameof(this.CanViewTasks));
             }
         }
         public bool CanViewCommunication
         {
             get
             {
-                return _userParameters.communication_visibility;
+                return this._userParameters.communication_visibility;
             }
             set
             {
-                _userParameters.communication_visibility = value;
-                OnPropertyChanged(nameof(CanViewCommunication));
+                this._userParameters.communication_visibility = value;
+                this.OnPropertyChanged(nameof(this.CanViewCommunication));
             }
         }
         public bool CanViewDatabase
         {
             get
             {
-                return _userParameters.database_visibility;
+                return this._userParameters.database_visibility;
             }
             set
             {
-                _userParameters.database_visibility = value;
-                OnPropertyChanged(nameof(CanViewDatabase));
+                this._userParameters.database_visibility = value;
+                this.OnPropertyChanged(nameof(this.CanViewDatabase));
             }
         }
         public bool CanCreateTemplates
         {
             get
             {
-                return _userParameters.create_templates;
+                return this._userParameters.create_templates;
             }
             set
             {
-                _userParameters.create_templates = value;
-                OnPropertyChanged(nameof(CanCreateTemplates));
+                this._userParameters.create_templates = value;
+                this.OnPropertyChanged(nameof(this.CanCreateTemplates));
             }
         }
         public bool CanModifyTemplates
         {
             get
             {
-                return _userParameters.modify_templates;
+                return this._userParameters.modify_templates;
             }
             set
             {
-                _userParameters.modify_templates = value;
-                OnPropertyChanged(nameof(CanModifyTemplates));
+                this._userParameters.modify_templates = value;
+                this.OnPropertyChanged(nameof(this.CanModifyTemplates));
             }
         }
         public bool WritesLog
         {
             get
             {
-                return _userParameters.write_log;
+                return this._userParameters.write_log;
             }
             set
             {
-                _userParameters.write_log = value;
-                OnPropertyChanged(nameof(WritesLog));
+                this._userParameters.write_log = value;
+                this.OnPropertyChanged(nameof(this.WritesLog));
             }
         }
         public bool WritesListenLog
         {
             get
             {
-                return _userParameters.write_listen_log;
+                return this._userParameters.write_listen_log;
             }
             set
             {
-                _userParameters.write_listen_log = value;
-                OnPropertyChanged(nameof(WritesListenLog));
+                this._userParameters.write_listen_log = value;
+                this.OnPropertyChanged(nameof(this.WritesListenLog));
             }
         }
 
 
         public bool Save()
         {
-            if (!string.IsNullOrWhiteSpace(_user.username) && !string.IsNullOrWhiteSpace(_userParameters.startup_password) && !string.IsNullOrWhiteSpace(_user.surname) && _selectedSector != null)
+            if (!string.IsNullOrWhiteSpace(this._user.username) && !string.IsNullOrWhiteSpace(this._userParameters.startup_password) && !string.IsNullOrWhiteSpace(this._user.surname) && this._selectedSector != null)
             {
                 ProgramState.ShowWaitCursor();
-                _user.fullname = $"{_user.surname} {_user.secondName}";
-                _user.sector = _selectedSector.slug;
-                _user.GenerateSign();
-                _user.SaveParametersContext(_userParameters);
-                _user.SaveUser();
+                this._user.fullname = $"{this._user.surname} {this._user.secondName}";
+                this._user.sector = this._selectedSector.slug;
+                this._user.GenerateSign();
+                this._user.SaveParametersContext(this._userParameters);
+                this._user.SaveUser();
                 ProgramState.ShowWaitCursor(false);
                 return true;
             }

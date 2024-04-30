@@ -10,14 +10,12 @@ namespace Incubator_2.ViewModels.VM_Tasks
         {
             get
             {
-                using (Task t = new())
-                {
-                    return t.GetAllTasksModels();
-                }
+                using Task t = new();
+                return t.GetAllTasksModels();
             }
             set
             {
-                OnPropertyChanged(nameof(Tasks));
+                this.OnPropertyChanged(nameof(this.Tasks));
             }
         }
     }

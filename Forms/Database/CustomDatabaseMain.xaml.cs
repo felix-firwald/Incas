@@ -25,21 +25,21 @@ namespace Incubator_2.Forms.Database
         public CustomDatabaseMain()
         {
             InitializeComponent();
-            this.DataContext = vm;
+            this.DataContext = this.vm;
         }
 
         private void AddNewRecordClick(object sender, MouseButtonEventArgs e)
         {
             try
             {
-                if (string.IsNullOrEmpty(vm.SelectedTable))
+                if (string.IsNullOrEmpty(this.vm.SelectedTable))
                 {
                     ProgramState.ShowExclamationDialog("Таблица для записи не выбрана!", "Действие невозможно");
                     return;
                 }
-                CreateRecord cr = new(vm.SelectedTable, vm.GetTableDefinition(), vm.SelectedDatabase.path);
+                CreateRecord cr = new(this.vm.SelectedTable, this.vm.GetTableDefinition(), this.vm.SelectedDatabase.path);
                 cr.ShowDialog();
-                vm.UpdateTable();
+                this.vm.UpdateTable();
 
             }
             catch (Exception ex)
@@ -50,7 +50,7 @@ namespace Incubator_2.Forms.Database
 
         private void RefreshClick(object sender, MouseButtonEventArgs e)
         {
-            vm.UpdateTable();
+            this.vm.UpdateTable();
         }
 
         private void DeleteRecordsClick(object sender, MouseButtonEventArgs e)
@@ -64,12 +64,12 @@ namespace Incubator_2.Forms.Database
                 }
                 CustomTable ct = new();
                 List<string> selection = new();
-                string pk = vm.GetPK();
+                string pk = this.vm.GetPK();
                 for (int i = 0; i < this.TableGrid.SelectedItems.Count; i++)
                 {
                     selection.Add(((DataRowView)this.TableGrid.SelectedItems[i]).Row[pk].ToString());
                 }
-                ct.DeleteInTable(vm.SelectedTable, pk, vm.SelectedDatabase.path, selection);
+                ct.DeleteInTable(this.vm.SelectedTable, pk, this.vm.SelectedDatabase.path, selection);
             }
             catch (ArgumentException)
             {
@@ -79,7 +79,7 @@ namespace Incubator_2.Forms.Database
             {
                 ProgramState.ShowErrorDialog("При попытке удаления записей возникла ошибка неизвестного характера:\n" + ex.Message);
             }
-            vm.UpdateTable();
+            this.vm.UpdateTable();
         }
 
         private void EditRecordClick(object sender, MouseButtonEventArgs e)
@@ -91,11 +91,11 @@ namespace Incubator_2.Forms.Database
                     ProgramState.ShowExclamationDialog("Не выбрано ни одной записи для редактирования!", "Действие невозможно");
                     return;
                 }
-                string pk = vm.GetPK();
+                string pk = this.vm.GetPK();
                 string record = ((DataRowView)this.TableGrid.SelectedItems[0]).Row[pk].ToString();
-                CreateRecord cr = new CreateRecord(vm.SelectedTable, pk, record, vm.GetTableDefinition(), vm.SelectedDatabase.path);
+                CreateRecord cr = new CreateRecord(this.vm.SelectedTable, pk, record, this.vm.GetTableDefinition(), this.vm.SelectedDatabase.path);
                 cr.ShowDialog();
-                vm.UpdateTable();
+                this.vm.UpdateTable();
             }
             catch (ArgumentException)
             {
@@ -109,13 +109,13 @@ namespace Incubator_2.Forms.Database
 
         private void SwitchSelectionUnitClick(object sender, MouseButtonEventArgs e)
         {
-            vm.SwitchSelectionUnit();
+            this.vm.SwitchSelectionUnit();
         }
 
         private void ReadCommandClick(object sender, RoutedEventArgs e)
         {
-            vm.CustomViewRequest = ReplaceParametersInQuery(((MenuItem)sender).Tag.ToString());
-            vm.UpdateTable();
+            this.vm.CustomViewRequest = this.ReplaceParametersInQuery(((MenuItem)sender).Tag.ToString());
+            this.vm.UpdateTable();
 
         }
         private string GetParameterFormat(string parameter)
@@ -126,7 +126,7 @@ namespace Incubator_2.Forms.Database
         private List<string> GetPKSelection()
         {
             List<string> selection = new();
-            string pk = vm.GetPK();
+            string pk = this.vm.GetPK();
             for (int i = 0; i < this.TableGrid.SelectedItems.Count; i++)
             {
                 selection.Add(((DataRowView)this.TableGrid.SelectedItems[i]).Row[pk].ToString());
@@ -138,17 +138,17 @@ namespace Incubator_2.Forms.Database
         {
             if (request.Contains("{%"))
             {
-                request = request.Replace(GetParameterFormat("TIME"), DateTime.Now.ToString("G"));
-                if (request.Contains(GetParameterFormat("INPUT")))
+                request = request.Replace(this.GetParameterFormat("TIME"), DateTime.Now.ToString("G"));
+                if (request.Contains(this.GetParameterFormat("INPUT")))
                 {
-                    request = request.Replace(GetParameterFormat("INPUT"), ProgramState.ShowInputBox("Введите значение", "Для выполнения функции ожидается ввод"));
+                    request = request.Replace(this.GetParameterFormat("INPUT"), ProgramState.ShowInputBox("Введите значение", "Для выполнения функции ожидается ввод"));
                 }
                 if (this.TableGrid.SelectedItems.Count > 0 && request.Contains("SELECTED"))
                 {
-                    request = request.Replace(GetParameterFormat("SELECTED"), string.Join(", ", GetPKSelection()));
-                    foreach (string col in vm.Columns)
+                    request = request.Replace(this.GetParameterFormat("SELECTED"), string.Join(", ", this.GetPKSelection()));
+                    foreach (string col in this.vm.Columns)
                     {
-                        request = request.Replace(GetParameterFormat("SELECTED#" + col), ((DataRowView)this.TableGrid.SelectedItems[0]).Row[col].ToString());
+                        request = request.Replace(this.GetParameterFormat("SELECTED#" + col), ((DataRowView)this.TableGrid.SelectedItems[0]).Row[col].ToString());
                     }
                 }
             }
@@ -159,7 +159,7 @@ namespace Incubator_2.Forms.Database
         {
             string request = ((MenuItem)sender).Tag.ToString();
 
-            vm.CustomUpdateRequest(ReplaceParametersInQuery(request));
+            this.vm.CustomUpdateRequest(this.ReplaceParametersInQuery(request));
 
         }
 
@@ -171,11 +171,11 @@ namespace Incubator_2.Forms.Database
 
         private void NewCommandClick(object sender, RoutedEventArgs e)
         {
-            if (vm.SelectedDatabase.path != null && vm.SelectedTable != null)
+            if (this.vm.SelectedDatabase.path != null && this.vm.SelectedTable != null)
             {
-                CreateCommand cc = new(vm.SelectedDatabase.path, vm.SelectedTable);
+                CreateCommand cc = new(this.vm.SelectedDatabase.path, this.vm.SelectedTable);
                 cc.ShowDialog();
-                vm.RefreshCommands();
+                this.vm.RefreshCommands();
             }
             else
             {
@@ -185,10 +185,10 @@ namespace Incubator_2.Forms.Database
 
         private void EditCommand(object sender, RoutedEventArgs e)
         {
-            SCommand com = vm.GetCommand(int.Parse(((MenuItem)sender).Tag.ToString()));
+            SCommand com = this.vm.GetCommand(int.Parse(((MenuItem)sender).Tag.ToString()));
             CreateCommand cc = new(com);
             cc.ShowDialog();
-            vm.RefreshCommands();
+            this.vm.RefreshCommands();
         }
 
         private void RemoveCommand(object sender, RoutedEventArgs e)
@@ -198,7 +198,7 @@ namespace Incubator_2.Forms.Database
                 c.id = int.Parse(((MenuItem)sender).Tag.ToString());
                 c.DeleteCommand();
             }
-            vm.RefreshCommands();
+            this.vm.RefreshCommands();
         }
 
         private void SearchTextChanged(object sender, TextChangedEventArgs e)
@@ -208,22 +208,22 @@ namespace Incubator_2.Forms.Database
 
         private void SearchClick(object sender, MouseButtonEventArgs e)
         {
-            if (!string.IsNullOrEmpty(vm.SearchText))
+            if (!string.IsNullOrEmpty(this.vm.SearchText))
             {
-                char[] letters = vm.SearchText.ToCharArray();
+                char[] letters = this.vm.SearchText.ToCharArray();
                 letters[0] = char.ToUpper(letters[0]);
-                vm.CustomViewRequest = $"SELECT * FROM [{vm.SelectedTable}] " +
-                    $"WHERE [{vm.ColumnFilter}] = '{vm.SearchText}' OR " +
-                    $"[{vm.ColumnFilter}] LIKE '%{vm.SearchText}%' OR " +
-                    $"[{vm.ColumnFilter}] LIKE '%{vm.SearchText.ToUpper()}%' OR " +
-                    $"[{vm.ColumnFilter}] LIKE '%{new string(letters)}%'";
-                vm.UpdateTable();
+                this.vm.CustomViewRequest = $"SELECT * FROM [{this.vm.SelectedTable}] " +
+                    $"WHERE [{this.vm.ColumnFilter}] = '{this.vm.SearchText}' OR " +
+                    $"[{this.vm.ColumnFilter}] LIKE '%{this.vm.SearchText}%' OR " +
+                    $"[{this.vm.ColumnFilter}] LIKE '%{this.vm.SearchText.ToUpper()}%' OR " +
+                    $"[{this.vm.ColumnFilter}] LIKE '%{new string(letters)}%'";
+                this.vm.UpdateTable();
             }
         }
 
         private void ClearCustomClick(object sender, MouseButtonEventArgs e)
         {
-            vm.ClearTableFromCustomView();
+            this.vm.ClearTableFromCustomView();
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
         public void ExportToExcel()
@@ -235,14 +235,14 @@ namespace Incubator_2.Forms.Database
                 string fileName = ProgramState.ShowInputBox("Имя файла", "Введите имя файла для вывода");
                 ProgramState.ShowWaitCursor();
                 XLWorkbook wb = new XLWorkbook();
-                IXLWorksheet ws = wb.AddWorksheet(vm.SelectedTable);
-                for (int c = 0; c < vm.Table.Columns.Count; c++) // columns
+                IXLWorksheet ws = wb.AddWorksheet(this.vm.SelectedTable);
+                for (int c = 0; c < this.vm.Table.Columns.Count; c++) // columns
                 {
-                    IXLCell cell = ws.Cell(1, c + 1).SetValue(vm.Columns[c]);
+                    IXLCell cell = ws.Cell(1, c + 1).SetValue(this.vm.Columns[c]);
                     cell.Style.Font.Bold = true;
-                    for (int r = 0; r < vm.Table.Rows.Count; r++) // rows
+                    for (int r = 0; r < this.vm.Table.Rows.Count; r++) // rows
                     {
-                        ws.Cell(r + 2, c + 1).SetValue(vm.Table.Rows[r][c].ToString());
+                        ws.Cell(r + 2, c + 1).SetValue(this.vm.Table.Rows[r][c].ToString());
                     }
                 }
                 ws.SetAutoFilter();
@@ -280,9 +280,9 @@ namespace Incubator_2.Forms.Database
                     ProgramState.ShowErrorDialog("Файл занят другим процессом. Его использование невозможно.");
                     return;
                 }
-                string pkfield = vm.GetPK();
+                string pkfield = this.vm.GetPK();
                 DataTable output = new();
-                foreach (string col in vm.GetFieldsSimple())
+                foreach (string col in this.vm.GetFieldsSimple())
                 {
                     if (col == pkfield)
                     {
@@ -327,7 +327,7 @@ namespace Incubator_2.Forms.Database
                     string result = "BEGIN TRANSACTION;\n";
                     if (deleteOld)
                     {
-                        result += $"DELETE FROM [{vm.Table}];\n";
+                        result += $"DELETE FROM [{this.vm.Table}];\n";
                     }
                     List<string> columns = new();
                     foreach (DataColumn col in di.ResultTable.Columns)
@@ -341,11 +341,11 @@ namespace Incubator_2.Forms.Database
                         {
                             cells.Add(dr[cell].ToString());
                         }
-                        result += $"REPLACE INTO [{vm.Table}] ([{string.Join("], [", columns)}]) " +
+                        result += $"REPLACE INTO [{this.vm.Table}] ([{string.Join("], [", columns)}]) " +
                             $"VALUES ('{string.Join("', '", cells)}');\n";
                     }
                     result += "\nEND TRANSACTION;";
-                    vm.CustomUpdateRequest(result);
+                    this.vm.CustomUpdateRequest(result);
                     ProgramState.ShowWaitCursor(false);
                 }
             }
@@ -356,7 +356,7 @@ namespace Incubator_2.Forms.Database
             switch (((MenuItem)sender).Tag.ToString())
             {
                 case "Excel":
-                    ExportToExcel();
+                    this.ExportToExcel();
                     break;
                 case "Word":
                     break;
@@ -368,14 +368,14 @@ namespace Incubator_2.Forms.Database
             switch (((MenuItem)sender).Tag.ToString())
             {
                 case "Import":
-                    ImportFromExcel();
+                    this.ImportFromExcel();
                     break;
                 case "FullImport":
                     if (Permission.CurrentUserPermission == PermissionGroup.Admin)
                     {
                         if (ProgramState.ShowQuestionDialog("Старые данные будут стерты без возможности восстановления.", "Вы уверены?") == Windows.DialogStatus.Yes)
                         {
-                            ImportFromExcel(true);
+                            this.ImportFromExcel(true);
                         }
                     }
                     else
@@ -390,7 +390,7 @@ namespace Incubator_2.Forms.Database
         {
             try
             {
-                if (string.IsNullOrEmpty(vm.SelectedTable))
+                if (string.IsNullOrEmpty(this.vm.SelectedTable))
                 {
                     ProgramState.ShowExclamationDialog("Таблица для записи не выбрана!", "Действие невозможно");
                     return;
@@ -400,9 +400,9 @@ namespace Incubator_2.Forms.Database
                     ProgramState.ShowExclamationDialog("Не выбрана запись для копирования!", "Действие невозможно");
                     return;
                 }
-                CreateRecord cr = new(vm.SelectedTable, vm.GetTableDefinition(), vm.SelectedDatabase.path, ((DataRowView)this.TableGrid.SelectedItems[0]).Row);
+                CreateRecord cr = new(this.vm.SelectedTable, this.vm.GetTableDefinition(), this.vm.SelectedDatabase.path, ((DataRowView)this.TableGrid.SelectedItems[0]).Row);
                 cr.ShowDialog();
-                vm.UpdateTable();
+                this.vm.UpdateTable();
 
             }
             catch (Exception ex)
@@ -418,18 +418,16 @@ namespace Incubator_2.Forms.Database
 
         private void NewDatabase(object sender, RoutedEventArgs e)
         {
-            using (Models.Database db = new())
+            using Models.Database db = new();
+            db.name = ProgramState.ShowInputBox("Имя базы данных");
+            using (Models.Sector s = new())
             {
-                db.name = ProgramState.ShowInputBox("Имя базы данных");
-                using (Models.Sector s = new())
+                foreach (Sector sec in s.GetSectors())
                 {
-                    foreach (Sector sec in s.GetSectors())
-                    {
-                        db.sectors += $"{sec.slug} ";
-                    }
+                    db.sectors += $"{sec.slug} ";
                 }
-                db.AddDatabase();
             }
+            db.AddDatabase();
         }
 
         private void NewTable(object sender, RoutedEventArgs e)

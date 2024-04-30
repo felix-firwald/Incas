@@ -5,6 +5,7 @@ using Models;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Incubator_2.Windows.Templates
@@ -15,7 +16,7 @@ namespace Incubator_2.Windows.Templates
     public partial class CreateTextTemplate : Window
     {
         public Template template;
-        private VM_Template VM_template;
+        private VM_Template vm;
         private readonly bool isEdit = false;
 
         public delegate void Base();
@@ -23,28 +24,28 @@ namespace Incubator_2.Windows.Templates
         public CreateTextTemplate() // new
         {
             InitializeComponent();
-            template = new Template();
-            template.type = TemplateType.Text;
-            VM_template = new VM_Template(this.template);
-            this.DataContext = VM_template;
+            this.template = new Template();
+            this.template.type = TemplateType.Text;
+            this.vm = new VM_Template(this.template);
+            this.DataContext = this.vm;
         }
         public CreateTextTemplate(Template te) // edit
         {
             InitializeComponent();
-            isEdit = true;
+            this.isEdit = true;
             this.Title = $"Редактирование генератора ({te.name})";
-            template = te;
-            VM_template = new VM_Template(this.template);
-            this.DataContext = VM_template;
-            GetTags();
+            this.template = te;
+            this.vm = new VM_Template(this.template);
+            this.DataContext = this.vm;
+            this.GetTags();
 
         }
         private void GetTags()
         {
             Tag tag = new Tag();
-            foreach (Tag t in tag.GetAllTagsByTemplate(template.id))
+            foreach (Tag t in tag.GetAllTagsByTemplate(this.template.id))
             {
-                AddTag(t);
+                this.AddTag(t);
             }
         }
         private async void SaveTags(bool isEdit)
@@ -53,7 +54,7 @@ namespace Incubator_2.Windows.Templates
             {
                 await System.Threading.Tasks.Task.Run(() =>
                 {
-                    tag.SaveTag(template.id, isEdit);
+                    tag.SaveTag(this.template.id, isEdit);
                 });
             }
         }
@@ -72,7 +73,7 @@ namespace Incubator_2.Windows.Templates
                 t = tag;
             }
             TagCreator tc = new(t, isNew);
-            tc.onDelete += RemoveTagFromList;
+            tc.onDelete += this.RemoveTagFromList;
             this.ContentPanel.Children.Add(tc);
         }
         private void RemoveTagFromList(TagCreator tag)
@@ -82,7 +83,7 @@ namespace Incubator_2.Windows.Templates
 
         private void AddTagClick(object sender, MouseButtonEventArgs e)
         {
-            AddTag();
+            this.AddTag();
         }
         private void GetTagsFromTextClick(object sender, MouseButtonEventArgs e)
         {
@@ -98,7 +99,7 @@ namespace Incubator_2.Windows.Templates
             {
                 Tag tag = new Tag();
                 tag.name = tagname;
-                AddTag(tag);
+                this.AddTag(tag);
             }
         }
         private void MinimizeAllClick(object sender, MouseButtonEventArgs e)
@@ -149,22 +150,60 @@ namespace Incubator_2.Windows.Templates
         }
         private void saveClick(object sender, RoutedEventArgs e)
         {
-            if (CheckForSave())
+            if (this.CheckForSave())
             {
                 ProgramState.ShowWaitCursor();
                 this.Close();
-                if (isEdit)
+                if (this.isEdit)
                 {
-                    template.UpdateTemplate();
-                    SaveTags(true);
+                    this.vm.SaveTemplate();
+                    this.SaveTags(true);
                 }
                 else
                 {
-                    template.AddTemplate();
-                    SaveTags(false);
+                    this.vm.SaveTemplate();
+                    this.SaveTags(false);
                 }
                 OnCreated?.Invoke();
                 ProgramState.ShowWaitCursor(false);
+            }
+        }
+
+        private void AddCommandClick(object sender, RoutedEventArgs e)
+        {
+            CommandSettings cs = new();
+            string tagData = ((MenuItem)sender).Tag.ToString();
+            switch (tagData)
+            {
+                case "Open":
+                    cs.Name = "Действия при открытии";
+                    cs.Script = this.vm.OnOpeningScript;
+                    break;
+                case "Save":
+                    cs.Name = "Действия при сохранении";
+                    cs.Script = this.vm.OnSavingScript;
+                    break;
+                case "Validate":
+                    cs.Name = "Валидация";
+                    cs.Script = this.vm.ValidationScript;
+                    break;
+            }
+            CreateTagCommand cc = new(cs);
+            cc.ShowDialog();
+            if (cc.Result == DialogStatus.Yes)
+            {
+                switch (tagData)
+                {
+                    case "Open":
+                        this.vm.OnOpeningScript = cc.Command.Script;
+                        break;
+                    case "Save":
+                        this.vm.OnSavingScript = cc.Command.Script;
+                        break;
+                    case "Validate":
+                        this.vm.ValidationScript = cc.Command.Script;
+                        break;
+                }
             }
         }
     }

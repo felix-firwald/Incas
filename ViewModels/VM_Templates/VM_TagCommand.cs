@@ -8,45 +8,45 @@ namespace Incubator_2.ViewModels.VM_Templates
         private CommandSettings commandSettings;
         public VM_TagCommand(CommandSettings cs)
         {
-            commandSettings = cs;
+            this.commandSettings = cs;
         }
         public string Name
         {
             get
             {
-                if (commandSettings.Name == null)
+                if (this.commandSettings.Name == null)
                 {
-                    commandSettings.Name = "";
+                    this.commandSettings.Name = "";
                 }
-                return commandSettings.Name;
+                return this.commandSettings.Name;
             }
             set
             {
-                commandSettings.Name = value;
-                OnPropertyChanged(nameof(Name));
+                this.commandSettings.Name = value;
+                this.OnPropertyChanged(nameof(this.Name));
             }
         }
         public string Script
         {
             get
             {
-                if (commandSettings.Script == null)
+                if (this.commandSettings.Script == null)
                 {
-                    commandSettings.Script = "";
+                    this.commandSettings.Script = "";
                 }
-                return commandSettings.Script;
+                return this.commandSettings.Script;
             }
             set
             {
-                commandSettings.Script = value;
-                OnPropertyChanged(nameof(Script));
+                this.commandSettings.Script = value;
+                this.OnPropertyChanged(nameof(this.Script));
             }
         }
         public Visibility IconVisibility
         {
             get
             {
-                if (ScriptType == 1)
+                if (this.ScriptType == 1)
                 {
                     return Visibility.Visible;
                 }
@@ -57,31 +57,31 @@ namespace Incubator_2.ViewModels.VM_Templates
         {
             get
             {
-                return (int)commandSettings.Icon;
+                return (int)this.commandSettings.Icon;
             }
             set
             {
-                commandSettings.Icon = (IconType)value;
-                OnPropertyChanged(nameof(Icon));
+                this.commandSettings.Icon = (IconType)value;
+                this.OnPropertyChanged(nameof(this.Icon));
             }
         }
         public int ScriptType
         {
             get
             {
-                return (int)commandSettings.ScriptType;
+                return (int)this.commandSettings.ScriptType;
             }
             set
             {
-                commandSettings.ScriptType = (ScriptType)value;
-                OnPropertyChanged(nameof(ScriptType));
-                OnPropertyChanged(nameof(IconVisibility));
+                this.commandSettings.ScriptType = (ScriptType)value;
+                this.OnPropertyChanged(nameof(this.ScriptType));
+                this.OnPropertyChanged(nameof(this.IconVisibility));
             }
         }
 
         public CommandSettings GetData()
         {
-            return commandSettings;
+            return this.commandSettings;
         }
     }
 }

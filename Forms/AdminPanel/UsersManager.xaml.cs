@@ -13,7 +13,7 @@ namespace Incubator_2.Forms.AdminPanel
         public UsersManager()
         {
             InitializeComponent();
-            FillUsersList();
+            this.FillUsersList();
         }
         public void FillUsersList()
         {
@@ -23,7 +23,7 @@ namespace Incubator_2.Forms.AdminPanel
                 u.GetAllUsers().ForEach(u =>
                 {
                     UserElement element = new(u);
-                    element.OnDeleted += RemoveElement;
+                    element.OnDeleted += this.RemoveElement;
                     this.UsersList.Children.Add(element);
 
                 });
@@ -36,7 +36,7 @@ namespace Incubator_2.Forms.AdminPanel
 
         private void RefreshClick(object sender, MouseButtonEventArgs e)
         {
-            FillUsersList();
+            this.FillUsersList();
         }
 
         private void AddClick(object sender, MouseButtonEventArgs e)
@@ -44,7 +44,7 @@ namespace Incubator_2.Forms.AdminPanel
             User user = new();
             UserEditor editor = new(user);
             editor.ShowDialog();
-            FillUsersList();
+            this.FillUsersList();
         }
     }
 }

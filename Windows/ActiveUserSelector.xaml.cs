@@ -10,21 +10,21 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class ActiveUserSelector : Window
     {
-        VM_ActiveUserSelector vm;
+        private VM_ActiveUserSelector vm;
         public Session SelectedSession;
         public ActiveUserSelector(string HelpText)
         {
             InitializeComponent();
             this.vm = new();
-            this.DataContext = vm;
+            this.DataContext = this.vm;
             this.vm.HelpTextTitle = HelpText;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (vm.SelectedSession != null)
+            if (this.vm.SelectedSession != null)
             {
-                SelectedSession = vm.SelectedSession;
+                this.SelectedSession = this.vm.SelectedSession;
                 this.Close();
             }
             else

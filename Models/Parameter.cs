@@ -18,7 +18,8 @@ namespace Incubator_2.Models
         public DBParamNotFound(string message) : base(message)
         { }
     }
-    class Parameter : Model
+
+    internal class Parameter : Model
     {
         public int id { get; private set; }
         public ParameterType type { get; set; }
@@ -27,12 +28,12 @@ namespace Incubator_2.Models
 
         public Parameter()
         {
-            tableName = "Parameters";
-            type = ParameterType.MISC;
+            this.tableName = "Parameters";
+            this.type = ParameterType.MISC;
         }
         public Parameter GetParameter(ParameterType typeOf, string nameOf, string defaultValue = "0", bool createIfNotExists = true)
         {
-            DataRow dr = StartCommandToService()
+            DataRow dr = this.StartCommandToService()
                         .Select()
                         .WhereEqual("type", typeOf.ToString())
                         .WhereEqual("name", nameOf)
@@ -55,7 +56,7 @@ namespace Incubator_2.Models
         }
         public bool Exists(ParameterType typeOf, string nameOf, string expectedValue, bool like = true)
         {
-            Query q = StartCommandToService()
+            Query q = this.StartCommandToService()
                         .Select()
                         .WhereEqual("type", typeOf.ToString())
                         .WhereEqual("name", nameOf);
@@ -74,7 +75,7 @@ namespace Incubator_2.Models
             }
             this.Serialize(dr);
             this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
-            return id > 0;
+            return this.id > 0;
         }
         public bool GetValueAsBool()
         {
@@ -101,12 +102,12 @@ namespace Incubator_2.Models
         }
         public Parameter CreateParameter()
         {
-            StartCommandToService()
+            this.StartCommandToService()
                 .Insert(new Dictionary<string, string>
                     {
-                        {"type", type.ToString()},
-                        {"name", name},
-                        {"value", value}
+                        {"type", this.type.ToString()},
+                        {"name", this.name},
+                        {"value", this.value}
                     }
                 )
                 .ExecuteVoid();
@@ -114,18 +115,18 @@ namespace Incubator_2.Models
         }
         public Parameter UpdateValue()
         {
-            StartCommandToService()
-                .Update("value", value)
-                .WhereEqual("id", id.ToString())
+            this.StartCommandToService()
+                .Update("value", this.value)
+                .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
             return this;
         }
         public Parameter DeleteParameterByTypeAndName()
         {
-            StartCommandToService()
+            this.StartCommandToService()
                 .Delete()
-                .WhereEqual("type", type.ToString())
-                .WhereEqual("name", name)
+                .WhereEqual("type", this.type.ToString())
+                .WhereEqual("name", this.name)
                 .ExecuteVoid();
             return this;
         }

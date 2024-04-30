@@ -24,20 +24,20 @@ namespace Incubator_2.Windows
                 this.IconRestart.Visibility = System.Windows.Visibility.Visible;
                 this.IconTerminate.Visibility = System.Windows.Visibility.Hidden;
             }
-            StartCloseTimer();
+            this.StartCloseTimer();
         }
         private void StartCloseTimer()
         {
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(3d);
-            timer.Tick += TimerTick;
+            timer.Tick += this.TimerTick;
             timer.Start();
         }
         private void TimerTick(object sender, EventArgs e)
         {
             DispatcherTimer timer = (DispatcherTimer)sender;
             timer.Stop();
-            timer.Tick -= TimerTick;
+            timer.Tick -= this.TimerTick;
             Application.Current.Shutdown();
         }
     }

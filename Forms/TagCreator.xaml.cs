@@ -19,15 +19,15 @@ namespace Incubator_2.Forms
         public delegate void MethodContainer(TagCreator t);
         public event MethodContainer onDelete;
         public Tag tag;
-        VM_Tag vm;
+        private VM_Tag vm;
 
         private bool IsCollapsed = false;
         public TagCreator(Tag t, bool isNew = false)
         {
             InitializeComponent();
-            tag = t;
-            vm = new(t);
-            this.DataContext = vm;
+            this.tag = t;
+            this.vm = new(t);
+            this.DataContext = this.vm;
         }
 
         public bool Check()
@@ -56,14 +56,14 @@ namespace Incubator_2.Forms
 
         public void SaveTag(int templ, bool isEdit = false)
         {
-            tag.template = templ;
+            this.tag.template = templ;
             if (isEdit)
             {
-                tag.UpdateTag();
+                this.tag.UpdateTag();
             }
             else
             {
-                tag.AddTag();
+                this.tag.AddTag();
             }
         }
         public void Minimize()
@@ -83,18 +83,18 @@ namespace Incubator_2.Forms
         {
             if (this.IsCollapsed)
             {
-                Maximize();
+                this.Maximize();
             }
             else
             {
-                Minimize();
+                this.Minimize();
             }
         }
 
         private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             onDelete?.Invoke(this);
-            tag.RemoveTag();
+            this.tag.RemoveTag();
         }
 
         private void CopyAllClick(object sender, System.Windows.RoutedEventArgs e)
@@ -130,7 +130,7 @@ namespace Incubator_2.Forms
         {
             try
             {
-                if (string.IsNullOrEmpty(vm.DefaultValue))
+                if (string.IsNullOrEmpty(this.vm.DefaultValue))
                 {
                     if (ProgramState.ShowQuestionDialog(
                     "Вы хотите использовать существующий генератор или создать новый?",
@@ -139,24 +139,22 @@ namespace Incubator_2.Forms
                     {
                         CreateTextTemplate ctt = new();
                         ctt.ShowDialog();
-                        vm.DefaultValue = ctt.template.id.ToString();
+                        this.vm.DefaultValue = ctt.template.id.ToString();
                     }
                     else
                     {
                         Template t = ProgramState.ShowTemplateSelector(TemplateType.Text, "Выберите генератор для использования");
                         if (t.id != 0)
                         {
-                            vm.DefaultValue = t.id.ToString();
+                            this.vm.DefaultValue = t.id.ToString();
                         }
                     }
                 }
                 else
                 {
-                    using (Template t = new Template())
-                    {
-                        CreateTextTemplate ctt = new(t.GetTemplateById(int.Parse(vm.DefaultValue)));
-                        ctt.ShowDialog();
-                    }
+                    using Template t = new Template();
+                    CreateTextTemplate ctt = new(t.GetTemplateById(int.Parse(this.vm.DefaultValue)));
+                    ctt.ShowDialog();
                 }
             }
             catch (Exception ex)
@@ -168,15 +166,15 @@ namespace Incubator_2.Forms
 
         private void EditScriptClick(object sender, RoutedEventArgs e)
         {
-            CreateTagCommand ct = new(tag.GetCommand());
+            CreateTagCommand ct = new(this.tag.GetCommand());
             ct.ShowDialog();
             if (ct.Result == DialogStatus.Yes)
             {
-                tag.SaveCommand(ct.Command);
+                this.tag.SaveCommand(ct.Command);
             }
             else if (ct.Result == DialogStatus.No)
             {
-                tag.command = "";
+                this.tag.command = "";
             }
         }
         public void SetOrderNumber(int orderNumber)
@@ -194,6 +192,10 @@ namespace Incubator_2.Forms
         }
 
         private void CopyNameToVisible(object sender, RoutedEventArgs e)
+        {
+            this.DublicateName();
+        }
+        public void DublicateName()
         {
             this.vm.VisibleName = this.vm.NameOfTag;
         }

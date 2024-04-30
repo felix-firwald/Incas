@@ -8,16 +8,16 @@ namespace Incubator_2.Forms.Database
     /// </summary>
     public partial class FieldEditor : UserControl
     {
-        VM_FieldEditor vm;
+        private VM_FieldEditor vm;
         public FieldEditor()
         {
             InitializeComponent();
-            vm = new();
-            this.DataContext = vm;
+            this.vm = new();
+            this.DataContext = this.vm;
         }
         public string GetDefinition()
         {
-            return vm.GetDefinition();
+            return this.vm.GetDefinition();
         }
     }
 }

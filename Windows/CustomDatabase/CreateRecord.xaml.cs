@@ -19,8 +19,8 @@ namespace Incubator_2.Windows.CustomDatabase
         public CreateRecord(string tableName, List<FieldCreator> fields, string pathDb) // add new
         {
             InitializeComponent();
-            Table = tableName;
-            path = pathDb;
+            this.Table = tableName;
+            this.path = pathDb;
             foreach (FieldCreator field in fields)
             {
                 if (!field.IsPK)
@@ -32,12 +32,12 @@ namespace Incubator_2.Windows.CustomDatabase
         public CreateRecord(string tableName, string pk, string pkValue, List<FieldCreator> fields, string pathDb) // update
         {
             InitializeComponent();
-            Table = tableName;
-            PK = pk;
-            PKValue = pkValue;
-            path = pathDb;
+            this.Table = tableName;
+            this.PK = pk;
+            this.PKValue = pkValue;
+            this.path = pathDb;
             CustomTable ct = new();
-            DataRow dr = ct.GetOneFromTable(Table, pk, pkValue, pathDb);
+            DataRow dr = ct.GetOneFromTable(this.Table, pk, pkValue, pathDb);
             foreach (FieldCreator field in fields)
             {
                 if (!field.IsPK)
@@ -52,8 +52,8 @@ namespace Incubator_2.Windows.CustomDatabase
         public CreateRecord(string tableName, List<FieldCreator> fields, string pathDb, DataRow dr) // copy
         {
             InitializeComponent();
-            Table = tableName;
-            path = pathDb;
+            this.Table = tableName;
+            this.path = pathDb;
             CustomTable ct = new();
             foreach (FieldCreator field in fields)
             {
@@ -81,27 +81,27 @@ namespace Incubator_2.Windows.CustomDatabase
                 }
             }
             CustomTable c = new();
-            if (PK == null)
+            if (this.PK == null)
             {
-                c.InsertInTable(Table, path, pairs);
+                c.InsertInTable(this.Table, this.path, pairs);
             }
             else
             {
-                c.UpdateInTable(Table, PK, PKValue, path, pairs);
+                c.UpdateInTable(this.Table, this.PK, this.PKValue, this.path, pairs);
             }
             return true;
         }
 
         private void SaveAndCloseClick(object sender, RoutedEventArgs e)
         {
-            if (Save())
+            if (this.Save())
             {
                 this.Close();
             }
         }
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            Save();
+            this.Save();
         }
     }
 }

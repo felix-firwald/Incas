@@ -2,7 +2,7 @@
 
 namespace Incubator_2.ViewModels
 {
-    class VM_AdminPanel : VM_Base
+    internal class VM_AdminPanel : VM_Base
     {
         public VM_AdminPanel() { }
 

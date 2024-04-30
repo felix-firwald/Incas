@@ -52,24 +52,18 @@ namespace Incas
         }
         public static List<string> GetCategoriesOfTemplates()
         {
-            using (Template t = new())
-            {
-                return t.GetCategories(new() { "Excel", "Word"});
-            }
+            using Template t = new();
+            return t.GetCategories(new() { "Excel", "Word" });
         }
         public static List<STemplate> GetWordTemplates(string category)
         {
-            using (Template t = new())
-            {
-                return t.GetWordTemplates(category);
-            }
+            using Template t = new();
+            return t.GetWordTemplates(category);
         }
         public static List<STemplate> GetWordTemplates()
         {
-            using (Template t = new())
-            {
-                return t.GetAllWordTemplates();
-            }
+            using Template t = new();
+            return t.GetAllWordTemplates();
         }
 
     }

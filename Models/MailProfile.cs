@@ -1,9 +1,4 @@
 ﻿using Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incubator_2.Models
 {
@@ -17,7 +12,7 @@ namespace Incubator_2.Models
         public int port;
         public MailProfile()
         {
-            tableName = "Profiles";
+            this.tableName = "Profiles";
         }
 
     }

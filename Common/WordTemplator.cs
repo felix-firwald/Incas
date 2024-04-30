@@ -40,13 +40,13 @@ namespace Common
 
         public async void Replace(List<string> tags, List<string> values, bool async = true) // не Dictionary потому что важен порядок замены
         {
-            DocX doc = LoadFile();
+            DocX doc = this.LoadFile();
             void MakeReplace()
             {
                 StringReplaceTextOptions options = new StringReplaceTextOptions();
                 for (int i = 0; i < tags.Count; i++)
                 {
-                    options.SearchValue = ConvertTag(tags[i]);
+                    options.SearchValue = this.ConvertTag(tags[i]);
                     options.NewValue = values[i].Trim(); // а нахуя Trim?
                     doc.ReplaceText(options);
                 }
@@ -137,9 +137,9 @@ namespace Common
         //}
         public void CreateTable(string tag, DataTable dt)
         {
-            DocX doc = LoadFile();
+            DocX doc = this.LoadFile();
             ObjectReplaceTextOptions options = new ObjectReplaceTextOptions();
-            options.SearchValue = ConvertTag(tag);
+            options.SearchValue = this.ConvertTag(tag);
             Table tab = doc.AddTable(dt.Rows.Count + 1, dt.Columns.Count);
             tab.Design = TableDesign.TableGrid;
 
@@ -188,7 +188,7 @@ namespace Common
         }
         public void GetTextOfFile()
         {
-            DocX doc = LoadFile();
+            DocX doc = this.LoadFile();
             IList<Xceed.Document.NET.Section> s = doc.GetSections();
             string result = "";
             foreach (Xceed.Document.NET.Section section in s)

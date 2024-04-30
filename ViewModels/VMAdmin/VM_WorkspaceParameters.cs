@@ -20,56 +20,56 @@ namespace Incubator_2.ViewModels.VMAdmin
         {
             get
             {
-                return _workspaceName.value;
+                return this._workspaceName.value;
             }
             set
             {
-                _workspaceName.value = value;
-                OnPropertyChanged(nameof(WorkspaceName));
+                this._workspaceName.value = value;
+                this.OnPropertyChanged(nameof(this.WorkspaceName));
             }
         }
         public bool WorkspaceOpened
         {
             get
             {
-                return _workspaceOpened.GetValueAsBool();
+                return this._workspaceOpened.GetValueAsBool();
             }
             set
             {
-                _workspaceOpened.WriteBoolValue(value);
-                OnPropertyChanged(nameof(WorkspaceOpened));
+                this._workspaceOpened.WriteBoolValue(value);
+                this.OnPropertyChanged(nameof(this.WorkspaceOpened));
             }
         }
         public bool WorkspaceLocked
         {
             get
             {
-                return _workspaceLocked.GetValueAsBool();
+                return this._workspaceLocked.GetValueAsBool();
             }
             set
             {
-                _workspaceLocked.WriteBoolValue(value);
-                OnPropertyChanged(nameof(WorkspaceLocked));
+                this._workspaceLocked.WriteBoolValue(value);
+                this.OnPropertyChanged(nameof(this.WorkspaceLocked));
             }
         }
         public bool TerminateSessions
         {
             get
             {
-                return _terminateSessions;
+                return this._terminateSessions;
             }
             set
             {
-                _terminateSessions = value;
-                OnPropertyChanged(nameof(TerminateSessions));
+                this._terminateSessions = value;
+                this.OnPropertyChanged(nameof(this.TerminateSessions));
             }
         }
         public void SaveParameters()
         {
-            _workspaceName.UpdateValue();
-            _workspaceOpened.UpdateValue();
-            _workspaceLocked.UpdateValue();
-            if (_workspaceLocked.GetValueAsBool() && TerminateSessions)
+            this._workspaceName.UpdateValue();
+            this._workspaceOpened.UpdateValue();
+            this._workspaceLocked.UpdateValue();
+            if (this._workspaceLocked.GetValueAsBool() && this.TerminateSessions)
             {
                 using (Session session = new Session())
                 {

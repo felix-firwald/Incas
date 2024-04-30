@@ -25,13 +25,13 @@ namespace Incubator_2.Windows
 
         private void Yes_Click(object sender, RoutedEventArgs e)
         {
-            status = DialogStatus.Yes;
+            this.status = DialogStatus.Yes;
             this.Close();
         }
 
         private void No_Click(object sender, RoutedEventArgs e)
         {
-            status = DialogStatus.No;
+            this.status = DialogStatus.No;
             this.Close();
         }
     }

@@ -11,26 +11,24 @@ namespace Incubator_2.Forms.AdminPanel
     /// </summary>
     public partial class WorkspaceManager : UserControl
     {
-        VM_WorkspaceParameters vm;
+        private VM_WorkspaceParameters vm;
         public WorkspaceManager()
         {
             InitializeComponent();
             this.vm = new VM_WorkspaceParameters();
-            this.DataContext = vm;
-            LoadSectors();
+            this.DataContext = this.vm;
+            this.LoadSectors();
         }
 
         private void LoadSectors()
         {
             this.Sectors.Children.Clear();
-            using (Sector s = new())
+            using Sector s = new();
+            s.GetSectors().ForEach(sector =>
             {
-                s.GetSectors().ForEach(sector =>
-                {
-                    SectorElement se = new(sector);
-                    this.Sectors.Children.Add(se);
-                });
-            }
+                SectorElement se = new(sector);
+                this.Sectors.Children.Add(se);
+            });
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
@@ -42,7 +40,7 @@ namespace Incubator_2.Forms.AdminPanel
         {
             SectorEditor se = new(new Sector());
             se.ShowDialog();
-            LoadSectors();
+            this.LoadSectors();
         }
     }
 }

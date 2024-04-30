@@ -11,51 +11,51 @@ namespace Incubator_2.Models
 
         public Sector()
         {
-            tableName = "Sectors";
+            this.tableName = "Sectors";
         }
         public void AddSector(bool generateSlug = true, bool acumulate = false)
         {
             if (generateSlug)
             {
-                slug = ProgramState.GenerateSlug(12);
+                this.slug = ProgramState.GenerateSlug(12);
             }
-            Query q = StartCommandToService()
+            Query q = this.StartCommandToService()
                 .Insert(new()
                 {
                     {
-                        "slug", slug
+                        "slug", this.slug
                     },
                     {
-                        "name", name
+                        "name", this.name
                     }
                 }, true);
             q.ExecuteVoid();
-            DatabaseManager.InitializeData(slug);
+            DatabaseManager.InitializeData(this.slug);
         }
         public void SaveSector()
         {
-            if (string.IsNullOrEmpty(slug))
+            if (string.IsNullOrEmpty(this.slug))
             {
-                AddSector();
+                this.AddSector();
             }
             else
             {
-                StartCommandToService()
-                    .Update("name", name)
-                    .WhereEqual("slug", slug)
+                this.StartCommandToService()
+                    .Update("name", this.name)
+                    .WhereEqual("slug", this.slug)
                     .ExecuteVoid();
             }
         }
         public void RemoveSector()
         {
-            StartCommandToService()
+            this.StartCommandToService()
                 .Delete()
-                .WhereEqual("slug", slug)
+                .WhereEqual("slug", this.slug)
                 .ExecuteVoid();
         }
         public List<Sector> GetSectors()
         {
-            DataTable dt = StartCommandToService()
+            DataTable dt = this.StartCommandToService()
                 .Select()
                 .Execute();
             List<Sector> result = new List<Sector>();
@@ -69,7 +69,7 @@ namespace Incubator_2.Models
         }
         public List<string> GetSectorSlugs()
         {
-            DataTable dt = StartCommandToService()
+            DataTable dt = this.StartCommandToService()
                 .Select()
                 .Execute();
             List<string> result = new();
@@ -82,9 +82,9 @@ namespace Incubator_2.Models
         }
         public Sector GetSector()
         {
-            DataRow dr = StartCommandToService()
+            DataRow dr = this.StartCommandToService()
                 .Select()
-                .WhereEqual("slug", slug)
+                .WhereEqual("slug", this.slug)
                 .ExecuteOne();
             this.Serialize(dr);
             return this;

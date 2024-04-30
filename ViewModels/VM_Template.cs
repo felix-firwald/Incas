@@ -3,31 +3,36 @@ using Models;
 
 namespace Incubator_2.ViewModels
 {
-    class VM_Template : VM_Base
+    internal class VM_Template : VM_Base
     {
-        private Template template_main;
+        private Template templateMain;
         private TemplateSettings templateSettings;
         public VM_Template(Template templ)
         {
-            this.template_main = templ;
+            this.templateMain = templ;
             this.templateSettings = templ.GetTemplateSettings();
         }
         public void ApplyNewTemplate(Template templ)
         {
-            this.template_main = templ;
+            this.templateMain = templ;
             this.templateSettings = templ.GetTemplateSettings();
-            OnPropertyChanged(nameof(NameOfTemplate));
-            OnPropertyChanged(nameof(Source));
-            OnPropertyChanged(nameof(OnSavingScript));
-            OnPropertyChanged(nameof(Category));
-            OnPropertyChanged(nameof(ValidationScript));
-            OnPropertyChanged(nameof(NumberPostfix));
+            this.OnPropertyChanged(nameof(this.NameOfTemplate));
+            this.OnPropertyChanged(nameof(this.Source));
+            this.OnPropertyChanged(nameof(this.OnSavingScript));
+            this.OnPropertyChanged(nameof(this.Category));
+            this.OnPropertyChanged(nameof(this.ValidationScript));
+            this.OnPropertyChanged(nameof(this.NumberPostfix));
+        }
+        public void SaveTemplate()
+        {
+            this.templateMain.SaveTemplateSettings(this.GetSettings());
+            this.templateMain.UpdateTemplate();
         }
         public bool IsEdit
         {
             get
             {
-                if (template_main.id == 0)
+                if (this.templateMain.id == 0)
                 {
                     return false;
                 }
@@ -36,143 +41,166 @@ namespace Incubator_2.ViewModels
         }
         public string NameOfTemplate
         {
-            get { return this.template_main.name; }
+            get { return this.templateMain.name; }
             set
             {
-                if (this.template_main.name != value)
+                if (this.templateMain.name != value)
                 {
-                    this.template_main.name = value;
-                    OnPropertyChanged("NameOfTemplate");
+                    this.templateMain.name = value;
+                    this.OnPropertyChanged("NameOfTemplate");
                 }
             }
         }
         public string Source
         {
-            get { return this.template_main.path; }
+            get { return this.templateMain.path; }
             set
             {
-                if (this.template_main.path != value)
+                if (this.templateMain.path != value)
                 {
-                    this.template_main.path = value;
-                    OnPropertyChanged("Source");
+                    this.templateMain.path = value;
+                    this.OnPropertyChanged("Source");
                 }
             }
         }
         public string Category
         {
-            get { return this.template_main.suggestedPath; }
+            get { return this.templateMain.suggestedPath; }
             set
             {
-                if (this.template_main.suggestedPath != value)
+                if (this.templateMain.suggestedPath != value)
                 {
-                    this.template_main.suggestedPath = value;
-                    OnPropertyChanged("Category");
+                    this.templateMain.suggestedPath = value;
+                    this.OnPropertyChanged("Category");
                 }
+            }
+        }
+        public bool CategoryEnabled
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(this.templateMain.parent);
             }
         }
         public string OnSavingScript
         {
             get
             {
-                if (templateSettings.OnSaving != null)
+                if (this.templateSettings.OnSaving != null)
                 {
-                    return templateSettings.OnSaving;
+                    return this.templateSettings.OnSaving;
                 }
                 return "";
             }
             set
             {
-                templateSettings.OnSaving = value;
-                OnPropertyChanged(nameof(OnSavingScript));
+                this.templateSettings.OnSaving = value;
+                this.OnPropertyChanged(nameof(this.OnSavingScript));
+            }
+        }
+        public string OnOpeningScript
+        {
+            get
+            {
+                if (this.templateSettings.OnOpening != null)
+                {
+                    return this.templateSettings.OnOpening;
+                }
+                return "";
+            }
+            set
+            {
+                this.templateSettings.OnOpening = value;
+                this.OnPropertyChanged(nameof(this.OnOpeningScript));
             }
         }
         public string ValidationScript
         {
             get
             {
-                if (templateSettings.Validation != null)
+                if (this.templateSettings.Validation != null)
                 {
-                    return templateSettings.Validation;
+                    return this.templateSettings.Validation;
                 }
                 return "";
             }
             set
             {
-                templateSettings.Validation = value;
-                OnPropertyChanged(nameof(ValidationScript));
+                this.templateSettings.Validation = value;
+                this.OnPropertyChanged(nameof(this.ValidationScript));
             }
         }
         public string NumberPrefix
         {
             get
             {
-                return templateSettings.NumberPrefix;
+                return this.templateSettings.NumberPrefix;
             }
             set
             {
-                templateSettings.NumberPrefix = value;
-                OnPropertyChanged(nameof(NumberPrefix));
+                this.templateSettings.NumberPrefix = value;
+                this.OnPropertyChanged(nameof(this.NumberPrefix));
             }
         }
         public string NumberPostfix
         {
             get
             {
-                return templateSettings.NumberPostfix;
+                return this.templateSettings.NumberPostfix;
             }
             set
             {
-                templateSettings.NumberPostfix = value;
-                OnPropertyChanged(nameof(NumberPostfix));
+                this.templateSettings.NumberPostfix = value;
+                this.OnPropertyChanged(nameof(this.NumberPostfix));
             }
         }
         public string FileNameTemplate
         {
             get
             {
-                return templateSettings.FileNameTemplate;
+                return this.templateSettings.FileNameTemplate;
             }
             set
             {
-                templateSettings.FileNameTemplate = value;
-                OnPropertyChanged(nameof(FileNameTemplate));
+                this.templateSettings.FileNameTemplate = value;
+                this.OnPropertyChanged(nameof(this.FileNameTemplate));
             }
         }
         public bool RequiresSave
         {
             get
             {
-                return templateSettings.RequiresSave;
+                return this.templateSettings.RequiresSave;
             }
             set
             {
-                templateSettings.RequiresSave = value;
-                if (RequiresSave)
+                this.templateSettings.RequiresSave = value;
+                if (this.RequiresSave)
                 {
-                    NeverSave = false;
+                    this.NeverSave = false;
                 }
-                OnPropertyChanged(nameof(RequiresSave));
+                this.OnPropertyChanged(nameof(this.RequiresSave));
             }
         }
         public bool NeverSave
         {
             get
             {
-                return templateSettings.PreventSave;
+                return this.templateSettings.PreventSave;
             }
             set
             {
-                templateSettings.PreventSave = value;
-                if (NeverSave)
+                this.templateSettings.PreventSave = value;
+                if (this.NeverSave)
                 {
-                    RequiresSave = false;
+                    this.RequiresSave = false;
                 }
-                OnPropertyChanged(nameof(NeverSave));
+                this.OnPropertyChanged(nameof(this.NeverSave));
             }
         }
         public TemplateSettings GetSettings()
         {
-            return templateSettings;
+            return this.templateSettings;
         }
     }
 }

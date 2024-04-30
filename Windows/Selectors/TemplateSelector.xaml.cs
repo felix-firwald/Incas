@@ -10,26 +10,26 @@ namespace Incubator_2.Windows.Selectors
     /// </summary>
     public partial class TemplateSelector : Window
     {
-        VM_TemplateSelector vm;
+        private VM_TemplateSelector vm;
         public STemplate SelectedTemplate
         {
             get
             {
-                return vm.SelectedTemplate;
+                return this.vm.SelectedTemplate;
             }
         }
         public TemplateSelector(TemplateType type, string helpText)
         {
             InitializeComponent();
             this.vm = new();
-            this.DataContext = vm;
+            this.DataContext = this.vm;
             this.vm.HelpTextTitle = helpText;
             this.vm.TemplateType = type;
         }
 
         private void SelectClick(object sender, RoutedEventArgs e)
         {
-            if (vm.SelectedTemplate.id != 0)
+            if (this.vm.SelectedTemplate.id != 0)
             {
                 this.Close();
             }

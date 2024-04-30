@@ -42,7 +42,7 @@ namespace Incubator_2.Models
                     query = "name NOT LIKE 'sqlite_%' ORDER BY name ASC";
                     break;
             }
-            DataTable dt = GetQuery(tableName, pathDb)
+            DataTable dt = this.GetQuery(this.tableName, pathDb)
                 .AddCustomRequest("SELECT name FROM sqlite_schema WHERE " + query) // SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'
                 .Execute();
 
@@ -57,13 +57,13 @@ namespace Incubator_2.Models
         {
             if (string.IsNullOrEmpty(custom))
             {
-                return GetQuery(table, pathDb).AddCustomRequest($"SELECT * FROM [{table}];").Execute();
+                return this.GetQuery(table, pathDb).AddCustomRequest($"SELECT * FROM [{table}];").Execute();
             }
-            return GetQuery(table, pathDb).AddCustomRequest(custom).Execute();
+            return this.GetQuery(table, pathDb).AddCustomRequest(custom).Execute();
         }
         public List<FieldCreator> GetTableFields(string table, string pathDb)
         {
-            DataTable dt = GetQuery(tableName, pathDb).AddCustomRequest($"PRAGMA table_info(\"{table}\")")
+            DataTable dt = this.GetQuery(this.tableName, pathDb).AddCustomRequest($"PRAGMA table_info(\"{table}\")")
                             .Execute();
             List<FieldCreator> creators = new();
             foreach (DataRow dr in dt.Rows)
@@ -71,15 +71,15 @@ namespace Incubator_2.Models
                 FieldCreator fc = new();
                 fc.Name = dr["name"].ToString();
                 fc.TypeOf = dr["type"].ToString();
-                fc.NotNULL = IntToBool((long)dr["notnull"]);
-                fc.IsPK = IntToBool((long)dr["pk"]);
+                fc.NotNULL = this.IntToBool((long)dr["notnull"]);
+                fc.IsPK = this.IntToBool((long)dr["pk"]);
                 creators.Add(fc);
             }
             return creators;
         }
         public List<string> GetTableFieldsSimple(string table, string pathDb)
         {
-            DataTable dt = GetQuery(tableName, pathDb).AddCustomRequest($"PRAGMA table_info(\"{table}\")")
+            DataTable dt = this.GetQuery(this.tableName, pathDb).AddCustomRequest($"PRAGMA table_info(\"{table}\")")
                             .Execute();
             List<string> fields = new();
             foreach (DataRow dr in dt.Rows)
@@ -90,13 +90,13 @@ namespace Incubator_2.Models
         }
         public string GetPKField(string table, string pathDb)
         {
-            DataTable dt = GetQuery(table, pathDb)
+            DataTable dt = this.GetQuery(table, pathDb)
                 .AddCustomRequest($"PRAGMA table_info(\"{table}\")")
                 .Execute();
             foreach (DataRow dr in dt.Rows)
             {
                 string name = dr["name"].ToString();
-                if (IntToBool((long)dr["pk"]))
+                if (this.IntToBool((long)dr["pk"]))
                 {
                     return name;
                 }
@@ -106,10 +106,10 @@ namespace Incubator_2.Models
 
         public List<FieldCreator> GetTableDefinition(string table, string pathDb)
         {
-            DataTable dt = GetQuery(table, pathDb)
+            DataTable dt = this.GetQuery(table, pathDb)
                 .AddCustomRequest($"PRAGMA foreign_key_list(\"{table}\")")
                 .Execute();
-            List<FieldCreator> creators = GetTableFields(table, pathDb);
+            List<FieldCreator> creators = this.GetTableFields(table, pathDb);
 
             foreach (DataRow dr in dt.Rows)
             {
@@ -132,20 +132,20 @@ namespace Incubator_2.Models
 
         public void InsertInTable(string table, string pathDb, Dictionary<string, string> pairs)
         {
-            Query q = GetQuery(table, pathDb);
+            Query q = this.GetQuery(table, pathDb);
             q.Table = table;
             q.Insert(pairs);
             q.ExecuteVoid();
         }
         public void DeleteInTable(string table, string field, string pathDb, List<string> values)
         {
-            GetQuery(table, pathDb)
+            this.GetQuery(table, pathDb)
                 .AddCustomRequest($"DELETE FROM [{table}] WHERE [{field}] IN ('{string.Join("', '", values)}')")
                 .ExecuteVoid();
         }
         public DataRow GetOneFromTable(string table, string pk, string pkValue, string pathDb)
         {
-            Query q = GetQuery(table, pathDb);
+            Query q = this.GetQuery(table, pathDb);
             q.Table = table;
             q.Select();
             q.WhereEqual(pk, pkValue);
@@ -153,7 +153,7 @@ namespace Incubator_2.Models
         }
         public void UpdateInTable(string table, string pk, string pkValue, string pathDb, Dictionary<string, string> pairs)
         {
-            Query q = GetQuery(table, pathDb);
+            Query q = this.GetQuery(table, pathDb);
             q.Table = table;
             foreach (KeyValuePair<string, string> pair in pairs)
             {
@@ -164,7 +164,7 @@ namespace Incubator_2.Models
         }
         public void CustomRequest(string pathDb, string query)
         {
-            Query q = GetQuery("", pathDb);
+            Query q = this.GetQuery("", pathDb);
             q.AddCustomRequest(query);
             q.ExecuteVoid();
         }

@@ -5,56 +5,56 @@ namespace Incubator_2.ViewModels
 {
     public class VM_TagFiller : VM_Base
     {
-        Tag tag;
+        private Tag tag;
         public VM_TagFiller(Tag t)
         {
-            tag = t;
+            this.tag = t;
         }
         public string NameView
         {
-            get { return tag.name; }
+            get { return this.tag.name; }
             set
             {
-                tag.name = value;
-                OnPropertyChanged(nameof(NameView));
+                this.tag.name = value;
+                this.OnPropertyChanged(nameof(this.NameView));
             }
         }
         public string Name
         {
-            get { return tag.name; }
+            get { return this.tag.name; }
             set
             {
-                tag.name = value;
-                OnPropertyChanged(nameof(Name));
+                this.tag.name = value;
+                this.OnPropertyChanged(nameof(this.Name));
             }
         }
         public string DefaultValue
         {
-            get { return tag.value; }
+            get { return this.tag.value; }
             set
             {
-                tag.value = value;
-                OnPropertyChanged(nameof(DefaultValue));
+                this.tag.value = value;
+                this.OnPropertyChanged(nameof(this.DefaultValue));
             }
         }
         public string[] Enumeration
         {
-            get { return tag.value.Split(';'); }
+            get { return this.tag.value.Split(';'); }
             set
             {
-                OnPropertyChanged(nameof(Enumeration));
+                this.OnPropertyChanged(nameof(this.Enumeration));
             }
         }
         public TypeOfTag TypeOf
         {
             get
             {
-                return tag.type;
+                return this.tag.type;
             }
         }
         public void UpdateTagAsChild()
         {
-            tag.GetChild();
+            this.tag.GetChild();
         }
     }
 }

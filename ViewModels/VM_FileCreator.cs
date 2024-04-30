@@ -14,43 +14,43 @@ namespace Incubator_2.ViewModels
 
         public VM_FileCreator(Template template, List<string> childs)
         {
-            _template = template;
+            this._template = template;
         }
         public string FileName
         {
-            get { return _filename; }
+            get { return this._filename; }
             set
             {
-                _filename = value;
-                OnPropertyChanged(nameof(FileName));
+                this._filename = value;
+                this.OnPropertyChanged(nameof(this.FileName));
             }
         }
         public List<string> Children
         {
-            get { return _childs; }
+            get { return this._childs; }
             set
             {
-                _childs = value;
-                OnPropertyChanged(nameof(Children));
+                this._childs = value;
+                this.OnPropertyChanged(nameof(this.Children));
             }
         }
         public string SelectedChild
         {
-            get { return _child; }
+            get { return this._child; }
             set
             {
-                _child = value;
-                _template.GetChild(value);
-                OnPropertyChanged(nameof(SelectedChild));
+                this._child = value;
+                this._template.GetChild(value);
+                this.OnPropertyChanged(nameof(this.SelectedChild));
             }
         }
         public string FilePath
         {
-            get { return _template.path; }
+            get { return this._template.path; }
             set
             {
-                _template.path = value;
-                OnPropertyChanged(nameof(FilePath));
+                this._template.path = value;
+                this.OnPropertyChanged(nameof(this.FilePath));
             }
         }
     }

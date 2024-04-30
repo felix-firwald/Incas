@@ -22,12 +22,12 @@ namespace Incubator_2.Common
         }
 
 #pragma warning disable CS1998
-        private async static System.Threading.Tasks.Task Error(ITelegramBotClient client, Exception exception, CancellationToken token)
+        private static async System.Threading.Tasks.Task Error(ITelegramBotClient client, Exception exception, CancellationToken token)
         {
 
         }
 #pragma warning restore CS1998
-        private async static System.Threading.Tasks.Task Update(ITelegramBotClient cli, Update update, CancellationToken token)
+        private static async System.Threading.Tasks.Task Update(ITelegramBotClient cli, Update update, CancellationToken token)
         {
             try
             {

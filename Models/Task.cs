@@ -21,12 +21,12 @@ namespace Models
         public Task AsModel()
         {
             Task task = new();
-            task.id = id;
-            task.name = name;
-            task.text = text;
-            task.passed = passed;
-            task.subtasks = subtasks;
-            task.dateFinished = dateFinished;
+            task.id = this.id;
+            task.name = this.name;
+            task.text = this.text;
+            task.passed = this.passed;
+            task.subtasks = this.subtasks;
+            task.dateFinished = this.dateFinished;
             return task;
         }
     }
@@ -41,23 +41,23 @@ namespace Models
 
         public Task()
         {
-            tableName = "Tasks";
+            this.tableName = "Tasks";
         }
         public STask AsStruct()
         {
             STask result = new();
-            result.id = id;
-            result.name = name;
-            result.text = text;
-            result.passed = passed;
-            result.subtasks = subtasks;
-            result.dateFinished = dateFinished;
+            result.id = this.id;
+            result.name = this.name;
+            result.text = this.text;
+            result.passed = this.passed;
+            result.subtasks = this.subtasks;
+            result.dateFinished = this.dateFinished;
             return result;
         }
 
         public List<STask> GetAllTasks()
         {
-            DataTable dt = StartCommand()
+            DataTable dt = this.StartCommand()
                 .Select()
                 .Execute();
             List<STask> result = new();
@@ -70,7 +70,7 @@ namespace Models
         }
         public List<Task> GetAllTasksModels()
         {
-            DataTable dt = StartCommand()
+            DataTable dt = this.StartCommand()
                 .Select()
                 .Execute();
             List<Task> result = new();
@@ -92,25 +92,25 @@ namespace Models
         }
         private void ParseSubtasksFromJSON(string input)
         {
-            subtasks = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SSubTask>>(input);
+            this.subtasks = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SSubTask>>(input);
         }
         public void SaveTask()
         {
-            StartCommand()
+            this.StartCommand()
                 .Insert(new()
                 {
-                    {nameof(name), name },
-                    {nameof(text), text },
-                    {nameof(passed), BoolToInt(passed).ToString() },
-                    {nameof(dateFinished), dateFinished.ToString() },
-                    {nameof(subtasks), ParseSubtasksToJSON()}
+                    {nameof(this.name), this.name },
+                    {nameof(this.text), this.text },
+                    {nameof(this.passed), this.BoolToInt(this.passed).ToString() },
+                    {nameof(this.dateFinished), this.dateFinished.ToString() },
+                    {nameof(this.subtasks), this.ParseSubtasksToJSON()}
                 })
                 .Execute();
         }
         public void UpdateSubtasks()
         {
-            StartCommand()
-                .Update(nameof(subtasks), ParseSubtasksToJSON());
+            this.StartCommand()
+                .Update(nameof(this.subtasks), this.ParseSubtasksToJSON());
         }
     }
 }

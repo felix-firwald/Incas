@@ -15,13 +15,14 @@ using System.Windows.Forms;
 
 namespace Incubator_2.Common
 {
-    enum ProcessType
+    internal enum ProcessType
     {
         UNKNOWN,
         QUERY,
         RESPONSE
     }
-    enum ProcessTarget
+
+    internal enum ProcessTarget
     {
         UNKNOWN,
         // FROM ADMIN-MODER ONLY
@@ -39,7 +40,8 @@ namespace Incubator_2.Common
         OPEN_WEB = 217,
         UPDATE_MAIN = 301,
     }
-    enum ResponseCode
+
+    internal enum ResponseCode
     {
         UNKNOWN,
         NO,
@@ -57,7 +59,8 @@ namespace Incubator_2.Common
         public string message;
         public AdminMessageType message_type;
     }
-    struct Process
+
+    internal struct Process
     {
         public string id;
         public string back_id;
@@ -67,7 +70,8 @@ namespace Incubator_2.Common
         public ProcessTarget target;
         public string content;
     }
-    static class WaitControls
+
+    internal static class WaitControls
     {
         public static List<UC_TagFiller> TagFillers = new();
         public static Dictionary<string, Generator> Generators = new();
@@ -96,7 +100,7 @@ namespace Incubator_2.Common
         }
     }
 
-    static class ServerProcessor
+    internal static class ServerProcessor
     {
         public static string Port { get { return $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession?.slug}.incport"; } }
         private static List<Process> WaitList = new();
@@ -130,17 +134,15 @@ namespace Incubator_2.Common
             }
             return result;
         }
-        private async static void SendToPort(Process process)
+        private static async void SendToPort(Process process)
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
                 string content = JsonConvert.SerializeObject(process);
-                using (Models.Process p = new())
-                {
-                    p.identifier = process.id;
-                    p.content = Cryptographer.EncryptString(GetKeyByRecipient(process.recipient), content);
-                    p.Send(process.recipient);
-                }
+                using Models.Process p = new();
+                p.identifier = process.id;
+                p.content = Cryptographer.EncryptString(GetKeyByRecipient(process.recipient), content);
+                p.Send(process.recipient);
             });
         }
         private static Process Parse(string input)
@@ -181,7 +183,7 @@ namespace Incubator_2.Common
         #endregion
 
         #region Main
-        public async static void Listen()
+        public static async void Listen()
         {
             RemoveOldest();
             await System.Threading.Tasks.Task.Run(() =>
@@ -212,7 +214,7 @@ namespace Incubator_2.Common
                 }
             });
         }
-        public async static void Switcher(Process process)
+        public static async void Switcher(Process process)
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
@@ -394,14 +396,12 @@ namespace Incubator_2.Common
             try
             {
                 List<SGeneratedDocument> documents = JsonConvert.DeserializeObject<List<SGeneratedDocument>>(content);
-                using (Template t = new())
+                using Template t = new();
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        UseTemplate ut = new(t.GetTemplateById(documents[0].template), documents);
-                        ut.Show();
-                    });
-                }
+                    UseTemplate ut = new(t.GetTemplateById(documents[0].template), documents);
+                    ut.Show();
+                });
             }
             catch (Exception ex)
             {
@@ -413,20 +413,18 @@ namespace Incubator_2.Common
             try
             {
                 SGeneratedDocument part = JsonConvert.DeserializeObject<SGeneratedDocument>(p.content);
-                using (Template t = new())
+                using Template t = new();
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    UseTemplateText ut = new(t.GetTemplateById(part.template), part);
+                    ut.Show();
+                    ut.OnFinishedEditing += new(() =>
                     {
-                        UseTemplateText ut = new(t.GetTemplateById(part.template), part);
-                        ut.Show();
-                        ut.OnFinishedEditing += new(() =>
-                        {
-                            SendOpenGeneratorResultResponse(p, ut.GetData());
-                            return;
-                        });
-
+                        SendOpenGeneratorResultResponse(p, ut.GetData());
+                        return;
                     });
-                }
+
+                });
             }
             catch (Exception ex)
             {
