@@ -28,8 +28,10 @@ namespace Incubator_2.Windows
             InitializeComponent();
             if (te == null)
             {
-                this.template = new Template();
-                this.template.parent = parents;
+                this.template = new()
+                {
+                    parent = parents
+                };
             }
             else
             {
@@ -45,7 +47,7 @@ namespace Incubator_2.Windows
 
         private void GetTags()
         {
-            Tag tag = new Tag();
+            Tag tag = new();
             foreach (Tag t in tag.GetAllTagsByTemplate(this.template.id))
             {
                 this.AddTag(t);
@@ -55,7 +57,7 @@ namespace Incubator_2.Windows
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
         private void reviewClick(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog fd = new OpenFileDialog();
+            OpenFileDialog fd = new();
             fd.Filter = "Word и Excel|*.docx;*.xlsx";
             fd.InitialDirectory = ProgramState.TemplatesSourcesWordPath;
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -111,7 +113,7 @@ namespace Incubator_2.Windows
                 return false;
             }
 
-            List<string> names = new List<string>();
+            List<string> names = new();
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
                 if (!tag.Check())

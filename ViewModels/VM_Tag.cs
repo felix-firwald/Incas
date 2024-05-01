@@ -34,6 +34,8 @@ namespace Incubator_2.ViewModels
                     case TypeOfTag.Text:
                     default:
                         return "Значение по умолчанию";
+                    case TypeOfTag.Number:
+                        return "Укажите значения как [мин];[по умолчанию];[макс] или [мин];[макс]";
                     case TypeOfTag.LocalConstant:
                         return "Значение константы";
                     case TypeOfTag.HiddenField:
@@ -57,7 +59,7 @@ namespace Incubator_2.ViewModels
             }
             set
             {
-                if (value >= 0 && value <= 50)
+                if (value is >= 0 and <= 50)
                 {
                     this.mainTag.orderNumber = value;
                     this.OnPropertyChanged(nameof(this.OrderNumber));
@@ -144,7 +146,6 @@ namespace Incubator_2.ViewModels
             }
         }
 
-
         // может лучше по selected index?
         #region Not Standart Properties
         public TypeOfTag SerializeFromInput(string val)
@@ -163,44 +164,37 @@ namespace Incubator_2.ViewModels
                 case "4":
                     return TypeOfTag.Date;
                 case "5":
-                    this.Description = "";
-                    return TypeOfTag.LocalConstant;
+                    return TypeOfTag.Number;
                 case "6":
                     this.Description = "";
-                    return TypeOfTag.HiddenField;
+                    return TypeOfTag.LocalConstant;
                 case "7":
+                    this.Description = "";
+                    return TypeOfTag.HiddenField;
+                case "8":
                     this.Description = "";
                     this.DefaultValue = "";
                     return TypeOfTag.Generator;
-                case "8":
+                case "9":
                     this.Description = "";
                     return TypeOfTag.Table;
             }
         }
         public string SerializeToInput(TypeOfTag tot)
         {
-            switch (tot)
+            return tot switch
             {
-                case TypeOfTag.Variable:
-                default:
-                    return "0";
-                case TypeOfTag.Text:
-                    return "1";
-                case TypeOfTag.LocalEnumeration:
-                    return "2";
-                case TypeOfTag.Relation:
-                    return "3";
-                case TypeOfTag.Date:
-                    return "4";
-                case TypeOfTag.LocalConstant:
-                    return "5";
-                case TypeOfTag.HiddenField:
-                    return "6";
-                case TypeOfTag.Generator:
-                    return "7";
-                case TypeOfTag.Table:
-                    return "8";
-            }
+                TypeOfTag.Text => "1",
+                TypeOfTag.LocalEnumeration => "2",
+                TypeOfTag.Relation => "3",
+                TypeOfTag.Date => "4",
+                TypeOfTag.Number => "5",
+                TypeOfTag.LocalConstant => "6",
+                TypeOfTag.HiddenField => "7",
+                TypeOfTag.Generator => "8",
+                TypeOfTag.Table => "9",
+                _ => "0",
+            };
         }
         public Visibility ButtonRelationVisibility
         {

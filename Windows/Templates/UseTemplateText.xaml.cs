@@ -70,7 +70,7 @@ namespace Incubator_2.Windows.Templates
                 ProgramState.ShowErrorDialog("При обработке скрипта на стороне формы возникла ошибка:\n" + ex.Message);
             }
         }
-
+ 
         public void ApplyData(SGeneratedDocument data)
         {
             foreach (SGeneratedTag tag in data.GetFilledTags())
@@ -87,21 +87,18 @@ namespace Incubator_2.Windows.Templates
         }
         public SGeneratedDocument GetData()
         {
-            SGeneratedDocument result = new();
-            result.id = this.template.id;
+            SGeneratedDocument result = new()
+            {
+                id = this.template.id
+            };
             List<SGeneratedTag> tags = new();
             foreach (UC_TagFiller tf in this.ContentPanel.Children)
             {
-                SGeneratedTag gt = new();
-                gt.tag = tf.tag.id;
-                if (tf.tag.type == TypeOfTag.Generator)
+                SGeneratedTag gt = new()
                 {
-                    gt.value = tf.GetData();
-                }
-                else
-                {
-                    gt.value = tf.GetValue();
-                }
+                    tag = tf.tag.id,
+                    value = tf.tag.type == TypeOfTag.Generator ? tf.GetData() : tf.GetValue()
+                };
                 tags.Add(gt);
             }
             result.filledTags = tags;
@@ -127,10 +124,7 @@ namespace Incubator_2.Windows.Templates
                     return;
                 }
             }
-            if (OnFinishedEditing != null)
-            {
-                OnFinishedEditing();
-            }
+            OnFinishedEditing?.Invoke();
 
             this.Result = DialogStatus.Yes;
             this.Close();

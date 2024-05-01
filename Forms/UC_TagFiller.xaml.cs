@@ -11,7 +11,6 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Tag = Models.Tag;
 
-
 namespace Incubator_2.Forms
 {
     public static class CommandIcons
@@ -44,17 +43,10 @@ namespace Incubator_2.Forms
         public event StringActionRecalculate OnRename;
         public UC_TagFiller(Tag t)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.Mode = FillerMode.Tag;
             this.tag = t;
-            if (string.IsNullOrWhiteSpace(this.tag.visibleName))
-            {
-                this.MainLabel.Text = this.tag.name + ":";
-            }
-            else
-            {
-                this.MainLabel.Text = this.tag.visibleName + ":";
-            }
+            this.MainLabel.Text = string.IsNullOrWhiteSpace(this.tag.visibleName) ? this.tag.name + ":" : this.tag.visibleName + ":";
 
             switch (this.tag.type)
             {
@@ -71,6 +63,15 @@ namespace Incubator_2.Forms
                     this.Textbox.Style = this.FindResource("TextBoxBig") as System.Windows.Style;
                     this.Textbox.MaxLength = 1200;
                     this.Textbox.Tag = this.tag.description;
+                    break;
+                case TypeOfTag.Number:
+                    //int digitValue;
+                    //if (int.TryParse(this.tag.value, out digitValue))
+                    //{
+                    //    this.NumericBox.Value = digitValue;
+                    //}
+                    this.NumericBox.ApplyMinAndMax(this.tag.value);
+                    this.NumericBox.Visibility = Visibility.Visible;
                     break;
                 case TypeOfTag.LocalConstant:
                 case TypeOfTag.HiddenField:
@@ -120,7 +121,7 @@ namespace Incubator_2.Forms
         }
         public UC_TagFiller(FieldCreator fc, string path)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.tag = new();
             this.Mode = FillerMode.RecordField;
             this.tag.name = fc.Name;
@@ -150,6 +151,13 @@ namespace Incubator_2.Forms
                 case TypeOfTag.HiddenField:
                 default:
                     this.Textbox.Text = value;
+                    break;
+                case TypeOfTag.Number:
+                    int digitValue;
+                    if (int.TryParse(value, out digitValue))
+                    {
+                        this.NumericBox.Value = digitValue;
+                    }                    
                     break;
                 case TypeOfTag.Relation:
                     this.SelectionBox.Value = value;
@@ -187,7 +195,7 @@ namespace Incubator_2.Forms
         }
         public bool ValidateContent()
         {
-            if (this.tag.type == TypeOfTag.Variable || this.tag.type == TypeOfTag.Text)
+            if (this.tag.type is TypeOfTag.Variable or TypeOfTag.Text)
             {
                 if (this.isRequired && string.IsNullOrEmpty(this.Textbox.Text))
                 {
@@ -217,6 +225,8 @@ namespace Incubator_2.Forms
                 case TypeOfTag.Variable:
                 default:
                     return this.Textbox.Text;
+                case TypeOfTag.Number:
+                    return this.NumericBox.Value.ToString();
                 case TypeOfTag.LocalConstant:
                     return this.tag.value;
                 case TypeOfTag.Relation:
@@ -370,7 +380,6 @@ namespace Incubator_2.Forms
 
                     this.SetValue((string)scope.GetVariable("output"));
                 }
-
             }
             catch (Exception ex)
             {

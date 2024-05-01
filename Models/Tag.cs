@@ -46,6 +46,7 @@ namespace Models
     {
         Variable,
         Text,
+        Number,
         Relation,
         LocalEnumeration,
         LocalConstant,
