@@ -8,6 +8,7 @@
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="40"/>
         <Setter Property="Margin" Value="5"/>
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplateMain}"/>
         <Setter Property="Language" Value="ru-RU"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -24,7 +25,7 @@
                                 <ControlTemplate x:Key="DropDownButtonTemplate" TargetType="{x:Type Button}">
                                     <Grid FlowDirection="LeftToRight" Cursor="Hand" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="20" Height="20">
 
-                                        <Path x:Name="PART_Icon" Fill="{StaticResource Icon}" HorizontalAlignment="Center" Stretch="Fill" VerticalAlignment="Center" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z" />
+                                        <Path x:Name="PART_Icon" Fill="{StaticResource Icon}" Height="18" Width="16" Stroke="{StaticResource Black}" StrokeThickness="0" HorizontalAlignment="Center" Stretch="Fill" VerticalAlignment="Center" Data="M6.5 0a.5.5 0 0 0 0 1H7v1.07A7.001 7.001 0 0 0 8 16a7 7 0 0 0 5.29-11.584l.013-.012.354-.354.353.354a.5.5 0 1 0 .707-.707l-1.414-1.415a.5.5 0 1 0-.707.707l.354.354-.354.354-.012.012A6.97 6.97 0 0 0 9 2.071V1h.5a.5.5 0 0 0 0-1zm2 5.6V9a.5.5 0 0 1-.5.5H4.5a.5.5 0 0 1 0-1h3V5.6a.5.5 0 1 1 1 0" />
                                     </Grid>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
@@ -40,7 +41,7 @@
                             </Grid.ColumnDefinitions>
                             <Rectangle Margin="0,0,2,0" Width="1" Fill="{StaticResource LightBlack}" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30"/>
                             <Button x:Name="PART_Button" Grid.Column="1" Focusable="False" HorizontalAlignment="Left" Margin="3,0,3,0" Grid.Row="0" Template="{StaticResource DropDownButtonTemplate}" VerticalAlignment="Center" Width="30" Cursor="Hand"/>
-                            <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" ContextMenu="{TemplateBinding ContextMenu}" HorizontalContentAlignment="Stretch" Grid.Row="0" VerticalContentAlignment="Center" Style="{DynamicResource DatePickerTextBoxStyle1}" Background="{x:Null}" Margin="0,0,0,0" CaretBrush="White" SelectionTextBrush="{DynamicResource Light}" />
+                            <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" ContextMenu="{TemplateBinding ContextMenu}" HorizontalContentAlignment="Stretch" Grid.Row="0" VerticalContentAlignment="Center" Style="{DynamicResource DatePickerTextBoxStyle1}" Background="{x:Null}" Margin="0,0,0,0" CaretBrush="White" SelectionTextBrush="{DynamicResource Light}"/>
                             <Grid x:Name="PART_DisabledVisual" Grid.ColumnSpan="2" Grid.Column="0" IsHitTestVisible="False" Opacity="0" Grid.Row="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -64,6 +65,7 @@
 
     <Style x:Key="DatePickerTextBoxStyle1" TargetType="{x:Type DatePickerTextBox}">
         <Setter Property="BorderBrush" Value="{x:Null}"/>
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplateMain}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DatePickerTextBox}">

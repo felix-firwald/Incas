@@ -19,6 +19,7 @@ namespace Incubator_2.Windows.Templates
         public DialogStatus Result = DialogStatus.Undefined;
         private Template template;
         private List<Tag> tags;
+        private TemplateSettings templateSettings;
         public delegate void Base();
         public event Base OnFinishedEditing;
         public UseTemplateText(Template templ, SGeneratedDocument data)
@@ -27,6 +28,7 @@ namespace Incubator_2.Windows.Templates
             this.template = templ;
             this.Title = this.template.name;
             this.GetTags();
+            this.templateSettings = this.template.GetTemplateSettings();
             if (data.filledTags != null)
             {
                 this.ApplyData(data);
@@ -113,19 +115,88 @@ namespace Incubator_2.Windows.Templates
             }
             return result;
         }
-
-        private void ApplyClick(object sender, RoutedEventArgs e)
+        private bool CustomValidate()
         {
             foreach (UC_TagFiller tf in this.ContentPanel.Children)
             {
                 if (string.IsNullOrEmpty(tf.GetData()))
                 {
                     ProgramState.ShowExclamationDialog($"Тег \"{tf.tag.name}\" не заполнен!", "Сохранение отклонено");
-                    return;
+                    return false;
                 }
             }
-            OnFinishedEditing?.Invoke();
+            try
+            {
+                bool result = true;
+                
+                if (!string.IsNullOrEmpty(this.templateSettings.Validation))
+                {
+                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();
+                    scope.SetVariable("result", true);
+                    scope.SetVariable("fields", new List<string>());
+                    scope.SetVariable("failed_text", "Текст не установлен.");
+                    foreach (UC_TagFiller tf in this.ContentPanel.Children)
+                    {
+                        scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
+                    }
+                    ScriptManager.Execute(this.templateSettings.Validation, scope);
+                    result = scope.GetVariable("result");
+                    if (!result)
+                    {
+                        ProgramState.ShowExclamationDialog(scope.GetVariable("failed_text"));
+                        dynamic fields = scope.GetVariable("fields");
+                        foreach (UC_TagFiller tf in this.ContentPanel.Children)
+                        {
+                            if (fields.Contains(tf.tag.name.Replace(" ", "_")))
+                            {
+                                tf.MarkAsNotValidated();
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog("При выполнении скрипта валидации возникла ошибка:\n" + ex.Message);
+                return true;
+            }
+        }
+        private void PlaySavingScript()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(this.templateSettings.OnSaving))
+                {
+                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();
+                    foreach (UC_TagFiller tf in this.ContentPanel.Children)
+                    {
+                        scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
+                    }
+                    ScriptManager.Execute(this.templateSettings.OnSaving, scope);
+                    foreach (UC_TagFiller tf in this.ContentPanel.Children)
+                    {
+                        if (tf.tag.type != TypeOfTag.Generator)
+                        {
+                            tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ProgramState.ShowErrorDialog("При выполнении скрипта возникла ошибка:\n" + ex.Message);
+            }
+        }
 
+        private void ApplyClick(object sender, RoutedEventArgs e)
+        {
+            if (!this.CustomValidate())
+            {
+                return;
+            }
+            this.PlaySavingScript();
+            OnFinishedEditing?.Invoke();
             this.Result = DialogStatus.Yes;
             this.Close();
         }

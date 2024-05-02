@@ -22,9 +22,14 @@ namespace Incubator_2.CustomControls
             set
             {
                 this.currentValue = value;
+                this.UpdateButtonsState();
                 this.OnPropertyChanged("Value");
+                this.OnNumberChanged?.Invoke(this.currentValue);
             }
         }
+        public delegate void ValueChanged(object sender);
+        public event ValueChanged OnNumberChanged;
+
         public NumericBox()
         {
             this.InitializeComponent();
@@ -56,6 +61,12 @@ namespace Incubator_2.CustomControls
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void UpdateButtonsState()
+        {
+            this.MinusButton.IsEnabled = this.Value > this.MinValue;
+            this.PlusButton.IsEnabled = this.Value < this.MaxValue;
         }
 
         private void DecrementClick(object sender, MouseButtonEventArgs e)

@@ -24,8 +24,8 @@ namespace Incubator_2.Forms
         private bool IsCollapsed = false;
         private Template template;
         private List<Tag> tags;
-        private List<UC_TagFiller> TagFillers = new List<UC_TagFiller>();
-        private List<TableFiller> Tables = new List<TableFiller>();
+        private List<UC_TagFiller> TagFillers = new();
+        private List<TableFiller> Tables = new();
         private TemplateSettings templateSettings;
 
         public delegate void TagAction(int tag, string value);
@@ -37,7 +37,7 @@ namespace Incubator_2.Forms
         public bool SelectorChecked { get { return (bool)this.Selector.IsChecked; } }
         public UC_FileCreator(Template templ, List<Tag> tagsList)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.tags = tagsList;
             this.template = templ;
             this.FillContentPanel();
@@ -57,7 +57,7 @@ namespace Incubator_2.Forms
             {
                 if (t.type != TypeOfTag.Table)
                 {
-                    UC_TagFiller tf = new UC_TagFiller(t);
+                    UC_TagFiller tf = new(t);
                     tf.OnInsert += this.OnInsert;
                     tf.OnRename += this.OnRename;
                     tf.OnScriptRequested += this.OnScriptRequested;
@@ -66,7 +66,7 @@ namespace Incubator_2.Forms
                 }
                 else
                 {
-                    TableFiller tf = new TableFiller(t);
+                    TableFiller tf = new(t);
                     this.ContentPanel.Children.Add(tf);
                     this.Tables.Add(tf);
                 }
@@ -203,7 +203,6 @@ namespace Incubator_2.Forms
             {
                 this.Minimize();
             }
-
         }
         private void Remove(object sender, MouseButtonEventArgs e)
         {
@@ -226,12 +225,14 @@ namespace Incubator_2.Forms
         }
         public SGeneratedDocument GetGeneratedDocument()
         {
-            SGeneratedDocument result = new();
-            result.template = this.template.id;
-            result.number = this.Number.Text;
-            result.fullNumber = this.GetNumber();
-            result.status = this.document.status;
-            result.fileName = this.Filename.Text;
+            SGeneratedDocument result = new()
+            {
+                template = this.template.id,
+                number = this.Number.Text,
+                fullNumber = this.GetNumber(),
+                status = this.document.status,
+                fileName = this.Filename.Text
+            };
             List<SGeneratedTag> filledTags = new();
             foreach (UC_TagFiller tf in this.TagFillers)
             {
@@ -240,18 +241,22 @@ namespace Incubator_2.Forms
                 string value = tf.GetValue();
                 if (tf.tag.type != TypeOfTag.LocalConstant)
                 {
-                    if (tf.tag.type == TypeOfTag.Generator || tf.tag.type == TypeOfTag.Date)
+                    if (tf.tag.type is TypeOfTag.Generator or TypeOfTag.Date)
                     {
-                        SGeneratedTag gtg = new();
-                        gtg.tag = id;
-                        gtg.value = tf.GetData();
+                        SGeneratedTag gtg = new()
+                        {
+                            tag = id,
+                            value = tf.GetData()
+                        };
                         filledTags.Add(gtg);
                     }
                     else
                     {
-                        SGeneratedTag gt = new();
-                        gt.tag = id;
-                        gt.value = value;
+                        SGeneratedTag gt = new()
+                        {
+                            tag = id,
+                            value = value
+                        };
                         filledTags.Add(gt);
                     }
                 }
@@ -366,7 +371,7 @@ namespace Incubator_2.Forms
                     switch (this.template.type)
                     {
                         case TemplateType.Word:
-                            newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
+                            newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.docx";
                             File.Copy(ProgramState.GetFullnameOfWordFile(this.template.path), newFile, true);
                             WordTemplator wt = new WordTemplator(newFile);
                             this.Dispatcher.Invoke(() =>

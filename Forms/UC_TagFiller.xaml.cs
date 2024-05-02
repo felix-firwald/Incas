@@ -428,5 +428,10 @@ namespace Incubator_2.Forms
         {
             this.CheckForScriptOnUpdate();
         }
+
+        private void NumericBox_OnNumberChanged(object sender)
+        {
+            this.CheckForScriptOnUpdate();
+        }
     }
 }

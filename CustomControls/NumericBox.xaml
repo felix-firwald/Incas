@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Incubator_2.CustomControls" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="350" MaxHeight="40">
-    <Border Grid.ColumnSpan="3" MinWidth="40" MinHeight="30" MaxHeight="30" Background="{DynamicResource Black}" BorderBrush="{DynamicResource Element}" BorderThickness="1,1,1,1" CornerRadius="6,6,6,6" Margin="5,5,5,5" Cursor="Hand">
+    <Border Grid.ColumnSpan="3" MinWidth="40" MinHeight="30" MaxHeight="30" Background="{DynamicResource Black}" BorderBrush="{DynamicResource Element}" BorderThickness="1,1,1,1" CornerRadius="6,6,6,6" Margin="5,5,5,5">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -24,10 +24,10 @@
                 </TextBox.ContextMenu>
             </TextBox>
             <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="1" Height="23" VerticalAlignment="Center"/>
-            <fa:FontAwesome Icon="Minus" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="DecrementClick" ToolTip="Вычесть из числа 1"></fa:FontAwesome>
+            <fa:FontAwesome x:Name="MinusButton" Icon="Minus" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="DecrementClick" ToolTip="Вычесть из числа 1"></fa:FontAwesome>
 
             <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="3" Height="23" VerticalAlignment="Center"/>
-            <fa:FontAwesome Icon="Plus" Grid.Column="4" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="IncrementClick" ToolTip="Прибавить к числу 1"></fa:FontAwesome>
+            <fa:FontAwesome x:Name="PlusButton" Icon="Plus" Grid.Column="4" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="IncrementClick" ToolTip="Прибавить к числу 1"></fa:FontAwesome>
             <!--<Path Grid.Column="2" Style="{DynamicResource PathMain}" VerticalAlignment="Center" HorizontalAlignment="Center" MouseDown="ButtonClick" ToolTip="Выбрать запись" Data="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" Stretch="Uniform" Margin="12,12,12,12" />-->
         </Grid>
 
