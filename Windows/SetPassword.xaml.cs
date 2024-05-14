@@ -16,9 +16,12 @@ namespace Incubator_2.Windows
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            UserParameters parameters = ProgramState.CurrentUserParameters;
+            ProgramState.ShowInfoDialog(ProgramState.CurrentUser.fullname);
+            UserParameters parameters = ProgramState.CurrentUser.GetParametersContext();
+            ProgramState.ShowInfoDialog(parameters.permission_group);
             parameters.password = this.Input.Text;
             ProgramState.CurrentUserParameters = parameters;
+            ProgramState.CurrentUser.SaveParametersContext(parameters);
             ProgramState.CurrentUser.SaveUser();
             this.Close();
         }
