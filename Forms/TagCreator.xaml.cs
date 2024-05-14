@@ -20,14 +20,13 @@ namespace Incubator_2.Forms
         public event MethodContainer onDelete;
         public Tag tag;
         private VM_Tag vm;
-
-        private bool IsCollapsed = false;
         public TagCreator(Tag t, bool isNew = false)
         {
             InitializeComponent();
             this.tag = t;
             this.vm = new(t);
             this.DataContext = this.vm;
+            this.ExpanderButton.IsChecked = true;
         }
 
         public bool Check()
@@ -68,27 +67,21 @@ namespace Incubator_2.Forms
         }
         public void Minimize()
         {
-            this.MainBorder.Height = 40;
-            this.IsCollapsed = true;
-            this.NumberUp.Visibility = Visibility.Visible;
+            this.ExpanderButton.IsChecked = false;
         }
         public void Maximize()
         {
+            this.ExpanderButton.IsChecked = true;
+        }
+        private void MaximizeClick(object sender, RoutedEventArgs e)
+        {
             this.MainBorder.Height = this.ContentPanel.Height + 40;
-            this.IsCollapsed = false;
             this.NumberUp.Visibility = Visibility.Collapsed;
         }
-
-        private void TurnSizeClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void MinimizeClick(object sender, RoutedEventArgs e)
         {
-            if (this.IsCollapsed)
-            {
-                this.Maximize();
-            }
-            else
-            {
-                this.Minimize();
-            }
+            this.MainBorder.Height = 40;
+            this.NumberUp.Visibility = Visibility.Visible;
         }
 
         private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -198,6 +191,6 @@ namespace Incubator_2.Forms
         public void DublicateName()
         {
             this.vm.VisibleName = this.vm.NameOfTag;
-        }
+        }        
     }
 }

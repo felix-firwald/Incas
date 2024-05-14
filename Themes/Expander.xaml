@@ -12,6 +12,61 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="ExpanderButton" TargetType="{x:Type CheckBox}">
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="MinWidth" Value="50"/>
+        <Setter Property="IsThreeState" Value="False"/>
+        <Setter Property="ToolTip" Value="Развернуть объект"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="150"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <Grid Background="Transparent">
+                        <Path Name="Arrow" Data="m -6.354 -2.354 a 0.5 0.5 0 0 1 0.708 0 l 5.646 5.647 l 5.646 -5.647 a 0.5 0.5 0 0 1 0.708 0.708 l -6 6 a 0.5 0.5 0 0 1 -0.708 0 l -6 -6 a 0.5 0.5 0 0 1 0 -0.708" HorizontalAlignment="Center" Fill="{StaticResource Icon}" VerticalAlignment="Center" Margin="4,4,0,0">
+                            <Path.RenderTransform>
+                                <RotateTransform Angle="-90" x:Name="ArrowRotate"/>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="true">
+                            <!--<Setter Property="Data" TargetName="Arrow" Value="M 1,1.5 L 4.5,5 L 8,1.5"/>-->
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.150" To="0"
+                         Storyboard.TargetName="ArrowRotate"
+                         Storyboard.TargetProperty="Angle"/>
+
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.200" To="-90"
+                        Storyboard.TargetName="ArrowRotate"
+                        Storyboard.TargetProperty="Angle"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                            <Setter Property="ToolTip" Value="Свернуть объект"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Stroke" TargetName="Arrow" Value="{StaticResource LightPurple}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Stroke" TargetName="Arrow" Value="{StaticResource Icon}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinHeight" Value="40"/>

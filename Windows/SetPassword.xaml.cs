@@ -11,7 +11,7 @@ namespace Incubator_2.Windows
     {
         public SetPassword()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

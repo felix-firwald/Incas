@@ -24,29 +24,31 @@ namespace Incubator_2.Windows
     public partial class UseTemplate : Window
     {
         private Template template;
+        private TemplateSettings templateSettings;
         private List<Tag> tags;
-        private List<UC_FileCreator> creators = new List<UC_FileCreator>();
+        private List<UC_FileCreator> creators = new();
 
         private delegate void UpdateProgressBarDelegate(DependencyProperty dp, object value);
-        private readonly BackgroundWorker worker = new BackgroundWorker();
-        public UseTemplate(Template t)
+        private readonly BackgroundWorker worker = new();
+        private void Setup(Template t)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.template = t;
             this.Title = t.name;
             this.CategoryName.Text = t.name;
-            this.LoadTags();
-            this.AddFileCreator();
+            this.templateSettings = t.GetTemplateSettings();
+            this.LoadTags();           
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
             ProgramState.ShowWaitCursor(false);
         }
+        public UseTemplate(Template t)
+        {
+            this.Setup(t);
+            this.AddFileCreator();
+        }
         public UseTemplate(Template t, List<SGeneratedDocument> records)
         {
-            InitializeComponent();
-            this.template = t;
-            this.Title = t.name;
-            this.LoadTags();
-            this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
+            this.Setup(t);
             this.CategoryName.Text = records[0].templateName;
             foreach (SGeneratedDocument item in records)
             {
@@ -62,7 +64,7 @@ namespace Incubator_2.Windows
 
         private UC_FileCreator AddFileCreator()
         {
-            UC_FileCreator fc = new UC_FileCreator(this.template, this.tags);
+            UC_FileCreator fc = new(this.template, ref this.templateSettings, this.tags);
             fc.OnInsertRequested += this.InsertValuesByTag;
             fc.OnRenameRequested += this.SimpleRecalculateNames;
             fc.OnCreatorDestroy += this.OnCreatorDestroy;

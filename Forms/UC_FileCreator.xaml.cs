@@ -21,7 +21,6 @@ namespace Incubator_2.Forms
     public partial class UC_FileCreator : UserControl
     {
         private SGeneratedDocument document;
-        private bool IsCollapsed = false;
         private Template template;
         private List<Tag> tags;
         private List<UC_TagFiller> TagFillers = new();
@@ -35,13 +34,13 @@ namespace Incubator_2.Forms
         public delegate void TagActionRecalculate(string tag);
         public event TagActionRecalculate OnRenameRequested;
         public bool SelectorChecked { get { return (bool)this.Selector.IsChecked; } }
-        public UC_FileCreator(Template templ, List<Tag> tagsList)
+        public UC_FileCreator(Template templ, ref TemplateSettings settings, List<Tag> tagsList)
         {
             this.InitializeComponent();
             this.tags = tagsList;
             this.template = templ;
             this.FillContentPanel();
-            this.templateSettings = templ.GetTemplateSettings();
+            this.templateSettings = settings;
             this.NumberPrefix.Content = this.templateSettings.NumberPrefix;
             this.NumberPostfix.Content = this.templateSettings.NumberPostfix;
             if (this.template.type == TemplateType.Excel)
@@ -49,6 +48,7 @@ namespace Incubator_2.Forms
                 this.EyeButton.Visibility = Visibility.Collapsed;
                 this.EyeButtonSeparator.Visibility = Visibility.Collapsed;
             }
+            this.ExpanderButton.IsChecked = true;
         }
 
         private void FillContentPanel()
@@ -184,30 +184,24 @@ namespace Incubator_2.Forms
         }
         public void Maximize()
         {
-            this.MainBorder.Height = this.ContentPanel.Height + 40;
-            this.IsCollapsed = false;
+            this.ExpanderButton.IsChecked = true;
         }
         public void Minimize()
         {
+            this.ExpanderButton.IsChecked = false;
+        }
+        private void MaximizeClick(object sender, RoutedEventArgs e)
+        {
+            this.MainBorder.Height = this.ContentPanel.Height + 40;
+        }
+        private void MinimizeClick(object sender, RoutedEventArgs e)
+        {
             this.MainBorder.Height = 40;
-            this.IsCollapsed = true;
         }
 
-        private void ResizeClick(object sender, MouseButtonEventArgs e)
-        {
-            if (this.IsCollapsed)
-            {
-                this.Maximize();
-            }
-            else
-            {
-                this.Minimize();
-            }
-        }
         private void Remove(object sender, MouseButtonEventArgs e)
         {
             OnCreatorDestroy?.Invoke(this);
-
         }
         private string RemoveUnresolvedChars(string input)
         {

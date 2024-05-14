@@ -66,21 +66,16 @@ namespace Incubator_2.Forms
         {
             if (this.Selector.Visibility == Visibility.Visible)
             {
-                if (this.Selector.IsChecked == true)
-                {
-                    this.Selector.IsChecked = false;
-                }
-                else
-                {
-                    this.Selector.IsChecked = true;
-                }
+                this.Selector.IsChecked = this.Selector.IsChecked == true ? false : true;
             }
         }
         private void CreateFile(string folder)
         {
             using Template templ = new();
             using Tag t = new();
-            UC_FileCreator fc = new(templ.GetTemplateById(this.record.template), t.GetAllTagsByTemplate(this.record.template));
+            templ.GetTemplateById(this.record.template);
+            TemplateSettings settings = templ.GetTemplateSettings();
+            UC_FileCreator fc = new(templ, settings: ref settings, t.GetAllTagsByTemplate(this.record.template));
             fc.ApplyRecord(this.record);
             fc.CreateFile(folder, this.record.templateName, false, false);
         }
