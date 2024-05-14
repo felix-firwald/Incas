@@ -123,9 +123,9 @@ namespace Forms
                 if (ProgramState.IsWorkspaceOpened())
                 {
                     ProgramState.ShowWaitCursor();
-                    CreateTemplateWord ctw = new CreateTemplateWord(this.template.AsModel());
+                    CreateTemplateWord ctw = new(this.template.AsModel());
                     ctw.OnCreated += this.UpdateList;
-                    ctw.ShowDialog();
+                    ctw.Show();
                 }
             }
             else
@@ -147,7 +147,7 @@ namespace Forms
                     }
                     CreateTemplateWord ctw = new CreateTemplateWord(parents: parents);
                     ctw.OnCreated += this.UpdateList;
-                    ctw.ShowDialog();
+                    ctw.Show();
                 }
             }
             else

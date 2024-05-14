@@ -37,7 +37,6 @@ namespace Incubator_2.Windows
             {
                 this.Title = $"Редактирование шаблона ({te.name})";
                 this.template = te;
-                this.FindInFileButton.IsEnabled = false;
                 this.GetTags();
             }
             this.vm = new VM_Template(this.template);
@@ -129,7 +128,6 @@ namespace Incubator_2.Windows
                 names.Add(tag.TagName.Text);
             }
 
-
             return true;
         }
 
@@ -196,6 +194,17 @@ namespace Incubator_2.Windows
 
         private void FindTagsInFile(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            bool CheckNameUniqueness(string name)
+            {
+                foreach (TagCreator creator in this.ContentPanel.Children)
+                {
+                    if (creator.tag.name == name)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
             string pathFile = ProgramState.GetFullnameOfWordFile(this.template.path);
             if (!File.Exists(pathFile))
             {
@@ -204,11 +213,14 @@ namespace Incubator_2.Windows
             }
             try
             {
-                this.ContentPanel.Children.Clear();
-                WordTemplator wt = new WordTemplator(pathFile);
+                WordTemplator wt = new(pathFile);
                 foreach (string tagname in wt.FindAllTags())
                 {
-                    Tag tag = new Tag();
+                    if (!CheckNameUniqueness(tagname))
+                    {
+                        continue;
+                    }
+                    Tag tag = new();
                     tag.name = tagname;
                     tag.visibleName = tagname;
                     this.AddTag(tag);
