@@ -375,25 +375,42 @@ namespace Incubator_2.Windows
             }
             try
             {
-                OpenFileDialog fd = new OpenFileDialog();
+                OpenFileDialog fd = new();
                 fd.Filter = "Шаблоны INCAS|*.tinc";
                 fd.InitialDirectory = ProgramState.TemplatesSourcesWordPath;
                 if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     TemplatePort tp = JsonConvert.DeserializeObject<TemplatePort>(File.ReadAllText(fd.FileName));
+                    
                     switch (tp.SourceTemplate.type)
                     {
                         case TemplateType.Word:
-                            if (!File.Exists(ProgramState.GetFullnameOfWordFile(tp.SourceTemplate.path)))
+                            string wordpath = tp.SourceTemplate.path;
+                            if (File.Exists(ProgramState.GetFullnameOfWordFile(tp.SourceTemplate.path)))
                             {
-                                File.WriteAllText(ProgramState.GetFullnameOfWordFile(tp.SourceTemplate.path), tp.Source);
+                                if (ProgramState.ShowQuestionDialog($"Исходный файл шаблона с именем \"{wordpath}\" уже существует в рабочем пространстве.\n" +
+                                    $"Использовать его или переименовать предлагаемый файл из импортированного шаблона?", "Использовать старый шаблон?", "Использовать старый", "Переименовать предлагаемый") == DialogStatus.No)
+                                {
+                                    wordpath = ProgramState.ShowInputBox("Имя исходного файла", "Придумайте другое имя").Replace("\\", "").Replace(".docx", "") + ".docx";
+                                    tp.SourceTemplate.path = wordpath;
+                                }       
                             }
+                            WordTemplator templator = new();
+                            templator.DeserializeAndExtract(tp.Source, wordpath);
+                            //File.WriteAllText(ProgramState.GetFullnameOfWordFile(wordpath), tp.Source, System.Text.Encoding.UTF8);
                             break;
                         case TemplateType.Excel:
-                            if (!File.Exists(ProgramState.GetFullnameOfExcelFile(tp.SourceTemplate.path)))
+                            string excelpath = tp.SourceTemplate.path;
+                            if (File.Exists(ProgramState.GetFullnameOfExcelFile(tp.SourceTemplate.path)))
                             {
-                                File.WriteAllText(ProgramState.GetFullnameOfExcelFile(tp.SourceTemplate.path), tp.Source);
+                                if (ProgramState.ShowQuestionDialog($"Исходный файл шаблона с именем \"{excelpath}\" уже существует в рабочем пространстве.\n" +
+                                    $"Использовать его или переименовать предлагаемый файл из импортированного шаблона?", "Использовать старый шаблон?", "Использовать старый", "Переименовать предлагаемый") == DialogStatus.No)
+                                {
+                                    excelpath = ProgramState.ShowInputBox("Имя исходного файла", "Придумайте другое имя").Replace("\\", "").Replace(".xlsx", "") + ".xlsx";
+                                    tp.SourceTemplate.path = excelpath;
+                                }
                             }
+                            File.WriteAllText(ProgramState.GetFullnameOfExcelFile(excelpath), tp.Source, System.Text.Encoding.UTF8);
                             break;
                     }
                     this.vm.ApplyNewTemplate(tp.SourceTemplate);

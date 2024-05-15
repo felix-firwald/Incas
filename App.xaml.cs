@@ -14,27 +14,16 @@ namespace Incubator_2
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            try
+            if (DateTime.Now > DateTime.Parse("15.07.2024"))
             {
-
-                //if (DateTime.Now > DateTime.Parse("22.06.2024"))
-                //{
-                //    ProgramState.ShowErrorDialog("Истек предельный срок для лицензии этой версии. Обновите программу.", "Лицензия истекла");
-                //    App.Current.Shutdown();
-                //}
-                OpenIncubator oi = new OpenIncubator();
-
-                if (oi.ShowDialog() == false)
-                {
-
-                }
+                ProgramState.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");
+                App.Current.Shutdown();
             }
-            catch (DBParamNotFound p)
+            OpenIncubator oi = new();
+
+            if (oi.ShowDialog() == false)
             {
-                Dialog d = new Dialog($"Параметр с именем \"{p}\" не найден в базе данных рабочего пространства.\n" +
-                    $"Вероятно, имело место быть ручное вмешательство в файл data.dbinc, в результате чего " +
-                    $"параметр был удален.\nДальнейшее использование рабочей области находится под угрозой.", "Возникла критическая ошибка");
-                d.ShowDialog();
+
             }
         }
 

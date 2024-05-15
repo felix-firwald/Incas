@@ -37,18 +37,18 @@ namespace Models
             switch (this.SourceTemplate.type)
             {
                 case TemplateType.Word:
-                    this.Source = File.ReadAllText(ProgramState.GetFullnameOfWordFile(this.SourceTemplate.path));
+                    WordTemplator wt = new(ProgramState.GetFullnameOfWordFile(this.SourceTemplate.path));
+                    this.Source = wt.Serialize();
                     break;
                 case TemplateType.Excel:
-                    this.Source = File.ReadAllText(ProgramState.GetFullnameOfExcelFile(this.SourceTemplate.path));
+                    this.Source = File.ReadAllText(ProgramState.GetFullnameOfExcelFile(this.SourceTemplate.path), System.Text.Encoding.UTF8);
                     break;
             }
         }
         public void ToFile(string folder)
         {
-            File.WriteAllText($"{folder}\\{this.SourceTemplate.name}.tinc", JsonConvert.SerializeObject(this));
+            File.WriteAllText($"{folder}\\{this.SourceTemplate.name}.tinc", JsonConvert.SerializeObject(this), System.Text.Encoding.UTF8);
         }
-
     }
     public struct TemplateSettings
     {

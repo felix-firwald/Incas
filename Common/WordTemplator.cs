@@ -1,6 +1,7 @@
 ﻿using Incubator_2.Forms;
 using Incubator_2.Models;
 using Models;
+using Newtonsoft.Json;
 using Spire.Doc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Text.RegularExpressions;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 using Font = Xceed.Document.NET.Font;
+using Formatting = Xceed.Document.NET.Formatting;
 using Table = Xceed.Document.NET.Table;
 
 namespace Common
@@ -28,6 +30,10 @@ namespace Common
         {
             this.Path = path;
         }
+        public WordTemplator()
+        {
+
+        }
 
         private string ConvertTag(string tag)
         {
@@ -37,13 +43,22 @@ namespace Common
         {
             return DocX.Load(this.Path);
         }
+        public string Serialize()
+        {
+            return JsonConvert.SerializeObject(this.LoadFile());
+        }
+        public void DeserializeAndExtract(string input, string newPath)
+        {
+            DocX doc = JsonConvert.DeserializeObject<DocX>(input);
+            doc.SaveAs(ProgramState.GetFullnameOfWordFile(newPath) + ".docx");
+        }
 
         public async void Replace(List<string> tags, List<string> values, bool async = true) // не Dictionary потому что важен порядок замены
         {
             DocX doc = this.LoadFile();
             void MakeReplace()
             {
-                StringReplaceTextOptions options = new StringReplaceTextOptions();
+                StringReplaceTextOptions options = new();
                 for (int i = 0; i < tags.Count; i++)
                 {
                     options.SearchValue = this.ConvertTag(tags[i]);
@@ -82,18 +97,22 @@ namespace Common
                 string value = tf.GetValue();
                 if (tf.tag.type != TypeOfTag.LocalConstant)
                 {
-                    if (tf.tag.type == TypeOfTag.Generator || tf.tag.type == TypeOfTag.Date)
+                    if (tf.tag.type is TypeOfTag.Generator or TypeOfTag.Date)
                     {
-                        SGeneratedTag gtg = new();
-                        gtg.tag = id;
-                        gtg.value = tf.GetData();
+                        SGeneratedTag gtg = new()
+                        {
+                            tag = id,
+                            value = tf.GetData()
+                        };
                         filledTags.Add(gtg);
                     }
                     else
                     {
-                        SGeneratedTag gt = new();
-                        gt.tag = id;
-                        gt.value = value;
+                        SGeneratedTag gt = new()
+                        {
+                            tag = id,
+                            value = value
+                        };
                         filledTags.Add(gt);
                     }
                 }
@@ -103,51 +122,24 @@ namespace Common
             this.Replace(tagsToReplace, values, isAsync);
             return filledTags;
         }
-        //public void MakeFormatting(DocX doc)
-        //{
-        //    StringReplaceTextOptions options = new StringReplaceTextOptions();
-        //    options.NewFormatting = new Formatting();
-        //    options.NewFormatting.FontFamily = new Font("Times New Roman");
-        //    options.NewFormatting.Bold = true;
-        //    GetMatchesFormat(doc, @"<b>.*</b>", new List<string> { "<b>", "</b>" }, options);
-        //    options.NewFormatting.Bold = false;
-        //    options.NewFormatting.Italic = true;
-        //    GetMatchesFormat(doc, @"<i>.*</i>", new List<string> { "<i>", "</i>" }, options);
-        //    doc.ReplaceText(options);
-        //}
-        //private List<string> GetMatchesFormat(DocX doc, string pattern, List<string> removableParts, StringReplaceTextOptions options)
-        //{
-        //    Regex reg = new Regex(pattern);
-        //    List<string> result = new List<string>();
-        //    MatchCollection matches = reg.Matches(doc.Text);
-        //    foreach (Match match in matches)
-        //    {
-        //        result.Add(match.Value);
-        //        options.SearchValue = match.Value;
-        //        string newValue = match.Value;
-        //        foreach (string part in removableParts)
-        //        {
-        //            newValue = newValue.Replace(part, "");
-        //        }
-        //        options.NewValue = newValue;
-        //        doc.ReplaceText(options);
-        //    }
 
-        //    return result;
-        //}
         public void CreateTable(string tag, DataTable dt)
         {
             DocX doc = this.LoadFile();
-            ObjectReplaceTextOptions options = new ObjectReplaceTextOptions();
-            options.SearchValue = this.ConvertTag(tag);
+            ObjectReplaceTextOptions options = new()
+            {
+                SearchValue = this.ConvertTag(tag)
+            };
             Table tab = doc.AddTable(dt.Rows.Count + 1, dt.Columns.Count);
             tab.Design = TableDesign.TableGrid;
 
-            Formatting head = new Formatting();
-            head.Bold = true;
-            head.FontFamily = new Font("Times New Roman");
+            Formatting head = new()
+            {
+                Bold = true,
+                FontFamily = new Font("Times New Roman")
+            };
 
-            Formatting rowStyle = new Formatting();
+            Formatting rowStyle = new();
             head.FontFamily = new Font("Times New Roman");
             for (int i = 0; i < dt.Columns.Count; i++) // cols
             {

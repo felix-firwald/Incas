@@ -521,7 +521,7 @@ namespace Common
                 cmd.CommandText = this.GetRequest();
 
                 SQLiteDataReader sqlreader = cmd.ExecuteReader();
-                DataTable objDataTable = new DataTable();
+                DataTable objDataTable = new();
                 objDataTable.Load(sqlreader);
                 conn.Close();
                 return objDataTable;
