@@ -65,7 +65,6 @@ namespace Incas
             using Template t = new();
             return t.GetAllWordTemplates();
         }
-
     }
 }
 namespace Incubator_2.Common

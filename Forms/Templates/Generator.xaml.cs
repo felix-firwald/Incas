@@ -193,7 +193,7 @@ namespace Incubator_2.Forms.Templates
                     Session session;
                     if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для заполнения этой части документа."))
                     {
-                        this.Result.template = this.TemplateId;
+                        this.Result[0].template = this.TemplateId;
                         ServerProcessor.SendOpenGeneratorProcess(this.Result, this, session.slug);
                         this.SetInProcess($"Делегировано: {session.user}");
                     }

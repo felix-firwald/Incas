@@ -1,4 +1,5 @@
 ﻿using Common;
+using IncasEngine;
 using Incubator_2.Common;
 using System;
 using System.Collections.Generic;
@@ -47,17 +48,19 @@ namespace Incubator_2.Models
 
         public GeneratedDocument AsModel()
         {
-            GeneratedDocument d = new();
-            d.id = this.id;
-            d.template = this.template;
-            d.templateName = this.templateName;
-            d.generatedTime = this.generatedTime;
-            d.fileName = this.fileName;
-            d.number = this.number;
-            d.fullNumber = this.fullNumber;
-            d.status = this.status;
-            d.content = this.filledTagsString;
-            d.author = this.author;
+            GeneratedDocument d = new()
+            {
+                id = this.id,
+                template = this.template,
+                templateName = this.templateName,
+                generatedTime = this.generatedTime,
+                fileName = this.fileName,
+                number = this.number,
+                fullNumber = this.fullNumber,
+                status = this.status,
+                content = this.filledTagsString,
+                author = this.author
+            };
             return d;
         }
     }

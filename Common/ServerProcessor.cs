@@ -1,4 +1,5 @@
 ﻿using Common;
+using IncasEngine;
 using Incubator_2.Forms;
 using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
@@ -147,7 +148,7 @@ namespace Incubator_2.Common
         }
         private static Process Parse(string input)
         {
-            Process result = new Process();
+            Process result = new();
             try
             {
                 string output = Cryptographer.DecryptString(GetKeyByRecipient(ProgramState.CurrentSession.slug), input);
@@ -165,7 +166,7 @@ namespace Incubator_2.Common
             try
             {
                 List<Session> closed = new();
-                using (Session s = new Session())
+                using (Session s = new())
                 {
                     closed = s.GetOpenedSessions(false);
                 }
