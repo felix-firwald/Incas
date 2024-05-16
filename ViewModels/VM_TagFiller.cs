@@ -1,4 +1,5 @@
 ﻿
+using IncasEngine.TemplateManager;
 using Models;
 
 namespace Incubator_2.ViewModels
@@ -45,7 +46,7 @@ namespace Incubator_2.ViewModels
                 this.OnPropertyChanged(nameof(this.Enumeration));
             }
         }
-        public TypeOfTag TypeOf
+        public TagType TypeOf
         {
             get
             {

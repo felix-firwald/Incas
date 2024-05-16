@@ -1,4 +1,5 @@
 ﻿using Common;
+using IncasEngine.TemplateManager;
 using Incubator_2.Windows;
 using Incubator_2.Windows.Templates;
 using Models;
@@ -70,7 +71,7 @@ namespace Forms
                 case TemplateType.Excel:
                     if (this.IsFileExists())
                     {
-                        UseTemplate ut = new UseTemplate(this.template.AsModel());
+                        UseTemplate ut = new(this.template.AsModel());
                         ut.Show();
                     }
                     else

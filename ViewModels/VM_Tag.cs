@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using IncasEngine.TemplateManager;
+using Models;
 using System.Windows;
 
 namespace Incubator_2.ViewModels
@@ -28,27 +29,17 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                switch (this.mainTag.type)
+                return this.mainTag.type switch
                 {
-                    case TypeOfTag.Variable:
-                    case TypeOfTag.Text:
-                    default:
-                        return "Значение по умолчанию";
-                    case TypeOfTag.Number:
-                        return "Укажите значения как [мин];[по умолчанию];[макс] или [мин];[макс]";
-                    case TypeOfTag.LocalConstant:
-                        return "Значение константы";
-                    case TypeOfTag.HiddenField:
-                        return "Значение, которое будет использовано, если скрипт вернет пустую строку";
-                    case TypeOfTag.LocalEnumeration:
-                        return "Предлагаемые значения (для разделения используйте символ \";\")";
-                    case TypeOfTag.Relation:
-                        return "Укажите таблицу и поле";
-                    case TypeOfTag.Date:
-                        return "Укажите правило форматирования";
-                    case TypeOfTag.Table:
-                        return "Укажите названия столбцов (для разделения используйте символ \";\")";
-                }
+                    TagType.Number => "Укажите значения как [мин];[по умолчанию];[макс] или [мин];[макс]",
+                    TagType.LocalConstant => "Значение константы",
+                    TagType.HiddenField => "Значение, которое будет использовано, если скрипт вернет пустую строку",
+                    TagType.LocalEnumeration => "Предлагаемые значения (для разделения используйте символ \";\")",
+                    TagType.Relation => "Укажите таблицу и поле",
+                    TagType.Date => "Укажите правило форматирования",
+                    TagType.Table => "Укажите названия столбцов (для разделения используйте символ \";\")",
+                    _ => "Значение по умолчанию",
+                };
             }
         }
         public int OrderNumber
@@ -107,9 +98,10 @@ namespace Incubator_2.ViewModels
                 {
                     default:
                         return Visibility.Visible;
-                    case TypeOfTag.LocalConstant:
-                    case TypeOfTag.HiddenField:
-                    case TypeOfTag.Generator:
+                    case TagType.LocalConstant:
+                    case TagType.HiddenField:
+                    case TagType.List:
+                    case TagType.Generator:
                         return Visibility.Collapsed;
                 }
             }
@@ -148,51 +140,56 @@ namespace Incubator_2.ViewModels
 
         // может лучше по selected index?
         #region Not Standart Properties
-        public TypeOfTag SerializeFromInput(string val)
+        public TagType SerializeFromInput(string val)
         {
             switch (val)
             {
                 case "0":
                 default:
-                    return TypeOfTag.Variable;
+                    return TagType.Variable;
                 case "1":
-                    return TypeOfTag.Text;
+                    return TagType.Text;
                 case "2":
-                    return TypeOfTag.LocalEnumeration;
+                    return TagType.LocalEnumeration;
                 case "3":
-                    return TypeOfTag.Relation;
+                    return TagType.Relation;
                 case "4":
-                    return TypeOfTag.Date;
+                    return TagType.Date;
                 case "5":
-                    return TypeOfTag.Number;
+                    return TagType.Number;
                 case "6":
                     this.Description = "";
-                    return TypeOfTag.LocalConstant;
+                    return TagType.LocalConstant;
                 case "7":
                     this.Description = "";
-                    return TypeOfTag.HiddenField;
+                    return TagType.HiddenField;
                 case "8":
                     this.Description = "";
                     this.DefaultValue = "";
-                    return TypeOfTag.Generator;
+                    return TagType.Generator;
                 case "9":
                     this.Description = "";
-                    return TypeOfTag.Table;
+                    this.DefaultValue = "";
+                    return TagType.List;
+                case "10":
+                    this.Description = "";
+                    return TagType.Table;
             }
         }
-        public string SerializeToInput(TypeOfTag tot)
+        public string SerializeToInput(TagType tot)
         {
             return tot switch
             {
-                TypeOfTag.Text => "1",
-                TypeOfTag.LocalEnumeration => "2",
-                TypeOfTag.Relation => "3",
-                TypeOfTag.Date => "4",
-                TypeOfTag.Number => "5",
-                TypeOfTag.LocalConstant => "6",
-                TypeOfTag.HiddenField => "7",
-                TypeOfTag.Generator => "8",
-                TypeOfTag.Table => "9",
+                TagType.Text => "1",
+                TagType.LocalEnumeration => "2",
+                TagType.Relation => "3",
+                TagType.Date => "4",
+                TagType.Number => "5",
+                TagType.LocalConstant => "6",
+                TagType.HiddenField => "7",
+                TagType.Generator => "8",
+                TagType.List => "9",
+                TagType.Table => "10",
                 _ => "0",
             };
         }
@@ -200,7 +197,7 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                if (this.mainTag.type == TypeOfTag.Relation)
+                if (this.mainTag.type == TagType.Relation)
                 {
                     return Visibility.Visible;
                 }
@@ -211,7 +208,7 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                if (this.mainTag.type == TypeOfTag.Generator)
+                if (this.mainTag.type is TagType.Generator or TagType.List)
                 {
                     return Visibility.Visible;
                 }
@@ -226,8 +223,8 @@ namespace Incubator_2.ViewModels
                 {
                     default:
                         return Visibility.Visible;
-                    case TypeOfTag.Relation:
-                    case TypeOfTag.Generator:
+                    case TagType.Relation:
+                    case TagType.Generator:
                         return Visibility.Collapsed;
                 }
             }

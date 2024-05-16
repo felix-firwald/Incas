@@ -1,4 +1,5 @@
 ﻿using Common;
+using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
 using Models;
@@ -50,35 +51,30 @@ namespace Incubator_2.Forms
 
             switch (this.tag.type)
             {
-                case TypeOfTag.Variable:
+                case TagType.Variable:
                 default:
                     this.SetTextBoxMode();
                     this.Textbox.Text = this.tag.value;
                     this.Textbox.MaxLength = 120;
                     this.Textbox.Tag = this.tag.description;
                     break;
-                case TypeOfTag.Text:
+                case TagType.Text:
                     this.SetTextBoxMode();
                     this.Textbox.Text = this.tag.value;
                     this.Textbox.Style = this.FindResource("TextBoxBig") as System.Windows.Style;
                     this.Textbox.MaxLength = 1200;
                     this.Textbox.Tag = this.tag.description;
                     break;
-                case TypeOfTag.Number:
-                    //int digitValue;
-                    //if (int.TryParse(this.tag.value, out digitValue))
-                    //{
-                    //    this.NumericBox.Value = digitValue;
-                    //}
+                case TagType.Number:
                     this.NumericBox.ApplyMinAndMax(this.tag.value);
                     this.NumericBox.Visibility = Visibility.Visible;
                     break;
-                case TypeOfTag.LocalConstant:
-                case TypeOfTag.HiddenField:
+                case TagType.LocalConstant:
+                case TagType.HiddenField:
                     this.Textbox.Text = this.tag.value;
                     this.Visibility = Visibility.Collapsed;
                     break;
-                case TypeOfTag.LocalEnumeration:
+                case TagType.LocalEnumeration:
                     this.SetComboBoxMode();
                     this.Combobox.ItemsSource = this.tag.value.Split(';');
                     this.Combobox.SelectedIndex = 0;
@@ -87,18 +83,23 @@ namespace Incubator_2.Forms
                         this.Combobox.ToolTip = this.tag.description;
                     }
                     break;
-                case TypeOfTag.Relation:
+                case TagType.Relation:
                     this.SelectionBox.Visibility = Visibility.Visible;
                     this.SelectionBox.Source = this.tag.value;
                     this.SelectionBox.ToolTip = this.tag.description;
                     break;
-                case TypeOfTag.Date:
+                case TagType.Date:
                     this.DatePicker.Visibility = Visibility.Visible;
                     this.DatePicker.ToolTip = this.tag.description;
                     break;
-                case TypeOfTag.Generator:
+                case TagType.Generator:
+                case TagType.List:
                     this.Generator.Visibility = Visibility.Visible;
                     this.Generator.TemplateId = int.Parse(this.tag.value);
+                    if (this.tag.type == TagType.List)
+                    {
+                        this.Generator.Mode = Templates.GeneratorMode.ManyForms;
+                    }
                     break;
             }
             this.MakeButton();
@@ -129,7 +130,7 @@ namespace Incubator_2.Forms
             this.isRequired = fc.NotNULL;
             if (fc.FKtable != null)
             {
-                this.tag.type = TypeOfTag.Relation;
+                this.tag.type = TagType.Relation;
                 this.SelectionBox.Visibility = Visibility.Visible;
                 this.SelectionBox.Database = path;
                 this.SelectionBox.Table = fc.FKtable;
@@ -137,7 +138,7 @@ namespace Incubator_2.Forms
             }
             else
             {
-                this.tag.type = TypeOfTag.Text;
+                this.tag.type = TagType.Text;
                 this.SetTextBoxMode();
             }
         }
@@ -146,28 +147,28 @@ namespace Incubator_2.Forms
         {
             switch (this.tag.type)
             {
-                case TypeOfTag.Variable:
-                case TypeOfTag.Text:
-                case TypeOfTag.HiddenField:
+                case TagType.Variable:
+                case TagType.Text:
+                case TagType.HiddenField:
                 default:
                     this.Textbox.Text = value;
                     break;
-                case TypeOfTag.Number:
+                case TagType.Number:
                     int digitValue;
                     if (int.TryParse(value, out digitValue))
                     {
                         this.NumericBox.Value = digitValue;
                     }                    
                     break;
-                case TypeOfTag.Relation:
+                case TagType.Relation:
                     this.SelectionBox.Value = value;
                     break;
-                case TypeOfTag.LocalConstant:
+                case TagType.LocalConstant:
                     return;
-                case TypeOfTag.LocalEnumeration:
+                case TagType.LocalEnumeration:
                     this.Combobox.SelectedValue = value;
                     break;
-                case TypeOfTag.Date:
+                case TagType.Date:
                     DateTime parsedDate;
                     bool success = DateTime.TryParseExact(value, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out parsedDate);
                     if (success)
@@ -175,7 +176,7 @@ namespace Incubator_2.Forms
                         this.DatePicker.SelectedDate = parsedDate;
                     }
                     break;
-                case TypeOfTag.Generator:
+                case TagType.Generator:
                     this.Generator.SetData(value);
                     break;
             }
@@ -195,7 +196,7 @@ namespace Incubator_2.Forms
         }
         public bool ValidateContent()
         {
-            if (this.tag.type is TypeOfTag.Variable or TypeOfTag.Text)
+            if (this.tag.type is TagType.Variable or TagType.Text)
             {
                 if (this.isRequired && string.IsNullOrEmpty(this.Textbox.Text))
                 {
@@ -222,24 +223,24 @@ namespace Incubator_2.Forms
 
             switch (this.tag.type)
             {
-                case TypeOfTag.Variable:
+                case TagType.Variable:
                 default:
                     return this.Textbox.Text;
-                case TypeOfTag.Number:
+                case TagType.Number:
                     return this.NumericBox.Value.ToString();
-                case TypeOfTag.LocalConstant:
+                case TagType.LocalConstant:
                     return this.tag.value;
-                case TypeOfTag.Relation:
+                case TagType.Relation:
                     return this.SelectionBox.Value;
-                case TypeOfTag.LocalEnumeration:
+                case TagType.LocalEnumeration:
                     if (this.Combobox.SelectedIndex != -1)
                     {
                         return this.Combobox.Items.GetItemAt(this.Combobox.SelectedIndex).ToString();
                     }
                     return "";
-                case TypeOfTag.Date:
+                case TagType.Date:
                     return this.GetDateInFormat();
-                case TypeOfTag.Generator:
+                case TagType.Generator:
                     return this.Generator.GetText();
             }
         }
@@ -247,9 +248,9 @@ namespace Incubator_2.Forms
         {
             switch (this.tag.type)
             {
-                case TypeOfTag.Generator:
+                case TagType.Generator:
                     return this.Generator.GetData();
-                case TypeOfTag.Date:
+                case TagType.Date:
                     if (this.DatePicker.SelectedDate.HasValue)
                     {
                         return ((DateTime)this.DatePicker.SelectedDate).ToString("dd.MM.yyyy");
@@ -317,7 +318,6 @@ namespace Incubator_2.Forms
             {
                 this.Textbox.Text = this.Textbox.Text.ToLower();
             }
-
         }
         private void RemoveWhitespacesClick(object sender, RoutedEventArgs e)
         {

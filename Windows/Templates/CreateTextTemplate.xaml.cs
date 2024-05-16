@@ -1,4 +1,5 @@
 ﻿using Common;
+using IncasEngine.TemplateManager;
 using Incubator_2.Forms;
 using Incubator_2.ViewModels;
 using Models;
@@ -23,15 +24,17 @@ namespace Incubator_2.Windows.Templates
         public event Base OnCreated;
         public CreateTextTemplate() // new
         {
-            InitializeComponent();
-            this.template = new Template();
-            this.template.type = TemplateType.Text;
+            this.InitializeComponent();
+            this.template = new()
+            {
+                type = TemplateType.Text
+            };
             this.vm = new VM_Template(this.template);
             this.DataContext = this.vm;
         }
         public CreateTextTemplate(Template te) // edit
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.isEdit = true;
             this.Title = $"Редактирование генератора ({te.name})";
             this.template = te;
@@ -129,7 +132,7 @@ namespace Incubator_2.Windows.Templates
                 return false;
             }
 
-            List<string> names = new List<string>();
+            List<string> names = new();
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
                 if (names.Contains(tag.TagName.Text))
@@ -137,7 +140,7 @@ namespace Incubator_2.Windows.Templates
                     ProgramState.ShowExclamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
                     return false;
                 }
-                if (tag.tag.type == TypeOfTag.Table)
+                if (tag.tag.type == TagType.Table)
                 {
                     ProgramState.ShowExclamationDialog($"В генераторах нельзя использовать таблицы!", "Сохранение прервано");
                     return false;

@@ -1,4 +1,5 @@
 ﻿using Common;
+using IncasEngine.TemplateManager;
 using Incubator_2.ViewModels.Selectors;
 using Models;
 using System.Windows;
@@ -20,7 +21,7 @@ namespace Incubator_2.Windows.Selectors
         }
         public TemplateSelector(TemplateType type, string helpText)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.vm = new();
             this.DataContext = this.vm;
             this.vm.HelpTextTitle = helpText;

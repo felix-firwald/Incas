@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Incubator 2", "Incubator 2.csproj", "{543B67D2-6060-4C8D-B38E-C26AB9298025}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Incas", "Incas.csproj", "{543B67D2-6060-4C8D-B38E-C26AB9298025}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Incas Engine", "..\..\Incas Engine\Incas Engine\Incas Engine.csproj", "{144F071C-9727-4417-BCAC-E8C16C955B11}"
 EndProject

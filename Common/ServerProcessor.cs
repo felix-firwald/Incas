@@ -420,7 +420,7 @@ namespace Incubator_2.Common
                     ut.Show();
                     ut.OnFinishedEditing += new(() =>
                     {
-                        SendOpenGeneratorResultResponse(p, ut.GetData());
+                        SendOpenGeneratorResultResponse(p, ut.GetData()[0]);
                         return;
                     });
 
@@ -572,7 +572,7 @@ namespace Incubator_2.Common
             process.content = JsonConvert.SerializeObject(documents);
             SendToPort(process);
         }
-        public static void SendOpenGeneratorProcess(SGeneratedDocument part, Generator tagfiller, string recipient)
+        public static void SendOpenGeneratorProcess(List<SGeneratedDocument> part, Generator tagfiller, string recipient)
         {
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.OPEN_GENERATOR;

@@ -1,4 +1,5 @@
-﻿using Incubator_2.Forms;
+﻿using IncasEngine.TemplateManager;
+using Incubator_2.Forms;
 using Incubator_2.Models;
 using Models;
 using Newtonsoft.Json;
@@ -83,8 +84,8 @@ namespace Common
         public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true)
         {
             List<SGeneratedTag> filledTags = new();
-            List<string> tagsToReplace = new List<string> { "N" };
-            List<string> values = new List<string> { number };
+            List<string> tagsToReplace = new() { "N" };
+            List<string> values = new() { number };
             foreach (TableFiller tab in tableFillers)
             {
                 this.CreateTable(tab.tag.name, tab.DataTable);
@@ -95,9 +96,9 @@ namespace Common
                 int id = tf.GetId();
                 string name = tf.GetTagName();
                 string value = tf.GetValue();
-                if (tf.tag.type != TypeOfTag.LocalConstant)
+                if (tf.tag.type != TagType.LocalConstant)
                 {
-                    if (tf.tag.type is TypeOfTag.Generator or TypeOfTag.Date)
+                    if (tf.tag.type is TagType.Generator or TagType.Date)
                     {
                         SGeneratedTag gtg = new()
                         {
@@ -157,9 +158,9 @@ namespace Common
 
         public List<string> FindAllTags()
         {
-            List<string> result = new List<string>();
+            List<string> result = new();
             DocX doc = DocX.Load(this.Path);
-            Regex regex = new Regex(@"\[[A-Za-zА-Яа-я ]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
+            Regex regex = new(@"\[[A-Za-zА-Яа-я ]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
             MatchCollection matches = regex.Matches(doc.Text);
 
             foreach (Match match in matches)
@@ -171,7 +172,7 @@ namespace Common
         public string TurnToXPS()
         {
             //Create a Document class object and load the sample file
-            Spire.Doc.Document doc = new Spire.Doc.Document(this.Path);
+            Spire.Doc.Document doc = new(this.Path);
             //Save the Word file as XPS and run the generated document
             string outputName = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.xps";
             doc.SaveToFile(outputName, FileFormat.XPS);

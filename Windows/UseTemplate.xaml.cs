@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Common;
+using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Incubator_2.Forms;
 using Incubator_2.Models;
@@ -159,15 +160,15 @@ namespace Incubator_2.Windows
         }
         private void RecalculateNamesClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            List<string> names = new List<string>();
+            List<string> names = new();
             foreach (Tag tag in this.tags)
             {
-                if (tag.type != TypeOfTag.LocalConstant && tag.type != TypeOfTag.Text && tag.type != TypeOfTag.Table)
+                if (tag.type is not TagType.LocalConstant and not TagType.Text and not TagType.Table)
                 {
                     names.Add(tag.name);
                 }
             }
-            FilenamesRecalculator fr = new FilenamesRecalculator(this.template.id, names);
+            FilenamesRecalculator fr = new(this.template.id, names);
             fr.ShowDialog();
             if (fr.status == DialogStatus.Yes)
             {

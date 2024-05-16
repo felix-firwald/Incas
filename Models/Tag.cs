@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using IncasEngine.TemplateManager;
 
 namespace Models
 {
@@ -42,26 +43,14 @@ namespace Models
         public string Name;
         public string Script;
     }
-    public enum TypeOfTag
-    {
-        Variable,
-        Text,
-        Number,
-        Relation,
-        LocalEnumeration,
-        LocalConstant,
-        HiddenField,
-        Date,
-        Generator,
-        Table
-    }
+
     public class Tag : Model
     {
         public int id { get; set; }
         public int template { get; set; }
         public string name { get; set; }
         public string visibleName { get; set; }
-        public TypeOfTag type { get; set; }
+        public TagType type { get; set; }
         public string value { get; set; }
 
         public int orderNumber { get; set; }
@@ -87,7 +76,7 @@ namespace Models
             {
                 Tag mt = new Tag();
                 mt.Serialize(dr);
-                mt.type = (TypeOfTag)Enum.Parse(typeof(TypeOfTag), dr["type"].ToString());
+                mt.type = (TagType)Enum.Parse(typeof(TagType), dr["type"].ToString());
                 result.Add(mt);
             }
             return result;
@@ -152,7 +141,7 @@ namespace Models
             if (dr != null)
             {
                 this.Serialize(dr);
-                this.type = (TypeOfTag)Enum.Parse(typeof(TypeOfTag), dr["type"].ToString());
+                this.type = (TagType)Enum.Parse(typeof(TagType), dr["type"].ToString());
             }
         }
         public string GetKey()

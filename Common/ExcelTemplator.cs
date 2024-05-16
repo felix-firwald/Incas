@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using IncasEngine.TemplateManager;
 using Incubator_2.Forms;
 using Incubator_2.Models;
 using Models;
@@ -51,11 +52,13 @@ namespace Common
         public void CreateTable(string tag, DataTable dt)
         {
             IXLCell cell = this.worksheet.Search(this.ConvertTag(tag), System.Globalization.CompareOptions.IgnoreCase, false).FirstOrDefault();
-            Formatting head = new Formatting();
-            head.Bold = true;
-            head.FontFamily = new Font("Times New Roman");
+            Formatting head = new()
+            {
+                Bold = true,
+                FontFamily = new Font("Times New Roman")
+            };
 
-            Formatting rowStyle = new Formatting();
+            Formatting rowStyle = new();
             head.FontFamily = new Font("Times New Roman");
             this.worksheet.Row(cell.WorksheetRow().RowNumber() + 1).InsertRowsBelow(dt.Rows.Count);
             IXLTable it = cell.InsertTable(dt, true);
@@ -67,8 +70,8 @@ namespace Common
         public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true)
         {
             List<SGeneratedTag> filledTags = new();
-            List<string> tagsToReplace = new List<string> { "N" };
-            List<string> values = new List<string> { number };
+            List<string> tagsToReplace = new() { "N" };
+            List<string> values = new() { number };
             foreach (TableFiller tab in tableFillers)
             {
                 this.CreateTable(tab.tag.name, tab.DataTable);
@@ -79,20 +82,24 @@ namespace Common
                 int id = tf.GetId();
                 string name = tf.GetTagName();
                 string value = tf.GetValue();
-                if (tf.tag.type != TypeOfTag.LocalConstant)
+                if (tf.tag.type != TagType.LocalConstant)
                 {
-                    if (tf.tag.type == TypeOfTag.Generator || tf.tag.type == TypeOfTag.Date)
+                    if (tf.tag.type is TagType.Generator or TagType.Date)
                     {
-                        SGeneratedTag gtg = new();
-                        gtg.tag = id;
-                        gtg.value = tf.GetData();
+                        SGeneratedTag gtg = new()
+                        {
+                            tag = id,
+                            value = tf.GetData()
+                        };
                         filledTags.Add(gtg);
                     }
                     else
                     {
-                        SGeneratedTag gt = new();
-                        gt.tag = id;
-                        gt.value = value;
+                        SGeneratedTag gt = new()
+                        {
+                            tag = id,
+                            value = value
+                        };
                         filledTags.Add(gt);
                     }
                 }

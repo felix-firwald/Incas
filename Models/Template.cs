@@ -1,4 +1,5 @@
 ﻿using Common;
+using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Newtonsoft.Json;
 using System;
@@ -60,13 +61,6 @@ namespace Models
         public bool RequiresSave;
         public bool PreventSave;
         public string OnOpening;
-    }
-    public enum TemplateType
-    {
-        Word,
-        Text,
-        Excel,
-        Mail
     }
     public struct STemplate
     {

@@ -1,4 +1,5 @@
 ﻿using Common;
+using IncasEngine.TemplateManager;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
 using Incubator_2.Windows.CustomDatabase;
@@ -22,7 +23,7 @@ namespace Incubator_2.Forms
         private VM_Tag vm;
         public TagCreator(Tag t, bool isNew = false)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.tag = t;
             this.vm = new(t);
             this.DataContext = this.vm;
@@ -37,14 +38,14 @@ namespace Incubator_2.Forms
             }
             switch (this.tag.type)
             {
-                case TypeOfTag.Variable:
-                case TypeOfTag.Text:
+                case TagType.Variable:
+                case TagType.Text:
                 default:
                     return true;
-                case TypeOfTag.Relation:
-                case TypeOfTag.LocalEnumeration:
-                case TypeOfTag.Generator:
-                case TypeOfTag.Table:
+                case TagType.Relation:
+                case TagType.LocalEnumeration:
+                case TagType.Generator:
+                case TagType.Table:
                     if (string.IsNullOrWhiteSpace(this.tag.value))
                     {
                         return false;
@@ -145,7 +146,7 @@ namespace Incubator_2.Forms
                 }
                 else
                 {
-                    using Template t = new Template();
+                    using Template t = new();
                     CreateTextTemplate ctt = new(t.GetTemplateById(int.Parse(this.vm.DefaultValue)));
                     ctt.ShowDialog();
                 }

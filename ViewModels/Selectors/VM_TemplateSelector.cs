@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using IncasEngine.TemplateManager;
+using Models;
 using System.Collections.Generic;
 
 namespace Incubator_2.ViewModels.Selectors
@@ -42,7 +43,7 @@ namespace Incubator_2.ViewModels.Selectors
         {
             get
             {
-                using Template t = new Template();
+                using Template t = new();
                 switch (this.TemplateType)
                 {
                     case TemplateType.Word:
@@ -57,7 +58,6 @@ namespace Incubator_2.ViewModels.Selectors
                 this.OnPropertyChanged(nameof(this.Templates));
 
             }
-
         }
 
         public STemplate SelectedTemplate

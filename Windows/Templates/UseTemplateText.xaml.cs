@@ -1,13 +1,15 @@
 ﻿using Common;
+using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Incubator_2.Forms;
+using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
 using Microsoft.Scripting.Hosting;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Windows;
-
+using System.Windows.Controls;
 
 namespace Incubator_2.Windows.Templates
 {
@@ -20,18 +22,47 @@ namespace Incubator_2.Windows.Templates
         private Template template;
         private List<Tag> tags;
         private TemplateSettings templateSettings;
+        private GeneratorMode generatorMode;
+        private List<SGeneratedDocument> documentsData;
         public delegate void Base();
         public event Base OnFinishedEditing;
-        public UseTemplateText(Template templ, SGeneratedDocument data)
+        private void Setup(Template templ, GeneratorMode gm)
         {
-            InitializeComponent();
+            this.InitializeComponent();
+            this.generatorMode = gm;
             this.template = templ;
             this.Title = this.template.name;
             this.GetTags();
             this.templateSettings = this.template.GetTemplateSettings();
+        }
+        public UseTemplateText(Template templ, SGeneratedDocument data)
+        {
+            this.Setup(templ, GeneratorMode.OneForm);
             if (data.filledTags != null)
             {
                 this.ApplyData(data);
+            }
+        }
+        public UseTemplateText(Template templ, List<SGeneratedDocument> data)
+        {
+            this.Setup(templ, GeneratorMode.ManyForms);
+            this.SuperElementsPanel.Visibility = Visibility.Visible;
+            this.documentsData = data;
+            this.AddElements(this.documentsData.Count);
+        }
+        private void AddElements(int count)
+        {
+            int primaryCount = this.ElementsPanel.Children.Count;
+            for (int i = 1 + primaryCount; i <= count + primaryCount; i++)
+            {
+                RadioButton rb = new()
+                {
+                    IsChecked = i == 1,
+                    Content = i.ToString(),
+                    Style = this.FindResource("FormSelectorButton") as Style
+                };
+                rb.Checked += this.ElementSelected;
+                this.ElementsPanel.Children.Add(rb);
             }
         }
         private void GetTags()
@@ -87,9 +118,9 @@ namespace Incubator_2.Windows.Templates
                 }
             }
         }
-        public SGeneratedDocument GetData()
+        public List<SGeneratedDocument> GetData()
         {
-            SGeneratedDocument result = new()
+            List<SGeneratedDocument> result = new()
             {
                 id = this.template.id
             };
@@ -99,7 +130,7 @@ namespace Incubator_2.Windows.Templates
                 SGeneratedTag gt = new()
                 {
                     tag = tf.tag.id,
-                    value = tf.tag.type == TypeOfTag.Generator ? tf.GetData() : tf.GetValue()
+                    value = tf.tag.type == TagType.Generator ? tf.GetData() : tf.GetValue()
                 };
                 tags.Add(gt);
             }
@@ -176,7 +207,7 @@ namespace Incubator_2.Windows.Templates
                     ScriptManager.Execute(this.templateSettings.OnSaving, scope);
                     foreach (UC_TagFiller tf in this.ContentPanel.Children)
                     {
-                        if (tf.tag.type != TypeOfTag.Generator)
+                        if (tf.tag.type != TagType.Generator)
                         {
                             tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
                         }
@@ -203,6 +234,24 @@ namespace Incubator_2.Windows.Templates
         private void UpdateClick(object sender, RoutedEventArgs e)
         {
             this.ResultView.Text = this.GetText();
+        }
+
+        private void AddElementClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.AddElements(1);
+        }
+
+        private void ElementSelected(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int number = int.Parse((sender as RadioButton).Content.ToString());
+                if (this.documentsData[number].filledTags != null)
+                {
+                    this.ApplyData(this.documentsData[number]);
+                }
+            }
+            catch { }
         }
     }
 }

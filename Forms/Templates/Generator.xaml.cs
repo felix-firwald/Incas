@@ -5,6 +5,7 @@ using Incubator_2.Windows.Templates;
 using Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,6 +18,11 @@ namespace Incubator_2.Forms.Templates
         {
 
         }
+    }
+    public enum GeneratorMode
+    {
+        OneForm,
+        ManyForms
     }
     public enum GeneratorStatus
     {
@@ -37,25 +43,49 @@ namespace Incubator_2.Forms.Templates
     public partial class Generator : UserControl
     {
         public GeneratorStatus Status = GeneratorStatus.NotContented;
+        public GeneratorMode Mode = GeneratorMode.OneForm;
         public int TemplateId;
-        public SGeneratedDocument Result;
+        public List<SGeneratedDocument> Result = new();
         private string resultText;
         public delegate void ValueChanged(object sender);
         public event ValueChanged OnValueChanged;
         public Generator() // new
         {
-            InitializeComponent();
+            this.InitializeComponent();
+            this.Result.Add(new());
         }
         public void SetData(string data)
         {
             try
             {
-                this.Result = JsonConvert.DeserializeObject<SGeneratedDocument>(data);
+                switch (this.Mode)
+                {
+                    case GeneratorMode.OneForm:
+                        this.Result[0] = JsonConvert.DeserializeObject<SGeneratedDocument>(data);
+                        break;
+                    case GeneratorMode.ManyForms:
+                        this.Result = JsonConvert.DeserializeObject<List<SGeneratedDocument>>(data);
+                        break;
+                }
+                
                 this.SetWarning("Требуется открыть для обновления");
             }
             catch { }
         }
         public void SetData(SGeneratedDocument data, string warning = "Требуется открыть для обновления")
+        {
+            try
+            {
+                this.Result[0] = data;
+                this.SetWarning(warning);
+                OnValueChanged?.Invoke(this);
+            }
+            catch (Exception)
+            {
+                this.SetNotContented();
+            }
+        }
+        public void SetData(List<SGeneratedDocument> data, string warning = "Требуется открыть для обновления")
         {
             try
             {
@@ -105,7 +135,7 @@ namespace Incubator_2.Forms.Templates
         }
         private void ApplyGenerated(SGeneratedDocument data)
         {
-            this.Result = data;
+            this.Result[0] = data;
             this.SetContented();
         }
         private void SetContented()
@@ -184,7 +214,6 @@ namespace Incubator_2.Forms.Templates
                     this.resultText = utt.GetText();
                     this.SetContented();
                 }
-
             }
             catch (Exception ex)
             {

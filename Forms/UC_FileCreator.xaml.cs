@@ -1,4 +1,5 @@
 ﻿using Common;
+using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
@@ -55,7 +56,7 @@ namespace Incubator_2.Forms
         {
             this.tags.ForEach(t =>
             {
-                if (t.type != TypeOfTag.Table)
+                if (t.type != TagType.Table)
                 {
                     UC_TagFiller tf = new(t);
                     tf.OnInsert += this.OnInsert;
@@ -85,7 +86,7 @@ namespace Incubator_2.Forms
                 ScriptManager.Execute(script, scope);
                 foreach (UC_TagFiller tf in this.TagFillers)
                 {
-                    if (tf.tag.type != TypeOfTag.Generator)
+                    if (tf.tag.type != TagType.Generator)
                     {
                         tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
                     }
@@ -233,9 +234,9 @@ namespace Incubator_2.Forms
                 int id = tf.GetId();
                 string name = tf.GetTagName();
                 string value = tf.GetValue();
-                if (tf.tag.type != TypeOfTag.LocalConstant)
+                if (tf.tag.type != TagType.LocalConstant)
                 {
-                    if (tf.tag.type is TypeOfTag.Generator or TypeOfTag.Date)
+                    if (tf.tag.type is TagType.Generator or TagType.Date)
                     {
                         SGeneratedTag gtg = new()
                         {
@@ -324,7 +325,7 @@ namespace Incubator_2.Forms
                     this.Number.Text = scope.GetVariable("document_number");
                     foreach (UC_TagFiller tf in this.TagFillers)
                     {
-                        if (tf.tag.type != TypeOfTag.Generator)
+                        if (tf.tag.type != TagType.Generator)
                         {
                             tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
                         }
@@ -367,16 +368,16 @@ namespace Incubator_2.Forms
                         case TemplateType.Word:
                             newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.docx";
                             File.Copy(ProgramState.GetFullnameOfWordFile(this.template.path), newFile, true);
-                            WordTemplator wt = new WordTemplator(newFile);
+                            WordTemplator wt = new(newFile);
                             this.Dispatcher.Invoke(() =>
                             {
                                 filledTags = wt.GenerateDocument(this.TagFillers, this.Tables, this.GetNumber(), async);
                             });
                             break;
                         case TemplateType.Excel:
-                            newFile = $"{newPath}\\{RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
+                            newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
                             File.Copy(ProgramState.GetFullnameOfExcelFile(this.template.path), newFile, true);
-                            ExcelTemplator et = new ExcelTemplator(newFile);
+                            ExcelTemplator et = new(newFile);
                             this.Dispatcher.Invoke(() =>
                             {
                                 filledTags = et.GenerateDocument(this.TagFillers, this.Tables, this.GetNumber(), async);
@@ -430,14 +431,7 @@ namespace Incubator_2.Forms
                     break;
                 }
             }
-            if (additive)
-            {
-                this.Filename.Text = $"{prefix} {this.Filename.Text} {result} {postfix}".Trim();
-            }
-            else
-            {
-                this.Filename.Text = $"{prefix} {result} {postfix}".Trim();
-            }
+            this.Filename.Text = additive ? $"{prefix} {this.Filename.Text} {result} {postfix}".Trim() : $"{prefix} {result} {postfix}".Trim();
 
         }
         public List<string> GetExcelRow()
@@ -463,10 +457,10 @@ namespace Incubator_2.Forms
 
                 string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.docx";
                 System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(this.template.path), newFile, true);
-                WordTemplator wt = new WordTemplator(newFile);
+                WordTemplator wt = new(newFile);
 
-                List<string> tagsToReplace = new List<string>();
-                List<string> values = new List<string>();
+                List<string> tagsToReplace = new();
+                List<string> values = new();
                 Application.Current.Dispatcher.BeginInvoke(
                     DispatcherPriority.Normal,
                     new Action(() =>
@@ -485,7 +479,7 @@ namespace Incubator_2.Forms
                         }
                         string fileXPS = wt.TurnToXPS();
                         ProgramState.ShowWaitCursor(false);
-                        PreviewWindow pr = new PreviewWindow(fileXPS, !this.templateSettings.RequiresSave);
+                        PreviewWindow pr = new(fileXPS, !this.templateSettings.RequiresSave);
                         pr.Show();
                     })
                 );
@@ -522,10 +516,10 @@ namespace Incubator_2.Forms
             {
                 case TemplateType.Word:
                 default:
-                    filename = $"{ProgramState.TemplatesRuntime}\\{RemoveUnresolvedChars(this.Filename.Text)}.docx";
+                    filename = $"{ProgramState.TemplatesRuntime}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.docx";
                     break;
                 case TemplateType.Excel:
-                    filename = $"{ProgramState.TemplatesRuntime}\\{RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
+                    filename = $"{ProgramState.TemplatesRuntime}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
                     break;
             }
             try
