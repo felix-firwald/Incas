@@ -51,6 +51,18 @@ namespace Incubator_2.Forms
             }
             this.ExpanderButton.IsChecked = true;
         }
+        public UC_FileCreator(List<Tag> tagsList) // dev mode
+        {
+            this.InitializeComponent();
+            this.tags = tagsList;
+            this.FillContentPanel();
+            this.DocumentTools.Visibility = Visibility.Collapsed;
+            this.DevModeLabel.Visibility = Visibility.Visible;
+            this.RemoveButton.Visibility = Visibility.Collapsed;
+            this.RemoveButtonRect.Visibility = Visibility.Collapsed;
+            this.DefineNumberButton.IsEnabled = false;
+            this.ExpanderButton.IsChecked = true;
+        }
 
         private void FillContentPanel()
         {

@@ -43,49 +43,25 @@ namespace Incubator_2.Forms.Templates
     public partial class Generator : UserControl
     {
         public GeneratorStatus Status = GeneratorStatus.NotContented;
-        public GeneratorMode Mode = GeneratorMode.OneForm;
         public int TemplateId;
-        public List<SGeneratedDocument> Result = new();
+        public SGeneratedDocument Result;
         private string resultText;
         public delegate void ValueChanged(object sender);
         public event ValueChanged OnValueChanged;
         public Generator() // new
         {
-            this.InitializeComponent();
-            this.Result.Add(new());
+            InitializeComponent();
         }
         public void SetData(string data)
         {
             try
             {
-                switch (this.Mode)
-                {
-                    case GeneratorMode.OneForm:
-                        this.Result[0] = JsonConvert.DeserializeObject<SGeneratedDocument>(data);
-                        break;
-                    case GeneratorMode.ManyForms:
-                        this.Result = JsonConvert.DeserializeObject<List<SGeneratedDocument>>(data);
-                        break;
-                }
-                
+                this.Result = JsonConvert.DeserializeObject<SGeneratedDocument>(data);
                 this.SetWarning("Требуется открыть для обновления");
             }
             catch { }
         }
         public void SetData(SGeneratedDocument data, string warning = "Требуется открыть для обновления")
-        {
-            try
-            {
-                this.Result[0] = data;
-                this.SetWarning(warning);
-                OnValueChanged?.Invoke(this);
-            }
-            catch (Exception)
-            {
-                this.SetNotContented();
-            }
-        }
-        public void SetData(List<SGeneratedDocument> data, string warning = "Требуется открыть для обновления")
         {
             try
             {
@@ -104,8 +80,9 @@ namespace Incubator_2.Forms.Templates
             switch (this.Status)
             {
                 case GeneratorStatus.InProcess:
-                    throw new GeneratorUndefinedStateException("Генератор ожидает получение ввода от другого пользователя. " +
-                        "Отзовите делегирование или дождитесь ввода.");
+                    ProgramState.ShowExclamationDialog("Генератор ожидает получение ввода от другого пользователя. " +
+                        "В документе будет пустая строка.");
+                    return "";
                 case GeneratorStatus.Warning:
                     using (Template t = new())
                     {
@@ -135,7 +112,7 @@ namespace Incubator_2.Forms.Templates
         }
         private void ApplyGenerated(SGeneratedDocument data)
         {
-            this.Result[0] = data;
+            this.Result = data;
             this.SetContented();
         }
         private void SetContented()
@@ -193,7 +170,7 @@ namespace Incubator_2.Forms.Templates
                     Session session;
                     if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для заполнения этой части документа."))
                     {
-                        this.Result[0].template = this.TemplateId;
+                        this.Result.template = this.TemplateId;
                         ServerProcessor.SendOpenGeneratorProcess(this.Result, this, session.slug);
                         this.SetInProcess($"Делегировано: {session.user}");
                     }
@@ -214,6 +191,7 @@ namespace Incubator_2.Forms.Templates
                     this.resultText = utt.GetText();
                     this.SetContented();
                 }
+
             }
             catch (Exception ex)
             {

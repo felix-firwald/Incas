@@ -57,6 +57,18 @@ namespace Incubator_2.Windows
             }
             ProgramState.ShowWaitCursor(false);
         }
+        public UseTemplate(string templateName, List<Tag> tags) // dev mode
+        {
+            this.InitializeComponent();
+            this.tags = tags;
+            this.Title = "Режим предпросмотра: " + templateName;
+            this.CategoryName.IsEnabled = false;
+            this.ToolBar.IsEnabled = false;
+            this.GenerateButton.IsEnabled = false;
+            this.dir.IsEnabled = false;
+            this.ReviewButton.IsEnabled = false;
+            AddFileCreatorDev();
+        }
         private void LoadTags()
         {
             using Tag t = new();
@@ -66,6 +78,16 @@ namespace Incubator_2.Windows
         private UC_FileCreator AddFileCreator()
         {
             UC_FileCreator fc = new(this.template, ref this.templateSettings, this.tags);
+            fc.OnInsertRequested += this.InsertValuesByTag;
+            fc.OnRenameRequested += this.SimpleRecalculateNames;
+            fc.OnCreatorDestroy += this.OnCreatorDestroy;
+            this.ContentPanel.Children.Add(fc);
+            this.creators.Add(fc);
+            return fc;
+        }
+        private UC_FileCreator AddFileCreatorDev()
+        {
+            UC_FileCreator fc = new(this.tags);
             fc.OnInsertRequested += this.InsertValuesByTag;
             fc.OnRenameRequested += this.SimpleRecalculateNames;
             fc.OnCreatorDestroy += this.OnCreatorDestroy;
@@ -136,7 +158,7 @@ namespace Incubator_2.Windows
 
         private void review_Click(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog fb = new FolderBrowserDialog();
+            FolderBrowserDialog fb = new();
             fb.RootFolder = System.Environment.SpecialFolder.MyDocuments;
             if (fb.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -177,7 +199,6 @@ namespace Incubator_2.Windows
                     fc.RenameByTag(fr.SelectedTag, fr.Prefix, fr.Postfix, fr.IsAdditive);
                 }
             }
-
         }
         private void SimpleRecalculateNames(string tag)
         {
@@ -189,8 +210,10 @@ namespace Incubator_2.Windows
 
         private void GetFromExcel(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            OpenFileDialog fd = new OpenFileDialog();
-            fd.Filter = "MS Excel|*.xlsx";
+            OpenFileDialog fd = new()
+            {
+                Filter = "MS Excel|*.xlsx"
+            };
 
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -199,7 +222,7 @@ namespace Incubator_2.Windows
                 IXLWorksheet ws;
                 try
                 {
-                    XLWorkbook wb = new XLWorkbook(fd.FileName);
+                    XLWorkbook wb = new(fd.FileName);
                     ws = wb.Worksheet(1);
                 }
                 catch (IOException)
@@ -228,7 +251,6 @@ namespace Incubator_2.Windows
                             pairs[fileIndex].Add(tag.name, value);
                             fileIndex++;
                         }
-
                     }
                     catch (Exception)
                     {
@@ -248,7 +270,7 @@ namespace Incubator_2.Windows
         {
             if (this.ValidateContent())
             {
-                XLWorkbook wb = new XLWorkbook();
+                XLWorkbook wb = new();
                 IXLWorksheet ws = wb.AddWorksheet("Из инкубатора");
                 for (int i = 0; i < this.tags.Count; i++) // columns
                 {
@@ -276,7 +298,6 @@ namespace Incubator_2.Windows
                     ProgramState.ShowErrorDialog("При попытке записать файл возникла ошибка,\nвозможно файл уже открыт." +
                         "\nЗакройте его и попробуйте снова", "Сохранение прервано");
                 }
-
             }
         }
 
@@ -301,7 +322,6 @@ namespace Incubator_2.Windows
                 {
                     ServerProcessor.SendOpenSequencerProcess(documents, session.slug);
                 }
-
             }
         }
     }

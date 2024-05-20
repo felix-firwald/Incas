@@ -93,13 +93,8 @@ namespace Incubator_2.Forms
                     this.DatePicker.ToolTip = this.tag.description;
                     break;
                 case TagType.Generator:
-                case TagType.List:
                     this.Generator.Visibility = Visibility.Visible;
                     this.Generator.TemplateId = int.Parse(this.tag.value);
-                    if (this.tag.type == TagType.List)
-                    {
-                        this.Generator.Mode = Templates.GeneratorMode.ManyForms;
-                    }
                     break;
             }
             this.MakeButton();

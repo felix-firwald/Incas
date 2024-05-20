@@ -139,22 +139,6 @@
                         
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Trigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetName="bor" Storyboard.TargetProperty="Background.Color"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.350" To="#FF393C46" Storyboard.TargetName="bor" Storyboard.TargetProperty="Background.Color"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </Trigger.ExitActions>
-                        </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             
                             <Trigger.EnterActions>
@@ -168,7 +152,7 @@
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.250" To="#FFA7ABB7" Storyboard.TargetName="Icon" Storyboard.TargetProperty="Fill.Color"/>
+                                        <ColorAnimation Duration="0:0:0.250" To="#FF434650" Storyboard.TargetName="Icon" Storyboard.TargetProperty="Fill.Color"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>

@@ -100,7 +100,6 @@ namespace Incubator_2.ViewModels
                         return Visibility.Visible;
                     case TagType.LocalConstant:
                     case TagType.HiddenField:
-                    case TagType.List:
                     case TagType.Generator:
                         return Visibility.Collapsed;
                 }
@@ -169,10 +168,6 @@ namespace Incubator_2.ViewModels
                     return TagType.Generator;
                 case "9":
                     this.Description = "";
-                    this.DefaultValue = "";
-                    return TagType.List;
-                case "10":
-                    this.Description = "";
                     return TagType.Table;
             }
         }
@@ -188,8 +183,7 @@ namespace Incubator_2.ViewModels
                 TagType.LocalConstant => "6",
                 TagType.HiddenField => "7",
                 TagType.Generator => "8",
-                TagType.List => "9",
-                TagType.Table => "10",
+                TagType.Table => "9",
                 _ => "0",
             };
         }
@@ -208,7 +202,7 @@ namespace Incubator_2.ViewModels
         {
             get
             {
-                if (this.mainTag.type is TagType.Generator or TagType.List)
+                if (this.mainTag.type is TagType.Generator)
                 {
                     return Visibility.Visible;
                 }

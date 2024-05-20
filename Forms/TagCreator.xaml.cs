@@ -155,7 +155,6 @@ namespace Incubator_2.Forms
             {
                 ProgramState.ShowErrorDialog("При попытке открытия генератора возникла ошибка:\n" + ex.Message);
             }
-
         }
 
         private void EditScriptClick(object sender, RoutedEventArgs e)

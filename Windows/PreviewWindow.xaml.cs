@@ -23,6 +23,7 @@ namespace Incubator_2.Windows
             this.Preview.Document = this.document.GetFixedDocumentSequence();
             this.document.Close();
             this.printEnabled = printEnabled;
+            
         }
 
         private void OnClosed(object sender, EventArgs e)
@@ -45,6 +46,7 @@ namespace Incubator_2.Windows
                 return;
             }
             System.Windows.Controls.PrintDialog printDialog = new();
+            
             bool? isPrinted = printDialog.ShowDialog();
             if (isPrinted != true)
             {
@@ -68,6 +70,16 @@ namespace Incubator_2.Windows
             {
 
             }
+        }
+
+        private void ZoomIn(object sender, RoutedEventArgs e)
+        {
+            this.Preview.IncreaseZoom();
+        }
+
+        private void ZoomOut(object sender, RoutedEventArgs e)
+        {
+            this.Preview.DecreaseZoom();
         }
     }
 }

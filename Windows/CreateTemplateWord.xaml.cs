@@ -26,7 +26,7 @@ namespace Incubator_2.Windows
         public event Base OnCreated;
         public CreateTemplateWord(Template te = null, string parents = null)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             if (te == null)
             {
                 this.template = new()
@@ -436,6 +436,22 @@ namespace Incubator_2.Windows
                     tag.DublicateName();
                 }
             }
+        }
+        private List<Tag> GetTagsData()
+        {
+            List<Tag> tags = new ();
+            foreach (TagCreator tag in this.ContentPanel.Children)
+            {
+                tags.Add(tag.tag);
+            }
+            return tags;
+        }
+
+        private void PreviewClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+            UseTemplate ut = new(this.vm.NameOfTemplate, this.GetTagsData());
+            ut.ShowDialog();
         }
     }
 }

@@ -14,40 +14,47 @@ using Xceed.Words.NET;
 using Font = Xceed.Document.NET.Font;
 using Formatting = Xceed.Document.NET.Formatting;
 using Table = Xceed.Document.NET.Table;
+using DocumentFormat.OpenXml.ExtendedProperties;
 
 namespace Common
 {
     public interface ITemplator
     {
         public void Replace(List<string> tags, List<string> values, bool async = true);
+
         public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true);
+
         public void CreateTable(string tag, DataTable dt);
     }
 
     public class WordTemplator : ITemplator
     {
         public readonly string Path;
+
         public WordTemplator(string path)
         {
             this.Path = path;
         }
+
         public WordTemplator()
         {
-
         }
 
         private string ConvertTag(string tag)
         {
             return $"[{tag}]";
         }
+
         private DocX LoadFile()
         {
             return DocX.Load(this.Path);
         }
+
         public string Serialize()
         {
             return JsonConvert.SerializeObject(this.LoadFile());
         }
+
         public void DeserializeAndExtract(string input, string newPath)
         {
             DocX doc = JsonConvert.DeserializeObject<DocX>(input);
@@ -79,8 +86,9 @@ namespace Common
             {
                 MakeReplace();
             }
-            doc.Save();
+            doc.Save();           
         }
+
         public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true)
         {
             List<SGeneratedTag> filledTags = new();
@@ -155,6 +163,18 @@ namespace Common
             doc.ReplaceTextWithObject(options);
             doc.Save();
         }
+        public static void ConvertToPdf(string path)
+        {
+            Spire.Doc.Document doc = new(path);
+            doc.SaveToFile(path, FileFormat.PDF);
+        }
+        public static void ConvertToPdf(List<string> paths)
+        {
+            foreach(string path in paths)
+            {
+                ConvertToPdf(path);
+            }
+        }
 
         public List<string> FindAllTags()
         {
@@ -169,16 +189,27 @@ namespace Common
             }
             return result;
         }
+
+        /// <summary>
+        /// Activate SPIRE
+        /// </summary>
+        //private void ActiveSpire()
+        //{
+        //    string LData = "845K-ilsj-2946-9908";
+
+        //    LicenseProvider.SetLicenseKey(LData);
+        //}
+
         public string TurnToXPS()
         {
-            //Create a Document class object and load the sample file
             Spire.Doc.Document doc = new(this.Path);
-            //Save the Word file as XPS and run the generated document
-            string outputName = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.xps";
+            string outputName = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.pdf";
+            Application app = new(this.Path);
             doc.SaveToFile(outputName, FileFormat.XPS);
             File.Delete(this.Path);
             return outputName;
         }
+
         public void GetTextOfFile()
         {
             DocX doc = this.LoadFile();

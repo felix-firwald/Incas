@@ -14,6 +14,7 @@ namespace Incubator_2
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
             if (DateTime.Now > DateTime.Parse("15.07.2024"))
             {
                 ProgramState.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");

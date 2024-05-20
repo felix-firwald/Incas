@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incubator_2.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Редактирование команды" Height="450" Width="800" Style="{DynamicResource WindowBase}" WindowStartupLocation="CenterScreen" SizeToContent="Height">
+        Title="Редактирование команды" Height="450" Width="800" Style="{DynamicResource WindowBase}" WindowStartupLocation="CenterScreen" SizeToContent="Height" Topmost="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>

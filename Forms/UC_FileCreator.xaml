@@ -17,18 +17,22 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="55"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" >
+            <Label x:Name="DevModeLabel" Style="{StaticResource LabelElement}" Visibility="Collapsed" Content="Режим предпросмотра" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource PrimaryMain}" Grid.ColumnSpan="2"/>
+            <StackPanel x:Name="DocumentTools" Orientation="Horizontal" Grid.Row="0" >
                 <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="10,0,10,0" MouseDown="ResizeClick" ToolTip="Свернуть / Развернуть окно"/>-->
                 <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" Checked="MaximizeClick" Unchecked="MinimizeClick"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,5,0,5" Opacity="0.5" />
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="FileText" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть файл" Cursor="Hand" MouseDown="OpenFileClick" Margin="8,5,5,5"/>
-                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,5,5,5" Opacity="0.5"/>
+                <StackPanel Orientation="Horizontal">
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="FileText" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть файл" Cursor="Hand" MouseDown="OpenFileClick" Margin="8,5,5,5"/>
+                    <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,5,5,5" Opacity="0.5"/>
+
+
+                </StackPanel>
+
                 <fa:FontAwesome x:Name="EyeButton" Style="{DynamicResource IconButton}" Icon="Eye" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть средство предпросмотра" Cursor="Hand" MouseDown="PreviewCLick" Margin="5,5,1,5"/>
                 <Rectangle x:Name="EyeButtonSeparator" Width="1" Fill="{DynamicResource Element}" Opacity="0.5" Margin="10,5,10,5"/>
                 <CheckBox x:Name="Selector" Style="{DynamicResource Selector}" Checked="OnSelectorChecked" Unchecked="OnSelectorUnchecked" Margin="-5,0,0,0"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Opacity="0.5" Margin="5,5,5,5"/>
-
-                <!--<Label Style="{DynamicResource LabelElement}" Content="—" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,0,0"/>-->
                 <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="Новый">
                     <TextBox.ContextMenu>
                         <ContextMenu>
@@ -39,8 +43,8 @@
                 </TextBox>
                 <Label Style="{DynamicResource LabelElement}" Content=".docx" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-5,0,0,0"/>
             </StackPanel>
-            <Rectangle Fill="{DynamicResource Element}" Opacity="0.5" HorizontalAlignment="Left" Grid.Column="1" Width="1" Margin="0,5,0,5"/>
-            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" MouseDown="Remove" ToolTip="Удалить файл" Cursor="Hand" Grid.Column="1"/>
+            <Rectangle x:Name="RemoveButtonRect" Fill="{DynamicResource Element}" Opacity="0.5" HorizontalAlignment="Left" Grid.Column="1" Width="1" Margin="0,5,0,5"/>
+            <fa:FontAwesome x:Name="RemoveButton" Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" MouseDown="Remove" ToolTip="Удалить файл" Cursor="Hand" Grid.Column="1"/>
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
             <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
                 <Grid>
@@ -64,7 +68,7 @@
                     </TextBox>
                     <Label x:Name="NumberPostfix" Style="{DynamicResource LabelElement}" Content="" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-5,0,0,0" Grid.Column="3"/>
                     <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Style="{StaticResource ButtonMain}" Content="Определить" MinWidth="120"/>
+                        <Button x:Name="DefineNumberButton" Style="{StaticResource ButtonMain}" Content="Определить" MinWidth="120"/>
                     </StackPanel>
                 </Grid>
                 <Rectangle Stroke="{DynamicResource Element}" StrokeDashArray="4 4" Height="1" Margin="5,0,5,0"/>
@@ -72,7 +76,7 @@
 
                 </StackPanel>
             </StackPanel>
-            
+
         </Grid>
     </Border>
 </UserControl>

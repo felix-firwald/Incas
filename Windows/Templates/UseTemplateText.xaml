@@ -17,15 +17,10 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <StackPanel x:Name="SuperElementsPanel" Orientation="Horizontal" HorizontalAlignment="Center" Grid.ColumnSpan="2" Visibility="Collapsed">
-            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Close"/>
-            <StackPanel x:Name="ElementsPanel" Orientation="Horizontal" HorizontalAlignment="Center">
-                
-            </StackPanel>
-            
-            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="PlusSquare" MouseDown="AddElementClick"/>
+        <StackPanel x:Name="ElementsPanel" Orientation="Horizontal" HorizontalAlignment="Center">
+
         </StackPanel>
-        
+
         <Border Background="{DynamicResource Dark}" Grid.ColumnSpan="2" MaxHeight="400" Margin="5,5,5,5" CornerRadius="5" BorderThickness="1" BorderBrush="{DynamicResource Element}" Grid.Row="1">
             <ScrollViewer Style="{DynamicResource ScrollViewerBase}">
                 <StackPanel x:Name="ContentPanel">
