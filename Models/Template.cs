@@ -65,6 +65,7 @@ namespace Models
             File.WriteAllText($"{zipFolder}\\{dataName}", JsonConvert.SerializeObject(this.Data));
             File.Copy(sourceFullname, $"{zipFolder}\\{sourceFilename}");
             ZipFile.CreateFromDirectory(zipFolder, zipFolder + ".tinc");
+            Directory.Delete(zipFolder, true);
         }
         public void ParseData(string file)
         {

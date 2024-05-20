@@ -18,7 +18,6 @@ namespace Incubator_2.Windows.Templates
     {
         public Template template;
         private VM_Template vm;
-        private readonly bool isEdit = false;
 
         public delegate void Base();
         public event Base OnCreated;
@@ -35,7 +34,6 @@ namespace Incubator_2.Windows.Templates
         public CreateTextTemplate(Template te) // edit
         {
             this.InitializeComponent();
-            this.isEdit = true;
             this.Title = $"Редактирование генератора ({te.name})";
             this.template = te;
             this.vm = new VM_Template(this.template);
@@ -45,19 +43,19 @@ namespace Incubator_2.Windows.Templates
         }
         private void GetTags()
         {
-            Tag tag = new Tag();
+            Tag tag = new();
             foreach (Tag t in tag.GetAllTagsByTemplate(this.template.id))
             {
                 this.AddTag(t);
             }
         }
-        private async void SaveTags(bool isEdit)
+        private async void SaveTags()
         {
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
                 await System.Threading.Tasks.Task.Run(() =>
                 {
-                    tag.SaveTag(this.template.id, isEdit);
+                    tag.SaveTag(this.template.id);
                 });
             }
         }
@@ -157,16 +155,8 @@ namespace Incubator_2.Windows.Templates
             {
                 ProgramState.ShowWaitCursor();
                 this.Close();
-                if (this.isEdit)
-                {
-                    this.vm.SaveTemplate();
-                    this.SaveTags(true);
-                }
-                else
-                {
-                    this.vm.SaveTemplate();
-                    this.SaveTags(false);
-                }
+                this.vm.SaveTemplate();
+                this.SaveTags();
                 OnCreated?.Invoke();
                 ProgramState.ShowWaitCursor(false);
             }

@@ -18,7 +18,6 @@ namespace Incubator_2.Windows
     /// </summary>
     public partial class CreateTemplateWord : Window
     {
-        private Template template;
         private VM_Template vm;
 
         public delegate void Base();
@@ -28,18 +27,19 @@ namespace Incubator_2.Windows
             this.InitializeComponent();
             if (te == null)
             {
-                this.template = new()
+                te = new()
                 {
                     parent = parents
                 };
+                this.vm = new VM_Template(te);
             }
             else
             {
                 this.Title = $"Редактирование шаблона ({te.name})";
-                this.template = te;
+                this.vm = new VM_Template(te);
                 this.GetTags();
             }
-            this.vm = new VM_Template(this.template);
+            
             this.DataContext = this.vm;
             ProgramState.ShowWaitCursor(false);
         }
@@ -47,7 +47,7 @@ namespace Incubator_2.Windows
         private void GetTags()
         {
             Tag tag = new();
-            foreach (Tag t in tag.GetAllTagsByTemplate(this.template.id))
+            foreach (Tag t in tag.GetAllTagsByTemplate(this.vm.Id))
             {
                 this.AddTag(t);
             }
@@ -56,9 +56,11 @@ namespace Incubator_2.Windows
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
         private void reviewClick(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog fd = new();
-            fd.Filter = "Word и Excel|*.docx;*.xlsx";
-            fd.InitialDirectory = ProgramState.TemplatesSourcesWordPath;
+            OpenFileDialog fd = new()
+            {
+                Filter = "Word и Excel|*.docx;*.xlsx",
+                InitialDirectory = ProgramState.TemplatesSourcesWordPath
+            };
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string result;
@@ -70,7 +72,7 @@ namespace Incubator_2.Windows
                     {
                         File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesWordPath}\\{fd.SafeFileName}");
                     }
-                    this.template.type = TemplateType.Word;
+                    this.vm.Type = TemplateType.Word;
                 }
                 else if (fd.FileName.EndsWith(".xlsx"))
                 {
@@ -78,9 +80,8 @@ namespace Incubator_2.Windows
                     {
                         File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesExcelPath}\\{fd.SafeFileName}");
                     }
-                    this.template.type = TemplateType.Excel;
+                    this.vm.Type = TemplateType.Excel;
                 }
-
             }
         }
 
@@ -101,7 +102,7 @@ namespace Incubator_2.Windows
                 ProgramState.ShowExclamationDialog($"Неверное имя шаблона.", "Сохранение прервано");
                 return false;
             }
-            if (this.ContentPanel.Children.Count == 0 && string.IsNullOrWhiteSpace(this.template.parent))
+            if (this.ContentPanel.Children.Count == 0 && string.IsNullOrWhiteSpace(this.vm.Parents))
             {
                 ProgramState.ShowExclamationDialog($"Шаблон без единого тега не является шаблоном.", "Сохранение прервано");
                 return false;
@@ -142,36 +143,27 @@ namespace Incubator_2.Windows
             {
                 ProgramState.ShowWaitCursor();
                 this.Close();
-                this.template.SaveTemplateSettings(this.vm.GetSettings());
-                if (this.template.id != 0)
-                {
-                    this.template.UpdateTemplate();
-                    this.SaveTags(true);
-                }
-                else
-                {
-                    this.template.AddTemplate();
-                    this.SaveTags(false);
-                }
+                this.vm.SaveTemplate();
+                this.SaveTags();
                 OnCreated?.Invoke();
                 ProgramState.ShowWaitCursor(false);
             }
         }
 
-        private async void SaveTags(bool isEdit)
+        private async void SaveTags()
         {
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
                 await System.Threading.Tasks.Task.Run(() =>
                 {
-                    tag.SaveTag(this.template.id, isEdit);
+                    tag.SaveTag(this.vm.Id);
                 });
             }
         }
 
         private void AddTag(Tag tag = null)
         {
-            Tag t = new Tag();
+            Tag t = new();
             bool isNew = false;
             if (tag == null)
             {
@@ -220,9 +212,11 @@ namespace Incubator_2.Windows
                     {
                         continue;
                     }
-                    Tag tag = new();
-                    tag.name = tagname;
-                    tag.visibleName = tagname;
+                    Tag tag = new()
+                    {
+                        name = tagname,
+                        visibleName = tagname
+                    };
                     this.AddTag(tag);
                 }
             }
@@ -253,7 +247,7 @@ namespace Incubator_2.Windows
         private void EditSourceClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             string pathFile = "";
-            switch (this.template.type)
+            switch (this.vm.Type)
             {
                 case TemplateType.Excel:
                     pathFile = ProgramState.GetFullnameOfExcelFile(this.vm.Source);
@@ -341,23 +335,23 @@ namespace Incubator_2.Windows
             {
                 try
                 {
-                    if (!string.IsNullOrWhiteSpace(this.template.parent))
+                    if (!string.IsNullOrWhiteSpace(this.vm.Parents))
                     {
                         DialogStatus ds = ProgramState.ShowQuestionDialog("Этот шаблон унаследован, вы можете применить все родительские теги к ниму.", "Учитывать родителей?", "Применить родителей", "Не применять");
                         if (ds == DialogStatus.Yes)
                         {
-                            tp.FillData(this.template, true);
+                            tp.FillData(this.vm.GetTemplate(), true);
                         }
                         else
                         {
-                            tp.FillData(this.template, false);
+                            tp.FillData(this.vm.GetTemplate(), false);
                         }
                     }
                     else
                     {
-                        tp.FillData(this.template, false);
+                        tp.FillData(this.vm.GetTemplate(), false);
                     }
-                    tp.ToFile(folder.SelectedPath, this.template.type == TemplateType.Word? ProgramState.GetFullnameOfWordFile(this.template.path) : ProgramState.GetFullnameOfExcelFile(this.template.path), this.template.path);
+                    tp.ToFile(folder.SelectedPath, this.vm.Type == TemplateType.Word? ProgramState.GetFullnameOfWordFile(this.vm.Source) : ProgramState.GetFullnameOfExcelFile(this.vm.Source), this.vm.Source);
                 }
                 catch (Exception ex)
                 {
@@ -368,7 +362,7 @@ namespace Incubator_2.Windows
 
         private void Upload(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (this.template.id != 0)
+            if (this.vm.Id != 0)
             {
                 ProgramState.ShowExclamationDialog("Невозможно применить импорт, поскольку это грозит утерей текущего шаблона", "Импорт прерван");
                 return;

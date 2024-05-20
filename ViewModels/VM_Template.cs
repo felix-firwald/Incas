@@ -1,5 +1,7 @@
 ﻿
+using IncasEngine.TemplateManager;
 using Models;
+using Org.BouncyCastle.Asn1.Mozilla;
 
 namespace Incubator_2.ViewModels
 {
@@ -28,6 +30,10 @@ namespace Incubator_2.ViewModels
             this.templateMain.SaveTemplateSettings(this.GetSettings());
             this.templateMain.UpdateTemplate();
         }
+        public Template GetTemplate()
+        {
+            return this.templateMain;
+        }
         public bool IsEdit
         {
             get
@@ -37,6 +43,37 @@ namespace Incubator_2.ViewModels
                     return false;
                 }
                 return true;
+            }
+        }
+        public int Id
+        {
+            get
+            {
+                return this.templateMain.id;
+            }
+        }
+        public TemplateType Type
+        {
+            get
+            {
+                return this.templateMain.type;
+            }
+            set
+            {
+                this.templateMain.type = value;
+                this.OnPropertyChanged("Type");
+            }
+        }
+        public string Parents
+        {
+            get
+            {
+                return this.templateMain.parent;
+            }
+            set
+            {
+                this.templateMain.parent = value;
+                this.OnPropertyChanged("Parents");
             }
         }
         public string NameOfTemplate

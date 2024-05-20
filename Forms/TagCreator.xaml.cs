@@ -54,17 +54,10 @@ namespace Incubator_2.Forms
             }
         }
 
-        public void SaveTag(int templ, bool isEdit = false)
+        public void SaveTag(int templ)
         {
             this.tag.template = templ;
-            if (isEdit)
-            {
-                this.tag.UpdateTag();
-            }
-            else
-            {
-                this.tag.AddTag();
-            }
+            this.tag.UpdateTag();
         }
         public void Minimize()
         {
