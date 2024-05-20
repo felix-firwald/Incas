@@ -11,7 +11,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 
-
 namespace Incubator_2.Windows
 {
     /// <summary>
@@ -87,12 +86,12 @@ namespace Incubator_2.Windows
 
         private bool CheckForSave()
         {
-            if (!File.Exists(ProgramState.GetFullnameOfWordFile(this.template.path)) && !File.Exists(ProgramState.GetFullnameOfExcelFile(this.template.path)))
+            if (!File.Exists(ProgramState.GetFullnameOfWordFile(this.vm.Source)) && !File.Exists(ProgramState.GetFullnameOfExcelFile(this.vm.Source)))
             {
-                ProgramState.ShowErrorDialog($"Файл ({this.template.path}) не найден.", "Сохранение прервано");
+                ProgramState.ShowErrorDialog($"Файл ({this.vm.Source}) не найден в служебном каталоге.", "Сохранение прервано");
                 return false;
             }
-            if (!this.template.path.EndsWith(".docx") && !this.template.path.EndsWith(".xlsx"))
+            if (!this.vm.Source.EndsWith(".docx") && !this.vm.Source.EndsWith(".xlsx"))
             {
                 ProgramState.ShowExclamationDialog($"Исходный файл шаблона должен быть с расширением .docx или .xlsx, любое другое расширение использовать нельзя.", "Сохранение прервано");
                 return false;
@@ -206,10 +205,10 @@ namespace Incubator_2.Windows
                 }
                 return true;
             }
-            string pathFile = ProgramState.GetFullnameOfWordFile(this.template.path);
+            string pathFile = ProgramState.GetFullnameOfWordFile(this.vm.Source);
             if (!File.Exists(pathFile))
             {
-                ProgramState.ShowExclamationDialog($"Файл ({this.template.path}) не существует!\nТеги не могут быть обнаружены.", "Поиск невозможен");
+                ProgramState.ShowExclamationDialog($"Файл ({this.vm.Source}) не существует!\nТеги не могут быть обнаружены.", "Поиск невозможен");
                 return;
             }
             try
@@ -257,10 +256,10 @@ namespace Incubator_2.Windows
             switch (this.template.type)
             {
                 case TemplateType.Excel:
-                    pathFile = ProgramState.GetFullnameOfExcelFile(this.template.path);
+                    pathFile = ProgramState.GetFullnameOfExcelFile(this.vm.Source);
                     break;
                 case TemplateType.Word:
-                    pathFile = ProgramState.GetFullnameOfWordFile(this.template.path);
+                    pathFile = ProgramState.GetFullnameOfWordFile(this.vm.Source);
                     break;
                 default:
                     break;
@@ -268,7 +267,7 @@ namespace Incubator_2.Windows
 
             if (!File.Exists(pathFile))
             {
-                ProgramState.ShowExclamationDialog($"Файл ({this.template.path}) не существует!", "Действие прервано");
+                ProgramState.ShowExclamationDialog($"Файл ({this.vm.Source}) не существует!", "Действие прервано");
                 return;
             }
             try
@@ -337,7 +336,7 @@ namespace Incubator_2.Windows
                 return;
             }
             TemplatePort tp = new();
-            FolderBrowserDialog folder = new FolderBrowserDialog();
+            FolderBrowserDialog folder = new();
             if (folder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 try
@@ -358,7 +357,7 @@ namespace Incubator_2.Windows
                     {
                         tp.FillData(this.template, false);
                     }
-                    tp.ToFile(folder.SelectedPath);
+                    tp.ToFile(folder.SelectedPath, this.template.type == TemplateType.Word? ProgramState.GetFullnameOfWordFile(this.template.path) : ProgramState.GetFullnameOfExcelFile(this.template.path), this.template.path);
                 }
                 catch (Exception ex)
                 {
@@ -376,49 +375,24 @@ namespace Incubator_2.Windows
             }
             try
             {
-                OpenFileDialog fd = new();
-                fd.Filter = "Шаблоны INCAS|*.tinc";
-                fd.InitialDirectory = ProgramState.TemplatesSourcesWordPath;
+                OpenFileDialog fd = new()
+                {
+                    Filter = "Шаблоны INCAS|*.tinc",
+                    InitialDirectory = ProgramState.TemplatesSourcesWordPath
+                };
                 if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    TemplatePort tp = JsonConvert.DeserializeObject<TemplatePort>(File.ReadAllText(fd.FileName));
-                    
-                    switch (tp.SourceTemplate.type)
+                    TemplatePort tp = new();
+                    tp.ParseData(fd.FileName);
+                    if (tp.Data != null)
                     {
-                        case TemplateType.Word:
-                            string wordpath = tp.SourceTemplate.path;
-                            if (File.Exists(ProgramState.GetFullnameOfWordFile(tp.SourceTemplate.path)))
-                            {
-                                if (ProgramState.ShowQuestionDialog($"Исходный файл шаблона с именем \"{wordpath}\" уже существует в рабочем пространстве.\n" +
-                                    $"Использовать его или переименовать предлагаемый файл из импортированного шаблона?", "Использовать старый шаблон?", "Использовать старый", "Переименовать предлагаемый") == DialogStatus.No)
-                                {
-                                    wordpath = ProgramState.ShowInputBox("Имя исходного файла", "Придумайте другое имя").Replace("\\", "").Replace(".docx", "") + ".docx";
-                                    tp.SourceTemplate.path = wordpath;
-                                }       
-                            }
-                            WordTemplator templator = new();
-                            templator.DeserializeAndExtract(tp.Source, wordpath);
-                            //File.WriteAllText(ProgramState.GetFullnameOfWordFile(wordpath), tp.Source, System.Text.Encoding.UTF8);
-                            break;
-                        case TemplateType.Excel:
-                            string excelpath = tp.SourceTemplate.path;
-                            if (File.Exists(ProgramState.GetFullnameOfExcelFile(tp.SourceTemplate.path)))
-                            {
-                                if (ProgramState.ShowQuestionDialog($"Исходный файл шаблона с именем \"{excelpath}\" уже существует в рабочем пространстве.\n" +
-                                    $"Использовать его или переименовать предлагаемый файл из импортированного шаблона?", "Использовать старый шаблон?", "Использовать старый", "Переименовать предлагаемый") == DialogStatus.No)
-                                {
-                                    excelpath = ProgramState.ShowInputBox("Имя исходного файла", "Придумайте другое имя").Replace("\\", "").Replace(".xlsx", "") + ".xlsx";
-                                    tp.SourceTemplate.path = excelpath;
-                                }
-                            }
-                            File.WriteAllText(ProgramState.GetFullnameOfExcelFile(excelpath), tp.Source, System.Text.Encoding.UTF8);
-                            break;
-                    }
-                    this.vm.ApplyNewTemplate(tp.SourceTemplate);
-                    foreach (Tag t in tp.Tags)
-                    {
-                        this.AddTag(t);
-                    }
+                        tp.GetSourceFile(fd.FileName, tp.Data.SourceTemplate.path);
+                        this.vm.ApplyNewTemplate(tp.Data.SourceTemplate);
+                        foreach (Tag t in tp.Data.Tags)
+                        {
+                            this.AddTag(t);
+                        }
+                    }                   
                 }
             }
             catch (Exception ex)
@@ -449,7 +423,6 @@ namespace Incubator_2.Windows
 
         private void PreviewClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
             UseTemplate ut = new(this.vm.NameOfTemplate, this.GetTagsData());
             ut.ShowDialog();
         }

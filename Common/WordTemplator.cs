@@ -50,17 +50,6 @@ namespace Common
             return DocX.Load(this.Path);
         }
 
-        public string Serialize()
-        {
-            return JsonConvert.SerializeObject(this.LoadFile());
-        }
-
-        public void DeserializeAndExtract(string input, string newPath)
-        {
-            DocX doc = JsonConvert.DeserializeObject<DocX>(input);
-            doc.SaveAs(ProgramState.GetFullnameOfWordFile(newPath) + ".docx");
-        }
-
         public async void Replace(List<string> tags, List<string> values, bool async = true) // не Dictionary потому что важен порядок замены
         {
             DocX doc = this.LoadFile();
