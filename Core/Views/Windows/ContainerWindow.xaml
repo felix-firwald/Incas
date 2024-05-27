@@ -1,0 +1,43 @@
+﻿<Window xmlns:Database="clr-namespace:Incubator_2.Forms.Database"  x:Class="Incas.Core.Views.Windows.ContainerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Incas.Core.Views.Windows"
+        mc:Ignorable="d" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        Title="ContainerWindow" MinHeight="550" Height="550" MinWidth="850" Width="850" AllowsTransparency="True" Background="{x:Null}" WindowStartupLocation="CenterScreen">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="6" CornerRadius="5" GlassFrameThickness="0"/>
+    </WindowChrome.WindowChrome>
+    <Border CornerRadius="5" Background="{StaticResource Basic}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40 "/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Column="2" UseLayoutRounding="True">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="1,1" StartPoint="0.2,1">
+                        <GradientStop Color="#FF252528" />
+                        <GradientStop Color="#FF1F1D1D" Offset="0.5"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="Logo.png" RenderOptions.BitmapScalingMode="HighQuality" Margin="6" />
+                <TextBlock Text="{Binding Title, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                <Button Name="MinimizeButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TitleBarWindowButton}" Content="🗕" Grid.Column="2" Command="{Binding MinimizeCommand}" />
+                <Button Name="MaximizeButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TitleBarWindowButton}" Content="🗖" Grid.Column="3" Command="{Binding MaximizeCommand}" />
+                <Button Name="CloseButton" WindowChrome.IsHitTestVisibleInChrome="True" Style="{StaticResource TitleBarWindowButton}" Content="✕" Grid.Column="4" Command="{Binding CloseCommand}" />
+            </Grid>
+            <Border x:Name="ContentPanel" Grid.Row="1">
+
+            </Border>
+        </Grid>
+    </Border>
+</Window>

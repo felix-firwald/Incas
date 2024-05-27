@@ -1,12 +1,12 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
 using Incubator_2.Models;
-using Incubator_2.Windows;
+using Incas.Users.Views.Windows;
 using Incubator_2.Windows.CustomDatabase;
-using Models;
 using System;
+using Incas.Users.Models;
 
-namespace Incubator_2.Common
+namespace Incas.Common
 {
     public static class CommandHandler
     {

@@ -1,6 +1,6 @@
 ﻿
-using Incubator_2.ViewModels.VMAdmin;
-using Models;
+using Incas.Users.Models;
+using Incas.Users.ViewModels;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -11,12 +11,12 @@ namespace Incubator_2.Forms
     /// </summary>
     public partial class UserElement : UserControl
     {
-        private VM_UserElement vm;
+        private UserElementViewModel vm;
         public delegate void Deleted(UserElement element);
         public event Deleted OnDeleted;
         public UserElement(User user)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.vm = new(user);
             this.DataContext = this.vm;
         }

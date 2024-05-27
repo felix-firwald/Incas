@@ -1,9 +1,9 @@
-﻿using Incas.Core.Views.Windows;
+﻿using Incas.Core.ViewModels;
+using Incas.Core.Views.Windows;
 using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Incubator_2.Models;
-using Incubator_2.ViewModels;
-using Incubator_2.Windows;
+using Incas.Users.Views.Windows;
 using Incubator_2.Windows.CustomDatabase;
 using Incubator_2.Windows.Selectors;
 using Microsoft.Win32;
@@ -17,6 +17,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Incas.Users.Models;
 
 namespace Common
 {
@@ -71,7 +72,7 @@ namespace Common
         public static Session CurrentSession { get; private set; }
         #endregion
         public static Sector CurrentSector { get; private set; }
-        public static MV_MainWindow MainWindow { get; set; }
+        public static MainWindowViewModel MainWindow { get; set; }
 
         private static DateTime LastGarbageCollect = DateTime.Now;
         #region Path and init

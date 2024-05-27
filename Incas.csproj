@@ -45,7 +45,7 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Incubator_2.App</StartupObject>
+    <StartupObject>Incas.App</StartupObject>
     <PackageIcon>Logo.png</PackageIcon>
     <PackageId>firwald/incas</PackageId>
     <SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
@@ -239,6 +239,7 @@
     <Folder Include="Core\Views\UserControls\" />
     <Folder Include="Core\Models\" />
     <Folder Include="Resources\" />
+    <Folder Include="Users\Views\UserControls\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Incas Engine\Incas Engine\Incas Engine.csproj" />

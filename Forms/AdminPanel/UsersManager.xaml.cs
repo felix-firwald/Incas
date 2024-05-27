@@ -1,5 +1,5 @@
-﻿using Incubator_2.Windows;
-using Models;
+﻿using Incas.Users.Models;
+using Incas.Users.Views.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 

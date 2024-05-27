@@ -1,6 +1,6 @@
 ﻿using Common;
 using Incas.Core.ViewModels;
-using Models;
+using Incas.Users.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

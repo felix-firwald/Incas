@@ -2,12 +2,12 @@
 using Incas.Users.Models;
 using System.Collections.Generic;
 
-namespace Incubator_2.ViewModels.VM_Communication
+namespace Incas.Users.ViewModels
 {
-    public class VM_CommunicationMain : BaseViewModel
+    public class UserSelectorViewModel : BaseViewModel
     {
-        private User _selectedUser;
-        public VM_CommunicationMain() { }
+        private User _selected;
+        public UserSelectorViewModel() { }
 
         public List<User> Users
         {
@@ -21,11 +21,11 @@ namespace Incubator_2.ViewModels.VM_Communication
         {
             get
             {
-                return this._selectedUser;
+                return this._selected;
             }
             set
             {
-                this._selectedUser = value;
+                this._selected = value;
                 this.OnPropertyChanged(nameof(this.SelectedUser));
             }
         }

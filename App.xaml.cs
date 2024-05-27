@@ -1,4 +1,6 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
+
 //using IncasEngine.PDFManager.Fluent;
 //using IncasEngine.PDFManager.Helpers;
 //using IncasEngine.PDFManager.Infrastructure;
@@ -10,7 +12,7 @@ using QuestPDF.Infrastructure;
 using System;
 using System.Windows;
 
-namespace Incubator_2
+namespace Incas
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml
@@ -27,9 +29,9 @@ namespace Incubator_2
                 ProgramState.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");
                 App.Current.Shutdown();
             }
-            OpenIncubator oi = new();
+            OpenWorkspace ow = new();
 
-            if (oi.ShowDialog() == false)
+            if (ow.ShowDialog() == false)
             {
 
             }

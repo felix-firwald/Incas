@@ -1,4 +1,4 @@
-﻿using Incubator_2.Windows;
+﻿using Incas.Users.Views.Windows;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -11,7 +11,7 @@ namespace Incubator_2.Forms.UserSettings
     {
         public UserSettingsMain()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void SetPasswordClick(object sender, RoutedEventArgs e)
