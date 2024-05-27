@@ -1,10 +1,11 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 using Models;
 using System.Collections.Generic;
 
 namespace Incubator_2.ViewModels
 {
-    public class VM_ActiveUserSelector : VM_Base
+    public class VM_ActiveUserSelector : BaseViewModel
     {
         private Session selectedSession;
         private string helptext = "Выбранному пользователю будет послан процесс от вашего имени.";

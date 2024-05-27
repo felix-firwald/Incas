@@ -1,10 +1,11 @@
-﻿using Incubator_2.Common;
+﻿using Incas.Core.ViewModels;
+using Incubator_2.Common;
 using Incubator_2.Windows.AdminWindows;
 using Models;
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
-    internal class VM_SessionElement : VM_Base
+    internal class VM_SessionElement : BaseViewModel
     {
         private SSession _session;
         public VM_SessionElement(ref SSession s)

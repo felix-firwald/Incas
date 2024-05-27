@@ -1,8 +1,9 @@
-﻿using Incubator_2.Common;
+﻿using Incas.Core.ViewModels;
+using Incubator_2.Common;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
-    public class VM_FieldEditor : VM_Base
+    public class VM_FieldEditor : BaseViewModel
     {
         private FieldCreator creator;
         private bool _fk;

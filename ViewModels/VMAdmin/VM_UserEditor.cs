@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 using Incubator_2.Common;
 using Incubator_2.Models;
 using Models;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
-    internal class VM_UserEditor : VM_Base
+    internal class VM_UserEditor : BaseViewModel
     {
         private User _user;
         private UserParameters _userParameters;

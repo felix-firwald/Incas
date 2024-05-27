@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Classes;
 using Incubator_2.Common;
 using System.Collections.Generic;
 using System.Data;

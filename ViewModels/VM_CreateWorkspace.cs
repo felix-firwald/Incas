@@ -1,8 +1,9 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 
 namespace Incubator_2.ViewModels
 {
-    internal class VM_CreateWorkspace : VM_Base
+    internal class VM_CreateWorkspace : BaseViewModel
     {
         private FirstWorkspaceData maindata;
         public VM_CreateWorkspace()

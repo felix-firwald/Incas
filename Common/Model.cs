@@ -1,4 +1,5 @@
-﻿using Incubator_2.Common;
+﻿using Incas.Core.Classes;
+using Incubator_2.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -112,7 +113,6 @@ namespace Common
         {
             return new Query(this.tableName, DBConnectionType.CUSTOM);
         }
-
 
         #region Standart Requests
         protected DataTable GetAll()

@@ -1,15 +1,14 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Incubator_2.Forms;
-using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
 using Microsoft.Scripting.Hosting;
 using Models;
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Incubator_2.Windows.Templates
 {
@@ -25,7 +24,7 @@ namespace Incubator_2.Windows.Templates
         public event Base OnFinishedEditing;
         public UseTemplateText(Template templ, SGeneratedDocument data)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.template = templ;
             this.Title = this.template.name;
             this.GetTags();
@@ -93,7 +92,7 @@ namespace Incubator_2.Windows.Templates
             {
                 id = this.template.id
             };
-            List<SGeneratedTag> tags = new();
+            List<SGeneratedTag> tags = [];
             foreach (UC_TagFiller tf in this.ContentPanel.Children)
             {
                 SGeneratedTag gt = new()

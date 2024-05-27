@@ -1,4 +1,6 @@
 ﻿using Common;
+using Incas.Core.Classes;
+using Incas.Core.Views.Windows;
 using IncasEngine;
 using IncasEngine.TemplateManager;
 using Incubator_2.Common;
@@ -154,14 +156,16 @@ namespace Models
 
         public Template AsModel()
         {
-            Template template = new();
-            template.id = this.id;
-            template.name = this.name;
-            template.path = this.path;
-            template.suggestedPath = this.suggestedPath;
-            template.parent = this.parent;
-            template.type = this.type;
-            template.settings = this.settings;
+            Template template = new()
+            {
+                id = this.id,
+                name = this.name,
+                path = this.path,
+                suggestedPath = this.suggestedPath,
+                parent = this.parent,
+                type = this.type,
+                settings = this.settings
+            };
             return template;
         }
     }

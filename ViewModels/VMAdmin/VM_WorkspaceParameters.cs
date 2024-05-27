@@ -1,11 +1,12 @@
-﻿using Incubator_2.Common;
+﻿using Incas.Core.ViewModels;
+using Incubator_2.Common;
 using Incubator_2.Models;
 using Models;
 
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
-    public class VM_WorkspaceParameters : VM_Base
+    public class VM_WorkspaceParameters : BaseViewModel
     {
         private Parameter _workspaceName = new Parameter().GetParameter(ParameterType.INCUBATOR, "ws_name");
         private Parameter _workspaceOpened = new Parameter().GetParameter(ParameterType.INCUBATOR, "ws_opened");

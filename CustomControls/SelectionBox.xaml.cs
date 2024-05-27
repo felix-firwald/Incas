@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using Incubator_2.Windows.CustomDatabase;
 using System;
 using System.Windows.Controls;
@@ -36,14 +37,14 @@ namespace Incubator_2.CustomControls
         public event ValueChanged OnValueChanged;
         public SelectionBox()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void ButtonClick(object sender, MouseButtonEventArgs e)
         {
             DatabaseSelection s = new(this.Database, this.Table, this.Field);
             s.ShowDialog();
-            if (s.Result == Windows.DialogStatus.Yes)
+            if (s.Result == DialogStatus.Yes)
             {
                 try
                 {

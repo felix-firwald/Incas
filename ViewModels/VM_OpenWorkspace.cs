@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace Incubator_2.ViewModels
 {
-    internal class VM_OpenWorkspace : VM_Base
+    internal class VM_OpenWorkspace : BaseViewModel
     {
         private List<string> _workspaces = RegistryData.GetWorkspaces();
         public VM_OpenWorkspace()

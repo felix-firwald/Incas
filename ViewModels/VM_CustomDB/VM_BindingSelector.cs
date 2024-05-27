@@ -1,11 +1,12 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 using Incubator_2.Models;
 using System.Collections.Generic;
 using System.Windows;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
-    public class VM_BindingSelector : VM_Base
+    public class VM_BindingSelector : BaseViewModel
     {
         private SDatabase _selectedDB;
         private string _selectedTable;

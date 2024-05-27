@@ -1,4 +1,5 @@
-﻿using Incubator_2.Common;
+﻿using Incas.Core.Classes;
+using Incubator_2.Common;
 using Incubator_2.Models;
 using Models;
 using System;

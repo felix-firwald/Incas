@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
 using System;

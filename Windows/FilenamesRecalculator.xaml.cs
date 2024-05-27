@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using System.Collections.Generic;
 using System.Windows;
 

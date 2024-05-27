@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using IncasEngine.TemplateManager;
 using Incubator_2.Windows;
 using Incubator_2.Windows.Templates;

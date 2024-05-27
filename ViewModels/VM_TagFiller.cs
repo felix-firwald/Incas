@@ -1,10 +1,11 @@
 ﻿
+using Incas.Core.ViewModels;
 using IncasEngine.TemplateManager;
 using Models;
 
 namespace Incubator_2.ViewModels
 {
-    public class VM_TagFiller : VM_Base
+    public class VM_TagFiller : BaseViewModel
     {
         private Tag tag;
         public VM_TagFiller(Tag t)

@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Windows.Input;
 
-namespace Incubator_2.ViewModels
+namespace Incas.Core.ViewModels
 {
-    public class VM_Base : INotifyPropertyChanged, ICommand
+    public class BaseViewModel : INotifyPropertyChanged, ICommand
     {
         public event PropertyChangedEventHandler PropertyChanged;
 #pragma warning disable CS0067

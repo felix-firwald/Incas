@@ -1,13 +1,7 @@
 ﻿using System.Windows;
 
-namespace Incubator_2.Windows
+namespace Incas.Core.Views.Windows
 {
-    public enum DialogStatus
-    {
-        Yes,
-        No,
-        Undefined
-    }
     /// <summary>
     /// Логика взаимодействия для DialogQuestion.xaml
     /// </summary>
@@ -16,7 +10,7 @@ namespace Incubator_2.Windows
         public DialogStatus status = DialogStatus.Undefined;
         public DialogQuestion(string text, string title = "Выполнить действие?", string yesText = "Да", string noText = "Нет")
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.TitleText.Content = title;
             this.Description.Text = text;
             this.Yes.Content = yesText;

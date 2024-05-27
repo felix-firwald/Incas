@@ -1,4 +1,5 @@
-﻿using Incubator_2.ViewModels.VM_CustomDB;
+﻿using Incas.Core.Views.Windows;
+using Incubator_2.ViewModels.VM_CustomDB;
 using System.Data;
 using System.Windows;
 

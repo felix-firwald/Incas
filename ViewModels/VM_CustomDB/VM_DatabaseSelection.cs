@@ -1,9 +1,10 @@
-﻿using Incubator_2.Models;
+﻿using Incas.Core.ViewModels;
+using Incubator_2.Models;
 using System.Data;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
-    public class VM_DatabaseSelection : VM_Base
+    public class VM_DatabaseSelection : BaseViewModel
     {
         private CustomTable requester = new();
         private string _database;

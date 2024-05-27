@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using IncasEngine.TemplateManager;
 using Incubator_2.ViewModels;
 using Incubator_2.Windows;
@@ -106,7 +107,7 @@ namespace Incubator_2.Forms
         {
             BindingSelector bs = new();
             bs.ShowDialog();
-            if (bs.Result == Windows.DialogStatus.Yes)
+            if (bs.Result == DialogStatus.Yes)
             {
                 this.vm.DefaultValue = $"{bs.SelectedDatabase}.{bs.SelectedTable}.{bs.SelectedField}";
             }
@@ -122,7 +123,7 @@ namespace Incubator_2.Forms
                     if (ProgramState.ShowQuestionDialog(
                     "Вы хотите использовать существующий генератор или создать новый?",
                     "Новый или существующий",
-                    "Новый", "Существующий") == Windows.DialogStatus.Yes)
+                    "Новый", "Существующий") == DialogStatus.Yes)
                     {
                         CreateTextTemplate ctt = new();
                         ctt.ShowDialog();

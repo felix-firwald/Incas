@@ -1,11 +1,12 @@
 ﻿
+using Incas.Core.ViewModels;
 using Models;
 using System.Collections.Generic;
 
 
 namespace Incubator_2.ViewModels
 {
-    public class VM_FileCreator : VM_Base
+    public class VM_FileCreator : BaseViewModel
     {
         private Template _template;
         private string _filename;

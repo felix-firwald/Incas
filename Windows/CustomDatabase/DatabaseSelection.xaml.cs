@@ -1,8 +1,10 @@
 ﻿using Common;
+using Incas.Core.Classes;
+using Incas.Core.Views.Windows;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
-using Query = Common.Query;
+using Query = Incas.Core.Classes.Query;
 
 namespace Incubator_2.Windows.CustomDatabase
 {
@@ -19,7 +21,7 @@ namespace Incubator_2.Windows.CustomDatabase
         {
             get
             {
-                return ((DataRowView)Grid.SelectedItems[0]).Row[this.Field].ToString();
+                return ((DataRowView)this.Grid.SelectedItems[0]).Row[this.Field].ToString();
             }
         }
         public DataRow SelectedValues

@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 using Incubator_2.Common;
 using Incubator_2.Models;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Windows.Controls;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
-    internal class VM_CustomDatabase : VM_Base
+    internal class VM_CustomDatabase : BaseViewModel
     {
         private string _selectedTable = "";
         private DataRow _selectedRow;

@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using Incubator_2.Models;
 using Incubator_2.Windows;
 using Incubator_2.Windows.CustomDatabase;
@@ -126,7 +127,7 @@ namespace Incubator_2.Common
                     {
                         p.type = ParameterType.RESTRICT_EDIT_TABLE;
                         BindingSelector bs = ProgramState.ShowBindingSelector();
-                        if (bs.Result == Windows.DialogStatus.Yes)
+                        if (bs.Result == DialogStatus.Yes)
                         {
                             p.name = $"{bs.SelectedDatabase}.{bs.SelectedTable}";
                             p.DeleteParameterByTypeAndName();
@@ -147,7 +148,7 @@ namespace Incubator_2.Common
                     {
                         p.type = ParameterType.RESTRICT_EDIT_TABLE;
                         BindingSelector bs = ProgramState.ShowBindingSelector();
-                        if (bs.Result == Windows.DialogStatus.Yes)
+                        if (bs.Result == DialogStatus.Yes)
                         {
                             p.name = $"{bs.SelectedDatabase}.{bs.SelectedTable}";
                             p.DeleteParameterByTypeAndName();

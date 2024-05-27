@@ -1,8 +1,9 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 
 namespace Incubator_2.ViewModels
 {
-    internal class VM_AdminPanel : VM_Base
+    internal class VM_AdminPanel : BaseViewModel
     {
         public VM_AdminPanel() { }
 

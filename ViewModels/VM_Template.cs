@@ -1,11 +1,12 @@
 ﻿
+using Incas.Core.ViewModels;
 using IncasEngine.TemplateManager;
 using Models;
 using Org.BouncyCastle.Asn1.Mozilla;
 
 namespace Incubator_2.ViewModels
 {
-    internal class VM_Template : VM_Base
+    internal class VM_Template : BaseViewModel
     {
         private Template templateMain;
         private TemplateSettings templateSettings;

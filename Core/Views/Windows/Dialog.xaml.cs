@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Incubator_2.Windows
+namespace Incas.Core.Views.Windows
 {
     /// <summary>
     /// Логика взаимодействия для Error.xaml
@@ -17,7 +17,7 @@ namespace Incubator_2.Windows
         }
         public Dialog(string text, string title = "Неизвестная ошибка", DialogIcon ic = DialogIcon.Error)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.TitleText.Content = title;
             this.Description.Text = text;
             switch (ic)

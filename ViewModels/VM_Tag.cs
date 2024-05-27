@@ -1,10 +1,11 @@
-﻿using IncasEngine.TemplateManager;
+﻿using Incas.Core.ViewModels;
+using IncasEngine.TemplateManager;
 using Models;
 using System.Windows;
 
 namespace Incubator_2.ViewModels
 {
-    internal class VM_Tag : VM_Base
+    internal class VM_Tag : BaseViewModel
     {
         private Tag mainTag;
         // сделать проверку по id, если id есть, то update, если нет - add

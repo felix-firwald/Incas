@@ -1,9 +1,10 @@
-﻿using Models;
+﻿using Incas.Core.ViewModels;
+using Models;
 using System.Collections.Generic;
 
 namespace Incubator_2.ViewModels.VM_Communication
 {
-    public class VM_CommunicationMain : VM_Base
+    public class VM_CommunicationMain : BaseViewModel
     {
         private User _selectedUser;
         public VM_CommunicationMain() { }

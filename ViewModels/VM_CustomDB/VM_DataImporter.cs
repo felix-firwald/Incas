@@ -1,8 +1,9 @@
 ﻿using System.Data;
+using Incas.Core.ViewModels;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
-    public class VM_DataImporter : VM_Base
+    public class VM_DataImporter : BaseViewModel
     {
         private DataTable _table;
 

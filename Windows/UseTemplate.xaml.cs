@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Common;
+using Incas.Core.Views.Windows;
 using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Incubator_2.Forms;

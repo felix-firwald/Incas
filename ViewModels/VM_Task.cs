@@ -1,9 +1,10 @@
-﻿using Models;
+﻿using Incas.Core.ViewModels;
+using Models;
 using System.Collections.Generic;
 
 namespace Incubator_2.ViewModels
 {
-    public class VM_Task : VM_Base
+    public class VM_Task : BaseViewModel
     {
         private STask _task;
         public VM_Task(STask task)

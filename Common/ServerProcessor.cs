@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using IncasEngine;
 using Incubator_2.Forms;
 using Incubator_2.Forms.Templates;
@@ -74,8 +75,8 @@ namespace Incubator_2.Common
 
     internal static class WaitControls
     {
-        public static List<UC_TagFiller> TagFillers = new();
-        public static Dictionary<string, Generator> Generators = new();
+        public static List<UC_TagFiller> TagFillers = [];
+        public static Dictionary<string, Generator> Generators = [];
         public static Generator GetGenerator(string process)
         {
             Generator g = Generators[process];
@@ -103,8 +104,8 @@ namespace Incubator_2.Common
 
     internal static class ServerProcessor
     {
-        public static string Port { get { return $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession?.slug}.incport"; } }
-        private static List<Process> WaitList = new();
+        public static string Port => $"{ProgramState.ServerProcesses}\\{ProgramState.CurrentSession?.slug}.incport";
+        private static List<Process> WaitList = [];
         private static bool StopPulling = false;
 
         #region ControlsWait
@@ -165,7 +166,7 @@ namespace Incubator_2.Common
         {
             try
             {
-                List<Session> closed = new();
+                List<Session> closed = [];
                 using (Session s = new())
                 {
                     closed = s.GetOpenedSessions(false);
@@ -343,8 +344,10 @@ namespace Incubator_2.Common
         private static void CopyFileProcessHandle(string filename)
         {
             string fullname = $"{ProgramState.Exchanges}\\{filename}";
-            FolderBrowserDialog fb = new();
-            fb.Description = $"Папка для сохранения \"{filename}\"";
+            FolderBrowserDialog fb = new()
+            {
+                Description = $"Папка для сохранения \"{filename}\""
+            };
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 if (fb.ShowDialog() == DialogResult.OK)
@@ -490,12 +493,13 @@ namespace Incubator_2.Common
         }
         private static Process CreateQueryProcess(string recipient)
         {
-            Process process = new Process();
-
-            process.id = GenerateId();
-            process.emitter = ProgramState.CurrentSession.slug;
-            process.recipient = recipient;
-            process.type = ProcessType.QUERY;
+            Process process = new Process
+            {
+                id = GenerateId(),
+                emitter = ProgramState.CurrentSession.slug,
+                recipient = recipient,
+                type = ProcessType.QUERY
+            };
             return process;
         }
         public static void SendTerminateProcess(string recipient)

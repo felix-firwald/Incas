@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 using Incubator_2.Common;
 using Models;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Windows.Input;
 
 namespace Incubator_2.ViewModels
 {
-    public class MV_MainWindow : VM_Base
+    public class MV_MainWindow : BaseViewModel
     {
         private string _workspaceName = "Имя инкубатора";
         private bool _processHandled = false;

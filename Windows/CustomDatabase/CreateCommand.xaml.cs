@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using Incubator_2.Models;
 using Incubator_2.ViewModels.VM_CustomDB;
 using System;

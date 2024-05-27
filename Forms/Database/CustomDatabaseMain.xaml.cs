@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Common;
+using Incas.Core.Views.Windows;
 using Incubator_2.Models;
 using Incubator_2.ViewModels.VM_CustomDB;
 using Incubator_2.Windows.CustomDatabase;
@@ -321,7 +322,7 @@ namespace Incubator_2.Forms.Database
                 ProgramState.ShowWaitCursor(false);
                 DataImporter di = new(output);
                 di.ShowDialog();
-                if (di.Result == Windows.DialogStatus.Yes)
+                if (di.Result == DialogStatus.Yes)
                 {
                     ProgramState.ShowWaitCursor();
                     string result = "BEGIN TRANSACTION;\n";
@@ -373,7 +374,7 @@ namespace Incubator_2.Forms.Database
                 case "FullImport":
                     if (Permission.CurrentUserPermission == PermissionGroup.Admin)
                     {
-                        if (ProgramState.ShowQuestionDialog("Старые данные будут стерты без возможности восстановления.", "Вы уверены?") == Windows.DialogStatus.Yes)
+                        if (ProgramState.ShowQuestionDialog("Старые данные будут стерты без возможности восстановления.", "Вы уверены?") == DialogStatus.Yes)
                         {
                             this.ImportFromExcel(true);
                         }

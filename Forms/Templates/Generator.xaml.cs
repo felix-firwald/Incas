@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using Incubator_2.Common;
 using Incubator_2.Models;
 using Incubator_2.Windows.Templates;
@@ -185,7 +186,7 @@ namespace Incubator_2.Forms.Templates
             utt.ShowDialog();
             try
             {
-                if (utt.Result == Windows.DialogStatus.Yes)
+                if (utt.Result == DialogStatus.Yes)
                 {
                     this.Result = utt.GetData();
                     this.resultText = utt.GetText();

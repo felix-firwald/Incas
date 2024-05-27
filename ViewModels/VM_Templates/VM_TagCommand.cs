@@ -1,9 +1,10 @@
-﻿using Models;
+﻿using Incas.Core.ViewModels;
+using Models;
 using System.Windows;
 
 namespace Incubator_2.ViewModels.VM_Templates
 {
-    public class VM_TagCommand : VM_Base
+    public class VM_TagCommand : BaseViewModel
     {
         private CommandSettings commandSettings;
         public VM_TagCommand(CommandSettings cs)

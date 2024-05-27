@@ -1,11 +1,12 @@
-﻿using IncasEngine.TemplateManager;
+﻿using Incas.Core.ViewModels;
+using IncasEngine.TemplateManager;
 using Models;
 using System.Collections.Generic;
 
 namespace Incubator_2.ViewModels.Selectors
 {
 
-    public class VM_TemplateSelector : VM_Base
+    public class VM_TemplateSelector : BaseViewModel
     {
         private STemplate selectedTemplate;
         private string helptext = "Выбранному пользователю будет послан процесс от вашего имени.";

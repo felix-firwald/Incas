@@ -1,9 +1,10 @@
-﻿using Models;
+﻿using Incas.Core.ViewModels;
+using Models;
 using System.Collections.Generic;
 
 namespace Incubator_2.ViewModels
 {
-    public class VM_UserSelector : VM_Base
+    public class VM_UserSelector : BaseViewModel
     {
         private User _selected;
         public VM_UserSelector() { }

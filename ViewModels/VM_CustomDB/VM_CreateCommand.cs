@@ -1,10 +1,11 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 using Incubator_2.Models;
 using System.Collections.Generic;
 
 namespace Incubator_2.ViewModels.VM_CustomDB
 {
-    public class VM_CreateCommand : VM_Base
+    public class VM_CreateCommand : BaseViewModel
     {
         public CustomTable Requester = new();
         private Models.Command command;

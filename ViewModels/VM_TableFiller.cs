@@ -1,9 +1,10 @@
-﻿using Models;
+﻿using Incas.Core.ViewModels;
+using Models;
 using System.Data;
 
 namespace Incubator_2.ViewModels
 {
-    internal class VM_TableFiller : VM_Base
+    internal class VM_TableFiller : BaseViewModel
     {
         private DataTable _data;
         public VM_TableFiller(Tag t)

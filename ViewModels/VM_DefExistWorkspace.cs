@@ -1,6 +1,8 @@
-﻿namespace Incubator_2.ViewModels
+﻿using Incas.Core.ViewModels;
+
+namespace Incubator_2.ViewModels
 {
-    public class VM_DefExistWorkspace : VM_Base
+    public class VM_DefExistWorkspace : BaseViewModel
     {
         private string _path;
         private string _workspacename;

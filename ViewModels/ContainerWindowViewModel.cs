@@ -1,11 +1,12 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Incas.Core.ViewModels;
 using Incubator_2.Common;
 using System.Windows;
 using System.Windows.Input;
 
 namespace Incubator_2.ViewModels
 {
-    internal class ContainerWindowViewModel : VM_Base
+    internal class ContainerWindowViewModel : BaseViewModel
     {
         #region Private Member
 

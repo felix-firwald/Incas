@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Incubator_2.Windows
+namespace Incas.Core.Views.Windows
 {
     /// <summary>
     /// Логика взаимодействия для DialogInput.xaml

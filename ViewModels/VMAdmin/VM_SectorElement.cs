@@ -1,8 +1,9 @@
-﻿using Incubator_2.Models;
+﻿using Incas.Core.ViewModels;
+using Incubator_2.Models;
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
-    internal class VM_SectorElement : VM_Base
+    internal class VM_SectorElement : BaseViewModel
     {
         public Sector sector;
         public VM_SectorElement(Sector s)

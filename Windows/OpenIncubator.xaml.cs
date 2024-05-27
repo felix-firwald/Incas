@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Views.Windows;
 using Incubator_2.Common;
 using Incubator_2.ViewModels;
 using System.IO;
@@ -15,7 +16,7 @@ namespace Incubator_2.Windows
         private VM_OpenWorkspace vm;
         public OpenIncubator()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             ProgramState.LoadUserData();
             this.vm = new VM_OpenWorkspace();
             this.DataContext = this.vm;
@@ -25,7 +26,7 @@ namespace Incubator_2.Windows
         {
             if (string.IsNullOrEmpty(this.cpath.Text) || string.IsNullOrEmpty(this.pwd.Text))
             {
-                Dialog d = new Dialog("Одно из обязательных полей не заполнено!", "Вход невозможен");
+                Dialog d = new("Одно из обязательных полей не заполнено!", "Вход невозможен");
                 d.ShowDialog();
             }
             else
@@ -51,7 +52,7 @@ namespace Incubator_2.Windows
                     Permission.CurrentUserPermission = ProgramState.CurrentUserParameters.permission_group;
                     if (Permission.CurrentUserPermission != PermissionGroup.Admin && ProgramState.IsWorkspaceLocked())
                     {
-                        Locked l = new Locked();
+                        Locked l = new();
                         l.ShowDialog();
                         this.ShowDialog();
                     }
@@ -76,12 +77,11 @@ namespace Incubator_2.Windows
             {
                 ProgramState.ShowExclamationDialog("Пользователь не выбран.", "Вход невозможен");
             }
-
         }
 
         private void PathReview(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            FolderBrowserDialog folderDialog = new();
             if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 this.cpath.Text = folderDialog.SelectedPath;
@@ -100,10 +100,12 @@ namespace Incubator_2.Windows
 
         private void EditClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            VM_DefExistWorkspace vmedit = new VM_DefExistWorkspace();
-            vmedit.WorkspaceName = this.vm.SelectedWorkspace;
-            vmedit.WorkspacePath = this.vm.Path;
-            DefineExistingWorkspace dew = new DefineExistingWorkspace(vmedit);
+            VM_DefExistWorkspace vmedit = new()
+            {
+                WorkspaceName = this.vm.SelectedWorkspace,
+                WorkspacePath = this.vm.Path
+            };
+            DefineExistingWorkspace dew = new(vmedit);
             dew.ShowDialog();
             this.vm.Refresh();
         }
@@ -114,16 +116,15 @@ namespace Incubator_2.Windows
             {
                 case DialogStatus.Yes:
                 default:
-                    CreateWorkspace cw = new CreateWorkspace();
+                    CreateWorkspace cw = new();
                     cw.ShowDialog();
                     break;
                 case DialogStatus.No:
-                    DefineExistingWorkspace dew = new DefineExistingWorkspace();
+                    DefineExistingWorkspace dew = new();
                     dew.ShowDialog();
                     break;
             }
             this.vm.Refresh();
         }
-
     }
 }

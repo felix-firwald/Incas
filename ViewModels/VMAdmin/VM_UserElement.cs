@@ -1,11 +1,12 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 using Incubator_2.Windows;
 using Models;
 
 
 namespace Incubator_2.ViewModels.VMAdmin
 {
-    internal class VM_UserElement : VM_Base
+    internal class VM_UserElement : BaseViewModel
     {
         private readonly User _user;
         public VM_UserElement(User user)

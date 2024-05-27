@@ -1,4 +1,5 @@
-﻿using IncasEngine.TemplateManager;
+﻿using Incas.Core.Views.Windows;
+using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Incubator_2.Models;
 using Incubator_2.ViewModels;
@@ -16,7 +17,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
 
 namespace Common
 {
@@ -47,22 +47,22 @@ namespace Common
         public static string CommonPath { get; private set; }
         public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incas";
         public static string DatabasePath { get; private set; }
-        public static string CustomDatabasePath { get { return Root + @"\Databases"; } }
-        public static string ServiceDatabasePath { get { return Root + @"\service.dbinc"; } }
-        public static string Root { get { return CommonPath + @"\Root"; } }
-        public static string ServerProcesses { get { return Root + @"\ServerProcesses"; } } // ...\Root\ServerProccesses
-        public static string Exchanges { get { return Root + @"\Exchanges"; } } // ...\Root\Exchanges
-        public static string Messages { get { return Root + @"\Messages"; } } // папка еще не создана
+        public static string CustomDatabasePath => Root + @"\Databases";
+        public static string ServiceDatabasePath => Root + @"\service.dbinc";
+        public static string Root => CommonPath + @"\Root";
+        public static string ServerProcesses => Root + @"\ServerProcesses";  // ...\Root\ServerProccesses
+        public static string Exchanges => Root + @"\Exchanges";  // ...\Root\Exchanges
+        public static string Messages => Root + @"\Messages";  // папка еще не создана
 
-        public static string Scripts { get { return Root + @"\Scripts"; } }
-        public static string LogData { get { return Root + @"\LogData"; } } // ...\Root\LogData
+        public static string Scripts => Root + @"\Scripts";
+        public static string LogData => Root + @"\LogData";  // ...\Root\LogData
 
         #region Templates
 
-        private static string Templates { get { return Root + @"\Templates"; } }    // ...\Root\Templates
-        public static string TemplatesSourcesWordPath { get { return Templates + @"\Sources\Word"; } }    // ...\Root\Templates\Sources\Word
-        public static string TemplatesSourcesExcelPath { get { return Templates + @"\Sources\Excel"; } }    // ...\Root\Templates\Sources\Excel
-        public static string TemplatesRuntime { get { return Templates + @"\Runtime"; } }    // ...\Root\Templates\Runtime
+        private static string Templates => Root + @"\Templates";     // ...\Root\Templates
+        public static string TemplatesSourcesWordPath => Templates + @"\Sources\Word";     // ...\Root\Templates\Sources\Word
+        public static string TemplatesSourcesExcelPath => Templates + @"\Sources\Excel";     // ...\Root\Templates\Sources\Excel
+        public static string TemplatesRuntime => Templates + @"\Runtime";     // ...\Root\Templates\Runtime
         #endregion
 
         #region User
@@ -110,11 +110,7 @@ namespace Common
         }
         public static bool CheckSensitive()
         {
-            if (CurrentUser == null || CurrentSession == null)
-            {
-                return false;
-            }
-            return true;
+            return CurrentUser != null && CurrentSession != null;
         }
         public static bool IsCommonPathExists()
         {
@@ -128,7 +124,7 @@ namespace Common
         {
             if (!File.Exists(getDBFilePath()))
             {
-                Dialog q = new Dialog("По указанному пути рабочее пространство не обнаружено.\n" +
+                Dialog q = new("По указанному пути рабочее пространство не обнаружено.\n" +
                 "Проверьте правильность введенного пути или создайте новое рабочее пространство.", "Рабочее пространство не обнаружено");
                 q.ShowDialog();
             }
@@ -138,7 +134,7 @@ namespace Common
         #region ComputerId
         public static string GenerateSlug(int len, string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
         {
-            Random random = new Random();
+            Random random = new();
             return new string(Enumerable.Repeat(chars, len)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
@@ -177,7 +173,7 @@ namespace Common
         }
         public static Parameter GetParameter(ParameterType type, string name, string defaultValue = "0", bool createIfNot = true)
         {
-            Parameter par = new Parameter();
+            Parameter par = new();
             par.GetParameter(type, name, defaultValue, createIfNot);
             return par;
         }
@@ -221,12 +217,14 @@ namespace Common
                     user.secondName = data.userFullname;
                     user.fullname = $"{user.surname} {user.secondName}";
                     user.sector = "data";
-                    UserParameters up = new();
-                    up.permission_group = PermissionGroup.Admin;
-                    up.tasks_visibility = true;
-                    up.communication_visibility = true;
-                    up.database_visibility = true;
-                    up.password = data.userPassword;
+                    UserParameters up = new()
+                    {
+                        permission_group = PermissionGroup.Admin,
+                        tasks_visibility = true,
+                        communication_visibility = true,
+                        database_visibility = true,
+                        password = data.userPassword
+                    };
                     user.GenerateSign();
                     user.SaveParametersContext(up);
                     user.AddUser();
@@ -321,7 +319,7 @@ namespace Common
         }
         public static void OpenSession()
         {
-            using Session ms = new Session();
+            using Session ms = new();
             ms.AddSession();
             CurrentSession = ms;
             ms.ClearOldestSessions();
@@ -329,7 +327,7 @@ namespace Common
         }
         public static List<Session> GetActiveSessions()
         {
-            using Session ms = new Session();
+            using Session ms = new();
             return ms.GetOpenedSessions();
         }
         public static void CloseSession()
@@ -346,7 +344,7 @@ namespace Common
             try
             {
                 using FileStream stream = File.Open($"Static\\{path}.wav", FileMode.Open);
-                SoundPlayer myNewSound = new SoundPlayer(stream);
+                SoundPlayer myNewSound = new(stream);
                 myNewSound.Load();
                 myNewSound.Play();
                 myNewSound.Dispose();
@@ -377,7 +375,7 @@ namespace Common
                     return;
                 }
                 PlaySound("UI-Exclamation");
-                Dialog d = new Dialog(message, title, Dialog.DialogIcon.Error);
+                Dialog d = new(message, title, Dialog.DialogIcon.Error);
                 d.ShowDialog();
             });
         }
@@ -386,7 +384,7 @@ namespace Common
             Application.Current.Dispatcher.Invoke(() =>
             {
                 PlaySound("UI-Exclamation");
-                Dialog d = new Dialog(message, title, Dialog.DialogIcon.DatabaseError);
+                Dialog d = new(message, title, Dialog.DialogIcon.DatabaseError);
                 d.ShowDialog();
             });
         }
@@ -395,7 +393,7 @@ namespace Common
             Application.Current.Dispatcher.Invoke(() =>
             {
                 PlaySound("UI-Exclamation");
-                Dialog d = new Dialog(message, title, Dialog.DialogIcon.AccessDenied);
+                Dialog d = new(message, title, Dialog.DialogIcon.AccessDenied);
                 d.ShowDialog();
             });
         }
@@ -404,7 +402,7 @@ namespace Common
             Application.Current.Dispatcher.Invoke(() =>
             {
                 PlaySound("UI-Attention");
-                Dialog d = new Dialog(message, title, Dialog.DialogIcon.Exclamation);
+                Dialog d = new(message, title, Dialog.DialogIcon.Exclamation);
                 d.ShowDialog();
             });
         }
@@ -413,7 +411,7 @@ namespace Common
             Application.Current.Dispatcher.Invoke(() =>
             {
                 PlaySound("UI-Attention");
-                Dialog d = new Dialog(message, title, Dialog.DialogIcon.Info);
+                Dialog d = new(message, title, Dialog.DialogIcon.Info);
                 d.ShowDialog();
             });
         }
@@ -423,13 +421,13 @@ namespace Common
             Application.Current.Dispatcher.Invoke(() =>
             {
                 PlaySound("UI-Attention");
-                Dialog d = new Dialog(message.ToString(), title, Dialog.DialogIcon.Info);
+                Dialog d = new(message.ToString(), title, Dialog.DialogIcon.Info);
                 d.ShowDialog();
             });
         }
         public static DialogStatus ShowQuestionDialog(string message, string title, string yesText = "Да", string noText = "Нет")
         {
-            DialogQuestion d = new DialogQuestion(message, title, yesText, noText);
+            DialogQuestion d = new(message, title, yesText, noText);
             Application.Current.Dispatcher.Invoke(() =>
             {
                 PlaySound("UI-Attention");
@@ -521,14 +519,7 @@ namespace Common
         }
         public static void ShowWaitCursor(bool wait = true)
         {
-            if (wait)
-            {
-                Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-            }
-            else
-            {
-                Mouse.OverrideCursor = null;
-            }
+            Mouse.OverrideCursor = wait ? System.Windows.Input.Cursors.Wait : null;
         }
         #endregion
 
