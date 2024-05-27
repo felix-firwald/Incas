@@ -1,9 +1,8 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Windows;
 using IncasEngine.TemplateManager;
-using Incubator_2.Windows;
-using Incubator_2.Windows.Templates;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,7 +25,7 @@ namespace Forms
         public event Base OnUpdated;
         public UC_TemplateElement(STemplate t)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.template = t;
             this.MainLabel.Content = this.template.name;
             this.FindChilds();
@@ -45,7 +44,7 @@ namespace Forms
                     {
                         foreach (STemplate item in children)
                         {
-                            UC_TemplateElement c = new UC_TemplateElement(item);
+                            UC_TemplateElement c = new(item);
                             this.ChildPanel.Children.Add(c);
                             c.OnUpdated += this.UpdateList;
                         }
@@ -80,12 +79,7 @@ namespace Forms
                         ProgramState.ShowErrorDialog($"Файл шаблона \"{this.template.name}\" ({this.template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
                     }
                     break;
-                case TemplateType.Mail:
-                    UseTemplateMail utm = new(this.template.AsModel());
-                    utm.Show();
-                    break;
             }
-
         }
         private bool IsFileExists()
         {

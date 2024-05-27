@@ -2,6 +2,7 @@
 using Incas.Users.Models;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Incas.Users.ViewModels;
 
 namespace Incubator_2.Forms.AdminPanel
 {
@@ -10,7 +11,7 @@ namespace Incubator_2.Forms.AdminPanel
     /// </summary>
     public partial class SessionElement : UserControl
     {
-        private VM_SessionElement vm;
+        private SessionElementViewModel vm;
         public SessionElement(SSession session)
         {
             this.InitializeComponent();

@@ -1,9 +1,9 @@
 ﻿using Common;
 using Incas.Common;
 using Incas.Core.Views.Windows;
+using Incas.Users.Models;
 using Incubator_2.Common;
 using Incubator_2.ViewModels;
-using Models;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Forms;
@@ -100,7 +100,6 @@ namespace Incas.Core.ViewModels
                 ServerProcessor.SendOpenWebProcess(url, target.slug);
             }
         }
-
 
         #endregion
         public Visibility AdminFunctionVisibility => Permission.CurrentUserPermission == PermissionGroup.Admin ? Visibility.Visible : Visibility.Collapsed;

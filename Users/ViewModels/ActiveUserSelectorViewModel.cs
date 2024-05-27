@@ -1,7 +1,6 @@
 ﻿using Common;
 using Incas.Core.ViewModels;
 using Incas.Users.Models;
-using Models;
 using System.Collections.Generic;
 
 namespace Incas.Users.ViewModels
@@ -37,7 +36,6 @@ namespace Incas.Users.ViewModels
                 this.OnPropertyChanged(nameof(this.Sessions));
 
             }
-
         }
 
         public Session SelectedSession

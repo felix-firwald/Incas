@@ -3,13 +3,10 @@ using Incas.Core.Views.Windows;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
 using IncasEngine.TemplateManager;
-using Incubator_2.Windows;
 using Incubator_2.Windows.CustomDatabase;
-using Incubator_2.Windows.Templates;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-
 
 namespace Incubator_2.Forms
 {

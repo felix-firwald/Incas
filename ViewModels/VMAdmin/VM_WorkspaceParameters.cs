@@ -1,8 +1,7 @@
 ﻿using Incas.Core.ViewModels;
+using Incas.Users.Models;
 using Incubator_2.Common;
 using Incubator_2.Models;
-using Models;
-
 
 namespace Incubator_2.ViewModels.VMAdmin
 {

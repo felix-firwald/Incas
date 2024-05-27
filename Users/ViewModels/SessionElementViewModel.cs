@@ -2,14 +2,13 @@
 using Incas.Users.Models;
 using Incubator_2.Common;
 using Incubator_2.Windows.AdminWindows;
-using Models;
 
-namespace Incubator_2.ViewModels.VMAdmin
+namespace Incas.Users.ViewModels
 {
-    internal class VM_SessionElement : BaseViewModel
+    internal class SessionElementViewModel : BaseViewModel
     {
         private SSession _session;
-        public VM_SessionElement(ref SSession s)
+        public SessionElementViewModel(ref SSession s)
         {
             this._session = s;
         }
@@ -39,7 +38,6 @@ namespace Incubator_2.ViewModels.VMAdmin
                 {
                     return this._session.timeFinished.ToString("G");
                 }
-
             }
         }
         public bool IsActive

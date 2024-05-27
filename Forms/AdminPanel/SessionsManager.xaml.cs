@@ -1,8 +1,7 @@
 ﻿
-using Models;
+using Incas.Users.Models;
 using System;
 using System.Windows.Controls;
-
 
 namespace Incubator_2.Forms.AdminPanel
 {

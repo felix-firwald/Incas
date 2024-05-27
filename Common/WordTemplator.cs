@@ -180,16 +180,6 @@ namespace Common
             return result;
         }
 
-        /// <summary>
-        /// Activate SPIRE
-        /// </summary>
-        //private void ActiveSpire()
-        //{
-        //    string LData = "845K-ilsj-2946-9908";
-
-        //    LicenseProvider.SetLicenseKey(LData);
-        //}
-
         public string TurnToXPS()
         {
             Spire.Doc.Document doc = new(this.Path);

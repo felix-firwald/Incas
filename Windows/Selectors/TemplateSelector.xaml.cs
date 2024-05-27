@@ -1,7 +1,7 @@
 ﻿using Common;
 using Incas.Templates.Models;
+using Incas.Templates.ViewModels;
 using IncasEngine.TemplateManager;
-using Incubator_2.ViewModels.Selectors;
 using System.Windows;
 
 namespace Incubator_2.Windows.Selectors
@@ -11,7 +11,7 @@ namespace Incubator_2.Windows.Selectors
     /// </summary>
     public partial class TemplateSelector : Window
     {
-        private VM_TemplateSelector vm;
+        private TemplateSelectorViewModel vm;
         public STemplate SelectedTemplate
         {
             get

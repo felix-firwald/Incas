@@ -3,24 +3,21 @@ using Incas.Templates.Models;
 using IncasEngine.TemplateManager;
 using System.Collections.Generic;
 
-namespace Incubator_2.ViewModels.Selectors
+namespace Incas.Templates.ViewModels
 {
 
-    public class VM_TemplateSelector : BaseViewModel
+    public class TemplateSelectorViewModel : BaseViewModel
     {
         private STemplate selectedTemplate;
         private string helptext = "Выбранному пользователю будет послан процесс от вашего имени.";
-        public VM_TemplateSelector()
+        public TemplateSelectorViewModel()
         {
 
         }
         private TemplateType _templateType;
         public TemplateType TemplateType
         {
-            get
-            {
-                return this._templateType;
-            }
+            get => this._templateType;
             set
             {
                 this._templateType = value;
@@ -30,10 +27,7 @@ namespace Incubator_2.ViewModels.Selectors
 
         public string HelpTextTitle
         {
-            get
-            {
-                return this.helptext;
-            }
+            get => this.helptext;
             set
             {
                 this.helptext = value;
@@ -54,16 +48,12 @@ namespace Incubator_2.ViewModels.Selectors
                         return t.GetAllTextTemplates();
                 }
             }
-            set
-            {
-                this.OnPropertyChanged(nameof(this.Templates));
-
-            }
+            set => this.OnPropertyChanged(nameof(this.Templates));
         }
 
         public STemplate SelectedTemplate
         {
-            get { return this.selectedTemplate; }
+            get => this.selectedTemplate;
             set
             {
                 this.selectedTemplate = value;
