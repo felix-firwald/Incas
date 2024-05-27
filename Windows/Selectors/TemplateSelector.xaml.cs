@@ -1,7 +1,7 @@
 ﻿using Common;
+using Incas.Templates.Models;
 using IncasEngine.TemplateManager;
 using Incubator_2.ViewModels.Selectors;
-using Models;
 using System.Windows;
 
 namespace Incubator_2.Windows.Selectors

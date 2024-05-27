@@ -1,5 +1,5 @@
 ﻿using Incas.Core.ViewModels;
-using Models;
+using Incas.Templates.Components;
 using System.Windows;
 
 namespace Incubator_2.ViewModels.VM_Templates

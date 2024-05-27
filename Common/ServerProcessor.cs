@@ -1,12 +1,12 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
+using Incas.Templates.Models;
 using IncasEngine;
 using Incubator_2.Forms;
 using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
 using Incubator_2.Windows;
 using Incubator_2.Windows.Templates;
-using Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

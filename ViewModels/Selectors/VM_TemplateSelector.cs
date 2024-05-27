@@ -1,6 +1,6 @@
 ﻿using Incas.Core.ViewModels;
+using Incas.Templates.Models;
 using IncasEngine.TemplateManager;
-using Models;
 using System.Collections.Generic;
 
 namespace Incubator_2.ViewModels.Selectors

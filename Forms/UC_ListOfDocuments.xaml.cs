@@ -1,8 +1,8 @@
 ﻿using Common;
 using Forms;
+using Incas.Templates.Models;
 using Incubator_2.Forms.OneInstance;
 using Incubator_2.Windows;
-using Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;

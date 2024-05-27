@@ -1,11 +1,11 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
+using Incas.Templates.Models;
+using Incas.Templates.ViewModels;
 using IncasEngine.TemplateManager;
-using Incubator_2.ViewModels;
 using Incubator_2.Windows;
 using Incubator_2.Windows.CustomDatabase;
 using Incubator_2.Windows.Templates;
-using Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +21,7 @@ namespace Incubator_2.Forms
         public delegate void MethodContainer(TagCreator t);
         public event MethodContainer onDelete;
         public Tag tag;
-        private VM_Tag vm;
+        private TagViewModel vm;
         public TagCreator(Tag t, bool isNew = false)
         {
             this.InitializeComponent();

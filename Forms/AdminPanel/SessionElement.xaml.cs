@@ -1,5 +1,5 @@
 ﻿using Incubator_2.ViewModels.VMAdmin;
-using Models;
+using Incas.Users.Models;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -13,7 +13,7 @@ namespace Incubator_2.Forms.AdminPanel
         private VM_SessionElement vm;
         public SessionElement(SSession session)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.vm = new(ref session);
             this.DataContext = this.vm;
         }

@@ -1,9 +1,9 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
+using Incas.Templates.Models;
 using IncasEngine.TemplateManager;
 using Incubator_2.Windows;
 using Incubator_2.Windows.Templates;
-using Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -105,7 +105,7 @@ namespace Forms
                     }
                     if (ProgramState.ShowQuestionDialog($"Шаблон \"{this.template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
                     {
-                        Models.Tag tag = new Models.Tag();
+                        Tag tag = new Models.Tag();
                         tag.RemoveAllTagsByTemplate(this.template.id);
                         this.template.AsModel().RemoveTemplate();
                         this.UpdateList();

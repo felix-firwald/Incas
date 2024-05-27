@@ -1,4 +1,5 @@
 ﻿using Incas.Core.ViewModels;
+using Incas.Users.Models;
 using Incubator_2.Common;
 using Incubator_2.Windows.AdminWindows;
 using Models;

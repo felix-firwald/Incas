@@ -1,9 +1,10 @@
 ﻿using Common;
+using Incas.Templates.Components;
+using Incas.Templates.Models;
+using Incas.Templates.ViewModels;
 using Incubator_2.Common;
 using Incubator_2.Models;
-using Incubator_2.ViewModels;
 using Microsoft.Scripting.Hosting;
-using Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Incubator_2.Forms
     /// </summary>
     public partial class TableFiller : UserControl
     {
-        private VM_TableFiller vm;
+        private TableFillerViewModel vm;
         public Tag tag;
         private CommandSettings command;
         public DataTable DataTable { get { return this.vm.Grid; } }
@@ -27,7 +28,7 @@ namespace Incubator_2.Forms
         {
             InitializeComponent();
             this.tag = t;
-            this.vm = new VM_TableFiller(t);
+            this.vm = new TableFillerViewModel(t);
             this.DataContext = this.vm;
             this.command = t.GetCommand();
             this.MakeButton();

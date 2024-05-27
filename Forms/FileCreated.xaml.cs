@@ -1,16 +1,17 @@
 ﻿using Common;
+using Incas.Templates.Components;
+using Incas.Templates.Models;
 using Incubator_2.Common;
 using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
 using Incubator_2.Windows;
-using Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Tag = Models.Tag;
+using Tag = Incas.Templates.Models.Tag;
 
 
 namespace Incubator_2.Forms

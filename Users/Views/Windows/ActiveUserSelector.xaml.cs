@@ -1,7 +1,8 @@
 ﻿using Common;
 using Incubator_2.ViewModels;
-using Models;
+using Incas.Users.Models;
 using System.Windows;
+using Incas.Users.ViewModels;
 
 namespace Incas.Users.Views.Windows
 {
@@ -10,7 +11,7 @@ namespace Incas.Users.Views.Windows
     /// </summary>
     public partial class ActiveUserSelector : Window
     {
-        private VM_ActiveUserSelector vm;
+        private ActiveUserSelectorViewModel vm;
         public Session SelectedSession;
         public ActiveUserSelector(string HelpText)
         {

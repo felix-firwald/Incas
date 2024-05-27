@@ -1,8 +1,8 @@
 ﻿using Common;
+using Incas.Templates.Components;
 using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
-using Models;
 using System;
 using System.ComponentModel;
 using System.Globalization;
@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Tag = Models.Tag;
+using Tag = Incas.Templates.Models.Tag;
 
 namespace Incubator_2.Forms
 {
