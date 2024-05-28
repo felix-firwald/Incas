@@ -1,7 +1,7 @@
 ﻿using Common;
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
-using Incubator_2.Models;
+using Incas.CustomDatabases.Models;
 using System.Collections.Generic;
 
 namespace Incas.CustomDatabases.ViewModels

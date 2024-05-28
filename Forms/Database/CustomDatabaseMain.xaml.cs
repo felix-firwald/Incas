@@ -2,9 +2,9 @@
 using Common;
 using Incas.Core.Models;
 using Incas.Core.Views.Windows;
+using Incas.CustomDatabases.Models;
 using Incas.CustomDatabases.ViewModels;
 using Incas.CustomDatabases.Views.Windows;
-using Incubator_2.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -422,7 +422,7 @@ namespace Incubator_2.Forms.Database
 
         private void NewDatabase(object sender, RoutedEventArgs e)
         {
-            using Models.Database db = new();
+            using Incas.CustomDatabases.Models.Database db = new();
             db.name = ProgramState.ShowInputBox("Имя базы данных");
             using (Sector s = new())
             {

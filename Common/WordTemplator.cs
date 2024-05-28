@@ -1,6 +1,5 @@
 ﻿using IncasEngine.TemplateManager;
 using Incubator_2.Forms;
-using Incubator_2.Models;
 using Newtonsoft.Json;
 using Spire.Doc;
 using System;
@@ -14,6 +13,7 @@ using Font = Xceed.Document.NET.Font;
 using Formatting = Xceed.Document.NET.Formatting;
 using Table = Xceed.Document.NET.Table;
 using DocumentFormat.OpenXml.ExtendedProperties;
+using Incas.CreatedDocuments.Models;
 
 namespace Common
 {

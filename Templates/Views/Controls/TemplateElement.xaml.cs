@@ -11,19 +11,18 @@ using System.Windows.Controls;
 
 using System.Windows.Input;
 
-
-namespace Forms
+namespace Incas.Templates.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для UC_TemplateElement.xaml
     /// </summary>
-    public partial class UC_TemplateElement : UserControl
+    public partial class TemplateElement : UserControl
     {
         public STemplate template;
 
         public delegate void Base();
         public event Base OnUpdated;
-        public UC_TemplateElement(STemplate t)
+        public TemplateElement(STemplate t)
         {
             this.InitializeComponent();
             this.template = t;
@@ -44,7 +43,7 @@ namespace Forms
                     {
                         foreach (STemplate item in children)
                         {
-                            UC_TemplateElement c = new(item);
+                            TemplateElement c = new(item);
                             this.ChildPanel.Children.Add(c);
                             c.OnUpdated += this.UpdateList;
                         }

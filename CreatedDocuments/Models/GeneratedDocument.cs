@@ -1,69 +1,12 @@
 ﻿using Common;
+using Incas.CreatedDocuments.Components;
 using IncasEngine;
-using Incubator_2.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Incubator_2.Models
+namespace Incas.CreatedDocuments.Models
 {
-    public struct SGeneratedTag
-    {
-        public int tag { get; set; }
-        public string value { get; set; }
-    }
-    public enum DocumentStatus
-    {
-        Draft = 0,
-        Created = 1,
-        Approved = 2,
-        Printed = 3,
-        Done = 4
-    }
-    public struct SGeneratedDocument
-    {
-        public int id;
-        public int template;
-        public string templateName;
-        public DateTime generatedTime;
-        public string fileName;
-        public string number;
-        public string fullNumber;
-        public DocumentStatus status { get; set; }
-        public List<SGeneratedTag> filledTags;
-        public string filledTagsString;
-        public string author;
-        public List<SGeneratedTag> GetFilledTags()
-        {
-            if (this.filledTags == null)
-            {
-                this.filledTags = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SGeneratedTag>>(Cryptographer.DecryptString(this.filledTagsString));
-            }
-            return this.filledTags;
-        }
-        public void SaveFilledTags(List<SGeneratedTag> tags)
-        {
-            this.filledTagsString = Cryptographer.EncryptString(Newtonsoft.Json.JsonConvert.SerializeObject(tags));
-        }
-
-        public GeneratedDocument AsModel()
-        {
-            GeneratedDocument d = new()
-            {
-                id = this.id,
-                template = this.template,
-                templateName = this.templateName,
-                generatedTime = this.generatedTime,
-                fileName = this.fileName,
-                number = this.number,
-                fullNumber = this.fullNumber,
-                status = this.status,
-                content = this.filledTagsString,
-                author = this.author
-            };
-            return d;
-        }
-    }
     public class GeneratedDocument : Model
     {
         public int id { get; set; }
@@ -83,17 +26,19 @@ namespace Incubator_2.Models
         }
         public SGeneratedDocument AsStruct()
         {
-            SGeneratedDocument d = new();
-            d.id = this.id;
-            d.template = this.template;
-            d.templateName = this.templateName;
-            d.generatedTime = this.generatedTime;
-            d.fileName = this.fileName;
-            d.number = this.number;
-            d.fullNumber = this.fullNumber;
-            d.status = this.status;
-            d.author = this.author;
-            d.filledTagsString = this.content;
+            SGeneratedDocument d = new()
+            {
+                id = this.id,
+                template = this.template,
+                templateName = this.templateName,
+                generatedTime = this.generatedTime,
+                fileName = this.fileName,
+                number = this.number,
+                fullNumber = this.fullNumber,
+                status = this.status,
+                author = this.author,
+                filledTagsString = this.content
+            };
             return d;
         }
 
@@ -103,7 +48,7 @@ namespace Incubator_2.Models
                 .SelectUnique("templateName")
                 .OrderByASC("templateName")
                 .Execute();
-            List<string> result = new();
+            List<string> result = [];
             foreach (DataRow dr in dt.Rows)
             {
                 result.Add(dr["templateName"].ToString());
@@ -117,7 +62,7 @@ namespace Incubator_2.Models
                 .WhereEqual("templateName", templateName)
                 .OrderByASC("generatedTime DESC, fileName")
                 .Execute();
-            List<SGeneratedDocument> result = new();
+            List<SGeneratedDocument> result = [];
             foreach (DataRow dr in dt.Rows)
             {
                 this.Serialize(dr);
@@ -132,7 +77,7 @@ namespace Incubator_2.Models
                 .Select()
                 .OrderByDESC("template ASC, generatedTime")
                 .Execute();
-            List<SGeneratedDocument> result = new();
+            List<SGeneratedDocument> result = [];
             foreach (DataRow dr in dt.Rows)
             {
                 this.Serialize(dr);

@@ -3,14 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:Forms="clr-namespace:Forms" xmlns:database="clr-namespace:Incubator_2.Forms.Database" xmlns:adminpanel="clr-namespace:Incubator_2.Forms.AdminPanel" xmlns:mail="clr-namespace:Incubator_2.Forms.Mail" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
+    xmlns:Forms="clr-namespace:Forms" xmlns:database="clr-namespace:Incubator_2.Forms.Database" xmlns:adminpanel="clr-namespace:Incubator_2.Forms.AdminPanel" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
         mc:Ignorable="d"
         Height="900"
         Width="1300"
         Style="{DynamicResource WindowBase}"
         WindowState="Maximized"
         Title="{Binding WorkspaceName}"
-        Icon="/Views/Logo64.ico"
         Closed="OnClosed"     
         AllowDrop="True"
         MinHeight="700" MinWidth="900" PreviewKeyDown="window_PreviewKeyDown"
@@ -110,7 +109,7 @@
                     <Forms:UC_Templator />
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=MailRadio, Path=IsChecked}" Background="{x:Null}">
-                    <mail:MailMain/>
+                    
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=DatabaseRadio, Path=IsChecked}" Background="{x:Null}">
                     <database:CustomDatabaseMain/>

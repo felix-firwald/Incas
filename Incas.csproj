@@ -229,9 +229,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Views\UserControls\" />
-    <Folder Include="CustomDatabases\Models\" />
+    <Folder Include="CreatedDocuments\ViewModels\" />
+    <Folder Include="CreatedDocuments\Views\Windows\" />
+    <Folder Include="CreatedDocuments\Views\Controls\" />
+    <Folder Include="CreatedDocuments\Views\Pages\" />
+    <Folder Include="CustomDatabases\Components\" />
     <Folder Include="Resources\" />
-    <Folder Include="Templates\Views\Controls\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Incas Engine\Incas Engine\Incas Engine.csproj" />

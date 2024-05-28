@@ -3,24 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 
-namespace Incubator_2.Models
+namespace Incas.CustomDatabases.Models
 {
-    public struct SDatabase
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string path { get; set; }
-        public string sectors { get; set; }
-        public Database AsModel()
-        {
-            Database db = new();
-            db.id = this.id;
-            db.name = this.name;
-            db.sectors = this.sectors;
-            db.path = this.path;
-            return db;
-        }
-    }
     public class Database : Model
     {
         public int id { get; set; }
@@ -34,11 +18,13 @@ namespace Incubator_2.Models
         }
         public SDatabase AsStruct()
         {
-            SDatabase db = new();
-            db.id = this.id;
-            db.name = this.name;
-            db.sectors = this.sectors;
-            db.path = this.path;
+            SDatabase db = new()
+            {
+                id = this.id,
+                name = this.name,
+                sectors = this.sectors,
+                path = this.path
+            };
             return db;
         }
         public void AddDatabase()
@@ -57,7 +43,7 @@ namespace Incubator_2.Models
         }
         private List<SDatabase> ParseToList(DataTable dt)
         {
-            List<SDatabase> dbs = new();
+            List<SDatabase> dbs = [];
             foreach (DataRow dr in dt.Rows)
             {
                 this.Serialize(dr);

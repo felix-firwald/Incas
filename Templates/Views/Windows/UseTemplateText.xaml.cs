@@ -1,10 +1,10 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
+using Incas.CreatedDocuments.Models;
 using Incas.Templates.Models;
 using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Incubator_2.Forms;
-using Incubator_2.Models;
 using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;

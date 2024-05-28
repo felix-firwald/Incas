@@ -1,11 +1,5 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
-
-//using IncasEngine.PDFManager.Fluent;
-//using IncasEngine.PDFManager.Helpers;
-//using IncasEngine.PDFManager.Infrastructure;
-using Incubator_2.Models;
-using Incubator_2.Windows;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;

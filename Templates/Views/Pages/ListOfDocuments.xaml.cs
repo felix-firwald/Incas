@@ -1,6 +1,6 @@
 ﻿using Common;
-using Forms;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Windows;
 using Incubator_2.Forms.OneInstance;
 using System;
@@ -8,26 +8,28 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Incubator_2.Forms.Mail
+namespace Incas.Templates.Views.Pages
 {
+
     /// <summary>
-    /// Логика взаимодействия для MailMain.xaml
+    /// Логика взаимодействия для ListOfDocuments.xaml
     /// </summary>
-    public partial class MailMain : UserControl
+    public partial class ListOfDocuments : UserControl
     {
         private string selectedCategory = "";
-        public MailMain()
+        public ListOfDocuments()
         {
             this.InitializeComponent();
             this.LoadCategories();
             this.LoadTemplatesByCategory("");
+            //LoadChildrenForTemplates("");
         }
         private void LoadCategories()
         {
             this.Categories.Children.Clear();
             this.AddCategory("Без категории", true);
-            Template mt = new Template();
-            mt.GetCategories(["Mail"]).ForEach(c =>
+            Template mt = new();
+            mt.GetCategories(["Excel", "Word"]).ForEach(c =>
             {
                 if (!string.IsNullOrEmpty(c))
                 {
@@ -37,7 +39,7 @@ namespace Incubator_2.Forms.Mail
         }
         private void AddCategory(string category, bool selected = false)
         {
-            RadioButton rb = new RadioButton
+            RadioButton rb = new()
             {
                 Style = this.FindResource("CategoryButton") as Style,
                 Content = category
@@ -49,11 +51,11 @@ namespace Incubator_2.Forms.Mail
         private void LoadTemplatesByCategory(string category)
         {
             this.TemplatesArea.Children.Clear();
-            using (Template mt = new Template())
+            using (Template mt = new())
             {
-                mt.GetAllMailTemplates(category).ForEach(c =>
+                mt.GetAllWordExcelTemplates(category).ForEach(c =>
                 {
-                    UC_TemplateElement te = new UC_TemplateElement(c);
+                    TemplateElement te = new(c);
                     te.OnUpdated += this.Refresh;
                     this.TemplatesArea.Children.Add(te);
                 });
@@ -79,7 +81,6 @@ namespace Incubator_2.Forms.Mail
                 this.LoadTemplatesByCategory("");
                 this.selectedCategory = "";
             }
-
         }
 
         private void AddFC_Click(object sender, MouseButtonEventArgs e)
@@ -90,7 +91,6 @@ namespace Incubator_2.Forms.Mail
                 ctw.OnCreated += this.Refresh;
                 ctw.Show();
             }
-
         }
         private void FindSelectedInRefreshedList()
         {
@@ -116,13 +116,7 @@ namespace Incubator_2.Forms.Mail
             this.FindSelectedInRefreshedList();
         }
 
-
-        private void CreateTemplateClick(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void RefreshClick(object sender, MouseButtonEventArgs e)
+        private void Refresh_Click(object sender, MouseButtonEventArgs e)
         {
             this.Refresh();
         }

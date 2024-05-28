@@ -1,11 +1,12 @@
 ﻿using Common;
+using Incas.CreatedDocuments.Components;
+using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Windows;
 using Incas.Users.Models;
 using Incubator_2.Common;
 using Incubator_2.Forms.Templates;
-using Incubator_2.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;

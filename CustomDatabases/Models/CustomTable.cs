@@ -4,7 +4,7 @@ using Incubator_2.Common;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Incubator_2.Models
+namespace Incas.CustomDatabases.Models
 {
     public enum TableType
     {
@@ -21,9 +21,11 @@ namespace Incubator_2.Models
 
         private Query GetQuery(string tableName, string pathDb)
         {
-            Query q = new(tableName);
-            q.typeOfConnection = DBConnectionType.CUSTOM;
-            q.DBPath = $"{ProgramState.CustomDatabasePath}\\{pathDb}.db";
+            Query q = new(tableName)
+            {
+                typeOfConnection = DBConnectionType.CUSTOM,
+                DBPath = $"{ProgramState.CustomDatabasePath}\\{pathDb}.db"
+            };
             //ProgramState.ShowInfoDialog(path);
             return q;
         }

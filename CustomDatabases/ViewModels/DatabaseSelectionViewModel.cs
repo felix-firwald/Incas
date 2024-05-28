@@ -1,5 +1,5 @@
 ﻿using Incas.Core.ViewModels;
-using Incubator_2.Models;
+using Incas.CustomDatabases.Models;
 using System.Data;
 
 namespace Incas.CustomDatabases.ViewModels
