@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incas.Templates.Components;
+using Incas.Users.Models;
 using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;

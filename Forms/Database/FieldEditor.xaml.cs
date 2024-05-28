@@ -1,4 +1,4 @@
-﻿using Incubator_2.ViewModels.VM_CustomDB;
+﻿using Incas.CustomDatabases.ViewModels;
 using System.Windows.Controls;
 
 namespace Incubator_2.Forms.Database
@@ -8,7 +8,7 @@ namespace Incubator_2.Forms.Database
     /// </summary>
     public partial class FieldEditor : UserControl
     {
-        private VM_FieldEditor vm;
+        private FieldEditorViewModel vm;
         public FieldEditor()
         {
             InitializeComponent();

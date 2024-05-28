@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Windows;
 using Incubator_2.Forms.OneInstance;
 using Incubator_2.Models;
 using Incubator_2.Windows;

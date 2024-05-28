@@ -1,10 +1,11 @@
 ﻿using Common;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Windows;
+using Incas.Users.Models;
 using Incubator_2.Common;
 using Incubator_2.Forms.Templates;
 using Incubator_2.Models;
-using Incubator_2.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,7 +35,7 @@ namespace Incubator_2.Forms
         public event SelectorNotify OnSelectorUnchecked;
         public FileCreated(ref SGeneratedDocument rec, int counter = 1)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.record = rec;
             this.Counter.Content = counter;
             this.SetTitle();
@@ -67,7 +68,7 @@ namespace Incubator_2.Forms
         {
             if (this.Selector.Visibility == Visibility.Visible)
             {
-                this.Selector.IsChecked = this.Selector.IsChecked == true ? false : true;
+                this.Selector.IsChecked = this.Selector.IsChecked != true;
             }
         }
         private void CreateFile(string folder)
@@ -144,7 +145,7 @@ namespace Incubator_2.Forms
                 try
                 {
                     List<SGeneratedDocument> tj = [this.record];
-                    UseTemplate ut = new UseTemplate(tm, tj);
+                    UseTemplate ut = new(tm, tj);
                     ut.Show();
                 }
                 catch (IOException ex)

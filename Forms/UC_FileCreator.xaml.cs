@@ -1,6 +1,7 @@
 ﻿using Common;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Windows;
 using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Incubator_2.Forms.Templates;

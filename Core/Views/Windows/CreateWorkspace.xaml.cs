@@ -1,4 +1,4 @@
-﻿using Incubator_2.ViewModels;
+﻿using Incas.Core.ViewModels;
 using System.Windows;
 using System.Windows.Forms;
 
@@ -9,11 +9,11 @@ namespace Incas.Core.Views.Windows
     /// </summary>
     public partial class CreateWorkspace : Window
     {
-        private VM_CreateWorkspace vm;
+        private CreateWorkspaceViewModel vm;
         public CreateWorkspace()
         {
             InitializeComponent();
-            this.vm = new VM_CreateWorkspace();
+            this.vm = new CreateWorkspaceViewModel();
             this.DataContext = this.vm;
         }
 

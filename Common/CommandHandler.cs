@@ -2,9 +2,10 @@
 using Incas.Core.Views.Windows;
 using Incubator_2.Models;
 using Incas.Users.Views.Windows;
-using Incubator_2.Windows.CustomDatabase;
 using System;
 using Incas.Users.Models;
+using Incas.CustomDatabases.Views.Windows;
+using Incas.Core.Models;
 
 namespace Incas.Common
 {

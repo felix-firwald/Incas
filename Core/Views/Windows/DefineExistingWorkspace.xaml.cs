@@ -1,5 +1,5 @@
 ﻿using Common;
-using Incubator_2.ViewModels;
+using Incas.Core.ViewModels;
 using System.IO;
 using System.Windows;
 
@@ -10,8 +10,8 @@ namespace Incas.Core.Views.Windows
     /// </summary>
     public partial class DefineExistingWorkspace : Window
     {
-        private VM_DefExistWorkspace vm;
-        public DefineExistingWorkspace(VM_DefExistWorkspace vmedit = null)
+        private DefExistWorkspaceViewModel vm;
+        public DefineExistingWorkspace(DefExistWorkspaceViewModel vmedit = null)
         {
             this.InitializeComponent();
 
@@ -22,7 +22,7 @@ namespace Incas.Core.Views.Windows
             }
             else
             {
-                this.vm = new VM_DefExistWorkspace();
+                this.vm = new DefExistWorkspaceViewModel();
                 this.DataContext = this.vm;
             }
 

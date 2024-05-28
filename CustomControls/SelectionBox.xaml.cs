@@ -1,6 +1,6 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
-using Incubator_2.Windows.CustomDatabase;
+using Incas.CustomDatabases.Views.Windows;
 using System;
 using System.Windows.Controls;
 using System.Windows.Input;

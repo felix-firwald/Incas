@@ -1,9 +1,10 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
+using Incas.CustomDatabases.Views.Windows;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
+using Incas.Templates.Views.Windows;
 using IncasEngine.TemplateManager;
-using Incubator_2.Windows.CustomDatabase;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -108,7 +109,6 @@ namespace Incubator_2.Forms
             {
                 this.vm.DefaultValue = $"{bs.SelectedDatabase}.{bs.SelectedTable}.{bs.SelectedField}";
             }
-
         }
 
         private void DefineGeneratorClick(object sender, RoutedEventArgs e)
@@ -182,6 +182,6 @@ namespace Incubator_2.Forms
         public void DublicateName()
         {
             this.vm.VisibleName = this.vm.NameOfTag;
-        }        
+        }
     }
 }

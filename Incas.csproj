@@ -94,7 +94,6 @@
     <None Remove="Static\UI-Attention.wav" />
     <None Remove="Static\UI-Exclamation.wav" />
     <None Remove="Themes\Tile.png" />
-    <None Remove="Views\Logo64.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
@@ -149,7 +148,6 @@
     <Resource Include="Fonts\VelaSans-Regular.ttf" />
     <Resource Include="Fonts\VelaSans-SemiBold.ttf" />
     <Resource Include="Themes\Tile.png" />
-    <Resource Include="Views\Logo64.ico" />
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="Logo.ico" />
@@ -182,12 +180,6 @@
     <EmbeddedResource Include="Static\UI-Exclamation.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Windows\Logo.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
@@ -237,10 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Views\UserControls\" />
-    <Folder Include="Core\Models\" />
     <Folder Include="CustomDatabases\Models\" />
-    <Folder Include="CustomDatabases\ViewModels\" />
-    <Folder Include="CustomDatabases\Views\" />
     <Folder Include="Resources\" />
     <Folder Include="Templates\Views\Controls\" />
   </ItemGroup>

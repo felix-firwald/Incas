@@ -1,8 +1,8 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
+using Incas.CustomDatabases.Views.Windows;
 using Incas.Templates.Components;
-using Incubator_2.ViewModels.VM_Templates;
-using Incubator_2.Windows.CustomDatabase;
+using Incas.Templates.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,7 +16,7 @@ namespace Incas.Templates.Views.Windows
     {
         public CommandSettings Command;
         public DialogStatus Result = DialogStatus.Undefined;
-        public VM_TagCommand vm;
+        public TagCommandViewModel vm;
         public CreateTagCommand(CommandSettings cs)
         {
             this.InitializeComponent();

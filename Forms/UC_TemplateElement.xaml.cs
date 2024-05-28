@@ -99,7 +99,7 @@ namespace Forms
                     }
                     if (ProgramState.ShowQuestionDialog($"Шаблон \"{this.template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
                     {
-                        Tag tag = new Models.Tag();
+                        Tag tag = new();
                         tag.RemoveAllTagsByTemplate(this.template.id);
                         this.template.AsModel().RemoveTemplate();
                         this.UpdateList();
@@ -119,7 +119,7 @@ namespace Forms
                 if (ProgramState.IsWorkspaceOpened())
                 {
                     ProgramState.ShowWaitCursor();
-                    CreateTemplateWord ctw = new(this.template.AsModel());
+                    CreateDocumentTemplate ctw = new(this.template.AsModel());
                     ctw.OnCreated += this.UpdateList;
                     ctw.Show();
                 }
@@ -141,7 +141,7 @@ namespace Forms
                     {
                         parents = this.template.parent + ";" + parents;
                     }
-                    CreateTemplateWord ctw = new CreateTemplateWord(parents: parents);
+                    CreateDocumentTemplate ctw = new(parents: parents);
                     ctw.OnCreated += this.UpdateList;
                     ctw.Show();
                 }

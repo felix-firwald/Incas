@@ -1,8 +1,8 @@
 ﻿using Common;
+using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Users.Models;
 using Incubator_2.Common;
-using Incubator_2.Models;
 using System.Collections.Generic;
 
 namespace Incas.Users.ViewModels

@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Models;
 using Incas.Templates.Models;
 using Incas.Users.Models;
 using Incubator_2.Common;
@@ -42,8 +43,8 @@ namespace Common
         }
         public static void InitializeData(string customName = null)
         {
-            AutoTableCreator atc = new AutoTableCreator();
-            Query q = new Query("");
+            AutoTableCreator atc = new();
+            Query q = new("");
             if (customName == null)
             {
                 q.typeOfConnection = DBConnectionType.BASE;
@@ -55,7 +56,7 @@ namespace Common
                 q.typeOfConnection = DBConnectionType.OTHER;
                 q.DBPath = customName;
             }
-            q.AddCustomRequest(GetTaskDefinition(atc))
+            q
              .AddCustomRequest(GetTemplateDefinition(atc))
              .AddCustomRequest(GetTagDefinition(atc))
              .AddCustomRequest(GetGeneratedDocumentDefinition(atc))
@@ -67,8 +68,8 @@ namespace Common
         {
             SQLiteConnection.CreateFile(ProgramState.DatabasePath);
             SQLiteConnection.CreateFile(ProgramState.ServiceDatabasePath);
-            AutoTableCreator atc = new AutoTableCreator();
-            Query q = new Query("");
+            AutoTableCreator atc = new();
+            Query q = new("");
             q.typeOfConnection = DBConnectionType.SERVICE;
             q
              .AddCustomRequest(GetParameterDefinition(atc))
@@ -128,7 +129,7 @@ namespace Common
         #region Definitions
         private static string GetProcessDefinition(AutoTableCreator atc)
         {
-            atc.Initialize(typeof(Incubator_2.Models.Process), "Processes");
+            atc.Initialize(typeof(Incas.Core.Models.Process), "Processes");
             atc.SetAsUnique("identifier");
             return atc.GetQueryText();
         }
@@ -165,11 +166,6 @@ namespace Common
         private static string GetSessionDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Session), "Sessions");
-            return atc.GetQueryText();
-        }
-        private static string GetTaskDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Task), "Tasks");
             return atc.GetQueryText();
         }
         private static string GetTemplateDefinition(AutoTableCreator atc)
@@ -233,9 +229,11 @@ namespace Common
             if (ex.Message.Contains("no such table:"))
             {
                 string[] result = ex.Message.Split();
-                AutoTableCreator atc = new AutoTableCreator();
-                Query q = new Query("");
-                q.typeOfConnection = con;
+                AutoTableCreator atc = new();
+                Query q = new("")
+                {
+                    typeOfConnection = con
+                };
                 switch (result[result.Length - 1].Trim())
                 {
                     case "Processes":
@@ -255,9 +253,6 @@ namespace Common
                         break;
                     case "Sessions":
                         q.AddCustomRequest(GetSessionDefinition(atc));
-                        break;
-                    case "Tasks":
-                        q.AddCustomRequest(GetTaskDefinition(atc));
                         break;
                     case "Templates":
                         q.AddCustomRequest(GetTemplateDefinition(atc));

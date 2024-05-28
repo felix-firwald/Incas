@@ -1,9 +1,10 @@
 ﻿using ClosedXML.Excel;
 using Common;
+using Incas.Core.Models;
 using Incas.Core.Views.Windows;
+using Incas.CustomDatabases.ViewModels;
+using Incas.CustomDatabases.Views.Windows;
 using Incubator_2.Models;
-using Incubator_2.ViewModels.VM_CustomDB;
-using Incubator_2.Windows.CustomDatabase;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,10 +23,10 @@ namespace Incubator_2.Forms.Database
     /// </summary>
     public partial class CustomDatabaseMain : System.Windows.Controls.UserControl
     {
-        private VM_CustomDatabase vm = new();
+        private CustomDatabaseViewModel vm = new();
         public CustomDatabaseMain()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.DataContext = this.vm;
         }
 
@@ -64,7 +65,7 @@ namespace Incubator_2.Forms.Database
                     return;
                 }
                 CustomTable ct = new();
-                List<string> selection = new();
+                List<string> selection = [];
                 string pk = this.vm.GetPK();
                 for (int i = 0; i < this.TableGrid.SelectedItems.Count; i++)
                 {
@@ -94,7 +95,7 @@ namespace Incubator_2.Forms.Database
                 }
                 string pk = this.vm.GetPK();
                 string record = ((DataRowView)this.TableGrid.SelectedItems[0]).Row[pk].ToString();
-                CreateRecord cr = new CreateRecord(this.vm.SelectedTable, pk, record, this.vm.GetTableDefinition(), this.vm.SelectedDatabase.path);
+                CreateRecord cr = new(this.vm.SelectedTable, pk, record, this.vm.GetTableDefinition(), this.vm.SelectedDatabase.path);
                 cr.ShowDialog();
                 this.vm.UpdateTable();
             }
@@ -126,7 +127,7 @@ namespace Incubator_2.Forms.Database
 
         private List<string> GetPKSelection()
         {
-            List<string> selection = new();
+            List<string> selection = [];
             string pk = this.vm.GetPK();
             for (int i = 0; i < this.TableGrid.SelectedItems.Count; i++)
             {
@@ -265,8 +266,10 @@ namespace Incubator_2.Forms.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
         public void ImportFromExcel(bool deleteOld = false)
         {
-            OpenFileDialog of = new();
-            of.Filter = "Файлы Excel (*.xlsx)|*.xlsx";
+            OpenFileDialog of = new()
+            {
+                Filter = "Файлы Excel (*.xlsx)|*.xlsx"
+            };
             if (of.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 ProgramState.ShowWaitCursor();
@@ -330,14 +333,14 @@ namespace Incubator_2.Forms.Database
                     {
                         result += $"DELETE FROM [{this.vm.Table}];\n";
                     }
-                    List<string> columns = new();
+                    List<string> columns = [];
                     foreach (DataColumn col in di.ResultTable.Columns)
                     {
                         columns.Add(col.ColumnName);
                     }
                     foreach (DataRow dr in di.ResultTable.Rows)
                     {
-                        List<string> cells = new();
+                        List<string> cells = [];
                         foreach (string cell in columns)
                         {
                             cells.Add(dr[cell].ToString());
@@ -421,7 +424,7 @@ namespace Incubator_2.Forms.Database
         {
             using Models.Database db = new();
             db.name = ProgramState.ShowInputBox("Имя базы данных");
-            using (Models.Sector s = new())
+            using (Sector s = new())
             {
                 foreach (Sector sec in s.GetSectors())
                 {

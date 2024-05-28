@@ -1,8 +1,8 @@
 ﻿using Common;
 using Forms;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Windows;
 using Incubator_2.Forms.OneInstance;
-using Incubator_2.Windows;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,7 +18,7 @@ namespace Incubator_2.Forms.Mail
         private string selectedCategory = "";
         public MailMain()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.LoadCategories();
             this.LoadTemplatesByCategory("");
         }
@@ -27,7 +27,7 @@ namespace Incubator_2.Forms.Mail
             this.Categories.Children.Clear();
             this.AddCategory("Без категории", true);
             Template mt = new Template();
-            mt.GetCategories(new() { "Mail" }).ForEach(c =>
+            mt.GetCategories(["Mail"]).ForEach(c =>
             {
                 if (!string.IsNullOrEmpty(c))
                 {
@@ -37,9 +37,11 @@ namespace Incubator_2.Forms.Mail
         }
         private void AddCategory(string category, bool selected = false)
         {
-            RadioButton rb = new RadioButton();
-            rb.Style = this.FindResource("CategoryButton") as Style;
-            rb.Content = category;
+            RadioButton rb = new RadioButton
+            {
+                Style = this.FindResource("CategoryButton") as Style,
+                Content = category
+            };
             rb.Click += new RoutedEventHandler(this.SelectCategory);
             rb.IsChecked = selected;
             this.Categories.Children.Add(rb);
@@ -84,7 +86,7 @@ namespace Incubator_2.Forms.Mail
         {
             if (ProgramState.IsWorkspaceOpened())
             {
-                CreateTemplateWord ctw = new CreateTemplateWord();
+                CreateDocumentTemplate ctw = new();
                 ctw.OnCreated += this.Refresh;
                 ctw.Show();
             }

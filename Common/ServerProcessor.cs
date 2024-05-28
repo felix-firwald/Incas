@@ -1,6 +1,8 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Windows;
+using Incas.Users.Models;
 using IncasEngine;
 using Incubator_2.Forms;
 using Incubator_2.Forms.Templates;
@@ -139,7 +141,7 @@ namespace Incubator_2.Common
             await System.Threading.Tasks.Task.Run(() =>
             {
                 string content = JsonConvert.SerializeObject(process);
-                using Models.Process p = new();
+                using Incas.Core.Models.Process p = new();
                 p.identifier = process.id;
                 p.content = Cryptographer.EncryptString(GetKeyByRecipient(process.recipient), content);
                 p.Send(process.recipient);
@@ -196,7 +198,7 @@ namespace Incubator_2.Common
                         {
                             DatabaseManager.InitializePort();
                         }
-                        using (Models.Process process = new())
+                        using (Incas.Core.Models.Process process = new())
                         {
                             foreach (string content in process.GetNewProcesses())
                             {

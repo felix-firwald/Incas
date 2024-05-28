@@ -3,7 +3,6 @@ using Incas.Core.ViewModels;
 using Incas.Templates.Models;
 using System.Collections.Generic;
 
-
 namespace Incubator_2.ViewModels
 {
     public class VM_FileCreator : BaseViewModel

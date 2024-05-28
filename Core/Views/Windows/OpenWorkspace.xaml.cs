@@ -1,7 +1,7 @@
 ﻿using Common;
+using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
 using Incubator_2.Common;
-using Incubator_2.ViewModels;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -13,12 +13,12 @@ namespace Incas.Core.Views.Windows
     /// </summary>
     public partial class OpenWorkspace : Window
     {
-        private VM_OpenWorkspace vm;
+        private OpenWorkspaceViewModel vm;
         public OpenWorkspace()
         {
             this.InitializeComponent();
             ProgramState.LoadUserData();
-            this.vm = new VM_OpenWorkspace();
+            this.vm = new OpenWorkspaceViewModel();
             this.DataContext = this.vm;
         }
 
@@ -99,7 +99,7 @@ namespace Incas.Core.Views.Windows
 
         private void EditClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            VM_DefExistWorkspace vmedit = new()
+            DefExistWorkspaceViewModel vmedit = new()
             {
                 WorkspaceName = this.vm.SelectedWorkspace,
                 WorkspacePath = this.vm.Path

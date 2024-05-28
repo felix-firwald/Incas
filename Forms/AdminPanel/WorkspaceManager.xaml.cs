@@ -1,4 +1,4 @@
-﻿using Incubator_2.Models;
+﻿using Incas.Core.Models;
 using Incubator_2.ViewModels.VMAdmin;
 using Incubator_2.Windows.AdminWindows;
 using System.Windows;

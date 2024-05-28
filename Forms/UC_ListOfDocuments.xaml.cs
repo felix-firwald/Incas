@@ -1,6 +1,7 @@
 ﻿using Common;
 using Forms;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Windows;
 using Incubator_2.Forms.OneInstance;
 using Incubator_2.Windows;
 using System;
@@ -79,14 +80,13 @@ namespace Incubator_2.Forms
                 this.LoadTemplatesByCategory("");
                 this.selectedCategory = "";
             }
-
         }
 
         private void AddFC_Click(object sender, MouseButtonEventArgs e)
         {
             if (ProgramState.IsWorkspaceOpened())
             {
-                CreateTemplateWord ctw = new CreateTemplateWord();
+                CreateDocumentTemplate ctw = new();
                 ctw.OnCreated += this.Refresh;
                 ctw.Show();
             }
