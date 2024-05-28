@@ -189,7 +189,7 @@
                             <ScrollViewer 
                                 x:Name="PART_ContentHost" 
                                 Focusable="False"
-                                TextElement.FontFamily="/Fonts/#JetBrains Mono"
+                                TextElement.FontFamily="/Static/Fonts/#JetBrains Mono"
                                 
                                 HorizontalScrollBarVisibility="Hidden" 
                                 VerticalScrollBarVisibility="Hidden" VerticalAlignment="Center"/>
@@ -315,7 +315,7 @@
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
+        <Setter Property="TextElement.FontFamily" Value="/Static/Fonts/#JetBrains Mono"/>
         <Setter Property="AcceptsReturn" Value="True"/>
 
     </Style>
@@ -324,7 +324,7 @@
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
+        <Setter Property="TextElement.FontFamily" Value="/Static/Fonts/#JetBrains Mono"/>
         <Setter Property="AcceptsReturn" Value="True"/>
     </Style>
 </ResourceDictionary>

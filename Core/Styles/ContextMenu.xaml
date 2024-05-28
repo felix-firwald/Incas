@@ -49,7 +49,7 @@
                                     <ColumnDefinition Width="*" MinWidth="80"/>
                                 </Grid.ColumnDefinitions>
                                 <Label x:Name="Arrow" Style="{DynamicResource LabelElement}" Content="f" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource Element}" FontWeight="Bold" FontStyle="Italic" Margin="0,-2,0,0"/>
-                                <TextBlock Foreground="{TemplateBinding Foreground}" Grid.Column="1" Margin="5 0 15 0"  VerticalAlignment="Center" x:Name="_txt" Text="{Binding Header,RelativeSource={RelativeSource TemplatedParent}}" />
+                                <TextBlock Foreground="{TemplateBinding Foreground}"  Grid.Column="1" Margin="5 0 15 0"  VerticalAlignment="Center" x:Name="_txt" Text="{Binding Header,RelativeSource={RelativeSource TemplatedParent}}" />
                             </Grid>
                         </Border>
                         <Path Visibility="Collapsed" x:Name="_path" Grid.Column="1" HorizontalAlignment="Right" Data="M -4 0 A 0.5 0.5 0 0 1 -3.5 -0.5 H 2.293 L 0.146 -2.646 A 0.5 0.5 0 1 1 0.854 -3.354 L 3.854 -0.354 A 0.5 0.5 0 0 1 3.854 0.354 L 0.854 3.354 A 0.5 0.5 0 0 1 0.146 2.646 L 2.293 0.5 H -3.5 A 0.5 0.5 0 0 1 -4 0" Fill="{StaticResource Error}" VerticalAlignment="Center" Stretch="Uniform" Margin="0,0,12,0">

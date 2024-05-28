@@ -41,7 +41,7 @@
                             <SolidColorBrush Color="Transparent" />
                         </Border.Background>
 
-                        <ContentPresenter Margin="5" TextElement.Foreground="{StaticResource Light}" TextElement.FontFamily="/Fonts/#JetBrains Mono" TextElement.FontSize="11" />
+                        <ContentPresenter Margin="5" TextElement.Foreground="{StaticResource Light}" TextElement.FontFamily="/Static/Fonts/#JetBrains Mono" TextElement.FontSize="11" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
@@ -64,7 +64,7 @@
                     <Border Name="bor" Grid.Column="1" Background="{StaticResource Area}" CornerRadius="3" BorderThickness="1" BorderBrush="{StaticResource Element}" Margin="0,0,0,0">
                         <StackPanel Orientation="Horizontal">
                             <Polygon x:Name="PolygonMain" Points="10, 20, 10, 0, 20, 10" Fill="{StaticResource LightPurple}" Visibility="Collapsed" VerticalAlignment="Center" Margin="-10,0,0,0" Width="NaN" Height="NaN" Panel.ZIndex="-9"/>
-                            <ContentPresenter TextElement.FontFamily="/Fonts/#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
+                            <ContentPresenter TextElement.FontFamily="/Static/Fonts/#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
                         </StackPanel>
 
                     </Border>
@@ -128,7 +128,7 @@
                                 <Path x:Name="Plus" RenderOptions.EdgeMode="Aliased" Fill="{StaticResource Success}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" Visibility="Collapsed" Margin="0,0,0,0"/>
                                 <Path x:Name="Minus" RenderOptions.EdgeMode="Aliased" Fill="{StaticResource Error}" Data="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" Visibility="Visible" Margin="1,0,0,0"/>
                             </Grid>
-                            <ContentPresenter TextElement.FontFamily="/Fonts/#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
+                            <ContentPresenter TextElement.FontFamily="/Static/Fonts/#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
                         </StackPanel>
 
                     </Border>

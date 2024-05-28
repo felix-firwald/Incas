@@ -88,7 +88,7 @@
                                 </Path.RenderTransform>
                             </Path>
 
-                            <ContentPresenter x:Name="header" Grid.Column="1" TextElement.FontSize="11" TextElement.Foreground="{StaticResource GrayLight}" TextElement.FontFamily="/Fonts/#JetBrains Mono" HorizontalAlignment="Right" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center" OpacityMask="{x:Null}"/>
+                            <ContentPresenter x:Name="header" Grid.Column="1" TextElement.FontSize="11" TextElement.Foreground="{StaticResource GrayLight}" TextElement.FontFamily="/Static/Fonts/#JetBrains Mono" HorizontalAlignment="Right" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center" OpacityMask="{x:Null}"/>
                             <Rectangle x:Name="rect" Fill="{StaticResource Element}" Grid.Column="2" Height="1" Margin="10,0,0,0"/>
                         </Grid>
                     </Border>

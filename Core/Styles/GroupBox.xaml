@@ -17,7 +17,7 @@
                             </Grid.RowDefinitions>
 
                             <Border Grid.Row="0" CornerRadius="6" Background="Transparent" BorderBrush="{StaticResource Element}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35">
-                                <Label x:Name="HeaderLabel" FontSize="16" FontFamily="/Fonts/#JetBrains Mono" FontWeight="ExtraLight" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource DarkLight}">
+                                <Label x:Name="HeaderLabel" FontSize="16" FontFamily="/Static/Fonts/#JetBrains Mono" FontWeight="ExtraLight" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource DarkLight}">
                                     <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" >
                                     </ContentPresenter>
                                 </Label>
