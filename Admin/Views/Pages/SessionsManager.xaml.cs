@@ -1,9 +1,9 @@
-﻿
+﻿using Incas.Admin.Views.Controls;
 using Incas.Users.Models;
 using System;
 using System.Windows.Controls;
 
-namespace Incubator_2.Forms.AdminPanel
+namespace Incas.Admin.Views.Pages
 {
     /// <summary>
     /// Логика взаимодействия для SessionsManager.xaml

@@ -230,6 +230,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Admin\Models\" />
     <Folder Include="CreatedDocuments\ViewModels\" />
     <Folder Include="CreatedDocuments\Views\Windows\" />
     <Folder Include="CustomDatabases\Components\" />

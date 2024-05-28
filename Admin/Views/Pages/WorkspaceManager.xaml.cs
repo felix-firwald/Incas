@@ -1,21 +1,22 @@
-﻿using Incas.Core.Models;
-using Incas.ViewModels.VMAdmin;
+﻿using Incas.Admin.ViewModels;
+using Incas.Admin.Views.Controls;
+using Incas.Core.Models;
 using Incubator_2.Windows.AdminWindows;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Incubator_2.Forms.AdminPanel
+namespace Incas.Admin.Views.Pages
 {
     /// <summary>
     /// Логика взаимодействия для WorkspaceManager.xaml
     /// </summary>
     public partial class WorkspaceManager : UserControl
     {
-        private VM_WorkspaceParameters vm;
+        private WorkspaceParametersViewModel vm;
         public WorkspaceManager()
         {
             this.InitializeComponent();
-            this.vm = new VM_WorkspaceParameters();
+            this.vm = new WorkspaceParametersViewModel();
             this.DataContext = this.vm;
             this.LoadSectors();
         }

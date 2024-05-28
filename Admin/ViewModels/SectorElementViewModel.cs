@@ -1,12 +1,12 @@
 ﻿using Incas.Core.Models;
 using Incas.Core.ViewModels;
 
-namespace Incas.ViewModels.VMAdmin
+namespace Incas.Admin.ViewModels
 {
-    internal class VM_SectorElement : BaseViewModel
+    internal class SectorElementViewModel : BaseViewModel
     {
         public Sector sector;
-        public VM_SectorElement(Sector s)
+        public SectorElementViewModel(Sector s)
         {
             this.sector = s;
         }

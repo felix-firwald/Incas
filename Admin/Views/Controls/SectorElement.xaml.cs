@@ -1,17 +1,16 @@
-﻿using Incas.Core.Models;
-using Incas.ViewModels.VMAdmin;
+﻿using Incas.Admin.ViewModels;
+using Incas.Core.Models;
 using Incubator_2.Windows.AdminWindows;
 using System.Windows.Controls;
 
-
-namespace Incubator_2.Forms.AdminPanel
+namespace Incas.Admin.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для SectorElement.xaml
     /// </summary>
     public partial class SectorElement : UserControl
     {
-        private VM_SectorElement vm;
+        private SectorElementViewModel vm;
         public SectorElement(Sector s)
         {
             this.InitializeComponent();

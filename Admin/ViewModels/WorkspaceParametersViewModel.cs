@@ -3,15 +3,15 @@ using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Users.Models;
 
-namespace Incas.ViewModels.VMAdmin
+namespace Incas.Admin.ViewModels
 {
-    public class VM_WorkspaceParameters : BaseViewModel
+    public class WorkspaceParametersViewModel : BaseViewModel
     {
         private Parameter _workspaceName = new Parameter().GetParameter(ParameterType.INCUBATOR, "ws_name");
         private Parameter _workspaceOpened = new Parameter().GetParameter(ParameterType.INCUBATOR, "ws_opened");
         private Parameter _workspaceLocked = new Parameter().GetParameter(ParameterType.INCUBATOR, "ws_locked");
         private bool _terminateSessions = false;
-        public VM_WorkspaceParameters()
+        public WorkspaceParametersViewModel()
         {
 
         }

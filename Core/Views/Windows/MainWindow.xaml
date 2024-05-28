@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:adminpanel="clr-namespace:Incubator_2.Forms.AdminPanel" xmlns:pages="clr-namespace:Incas.Templates.Views.Pages" xmlns:pages1="clr-namespace:Incas.CustomDatabases.Views.Pages" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
+         xmlns:pages="clr-namespace:Incas.Templates.Views.Pages" xmlns:pages1="clr-namespace:Incas.CustomDatabases.Views.Pages" xmlns:pages2="clr-namespace:Incas.Admin.Views.Pages" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
         mc:Ignorable="d"
         Height="900"
         Width="1300"
@@ -114,13 +114,13 @@
                     <pages1:CustomDatabaseMain/>
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=SettingsRadio, Path=IsChecked}" Background="{x:Null}">
-                    <adminpanel:WorkspaceManager/>
+                    <pages2:WorkspaceManager/>
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=UsersRadio, Path=IsChecked}" Background="{x:Null}">
-                    <adminpanel:UsersManager/>
+                    <pages2:UsersManager/>
                 </TabItem>
                 <TabItem Visibility="Collapsed" IsSelected="{Binding ElementName=SessionsRadio, Path=IsChecked}" Background="{x:Null}">
-                    <adminpanel:SessionsManager/>
+                    <pages2:SessionsManager/>
                 </TabItem>
             </TabControl>
         </Border>

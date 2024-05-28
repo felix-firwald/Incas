@@ -4,7 +4,7 @@ using Incas.Users.Views.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Incubator_2.Forms.AdminPanel
+namespace Incas.Admin.Views.Pages
 {
     /// <summary>
     /// Логика взаимодействия для UsersManager.xaml

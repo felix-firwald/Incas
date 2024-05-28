@@ -3,7 +3,7 @@ using Incas.Users.ViewModels;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Incubator_2.Forms.AdminPanel
+namespace Incas.Admin.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для SessionElement.xaml
