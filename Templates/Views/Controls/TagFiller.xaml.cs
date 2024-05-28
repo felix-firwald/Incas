@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Templates.Components;
 using Incas.Users.Models;
 using IncasEngine.TemplateManager;
@@ -13,7 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Tag = Incas.Templates.Models.Tag;
 
-namespace Incubator_2.Forms
+namespace Incas.Templates.Views.Controls
 {
     public static class CommandIcons
     {
@@ -28,9 +28,9 @@ namespace Incubator_2.Forms
         RecordField
     }
     /// <summary>
-    /// Логика взаимодействия для UC_TagFiller.xaml
+    /// Логика взаимодействия для TagFiller.xaml
     /// </summary>
-    public partial class UC_TagFiller : UserControl
+    public partial class TagFiller : UserControl
     {
         public readonly Tag tag;
         public FillerMode Mode;
@@ -43,7 +43,7 @@ namespace Incubator_2.Forms
         public event CommandScript OnScriptRequested;
         public delegate void StringActionRecalculate(string tag);
         public event StringActionRecalculate OnRename;
-        public UC_TagFiller(Tag t)
+        public TagFiller(Tag t)
         {
             this.InitializeComponent();
             this.Mode = FillerMode.Tag;
@@ -116,7 +116,7 @@ namespace Incubator_2.Forms
             this.validated = false;
             this.MainLabel.Foreground = this.FindResource("Error") as SolidColorBrush;
         }
-        public UC_TagFiller(FieldCreator fc, string path)
+        public TagFiller(FieldCreator fc, string path)
         {
             this.InitializeComponent();
             this.tag = new();
@@ -154,7 +154,7 @@ namespace Incubator_2.Forms
                     if (int.TryParse(value, out digitValue))
                     {
                         this.NumericBox.Value = digitValue;
-                    }                    
+                    }
                     break;
                 case TagType.Relation:
                     this.SelectionBox.Value = value;
@@ -204,15 +204,9 @@ namespace Incubator_2.Forms
         }
         private string GetDateInFormat()
         {
-            if (string.IsNullOrWhiteSpace(this.tag.value))
-            {
-                return this.DatePicker.SelectedDate.ToString();
-            }
-            if (this.DatePicker.SelectedDate.HasValue)
-            {
-                return ((DateTime)this.DatePicker.SelectedDate).ToString(this.tag.value);
-            }
-            return "";
+            return string.IsNullOrWhiteSpace(this.tag.value)
+                ? this.DatePicker.SelectedDate.ToString()
+                : this.DatePicker.SelectedDate.HasValue ? ((DateTime)this.DatePicker.SelectedDate).ToString(this.tag.value) : "";
         }
         public string GetValue()
         {

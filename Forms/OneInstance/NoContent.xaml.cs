@@ -9,7 +9,7 @@ namespace Incubator_2.Forms.OneInstance
     {
         public NoContent()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.Views.Windows;
 using Incas.CustomDatabases.Views.Windows;
 using System;
@@ -12,7 +12,7 @@ namespace Incubator_2.CustomControls
     /// </summary>
     public partial class SelectionBox : UserControl
     {
-        public string Value { get { return this.Input.Text; } set { this.Input.Text = value; } }
+        public string Value { get => this.Input.Text; set => this.Input.Text = value; }
 
         public string Database = "";
         public string Table = "";

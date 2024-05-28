@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
@@ -13,7 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Incubator_2.Forms
+namespace Incas.Templates.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для TableFiller.xaml
@@ -23,10 +23,10 @@ namespace Incubator_2.Forms
         private TableFillerViewModel vm;
         public Tag tag;
         private CommandSettings command;
-        public DataTable DataTable { get { return this.vm.Grid; } }
+        public DataTable DataTable => this.vm.Grid;
         public TableFiller(Tag t)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.tag = t;
             this.vm = new TableFillerViewModel(t);
             this.DataContext = this.vm;
@@ -56,9 +56,11 @@ namespace Incubator_2.Forms
         }
         public SGeneratedTag GetAsGeneratedTag()
         {
-            SGeneratedTag result = new();
-            result.tag = this.tag.id;
-            result.value = this.GetData();
+            SGeneratedTag result = new()
+            {
+                tag = this.tag.id,
+                value = this.GetData()
+            };
             return result;
         }
         private void RunScript()

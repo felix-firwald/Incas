@@ -2,7 +2,7 @@
 using Incas.Users.Models;
 using System.Collections.Generic;
 
-namespace Incubator_2.ViewModels.VM_Communication
+namespace Incas.ViewModels.VM_Communication
 {
     public class VM_CommunicationMain : BaseViewModel
     {
@@ -19,10 +19,7 @@ namespace Incubator_2.ViewModels.VM_Communication
         }
         public User SelectedUser
         {
-            get
-            {
-                return this._selectedUser;
-            }
+            get => this._selectedUser;
             set
             {
                 this._selectedUser = value;

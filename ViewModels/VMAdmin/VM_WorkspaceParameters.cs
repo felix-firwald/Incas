@@ -1,9 +1,9 @@
-﻿using Incas.Core.Models;
+﻿using Incas.Common;
+using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Users.Models;
-using Incubator_2.Common;
 
-namespace Incubator_2.ViewModels.VMAdmin
+namespace Incas.ViewModels.VMAdmin
 {
     public class VM_WorkspaceParameters : BaseViewModel
     {
@@ -18,10 +18,7 @@ namespace Incubator_2.ViewModels.VMAdmin
 
         public string WorkspaceName
         {
-            get
-            {
-                return this._workspaceName.value;
-            }
+            get => this._workspaceName.value;
             set
             {
                 this._workspaceName.value = value;
@@ -30,10 +27,7 @@ namespace Incubator_2.ViewModels.VMAdmin
         }
         public bool WorkspaceOpened
         {
-            get
-            {
-                return this._workspaceOpened.GetValueAsBool();
-            }
+            get => this._workspaceOpened.GetValueAsBool();
             set
             {
                 this._workspaceOpened.WriteBoolValue(value);
@@ -42,10 +36,7 @@ namespace Incubator_2.ViewModels.VMAdmin
         }
         public bool WorkspaceLocked
         {
-            get
-            {
-                return this._workspaceLocked.GetValueAsBool();
-            }
+            get => this._workspaceLocked.GetValueAsBool();
             set
             {
                 this._workspaceLocked.WriteBoolValue(value);
@@ -54,10 +45,7 @@ namespace Incubator_2.ViewModels.VMAdmin
         }
         public bool TerminateSessions
         {
-            get
-            {
-                return this._terminateSessions;
-            }
+            get => this._terminateSessions;
             set
             {
                 this._terminateSessions = value;

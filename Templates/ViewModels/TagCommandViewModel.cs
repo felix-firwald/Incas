@@ -37,23 +37,10 @@ namespace Incas.Templates.ViewModels
                 this.OnPropertyChanged(nameof(this.Script));
             }
         }
-        public Visibility IconVisibility
-        {
-            get
-            {
-                if (this.ScriptType == 1)
-                {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
+        public Visibility IconVisibility => this.ScriptType == 1 ? Visibility.Visible : Visibility.Collapsed;
         public int Icon
         {
-            get
-            {
-                return (int)this.commandSettings.Icon;
-            }
+            get => (int)this.commandSettings.Icon;
             set
             {
                 this.commandSettings.Icon = (IconType)value;
@@ -62,10 +49,7 @@ namespace Incas.Templates.ViewModels
         }
         public int ScriptType
         {
-            get
-            {
-                return (int)this.commandSettings.ScriptType;
-            }
+            get => (int)this.commandSettings.ScriptType;
             set
             {
                 this.commandSettings.ScriptType = (ScriptType)value;

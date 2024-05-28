@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
@@ -90,7 +90,7 @@ namespace Incas.Templates.Views.Windows
         }
         private void GetTagsFromTextClick(object sender, MouseButtonEventArgs e)
         {
-            List<string> result = new List<string>();
+            List<string> result = [];
             Regex regex = new Regex(@"\[[A-Za-zА-Яа-я ]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
             MatchCollection matches = regex.Matches(this.source.Text);
 
@@ -100,8 +100,10 @@ namespace Incas.Templates.Views.Windows
             }
             foreach (string tagname in result)
             {
-                Tag tag = new Tag();
-                tag.name = tagname;
+                Tag tag = new Tag
+                {
+                    name = tagname
+                };
                 this.AddTag(tag);
             }
         }
@@ -132,7 +134,7 @@ namespace Incas.Templates.Views.Windows
                 return false;
             }
 
-            List<string> names = new();
+            List<string> names = [];
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
                 if (names.Contains(tag.TagName.Text))

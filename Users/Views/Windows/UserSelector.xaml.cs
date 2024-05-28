@@ -1,8 +1,7 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.Views.Windows;
 using Incas.Users.Models;
 using Incas.Users.ViewModels;
-using Incubator_2.ViewModels;
 using System.Windows;
 
 namespace Incas.Users.Views.Windows
@@ -14,7 +13,7 @@ namespace Incas.Users.Views.Windows
     {
         public DialogStatus Result = DialogStatus.Undefined;
         private UserSelectorViewModel vm;
-        public User SelectedUser { get { return this.vm.SelectedUser; } }
+        public User SelectedUser => this.vm.SelectedUser;
         public UserSelector()
         {
             this.InitializeComponent();

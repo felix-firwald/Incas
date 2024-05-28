@@ -1,6 +1,5 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.ViewModels;
-using Incas.Core.Views.Windows;
 using Incas.Users.Views.Windows;
 using System;
 using System.IO;

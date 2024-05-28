@@ -19,10 +19,7 @@ namespace Incas.Users.ViewModels
         }
         public User SelectedUser
         {
-            get
-            {
-                return this._selected;
-            }
+            get => this._selected;
             set
             {
                 this._selected = value;

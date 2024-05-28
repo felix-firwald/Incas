@@ -1,8 +1,7 @@
-﻿using Common;
-using Incubator_2.ViewModels;
+﻿using Incas.Common;
 using Incas.Users.Models;
-using System.Windows;
 using Incas.Users.ViewModels;
+using System.Windows;
 
 namespace Incas.Users.Views.Windows
 {

@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="Incas.Forms.FileManager.FileManagerMain"
+﻿<UserControl x:Class="Incas.FileManager.Views.Pages.FileManagerMain"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Incas.Forms.FileManager"
+             xmlns:local="clr-namespace:Incas.FileManager.Views.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <GroupBox Style="{StaticResource MainGroupBox}" Header="ФАЙЛОВЫЙ МЕНЕДЖЕР">

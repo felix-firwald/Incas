@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.CustomDatabases.Views.Windows;
 using Incas.Templates.Models;
 using IronPython.Hosting;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Incas
+namespace Incas.Common
 {
     public class Service
     {
@@ -43,7 +43,7 @@ namespace Incas
         {
             DatabaseSelection ds = new(db, table, "");
             ds.ShowDialog();
-            Dictionary<string, string> result = new();
+            Dictionary<string, string> result = [];
             foreach (DataColumn dataColumn in ds.SelectedValues.Table.Columns)
             {
                 result.Add(dataColumn.ColumnName, ds.SelectedValues[dataColumn.ColumnName].ToString());
@@ -53,7 +53,7 @@ namespace Incas
         public static List<string> GetCategoriesOfTemplates()
         {
             using Template t = new();
-            return t.GetCategories(new() { "Excel", "Word" });
+            return t.GetCategories(["Excel", "Word"]);
         }
         public static List<STemplate> GetWordTemplates(string category)
         {

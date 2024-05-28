@@ -1,6 +1,5 @@
-﻿using Common;
+﻿using Incas.Common;
 using IncasEngine;
-using Incubator_2.Common;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data;
@@ -56,7 +55,7 @@ namespace Incas.Users.Models
         #region Base
         public List<User> GetAllUsers()
         {
-            List<User> output = new List<User>();
+            List<User> output = [];
             DataTable dt = this.StartCommandToService()
                 .Select()
                 .OrderByASC("fullname")
@@ -143,15 +142,7 @@ namespace Incas.Users.Models
                 .Select("username")
                 .WhereEqual("username", username)
                 .Execute();
-            if (dt != null)
-            {
-                if (dt.Rows.Count == 0)
-                {
-                    return false;
-                }
-                return true;
-            }
-            return false;
+            return dt != null && dt.Rows.Count != 0;
         }
 
         public void RemoveUser()

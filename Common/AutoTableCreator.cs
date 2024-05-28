@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Incubator_2.Common
+namespace Incas.Common
 {
     public struct FieldCreator
     {
@@ -25,33 +25,23 @@ namespace Incubator_2.Common
         }
         private string GetFK()
         {
-            if (this.FKtable != null)
-            {
-                return $"REFERENCES [{this.FKtable}] ([{this.FKfield}]) ON DELETE CASCADE";
-            }
-            return "";
+            return this.FKtable != null ? $"REFERENCES [{this.FKtable}] ([{this.FKfield}]) ON DELETE CASCADE" : "";
         }
 
         private string GetUniq()
         {
-            if (this.IsUNIQUE)
-            {
-                return "UNIQUE ON CONFLICT ROLLBACK";
-            }
-            return "";
+            return this.IsUNIQUE ? "UNIQUE ON CONFLICT ROLLBACK" : "";
         }
         public override string ToString()
         {
-            if (this.IsPK)
-            {
-                return $"[{this.Name}] INTEGER PRIMARY KEY AUTOINCREMENT";
-            }
-            return $"[{this.Name}] {this.TypeOf} {this.GetNull()} {this.GetUniq()} {this.GetFK()}".Trim();
+            return this.IsPK
+                ? $"[{this.Name}] INTEGER PRIMARY KEY AUTOINCREMENT"
+                : $"[{this.Name}] {this.TypeOf} {this.GetNull()} {this.GetUniq()} {this.GetFK()}".Trim();
         }
     }
     public class AutoTableCreator
     {
-        private Dictionary<string, FieldCreator> definition = new Dictionary<string, FieldCreator>();
+        private Dictionary<string, FieldCreator> definition = [];
         private string TableName;
         private Type modelClass;
         public AutoTableCreator()
@@ -117,17 +107,9 @@ namespace Incubator_2.Common
             {
                 return "DOUBLE";
             }
-            else if (type == typeof(DateTime))
-            {
-                return "TEXT";
-            }
-            else if (type == typeof(bool))
-            {
-                return "BOOLEAN";
-            }
             else
             {
-                return "STRING";
+                return type == typeof(DateTime) ? "TEXT" : type == typeof(bool) ? "BOOLEAN" : "STRING";
             }
         }
         #endregion

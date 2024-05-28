@@ -1,6 +1,6 @@
-﻿using Incas.Core.ViewModels;
+﻿using Incas.Common;
+using Incas.Core.ViewModels;
 using Incas.Users.Models;
-using Incubator_2.Common;
 using Incubator_2.Windows.AdminWindows;
 
 namespace Incas.Users.ViewModels
@@ -12,41 +12,10 @@ namespace Incas.Users.ViewModels
         {
             this._session = s;
         }
-        public string Username
-        {
-            get
-            {
-                return this._session.user;
-            }
-        }
-        public string StartTime
-        {
-            get
-            {
-                return this._session.timeStarted.ToString("G");
-            }
-        }
-        public string EndTime
-        {
-            get
-            {
-                if (this.IsActive)
-                {
-                    return "В сети";
-                }
-                else
-                {
-                    return this._session.timeFinished.ToString("G");
-                }
-            }
-        }
-        public bool IsActive
-        {
-            get
-            {
-                return this._session.active;
-            }
-        }
+        public string Username => this._session.user;
+        public string StartTime => this._session.timeStarted.ToString("G");
+        public string EndTime => this.IsActive ? "В сети" : this._session.timeFinished.ToString("G");
+        public bool IsActive => this._session.active;
         public void Terminate()
         {
             ServerProcessor.SendTerminateProcess(this._session.slug);

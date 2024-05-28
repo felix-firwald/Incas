@@ -1,5 +1,5 @@
-﻿using Incas.Core.ViewModels;
-using Incubator_2.Common;
+﻿using Incas.Common;
+using Incas.Core.ViewModels;
 
 namespace Incas.CustomDatabases.ViewModels
 {

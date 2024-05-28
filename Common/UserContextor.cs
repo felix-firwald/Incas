@@ -1,6 +1,6 @@
 ﻿using Common;
 
-namespace Incubator_2.Common
+namespace Incas.Common
 {
     public enum RestrictionType // потому что эта тупая хуета не десериализует
     {
@@ -27,11 +27,7 @@ namespace Incubator_2.Common
 
         public bool IsRightPassword(string input)
         {
-            if (string.IsNullOrEmpty(this.password))
-            {
-                return input == this.startup_password;
-            }
-            return input == this.password;
+            return string.IsNullOrEmpty(this.password) ? input == this.startup_password : input == this.password;
         }
         //public void Show()
         //{

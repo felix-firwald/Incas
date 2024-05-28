@@ -1,6 +1,5 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.Classes;
-using Incubator_2.Common;
 using System.Collections.Generic;
 using System.Data;
 
@@ -49,7 +48,7 @@ namespace Incas.CustomDatabases.Models
                 .AddCustomRequest("SELECT name FROM sqlite_schema WHERE " + query) // SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'
                 .Execute();
 
-            List<string> result = new();
+            List<string> result = [];
             foreach (DataRow dr in dt.Rows)
             {
                 result.Add(dr["name"].ToString());
@@ -58,24 +57,24 @@ namespace Incas.CustomDatabases.Models
         }
         public DataTable GetTable(string table, string pathDb, string custom)
         {
-            if (string.IsNullOrEmpty(custom))
-            {
-                return this.GetQuery(table, pathDb).AddCustomRequest($"SELECT * FROM [{table}];").Execute();
-            }
-            return this.GetQuery(table, pathDb).AddCustomRequest(custom).Execute();
+            return string.IsNullOrEmpty(custom)
+                ? this.GetQuery(table, pathDb).AddCustomRequest($"SELECT * FROM [{table}];").Execute()
+                : this.GetQuery(table, pathDb).AddCustomRequest(custom).Execute();
         }
         public List<FieldCreator> GetTableFields(string table, string pathDb)
         {
             DataTable dt = this.GetQuery(this.tableName, pathDb).AddCustomRequest($"PRAGMA table_info(\"{table}\")")
                             .Execute();
-            List<FieldCreator> creators = new();
+            List<FieldCreator> creators = [];
             foreach (DataRow dr in dt.Rows)
             {
-                FieldCreator fc = new();
-                fc.Name = dr["name"].ToString();
-                fc.TypeOf = dr["type"].ToString();
-                fc.NotNULL = this.IntToBool((long)dr["notnull"]);
-                fc.IsPK = this.IntToBool((long)dr["pk"]);
+                FieldCreator fc = new()
+                {
+                    Name = dr["name"].ToString(),
+                    TypeOf = dr["type"].ToString(),
+                    NotNULL = this.IntToBool((long)dr["notnull"]),
+                    IsPK = this.IntToBool((long)dr["pk"])
+                };
                 creators.Add(fc);
             }
             return creators;
@@ -84,7 +83,7 @@ namespace Incas.CustomDatabases.Models
         {
             DataTable dt = this.GetQuery(this.tableName, pathDb).AddCustomRequest($"PRAGMA table_info(\"{table}\")")
                             .Execute();
-            List<string> fields = new();
+            List<string> fields = [];
             foreach (DataRow dr in dt.Rows)
             {
                 fields.Add(dr["name"].ToString());

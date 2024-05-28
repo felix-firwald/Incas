@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.ViewModels;
 using Incas.Users.Models;
 using System.Collections.Generic;
@@ -15,10 +15,7 @@ namespace Incas.Users.ViewModels
         }
         public string HelpTextTitle
         {
-            get
-            {
-                return this.helptext;
-            }
+            get => this.helptext;
             set
             {
                 this.helptext = value;
@@ -27,20 +24,13 @@ namespace Incas.Users.ViewModels
         }
         public List<Session> Sessions
         {
-            get
-            {
-                return ProgramState.GetActiveSessions();
-            }
-            set
-            {
-                this.OnPropertyChanged(nameof(this.Sessions));
-
-            }
+            get => ProgramState.GetActiveSessions();
+            set => this.OnPropertyChanged(nameof(this.Sessions));
         }
 
         public Session SelectedSession
         {
-            get { return this.selectedSession; }
+            get => this.selectedSession;
             set
             {
                 this.selectedSession = value;

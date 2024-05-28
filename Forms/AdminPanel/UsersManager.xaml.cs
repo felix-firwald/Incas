@@ -13,7 +13,7 @@ namespace Incubator_2.Forms.AdminPanel
     {
         public UsersManager()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.FillUsersList();
         }
         public void FillUsersList()

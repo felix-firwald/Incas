@@ -1,7 +1,7 @@
 ﻿using Common;
 using Incas.Core.ViewModels;
 
-namespace Incubator_2.ViewModels
+namespace Incas.ViewModels
 {
     internal class VM_AdminPanel : BaseViewModel
     {
@@ -22,9 +22,6 @@ namespace Incubator_2.ViewModels
                 }
             }
         }
-        public bool IsAdmin
-        {
-            get { return Permission.CurrentUserPermission is PermissionGroup.Admin; }
-        }
+        public bool IsAdmin => Permission.CurrentUserPermission is PermissionGroup.Admin;
     }
 }

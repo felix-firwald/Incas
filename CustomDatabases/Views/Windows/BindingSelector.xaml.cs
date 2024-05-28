@@ -11,9 +11,9 @@ namespace Incas.CustomDatabases.Views.Windows
     {
         private BindingSelectorViewModel vm;
         public DialogStatus Result = DialogStatus.Undefined;
-        public string SelectedDatabase { get { return this.vm.SelectedDatabase.path; } }
-        public string SelectedTable { get { return this.vm.SelectedTable; } }
-        public string SelectedField { get { return this.vm.SelectedField; } }
+        public string SelectedDatabase => this.vm.SelectedDatabase.path;
+        public string SelectedTable => this.vm.SelectedTable;
+        public string SelectedField => this.vm.SelectedField;
         public BindingSelector()
         {
             this.InitializeComponent();

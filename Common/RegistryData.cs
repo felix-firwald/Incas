@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 #pragma warning disable CA1416 // Проверка совместимости платформы
-namespace Common
+namespace Incas.Common
 {
 
     internal static class RegistryData
@@ -81,12 +81,7 @@ namespace Common
         }
         public static string GetWorkspaceSelectedUser(string name)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                return "";
-            }
-
-            return GetWorkspaceByName(name).GetValue("user", "").ToString();
+            return string.IsNullOrEmpty(name) ? "" : GetWorkspaceByName(name).GetValue("user", "").ToString();
         }
         public static void SetWorkspaceSelectedUser(string name, string user)
         {

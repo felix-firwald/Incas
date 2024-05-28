@@ -12,7 +12,7 @@ namespace Incas.Core.Views.Windows
         private CreateWorkspaceViewModel vm;
         public CreateWorkspace()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.vm = new CreateWorkspaceViewModel();
             this.DataContext = this.vm;
         }
@@ -25,8 +25,10 @@ namespace Incas.Core.Views.Windows
 
         private void DefinePathClick(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog fb = new FolderBrowserDialog();
-            fb.RootFolder = System.Environment.SpecialFolder.MyDocuments;
+            FolderBrowserDialog fb = new FolderBrowserDialog
+            {
+                RootFolder = System.Environment.SpecialFolder.MyDocuments
+            };
             if (fb.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 this.vm.WorkspacePath = fb.SelectedPath;

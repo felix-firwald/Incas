@@ -1,4 +1,5 @@
-﻿using Incas.Core.Models;
+﻿using Common;
+using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
 using Incas.CustomDatabases.Views.Windows;
@@ -19,7 +20,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Common
+namespace Incas.Common
 {
     public class LockedException : Exception
     {
@@ -363,7 +364,7 @@ namespace Common
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex.Message}", "Действие невозможно");
+                ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex.Message}", "Действие невозможно");
             }
         }
         #region Modal Dialogs
@@ -520,7 +521,7 @@ namespace Common
         }
         public static void ShowWaitCursor(bool wait = true)
         {
-            Mouse.OverrideCursor = wait ? System.Windows.Input.Cursors.Wait : null;
+            Mouse.OverrideCursor = wait ? Cursors.Wait : null;
         }
         #endregion
 
@@ -543,7 +544,7 @@ namespace Common
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                foreach (string item in Directory.GetFiles(ProgramState.TemplatesRuntime))
+                foreach (string item in Directory.GetFiles(TemplatesRuntime))
                 {
                     try
                     {

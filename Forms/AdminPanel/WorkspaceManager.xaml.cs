@@ -1,5 +1,5 @@
 ﻿using Incas.Core.Models;
-using Incubator_2.ViewModels.VMAdmin;
+using Incas.ViewModels.VMAdmin;
 using Incubator_2.Windows.AdminWindows;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +14,7 @@ namespace Incubator_2.Forms.AdminPanel
         private VM_WorkspaceParameters vm;
         public WorkspaceManager()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.vm = new VM_WorkspaceParameters();
             this.DataContext = this.vm;
             this.LoadSectors();

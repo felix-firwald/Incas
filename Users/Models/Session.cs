@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -45,14 +45,16 @@ namespace Incas.Users.Models
         }
         public SSession AsStruct()
         {
-            SSession s = new();
-            s.slug = this.slug;
-            s.user = this.user;
-            s.userId = this.userId;
-            s.timeStarted = this.timeStarted;
-            s.timeFinished = this.timeFinished;
-            s.computer = this.computer;
-            s.active = this.active;
+            SSession s = new()
+            {
+                slug = this.slug,
+                user = this.user,
+                userId = this.userId,
+                timeStarted = this.timeStarted,
+                timeFinished = this.timeFinished,
+                computer = this.computer,
+                active = this.active
+            };
             return s;
         }
 
@@ -63,7 +65,7 @@ namespace Incas.Users.Models
                 .OrderByDESC("slug")
                 .Limit(40)
                 .Execute();
-            List<SSession> sessions = new();
+            List<SSession> sessions = [];
             foreach (DataRow dr in dt.Rows)
             {
                 this.Serialize(dr);
@@ -80,7 +82,7 @@ namespace Incas.Users.Models
                 .Having("MAX(slug)")
                 .OrderByASC("user")
                 .Execute();
-            List<Session> sessions = new List<Session>();
+            List<Session> sessions = [];
             foreach (DataRow dr in dt.Rows)
             {
                 Session s = new Session();
@@ -143,11 +145,7 @@ namespace Incas.Users.Models
                     .WhereEqual("slug", this.slug)
                     .ExecuteOne();
             this.Serialize(dr);
-            if (this.active != true)
-            {
-                throw new SessionBrokenException();
-            }
-            return true;
+            return this.active != true ? throw new SessionBrokenException() : true;
         }
     }
 }

@@ -1,17 +1,16 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Windows;
 using Incas.Users.Models;
-using Incubator_2.Common;
 using Newtonsoft.Json;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Incubator_2.Forms.Templates
+namespace Incas.Templates.Views.Controls
 {
     public class GeneratorUndefinedStateException : Exception
     {
@@ -51,7 +50,7 @@ namespace Incubator_2.Forms.Templates
         public event ValueChanged OnValueChanged;
         public Generator() // new
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
         public void SetData(string data)
         {
@@ -101,11 +100,7 @@ namespace Incubator_2.Forms.Templates
                     }
                     break;
             }
-            if (string.IsNullOrWhiteSpace(this.resultText))
-            {
-                return "";
-            }
-            return this.resultText;
+            return string.IsNullOrWhiteSpace(this.resultText) ? "" : this.resultText;
         }
         public string GetData()
         {

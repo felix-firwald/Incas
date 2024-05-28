@@ -3,7 +3,7 @@ using Incas.Core.ViewModels;
 using Incas.Templates.Models;
 using System.Collections.Generic;
 
-namespace Incubator_2.ViewModels
+namespace Incas.ViewModels
 {
     public class VM_FileCreator : BaseViewModel
     {
@@ -18,7 +18,7 @@ namespace Incubator_2.ViewModels
         }
         public string FileName
         {
-            get { return this._filename; }
+            get => this._filename;
             set
             {
                 this._filename = value;
@@ -27,7 +27,7 @@ namespace Incubator_2.ViewModels
         }
         public List<string> Children
         {
-            get { return this._childs; }
+            get => this._childs;
             set
             {
                 this._childs = value;
@@ -36,7 +36,7 @@ namespace Incubator_2.ViewModels
         }
         public string SelectedChild
         {
-            get { return this._child; }
+            get => this._child;
             set
             {
                 this._child = value;
@@ -46,7 +46,7 @@ namespace Incubator_2.ViewModels
         }
         public string FilePath
         {
-            get { return this._template.path; }
+            get => this._template.path;
             set
             {
                 this._template.path = value;

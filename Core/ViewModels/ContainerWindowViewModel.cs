@@ -1,10 +1,9 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using Incas.Core.ViewModels;
-using Incubator_2.Common;
+using Incas.Common;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Incubator_2.ViewModels
+namespace Incas.Core.ViewModels
 {
     internal class ContainerWindowViewModel : BaseViewModel
     {
@@ -47,7 +46,7 @@ namespace Incubator_2.ViewModels
         /// <summary>
         /// True if the window should be borderless because it is docked or maximized
         /// </summary>
-        public bool Borderless { get { return (this.mWindow.WindowState == WindowState.Maximized || this.mDockPosition != WindowDockPosition.Undocked); } }
+        public bool Borderless => this.mWindow.WindowState == WindowState.Maximized || this.mDockPosition != WindowDockPosition.Undocked;
 
         /// <summary>
         /// The size of the resize border around the window
@@ -57,54 +56,44 @@ namespace Incubator_2.ViewModels
         /// <summary>
         /// The size of the resize border around the window, taking into account the outer margin
         /// </summary>
-        public Thickness ResizeBorderThickness { get { return new Thickness(this.ResizeBorder + this.OuterMarginSize); } }
+        public Thickness ResizeBorderThickness => new Thickness(this.ResizeBorder + this.OuterMarginSize);
 
         /// <summary>
         /// The padding of the inner content of the main window
         /// </summary>
-        public Thickness InnerContentPadding { get { return new Thickness(this.ResizeBorder); } }
+        public Thickness InnerContentPadding => new Thickness(this.ResizeBorder);
 
         /// <summary>
         /// The margin around the window to allow for a drop shadow
         /// </summary>
         public int OuterMarginSize
         {
-            get
-            {
+            get =>
                 // If it is maximized or docked, no border
-                return this.Borderless ? 0 : this.mOuterMarginSize;
-            }
-            set
-            {
-                this.mOuterMarginSize = value;
-            }
+                this.Borderless ? 0 : this.mOuterMarginSize;
+            set => this.mOuterMarginSize = value;
         }
 
         /// <summary>
         /// The margin around the window to allow for a drop shadow
         /// </summary>
-        public Thickness OuterMarginSizeThickness { get { return new Thickness(this.OuterMarginSize); } }
+        public Thickness OuterMarginSizeThickness => new Thickness(this.OuterMarginSize);
 
         /// <summary>
         /// The radius of the edges of the window
         /// </summary>
         public int WindowRadius
         {
-            get
-            {
+            get =>
                 // If it is maximized or docked, no border
-                return this.Borderless ? 0 : this.mWindowRadius;
-            }
-            set
-            {
-                this.mWindowRadius = value;
-            }
+                this.Borderless ? 0 : this.mWindowRadius;
+            set => this.mWindowRadius = value;
         }
 
         /// <summary>
         /// The radius of the edges of the window
         /// </summary>
-        public CornerRadius WindowCornerRadius { get { return new CornerRadius(this.WindowRadius); } }
+        public CornerRadius WindowCornerRadius => new CornerRadius(this.WindowRadius);
 
         /// <summary>
         /// The height of the title bar / caption of the window
@@ -113,7 +102,7 @@ namespace Incubator_2.ViewModels
         /// <summary>
         /// The height of the title bar / caption of the window
         /// </summary>
-        public GridLength TitleHeightGridLength { get { return new GridLength(this.TitleHeight + this.ResizeBorder); } }
+        public GridLength TitleHeightGridLength => new GridLength(this.TitleHeight + this.ResizeBorder);
 
         #endregion
 

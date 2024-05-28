@@ -9,7 +9,7 @@ namespace Incas.CustomDatabases.Views.Windows
     {
         public BindSelectionDatabase()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

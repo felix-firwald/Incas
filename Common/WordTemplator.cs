@@ -1,6 +1,7 @@
-﻿using IncasEngine.TemplateManager;
-using Incubator_2.Forms;
-using Newtonsoft.Json;
+﻿using DocumentFormat.OpenXml.ExtendedProperties;
+using Incas.CreatedDocuments.Models;
+using Incas.Templates.Views.Controls;
+using IncasEngine.TemplateManager;
 using Spire.Doc;
 using System;
 using System.Collections.Generic;
@@ -12,16 +13,14 @@ using Xceed.Words.NET;
 using Font = Xceed.Document.NET.Font;
 using Formatting = Xceed.Document.NET.Formatting;
 using Table = Xceed.Document.NET.Table;
-using DocumentFormat.OpenXml.ExtendedProperties;
-using Incas.CreatedDocuments.Models;
 
-namespace Common
+namespace Incas.Common
 {
     public interface ITemplator
     {
         public void Replace(List<string> tags, List<string> values, bool async = true);
 
-        public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true);
+        public List<SGeneratedTag> GenerateDocument(List<TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true);
 
         public void CreateTable(string tag, DataTable dt);
     }
@@ -74,20 +73,20 @@ namespace Common
             {
                 MakeReplace();
             }
-            doc.Save();           
+            doc.Save();
         }
 
-        public List<SGeneratedTag> GenerateDocument(List<UC_TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true)
+        public List<SGeneratedTag> GenerateDocument(List<TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true)
         {
-            List<SGeneratedTag> filledTags = new();
-            List<string> tagsToReplace = new() { "N" };
-            List<string> values = new() { number };
+            List<SGeneratedTag> filledTags = [];
+            List<string> tagsToReplace = ["N"];
+            List<string> values = [number];
             foreach (TableFiller tab in tableFillers)
             {
                 this.CreateTable(tab.tag.name, tab.DataTable);
                 filledTags.Add(tab.GetAsGeneratedTag());
             }
-            foreach (UC_TagFiller tf in tagFillers)
+            foreach (TagFiller tf in tagFillers)
             {
                 int id = tf.GetId();
                 string name = tf.GetTagName();
@@ -153,13 +152,13 @@ namespace Common
         }
         public static void ConvertToPdf(string path)
         {
-            
+
             Spire.Doc.Document doc = new(path);
             doc.SaveToFile(path, FileFormat.PDF);
         }
         public static void ConvertToPdf(List<string> paths)
         {
-            foreach(string path in paths)
+            foreach (string path in paths)
             {
                 ConvertToPdf(path);
             }
@@ -167,7 +166,7 @@ namespace Common
 
         public List<string> FindAllTags()
         {
-            List<string> result = new();
+            List<string> result = [];
             DocX doc = DocX.Load(this.Path);
             Regex regex = new(@"\[[A-Za-zА-Яа-я ]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
             MatchCollection matches = regex.Matches(doc.Text);

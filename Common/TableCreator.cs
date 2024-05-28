@@ -1,4 +1,4 @@
-﻿namespace Incubator_2.Common
+﻿namespace Incas.Common
 {
     internal class TableCreator
     {

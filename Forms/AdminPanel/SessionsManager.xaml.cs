@@ -12,7 +12,7 @@ namespace Incubator_2.Forms.AdminPanel
     {
         public SessionsManager()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.FillContentPanel();
         }
         public void FillContentPanel()

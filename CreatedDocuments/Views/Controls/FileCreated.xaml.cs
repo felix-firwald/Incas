@@ -1,12 +1,12 @@
 ﻿using Common;
+using Incas.Common;
 using Incas.CreatedDocuments.Components;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Pages;
 using Incas.Templates.Views.Windows;
 using Incas.Users.Models;
-using Incubator_2.Common;
-using Incubator_2.Forms.Templates;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,8 +15,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Tag = Incas.Templates.Models.Tag;
 
-
-namespace Incubator_2.Forms
+namespace Incas.CreatedDocuments.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для FileCreated.xaml
@@ -78,7 +77,7 @@ namespace Incubator_2.Forms
             using Tag t = new();
             templ.GetTemplateById(this.record.template);
             TemplateSettings settings = templ.GetTemplateSettings();
-            UC_FileCreator fc = new(templ, settings: ref settings, t.GetAllTagsByTemplate(this.record.template));
+            FileCreator fc = new(templ, settings: ref settings, t.GetAllTagsByTemplate(this.record.template));
             fc.ApplyRecord(this.record);
             fc.CreateFile(folder, this.record.templateName, false, false);
         }
@@ -204,14 +203,26 @@ namespace Incubator_2.Forms
                     break;
                 case DocumentStatus.Approved:
                     this.Selector.Visibility = Visibility.Visible;
-                    if (!this.CheckUnique()) return;
+                    if (!this.CheckUnique())
+                    {
+                        return;
+                    }
+
                     break;
                 case DocumentStatus.Printed:
                     this.Selector.Visibility = Visibility.Visible;
-                    if (!this.CheckUnique()) return;
+                    if (!this.CheckUnique())
+                    {
+                        return;
+                    }
+
                     break;
                 case DocumentStatus.Done:
-                    if (!this.CheckUnique()) return;
+                    if (!this.CheckUnique())
+                    {
+                        return;
+                    }
+
                     this.Selector.Visibility = Visibility.Collapsed;
                     break;
             }
@@ -240,7 +251,7 @@ namespace Incubator_2.Forms
             using (GeneratedDocument gd = this.record.AsModel())
             {
                 gd.number = input;
-                gd.fullNumber = settings.NumberPrefix + input + settings.NumberPostfix; ;
+                gd.fullNumber = settings.NumberPrefix + input + settings.NumberPostfix;
                 gd.UpdateRecord();
                 this.record = gd.AsStruct();
             }

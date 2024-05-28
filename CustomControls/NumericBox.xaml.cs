@@ -15,10 +15,7 @@ namespace Incubator_2.CustomControls
         private int currentValue;
         public int Value
         {
-            get
-            {
-                return Math.Clamp(this.currentValue, this.MinValue, this.MaxValue);
-            }
+            get => Math.Clamp(this.currentValue, this.MinValue, this.MaxValue);
             set
             {
                 this.currentValue = value;

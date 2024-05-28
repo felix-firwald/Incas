@@ -1,13 +1,12 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.CreatedDocuments.Components;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Windows;
 using IncasEngine.TemplateManager;
 using Incubator_2.Common;
-using Incubator_2.Forms.Templates;
-using Incubator_2.Windows;
 using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;
@@ -17,28 +16,28 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 
-namespace Incubator_2.Forms
+namespace Incas.Templates.Views.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для UC_FileCreator.xaml
+    /// Логика взаимодействия для FileCreator.xaml
     /// </summary>
-    public partial class UC_FileCreator : UserControl
+    public partial class FileCreator : UserControl
     {
         private SGeneratedDocument document;
         private Template template;
         private List<Tag> tags;
-        private List<UC_TagFiller> TagFillers = new();
-        private List<TableFiller> Tables = new();
+        private List<TagFiller> TagFillers = [];
+        private List<TableFiller> Tables = [];
         private TemplateSettings templateSettings;
 
         public delegate void TagAction(int tag, string value);
         public event TagAction OnInsertRequested;
-        public delegate void FileCreatorAction(UC_FileCreator creator);
+        public delegate void FileCreatorAction(FileCreator creator);
         public event FileCreatorAction OnCreatorDestroy;
         public delegate void TagActionRecalculate(string tag);
         public event TagActionRecalculate OnRenameRequested;
-        public bool SelectorChecked { get { return (bool)this.Selector.IsChecked; } }
-        public UC_FileCreator(Template templ, ref TemplateSettings settings, List<Tag> tagsList)
+        public bool SelectorChecked => (bool)this.Selector.IsChecked;
+        public FileCreator(Template templ, ref TemplateSettings settings, List<Tag> tagsList)
         {
             this.InitializeComponent();
             this.tags = tagsList;
@@ -54,7 +53,7 @@ namespace Incubator_2.Forms
             }
             this.ExpanderButton.IsChecked = true;
         }
-        public UC_FileCreator(List<Tag> tagsList) // dev mode
+        public FileCreator(List<Tag> tagsList) // dev mode
         {
             this.InitializeComponent();
             this.tags = tagsList;
@@ -73,7 +72,7 @@ namespace Incubator_2.Forms
             {
                 if (t.type != TagType.Table)
                 {
-                    UC_TagFiller tf = new(t);
+                    TagFiller tf = new(t);
                     tf.OnInsert += this.OnInsert;
                     tf.OnRename += this.OnRename;
                     tf.OnScriptRequested += this.OnScriptRequested;
@@ -94,12 +93,12 @@ namespace Incubator_2.Forms
             try
             {
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                foreach (UC_TagFiller tf in this.TagFillers)
+                foreach (TagFiller tf in this.TagFillers)
                 {
                     scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
-                foreach (UC_TagFiller tf in this.TagFillers)
+                foreach (TagFiller tf in this.TagFillers)
                 {
                     if (tf.tag.type != TagType.Generator)
                     {
@@ -125,7 +124,7 @@ namespace Incubator_2.Forms
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                foreach (UC_TagFiller tf in this.TagFillers)
+                foreach (TagFiller tf in this.TagFillers)
                 {
                     if (tf.tag.id == tag)
                     {
@@ -152,7 +151,7 @@ namespace Incubator_2.Forms
             this.Number.Text = record.number;
             foreach (SGeneratedTag tag in record.GetFilledTags())
             {
-                foreach (UC_TagFiller tagfiller in this.TagFillers)
+                foreach (TagFiller tagfiller in this.TagFillers)
                 {
                     if (tagfiller.tag.id == tag.tag)
                     {
@@ -188,7 +187,7 @@ namespace Incubator_2.Forms
         {
             foreach (KeyValuePair<string, string> pair in pairs)
             {
-                foreach (UC_TagFiller tf in this.ContentPanel.Children)
+                foreach (TagFiller tf in this.ContentPanel.Children)
                 {
                     if (tf.tag.name == pair.Key)
                     {
@@ -243,8 +242,8 @@ namespace Incubator_2.Forms
                 status = this.document.status,
                 fileName = this.Filename.Text
             };
-            List<SGeneratedTag> filledTags = new();
-            foreach (UC_TagFiller tf in this.TagFillers)
+            List<SGeneratedTag> filledTags = [];
+            foreach (TagFiller tf in this.TagFillers)
             {
                 int id = tf.GetId();
                 string name = tf.GetTagName();
@@ -295,7 +294,7 @@ namespace Incubator_2.Forms
                     scope.SetVariable("document_number", this.Number.Text);
                     scope.SetVariable("fields", new List<string>());
                     scope.SetVariable("failed_text", "Текст не установлен.");
-                    foreach (UC_TagFiller tf in this.TagFillers)
+                    foreach (TagFiller tf in this.TagFillers)
                     {
                         scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                     }
@@ -305,7 +304,7 @@ namespace Incubator_2.Forms
                     {
                         ProgramState.ShowExclamationDialog(scope.GetVariable("failed_text"));
                         dynamic fields = scope.GetVariable("fields");
-                        foreach (UC_TagFiller tf in this.TagFillers)
+                        foreach (TagFiller tf in this.TagFillers)
                         {
                             if (fields.Contains(tf.tag.name.Replace(" ", "_")))
                             {
@@ -329,7 +328,7 @@ namespace Incubator_2.Forms
                 if (!string.IsNullOrEmpty(this.templateSettings.OnSaving))
                 {
                     ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                    foreach (UC_TagFiller tf in this.TagFillers)
+                    foreach (TagFiller tf in this.TagFillers)
                     {
                         scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                     }
@@ -338,7 +337,7 @@ namespace Incubator_2.Forms
                     ScriptManager.Execute(this.templateSettings.OnSaving, scope);
                     this.Filename.Text = scope.GetVariable("file_name");
                     this.Number.Text = scope.GetVariable("document_number");
-                    foreach (UC_TagFiller tf in this.TagFillers)
+                    foreach (TagFiller tf in this.TagFillers)
                     {
                         if (tf.tag.type != TagType.Generator)
                         {
@@ -361,7 +360,7 @@ namespace Incubator_2.Forms
             if (!string.IsNullOrWhiteSpace(this.templateSettings.FileNameTemplate))
             {
                 string result = this.templateSettings.FileNameTemplate;
-                foreach (UC_TagFiller tf in this.TagFillers)
+                foreach (TagFiller tf in this.TagFillers)
                 {
                     result = result.Replace("[" + tf.GetTagName() + "]", tf.GetValue());
                 }
@@ -377,7 +376,7 @@ namespace Incubator_2.Forms
                     this.ApplyNameByTemplate();
                     this.PlaySavingScript();
                     string newFile;
-                    List<SGeneratedTag> filledTags = new();
+                    List<SGeneratedTag> filledTags = [];
                     switch (this.template.type)
                     {
                         case TemplateType.Word:
@@ -438,7 +437,7 @@ namespace Incubator_2.Forms
         public void RenameByTag(string tag, string prefix = "", string postfix = "", bool additive = false)
         {
             string result = "";
-            foreach (UC_TagFiller tf in this.TagFillers)
+            foreach (TagFiller tf in this.TagFillers)
             {
                 if (tf.GetTagName() == tag)
                 {
@@ -451,8 +450,8 @@ namespace Incubator_2.Forms
         }
         public List<string> GetExcelRow()
         {
-            List<string> output = new();
-            foreach (UC_TagFiller tf in this.TagFillers)
+            List<string> output = [];
+            foreach (TagFiller tf in this.TagFillers)
             {
                 output.Add(tf.GetValue());
             }
@@ -474,13 +473,13 @@ namespace Incubator_2.Forms
                 System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(this.template.path), newFile, true);
                 WordTemplator wt = new(newFile);
 
-                List<string> tagsToReplace = new();
-                List<string> values = new();
+                List<string> tagsToReplace = [];
+                List<string> values = [];
                 Application.Current.Dispatcher.BeginInvoke(
                     DispatcherPriority.Normal,
                     new Action(() =>
                     {
-                        foreach (UC_TagFiller tf in this.TagFillers)
+                        foreach (TagFiller tf in this.TagFillers)
                         {
                             string nameOf = tf.GetTagName();
                             string value = tf.GetValue();

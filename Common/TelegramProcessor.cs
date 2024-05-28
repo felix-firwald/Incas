@@ -8,7 +8,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Incubator_2.Common
+namespace Incas.Common
 {
     public static class TelegramProcessor
     {
@@ -22,12 +22,12 @@ namespace Incubator_2.Common
         }
 
 #pragma warning disable CS1998
-        private static async System.Threading.Tasks.Task Error(ITelegramBotClient client, Exception exception, CancellationToken token)
+        private static async Task Error(ITelegramBotClient client, Exception exception, CancellationToken token)
         {
 
         }
 #pragma warning restore CS1998
-        private static async System.Threading.Tasks.Task Update(ITelegramBotClient cli, Update update, CancellationToken token)
+        private static async Task Update(ITelegramBotClient cli, Update update, CancellationToken token)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Incubator_2.Common
                 case "NEWDOC":
                     using (Template t = new())
                     {
-                        List<string> categories = t.GetCategories(new() { "Excel", "Word" });
+                        List<string> categories = t.GetCategories(["Excel", "Word"]);
                         string result = "Выберите *одну* из категорий ниже:";
                         foreach (string category in categories)
                         {

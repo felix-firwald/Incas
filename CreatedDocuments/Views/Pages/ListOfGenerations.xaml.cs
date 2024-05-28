@@ -1,26 +1,26 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.CreatedDocuments.Models;
+using Incas.CreatedDocuments.Views.Controls;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Windows;
 using Incubator_2.Forms.OneInstance;
-using Incubator_2.Windows;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Incubator_2.Forms
+namespace Incas.CreatedDocuments.Views.Pages
 {
     /// <summary>
     /// Логика взаимодействия для ListOfGenerations.xaml
     /// </summary>
     public partial class ListOfGenerations : UserControl
     {
-        private List<FileCreated> Selection = new List<FileCreated>();
+        private List<FileCreated> Selection = [];
         public ListOfGenerations()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.UpdateList();
         }
         public void UpdateList()
@@ -30,8 +30,10 @@ namespace Incubator_2.Forms
             {
                 foreach (string template in d.GetAllUsedTemplates())
                 {
-                    Expander exp = new();
-                    exp.Header = template;
+                    Expander exp = new()
+                    {
+                        Header = template
+                    };
                     exp.Expanded += this.CurrentExpander_Expanded;
                     exp.Style = this.FindResource("ExpanderMain") as Style;
                     this.ContentPanel.Children.Add(exp);
@@ -89,7 +91,7 @@ namespace Incubator_2.Forms
             {
                 if (this.Selection.Count > 0)
                 {
-                    List<int> docs = new();
+                    List<int> docs = [];
                     foreach (FileCreated item in this.Selection)
                     {
                         docs.Add(item.record.id);
@@ -120,7 +122,7 @@ namespace Incubator_2.Forms
                 {
                     try
                     {
-                        List<SGeneratedDocument> tj = new();
+                        List<SGeneratedDocument> tj = [];
                         foreach (FileCreated fc in this.Selection)
                         {
                             tj.Add(fc.record);

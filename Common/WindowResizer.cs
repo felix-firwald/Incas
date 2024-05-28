@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace Incubator_2.Common
+namespace Incas.Common
 {
     public enum WindowDockPosition
     {
@@ -52,7 +52,7 @@ namespace Incubator_2.Common
         /// <summary>
         /// The last screen the window was on
         /// </summary>
-        private IntPtr mLastScreen;
+        private nint mLastScreen;
 
         /// <summary>
         /// The last known dock position
@@ -68,10 +68,10 @@ namespace Incubator_2.Common
         private static extern bool GetCursorPos(out POINT lpPoint);
 
         [DllImport("user32.dll")]
-        private static extern bool GetMonitorInfo(IntPtr hMonitor, MONITORINFO lpmi);
+        private static extern bool GetMonitorInfo(nint hMonitor, MONITORINFO lpmi);
 
         [DllImport("user32.dll", SetLastError = true)]
-        private static extern IntPtr MonitorFromPoint(POINT pt, MonitorOptions dwFlags);
+        private static extern nint MonitorFromPoint(POINT pt, MonitorOptions dwFlags);
 
         #endregion
 
@@ -118,7 +118,7 @@ namespace Incubator_2.Common
             PresentationSource source = PresentationSource.FromVisual(this.mWindow);
 
             // Reset the transform to default
-            this.mTransformToDevice = default(Matrix);
+            this.mTransformToDevice = default;
 
             // If we cannot get the source, ignore
             if (source == null)
@@ -133,10 +133,10 @@ namespace Incubator_2.Common
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Window_SourceInitialized(object sender, System.EventArgs e)
+        private void Window_SourceInitialized(object sender, EventArgs e)
         {
             // Get the handle of this window
-            nint handle = (new WindowInteropHelper(this.mWindow)).Handle;
+            nint handle = new WindowInteropHelper(this.mWindow).Handle;
             HwndSource handleSource = HwndSource.FromHwnd(handle);
 
             // If not found, end
@@ -159,7 +159,7 @@ namespace Incubator_2.Common
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // We cannot find positioning until the window transform has been established
-            if (this.mTransformToDevice == default(Matrix))
+            if (this.mTransformToDevice == default)
                 return;
 
             // Get the WPF size
@@ -176,22 +176,18 @@ namespace Incubator_2.Common
             Point windowBottomRight = this.mTransformToDevice.Transform(new Point(right, bottom));
 
             // Check for edges docked
-            bool edgedTop = windowTopLeft.Y <= (this.mScreenSize.Top + this.mEdgeTolerance);
-            bool edgedLeft = windowTopLeft.X <= (this.mScreenSize.Left + this.mEdgeTolerance);
-            bool edgedBottom = windowBottomRight.Y >= (this.mScreenSize.Bottom - this.mEdgeTolerance);
-            bool edgedRight = windowBottomRight.X >= (this.mScreenSize.Right - this.mEdgeTolerance);
+            bool edgedTop = windowTopLeft.Y <= this.mScreenSize.Top + this.mEdgeTolerance;
+            bool edgedLeft = windowTopLeft.X <= this.mScreenSize.Left + this.mEdgeTolerance;
+            bool edgedBottom = windowBottomRight.Y >= this.mScreenSize.Bottom - this.mEdgeTolerance;
+            bool edgedRight = windowBottomRight.X >= this.mScreenSize.Right - this.mEdgeTolerance;
 
             // Get docked position
             WindowDockPosition dock = WindowDockPosition.Undocked;
 
             // Left docking
-            if (edgedTop && edgedBottom && edgedLeft)
-                dock = WindowDockPosition.Left;
-            else if (edgedTop && edgedBottom && edgedRight)
-                dock = WindowDockPosition.Right;
-            // None
-            else
-                dock = WindowDockPosition.Undocked;
+            dock = edgedTop && edgedBottom && edgedLeft
+                ? WindowDockPosition.Left
+                : edgedTop && edgedBottom && edgedRight ? WindowDockPosition.Right : WindowDockPosition.Undocked;
 
             // If dock has changed
             if (dock != this.mLastDock)
@@ -215,7 +211,7 @@ namespace Incubator_2.Common
         /// <param name="lParam"></param>
         /// <param name="handled"></param>
         /// <returns></returns>
-        private IntPtr WindowProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        private nint WindowProc(nint hwnd, int msg, nint wParam, nint lParam, ref bool handled)
         {
             switch (msg)
             {
@@ -226,7 +222,7 @@ namespace Incubator_2.Common
                     break;
             }
 
-            return (IntPtr)0;
+            return 0;
         }
 
         #endregion
@@ -237,7 +233,7 @@ namespace Incubator_2.Common
         /// </summary>
         /// <param name="hwnd"></param>
         /// <param name="lParam"></param>
-        private void WmGetMinMaxInfo(System.IntPtr hwnd, System.IntPtr lParam)
+        private void WmGetMinMaxInfo(nint hwnd, nint lParam)
         {
             // Get the point position to determine what screen we are on
             POINT lMousePosition;
@@ -255,7 +251,7 @@ namespace Incubator_2.Common
             nint lCurrentScreen = MonitorFromPoint(lMousePosition, MonitorOptions.MONITOR_DEFAULTTONEAREST);
 
             // If this has changed from the last one, update the transform
-            if (lCurrentScreen != this.mLastScreen || this.mTransformToDevice == default(Matrix))
+            if (lCurrentScreen != this.mLastScreen || this.mTransformToDevice == default)
                 this.GetTransform();
 
             // Store last know screen

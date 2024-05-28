@@ -68,6 +68,7 @@
     <WarningLevel>9999</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Core\Views\Windows\Logo.png" />
     <None Remove="Fonts\RobotoMono-Bold.ttf" />
     <None Remove="Fonts\RobotoMono-BoldItalic.ttf" />
     <None Remove="Fonts\RobotoMono-ExtraLight.ttf" />
@@ -93,9 +94,10 @@
     <None Remove="Static\Rooster.wav" />
     <None Remove="Static\UI-Attention.wav" />
     <None Remove="Static\UI-Exclamation.wav" />
-    <None Remove="Themes\Tile.png" />
+    <None Remove="Core\Styles\Tile.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Core\Views\Windows\Logo.png" />
     <Resource Include="Fonts\JetBrainsMono-Bold.ttf" />
     <Resource Include="Fonts\JetBrainsMono-BoldItalic.ttf" />
     <Resource Include="Fonts\JetBrainsMono-ExtraBold.ttf" />
@@ -147,7 +149,7 @@
     <Resource Include="Fonts\VelaSans-Medium.ttf" />
     <Resource Include="Fonts\VelaSans-Regular.ttf" />
     <Resource Include="Fonts\VelaSans-SemiBold.ttf" />
-    <Resource Include="Themes\Tile.png" />
+    <Resource Include="Core\Styles\Tile.png" />
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="Logo.ico" />
@@ -231,9 +233,12 @@
     <Folder Include="Core\Views\UserControls\" />
     <Folder Include="CreatedDocuments\ViewModels\" />
     <Folder Include="CreatedDocuments\Views\Windows\" />
-    <Folder Include="CreatedDocuments\Views\Controls\" />
-    <Folder Include="CreatedDocuments\Views\Pages\" />
     <Folder Include="CustomDatabases\Components\" />
+    <Folder Include="FileManager\Models\" />
+    <Folder Include="FileManager\ViewModels\" />
+    <Folder Include="FileManager\Views\Windows\" />
+    <Folder Include="FileManager\Views\Controls\" />
+    <Folder Include="Forms\Templates\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>

@@ -2,11 +2,10 @@
 using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Windows;
 using Incas.Users.Models;
 using IncasEngine;
-using Incubator_2.Forms;
-using Incubator_2.Forms.Templates;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,7 +14,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Incubator_2.Common
+namespace Incas.Common
 {
     internal enum ProcessType
     {
@@ -75,7 +74,7 @@ namespace Incubator_2.Common
 
     internal static class WaitControls
     {
-        public static List<UC_TagFiller> TagFillers = [];
+        public static List<TagFiller> TagFillers = [];
         public static Dictionary<string, Generator> Generators = [];
         public static Generator GetGenerator(string process)
         {
@@ -141,7 +140,7 @@ namespace Incubator_2.Common
             await System.Threading.Tasks.Task.Run(() =>
             {
                 string content = JsonConvert.SerializeObject(process);
-                using Incas.Core.Models.Process p = new();
+                using Core.Models.Process p = new();
                 p.identifier = process.id;
                 p.content = Cryptographer.EncryptString(GetKeyByRecipient(process.recipient), content);
                 p.Send(process.recipient);
@@ -198,7 +197,7 @@ namespace Incubator_2.Common
                         {
                             DatabaseManager.InitializePort();
                         }
-                        using (Incas.Core.Models.Process process = new())
+                        using (Core.Models.Process process = new())
                         {
                             foreach (string content in process.GetNewProcesses())
                             {
@@ -336,7 +335,7 @@ namespace Incubator_2.Common
                     SessionBroken b = new SessionBroken(BrokenType.Restart);
                     b.ShowDialog();
                     ProgramState.ClearDataForRestart();
-                    System.Windows.Forms.Application.Restart();
+                    Application.Restart();
                 });
             }
         }
@@ -528,7 +527,7 @@ namespace Incubator_2.Common
             process.content = text;
             SendToPort(process);
         }
-        public static void SendRequestTextProcess(UC_TagFiller tagfiller, string recipient)
+        public static void SendRequestTextProcess(TagFiller tagfiller, string recipient)
         {
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.REQUEST_TEXT;
@@ -590,7 +589,7 @@ namespace Incubator_2.Common
         private static void SendQuestionResultResponse(Process inputProcess, DialogStatus ds)
         {
             Process outputProcess = CreateResponseProcess(inputProcess);
-            outputProcess.content = (ds == DialogStatus.Yes) ? "Да" : "Нет";
+            outputProcess.content = ds == DialogStatus.Yes ? "Да" : "Нет";
             SendToPort(outputProcess);
         }
         private static void SendOpenGeneratorResultResponse(Process inputProcess, SGeneratedDocument part)

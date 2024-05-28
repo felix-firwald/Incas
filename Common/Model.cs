@@ -1,11 +1,11 @@
-﻿using Incas.Core.Classes;
-using Incubator_2.Common;
+﻿using Common;
+using Incas.Core.Classes;
 using System;
 using System.Collections.Generic;
 using System.Data;
 //using Microsoft.Office.Core;
 
-namespace Common
+namespace Incas.Common
 {
     public enum DatabasePermissions
     {
@@ -34,7 +34,7 @@ namespace Common
         public Model AsModel();
     }
 
-    public abstract class Model : System.IDisposable
+    public abstract class Model : IDisposable
     {
         private bool disposed = false;
         protected string tableName { get; set; }
@@ -76,7 +76,7 @@ namespace Common
 
         protected List<string> GetFields()
         {
-            List<string> result = new List<string>();
+            List<string> result = [];
             foreach (System.Reflection.PropertyInfo prop in this.GetType().GetProperties())
             {
                 result.Add(prop.Name);
@@ -163,15 +163,15 @@ namespace Common
         }
         protected bool IntToBool(int value)
         {
-            return value == 0 ? false : true;
+            return value != 0;
         }
         protected bool IntToBool(long value)
         {
-            return value == 0 ? false : true;
+            return value != 0;
         }
         protected bool IntToBool(uint value)
         {
-            return value == 0 ? false : true;
+            return value != 0;
         }
         /// <summary>
         /// Does not support custom types and sets such fields to null
@@ -193,12 +193,7 @@ namespace Common
         protected static T ParseEnum<T>(object value, T defaultValue)
         {
             string input = value.ToString();
-            if (string.IsNullOrEmpty(input))
-            {
-                return defaultValue;
-            }
-            return (T)Enum.Parse(typeof(T), value.ToString(), true);
-
+            return string.IsNullOrEmpty(input) ? defaultValue : (T)Enum.Parse(typeof(T), value.ToString(), true);
         }
 
         #endregion

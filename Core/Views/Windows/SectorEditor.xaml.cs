@@ -1,5 +1,5 @@
 ﻿using Incas.Core.Models;
-using Incubator_2.ViewModels.VMAdmin;
+using Incas.ViewModels.VMAdmin;
 using System.Windows;
 
 namespace Incubator_2.Windows.AdminWindows
@@ -12,7 +12,7 @@ namespace Incubator_2.Windows.AdminWindows
         private VM_SectorElement vm;
         public SectorEditor(Sector s)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.vm = new(s);
             this.DataContext = this.vm;
         }

@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.Views.Windows;
 using System.Collections.Generic;
 using System.Windows;
@@ -11,27 +11,15 @@ namespace Incas.Templates.Views.Windows
     public partial class FilenamesRecalculator : Window
     {
         public DialogStatus status = DialogStatus.Undefined;
-        public string SelectedTag
-        {
-            get { return this.resultedTag.Items[this.resultedTag.SelectedIndex].ToString(); }
-        }
-        public string Prefix
-        {
-            get { return this.prefixValue.Text; }
-        }
-        public string Postfix
-        {
-            get { return this.postfixValue.Text; }
-        }
-        public bool IsAdditive
-        {
-            get { return (bool)this.Additive.IsChecked; }
-        }
+        public string SelectedTag => this.resultedTag.Items[this.resultedTag.SelectedIndex].ToString();
+        public string Prefix => this.prefixValue.Text;
+        public string Postfix => this.postfixValue.Text;
+        public bool IsAdditive => (bool)this.Additive.IsChecked;
         private int template;
 
         public FilenamesRecalculator(int templ, List<string> tags)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.template = templ;
             this.prefixValue.Text = RegistryData.GetTemplatePreferredPrefix(this.template.ToString());
             this.postfixValue.Text = RegistryData.GetTemplatePreferredPostfix(this.template.ToString());

@@ -1,5 +1,4 @@
-﻿using Common;
-using Incubator_2.Common;
+﻿using Incas.Common;
 using System.Windows;
 
 namespace Incas.Users.Views.Windows

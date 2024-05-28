@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 
 namespace Incas.Core.ViewModels
 {
@@ -11,52 +11,52 @@ namespace Incas.Core.ViewModels
         }
         public string WorkspaceName
         {
-            get { return maindata.workspaceName; }
+            get => this.maindata.workspaceName;
             set
             {
-                maindata.workspaceName = value;
-                OnPropertyChanged(nameof(WorkspaceName));
+                this.maindata.workspaceName = value;
+                this.OnPropertyChanged(nameof(this.WorkspaceName));
             }
         }
         public string WorkspacePath
         {
-            get { return maindata.workspacePath; }
+            get => this.maindata.workspacePath;
             set
             {
-                maindata.workspacePath = value;
-                OnPropertyChanged(nameof(WorkspacePath));
+                this.maindata.workspacePath = value;
+                this.OnPropertyChanged(nameof(this.WorkspacePath));
             }
         }
         public string UserSurname
         {
-            get { return maindata.userSurname; }
+            get => this.maindata.userSurname;
             set
             {
-                maindata.userSurname = value;
-                OnPropertyChanged(nameof(UserSurname));
+                this.maindata.userSurname = value;
+                this.OnPropertyChanged(nameof(this.UserSurname));
             }
         }
         public string UserFullname
         {
-            get { return maindata.userFullname; }
+            get => this.maindata.userFullname;
             set
             {
-                maindata.userFullname = value;
-                OnPropertyChanged(nameof(UserFullname));
+                this.maindata.userFullname = value;
+                this.OnPropertyChanged(nameof(this.UserFullname));
             }
         }
         public string UserPassword
         {
-            get { return maindata.userPassword; }
+            get => this.maindata.userPassword;
             set
             {
-                maindata.userPassword = value;
-                OnPropertyChanged(nameof(UserPassword));
+                this.maindata.userPassword = value;
+                this.OnPropertyChanged(nameof(this.UserPassword));
             }
         }
         public void RunInitializing()
         {
-            ProgramState.InitWorkspace(maindata);
+            ProgramState.InitWorkspace(this.maindata);
         }
     }
 }

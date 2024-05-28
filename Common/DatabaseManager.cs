@@ -4,18 +4,17 @@ using Incas.CreatedDocuments.Models;
 using Incas.CustomDatabases.Models;
 using Incas.Templates.Models;
 using Incas.Users.Models;
-using Incubator_2.Common;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Reflection;
 
-namespace Common
+namespace Incas.Common
 {
     public static class DatabaseManager // static cause server connection must be only one per session
     {
-        private static List<string> commandsText = new();
+        private static List<string> commandsText = [];
         public static SQLiteConnection connection;
         public static void OpenConnection(string path)
         {
@@ -36,9 +35,11 @@ namespace Common
         {
             AutoTableCreator atc = new AutoTableCreator();
             SQLiteConnection.CreateFile(ServerProcessor.Port);
-            Query q = new Query("");
-            q.typeOfConnection = DBConnectionType.CUSTOM;
-            q.DBPath = ServerProcessor.Port;
+            Query q = new Query("")
+            {
+                typeOfConnection = DBConnectionType.CUSTOM,
+                DBPath = ServerProcessor.Port
+            };
             q.AddCustomRequest(GetProcessDefinition(atc));
             q.ExecuteVoid();
         }
@@ -70,8 +71,10 @@ namespace Common
             SQLiteConnection.CreateFile(ProgramState.DatabasePath);
             SQLiteConnection.CreateFile(ProgramState.ServiceDatabasePath);
             AutoTableCreator atc = new();
-            Query q = new("");
-            q.typeOfConnection = DBConnectionType.SERVICE;
+            Query q = new("")
+            {
+                typeOfConnection = DBConnectionType.SERVICE
+            };
             q
              .AddCustomRequest(GetParameterDefinition(atc))
              .AddCustomRequest(GetSectorDefinition(atc))
@@ -130,7 +133,7 @@ namespace Common
         #region Definitions
         private static string GetProcessDefinition(AutoTableCreator atc)
         {
-            atc.Initialize(typeof(Incas.Core.Models.Process), "Processes");
+            atc.Initialize(typeof(Core.Models.Process), "Processes");
             atc.SetAsUnique("identifier");
             return atc.GetQueryText();
         }

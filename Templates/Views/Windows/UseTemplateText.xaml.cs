@@ -1,10 +1,10 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Controls;
 using IncasEngine.TemplateManager;
 using Incubator_2.Common;
-using Incubator_2.Forms;
 using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;
@@ -46,7 +46,7 @@ namespace Incas.Templates.Views.Windows
         }
         private void AddField(Tag t)
         {
-            UC_TagFiller tf = new(t);
+            TagFiller tf = new(t);
             tf.OnScriptRequested += this.OnScriptRequested;
             this.ContentPanel.Children.Add(tf);
         }
@@ -56,12 +56,12 @@ namespace Incas.Templates.Views.Windows
             try
             {
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                foreach (UC_TagFiller tf in this.ContentPanel.Children)
+                foreach (TagFiller tf in this.ContentPanel.Children)
                 {
                     scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
-                foreach (UC_TagFiller tf in this.ContentPanel.Children)
+                foreach (TagFiller tf in this.ContentPanel.Children)
                 {
                     tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
                 }
@@ -76,7 +76,7 @@ namespace Incas.Templates.Views.Windows
         {
             foreach (SGeneratedTag tag in data.GetFilledTags())
             {
-                foreach (UC_TagFiller tagfiller in this.ContentPanel.Children)
+                foreach (TagFiller tagfiller in this.ContentPanel.Children)
                 {
                     if (tagfiller.tag.id == tag.tag)
                     {
@@ -93,7 +93,7 @@ namespace Incas.Templates.Views.Windows
                 id = this.template.id
             };
             List<SGeneratedTag> tags = [];
-            foreach (UC_TagFiller tf in this.ContentPanel.Children)
+            foreach (TagFiller tf in this.ContentPanel.Children)
             {
                 SGeneratedTag gt = new()
                 {
@@ -108,7 +108,7 @@ namespace Incas.Templates.Views.Windows
         public string GetText()
         {
             string result = this.template.path;
-            foreach (UC_TagFiller tf in this.ContentPanel.Children)
+            foreach (TagFiller tf in this.ContentPanel.Children)
             {
                 result = result.Replace($"[{tf.tag.name}]", tf.GetValue());
             }
@@ -117,7 +117,7 @@ namespace Incas.Templates.Views.Windows
 
         private void ApplyClick(object sender, RoutedEventArgs e)
         {
-            foreach (UC_TagFiller tf in this.ContentPanel.Children)
+            foreach (TagFiller tf in this.ContentPanel.Children)
             {
                 if (string.IsNullOrEmpty(tf.GetData()))
                 {

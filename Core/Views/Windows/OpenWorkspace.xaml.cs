@@ -1,7 +1,6 @@
 ﻿using Common;
+using Incas.Common;
 using Incas.Core.ViewModels;
-using Incas.Core.Views.Windows;
-using Incubator_2.Common;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;

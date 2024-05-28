@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 
-namespace Incubator_2.Common
+namespace Incas.Common
 {
     [Export]
     public static class PluginManager

@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.Models;
 using Incas.Core.Views.Windows;
 using Incas.CustomDatabases.ViewModels;
@@ -115,15 +115,9 @@ namespace Incas.CustomDatabases.Views.Windows
         }
         private string GetUpdateExample()
         {
-            string result = "";
-            if (!string.IsNullOrEmpty(this.vm.Query))
-            {
-                result = !this.vm.Query.Contains("UPDATE") ? $"UPDATE [{this.vm.Table}]\nSET  " : this.vm.Query;
-            }
-            else
-            {
-                result = $"UPDATE [{this.vm.Table}]\nSET  ";
-            }
+            string result = !string.IsNullOrEmpty(this.vm.Query)
+                ? !this.vm.Query.Contains("UPDATE") ? $"UPDATE [{this.vm.Table}]\nSET  " : this.vm.Query
+                : $"UPDATE [{this.vm.Table}]\nSET  ";
             BindingSelector bs = ProgramState.ShowBindingSelector(this.vm.Database, this.vm.Table, false, false);
             if (bs.Result == DialogStatus.Yes)
             {

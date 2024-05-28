@@ -10,26 +10,20 @@
         }
         public string WorkspacePath
         {
-            get
-            {
-                return _path;
-            }
+            get => this._path;
             set
             {
-                _path = value;
-                OnPropertyChanged(nameof(WorkspacePath));
+                this._path = value;
+                this.OnPropertyChanged(nameof(this.WorkspacePath));
             }
         }
         public string WorkspaceName
         {
-            get
-            {
-                return _workspacename;
-            }
+            get => this._workspacename;
             set
             {
-                _workspacename = value;
-                OnPropertyChanged(nameof(WorkspaceName));
+                this._workspacename = value;
+                this.OnPropertyChanged(nameof(this.WorkspaceName));
             }
         }
     }

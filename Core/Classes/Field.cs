@@ -33,11 +33,7 @@
         }
         private string GetFK()
         {
-            if (!string.IsNullOrEmpty(this.FKTable))
-            {
-                return $" REFERENCES {this.FKTable} ({this.FKField})";
-            }
-            return "";
+            return !string.IsNullOrEmpty(this.FKTable) ? $" REFERENCES {this.FKTable} ({this.FKField})" : "";
         }
         public override string ToString()
         {

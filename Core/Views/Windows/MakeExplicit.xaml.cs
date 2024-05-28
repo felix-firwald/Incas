@@ -1,4 +1,4 @@
-﻿using Incubator_2.Common;
+﻿using Incas.Common;
 using System.Windows;
 
 namespace Incubator_2.Windows.AdminWindows
@@ -11,7 +11,7 @@ namespace Incubator_2.Windows.AdminWindows
         public ExplicitMessage message = new ExplicitMessage();
         public MakeExplicit()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void SendClick(object sender, RoutedEventArgs e)

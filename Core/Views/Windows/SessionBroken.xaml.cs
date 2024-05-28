@@ -28,8 +28,10 @@ namespace Incas.Core.Views.Windows
         }
         private void StartCloseTimer()
         {
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(3d);
+            DispatcherTimer timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(3d)
+            };
             timer.Tick += this.TimerTick;
             timer.Start();
         }

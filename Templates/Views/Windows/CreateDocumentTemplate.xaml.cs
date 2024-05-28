@@ -1,11 +1,10 @@
-﻿using Common;
+﻿using Incas.Common;
 using Incas.Core.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
 using IncasEngine.TemplateManager;
 using Incubator_2.Forms;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,7 +40,7 @@ namespace Incas.Templates.Views.Windows
                 this.vm = new TemplateViewModel(te);
                 this.GetTags();
             }
-            
+
             this.DataContext = this.vm;
             ProgramState.ShowWaitCursor(false);
         }
@@ -115,7 +114,7 @@ namespace Incas.Templates.Views.Windows
                 return false;
             }
 
-            List<string> names = new();
+            List<string> names = [];
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
                 if (!tag.Check())
@@ -353,7 +352,7 @@ namespace Incas.Templates.Views.Windows
                     {
                         tp.FillData(this.vm.GetTemplate(), false);
                     }
-                    tp.ToFile(folder.SelectedPath, this.vm.Type == TemplateType.Word? ProgramState.GetFullnameOfWordFile(this.vm.Source) : ProgramState.GetFullnameOfExcelFile(this.vm.Source), this.vm.Source);
+                    tp.ToFile(folder.SelectedPath, this.vm.Type == TemplateType.Word ? ProgramState.GetFullnameOfWordFile(this.vm.Source) : ProgramState.GetFullnameOfExcelFile(this.vm.Source), this.vm.Source);
                 }
                 catch (Exception ex)
                 {
@@ -388,7 +387,7 @@ namespace Incas.Templates.Views.Windows
                         {
                             this.AddTag(t);
                         }
-                    }                   
+                    }
                 }
             }
             catch (Exception ex)
@@ -409,7 +408,7 @@ namespace Incas.Templates.Views.Windows
         }
         private List<Tag> GetTagsData()
         {
-            List<Tag> tags = new ();
+            List<Tag> tags = [];
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
                 tags.Add(tag.tag);

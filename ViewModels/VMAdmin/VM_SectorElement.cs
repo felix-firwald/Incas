@@ -1,7 +1,7 @@
 ﻿using Incas.Core.Models;
 using Incas.Core.ViewModels;
 
-namespace Incubator_2.ViewModels.VMAdmin
+namespace Incas.ViewModels.VMAdmin
 {
     internal class VM_SectorElement : BaseViewModel
     {
@@ -12,23 +12,10 @@ namespace Incubator_2.ViewModels.VMAdmin
         }
         public string SectorName
         {
-            get
-            {
-                return this.sector.name;
-            }
-            set { this.sector.name = value; }
+            get => this.sector.name;
+            set => this.sector.name = value;
         }
-        public bool CanDelete
-        {
-            get
-            {
-                if (this.sector.slug == "data")
-                {
-                    return false;
-                }
-                return true;
-            }
-        }
+        public bool CanDelete => this.sector.slug != "data";
         public void Save()
         {
             this.sector.SaveSector();

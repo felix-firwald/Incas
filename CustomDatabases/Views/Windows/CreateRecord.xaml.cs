@@ -1,6 +1,6 @@
-﻿using Incas.CustomDatabases.Models;
-using Incubator_2.Common;
-using Incubator_2.Forms;
+﻿using Incas.Common;
+using Incas.CustomDatabases.Models;
+using Incas.Templates.Views.Controls;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
@@ -25,7 +25,7 @@ namespace Incas.CustomDatabases.Views.Windows
             {
                 if (!field.IsPK)
                 {
-                    this.ContentPanel.Children.Add(new UC_TagFiller(field, pathDb));
+                    this.ContentPanel.Children.Add(new TagFiller(field, pathDb));
                 }
             }
         }
@@ -42,7 +42,7 @@ namespace Incas.CustomDatabases.Views.Windows
             {
                 if (!field.IsPK)
                 {
-                    UC_TagFiller tf = new(field, pathDb);
+                    TagFiller tf = new(field, pathDb);
                     tf.SetValue(dr[field.Name].ToString());
                     this.ContentPanel.Children.Add(tf);
                 }
@@ -59,7 +59,7 @@ namespace Incas.CustomDatabases.Views.Windows
             {
                 if (!field.IsPK)
                 {
-                    UC_TagFiller tf = new(field, pathDb);
+                    TagFiller tf = new(field, pathDb);
                     tf.SetValue(dr[field.Name].ToString());
                     this.ContentPanel.Children.Add(tf);
                 }
@@ -69,7 +69,7 @@ namespace Incas.CustomDatabases.Views.Windows
         private bool Save()
         {
             Dictionary<string, string> pairs = [];
-            foreach (UC_TagFiller tf in this.ContentPanel.Children)
+            foreach (TagFiller tf in this.ContentPanel.Children)
             {
                 if (tf.ValidateContent())
                 {

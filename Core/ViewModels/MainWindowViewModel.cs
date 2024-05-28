@@ -2,8 +2,6 @@
 using Incas.Common;
 using Incas.Core.Views.Windows;
 using Incas.Users.Models;
-using Incubator_2.Common;
-using Incubator_2.ViewModels;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Forms;

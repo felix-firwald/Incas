@@ -1,8 +1,7 @@
-﻿using Incubator_2.ViewModels.VMAdmin;
-using Incas.Users.Models;
+﻿using Incas.Users.Models;
+using Incas.Users.ViewModels;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Incas.Users.ViewModels;
 
 namespace Incubator_2.Forms.AdminPanel
 {

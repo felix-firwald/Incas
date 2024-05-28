@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using Incas.Common;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -9,10 +9,10 @@ namespace Incas.Core.Views.Windows
     /// </summary>
     public partial class DialogInput : Window
     {
-        public string Input { get { return this.InputValue.Text; } }
+        public string Input => this.InputValue.Text;
         public DialogInput(string title, string description = "Введите значение")
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.TitleText.Content = title;
             this.InputValue.Tag = description;
         }

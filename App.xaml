@@ -7,22 +7,22 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Themes/Colors.xaml" />
-                <ResourceDictionary Source="Themes/Window.xaml" />
-                <ResourceDictionary Source="Themes/RadioButton.xaml" />
-                <ResourceDictionary Source="Themes/Expander.xaml" />
-                <ResourceDictionary Source="Themes/Button.xaml" />
-                <ResourceDictionary Source="Themes/TextBox.xaml" />
-                <ResourceDictionary Source="Themes/ComboBox.xaml" />
-                <ResourceDictionary Source="Themes/CheckBox.xaml" />
-                <ResourceDictionary Source="Themes/GroupBox.xaml" />
-                <ResourceDictionary Source="Themes/ListBox.xaml" />
-                <ResourceDictionary Source="Themes/Label.xaml" />
-                <ResourceDictionary Source="Themes/Scroll.xaml" />
-                <ResourceDictionary Source="Themes/DataGrid.xaml" />
-                <ResourceDictionary Source="Themes/DatePicker.xaml" />
-                <ResourceDictionary Source="Themes/ContextMenu.xaml" />
-                <ResourceDictionary Source="Themes/Icons.xaml" />
+                <ResourceDictionary Source="Core/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Core/Styles/Window.xaml" />
+                <ResourceDictionary Source="Core/Styles/RadioButton.xaml" />
+                <ResourceDictionary Source="Core/Styles/Expander.xaml" />
+                <ResourceDictionary Source="Core/Styles/Button.xaml" />
+                <ResourceDictionary Source="Core/Styles/TextBox.xaml" />
+                <ResourceDictionary Source="Core/Styles/ComboBox.xaml" />
+                <ResourceDictionary Source="Core/Styles/CheckBox.xaml" />
+                <ResourceDictionary Source="Core/Styles/GroupBox.xaml" />
+                <ResourceDictionary Source="Core/Styles/ListBox.xaml" />
+                <ResourceDictionary Source="Core/Styles/Label.xaml" />
+                <ResourceDictionary Source="Core/Styles/Scroll.xaml" />
+                <ResourceDictionary Source="Core/Styles/DataGrid.xaml" />
+                <ResourceDictionary Source="Core/Styles/DatePicker.xaml" />
+                <ResourceDictionary Source="Core/Styles/ContextMenu.xaml" />
+                <ResourceDictionary Source="Core/Styles/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="{x:Type GridSplitter}">

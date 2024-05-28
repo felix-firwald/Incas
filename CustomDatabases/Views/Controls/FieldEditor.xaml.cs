@@ -1,7 +1,7 @@
 ﻿using Incas.CustomDatabases.ViewModels;
 using System.Windows.Controls;
 
-namespace Incubator_2.Forms.Database
+namespace Incas.CustomDatabases.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для FieldEditor.xaml
@@ -11,7 +11,7 @@ namespace Incubator_2.Forms.Database
         private FieldEditorViewModel vm;
         public FieldEditor()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.vm = new();
             this.DataContext = this.vm;
         }

@@ -94,7 +94,7 @@ namespace Incas.Templates.ViewModels
         public bool CategoryEnabled => string.IsNullOrWhiteSpace(this.templateMain.parent);
         public string OnSavingScript
         {
-            get => this.templateSettings.OnSaving != null ? this.templateSettings.OnSaving : "";
+            get => this.templateSettings.OnSaving ?? "";
             set
             {
                 this.templateSettings.OnSaving = value;
@@ -103,7 +103,7 @@ namespace Incas.Templates.ViewModels
         }
         public string OnOpeningScript
         {
-            get => this.templateSettings.OnOpening != null ? this.templateSettings.OnOpening : "";
+            get => this.templateSettings.OnOpening ?? "";
             set
             {
                 this.templateSettings.OnOpening = value;
@@ -112,7 +112,7 @@ namespace Incas.Templates.ViewModels
         }
         public string ValidationScript
         {
-            get => this.templateSettings.Validation != null ? this.templateSettings.Validation : "";
+            get => this.templateSettings.Validation ?? "";
             set
             {
                 this.templateSettings.Validation = value;
