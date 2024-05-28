@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using Incas.Users.Models;
 using System;
 using System.Collections.Generic;

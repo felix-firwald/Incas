@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;

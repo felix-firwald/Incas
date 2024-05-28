@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace Incas.Common
+namespace Incas.Core.Classes
 {
     public enum WindowDockPosition
     {

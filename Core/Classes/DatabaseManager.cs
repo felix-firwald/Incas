@@ -1,16 +1,16 @@
-﻿using Incas.Core.Classes;
-using Incas.Core.Models;
+﻿using Incas.Core.Models;
 using Incas.CreatedDocuments.Models;
 using Incas.CustomDatabases.Models;
 using Incas.Templates.Models;
 using Incas.Users.Models;
+using IncasEngine.Database;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Reflection;
 
-namespace Incas.Common
+namespace Incas.Core.Classes
 {
     public static class DatabaseManager // static cause server connection must be only one per session
     {
@@ -33,9 +33,9 @@ namespace Incas.Common
         }
         public static void InitializePort()
         {
-            AutoTableCreator atc = new AutoTableCreator();
+            AutoTableCreator atc = new();
             SQLiteConnection.CreateFile(ServerProcessor.Port);
-            Query q = new Query("")
+            Query q = new("")
             {
                 typeOfConnection = DBConnectionType.CUSTOM,
                 DBPath = ServerProcessor.Port
@@ -133,7 +133,7 @@ namespace Incas.Common
         #region Definitions
         private static string GetProcessDefinition(AutoTableCreator atc)
         {
-            atc.Initialize(typeof(Core.Models.Process), "Processes");
+            atc.Initialize(typeof(Models.Process), "Processes");
             atc.SetAsUnique("identifier");
             return atc.GetQueryText();
         }

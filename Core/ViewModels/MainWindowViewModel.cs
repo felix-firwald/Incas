@@ -1,5 +1,5 @@
 ﻿using Common;
-using Incas.Common;
+using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Users.Models;
 using System.Collections.Generic;

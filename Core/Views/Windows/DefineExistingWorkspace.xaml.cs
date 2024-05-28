@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using System.IO;
 using System.Windows;

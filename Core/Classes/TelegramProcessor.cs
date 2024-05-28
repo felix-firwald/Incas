@@ -8,7 +8,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Incas.Common
+namespace Incas.Core.Classes
 {
     public static class TelegramProcessor
     {

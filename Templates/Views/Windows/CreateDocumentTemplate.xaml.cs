@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;

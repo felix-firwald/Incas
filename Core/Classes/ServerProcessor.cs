@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Models;
@@ -14,7 +15,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Incas.Common
+namespace Incas.Core.Classes
 {
     internal enum ProcessType
     {
@@ -110,7 +111,6 @@ namespace Incas.Common
         #region ControlsWait
         #endregion
 
-
         #region Base Functionality
         public static void StopPort()
         {
@@ -179,7 +179,6 @@ namespace Incas.Common
             {
                 ProgramState.ShowErrorDialog(e.Message);
             }
-
         }
         #endregion
 
@@ -317,7 +316,7 @@ namespace Incas.Common
                     System.Windows.Application.Current.MainWindow.Hide();
                     ProgramState.CloseSession();
                     System.Windows.Application.Current.MainWindow = new SessionBroken();
-                    SessionBroken b = new SessionBroken();
+                    SessionBroken b = new();
                     b.ShowDialog();
                 });
             }
@@ -332,7 +331,7 @@ namespace Incas.Common
                     System.Windows.Application.Current.MainWindow.Hide();
                     ProgramState.CloseSession();
                     System.Windows.Application.Current.MainWindow = new SessionBroken();
-                    SessionBroken b = new SessionBroken(BrokenType.Restart);
+                    SessionBroken b = new(BrokenType.Restart);
                     b.ShowDialog();
                     ProgramState.ClearDataForRestart();
                     Application.Restart();
@@ -477,7 +476,7 @@ namespace Incas.Common
         #region Sending
         private static string GenerateId()
         {
-            Random random = new Random();
+            Random random = new();
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             return DateTime.Now.ToString("HHmmssffff") + new string(Enumerable.Repeat(chars, 4).Select(s => s[random.Next(s.Length)]).ToArray());
         }
@@ -492,7 +491,7 @@ namespace Incas.Common
         }
         private static Process CreateQueryProcess(string recipient)
         {
-            Process process = new Process
+            Process process = new()
             {
                 id = GenerateId(),
                 emitter = ProgramState.CurrentSession.slug,

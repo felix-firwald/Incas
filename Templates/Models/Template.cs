@@ -1,5 +1,4 @@
-﻿using Incas.Common;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Templates.Components;
 using IncasEngine;
 using IncasEngine.TemplateManager;

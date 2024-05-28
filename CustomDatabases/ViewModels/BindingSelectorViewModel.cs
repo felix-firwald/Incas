@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.CustomDatabases.Models;
 using System.Collections.Generic;

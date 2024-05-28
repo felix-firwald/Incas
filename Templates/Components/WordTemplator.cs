@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.ExtendedProperties;
+using Incas.Core.Classes;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Views.Controls;
 using IncasEngine.TemplateManager;
@@ -14,7 +15,7 @@ using Font = Xceed.Document.NET.Font;
 using Formatting = Xceed.Document.NET.Formatting;
 using Table = Xceed.Document.NET.Table;
 
-namespace Incas.Common
+namespace Incas.Templates.Components
 {
     public interface ITemplator
     {

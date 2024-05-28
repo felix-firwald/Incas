@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 #pragma warning disable CA1416 // Проверка совместимости платформы
-namespace Incas.Common
+namespace Incas.Core.Classes
 {
 
     internal static class RegistryData

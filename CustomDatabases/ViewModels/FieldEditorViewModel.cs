@@ -1,5 +1,5 @@
-﻿using Incas.Common;
-using Incas.Core.ViewModels;
+﻿using Incas.Core.ViewModels;
+using IncasEngine.Database;
 
 namespace Incas.CustomDatabases.ViewModels
 {

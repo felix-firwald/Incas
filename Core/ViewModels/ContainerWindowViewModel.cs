@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using Incas.Common;
+using Incas.Core.Classes;
 using System.Windows;
 using System.Windows.Input;
 

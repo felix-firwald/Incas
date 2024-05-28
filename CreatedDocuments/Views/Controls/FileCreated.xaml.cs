@@ -1,5 +1,5 @@
 ﻿using Common;
-using Incas.Common;
+using Incas.Core.Classes;
 using Incas.CreatedDocuments.Components;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;

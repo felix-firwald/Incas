@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 //using Microsoft.Office.Core;
 
-namespace Incas.Common
+namespace Incas.Core.Classes
 {
     public enum DatabasePermissions
     {

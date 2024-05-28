@@ -1,5 +1,5 @@
 ﻿using ClosedXML.Excel;
-using Incas.Common;
+using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;

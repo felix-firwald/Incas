@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 
 namespace Incas.Core.ViewModels
 {

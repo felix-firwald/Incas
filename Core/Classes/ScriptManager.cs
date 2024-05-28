@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using Incas.CustomDatabases.Views.Windows;
 using Incas.Templates.Models;
 using IronPython.Hosting;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Incas.Common
+namespace Incas.Core.Classes
 {
     public class Service
     {

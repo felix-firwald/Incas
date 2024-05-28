@@ -6,7 +6,7 @@ using Incas.Users.Models;
 using Incas.Users.Views.Windows;
 using System;
 
-namespace Incas.Common
+namespace Incas.Core.Classes
 {
     public static class CommandHandler
     {

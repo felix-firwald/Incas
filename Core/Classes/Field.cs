@@ -25,7 +25,6 @@
                 this.FKField = "";
                 this.Constraint = OnDeleteUpdate.CASCADE;
             }
-
         }
         private string GetNotNull()
         {

@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using Incas.CreatedDocuments.Models;
 using Incas.CreatedDocuments.Views.Controls;
@@ -60,7 +60,7 @@ namespace Incas.CreatedDocuments.Views.Pages
                 int counter = 1;
                 d.GetDocumentsByTemplate(templateName).ForEach(document =>
                 {
-                    FileCreated fc = new FileCreated(ref document, counter);
+                    FileCreated fc = new(ref document, counter);
                     fc.OnSelectorChecked += this.AddToSelection;
                     fc.OnSelectorUnchecked += this.RemoveFromSelection;
                     content.Children.Add(fc);
@@ -127,7 +127,7 @@ namespace Incas.CreatedDocuments.Views.Pages
                         {
                             tj.Add(fc.record);
                         }
-                        UseTemplate ut = new UseTemplate(tm, tj);
+                        UseTemplate ut = new(tm, tj);
                         ut.Show();
                     }
                     catch (IOException ex)

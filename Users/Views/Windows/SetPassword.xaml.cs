@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using System.Windows;
 
 namespace Incas.Users.Views.Windows

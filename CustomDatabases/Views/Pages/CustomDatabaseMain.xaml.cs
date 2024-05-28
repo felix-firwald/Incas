@@ -1,6 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Common;
-using Incas.Common;
+using Incas.Core.Classes;
 using Incas.Core.Models;
 using Incas.Core.Views.Windows;
 using Incas.CustomDatabases.Models;

@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using System.Windows;
 
 namespace Incubator_2.Windows.AdminWindows
@@ -8,7 +8,7 @@ namespace Incubator_2.Windows.AdminWindows
     /// </summary>
     public partial class MakeExplicit : Window
     {
-        public ExplicitMessage message = new ExplicitMessage();
+        public ExplicitMessage message = new();
         public MakeExplicit()
         {
             this.InitializeComponent();

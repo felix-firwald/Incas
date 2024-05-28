@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Incas.CreatedDocuments.Models;
+using Incas.Templates.Components;
 using Incas.Templates.Views.Controls;
 using IncasEngine.TemplateManager;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Data;
 using System.Linq;
 using Xceed.Document.NET;
 
-namespace Incas.Common
+namespace Incas.Templates.Components
 {
     public class ExcelTemplator : ITemplator
     {

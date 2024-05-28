@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using Incas.Users.Models;
 using Incas.Users.ViewModels;
 
@@ -29,7 +29,6 @@ namespace Incas.Users.Views.Windows
             {
                 ProgramState.ShowExclamationDialog("Одно или несколько обязательных полей не заполнены.", "Сохранение невозможно");
             }
-
         }
     }
 }

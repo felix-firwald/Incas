@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
@@ -64,7 +64,7 @@ namespace Incas.Templates.Views.Windows
 
         private void AddTag(Tag tag = null)
         {
-            Tag t = new Tag();
+            Tag t = new();
             bool isNew = false;
             if (tag == null)
             {
@@ -91,7 +91,7 @@ namespace Incas.Templates.Views.Windows
         private void GetTagsFromTextClick(object sender, MouseButtonEventArgs e)
         {
             List<string> result = [];
-            Regex regex = new Regex(@"\[[A-Za-zА-Яа-я ]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
+            Regex regex = new(@"\[[A-Za-zА-Яа-я ]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
             MatchCollection matches = regex.Matches(this.source.Text);
 
             foreach (Match match in matches)
@@ -100,7 +100,7 @@ namespace Incas.Templates.Views.Windows
             }
             foreach (string tagname in result)
             {
-                Tag tag = new Tag
+                Tag tag = new()
                 {
                     name = tagname
                 };
@@ -149,7 +149,6 @@ namespace Incas.Templates.Views.Windows
                 }
                 names.Add(tag.TagName.Text);
             }
-
 
             return true;
         }

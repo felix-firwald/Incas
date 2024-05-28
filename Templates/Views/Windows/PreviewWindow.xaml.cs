@@ -1,4 +1,4 @@
-﻿using Incas.Common;
+﻿using Incas.Core.Classes;
 using System;
 using System.IO;
 using System.Windows;
@@ -23,7 +23,6 @@ namespace Incas.Templates.Views.Windows
             this.Preview.Document = this.document.GetFixedDocumentSequence();
             this.document.Close();
             this.printEnabled = printEnabled;
-
         }
 
         private void OnClosed(object sender, EventArgs e)

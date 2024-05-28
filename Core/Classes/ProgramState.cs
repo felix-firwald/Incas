@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.Classes;
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
@@ -20,7 +21,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Incas.Common
+namespace Incas.Core.Classes
 {
     public class LockedException : Exception
     {
@@ -96,7 +97,7 @@ namespace Incas.Common
                 DatabaseManager.ActualizeTables();
             }
             CollectGarbage();
-            ScriptManager.Execute("from Incas import Service", ScriptManager.GetEngine().CreateScope());
+            //ScriptManager.Execute("from Incas import Service", ScriptManager.GetEngine().CreateScope());
             //TelegramProcessor.StartBot("6911917508:AAHJeEhfNKzzOJjp0IlGtZ51lqNrE2LBnK4");
         }
         public static string GetFullPathOfCustomDb(string path)
