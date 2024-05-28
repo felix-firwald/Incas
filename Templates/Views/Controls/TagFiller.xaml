@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incas.Templates.Views.Controls"
-             xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:CustomControls="clr-namespace:Incubator_2.CustomControls" xmlns:templates="clr-namespace:Incubator_2.Forms.Templates" x:Class="Incas.Templates.Views.Controls.TagFiller"
+             xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:CustomControls="clr-namespace:Incubator_2.CustomControls" x:Class="Incas.Templates.Views.Controls.TagFiller"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="600">
     <Grid>

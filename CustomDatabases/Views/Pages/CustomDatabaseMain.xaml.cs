@@ -17,7 +17,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 
-namespace Incubator_2.Forms.Database
+namespace Incas.CustomDatabases.Views.Pages
 {
     /// <summary>
     /// Логика взаимодействия для CustomDatabaseMain.xaml

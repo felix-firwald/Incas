@@ -4,6 +4,7 @@ using Incas.CreatedDocuments.Components;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
+using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Pages;
 using Incas.Templates.Views.Windows;
 using Incas.Users.Models;

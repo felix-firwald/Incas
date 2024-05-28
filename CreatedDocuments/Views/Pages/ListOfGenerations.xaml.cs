@@ -1,9 +1,9 @@
 ﻿using Incas.Common;
+using Incas.Core.Views.Controls;
 using Incas.CreatedDocuments.Models;
 using Incas.CreatedDocuments.Views.Controls;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Windows;
-using Incubator_2.Forms.OneInstance;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;

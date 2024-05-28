@@ -2,9 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Forms"
-             xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:Forms="clr-namespace:Incubator_2.Forms" xmlns:pages="clr-namespace:Incas.Templates.Views.Pages" xmlns:pages1="clr-namespace:Incas.CreatedDocuments.Views.Pages" x:Class="Forms.UC_Templator"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:pages="clr-namespace:Incas.Templates.Views.Pages" 
+             xmlns:pages1="clr-namespace:Incas.CreatedDocuments.Views.Pages"
+             x:Class="Incas.Templates.Views.Pages.UC_Templator"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200">
     <Grid Background="#2f3239">

@@ -230,7 +230,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Views\UserControls\" />
     <Folder Include="CreatedDocuments\ViewModels\" />
     <Folder Include="CreatedDocuments\Views\Windows\" />
     <Folder Include="CustomDatabases\Components\" />
@@ -238,7 +237,6 @@
     <Folder Include="FileManager\ViewModels\" />
     <Folder Include="FileManager\Views\Windows\" />
     <Folder Include="FileManager\Views\Controls\" />
-    <Folder Include="Forms\Templates\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>

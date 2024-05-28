@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Forms
+namespace Incas.Templates.Views.Pages
 {
     /// <summary>
     /// Логика взаимодействия для UC_Templator.xaml
@@ -10,7 +10,6 @@ namespace Forms
         public UC_Templator()
         {
             this.InitializeComponent();
-
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Incubator_2.Forms.OneInstance
+namespace Incas.Core.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для NoContent.xaml
