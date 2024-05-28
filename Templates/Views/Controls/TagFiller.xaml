@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incas.Templates.Views.Controls"
-             xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:CustomControls="clr-namespace:Incubator_2.CustomControls" x:Class="Incas.Templates.Views.Controls.TagFiller"
+             xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:controls="clr-namespace:Incas.Core.Views.Controls" x:Class="Incas.Templates.Views.Controls.TagFiller"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="600">
     <Grid>
@@ -62,7 +62,7 @@
                 </ContextMenu>
             </ComboBox.ContextMenu>
         </ComboBox>
-        <CustomControls:SelectionBox x:Name="SelectionBox" Grid.Column="1" Visibility="Hidden" OnValueChanged="SelectionBox_OnValueChanged" ToolTipService.InitialShowDelay="180"/>
+        <controls:SelectionBox x:Name="SelectionBox" Grid.Column="1" Visibility="Hidden" OnValueChanged="SelectionBox_OnValueChanged" ToolTipService.InitialShowDelay="180"/>
         <local:Generator x:Name="Generator" OnValueChanged="Generator_OnValueChanged" Grid.Column="1" Visibility="Hidden" />
         <DatePicker x:Name="DatePicker" Style="{DynamicResource DatePickerMain}" SelectedDateChanged="DatePicker_SelectedDateChanged" Visibility="Hidden" Grid.Column="1" Margin="5,5,5,5" Cursor="">
             <DatePicker.ContextMenu>
@@ -72,7 +72,7 @@
                 </ContextMenu>
             </DatePicker.ContextMenu>
         </DatePicker>
-        <CustomControls:NumericBox x:Name="NumericBox" Grid.Column="1" Visibility="Collapsed" OnNumberChanged="NumericBox_OnNumberChanged" />
+        <controls:NumericBox x:Name="NumericBox" Grid.Column="1" Visibility="Collapsed" OnNumberChanged="NumericBox_OnNumberChanged" />
         <Button x:Name="CommandButton" Style="{DynamicResource ButtonMain}" Visibility="Collapsed" Grid.Column="2" MinWidth="40" VerticalAlignment="Top" Cursor="Hand" Click="CommandClick">
             <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
                 <Path x:Name="CommandButtonIcon" Fill="White" VerticalAlignment="Center" Data="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707zM7.293 4A.5.5 0 1 0 8 3.293L6.707 2A.5.5 0 0 0 6 2.707zm-.621 2.5a.5.5 0 1 0 0-1H4.843a.5.5 0 1 0 0 1zm8.485 0a.5.5 0 1 0 0-1h-1.829a.5.5 0 0 0 0 1zM13.293 10A.5.5 0 1 0 14 9.293L12.707 8a.5.5 0 1 0-.707.707zM9.5 11.157a.5.5 0 0 0 1 0V9.328a.5.5 0 0 0-1 0zm1.854-5.097a.5.5 0 0 0 0-.706l-.708-.708a.5.5 0 0 0-.707 0L8.646 5.94a.5.5 0 0 0 0 .707l.708.708a.5.5 0 0 0 .707 0l1.293-1.293Zm-3 3a.5.5 0 0 0 0-.706l-.708-.708a.5.5 0 0 0-.707 0L.646 13.94a.5.5 0 0 0 0 .707l.708.708a.5.5 0 0 0 .707 0z"/>

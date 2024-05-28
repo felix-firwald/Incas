@@ -231,7 +231,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Admin\Models\" />
-    <Folder Include="Common\" />
     <Folder Include="CreatedDocuments\ViewModels\" />
     <Folder Include="CreatedDocuments\Views\Windows\" />
     <Folder Include="CustomDatabases\Components\" />

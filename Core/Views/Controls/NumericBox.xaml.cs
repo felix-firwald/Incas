@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Incubator_2.CustomControls
+namespace Incas.Core.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для NumericBox.xaml
