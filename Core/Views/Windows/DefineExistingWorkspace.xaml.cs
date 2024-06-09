@@ -32,17 +32,17 @@ namespace Incas.Core.Views.Windows
         {
             if (this.name.Text.Length < 5)
             {
-                ProgramState.ShowErrorDialog("Имя слишком короткое!", "Сохранение прервано");
+                DialogsManager.ShowErrorDialog("Имя слишком короткое!", "Сохранение прервано");
                 return;
             }
             if (!Directory.Exists(this.path.Text))
             {
-                ProgramState.ShowErrorDialog("Такого пути не существует!", "Сохранение прервано");
+                DialogsManager.ShowErrorDialog("Такого пути не существует!", "Сохранение прервано");
                 return;
             }
             if (!File.Exists($"{this.path.Text}\\data.dbinc"))
             {
-                ProgramState.ShowErrorDialog("Рабочее пространство не найдено.", "Сохранение прервано");
+                DialogsManager.ShowErrorDialog("Рабочее пространство не найдено.", "Сохранение прервано");
                 return;
             }
             RegistryData.SetWorkspacePath(this.vm.WorkspaceName, this.vm.WorkspacePath);

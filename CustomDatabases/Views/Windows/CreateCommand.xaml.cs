@@ -118,10 +118,10 @@ namespace Incas.CustomDatabases.Views.Windows
             string result = !string.IsNullOrEmpty(this.vm.Query)
                 ? !this.vm.Query.Contains("UPDATE") ? $"UPDATE [{this.vm.Table}]\nSET  " : this.vm.Query
                 : $"UPDATE [{this.vm.Table}]\nSET  ";
-            BindingSelector bs = ProgramState.ShowBindingSelector(this.vm.Database, this.vm.Table, false, false);
+            BindingSelector bs = DialogsManager.ShowBindingSelector(this.vm.Database, this.vm.Table, false, false);
             if (bs.Result == DialogStatus.Yes)
             {
-                string value = ProgramState.ShowInputBox("Введите новое значение", $"Новое значение для поля '{bs.SelectedField}'");
+                string value = DialogsManager.ShowInputBox("Введите новое значение", $"Новое значение для поля '{bs.SelectedField}'");
                 result += $",\n    [{bs.SelectedField}] = '{value}'";
                 return result.Replace($"SET  ,\n", $"SET ");
             }
@@ -133,7 +133,7 @@ namespace Incas.CustomDatabases.Views.Windows
             bd.ShowDialog();
             if (bd.Result == DialogStatus.Yes)
             {
-                string value = ProgramState.ShowInputBox("Введите значение", $"Значение для условия к полю '{bd.SelectedField}'");
+                string value = DialogsManager.ShowInputBox("Введите значение", $"Значение для условия к полю '{bd.SelectedField}'");
                 return $"{this.GetWhereByContext()} [{bd.SelectedTable}].[{bd.SelectedField}] {comparator} {mark}{value}{mark}";
             }
             return "";
@@ -144,7 +144,7 @@ namespace Incas.CustomDatabases.Views.Windows
         }
         private string GetParameterField()
         {
-            BindingSelector bd = ProgramState.ShowBindingSelector(this.vm.Database, this.vm.Table, false, false);
+            BindingSelector bd = DialogsManager.ShowBindingSelector(this.vm.Database, this.vm.Table, false, false);
             return $"\n{{%SELECTED#{bd.SelectedField}%}}";
         }
 

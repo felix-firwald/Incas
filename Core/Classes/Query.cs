@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Threading;
+using static IronPython.Modules._ast;
 
 namespace Incas.Core.Classes
 {
@@ -14,6 +15,7 @@ namespace Incas.Core.Classes
         public string Result { get; private set; }
         private bool isWhereAlready = false;
         private bool isUpdateAlready = false;
+        private Dictionary<string, string> parameters = new();
         private uint recursion = 0;
         public DBConnectionType typeOfConnection { get; set; }
         public string DBPath { get; set; }
@@ -27,6 +29,24 @@ namespace Incas.Core.Classes
             this.typeOfConnection = DBConnectionType.OTHER;
             this.Table = table;
             this.DBPath = path;
+        }
+        private void RegisterParameter(string name, string value)
+        {
+            if (name.Contains("@"))
+            {
+                this.parameters.Add(name, value);
+            }
+            else
+            {
+                this.parameters.Add("@" + name, value);
+            }
+        }
+        private void RegisterParameters(Dictionary<string, string> pairs)
+        {
+            foreach (KeyValuePair<string, string> pair in pairs)
+            {
+                this.RegisterParameter(pair.Key, pair.Value);
+            }
         }
         public override string ToString()
         {
@@ -117,25 +137,25 @@ namespace Incas.Core.Classes
             {
                 start = "INSERT OR REPLACE INTO";
             }
-            this.Result += $"{start} [{this.Table}] ([{string.Join("], [", dict.Keys)}])\nVALUES ('{string.Join("', '", dict.Values)}')";
+            this.Result += $"{start} [{this.Table}] ([{string.Join("], [", dict.Keys)}])\nVALUES (@{string.Join(", @", dict.Keys)})";
+            this.RegisterParameters(dict);
             this.ReplaceNull();
             return this;
         }
         public Query Update(string cell, string value, bool isStr = true)
         {
-            string c = "'";
-            //if (!isStr) { c = ""; }
             if (this.isUpdateAlready)
             {
                 this.Result += $",\n" +
-                $"[{cell}] = {c}{value}{c}";
+                $"[{cell}] = @{cell}";
             }
             else
             {
                 this.Result += $"UPDATE [{this.Table}]\n" +
-                $"SET [{cell}] = {c}{value}{c}";
+                $"SET [{cell}] = @{cell}";
                 this.isUpdateAlready = true;
             }
+            this.RegisterParameter(cell, value);
             return this;
         }
         public Query Delete()
@@ -442,8 +462,16 @@ namespace Incas.Core.Classes
         }
         public Query ShowRequest()
         {
-            ProgramState.ShowInfoDialog(this.Result);
+            DialogsManager.ShowInfoDialog(this.Result);
             return this;
+        }
+        private void ApplyParams(SQLiteCommand cmd)
+        {
+            foreach (KeyValuePair<string, string> pair in this.parameters)
+            {
+                cmd.Parameters.AddWithValue(pair.Key, pair.Value);
+            }
+            this.parameters.Clear();
         }
         public DataTable Execute()
         {
@@ -455,7 +483,7 @@ namespace Incas.Core.Classes
                 System.Diagnostics.Debug.WriteLine(this.DBPath);
                 System.Diagnostics.Debug.WriteLine(this.Result);
                 cmd.CommandText = this.GetRequest();
-
+                this.ApplyParams(cmd);
                 SQLiteDataReader sqlreader = cmd.ExecuteReader();
                 DataTable objDataTable = new();
                 objDataTable.Load(sqlreader);
@@ -479,8 +507,9 @@ namespace Incas.Core.Classes
                 System.Diagnostics.Debug.WriteLine(this.DBPath);
                 System.Diagnostics.Debug.WriteLine(this.Result);
                 cmd.CommandText = this.GetRequest();
+                this.ApplyParams(cmd);
                 SQLiteDataReader sqlreader = cmd.ExecuteReader();
-                DataTable objDataTable = new DataTable();
+                DataTable objDataTable = new();
                 objDataTable.Load(sqlreader);
                 if (objDataTable.Rows.Count > 0)
                 {
@@ -504,6 +533,7 @@ namespace Incas.Core.Classes
                 conn.Open();
                 SQLiteCommand cmd = conn.CreateCommand();
                 cmd.CommandText = this.GetRequest();
+                this.ApplyParams(cmd);
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 return;
@@ -525,7 +555,7 @@ namespace Incas.Core.Classes
                 else
                 {
                     this.recursion = 0;
-                    ProgramState.ShowDatabaseErrorDialog("База данных блокируется другим процессом.");
+                    DialogsManager.ShowDatabaseErrorDialog("База данных блокируется другим процессом.");
                 }
             }
         }
@@ -534,7 +564,7 @@ namespace Incas.Core.Classes
             switch (ex.ErrorCode)
             {
                 case 1:
-                    ProgramState.ShowDatabaseErrorDialog(
+                    DialogsManager.ShowDatabaseErrorDialog(
                         $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}\nЗапрос: {this.Result}" +
                         $"\nINCAS попытается исправить проблему, если она связана с конфигурацией служебной базы данных.");
                     if (this.typeOfConnection == DBConnectionType.BASE || this.typeOfConnection == DBConnectionType.SERVICE)
@@ -564,18 +594,17 @@ namespace Incas.Core.Classes
                     else
                     {
                         this.recursion = 0;
-                        ProgramState.ShowDatabaseErrorDialog("Не удалось выполнить запрос, поскольку база данных занята другим процессом.");
+                        DialogsManager.ShowDatabaseErrorDialog("Не удалось выполнить запрос, поскольку база данных занята другим процессом.");
                     }
                     break;
                 case 11:
                 case 26:
-                    ProgramState.ShowDatabaseErrorDialog(
+                    DialogsManager.ShowDatabaseErrorDialog(
                         $"База данных повреждена." +
                         $"\nЕё использование невозможно.\n\nСведения об ошибке: {ex}");
                     break;
                 default:
-
-                    ProgramState.ShowDatabaseErrorDialog(
+                    DialogsManager.ShowDatabaseErrorDialog(
                         $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}" +
                         $"\nПроверьте правильность данных.");
                     break;

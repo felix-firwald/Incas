@@ -27,7 +27,7 @@ namespace Incas.Users.Views.Windows
             }
             else
             {
-                ProgramState.ShowExclamationDialog("Одно или несколько обязательных полей не заполнены.", "Сохранение невозможно");
+                DialogsManager.ShowExclamationDialog("Одно или несколько обязательных полей не заполнены.", "Сохранение невозможно");
             }
         }
     }

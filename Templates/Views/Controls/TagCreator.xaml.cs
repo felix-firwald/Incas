@@ -117,7 +117,7 @@ namespace Incubator_2.Forms
             {
                 if (string.IsNullOrEmpty(this.vm.DefaultValue))
                 {
-                    if (ProgramState.ShowQuestionDialog(
+                    if (DialogsManager.ShowQuestionDialog(
                     "Вы хотите использовать существующий генератор или создать новый?",
                     "Новый или существующий",
                     "Новый", "Существующий") == DialogStatus.Yes)
@@ -128,7 +128,7 @@ namespace Incubator_2.Forms
                     }
                     else
                     {
-                        Template t = ProgramState.ShowTemplateSelector(TemplateType.Text, "Выберите генератор для использования");
+                        Template t = DialogsManager.ShowTemplateSelector(TemplateType.Text, "Выберите генератор для использования");
                         if (t.id != 0)
                         {
                             this.vm.DefaultValue = t.id.ToString();
@@ -144,7 +144,7 @@ namespace Incubator_2.Forms
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog("При попытке открытия генератора возникла ошибка:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog("При попытке открытия генератора возникла ошибка:\n" + ex.Message);
             }
         }
 

@@ -58,7 +58,7 @@ namespace Incas.CustomDatabases.Views.Windows
         {
             if (this.Grid.SelectedItems.Count == 0)
             {
-                ProgramState.ShowExclamationDialog("Нельзя использовать пустое значение!", "Значение не выбрано");
+                DialogsManager.ShowExclamationDialog("Нельзя использовать пустое значение!", "Значение не выбрано");
                 return;
             }
             this.Result = DialogStatus.Yes;

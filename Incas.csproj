@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
+    <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.6" />
     <PackageReference Include="ClosedXML" Version="0.102.1" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
     <PackageReference Include="DocX" Version="3.0.0" />
@@ -242,5 +243,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Incas Engine\Incas Engine\Incas Engine.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="WordGlue3.NET8">
+      <HintPath>..\..\IncasEngineTools\WordGlue3.NET8.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

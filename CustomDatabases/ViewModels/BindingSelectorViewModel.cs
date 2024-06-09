@@ -106,7 +106,7 @@ namespace Incas.CustomDatabases.ViewModels
         {
             if (this.SelectedField == null)
             {
-                ProgramState.ShowExclamationDialog("Поле не выбрано!", "Действие невозможно");
+                DialogsManager.ShowExclamationDialog("Поле не выбрано!", "Действие невозможно");
                 return false;
             }
             return true;

@@ -21,7 +21,7 @@ namespace Incas.Core.Views.Windows
         {
             if (string.IsNullOrEmpty(this.Input))
             {
-                ProgramState.ShowExclamationDialog("Поле пустое!", "Действие невозможно");
+                DialogsManager.ShowExclamationDialog("Поле пустое!", "Действие невозможно");
                 return;
             }
             this.Close();

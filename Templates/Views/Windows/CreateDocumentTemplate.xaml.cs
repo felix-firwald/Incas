@@ -42,7 +42,7 @@ namespace Incas.Templates.Views.Windows
             }
 
             this.DataContext = this.vm;
-            ProgramState.ShowWaitCursor(false);
+            DialogsManager.ShowWaitCursor(false);
         }
 
         private void GetTags()
@@ -90,27 +90,27 @@ namespace Incas.Templates.Views.Windows
         {
             if (!File.Exists(ProgramState.GetFullnameOfWordFile(this.vm.Source)) && !File.Exists(ProgramState.GetFullnameOfExcelFile(this.vm.Source)))
             {
-                ProgramState.ShowErrorDialog($"Файл ({this.vm.Source}) не найден в служебном каталоге.", "Сохранение прервано");
+                DialogsManager.ShowErrorDialog($"Файл ({this.vm.Source}) не найден в служебном каталоге.", "Сохранение прервано");
                 return false;
             }
             if (!this.vm.Source.EndsWith(".docx") && !this.vm.Source.EndsWith(".xlsx"))
             {
-                ProgramState.ShowExclamationDialog($"Исходный файл шаблона должен быть с расширением .docx или .xlsx, любое другое расширение использовать нельзя.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog($"Исходный файл шаблона должен быть с расширением .docx или .xlsx, любое другое расширение использовать нельзя.", "Сохранение прервано");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(this.nameOfTemplate.Text))
             {
-                ProgramState.ShowExclamationDialog($"Неверное имя шаблона.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog($"Неверное имя шаблона.", "Сохранение прервано");
                 return false;
             }
             if (this.ContentPanel.Children.Count == 0 && string.IsNullOrWhiteSpace(this.vm.Parents))
             {
-                ProgramState.ShowExclamationDialog($"Шаблон без единого тега не является шаблоном.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog($"Шаблон без единого тега не является шаблоном.", "Сохранение прервано");
                 return false;
             }
             if (this.ContentPanel.Children.Count > 25)
             {
-                ProgramState.ShowExclamationDialog($"Шаблон не может содержать более 25 тегов.\nРекомендуется использовать генераторы.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog($"Шаблон не может содержать более 25 тегов.\nРекомендуется использовать генераторы.", "Сохранение прервано");
                 return false;
             }
 
@@ -119,12 +119,12 @@ namespace Incas.Templates.Views.Windows
             {
                 if (!tag.Check())
                 {
-                    ProgramState.ShowExclamationDialog($"Тег \"{tag.tag.name}\" не заполнен.", "Сохранение прервано");
+                    DialogsManager.ShowExclamationDialog($"Тег \"{tag.tag.name}\" не заполнен.", "Сохранение прервано");
                     return false;
                 }
                 if (names.Contains(tag.TagName.Text))
                 {
-                    ProgramState.ShowExclamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
+                    DialogsManager.ShowExclamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
                     return false;
                 }
                 names.Add(tag.TagName.Text);
@@ -142,12 +142,12 @@ namespace Incas.Templates.Views.Windows
         {
             if (this.CheckForSave())
             {
-                ProgramState.ShowWaitCursor();
+                DialogsManager.ShowWaitCursor();
                 this.Close();
                 this.vm.SaveTemplate();
                 this.SaveTags();
                 OnCreated?.Invoke();
-                ProgramState.ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
             }
         }
 
@@ -201,7 +201,7 @@ namespace Incas.Templates.Views.Windows
             string pathFile = ProgramState.GetFullnameOfWordFile(this.vm.Source);
             if (!File.Exists(pathFile))
             {
-                ProgramState.ShowExclamationDialog($"Файл ({this.vm.Source}) не существует!\nТеги не могут быть обнаружены.", "Поиск невозможен");
+                DialogsManager.ShowExclamationDialog($"Файл ({this.vm.Source}) не существует!\nТеги не могут быть обнаружены.", "Поиск невозможен");
                 return;
             }
             try
@@ -223,7 +223,7 @@ namespace Incas.Templates.Views.Windows
             }
             catch (IOException)
             {
-                ProgramState.ShowErrorDialog("Файл занят другим процесом. Его использование невозможно.");
+                DialogsManager.ShowErrorDialog("Файл занят другим процесом. Его использование невозможно.");
             }
         }
         #region Design
@@ -262,7 +262,7 @@ namespace Incas.Templates.Views.Windows
 
             if (!File.Exists(pathFile))
             {
-                ProgramState.ShowExclamationDialog($"Файл ({this.vm.Source}) не существует!", "Действие прервано");
+                DialogsManager.ShowExclamationDialog($"Файл ({this.vm.Source}) не существует!", "Действие прервано");
                 return;
             }
             try
@@ -274,7 +274,7 @@ namespace Incas.Templates.Views.Windows
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"При попытке открытия файла возникла ошибка:\n{ex}");
+                DialogsManager.ShowErrorDialog($"При попытке открытия файла возникла ошибка:\n{ex}");
             }
         }
 
@@ -338,7 +338,7 @@ namespace Incas.Templates.Views.Windows
                 {
                     if (!string.IsNullOrWhiteSpace(this.vm.Parents))
                     {
-                        DialogStatus ds = ProgramState.ShowQuestionDialog("Этот шаблон унаследован, вы можете применить все родительские теги к ниму.", "Учитывать родителей?", "Применить родителей", "Не применять");
+                        DialogStatus ds = DialogsManager.ShowQuestionDialog("Этот шаблон унаследован, вы можете применить все родительские теги к ниму.", "Учитывать родителей?", "Применить родителей", "Не применять");
                         if (ds == DialogStatus.Yes)
                         {
                             tp.FillData(this.vm.GetTemplate(), true);
@@ -356,7 +356,7 @@ namespace Incas.Templates.Views.Windows
                 }
                 catch (Exception ex)
                 {
-                    ProgramState.ShowErrorDialog("При попытке экспорта шаблона возникла ошибка:\n" + ex.Message);
+                    DialogsManager.ShowErrorDialog("При попытке экспорта шаблона возникла ошибка:\n" + ex.Message);
                 }
             }
         }
@@ -365,7 +365,7 @@ namespace Incas.Templates.Views.Windows
         {
             if (this.vm.Id != 0)
             {
-                ProgramState.ShowExclamationDialog("Невозможно применить импорт, поскольку это грозит утерей текущего шаблона", "Импорт прерван");
+                DialogsManager.ShowExclamationDialog("Невозможно применить импорт, поскольку это грозит утерей текущего шаблона", "Импорт прерван");
                 return;
             }
             try
@@ -392,7 +392,7 @@ namespace Incas.Templates.Views.Windows
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog("При попытке импорта шаблона возникла ошибка:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog("При попытке импорта шаблона возникла ошибка:\n" + ex.Message);
             }
         }
 

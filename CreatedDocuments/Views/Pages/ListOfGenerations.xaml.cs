@@ -96,17 +96,17 @@ namespace Incas.CreatedDocuments.Views.Pages
                     {
                         docs.Add(item.record.id);
                     }
-                    ProgramState.ShowWaitCursor();
+                    DialogsManager.ShowWaitCursor();
                     using (GeneratedDocument d = new())
                     {
                         d.RemoveRecords(docs);
                     }
-                    ProgramState.ShowWaitCursor(false);
+                    DialogsManager.ShowWaitCursor(false);
                     this.UpdateList();
                 }
                 else
                 {
-                    ProgramState.ShowExclamationDialog("Не выбрано ни одного элемента для удаления.\n" +
+                    DialogsManager.ShowExclamationDialog("Не выбрано ни одного элемента для удаления.\n" +
                         "Используйте селекторы для выбора тех записей, которые нужно удалить.", "Действие невозможно");
                 }
             }
@@ -117,7 +117,7 @@ namespace Incas.CreatedDocuments.Views.Pages
             if (this.Selection.Count > 0)
             {
                 using Template tm = new();
-                ProgramState.ShowWaitCursor();
+                DialogsManager.ShowWaitCursor();
                 if (tm.GetTemplateById(this.Selection[0].record.template) != null)
                 {
                     try
@@ -132,14 +132,14 @@ namespace Incas.CreatedDocuments.Views.Pages
                     }
                     catch (IOException ex)
                     {
-                        ProgramState.ShowWaitCursor(false);
-                        ProgramState.ShowErrorDialog($"Один из файлов поврежден или удален. Пожалуйста, попробуйте ещё раз.\n{ex}");
+                        DialogsManager.ShowWaitCursor(false);
+                        DialogsManager.ShowErrorDialog($"Один из файлов поврежден или удален. Пожалуйста, попробуйте ещё раз.\n{ex}");
                     }
                 }
             }
             else
             {
-                ProgramState.ShowExclamationDialog("Не выбрано ни одного элемента для отправки в секвенсор.\n" +
+                DialogsManager.ShowExclamationDialog("Не выбрано ни одного элемента для отправки в секвенсор.\n" +
                     "Используйте селекторы для выбора тех записей, которые нужно открыть.", "Действие невозможно");
             }
         }

@@ -80,7 +80,7 @@ namespace Incas.Templates.Views.Controls
             switch (this.Status)
             {
                 case GeneratorStatus.InProcess:
-                    ProgramState.ShowExclamationDialog("Генератор ожидает получение ввода от другого пользователя. " +
+                    DialogsManager.ShowExclamationDialog("Генератор ожидает получение ввода от другого пользователя. " +
                         "В документе будет пустая строка.");
                     return "";
                 case GeneratorStatus.Warning:
@@ -164,7 +164,7 @@ namespace Incas.Templates.Views.Controls
                     break;
                 default:
                     Session session;
-                    if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для заполнения этой части документа."))
+                    if (DialogsManager.ShowActiveUserSelector(out session, "Выберите пользователя для заполнения этой части документа."))
                     {
                         this.Result.template = this.TemplateId;
                         ServerProcessor.SendOpenGeneratorProcess(this.Result, this, session.slug);
@@ -191,7 +191,7 @@ namespace Incas.Templates.Views.Controls
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog(ex.Message);
+                DialogsManager.ShowErrorDialog(ex.Message);
             }
         }
 

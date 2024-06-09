@@ -27,11 +27,11 @@ namespace Incas.Core.Classes
         }
         public static void ShowInfoDialog(string message, string title)
         {
-            ProgramState.ShowInfoDialog(message, title);
+            DialogsManager.ShowInfoDialog(message, title);
         }
         public static string ShowInputBox(string title, string description)
         {
-            return ProgramState.ShowInputBox(title, description);
+            return DialogsManager.ShowInputBox(title, description);
         }
         public static string ShowDatabaseSelection(string db, string table, string field)
         {
@@ -98,13 +98,12 @@ namespace Incubator_2.Common
                     minimum = "clr.AddReference('Incas')\n";
                 }
                 engine.Execute(minimum + script, scope);
-
-                ProgramState.ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
             }
             catch (Exception ex)
             {
-                ProgramState.ShowWaitCursor(false);
-                ProgramState.ShowErrorDialog($"При выполнении пользовательского скрипта возникла ошибка:\n" + ex.Message, "Ошибка выполнения скрипта");
+                DialogsManager.ShowWaitCursor(false);
+                DialogsManager.ShowErrorDialog($"При выполнении пользовательского скрипта возникла ошибка:\n" + ex.Message, "Ошибка выполнения скрипта");
             }
         }
     }

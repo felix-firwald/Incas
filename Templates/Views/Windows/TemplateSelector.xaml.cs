@@ -30,7 +30,7 @@ namespace Incas.Templates.Views.Windows
             }
             else
             {
-                ProgramState.ShowExclamationDialog("Шаблон не выбран!", "Действие невозможно");
+                DialogsManager.ShowExclamationDialog("Шаблон не выбран!", "Действие невозможно");
             }
         }
         private void CancelClick(object sender, RoutedEventArgs e)

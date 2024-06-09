@@ -68,7 +68,7 @@ namespace Incas.Templates.Views.Windows
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog("При обработке скрипта на стороне формы возникла ошибка:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog("При обработке скрипта на стороне формы возникла ошибка:\n" + ex.Message);
             }
         }
 
@@ -121,7 +121,7 @@ namespace Incas.Templates.Views.Windows
             {
                 if (string.IsNullOrEmpty(tf.GetData()))
                 {
-                    ProgramState.ShowExclamationDialog($"Тег \"{tf.tag.name}\" не заполнен!", "Сохранение отклонено");
+                    DialogsManager.ShowExclamationDialog($"Тег \"{tf.tag.name}\" не заполнен!", "Сохранение отклонено");
                     return;
                 }
             }

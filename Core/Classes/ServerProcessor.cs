@@ -156,7 +156,7 @@ namespace Incas.Core.Classes
             }
             catch (Exception e)
             {
-                ProgramState.ShowErrorDialog(e.Message);
+                DialogsManager.ShowErrorDialog(e.Message);
                 return new Process();
             }
             return result;
@@ -177,7 +177,7 @@ namespace Incas.Core.Classes
             }
             catch (Exception e)
             {
-                ProgramState.ShowErrorDialog(e.Message);
+                DialogsManager.ShowErrorDialog(e.Message);
             }
         }
         #endregion
@@ -266,7 +266,7 @@ namespace Incas.Core.Classes
                         case ProcessTarget.EXPLICIT:
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
-                                ProgramState.ShowInfoDialog($"Пользователь ответил: {process.content}", "Ответ на запрос");
+                                DialogsManager.ShowInfoDialog($"Пользователь ответил: {process.content}", "Ответ на запрос");
                             });
                             break;
                         case ProcessTarget.REQUEST_TEXT:
@@ -358,7 +358,7 @@ namespace Incas.Core.Classes
                     }
                     catch (Exception ex)
                     {
-                        ProgramState.ShowErrorDialog($"При попытке выполнения процесса возникла ошибка:\n{ex}");
+                        DialogsManager.ShowErrorDialog($"При попытке выполнения процесса возникла ошибка:\n{ex}");
                     }
                 }
             });
@@ -376,7 +376,7 @@ namespace Incas.Core.Classes
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"Не удалось открыть присланный файл:\n{ex}", "Действие невозможно");
+                DialogsManager.ShowErrorDialog($"Не удалось открыть присланный файл:\n{ex}", "Действие невозможно");
             }
         }
         private static void OpenWebProcessHandle(string url)
@@ -390,7 +390,7 @@ namespace Incas.Core.Classes
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex}", "Действие невозможно");
+                DialogsManager.ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex}", "Действие невозможно");
             }
         }
         private static void OpenSequencerProcessHandle(string content)
@@ -407,7 +407,7 @@ namespace Incas.Core.Classes
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"Не удалось открыть присланную запись:\n{ex}", "Действие невозможно");
+                DialogsManager.ShowErrorDialog($"Не удалось открыть присланную запись:\n{ex}", "Действие невозможно");
             }
         }
         private static void OpenGeneratorProcessHandle(Process p)
@@ -430,7 +430,7 @@ namespace Incas.Core.Classes
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"Не удалось открыть присланную часть документа:\n{ex.Message}", "Действие невозможно");
+                DialogsManager.ShowErrorDialog($"Не удалось открыть присланную часть документа:\n{ex.Message}", "Действие невозможно");
             }
         }
 
@@ -443,13 +443,13 @@ namespace Incas.Core.Classes
                 {
                     case AdminMessageType.NOTIFY:
                     default:
-                        ProgramState.ShowInfoDialog(m.message, m.header);
+                        DialogsManager.ShowInfoDialog(m.message, m.header);
                         break;
                     case AdminMessageType.WARNING:
-                        ProgramState.ShowExclamationDialog(m.message, m.header);
+                        DialogsManager.ShowExclamationDialog(m.message, m.header);
                         break;
                     case AdminMessageType.QUESTION:
-                        DialogStatus ds = ProgramState.ShowQuestionDialog(m.message, m.header);
+                        DialogStatus ds = DialogsManager.ShowQuestionDialog(m.message, m.header);
                         SendQuestionResultResponse(process, ds);
                         break;
                 }
@@ -461,7 +461,7 @@ namespace Incas.Core.Classes
             Process process = new();
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                string result = ProgramState.ShowInputBox("Запрос значения", oldProc.content.Split("|||")[1]);
+                string result = DialogsManager.ShowInputBox("Запрос значения", oldProc.content.Split("|||")[1]);
                 process.content = $"{oldProc.content.Split("|||")[0]}|||{result}";
             });
             process.id = GenerateId();
@@ -549,7 +549,7 @@ namespace Incas.Core.Classes
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog(ex.Message);
+                DialogsManager.ShowErrorDialog(ex.Message);
             }
         }
         public static void SendCopyFileProcess(string filename, string fullname, string recipient)

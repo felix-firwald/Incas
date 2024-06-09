@@ -12,7 +12,7 @@ namespace Incas.Core.Classes
     {
         private static void ShowObjectNotFound(string commandName, string obj)
         {
-            ProgramState.ShowExclamationDialog($"Объект или модификатор (\"{obj}\") для команды #{commandName} не предусмотрены!", "Команда не будет выполнена");
+            DialogsManager.ShowExclamationDialog($"Объект или модификатор (\"{obj}\") для команды #{commandName} не предусмотрены!", "Команда не будет выполнена");
         }
         public static void Handle(string input)
         {
@@ -24,7 +24,7 @@ namespace Incas.Core.Classes
             }
             catch (Exception)
             {
-                ProgramState.ShowErrorDialog("Обнаружена синтаксическая ошибка!", "Команда не будет выполнена");
+                DialogsManager.ShowErrorDialog("Обнаружена синтаксическая ошибка!", "Команда не будет выполнена");
             }
         }
         private static void SwitchOnAction(string action, string arguments)
@@ -35,22 +35,22 @@ namespace Incas.Core.Classes
                 case "#lock":
                 case "#set locked 1":
                     ProgramState.SetWorkspaceLocked(true);
-                    ProgramState.ShowInfoDialog("Рабочее пространство успешно заблокировано", "Отчет о выполнении");
+                    DialogsManager.ShowInfoDialog("Рабочее пространство успешно заблокировано", "Отчет о выполнении");
                     break;
                 case "#unlock":
                 case "#set locked 0":
                     ProgramState.SetWorkspaceLocked(false);
-                    ProgramState.ShowInfoDialog("Рабочее пространство успешно разблокировано", "Отчет о выполнении");
+                    DialogsManager.ShowInfoDialog("Рабочее пространство успешно разблокировано", "Отчет о выполнении");
                     break;
                 case "#open":
                 case "#set opened 1":
                     ProgramState.SetWorkspaceOpened(true);
-                    ProgramState.ShowInfoDialog("Рабочее пространство успешно открыто", "Отчет о выполнении");
+                    DialogsManager.ShowInfoDialog("Рабочее пространство успешно открыто", "Отчет о выполнении");
                     break;
                 case "#close":
                 case "#set opened 0":
                     ProgramState.SetWorkspaceOpened(false);
-                    ProgramState.ShowInfoDialog("Рабочее пространство успешно закрыто", "Отчет о выполнении");
+                    DialogsManager.ShowInfoDialog("Рабочее пространство успешно закрыто", "Отчет о выполнении");
                     break;
                 case "#new":
                     SwitchOnCreationCommands(arguments);
@@ -66,7 +66,7 @@ namespace Incas.Core.Classes
 
                     break;
                 default:
-                    ProgramState.ShowExclamationDialog("Команда не существует!");
+                    DialogsManager.ShowExclamationDialog("Команда не существует!");
                     break;
             }
         }
@@ -78,7 +78,7 @@ namespace Incas.Core.Classes
                 case "sector":
                     using (Sector sector = new())
                     {
-                        sector.name = ProgramState.ShowInputBox("Имя сектора", "Введите имя сектора");
+                        sector.name = DialogsManager.ShowInputBox("Имя сектора", "Введите имя сектора");
                         sector.AddSector();
                     }
                     break;
@@ -89,7 +89,7 @@ namespace Incas.Core.Classes
                 case "database":
                     using (Database db = new())
                     {
-                        db.name = ProgramState.ShowInputBox("База данных", "Введите имя базы данных");
+                        db.name = DialogsManager.ShowInputBox("База данных", "Введите имя базы данных");
                         using (Sector sector = new())
                         {
                             db.sectors = string.Join(" ", sector.GetSectorSlugs());
@@ -109,7 +109,7 @@ namespace Incas.Core.Classes
             {
                 case "user":
                     User u;
-                    if (ProgramState.ShowUserSelector(out u))
+                    if (DialogsManager.ShowUserSelector(out u))
                     {
                         u.RemoveUser();
                     }
@@ -126,7 +126,7 @@ namespace Incas.Core.Classes
                     using (Parameter p = new())
                     {
                         p.type = ParameterType.RESTRICT_EDIT_TABLE;
-                        BindingSelector bs = ProgramState.ShowBindingSelector();
+                        BindingSelector bs = DialogsManager.ShowBindingSelector();
                         if (bs.Result == DialogStatus.Yes)
                         {
                             p.name = $"{bs.SelectedDatabase}.{bs.SelectedTable}";
@@ -147,7 +147,7 @@ namespace Incas.Core.Classes
                     using (Parameter p = new())
                     {
                         p.type = ParameterType.RESTRICT_EDIT_TABLE;
-                        BindingSelector bs = ProgramState.ShowBindingSelector();
+                        BindingSelector bs = DialogsManager.ShowBindingSelector();
                         if (bs.Result == DialogStatus.Yes)
                         {
                             p.name = $"{bs.SelectedDatabase}.{bs.SelectedTable}";

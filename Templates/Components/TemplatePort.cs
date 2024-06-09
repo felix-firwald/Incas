@@ -80,10 +80,10 @@ namespace Incas.Templates.Components
                 {
                     if (File.Exists(ProgramState.GetFullnameOfWordFile(entry.Name))) // если файл с таким именем есть в папке Word
                     {
-                        if (ProgramState.ShowQuestionDialog($"Исходный файл шаблона с именем \"{entry.Name}\" уже существует в рабочем пространстве.\n" +
+                        if (DialogsManager.ShowQuestionDialog($"Исходный файл шаблона с именем \"{entry.Name}\" уже существует в рабочем пространстве.\n" +
                             $"Использовать его или переименовать предлагаемый файл из импортированного шаблона?", "Использовать старый шаблон?", "Использовать старый", "Переименовать предлагаемый") == DialogStatus.No)
                         {
-                            newpath = ProgramState.ShowInputBox("Имя исходного файла", "Придумайте другое имя").Replace("\\", "").Replace(".docx", "") + ".docx"; // use new
+                            newpath = DialogsManager.ShowInputBox("Имя исходного файла", "Придумайте другое имя").Replace("\\", "").Replace(".docx", "") + ".docx"; // use new
                             this.Data.SourceTemplate.path = newpath;
                             entry.ExtractToFile(ProgramState.GetFullnameOfWordFile(newpath));
                         }
@@ -97,10 +97,10 @@ namespace Incas.Templates.Components
                 {
                     if (File.Exists(ProgramState.GetFullnameOfExcelFile(entry.Name))) // если файл с таким именем есть в папке Excel
                     {
-                        if (ProgramState.ShowQuestionDialog($"Исходный файл шаблона с именем \"{entry.Name}\" уже существует в рабочем пространстве.\n" +
+                        if (DialogsManager.ShowQuestionDialog($"Исходный файл шаблона с именем \"{entry.Name}\" уже существует в рабочем пространстве.\n" +
                             $"Использовать его или переименовать предлагаемый файл из импортированного шаблона?", "Использовать старый шаблон?", "Использовать старый", "Переименовать предлагаемый") == DialogStatus.No)
                         {
-                            newpath = ProgramState.ShowInputBox("Имя исходного файла", "Придумайте другое имя").Replace("\\", "").Replace(".docx", "") + ".docx"; // use new
+                            newpath = DialogsManager.ShowInputBox("Имя исходного файла", "Придумайте другое имя").Replace("\\", "").Replace(".docx", "") + ".docx"; // use new
                             this.Data.SourceTemplate.path = newpath;
                             entry.ExtractToFile(ProgramState.GetFullnameOfExcelFile(newpath));
                         }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text.RegularExpressions;
+using WebSupergoo.WordGlue3;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 using Font = Xceed.Document.NET.Font;
@@ -128,12 +129,17 @@ namespace Incas.Templates.Components
                 SearchValue = this.ConvertTag(tag)
             };
             Table tab = doc.AddTable(dt.Rows.Count + 1, dt.Columns.Count);
-            tab.Design = TableDesign.TableGrid;
-
+            tab.Design = TableDesign.TableNormal;
+            tab.SetBorder(TableBorderType.InsideH, new Border());
+            tab.SetBorder(TableBorderType.InsideV, new Border());
+            tab.SetBorder(TableBorderType.Left, new Border());
+            tab.SetBorder(TableBorderType.Right, new Border());
+            tab.SetBorder(TableBorderType.Top, new Border());
+            tab.SetBorder(TableBorderType.Bottom, new Border());
             Formatting head = new()
             {
                 Bold = true,
-                FontFamily = new Font("Times New Roman")
+                FontFamily = new Font("Times New Roman"),
             };
 
             Formatting rowStyle = new();
@@ -181,11 +187,12 @@ namespace Incas.Templates.Components
 
         public string TurnToXPS()
         {
-            Spire.Doc.Document doc = new(this.Path);
-            string outputName = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.pdf";
-            Application app = new(this.Path);
-            doc.SaveToFile(outputName, FileFormat.XPS);
-            File.Delete(this.Path);
+            //Spire.Doc.Document doc = new(this.Path);
+            Doc doc = new(this.Path);
+            string outputName = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.xps";
+            doc.SaveAs(outputName);
+            //doc.SaveToFile(outputName, FileFormat.XPS);
+            //File.Delete(this.Path);
             return outputName;
         }
 
@@ -198,7 +205,7 @@ namespace Incas.Templates.Components
             {
                 result = result + "\n" + section.ToString();
             }
-            ProgramState.ShowErrorDialog(doc.Text);
+            DialogsManager.ShowErrorDialog(doc.Text);
         }
     }
 }

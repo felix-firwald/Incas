@@ -78,10 +78,8 @@ namespace Incas.Templates.Views.Controls
             }
             catch (Exception ex)
             {
-
-                ProgramState.ShowErrorDialog("При обработке скрипта произошла ошибка:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog("При обработке скрипта произошла ошибка:\n" + ex.Message);
             }
-
         }
 
         private void CommandClick(object sender, RoutedEventArgs e)
@@ -101,6 +99,11 @@ namespace Incas.Templates.Views.Controls
                 this.vm.Grid.Rows.RemoveAt(this.Table.SelectedIndex);
             }
             catch { }
+        }
+
+        private void ExcelClick(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

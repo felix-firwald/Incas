@@ -123,7 +123,7 @@ namespace Incas.Core.Classes
             }
             if (needAlter)
             {
-                ProgramState.ShowDatabaseErrorDialog($"В базе данных не было найдено поле для таблицы {tableName}. Таблица будет обновлена.", "Актуализация базы данных");
+                DialogsManager.ShowDatabaseErrorDialog($"В базе данных не было найдено поле для таблицы {tableName}. Таблица будет обновлена.", "Актуализация базы данных");
                 q.Clear();
                 q.AddCustomRequest(result + ";");
                 q.ExecuteVoid();
@@ -274,7 +274,7 @@ namespace Incas.Core.Classes
                         return;
                 }
                 q.ExecuteVoid();
-                ProgramState.ShowInfoDialog("INCAS исправил ошибку. Программа будет закрыта.");
+                DialogsManager.ShowInfoDialog("INCAS исправил ошибку. Программа будет закрыта.");
                 ServerProcessor.TerminateProcessHandle();
             }
         }

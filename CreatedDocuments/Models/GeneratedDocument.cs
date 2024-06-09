@@ -144,10 +144,10 @@ namespace Incas.CreatedDocuments.Models
                         .ExecuteVoid();
                     break;
                 case DocumentStatus.Printed:
-                    ProgramState.ShowAccessErrorDialog($"Документ \"{this.fileName}\" помечен, как распечатанный. Распечатанный документ нельзя удалить!");
+                    Core.Classes.DialogsManager.ShowAccessErrorDialog($"Документ \"{this.fileName}\" помечен, как распечатанный. Распечатанный документ нельзя удалить!");
                     break;
                 case DocumentStatus.Done:
-                    ProgramState.ShowAccessErrorDialog($"Документ \"{this.fileName}\" помечен, как завершенный. Завершенный документ нельзя удалить!");
+                    Core.Classes.DialogsManager.ShowAccessErrorDialog($"Документ \"{this.fileName}\" помечен, как завершенный. Завершенный документ нельзя удалить!");
                     break;
             }
 

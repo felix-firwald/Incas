@@ -6,6 +6,7 @@ using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -166,17 +167,37 @@ namespace Incas.Templates.Views.Controls
                     this.Combobox.SelectedValue = value;
                     break;
                 case TagType.Date:
-                    DateTime parsedDate;
-                    bool success = DateTime.TryParseExact(value, "dd.MM.yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out parsedDate);
-                    if (success)
-                    {
-                        this.DatePicker.SelectedDate = parsedDate;
-                    }
+                    this.SetDateTimeValue(value);
                     break;
                 case TagType.Generator:
                     this.Generator.SetData(value);
                     break;
             }
+        }
+
+        private void SetDateTimeValue(string value)
+        {
+            List<string> formats = new()
+            {
+                "dd.MM.yyyy", "dd.MM.yyyy HH:mm:ss", "dd.MM.yy"
+            };
+            bool tryApply(string format)
+            {
+                DateTime parsedDate;
+                bool success = DateTime.TryParseExact(value, format, CultureInfo.CurrentCulture, DateTimeStyles.None, out parsedDate);
+                if (success)
+                {
+                    this.DatePicker.SelectedDate = parsedDate;
+                }
+                return success;
+            }
+            foreach (string format in formats)
+            {
+                if (tryApply(format))
+                {
+                    return;
+                }
+            }            
         }
 
         private void SetTextBoxMode()
@@ -197,7 +218,7 @@ namespace Incas.Templates.Views.Controls
             {
                 if (this.isRequired && string.IsNullOrEmpty(this.Textbox.Text))
                 {
-                    ProgramState.ShowExclamationDialog($"Поле \"{this.tag.name}\" обязательно для заполнения!", "Действие прервано");
+                    DialogsManager.ShowExclamationDialog($"Поле \"{this.tag.name}\" обязательно для заполнения!", "Действие прервано");
                     return false;
                 }
             }
@@ -350,7 +371,7 @@ namespace Incas.Templates.Views.Controls
         private void TextRequest(object sender, RoutedEventArgs e)
         {
             Session session;
-            if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для запроса данных"))
+            if (DialogsManager.ShowActiveUserSelector(out session, "Выберите пользователя для запроса данных"))
             {
                 ServerProcessor.SendRequestTextProcess(this, session.slug);
             }
@@ -374,8 +395,7 @@ namespace Incas.Templates.Views.Controls
             }
             catch (Exception ex)
             {
-
-                ProgramState.ShowErrorDialog("При обработке скрипта произошла ошибка:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog("При обработке скрипта произошла ошибка:\n" + ex.Message);
             }
         }
         private void CommandClick(object sender, RoutedEventArgs e)

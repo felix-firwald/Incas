@@ -44,7 +44,7 @@ namespace Incas.Core.Views.Windows
         {
             if (ProgramState.CurrentUser != null)
             {
-                ProgramState.ShowWaitCursor();
+                DialogsManager.ShowWaitCursor();
                 ProgramState.CurrentUserParameters = ProgramState.CurrentUser.GetParametersContext();
                 if (ProgramState.CurrentUserParameters.IsRightPassword(this.pwd.Text))
                 {
@@ -60,20 +60,20 @@ namespace Incas.Core.Views.Windows
                         ProgramState.SetSectorByUser(ProgramState.CurrentUser);
                         ProgramState.OpenSession();
                         ServerProcessor.Listen();
-                        ProgramState.ShowWaitCursor(false);
+                        DialogsManager.ShowWaitCursor(false);
                         this.DialogResult = true;
                         this.Close();
                     }
                 }
                 else
                 {
-                    ProgramState.ShowExclamationDialog("Пароль введен неверно.", "Вход невозможен");
+                    DialogsManager.ShowExclamationDialog("Пароль введен неверно.", "Вход невозможен");
                     this.pwd.Text = "";
                 }
             }
             else
             {
-                ProgramState.ShowExclamationDialog("Пользователь не выбран.", "Вход невозможен");
+                DialogsManager.ShowExclamationDialog("Пользователь не выбран.", "Вход невозможен");
             }
         }
 
@@ -110,7 +110,7 @@ namespace Incas.Core.Views.Windows
 
         private void AddClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            switch (ProgramState.ShowQuestionDialog("Вы собираетесь добавить существующее рабочее пространство или хотите создать новое?", "Выбор добавления", "Создать новое", "Добавить существующее"))
+            switch (DialogsManager.ShowQuestionDialog("Вы собираетесь добавить существующее рабочее пространство или хотите создать новое?", "Выбор добавления", "Создать новое", "Добавить существующее"))
             {
                 case DialogStatus.Yes:
                 default:

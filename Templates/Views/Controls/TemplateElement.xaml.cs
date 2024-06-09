@@ -63,7 +63,7 @@ namespace Incas.Templates.Views.Controls
 
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
-            ProgramState.ShowWaitCursor();
+            DialogsManager.ShowWaitCursor();
             switch (this.template.type)
             {
                 case TemplateType.Word:
@@ -75,7 +75,7 @@ namespace Incas.Templates.Views.Controls
                     }
                     else
                     {
-                        ProgramState.ShowErrorDialog($"Файл шаблона \"{this.template.name}\" ({this.template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
+                        DialogsManager.ShowErrorDialog($"Файл шаблона \"{this.template.name}\" ({this.template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
                     }
                     break;
             }
@@ -93,10 +93,10 @@ namespace Incas.Templates.Views.Controls
                 {
                     if (this.ChildPanel.Children.Count > 0)
                     {
-                        ProgramState.ShowExclamationDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
+                        DialogsManager.ShowExclamationDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
                         return;
                     }
-                    if (ProgramState.ShowQuestionDialog($"Шаблон \"{this.template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
+                    if (DialogsManager.ShowQuestionDialog($"Шаблон \"{this.template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
                     {
                         Tag tag = new();
                         tag.RemoveAllTagsByTemplate(this.template.id);
@@ -107,7 +107,7 @@ namespace Incas.Templates.Views.Controls
             }
             else
             {
-                ProgramState.ShowAccessErrorDialog("Вам недоступна функция удаления шаблонов.", "Удаление прервано");
+                DialogsManager.ShowAccessErrorDialog("Вам недоступна функция удаления шаблонов.", "Удаление прервано");
             }
         }
 
@@ -117,7 +117,7 @@ namespace Incas.Templates.Views.Controls
             {
                 if (ProgramState.IsWorkspaceOpened())
                 {
-                    ProgramState.ShowWaitCursor();
+                    DialogsManager.ShowWaitCursor();
                     CreateDocumentTemplate ctw = new(this.template.AsModel());
                     ctw.OnCreated += this.UpdateList;
                     ctw.Show();
@@ -125,7 +125,7 @@ namespace Incas.Templates.Views.Controls
             }
             else
             {
-                ProgramState.ShowAccessErrorDialog("Вам недоступна функция редактирования шаблонов.", "Редактирование прервано");
+                DialogsManager.ShowAccessErrorDialog("Вам недоступна функция редактирования шаблонов.", "Редактирование прервано");
             }
         }
 
@@ -147,7 +147,7 @@ namespace Incas.Templates.Views.Controls
             }
             else
             {
-                ProgramState.ShowAccessErrorDialog("Вам недоступна функция создания шаблонов.", "Создание прервано");
+                DialogsManager.ShowAccessErrorDialog("Вам недоступна функция создания шаблонов.", "Создание прервано");
             }
         }
         private void UpdateList()

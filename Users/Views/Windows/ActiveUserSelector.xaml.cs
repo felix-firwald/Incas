@@ -29,7 +29,7 @@ namespace Incas.Users.Views.Windows
             }
             else
             {
-                ProgramState.ShowExclamationDialog("Пользователь не выбран!", "Действие невозможно");
+                DialogsManager.ShowExclamationDialog("Пользователь не выбран!", "Действие невозможно");
             }
         }
 

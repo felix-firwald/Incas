@@ -1,4 +1,8 @@
-﻿using Incas.Core.Classes;
+﻿
+using AvaloniaEdit.Highlighting.Xshd;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Rendering;
+using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.CustomDatabases.Views.Windows;
 using Incas.Templates.Components;
@@ -6,6 +10,7 @@ using Incas.Templates.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Incas.Templates.Views.Windows
 {
@@ -22,6 +27,7 @@ namespace Incas.Templates.Views.Windows
             this.InitializeComponent();
             this.Command = cs;
             this.vm = new(cs);
+            this.SetColors();
             this.CodeEditor.Text = this.vm.Script;
             this.DataContext = this.vm;
         }
@@ -32,6 +38,16 @@ namespace Incas.Templates.Views.Windows
             this.Command = this.vm.GetData();
             this.Result = DialogStatus.Yes;
             this.Close();
+        }
+
+        private void SetColors()
+        {
+            //ICSharpCode.AvalonEdit.Highlighting.IHighlightingDefinition highlighting = this.CodeEditor.SyntaxHighlighting;
+            ////highlighting.GetNamedColor("StringInterpolation").Foreground = new SimpleHighlightingBrush(Colors.Black);
+            //string comment = "";
+            //highlighting.GetNamedColor("Keywords").Foreground = new HighlightNew();
+            //ProgramState.ShowInfoDialog(comment, "");
+            //XshdSyntaxDefinition sd = new();
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
@@ -73,7 +89,7 @@ namespace Incas.Templates.Views.Windows
                     this.Append("Service.ShowInputBox(\"Описание\", \"Заголовок\")");
                     break;
                 case "ShowDatabaseSelection":
-                    BindingSelector bs = ProgramState.ShowBindingSelector();
+                    BindingSelector bs = DialogsManager.ShowBindingSelector();
                     this.Append($"Service.ShowDatabaseSelection(\"{bs.SelectedDatabase}\", \"{bs.SelectedTable}\", \"{bs.SelectedField}\")");
                     break;
             }

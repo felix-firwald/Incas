@@ -37,7 +37,7 @@ namespace Incas.CustomDatabases.Views.Pages
             {
                 if (string.IsNullOrEmpty(this.vm.SelectedTable))
                 {
-                    ProgramState.ShowExclamationDialog("Таблица для записи не выбрана!", "Действие невозможно");
+                    DialogsManager.ShowExclamationDialog("Таблица для записи не выбрана!", "Действие невозможно");
                     return;
                 }
                 CreateRecord cr = new(this.vm.SelectedTable, this.vm.GetTableDefinition(), this.vm.SelectedDatabase.path);
@@ -47,7 +47,7 @@ namespace Incas.CustomDatabases.Views.Pages
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog(ex.Message);
+                DialogsManager.ShowErrorDialog(ex.Message);
             }
         }
 
@@ -62,7 +62,7 @@ namespace Incas.CustomDatabases.Views.Pages
             {
                 if (this.TableGrid.SelectedItems.Count == 0)
                 {
-                    ProgramState.ShowExclamationDialog("Не выбрано ни одной записи для удаления!", "Действие невозможно");
+                    DialogsManager.ShowExclamationDialog("Не выбрано ни одной записи для удаления!", "Действие невозможно");
                     return;
                 }
                 CustomTable ct = new();
@@ -76,11 +76,11 @@ namespace Incas.CustomDatabases.Views.Pages
             }
             catch (ArgumentException)
             {
-                ProgramState.ShowErrorDialog("Неправильная конфигурация таблицы (вероятно у таблицы отсутствует первичный ключ).", "Ошибка идентификации записи");
+                DialogsManager.ShowErrorDialog("Неправильная конфигурация таблицы (вероятно у таблицы отсутствует первичный ключ).", "Ошибка идентификации записи");
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog("При попытке удаления записей возникла ошибка неизвестного характера:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog("При попытке удаления записей возникла ошибка неизвестного характера:\n" + ex.Message);
             }
             this.vm.UpdateTable();
         }
@@ -91,7 +91,7 @@ namespace Incas.CustomDatabases.Views.Pages
             {
                 if (this.TableGrid.SelectedItems.Count == 0)
                 {
-                    ProgramState.ShowExclamationDialog("Не выбрано ни одной записи для редактирования!", "Действие невозможно");
+                    DialogsManager.ShowExclamationDialog("Не выбрано ни одной записи для редактирования!", "Действие невозможно");
                     return;
                 }
                 string pk = this.vm.GetPK();
@@ -102,11 +102,11 @@ namespace Incas.CustomDatabases.Views.Pages
             }
             catch (ArgumentException)
             {
-                ProgramState.ShowErrorDialog("Неправильная конфигурация таблицы (вероятно у таблицы отсутствует первичный ключ).", "Ошибка идентификации записи");
+                DialogsManager.ShowErrorDialog("Неправильная конфигурация таблицы (вероятно у таблицы отсутствует первичный ключ).", "Ошибка идентификации записи");
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog("При попытке открыть окно редактирования записи возникла ошибка неизвестного характера:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog("При попытке открыть окно редактирования записи возникла ошибка неизвестного характера:\n" + ex.Message);
             }
         }
 
@@ -144,7 +144,7 @@ namespace Incas.CustomDatabases.Views.Pages
                 request = request.Replace(this.GetParameterFormat("TIME"), DateTime.Now.ToString("G"));
                 if (request.Contains(this.GetParameterFormat("INPUT")))
                 {
-                    request = request.Replace(this.GetParameterFormat("INPUT"), ProgramState.ShowInputBox("Введите значение", "Для выполнения функции ожидается ввод"));
+                    request = request.Replace(this.GetParameterFormat("INPUT"), DialogsManager.ShowInputBox("Введите значение", "Для выполнения функции ожидается ввод"));
                 }
                 if (this.TableGrid.SelectedItems.Count > 0 && request.Contains("SELECTED"))
                 {
@@ -182,7 +182,7 @@ namespace Incas.CustomDatabases.Views.Pages
             }
             else
             {
-                ProgramState.ShowExclamationDialog("База данных или таблица не выбрана!", "Действие невозможно");
+                DialogsManager.ShowExclamationDialog("База данных или таблица не выбрана!", "Действие невозможно");
             }
         }
 
@@ -235,8 +235,8 @@ namespace Incas.CustomDatabases.Views.Pages
             fb.ShowDialog();
             if (!string.IsNullOrEmpty(fb.SelectedPath))
             {
-                string fileName = ProgramState.ShowInputBox("Имя файла", "Введите имя файла для вывода");
-                ProgramState.ShowWaitCursor();
+                string fileName = DialogsManager.ShowInputBox("Имя файла", "Введите имя файла для вывода");
+                DialogsManager.ShowWaitCursor();
                 XLWorkbook wb = new XLWorkbook();
                 IXLWorksheet ws = wb.AddWorksheet(this.vm.SelectedTable);
                 for (int c = 0; c < this.vm.Table.Columns.Count; c++) // columns
@@ -255,11 +255,11 @@ namespace Incas.CustomDatabases.Views.Pages
                 }
                 catch (IOException)
                 {
-                    ProgramState.ShowWaitCursor(false);
-                    ProgramState.ShowErrorDialog("При попытке записать файл возникла ошибка,\nвозможно файл уже открыт." +
+                    DialogsManager.ShowWaitCursor(false);
+                    DialogsManager.ShowErrorDialog("При попытке записать файл возникла ошибка,\nвозможно файл уже открыт." +
                         "\nЗакройте его и попробуйте снова", "Сохранение прервано");
                 }
-                ProgramState.ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
                 ProgramState.OpenFolder(fb.SelectedPath);
             }
 
@@ -273,7 +273,7 @@ namespace Incas.CustomDatabases.Views.Pages
             };
             if (of.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                ProgramState.ShowWaitCursor();
+                DialogsManager.ShowWaitCursor();
                 IXLWorksheet ws;
                 try
                 {
@@ -282,7 +282,7 @@ namespace Incas.CustomDatabases.Views.Pages
                 }
                 catch (IOException)
                 {
-                    ProgramState.ShowErrorDialog("Файл занят другим процессом. Его использование невозможно.");
+                    DialogsManager.ShowErrorDialog("Файл занят другим процессом. Его использование невозможно.");
                     return;
                 }
                 string pkfield = this.vm.GetPK();
@@ -298,8 +298,8 @@ namespace Incas.CustomDatabases.Views.Pages
                     {
                         if (ws.Search(col, CompareOptions.IgnoreCase).FirstOrDefault() == null)
                         {
-                            ProgramState.ShowWaitCursor(false);
-                            ProgramState.ShowExclamationDialog($"Лист Excel не содержит столбца \"{col}\".\n" +
+                            DialogsManager.ShowWaitCursor(false);
+                            DialogsManager.ShowExclamationDialog($"Лист Excel не содержит столбца \"{col}\".\n" +
                                 $"Импорт из листа, не содержащего хотя бы одно из описанных в таблице полей, запрещен в целях обеспечения полноты данных.", "Действие прервано");
                             continue;
                         }
@@ -323,12 +323,12 @@ namespace Incas.CustomDatabases.Views.Pages
                         continue;
                     }
                 }
-                ProgramState.ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
                 DataImporter di = new(output);
                 di.ShowDialog();
                 if (di.Result == DialogStatus.Yes)
                 {
-                    ProgramState.ShowWaitCursor();
+                    DialogsManager.ShowWaitCursor();
                     string result = "BEGIN TRANSACTION;\n";
                     if (deleteOld)
                     {
@@ -351,7 +351,7 @@ namespace Incas.CustomDatabases.Views.Pages
                     }
                     result += "\nEND TRANSACTION;";
                     this.vm.CustomUpdateRequest(result);
-                    ProgramState.ShowWaitCursor(false);
+                    DialogsManager.ShowWaitCursor(false);
                 }
             }
         }
@@ -378,14 +378,14 @@ namespace Incas.CustomDatabases.Views.Pages
                 case "FullImport":
                     if (Permission.CurrentUserPermission == PermissionGroup.Admin)
                     {
-                        if (ProgramState.ShowQuestionDialog("Старые данные будут стерты без возможности восстановления.", "Вы уверены?") == DialogStatus.Yes)
+                        if (DialogsManager.ShowQuestionDialog("Старые данные будут стерты без возможности восстановления.", "Вы уверены?") == DialogStatus.Yes)
                         {
                             this.ImportFromExcel(true);
                         }
                     }
                     else
                     {
-                        ProgramState.ShowExclamationDialog("Данное действие может совершать только администратор рабочего пространства", "Нет доступа");
+                        DialogsManager.ShowExclamationDialog("Данное действие может совершать только администратор рабочего пространства", "Нет доступа");
                     }
                     break;
             }
@@ -397,12 +397,12 @@ namespace Incas.CustomDatabases.Views.Pages
             {
                 if (string.IsNullOrEmpty(this.vm.SelectedTable))
                 {
-                    ProgramState.ShowExclamationDialog("Таблица для записи не выбрана!", "Действие невозможно");
+                    DialogsManager.ShowExclamationDialog("Таблица для записи не выбрана!", "Действие невозможно");
                     return;
                 }
                 if (this.TableGrid.SelectedItems.Count == 0)
                 {
-                    ProgramState.ShowExclamationDialog("Не выбрана запись для копирования!", "Действие невозможно");
+                    DialogsManager.ShowExclamationDialog("Не выбрана запись для копирования!", "Действие невозможно");
                     return;
                 }
                 CreateRecord cr = new(this.vm.SelectedTable, this.vm.GetTableDefinition(), this.vm.SelectedDatabase.path, ((DataRowView)this.TableGrid.SelectedItems[0]).Row);
@@ -412,7 +412,7 @@ namespace Incas.CustomDatabases.Views.Pages
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog(ex.Message);
+                DialogsManager.ShowErrorDialog(ex.Message);
             }
         }
 
@@ -424,7 +424,7 @@ namespace Incas.CustomDatabases.Views.Pages
         private void NewDatabase(object sender, RoutedEventArgs e)
         {
             using Incas.CustomDatabases.Models.Database db = new();
-            db.name = ProgramState.ShowInputBox("Имя базы данных");
+            db.name = DialogsManager.ShowInputBox("Имя базы данных");
             using (Sector s = new())
             {
                 foreach (Sector sec in s.GetSectors())

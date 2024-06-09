@@ -41,7 +41,7 @@ namespace Incas.Templates.Views.Windows
             this.templateSettings = t.GetTemplateSettings();
             this.LoadTags();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
-            ProgramState.ShowWaitCursor(false);
+            DialogsManager.ShowWaitCursor(false);
         }
         public UseTemplate(Template t)
         {
@@ -56,7 +56,7 @@ namespace Incas.Templates.Views.Windows
             {
                 this.AddFileCreator().ApplyRecord(item);
             }
-            ProgramState.ShowWaitCursor(false);
+            DialogsManager.ShowWaitCursor(false);
         }
         public UseTemplate(string templateName, List<Tag> tags) // dev mode
         {
@@ -114,7 +114,7 @@ namespace Incas.Templates.Views.Windows
         {
             if (!Directory.Exists(this.dir.Text))
             {
-                ProgramState.ShowErrorDialog($"Папка, указанная в качестве выходной для генерации документов ({this.dir.Text}) не существует.\nУкажите существующую!", "Несуществующий выходной путь");
+                DialogsManager.ShowErrorDialog($"Папка, указанная в качестве выходной для генерации документов ({this.dir.Text}) не существует.\nУкажите существующую!", "Несуществующий выходной путь");
                 return false;
             }
             return true;
@@ -220,7 +220,7 @@ namespace Incas.Templates.Views.Windows
 
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                ProgramState.ShowWaitCursor();
+                DialogsManager.ShowWaitCursor();
                 List<Dictionary<string, string>> pairs = [];    // список "файлов", где каждый элемент в списке - это список тегов и значений относящихся к файлу
                 IXLWorksheet ws;
                 try
@@ -230,7 +230,7 @@ namespace Incas.Templates.Views.Windows
                 }
                 catch (IOException)
                 {
-                    ProgramState.ShowErrorDialog("Файл занят другим процессом. Его использование невозможно.");
+                    DialogsManager.ShowErrorDialog("Файл занят другим процессом. Его использование невозможно.");
                     return;
                 }
                 this.ContentPanel.Children.Clear();
@@ -265,7 +265,7 @@ namespace Incas.Templates.Views.Windows
                     FileCreator fc = this.AddFileCreator();
                     fc.ApplyFromExcel(item);
                 }
-                ProgramState.ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
             }
         }
 
@@ -298,7 +298,7 @@ namespace Incas.Templates.Views.Windows
                 }
                 catch (IOException)
                 {
-                    ProgramState.ShowErrorDialog("При попытке записать файл возникла ошибка,\nвозможно файл уже открыт." +
+                    DialogsManager.ShowErrorDialog("При попытке записать файл возникла ошибка,\nвозможно файл уже открыт." +
                         "\nЗакройте его и попробуйте снова", "Сохранение прервано");
                 }
             }
@@ -316,12 +316,12 @@ namespace Incas.Templates.Views.Windows
             }
             if (documents.Count == 0)
             {
-                ProgramState.ShowExclamationDialog("Не выбрано ни одного элемента для отправки! (используйте селекторы)", "Действие прервано");
+                DialogsManager.ShowExclamationDialog("Не выбрано ни одного элемента для отправки! (используйте селекторы)", "Действие прервано");
             }
             else
             {
                 Session session;
-                if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для отправки формы."))
+                if (DialogsManager.ShowActiveUserSelector(out session, "Выберите пользователя для отправки формы."))
                 {
                     ServerProcessor.SendOpenSequencerProcess(documents, session.slug);
                 }

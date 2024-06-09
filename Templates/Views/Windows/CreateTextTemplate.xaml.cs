@@ -125,12 +125,12 @@ namespace Incas.Templates.Views.Windows
         {
             if (string.IsNullOrWhiteSpace(this.nameOfTemplate.Text))
             {
-                ProgramState.ShowExclamationDialog($"Неверное имя генератора.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog($"Неверное имя генератора.", "Сохранение прервано");
                 return false;
             }
             if (this.ContentPanel.Children.Count == 0)
             {
-                ProgramState.ShowExclamationDialog($"Генератор без единого тега не является генератором.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog($"Генератор без единого тега не является генератором.", "Сохранение прервано");
                 return false;
             }
 
@@ -139,12 +139,12 @@ namespace Incas.Templates.Views.Windows
             {
                 if (names.Contains(tag.TagName.Text))
                 {
-                    ProgramState.ShowExclamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
+                    DialogsManager.ShowExclamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
                     return false;
                 }
                 if (tag.tag.type == TagType.Table)
                 {
-                    ProgramState.ShowExclamationDialog($"В генераторах нельзя использовать таблицы!", "Сохранение прервано");
+                    DialogsManager.ShowExclamationDialog($"В генераторах нельзя использовать таблицы!", "Сохранение прервано");
                     return false;
                 }
                 names.Add(tag.TagName.Text);
@@ -156,12 +156,12 @@ namespace Incas.Templates.Views.Windows
         {
             if (this.CheckForSave())
             {
-                ProgramState.ShowWaitCursor();
+                DialogsManager.ShowWaitCursor();
                 this.Close();
                 this.vm.SaveTemplate();
                 this.SaveTags();
                 OnCreated?.Invoke();
-                ProgramState.ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
             }
         }
 

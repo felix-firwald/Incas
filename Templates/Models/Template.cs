@@ -70,7 +70,7 @@ namespace Incas.Templates.Models
             }
             else
             {
-                ProgramState.ShowErrorDialog("Шаблон с таким идентификатором не был найден.", "Ошибка");
+                Core.Classes.DialogsManager.ShowErrorDialog("Шаблон с таким идентификатором не был найден.", "Ошибка");
                 return null;
             }
 

@@ -29,7 +29,7 @@ namespace Incas.Core.Views.Controls
                 }
                 catch (Exception ex)
                 {
-                    ProgramState.ShowErrorDialog($"При попытке определения таблицы возникла ошибка:\n{ex}", "Ошибка");
+                    DialogsManager.ShowErrorDialog($"При попытке определения таблицы возникла ошибка:\n{ex}", "Ошибка");
                 }
             }
         }
@@ -52,7 +52,7 @@ namespace Incas.Core.Views.Controls
                 }
                 catch (Exception ex)
                 {
-                    ProgramState.ShowErrorDialog(ex.Message);
+                    DialogsManager.ShowErrorDialog(ex.Message);
                     this.Value = "";
                 }
             }

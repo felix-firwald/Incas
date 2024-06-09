@@ -27,7 +27,7 @@ namespace Incas.Core.Views.Windows
             this.DataContext = this.vm;
             if (string.IsNullOrEmpty(ProgramState.CurrentUserParameters.password))
             {
-                if (ProgramState.ShowQuestionDialog("Текущий пароль, использованный вами для входа, " +
+                if (DialogsManager.ShowQuestionDialog("Текущий пароль, использованный вами для входа, " +
                     "является временным, потому известен администратору и может быть им изменен.\nРекомендуем вам придумать свой пароль. Его не сможет увидеть и изменить никто, кроме вас.", "Завершение активации", "Установить пароль", "Не сейчас") == DialogStatus.Yes)
                 {
                     SetPassword windowSet = new();

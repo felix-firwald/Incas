@@ -205,7 +205,8 @@ namespace Incas.Core.Classes
                         par.CreateParameter();
 
                     }
-                    ShowInfoDialog("Рабочее пространство успешно создано.");
+
+                    DialogsManager.ShowInfoDialog("Рабочее пространство успешно создано.");
                     using (Sector sector = new())
                     {
                         sector.slug = "data";
@@ -241,16 +242,17 @@ namespace Incas.Core.Classes
                     }
                     else
                     {
-                        ShowErrorDialog("Нечто блокирует файл базы данных.");
+                        DialogsManager.ShowErrorDialog("Нечто блокирует файл базы данных.");
                     }
                 }
             }
-            ShowWaitCursor();
+
+            DialogsManager.ShowWaitCursor();
             Permission.CurrentUserPermission = PermissionGroup.Admin;
             SetCommonPath(data.workspacePath, false);
             if (CreateTablesInDatabase())
             {
-                ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
                 RegistryData.SetWorkspacePath(data.workspaceName, data.workspacePath);
                 Create();
             }
@@ -280,7 +282,7 @@ namespace Incas.Core.Classes
                 bool result = par.GetValueAsBool();
                 if (!result)
                 {
-                    ShowErrorDialog("Действия по добавлению, изменению " +
+                    DialogsManager.ShowErrorDialog("Действия по добавлению, изменению " +
                         "или удалению информации из базы данных недоступны, " +
                         "пока рабочее пространство находится в статусе \"Закрыто\".\n" +
                         "Рабочее пространство по-прежнему можно использовать, однако " +
@@ -365,166 +367,9 @@ namespace Incas.Core.Classes
             }
             catch (Exception ex)
             {
-                ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex.Message}", "Действие невозможно");
+                DialogsManager.ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex.Message}", "Действие невозможно");
             }
         }
-        #region Modal Dialogs
-        public static void ShowErrorDialog(string message, string title = "Возникла неизвестная ошибка")
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                if (message == null)
-                {
-                    return;
-                }
-                PlaySound("UI-Exclamation");
-                Dialog d = new(message, title, Dialog.DialogIcon.Error);
-                d.ShowDialog();
-            });
-        }
-        public static void ShowDatabaseErrorDialog(string message, string title = "Ошибка при выполнении запроса")
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                PlaySound("UI-Exclamation");
-                Dialog d = new(message, title, Dialog.DialogIcon.DatabaseError);
-                d.ShowDialog();
-            });
-        }
-        public static void ShowAccessErrorDialog(string message, string title = "Нет доступа")
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                PlaySound("UI-Exclamation");
-                Dialog d = new(message, title, Dialog.DialogIcon.AccessDenied);
-                d.ShowDialog();
-            });
-        }
-        public static void ShowExclamationDialog(string message, string title = "Обратите внимание")
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                PlaySound("UI-Attention");
-                Dialog d = new(message, title, Dialog.DialogIcon.Exclamation);
-                d.ShowDialog();
-            });
-        }
-        public static void ShowInfoDialog(string message, string title = "Оповещение")
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                PlaySound("UI-Attention");
-                Dialog d = new(message, title, Dialog.DialogIcon.Info);
-                d.ShowDialog();
-            });
-        }
-        // for dev only
-        public static void ShowInfoDialog(object message, string title = "Оповещение")
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                PlaySound("UI-Attention");
-                Dialog d = new(message.ToString(), title, Dialog.DialogIcon.Info);
-                d.ShowDialog();
-            });
-        }
-        public static DialogStatus ShowQuestionDialog(string message, string title, string yesText = "Да", string noText = "Нет")
-        {
-            DialogQuestion d = new(message, title, yesText, noText);
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                PlaySound("UI-Attention");
-                d.ShowDialog();
-            });
-            return d.status;
-        }
-        public static string ShowInputBox(string title, string description = "Введите значение")
-        {
-            DialogInput dialog = new(title, description);
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                dialog.ShowDialog();
-            });
-            return dialog.Input;
-        }
-        public static void ShowWindow(UserControl control, string title)
-        {
-            ContainerWindow cw = new(control, title);
-            cw.Show();
-        }
-        public static void ShowWindowDialog(UserControl control, string title)
-        {
-            ContainerWindow cw = new(control, title);
-            cw.ShowDialog();
-        }
-        public static BindingSelector ShowBindingSelector()
-        {
-            BindingSelector bd = new();
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                bd.ShowDialog();
-            });
-            return bd;
-        }
-        public static BindingSelector ShowBindingSelector(string database, bool dbEnabled = true)
-        {
-            BindingSelector bd = new(database, dbEnabled);
-            bd.ShowDialog();
-            return bd;
-        }
-        public static BindingSelector ShowBindingSelector(string database, string table, bool dbEnabled = true, bool tableEnabled = true)
-        {
-            BindingSelector bd = new(database, table, dbEnabled, tableEnabled);
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                bd.ShowDialog();
-            });
-            return bd;
-        }
-        public static bool ShowActiveUserSelector(out Session session, string helpText)
-        {
-            ActiveUserSelector au = new(helpText);
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                au.ShowDialog();
-            });
-            if (au.SelectedSession != null)
-            {
-                session = au.SelectedSession;
-                return true;
-            }
-            session = null;
-            return false;
-        }
-        public static bool ShowUserSelector(out User user)
-        {
-            UserSelector us = new();
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                us.ShowDialog();
-            });
-            if (us.Result == DialogStatus.Yes)
-            {
-                user = us.SelectedUser;
-                return true;
-            }
-            user = null;
-            return false;
-        }
-        public static Template ShowTemplateSelector(TemplateType type, string help)
-        {
-            TemplateSelector ts = new(type, help);
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                ts.ShowDialog();
-            });
-            return ts.SelectedTemplate.AsModel();
-        }
-        public static void ShowWaitCursor(bool wait = true)
-        {
-            Mouse.OverrideCursor = wait ? Cursors.Wait : null;
-        }
-        #endregion
 
         #region Sector Managing
         public static void SetSectorByUser(User user)

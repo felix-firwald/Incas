@@ -41,7 +41,7 @@ namespace Incas.Templates.Views.Windows
         {
             if (!this.printEnabled)
             {
-                ProgramState.ShowExclamationDialog("Этот тип документа требует сохранения в историю, для создания файла используйте кнопку \"Создать файлы по шаблону\".", "Печать прервана");
+                DialogsManager.ShowExclamationDialog("Этот тип документа требует сохранения в историю, для создания файла используйте кнопку \"Создать файлы по шаблону\".", "Печать прервана");
                 return;
             }
             System.Windows.Controls.PrintDialog printDialog = new();

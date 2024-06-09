@@ -90,14 +90,14 @@ namespace Incas.CreatedDocuments.Views.Controls
                 switch (this.record.status)
                 {
                     case DocumentStatus.Done:
-                        ProgramState.ShowExclamationDialog("Документ нельзя сгенерировать, если он находится на статусе \"Завершен\"");
+                        DialogsManager.ShowExclamationDialog("Документ нельзя сгенерировать, если он находится на статусе \"Завершен\"");
                         return;
                 }
-                ProgramState.ShowWaitCursor();
+                DialogsManager.ShowWaitCursor();
                 string plus = DateTime.Now.ToString("HH.mm.ss ");
                 string filename = $"{ProgramState.TemplatesRuntime}\\{this.record.fileName}.docx";
                 this.CreateFile(ProgramState.TemplatesRuntime);
-                ProgramState.ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
                 try
                 {
                     System.Diagnostics.Process proc = new();
@@ -107,12 +107,12 @@ namespace Incas.CreatedDocuments.Views.Controls
                 }
                 catch (Exception ex)
                 {
-                    ProgramState.ShowErrorDialog($"Не удалось открыть файл:\n{ex}", "Действие невозможно");
+                    DialogsManager.ShowErrorDialog($"Не удалось открыть файл:\n{ex}", "Действие невозможно");
                 }
             }
             catch (GeneratorUndefinedStateException ex)
             {
-                ProgramState.ShowExclamationDialog(ex.Message);
+                DialogsManager.ShowExclamationDialog(ex.Message);
             }
         }
 
@@ -121,16 +121,16 @@ namespace Incas.CreatedDocuments.Views.Controls
             switch (this.record.status)
             {
                 case DocumentStatus.Done:
-                    ProgramState.ShowExclamationDialog("Документ нельзя сгенерировать, если он находится на статусе \"Завершен\"");
+                    DialogsManager.ShowExclamationDialog("Документ нельзя сгенерировать, если он находится на статусе \"Завершен\"");
                     return;
             }
             Session session;
-            if (ProgramState.ShowActiveUserSelector(out session, "Выберите пользователя для отправки файла"))
+            if (DialogsManager.ShowActiveUserSelector(out session, "Выберите пользователя для отправки файла"))
             {
-                ProgramState.ShowWaitCursor();
+                DialogsManager.ShowWaitCursor();
                 string filename = $"{this.record.fileName}.docx";
                 this.CreateFile(ProgramState.Exchanges);
-                ProgramState.ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
                 ServerProcessor.SendOpenFileProcess(filename, ProgramState.Exchanges + "\\" + filename, session.slug);
             }
         }
@@ -140,7 +140,7 @@ namespace Incas.CreatedDocuments.Views.Controls
             this.Selector.IsChecked = false;
             OnSelectorUnchecked?.Invoke(this);
             using Template tm = new();
-            ProgramState.ShowWaitCursor();
+            DialogsManager.ShowWaitCursor();
             if (tm.GetTemplateById(this.record.template) != null)
             {
                 try
@@ -151,8 +151,8 @@ namespace Incas.CreatedDocuments.Views.Controls
                 }
                 catch (IOException ex)
                 {
-                    ProgramState.ShowWaitCursor(false);
-                    ProgramState.ShowErrorDialog($"Файл поврежден или удален. Пожалуйста, попробуйте ещё раз.\n{ex}");
+                    DialogsManager.ShowWaitCursor(false);
+                    DialogsManager.ShowErrorDialog($"Файл поврежден или удален. Пожалуйста, попробуйте ещё раз.\n{ex}");
                 }
             }
         }
@@ -184,7 +184,7 @@ namespace Incas.CreatedDocuments.Views.Controls
             bool result = this.record.AsModel().CheckUniqueNumber();
             if (!result)
             {
-                ProgramState.ShowExclamationDialog("Изменение статуса невозможно: номер документа не уникален!", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog("Изменение статуса невозможно: номер документа не уникален!", "Сохранение прервано");
             }
             return result;
         }
@@ -194,7 +194,7 @@ namespace Incas.CreatedDocuments.Views.Controls
             DocumentStatus newStatus = (DocumentStatus)Enum.Parse(typeof(DocumentStatus), ((MenuItem)sender).Tag.ToString(), true);
             if (newStatus < this.record.status && !Permission.IsUserHavePermission(PermissionGroup.Moderator))
             {
-                ProgramState.ShowAccessErrorDialog("Нельзя откатить статус документа, не обладая правами модератора!");
+                DialogsManager.ShowAccessErrorDialog("Нельзя откатить статус документа, не обладая правами модератора!");
                 return;
             }
             switch (newStatus)
@@ -244,10 +244,10 @@ namespace Incas.CreatedDocuments.Views.Controls
             {
                 case DocumentStatus.Printed:
                 case DocumentStatus.Done:
-                    ProgramState.ShowExclamationDialog("Статусы \"Распечатан\" и \"Завершен\" не позволяют менять номер документа.", "Номер неизменяем");
+                    DialogsManager.ShowExclamationDialog("Статусы \"Распечатан\" и \"Завершен\" не позволяют менять номер документа.", "Номер неизменяем");
                     return;
             }
-            string input = ProgramState.ShowInputBox("Новый номер", "Введите номер без префикса и постфикса");
+            string input = DialogsManager.ShowInputBox("Новый номер", "Введите номер без префикса и постфикса");
             TemplateSettings settings = new Template(this.record.template).GetTemplateSettings();
             using (GeneratedDocument gd = this.record.AsModel())
             {

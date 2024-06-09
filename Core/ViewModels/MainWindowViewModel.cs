@@ -39,22 +39,22 @@ namespace Incas.Core.ViewModels
         #region Tools
         private void DoTextCommand(object obj)
         {
-            CommandHandler.Handle(ProgramState.ShowInputBox("Введите команду"));
+            CommandHandler.Handle(DialogsManager.ShowInputBox("Введите команду"));
         }
 
         public void DoCopyToClipBoard(object parameter)
         {
             Session target;
-            if (ProgramState.ShowActiveUserSelector(out target, "Выберите пользователя для копирования в буфер обмена."))
+            if (DialogsManager.ShowActiveUserSelector(out target, "Выберите пользователя для копирования в буфер обмена."))
             {
-                string result = ProgramState.ShowInputBox("Текст для буфера обмена", "Укажите текст для буфера обмена");
+                string result = DialogsManager.ShowInputBox("Текст для буфера обмена", "Укажите текст для буфера обмена");
                 ServerProcessor.SendCopyTextProcess(result, target.slug);
             }
         }
         public void DoCopyFile(object parameter)
         {
             Session target;
-            if (ProgramState.ShowActiveUserSelector(out target, "Выберите пользователя для копирования файла."))
+            if (DialogsManager.ShowActiveUserSelector(out target, "Выберите пользователя для копирования файла."))
             {
                 OpenFileDialog of = new();
                 if (of.ShowDialog() == DialogResult.OK)
@@ -72,7 +72,7 @@ namespace Incas.Core.ViewModels
                 { "Pdf", "Файлы PDF|*.pdf" }
             };
             Session target;
-            if (ProgramState.ShowActiveUserSelector(out target, "Выберите пользователя для открытия файла."))
+            if (DialogsManager.ShowActiveUserSelector(out target, "Выберите пользователя для открытия файла."))
             {
                 OpenFileDialog of2 = new()
                 {
@@ -87,12 +87,12 @@ namespace Incas.Core.ViewModels
         public void DoOpenWeb(object parameter)
         {
             Session target;
-            if (ProgramState.ShowActiveUserSelector(out target, "Выберите пользователя для открытия страницы."))
+            if (DialogsManager.ShowActiveUserSelector(out target, "Выберите пользователя для открытия страницы."))
             {
-                string url = ProgramState.ShowInputBox("Укажите адрес");
+                string url = DialogsManager.ShowInputBox("Укажите адрес");
                 if (!url.StartsWith("https://"))
                 {
-                    ProgramState.ShowExclamationDialog("Введенный адрес либо не является адресом сети, либо небезопасен.", "Действие прервано");
+                    DialogsManager.ShowExclamationDialog("Введенный адрес либо не является адресом сети, либо небезопасен.", "Действие прервано");
                     return;
                 }
                 ServerProcessor.SendOpenWebProcess(url, target.slug);

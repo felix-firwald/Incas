@@ -222,13 +222,13 @@ namespace Incas.Users.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(this._user.username) && !string.IsNullOrWhiteSpace(this._userParameters.startup_password) && !string.IsNullOrWhiteSpace(this._user.surname) && this._selectedSector != null)
             {
-                ProgramState.ShowWaitCursor();
+                DialogsManager.ShowWaitCursor();
                 this._user.fullname = $"{this._user.surname} {this._user.secondName}";
                 this._user.sector = this._selectedSector.slug;
                 this._user.GenerateSign();
                 this._user.SaveParametersContext(this._userParameters);
                 this._user.SaveUser();
-                ProgramState.ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
                 return true;
             }
             return false;

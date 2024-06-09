@@ -108,7 +108,7 @@ namespace Incas.Templates.Views.Pages
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog("При обработке скрипта на стороне формы возникла ошибка:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog("При обработке скрипта на стороне формы возникла ошибка:\n" + ex.Message);
             }
         }
 
@@ -143,7 +143,7 @@ namespace Incas.Templates.Views.Pages
         {
             if (record.filledTagsString == null)
             {
-                ProgramState.ShowDatabaseErrorDialog("Не удалось получить информацию о полях документа.", "Запись повреждена");
+                DialogsManager.ShowDatabaseErrorDialog("Не удалось получить информацию о полях документа.", "Запись повреждена");
                 return;
             }
             this.document = record;
@@ -283,7 +283,7 @@ namespace Incas.Templates.Views.Pages
             {
                 if (this.document.status == DocumentStatus.Done)
                 {
-                    ProgramState.ShowAccessErrorDialog("Документ находится в статусе \"Завершен\", он будет пропущен.");
+                    DialogsManager.ShowAccessErrorDialog("Документ находится в статусе \"Завершен\", он будет пропущен.");
                     return false;
                 }
                 bool result = true;
@@ -302,7 +302,7 @@ namespace Incas.Templates.Views.Pages
                     result = scope.GetVariable("result");
                     if (!result)
                     {
-                        ProgramState.ShowExclamationDialog(scope.GetVariable("failed_text"));
+                        DialogsManager.ShowExclamationDialog(scope.GetVariable("failed_text"));
                         dynamic fields = scope.GetVariable("fields");
                         foreach (TagFiller tf in this.TagFillers)
                         {
@@ -317,7 +317,7 @@ namespace Incas.Templates.Views.Pages
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog("При выполнении скрипта валидации возникла ошибка:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog("При выполнении скрипта валидации возникла ошибка:\n" + ex.Message);
                 return true;
             }
         }
@@ -348,7 +348,7 @@ namespace Incas.Templates.Views.Pages
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog("При выполнении скрипта возникла ошибка:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog("При выполнении скрипта возникла ошибка:\n" + ex.Message);
             }
         }
         public string GetNumber()
@@ -381,6 +381,10 @@ namespace Incas.Templates.Views.Pages
                     {
                         case TemplateType.Word:
                             newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.docx";
+                            if (File.Exists(newFile))
+                            {
+                                File.Delete(newFile);
+                            }
                             File.Copy(ProgramState.GetFullnameOfWordFile(this.template.path), newFile, true);
                             WordTemplator wt = new(newFile);
                             this.Dispatcher.Invoke(() =>
@@ -390,6 +394,10 @@ namespace Incas.Templates.Views.Pages
                             break;
                         case TemplateType.Excel:
                             newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
+                            if (File.Exists(newFile))
+                            {
+                                File.Delete(newFile);
+                            }
                             File.Copy(ProgramState.GetFullnameOfExcelFile(this.template.path), newFile, true);
                             ExcelTemplator et = new(newFile);
                             this.Dispatcher.Invoke(() =>
@@ -417,19 +425,19 @@ namespace Incas.Templates.Views.Pages
             }
             catch (GeneratorUndefinedStateException ex)
             {
-                ProgramState.ShowExclamationDialog(ex.Message, "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
                 return false;
             }
             catch (IOException)
             {
-                ProgramState.ShowErrorDialog($"При доступе к файлу \"{this.Filename.Text}\" или его папке возникла ошибка.\n" +
+                DialogsManager.ShowErrorDialog($"При доступе к файлу \"{this.Filename.Text}\" или его папке возникла ошибка.\n" +
                     $"Возможно существует файл с таким же именем, который уже открыт другим пользователем.\n" +
                     $"Файл будет пропущен.");
                 return false;
             }
             catch (Exception e)
             {
-                ProgramState.ShowErrorDialog(e.Message);
+                DialogsManager.ShowErrorDialog(e.Message);
                 return false;
             }
         }
@@ -462,10 +470,10 @@ namespace Incas.Templates.Views.Pages
         {
             if (this.template.type == TemplateType.Excel)
             {
-                ProgramState.ShowExclamationDialog("Предпросмотр недоступен для шаблонов Excel", "Действие недоступно");
+                DialogsManager.ShowExclamationDialog("Предпросмотр недоступен для шаблонов Excel", "Действие недоступно");
                 return;
             }
-            ProgramState.ShowWaitCursor();
+            DialogsManager.ShowWaitCursor();
             await System.Threading.Tasks.Task.Run(() =>
             {
 
@@ -492,7 +500,7 @@ namespace Incas.Templates.Views.Pages
                             wt.CreateTable(tab.tag.name, tab.DataTable);
                         }
                         string fileXPS = wt.TurnToXPS();
-                        ProgramState.ShowWaitCursor(false);
+                        DialogsManager.ShowWaitCursor(false);
                         PreviewWindow pr = new(fileXPS, !this.templateSettings.RequiresSave);
                         pr.Show();
                     })
@@ -515,15 +523,15 @@ namespace Incas.Templates.Views.Pages
         {
             if (this.document.status == DocumentStatus.Done)
             {
-                ProgramState.ShowAccessErrorDialog("Функция генерации документа недоступна, пока он находится в статусе \"Завершен\".");
+                DialogsManager.ShowAccessErrorDialog("Функция генерации документа недоступна, пока он находится в статусе \"Завершен\".");
                 return;
             }
             if (this.templateSettings.RequiresSave)
             {
-                ProgramState.ShowExclamationDialog("Этот тип документа требует сохранения в историю, для создания файла используйте кнопку \"Создать файлы по шаблону\".", "Генерация прервана");
+                DialogsManager.ShowExclamationDialog("Этот тип документа требует сохранения в историю, для создания файла используйте кнопку \"Создать файлы по шаблону\".", "Генерация прервана");
                 return;
             }
-            ProgramState.ShowWaitCursor();
+            DialogsManager.ShowWaitCursor();
             this.CreateFile(ProgramState.TemplatesRuntime, "", false, false);
             string filename;
             switch (this.template.type)
@@ -545,9 +553,9 @@ namespace Incas.Templates.Views.Pages
             }
             catch (Exception ex)
             {
-                ProgramState.ShowErrorDialog($"Не удалось открыть файл:\n{ex.Message}", "Действие невозможно");
+                DialogsManager.ShowErrorDialog($"Не удалось открыть файл:\n{ex.Message}", "Действие невозможно");
             }
-            ProgramState.ShowWaitCursor(false);
+            DialogsManager.ShowWaitCursor(false);
         }
     }
 }

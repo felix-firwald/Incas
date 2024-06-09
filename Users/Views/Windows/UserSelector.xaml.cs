@@ -30,7 +30,7 @@ namespace Incas.Users.Views.Windows
             }
             else
             {
-                ProgramState.ShowExclamationDialog("Пользователь не выбран!", "Действие прервано");
+                DialogsManager.ShowExclamationDialog("Пользователь не выбран!", "Действие прервано");
             }
         }
     }

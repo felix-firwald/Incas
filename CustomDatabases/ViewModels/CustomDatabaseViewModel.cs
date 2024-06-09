@@ -130,10 +130,10 @@ namespace Incas.CustomDatabases.ViewModels
         {
             if (!string.IsNullOrEmpty(this.SelectedTable))
             {
-                ProgramState.ShowWaitCursor();
+                DialogsManager.ShowWaitCursor();
                 this._dataTable = this.requester.GetTable(this.SelectedTable, this.SelectedDatabase.path, this.CustomViewRequest);
                 this.OnPropertyChanged(nameof(this.Table));
-                ProgramState.ShowWaitCursor(false);
+                DialogsManager.ShowWaitCursor(false);
             }
         }
         private void UpdateListOfCommands()

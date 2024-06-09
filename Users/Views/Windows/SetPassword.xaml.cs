@@ -15,9 +15,9 @@ namespace Incas.Users.Views.Windows
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ProgramState.ShowInfoDialog(ProgramState.CurrentUser.fullname);
+            DialogsManager.ShowInfoDialog(ProgramState.CurrentUser.fullname);
             UserParameters parameters = ProgramState.CurrentUser.GetParametersContext();
-            ProgramState.ShowInfoDialog(parameters.permission_group);
+            DialogsManager.ShowInfoDialog(parameters.permission_group);
             parameters.password = this.Input.Text;
             ProgramState.CurrentUserParameters = parameters;
             ProgramState.CurrentUser.SaveParametersContext(parameters);

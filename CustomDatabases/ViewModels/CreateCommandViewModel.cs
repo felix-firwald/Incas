@@ -71,7 +71,7 @@ namespace Incas.CustomDatabases.ViewModels
                 {
                     if (this.Query.Contains(word))
                     {
-                        ProgramState.ShowExclamationDialog($"Обнаружено ключевое слово ({word}), " +
+                        DialogsManager.ShowExclamationDialog($"Обнаружено ключевое слово ({word}), " +
                             "которое не может быть использовано в режиме чтения", "Сохранение прервано");
                         return false;
                     }
