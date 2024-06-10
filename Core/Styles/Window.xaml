@@ -5,7 +5,7 @@
         <Setter Property="Foreground" Value="{DynamicResource Light}"/>
     </Style>
     <ControlTemplate x:Key="WindowDialog" TargetType="{x:Type Window}">
-        <Border CornerRadius="6" BorderThickness="2" BorderBrush="{DynamicResource Element}" Background="{DynamicResource Basic}">
+        <Border CornerRadius="6" BorderThickness="2" BorderBrush="{DynamicResource Dark}" Background="{DynamicResource Black}">
             <ContentPresenter/>
         </Border>
     </ControlTemplate>

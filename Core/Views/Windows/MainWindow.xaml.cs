@@ -2,10 +2,16 @@
 using Incas.Core.ViewModels;
 using Incas.Users.Views.Windows;
 using System;
+using System.Drawing;
 using System.IO;
-using System.Media;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using Windows.UI.ViewManagement;
+using Windows.UI;
+using Windows.ApplicationModel.Core;
+using Avalonia.Controls.Chrome;
+using System.Media;
 
 namespace Incas.Core.Views.Windows
 {

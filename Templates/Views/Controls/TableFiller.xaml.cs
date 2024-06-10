@@ -1,14 +1,19 @@
-﻿using Incas.Core.Classes;
+﻿using ClosedXML.Excel;
+using Incas.Core.Classes;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
+using Incas.Templates.Views.Pages;
 using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -32,6 +37,7 @@ namespace Incas.Templates.Views.Controls
             this.DataContext = this.vm;
             this.command = t.GetCommand();
             this.MakeButton();
+            this.MakeFields();
         }
         private void MakeButton()
         {
@@ -40,6 +46,22 @@ namespace Incas.Templates.Views.Controls
                 this.CommandButtonIcon.Data = this.FindResource(this.command.Icon.ToString()) as PathGeometry;
                 this.CommandButton.Visibility = Visibility.Visible;
                 this.CommandButtonText.Content = this.command.Name;
+            }
+        }
+        private void MakeFields()
+        {
+            void MakeField(string name)
+            {
+                TextBox tb = new()
+                {
+                    Tag = name,
+                    Style = this.FindResource("TextBoxMain") as Style
+                };
+                this.Fields.Children.Add(tb);
+            }
+            foreach (DataColumn dc in this.vm.Grid.Columns)
+            {
+                MakeField(dc.ColumnName);
             }
         }
         public void SetData(DataTable dt)
@@ -103,7 +125,76 @@ namespace Incas.Templates.Views.Controls
 
         private void ExcelClick(object sender, RoutedEventArgs e)
         {
+            string file = "";
+            if (DialogsManager.ShowOpenFileDialog(ref file, "MS Excel|*.xlsx"))
+            {
+                IXLWorksheet ws;
+                try
+                {
+                    XLWorkbook wb = new(file);
+                    ws = wb.Worksheet(1);
+                }
+                catch (IOException)
+                {
+                    DialogsManager.ShowErrorDialog("Файл занят другим процессом. Его использование невозможно.", "Ошибка доступа");
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    DialogsManager.ShowErrorDialog(ex.Message);
+                    return;
+                }
+                DataTable output = new();
+                
+                foreach (DataColumn dc in this.vm.Grid.Columns)
+                {
+                    IXLCell colCell;
+                    string col = dc.ColumnName;
+                    output.Columns.Add(col);
+                    try
+                    {
+                        colCell = ws.Search(dc.ColumnName, CompareOptions.IgnoreCase).First();   // ищем заголовок столбца с именем аналогичным тегу
+                        int columnNumber = colCell.WorksheetColumn().ColumnNumber();    // номер столбца в листе Excel
+                        int rowNumber = colCell.WorksheetRow().RowNumber() + 1; // номер строки в листе Excel          
+                        for (int i = rowNumber; i <= ws.LastRowUsed().RowNumber(); i++)
+                        {
+                            if (i > output.Rows.Count)
+                            {
+                                output.Rows.Add();
+                            }
 
+                            output.Rows[i - 2][col] = ws.Cell(i, columnNumber).Value.ToString();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                }
+                this.vm.Grid = output;
+            }
+        }
+
+        private void SaveClick(object sender, RoutedEventArgs e)
+        {
+            string file = "";
+            if (DialogsManager.ShowSaveFileDialog(ref file, "MS Excel|*.xlsx"))
+            {
+                XLWorkbook wb = new();
+                IXLWorksheet ws = wb.AddWorksheet("Из INCAS");
+                IXLTable table = ws.FirstCell().InsertTable(this.vm.Grid);
+                table.Theme = new XLTableTheme("None");
+                try
+                {
+                    wb.SaveAs(file);
+                    ProgramState.OpenFolder(Path.GetDirectoryName(file));
+                }
+                catch (IOException)
+                {
+                    DialogsManager.ShowErrorDialog("При попытке записать файл возникла ошибка,\nвозможно файл уже открыт." +
+                        "\nЗакройте его и попробуйте снова", "Сохранение прервано");
+                }
+            }
         }
     }
 }

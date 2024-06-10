@@ -1,15 +1,8 @@
 ﻿using Common;
-using Incas.Core.Classes;
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
-using Incas.CustomDatabases.Views.Windows;
-using Incas.Templates.Models;
-using Incas.Templates.Views.Windows;
 using Incas.Users.Models;
-using Incas.Users.Views.Windows;
-using IncasEngine.TemplateManager;
-using Incubator_2.Common;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -17,9 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace Incas.Core.Classes
 {

@@ -1,8 +1,8 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Windows;
-using IncasEngine.TemplateManager;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

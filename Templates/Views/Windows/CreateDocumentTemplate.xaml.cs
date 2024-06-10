@@ -3,7 +3,6 @@ using Incas.Core.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
-using IncasEngine.TemplateManager;
 using Incubator_2.Forms;
 using System;
 using System.Collections.Generic;

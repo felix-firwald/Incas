@@ -1,7 +1,7 @@
 ﻿
 using Incas.Core.ViewModels;
+using Incas.Templates.Components;
 using Incas.Templates.Models;
-using IncasEngine.TemplateManager;
 
 namespace Incas.Templates.ViewModels
 {

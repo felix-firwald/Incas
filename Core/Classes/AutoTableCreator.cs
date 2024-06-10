@@ -1,0 +1,108 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+
+namespace Incas.Core.Classes
+{
+    public class AutoTableCreator
+    {
+        private Dictionary<string, FieldCreator> definition = [];
+        private string TableName;
+        private Type modelClass;
+        public AutoTableCreator()
+        {
+        }
+        public AutoTableCreator Initialize(Type type, string name)
+        {
+            definition.Clear();
+            TableName = name;
+            modelClass = type;
+            ParseToDict();
+            return this;
+        }
+        #region Common
+        public void ParseToDict()
+        {
+            foreach (PropertyInfo prop in modelClass.GetProperties())
+            {
+                FieldCreator fc = new(prop.Name, SwitchOnType(prop.PropertyType));
+                if (prop.Name == "id")
+                {
+                    fc.IsPK = true;
+                }
+                definition[prop.Name] = fc;
+            }
+        }
+
+
+        public string GetQueryText()
+        {
+            string result = $"CREATE TABLE IF NOT EXISTS [{TableName}] (\n";
+            result += string.Join(",\n", definition.Values);
+            result += "\n);";
+            return result;
+        }
+
+        public static string SwitchOnType(Type type)
+        {
+            switch (Type.GetTypeCode(type.GetType()))
+            {
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                    return "INTEGER";
+                case TypeCode.Double:
+                    return "DOUBLE";
+                case TypeCode.Boolean:
+                    return "BOOLEAN";
+                case TypeCode.String:
+                case TypeCode.DateTime:
+                case TypeCode.Object:
+                    return "TEXT";
+            }
+
+            if (type == typeof(int))
+            {
+                return "INTEGER";
+            }
+            else if (type == typeof(long) || type == typeof(double))
+            {
+                return "DOUBLE";
+            }
+            else
+            {
+                return type == typeof(DateTime) ? "TEXT" : type == typeof(bool) ? "BOOLEAN" : "STRING";
+            }
+        }
+        #endregion
+
+        public void SetNotNull(string name, bool inNotNull)
+        {
+            FieldCreator fc = definition[name];
+            fc.NotNULL = inNotNull;
+            definition[name] = fc;
+        }
+        public void SetAsUnique(string name)
+        {
+            FieldCreator fc = definition[name];
+            fc.IsUNIQUE = true;
+            definition[name] = fc;
+        }
+        public void SetFK(string name, string table, string field)
+        {
+            FieldCreator fc = definition[name];
+            fc.FKtable = table;
+            fc.FKfield = field;
+            definition[name] = fc;
+        }
+        public void SetTextType(string name)
+        {
+            FieldCreator fc = definition[name];
+            fc.TypeOf = "TEXT";
+            definition[name] = fc;
+        }
+    }
+}

@@ -6,7 +6,7 @@ using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Pages;
 using Incas.Users.Models;
-using IncasEngine.TemplateManager;
+//using IncasEngine.TemplateManager;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -159,13 +159,10 @@ namespace Incas.Templates.Views.Windows
 
         private void review_Click(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog fb = new()
+            string folder = "";
+            if (DialogsManager.ShowFolderDialog(ref folder))
             {
-                RootFolder = System.Environment.SpecialFolder.MyDocuments
-            };
-            if (fb.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                this.dir.Text = fb.SelectedPath;
+                this.dir.Text = folder;
             }
         }
         private void MinimizeAll(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -274,7 +271,7 @@ namespace Incas.Templates.Views.Windows
             if (this.ValidateContent())
             {
                 XLWorkbook wb = new();
-                IXLWorksheet ws = wb.AddWorksheet("Из инкубатора");
+                IXLWorksheet ws = wb.AddWorksheet("Из INCAS");
                 for (int i = 0; i < this.tags.Count; i++) // columns
                 {
                     IXLCell c = ws.Cell(1, i + 1).SetValue(this.tags[i].name);

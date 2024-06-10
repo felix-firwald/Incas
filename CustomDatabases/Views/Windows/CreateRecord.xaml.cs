@@ -1,6 +1,6 @@
-﻿using Incas.CustomDatabases.Models;
+﻿using Incas.Core.Classes;
+using Incas.CustomDatabases.Models;
 using Incas.Templates.Views.Controls;
-using IncasEngine.Database;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;

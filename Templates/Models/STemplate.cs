@@ -1,4 +1,4 @@
-﻿using IncasEngine.TemplateManager;
+﻿using Incas.Templates.Components;
 
 namespace Incas.Templates.Models
 {

@@ -1,13 +1,10 @@
-﻿using DocumentFormat.OpenXml.ExtendedProperties;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Views.Controls;
-using IncasEngine.TemplateManager;
 using Spire.Doc;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Text.RegularExpressions;
 using WebSupergoo.WordGlue3;
 using Xceed.Document.NET;

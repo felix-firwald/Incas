@@ -1,9 +1,9 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
+using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
-using IncasEngine.TemplateManager;
 using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
 using System;

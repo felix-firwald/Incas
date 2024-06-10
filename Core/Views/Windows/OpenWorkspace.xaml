@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows"
-        mc:Ignorable="d" Style="{DynamicResource Dialog}"
+        mc:Ignorable="d" Style="{DynamicResource Dialog}" Background="{StaticResource Black}"
         Title="Выбор рабочего пространства" Height="400" Width="400" WindowStartupLocation="CenterScreen">
     <Grid FocusManager.FocusedElement="{Binding ElementName=pwd}">
         <Grid.RowDefinitions>
@@ -35,8 +35,8 @@
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>
-        <Border CornerRadius="5" Margin="6,6,6,6" Background="{DynamicResource Black}" Grid.Row="2" >
-            <ListBox Style="{DynamicResource ListBoxMain}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}" Cursor="">
+        <Border CornerRadius="5" Margin="6" Background="{DynamicResource LightBlack}" Grid.Row="2" >
+            <ListBox Style="{DynamicResource ListBoxMain}" Background="{DynamicResource LightBlack}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}" Cursor="">
                 <!--<ListBoxItem Content="567567" IsSelected="True"/>
                 <ListBoxItem Content="567567"/>
                 <ListBoxItem Content="567567"/>
@@ -44,7 +44,7 @@
                 <ListBoxItem Content="567567"/>-->
             </ListBox>
         </Border>
-        <Border Grid.Row="2" CornerRadius="5" Margin="6,6,6,6" Background="{DynamicResource Black}" Grid.Column="1">
+        <Border Grid.Row="2" CornerRadius="5" Margin="6,6,6,6" Background="{DynamicResource LightBlack}" Grid.Column="1">
 
             <StackPanel Orientation="Vertical" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить новое рабочее пространство в список" MouseDown="AddClick" FontSize="16" />

@@ -15,9 +15,8 @@ namespace Incas
         {
             base.OnStartup(e);
             this.SetLicenses();
-
             //this.DoSomething();
-            if (DateTime.Now > DateTime.Parse("15.08.2024"))
+            if (DateTime.Now > DateTime.Parse("21.08.2024"))
             {
                 DialogsManager.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");
                 App.Current.Shutdown();

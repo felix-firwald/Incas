@@ -242,9 +242,6 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Incas Engine\Incas Engine\Incas Engine.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="WordGlue3.NET8">
       <HintPath>..\..\IncasEngineTools\WordGlue3.NET8.dll</HintPath>
     </Reference>

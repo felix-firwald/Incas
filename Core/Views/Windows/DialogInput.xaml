@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows"
         mc:Ignorable="d"
-        Title="DialogInput" Height="165" Style="{DynamicResource Dialog}" AllowsTransparency="True" SizeToContent="Height" WindowStartupLocation="CenterScreen">
+        Title="Ввод данных" Height="165" Style="{DynamicResource Dialog}" AllowsTransparency="True" SizeToContent="Height" WindowStartupLocation="CenterScreen">
     <Grid FocusManager.FocusedElement="{Binding ElementName=InputValue}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>

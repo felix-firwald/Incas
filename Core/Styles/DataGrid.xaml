@@ -68,7 +68,7 @@
         </Style.Triggers>
     </Style>
     <Style x:Key="CellMain" TargetType="{x:Type DataGridCell}">
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="Foreground" Value="{StaticResource Light}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="BorderThickness" Value="0,0,1,0"/>
@@ -98,7 +98,21 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource Area}"/>
+                <!--<Setter Property="Background" Value="{StaticResource Area}"/>-->
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:0.100" To="#FF393C46" Storyboard.TargetProperty="Background.Color"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:0.200" To="#1d1d1f" Storyboard.TargetProperty="Background.Color"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
             </Trigger>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
