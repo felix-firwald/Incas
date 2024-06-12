@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Telegram.Bot.Types;
 
 namespace Incas.Core.Classes
 {
@@ -142,6 +143,16 @@ namespace Incas.Core.Classes
                 d.ShowDialog();
             });
         }
+        public static void ShowErrorDialog(Exception ex, string startMessage = "При выполнении действия возникла непредвиденная ошибка")
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                
+                ProgramState.PlaySound("UI-Exclamation");
+                Dialog d = new($"{startMessage}.\nТип исключения: {ex.GetType().Name}\n\nТехнические подробности:\n" + ex.Message, "Возникла ошибка", Dialog.DialogIcon.Error);
+                d.ShowDialog();
+            });
+        }
         public static void ShowErrorDialog(string message, string title = "Возникла неизвестная ошибка")
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -215,7 +226,7 @@ namespace Incas.Core.Classes
             });
             return ts.SelectedTemplate.AsModel();
         }
-        public static bool ShowUserSelector(out User user)
+        public static bool ShowUserSelector(out Users.Models.User user)
         {
             UserSelector us = new();
             System.Windows.Application.Current.Dispatcher.Invoke(() =>

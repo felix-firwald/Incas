@@ -8,6 +8,7 @@ namespace Incas.CreatedDocuments.Models
     public struct GeneratedElement
     {
         public int template;
+        public string filler;
         public List<SGeneratedTag> filledTags;      
     }
     public struct SGeneratedDocument

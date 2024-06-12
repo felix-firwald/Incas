@@ -46,7 +46,7 @@ namespace Incas.Templates.Views.Controls
     {
         public GeneratorStatus Status = GeneratorStatus.NotContented;
         public int TemplateId;
-        public List<GeneratedElement> Result;
+        public List<GeneratedElement> Result = new();
         private string resultText;
         private TagType tagType;
         public delegate void ValueChanged(object sender);
@@ -63,7 +63,11 @@ namespace Incas.Templates.Views.Controls
                 this.Result = JsonConvert.DeserializeObject<List<GeneratedElement>>(data);
                 this.SetWarning("Требуется открыть для обновления");
             }
-            catch { }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+                this.Result = new();
+            }
         }
         public void SetData(GeneratedElement data, string warning = "Требуется открыть для обновления")
         {
@@ -95,6 +99,10 @@ namespace Incas.Templates.Views.Controls
 
         public string GetText()
         {
+            if (this.Result.Count == 0)
+            {
+                this.Result.Add(new());
+            }
             switch (this.Status)
             {
                 case GeneratorStatus.InProcess:
@@ -132,8 +140,7 @@ namespace Incas.Templates.Views.Controls
                                     return "";
                                 }
                                 break;
-                        }
-                        
+                        }        
                     }
                     break;
             }
@@ -142,11 +149,6 @@ namespace Incas.Templates.Views.Controls
         public string GetData()
         {
             return JsonConvert.SerializeObject(this.Result);
-        }
-        private void ApplyGenerated(GeneratedElement data)
-        {
-            this.Result[0] = data;
-            this.SetContented();
         }
         private void SetContented()
         {
@@ -215,22 +217,49 @@ namespace Incas.Templates.Views.Controls
 
         private void OpenClick(object sender, MouseButtonEventArgs e)
         {
+            if (this.Result.Count == 0)
+            {
+                this.Result.Add(new GeneratedElement { });
+            }
             using Template t = new();
-            UseTemplateText utt = new(t.GetTemplateById(this.TemplateId), this.Result[0]);
-            utt.ShowDialog();
-            try
+            switch (this.tagType)
             {
-                if (utt.Result == DialogStatus.Yes)
-                {
-                    this.Result[0] = utt.GetData();
-                    this.resultText = utt.GetText();
-                    this.SetContented();
-                }
+                case TagType.Generator:
+                    UseTemplateText utt = new(t.GetTemplateById(this.TemplateId), this.Result[0]);
+                    utt.ShowDialog();
+                    try
+                    {
+                        if (utt.Result == DialogStatus.Yes)
+                        {
+                            this.Result[0] = utt.GetData();
+                            this.resultText = utt.GetText();
+                            this.SetContented();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DialogsManager.ShowErrorDialog(ex.Message);
+                    }
+                    break;
+                case TagType.Macrogenerator:
+                    UseTemplateCircularText utc = new(t.GetTemplateById(this.TemplateId), this.Result);
+                    utc.ShowDialog();
+                    try
+                    {
+                        if (utc.Result == DialogStatus.Yes)
+                        {
+                            this.Result = utc.GetData();
+                            this.resultText = utc.GetText();
+                            this.SetContented();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DialogsManager.ShowErrorDialog(ex.Message);
+                    }
+                    break;
             }
-            catch (Exception ex)
-            {
-                DialogsManager.ShowErrorDialog(ex.Message);
-            }
+            
         }
 
         private void ShowTextClick(object sender, MouseButtonEventArgs e)

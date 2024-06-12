@@ -21,7 +21,7 @@
 
         </StackPanel>-->
 
-        <Border x:Name="ContentPanel" Grid.ColumnSpan="2" Grid.Row="0" MaxHeight="400" Margin="5,5,5,5" CornerRadius="5" BorderThickness="1"/>
+        <Border x:Name="ContentPanel" Background="{StaticResource Black}" Grid.ColumnSpan="2" Grid.Row="0" MaxHeight="400" Margin="5,5,5,5" CornerRadius="5" BorderThickness="1"/>
         
         <!--<DatePicker Style="{DynamicResource DatePickerMain}" VerticalAlignment="Top"/>-->
         <Expander Style="{DynamicResource ExpanderMain}" Header="Предварительный просмотр" Grid.Row="2" Grid.ColumnSpan="2" IsExpanded="True" Margin="3,3,3,3">

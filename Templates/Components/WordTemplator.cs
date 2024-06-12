@@ -92,7 +92,7 @@ namespace Incas.Templates.Components
                 string value = tf.GetValue();
                 if (tf.tag.type != TagType.LocalConstant)
                 {
-                    if (tf.tag.type is TagType.Generator or TagType.Date)
+                    if (tf.tag.type is TagType.Generator or Components.TagType.Macrogenerator or TagType.Date)
                     {
                         SGeneratedTag gtg = new()
                         {

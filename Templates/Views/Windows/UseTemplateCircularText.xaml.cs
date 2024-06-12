@@ -1,19 +1,15 @@
-﻿using Incas.CreatedDocuments.Models;
+﻿using Incas.Core.Views.Windows;
+using Incas.CreatedDocuments.Models;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Pages;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Incas.Templates.Views.Windows
 {
@@ -22,14 +18,18 @@ namespace Incas.Templates.Views.Windows
     /// </summary>
     public partial class UseTemplateCircularText : Window
     {
+        public DialogStatus Result = DialogStatus.Undefined;
         private Template template;
         private List<Tag> tags;
+        private bool autoUpdating;
         public UseTemplateCircularText(Template templ, List<GeneratedElement> data)
         {
             this.InitializeComponent();
             this.template = templ;
             this.GetTags();
             this.ApplyData(data);
+            this.autoUpdating = true;
+            this.Updating();
         }
         private void GetTags()
         {
@@ -42,6 +42,7 @@ namespace Incas.Templates.Views.Windows
         public void ApplyData(List<GeneratedElement> data)
         {
             this.ContentPanel.Children.Clear();
+            this.FillerText.Text = data[0].filler;
             foreach (GeneratedElement el in data)
             {
                 this.AddElement(el);
@@ -54,6 +55,9 @@ namespace Incas.Templates.Views.Windows
             {
                 result.Add(ec.GetData());
             }
+            GeneratedElement ge = result[0];
+            ge.filler = this.FillerText.Text;
+            result[0] = ge;
             return result;
         }
         public string GetText()
@@ -63,19 +67,65 @@ namespace Incas.Templates.Views.Windows
             {
                 result.Add(ec.GetText());
             }
-            return string.Join("\n", result);
+            return string.Join(this.FillerText.Text, result);
         }
 
         private void AddElement()
         {
             ElementCreator ec = new(this.template, this.tags);
+            ec.OnCreatorDestroy += this.Element_OnCreatorDestroy;
             this.ContentPanel.Children.Add(ec);
         }
+
+        private void Element_OnCreatorDestroy(ElementCreator creator)
+        {
+            this.ContentPanel.Children.Remove(creator);
+        }
+
         private void AddElement(GeneratedElement doc)
         {
             ElementCreator ec = new(this.template, this.tags);
             ec.ApplyData(doc);
             this.ContentPanel.Children.Add(ec);
+        }
+        private async void Updating()
+        {
+            await Task.Run(() =>
+            {
+                while (this.autoUpdating)
+                {
+                    Thread.Sleep(1000);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        this.UpdateView();
+                    });                
+                }
+            });
+        }
+        private void UpdateView()
+        {
+            this.FlowDocument.Blocks.Clear();
+            Paragraph paragraph = new()
+            {
+                Foreground = new SolidColorBrush(System.Windows.Media.Colors.White)
+            };
+            
+            uint index = 0;
+            foreach (ElementCreator ec in this.ContentPanel.Children)
+            {              
+                Run r = new(ec.GetText());
+                if (index > 0)
+                {
+                    Run filler = new(this.FillerText.Text)
+                    {
+                        Foreground = new SolidColorBrush(System.Windows.Media.Colors.Lime)
+                    };
+                    paragraph.Inlines.Add(filler);
+                }
+                index++;               
+                paragraph.Inlines.Add(r);
+            }
+            this.FlowDocument.Blocks.Add(paragraph);
         }
 
         private void AddElementClick(object sender, MouseButtonEventArgs e)
@@ -95,7 +145,13 @@ namespace Incas.Templates.Views.Windows
 
         private void GenerateClick(object sender, RoutedEventArgs e)
         {
+            this.Result = DialogStatus.Yes;
+            this.Close();
+        }
 
+        private void OnClosingWanted(object sender, System.EventArgs e)
+        {
+            this.autoUpdating = false;
         }
     }
 }

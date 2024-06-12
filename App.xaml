@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="Core/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Core/Styles/Window.xaml" />
                 <ResourceDictionary Source="Core/Styles/RadioButton.xaml" />
+                <ResourceDictionary Source="Core/Styles/CustomControls.xaml" />
                 <ResourceDictionary Source="Core/Styles/Expander.xaml" />
                 <ResourceDictionary Source="Core/Styles/Button.xaml" />
                 <ResourceDictionary Source="Core/Styles/TextBox.xaml" />

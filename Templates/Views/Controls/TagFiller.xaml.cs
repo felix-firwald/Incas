@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Views.Controls;
 using Incas.Templates.Components;
 using Incas.Users.Models;
 using Incubator_2.Common;
@@ -32,10 +33,12 @@ namespace Incas.Templates.Views.Controls
     /// </summary>
     public partial class TagFiller : UserControl
     {
+        //public static Dictionary<TagType, >
         public readonly Tag tag;
         public FillerMode Mode;
         private bool isRequired = false;
         private bool validated = true;
+        private Control control;
         private CommandSettings command;
         public delegate void StringAction(int tag, string text);
         public event StringAction OnInsert;
@@ -49,57 +52,96 @@ namespace Incas.Templates.Views.Controls
             this.Mode = FillerMode.Tag;
             this.tag = t;
             this.MainLabel.Text = string.IsNullOrWhiteSpace(this.tag.visibleName) ? this.tag.name + ":" : this.tag.visibleName + ":";
+            this.GenerateUIControl();
+            this.MakeButton();
+        }
 
+        private void GenerateUIControl()
+        {
             switch (this.tag.type)
             {
                 case TagType.Variable:
-                default:
-                    this.SetTextBoxMode();
-                    this.Textbox.Text = this.tag.value;
-                    this.Textbox.MaxLength = 120;
-                    this.Textbox.Tag = this.tag.description;
-                    break;
                 case TagType.Text:
-                    this.SetTextBoxMode();
-                    this.Textbox.Text = this.tag.value;
-                    this.Textbox.Style = this.FindResource("TextBoxBig") as System.Windows.Style;
-                    this.Textbox.MaxLength = 1200;
-                    this.Textbox.Tag = this.tag.description;
+                    TextBox textBox = new()
+                    {
+                        Text = this.tag.value,
+                        Tag = this.tag.description
+                    };
+                    textBox.TextChanged += this.Textbox_TextChanged;
+                    if (this.tag.type == TagType.Variable)
+                    {
+                        textBox.Style = this.FindResource("TextBoxMain") as Style;
+                        textBox.MaxLength = 120;
+                    }
+                    else
+                    {
+                        textBox.Style = this.FindResource("TextBoxBig") as System.Windows.Style;
+                        textBox.MaxLength = 1200;
+                    }
+                    this.PlaceUIControl(textBox);
+                    break;
+                case TagType.LocalEnumeration:
+                    ComboBox comboBox = new()
+                    {
+                        ItemsSource = this.tag.value.Split(';'),
+                        SelectedIndex = 0,
+                        Style = this.FindResource("ComboBoxMain") as Style
+                    };
+                    comboBox.SelectionChanged += this.Combobox_SelectionChanged;
+                    if (!string.IsNullOrWhiteSpace(this.tag.description))
+                    {
+                        comboBox.ToolTip = this.tag.description;
+                    }
+                    this.PlaceUIControl(comboBox);
                     break;
                 case TagType.Number:
-                    this.NumericBox.ApplyMinAndMax(this.tag.value);
-                    this.NumericBox.Visibility = Visibility.Visible;
+                    NumericBox numeric = new();
+                    numeric.OnNumberChanged += this.NumericBox_OnNumberChanged;
+                    numeric.ApplyMinAndMax(this.tag.value);
+                    this.PlaceUIControl(numeric);
                     break;
                 case TagType.LocalConstant:
                 case TagType.HiddenField:
-                    this.Textbox.Text = this.tag.value;
                     this.Visibility = Visibility.Collapsed;
                     break;
-                case TagType.LocalEnumeration:
-                    this.SetComboBoxMode();
-                    this.Combobox.ItemsSource = this.tag.value.Split(';');
-                    this.Combobox.SelectedIndex = 0;
-                    if (!string.IsNullOrWhiteSpace(this.tag.description))
-                    {
-                        this.Combobox.ToolTip = this.tag.description;
-                    }
-                    break;
                 case TagType.Relation:
-                    this.SelectionBox.Visibility = Visibility.Visible;
-                    this.SelectionBox.Source = this.tag.value;
-                    this.SelectionBox.ToolTip = this.tag.description;
+                    SelectionBox selectionBox = new()
+                    {
+                        Source = this.tag.value,
+                        ToolTip = this.tag.description
+                    };
+                    selectionBox.OnValueChanged += this.SelectionBox_OnValueChanged;
+                    this.PlaceUIControl(selectionBox);
                     break;
                 case TagType.Date:
-                    this.DatePicker.Visibility = Visibility.Visible;
-                    this.DatePicker.ToolTip = this.tag.description;
+                    DatePicker picker = new()
+                    {
+                        ToolTip = this.tag.description,
+                        Style = this.FindResource("DatePickerMain") as Style
+                    };
+                    picker.SelectedDateChanged += this.DatePicker_SelectedDateChanged;
+                    this.PlaceUIControl(picker);
                     break;
                 case TagType.Generator:
-                    this.Generator.Visibility = Visibility.Visible;
-                    this.Generator.TemplateId = int.Parse(this.tag.value);
+                case TagType.Macrogenerator:
+                    Generator generator = new(this.tag.type)
+                    {
+                        TemplateId = int.Parse(this.tag.value)
+                    };
+                    generator.OnValueChanged += this.Generator_OnValueChanged;
+                    this.PlaceUIControl(generator);
                     break;
             }
-            this.MakeButton();
         }
+
+        private void PlaceUIControl(Control control)
+        {
+            this.control = control;
+            this.Grid.Children.Add(control);
+            Grid.SetRow(control, 0);
+            Grid.SetColumn(control, 1);
+        }
+
         private void MakeButton()
         {
             this.command = this.tag.GetCommand();
@@ -124,19 +166,12 @@ namespace Incas.Templates.Views.Controls
             this.tag.name = fc.Name;
             this.MainLabel.Text = this.tag.name + ":";
             this.isRequired = fc.NotNULL;
+            this.tag.type = TagType.Text;           
             if (fc.FKtable != null)
             {
                 this.tag.type = TagType.Relation;
-                this.SelectionBox.Visibility = Visibility.Visible;
-                this.SelectionBox.Database = path;
-                this.SelectionBox.Table = fc.FKtable;
-                this.SelectionBox.Field = fc.FKfield;
             }
-            else
-            {
-                this.tag.type = TagType.Text;
-                this.SetTextBoxMode();
-            }
+            this.GenerateUIControl();
         }
 
         public void SetValue(string value)
@@ -145,30 +180,33 @@ namespace Incas.Templates.Views.Controls
             {
                 case TagType.Variable:
                 case TagType.Text:
-                case TagType.HiddenField:
                 default:
-                    this.Textbox.Text = value;
+                    ((TextBox)this.control).Text = value;
                     break;
                 case TagType.Number:
                     int digitValue;
                     if (int.TryParse(value, out digitValue))
                     {
-                        this.NumericBox.Value = digitValue;
+                        ((NumericBox)this.control).Value = digitValue;
                     }
                     break;
                 case TagType.Relation:
-                    this.SelectionBox.Value = value;
+                    ((SelectionBox)this.control).Value = value;
                     break;
                 case TagType.LocalConstant:
                     return;
+                case TagType.HiddenField:
+                    this.tag.value = value;
+                    break;
                 case TagType.LocalEnumeration:
-                    this.Combobox.SelectedValue = value;
+                    ((ComboBox)this.control).SelectedValue = value;
                     break;
                 case TagType.Date:
                     this.SetDateTimeValue(value);
                     break;
                 case TagType.Generator:
-                    this.Generator.SetData(value);
+                case TagType.Macrogenerator:
+                    ((Generator)this.control).SetData(value);
                     break;
             }
         }
@@ -185,7 +223,7 @@ namespace Incas.Templates.Views.Controls
                 bool success = DateTime.TryParseExact(value, format, CultureInfo.CurrentCulture, DateTimeStyles.None, out parsedDate);
                 if (success)
                 {
-                    this.DatePicker.SelectedDate = parsedDate;
+                    ((DatePicker)this.control).SelectedDate = parsedDate;
                 }
                 return success;
             }
@@ -198,14 +236,6 @@ namespace Incas.Templates.Views.Controls
             }            
         }
 
-        private void SetTextBoxMode()
-        {
-            this.Textbox.Visibility = Visibility.Visible;
-        }
-        private void SetComboBoxMode()
-        {
-            this.Combobox.Visibility = Visibility.Visible;
-        }
         public string GetTagName()
         {
             return this.tag.name;
@@ -214,7 +244,7 @@ namespace Incas.Templates.Views.Controls
         {
             if (this.tag.type is TagType.Variable or TagType.Text)
             {
-                if (this.isRequired && string.IsNullOrEmpty(this.Textbox.Text))
+                if (this.isRequired && string.IsNullOrEmpty(((TextBox)this.control).Text))
                 {
                     DialogsManager.ShowExclamationDialog($"Поле \"{this.tag.name}\" обязательно для заполнения!", "Действие прервано");
                     return false;
@@ -224,9 +254,10 @@ namespace Incas.Templates.Views.Controls
         }
         private string GetDateInFormat()
         {
+            DatePicker picker = ((DatePicker)this.control);
             return string.IsNullOrWhiteSpace(this.tag.value)
-                ? this.DatePicker.SelectedDate.ToString()
-                : this.DatePicker.SelectedDate.HasValue ? ((DateTime)this.DatePicker.SelectedDate).ToString(this.tag.value) : "";
+                ? picker.SelectedDate.ToString()
+                : picker.SelectedDate.HasValue ? ((DateTime)picker.SelectedDate).ToString(this.tag.value) : "";
         }
         public string GetValue()
         {
@@ -235,23 +266,26 @@ namespace Incas.Templates.Views.Controls
             {
                 case TagType.Variable:
                 default:
-                    return this.Textbox.Text;
+                    return ((TextBox)this.control).Text;
                 case TagType.Number:
-                    return this.NumericBox.Value.ToString();
+                    return ((NumericBox)this.control).Value.ToString();
                 case TagType.LocalConstant:
+                case TagType.HiddenField:
                     return this.tag.value;
                 case TagType.Relation:
-                    return this.SelectionBox.Value;
+                    return ((SelectionBox)this.control).Value;
                 case TagType.LocalEnumeration:
-                    if (this.Combobox.SelectedIndex != -1)
+                    ComboBox cb = (ComboBox)this.control;
+                    if (cb.SelectedIndex != -1)
                     {
-                        return this.Combobox.Items.GetItemAt(this.Combobox.SelectedIndex).ToString();
+                        return cb.Items.GetItemAt(cb.SelectedIndex).ToString();
                     }
                     return "";
                 case TagType.Date:
                     return this.GetDateInFormat();
                 case TagType.Generator:
-                    return this.Generator.GetText();
+                case TagType.Macrogenerator:
+                    return ((Generator)this.control).GetText();
             }
         }
         public string GetData()
@@ -259,11 +293,12 @@ namespace Incas.Templates.Views.Controls
             switch (this.tag.type)
             {
                 case TagType.Generator:
-                    return this.Generator.GetData();
+                case TagType.Macrogenerator:
+                    return ((Generator)this.control).GetData();
                 case TagType.Date:
-                    if (this.DatePicker.SelectedDate.HasValue)
+                    if (((DatePicker)this.control).SelectedDate.HasValue)
                     {
-                        return ((DateTime)this.DatePicker.SelectedDate).ToString("dd.MM.yyyy");
+                        return ((DateTime)((DatePicker)this.control).SelectedDate).ToString("dd.MM.yyyy");
                     }
                     return "";
                 default: return this.GetValue();
@@ -274,88 +309,84 @@ namespace Incas.Templates.Views.Controls
         {
             return this.tag.id;
         }
-        private void ClearClick(object sender, RoutedEventArgs e)
-        {
-            this.Textbox.Text = "";
-        }
+        //private void ClearClick(object sender, RoutedEventArgs e)
+        //{
+        //    this.Textbox.Text = "";
+        //}
 
-        private void CopyClick(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetText(this.Textbox.SelectedText);
-        }
         private void CopyAllClick(object sender, RoutedEventArgs e)
         {
-            Clipboard.SetText(this.Textbox.Text);
+            Clipboard.SetText(this.GetValue());
         }
-        private void PasteClick(object sender, RoutedEventArgs e)
-        {
-            this.Textbox.Text = Clipboard.GetText();
-        }
+        //private void PasteClick(object sender, RoutedEventArgs e)
+        //{
+        //    this.Textbox.Text = Clipboard.GetText();
+        //}
 
-        private bool IsAnythingSelected()
-        {
-            return !string.IsNullOrEmpty(this.Textbox.SelectedText);
-        }
-        private void MakeTitleClick(object sender, RoutedEventArgs e)
-        {
-            if (this.IsAnythingSelected())
-            {
-                this.Textbox.SelectedText = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(this.Textbox.SelectedText.ToLower());
-            }
-            else
-            {
-                this.Textbox.Text = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(this.Textbox.Text.ToLower());
-            }
-        }
-        private void MakeUpperClick(object sender, RoutedEventArgs e)
-        {
-            if (this.IsAnythingSelected())
-            {
-                this.Textbox.SelectedText = this.Textbox.SelectedText.ToUpper();
-            }
-            else
-            {
-                this.Textbox.Text = this.Textbox.Text.ToUpper();
-            }
-        }
-        private void MakeLowerClick(object sender, RoutedEventArgs e)
-        {
-            if (this.IsAnythingSelected())
-            {
-                this.Textbox.SelectedText = this.Textbox.SelectedText.ToLower();
-            }
-            else
-            {
-                this.Textbox.Text = this.Textbox.Text.ToLower();
-            }
-        }
-        private void RemoveWhitespacesClick(object sender, RoutedEventArgs e)
-        {
-            this.Textbox.Text = Regex.Replace(this.Textbox.Text, @"\s+", " ");
-        }
-        private void RemoveLineBreaksClick(object sender, RoutedEventArgs e)
-        {
-            this.Textbox.Text = this.Textbox.Text.Replace(System.Environment.NewLine, " ");
-        }
-        private void WrapAsQuoteClick(object sender, RoutedEventArgs e)
-        {
-            if (this.IsAnythingSelected())
-            {
-                this.Textbox.SelectedText = $"«{this.Textbox.SelectedText}»";
-            }
-            else
-            {
-                this.Textbox.Text = $"«{this.Textbox.Text}»";
-            }
-        }
-        private void AddDateNow(object sender, RoutedEventArgs e)
-        {
-            this.Textbox.Text += DateTime.Now.ToString("dd.MM.yyyy");
-        }
-        private void AddDateLongNow(object sender, RoutedEventArgs e)
-        {
-            this.Textbox.Text += DateTime.Now.ToString("D");
-        }
+        //private bool IsAnythingSelected()
+        //{
+        //    return !string.IsNullOrEmpty(this.Textbox.SelectedText);
+        //}
+        //private void MakeTitleClick(object sender, RoutedEventArgs e)
+        //{
+        //    if (this.IsAnythingSelected())
+        //    {
+        //        this.Textbox.SelectedText = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(this.Textbox.SelectedText.ToLower());
+        //    }
+        //    else
+        //    {
+        //        this.Textbox.Text = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(this.Textbox.Text.ToLower());
+        //    }
+        //}
+        //private void MakeUpperClick(object sender, RoutedEventArgs e)
+        //{
+        //    if (this.IsAnythingSelected())
+        //    {
+        //        this.Textbox.SelectedText = this.Textbox.SelectedText.ToUpper();
+        //    }
+        //    else
+        //    {
+        //        this.Textbox.Text = this.Textbox.Text.ToUpper();
+        //    }
+        //}
+        //private void MakeLowerClick(object sender, RoutedEventArgs e)
+        //{
+        //    if (this.IsAnythingSelected())
+        //    {
+        //        this.Textbox.SelectedText = this.Textbox.SelectedText.ToLower();
+        //    }
+        //    else
+        //    {
+        //        this.Textbox.Text = this.Textbox.Text.ToLower();
+        //    }
+        //}
+        //private void RemoveWhitespacesClick(object sender, RoutedEventArgs e)
+        //{
+        //    this.Textbox.Text = Regex.Replace(this.Textbox.Text, @"\s+", " ");
+        //}
+        //private void RemoveLineBreaksClick(object sender, RoutedEventArgs e)
+        //{
+        //    this.Textbox.Text = this.Textbox.Text.Replace(System.Environment.NewLine, " ");
+        //}
+        //private void WrapAsQuoteClick(object sender, RoutedEventArgs e)
+        //{
+        //    if (this.IsAnythingSelected())
+        //    {
+        //        this.Textbox.SelectedText = $"«{this.Textbox.SelectedText}»";
+        //    }
+        //    else
+        //    {
+        //        this.Textbox.Text = $"«{this.Textbox.Text}»";
+        //    }
+        //}
+        //private void AddDateNow(object sender, RoutedEventArgs e)
+        //{
+        //    this.Textbox.Text += DateTime.Now.ToString("dd.MM.yyyy");
+        //}
+        //private void AddDateLongNow(object sender, RoutedEventArgs e)
+        //{
+        //    this.Textbox.Text += DateTime.Now.ToString("D");
+        //}
 
         private void InsertToOther(object sender, RoutedEventArgs e)
         {

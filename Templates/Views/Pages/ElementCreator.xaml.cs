@@ -7,7 +7,9 @@ using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Incas.Templates.Views.Pages
 {
@@ -18,12 +20,18 @@ namespace Incas.Templates.Views.Pages
     {
         private Template template;
         private List<Tag> tags;
+
+        public delegate void ElementCreatorAction(ElementCreator creator);
+        public event ElementCreatorAction OnCreatorDestroy;
+
+        public delegate void TagActionRecalculate(string tag);
         public ElementCreator(Template template, List<Tag> tags)
         {
             this.InitializeComponent();
             this.template = template;
             this.tags = tags;
             this.FillPanel();
+            this.ExpanderButton.IsChecked = true;
         }
         private void FillPanel()
         {
@@ -40,17 +48,20 @@ namespace Incas.Templates.Views.Pages
         }
         public void ApplyData(GeneratedElement data)
         {
-            foreach (SGeneratedTag tag in data.filledTags)
+            if (data.filledTags != null)
             {
-                foreach (TagFiller tagfiller in this.ContentPanel.Children)
+                foreach (SGeneratedTag tag in data.filledTags)
                 {
-                    if (tagfiller.tag.id == tag.tag)
+                    foreach (TagFiller tagfiller in this.ContentPanel.Children)
                     {
-                        tagfiller.SetValue(tag.value);
-                        break;
+                        if (tagfiller.tag.id == tag.tag)
+                        {
+                            tagfiller.SetValue(tag.value);
+                            break;
+                        }
                     }
                 }
-            }
+            }         
         }
         public GeneratedElement GetData()
         {
@@ -98,7 +109,7 @@ namespace Incas.Templates.Views.Pages
             }
             catch (Exception ex)
             {
-                DialogsManager.ShowErrorDialog("При обработке скрипта на стороне формы возникла ошибка:\n" + ex.Message);
+                DialogsManager.ShowErrorDialog(ex, "При обработке скрипта на стороне формы возникла ошибка");
             }
         }
         public bool SimpleValidate()
@@ -112,6 +123,26 @@ namespace Incas.Templates.Views.Pages
                 }
             }
             return true;
+        }
+        public void Maximize()
+        {
+            this.ExpanderButton.IsChecked = true;
+        }
+        public void Minimize()
+        {
+            this.ExpanderButton.IsChecked = false;
+        }
+        private void MaximizeClick(object sender, RoutedEventArgs e)
+        {
+            this.MainBorder.Height = this.ContentPanel.Height + 40;
+        }
+        private void MinimizeClick(object sender, RoutedEventArgs e)
+        {
+            this.MainBorder.Height = 40;
+        }
+        private void Remove(object sender, MouseButtonEventArgs e)
+        {
+            OnCreatorDestroy?.Invoke(this);
         }
     }
 }

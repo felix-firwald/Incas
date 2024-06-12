@@ -246,28 +246,34 @@ namespace Incas.Templates.Views.Pages
             {
                 int id = tf.GetId();
                 string name = tf.GetTagName();
-                string value = tf.GetValue();
-                if (tf.tag.type != TagType.LocalConstant)
+                string value = tf.GetData();
+                SGeneratedTag gtg = new()
                 {
-                    if (tf.tag.type is TagType.Generator or TagType.Date)
-                    {
-                        SGeneratedTag gtg = new()
-                        {
-                            tag = id,
-                            value = tf.GetData()
-                        };
-                        filledTags.Add(gtg);
-                    }
-                    else
-                    {
-                        SGeneratedTag gt = new()
-                        {
-                            tag = id,
-                            value = value
-                        };
-                        filledTags.Add(gt);
-                    }
-                }
+                    tag = id,
+                    value = tf.GetData()
+                };
+                filledTags.Add(gtg);
+                //if (tf.tag.type != TagType.LocalConstant)
+                //{
+                //    if (tf.tag.type is TagType.Generator or Components.TagType.Macrogenerator or TagType.Date)
+                //    {
+                //        SGeneratedTag gtg = new()
+                //        {
+                //            tag = id,
+                //            value = tf.GetData()
+                //        };
+                //        filledTags.Add(gtg);
+                //    }
+                //    else
+                //    {
+                //        SGeneratedTag gt = new()
+                //        {
+                //            tag = id,
+                //            value = value
+                //        };
+                //        filledTags.Add(gt);
+                //    }
+                //}
             }
             foreach (TableFiller table in this.Tables)
             {
