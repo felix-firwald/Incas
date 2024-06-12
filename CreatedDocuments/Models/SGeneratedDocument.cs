@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 namespace Incas.CreatedDocuments.Models
 {
+    public struct GeneratedElement
+    {
+        public int template;
+        public List<SGeneratedTag> filledTags;      
+    }
     public struct SGeneratedDocument
     {
         public int id;

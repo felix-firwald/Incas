@@ -17,17 +17,12 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <StackPanel x:Name="ElementsPanel" Orientation="Horizontal" HorizontalAlignment="Center">
+        <!--<StackPanel x:Name="ElementsPanel" Orientation="Horizontal" HorizontalAlignment="Center">
 
-        </StackPanel>
+        </StackPanel>-->
 
-        <Border Background="{DynamicResource Dark}" Grid.ColumnSpan="2" MaxHeight="400" Margin="5,5,5,5" CornerRadius="5" BorderThickness="1" BorderBrush="{DynamicResource Element}" Grid.Row="1">
-            <ScrollViewer Style="{DynamicResource ScrollViewerBase}">
-                <StackPanel x:Name="ContentPanel">
-                    
-                </StackPanel>
-            </ScrollViewer>
-        </Border>
+        <Border x:Name="ContentPanel" Grid.ColumnSpan="2" Grid.Row="0" MaxHeight="400" Margin="5,5,5,5" CornerRadius="5" BorderThickness="1"/>
+        
         <!--<DatePicker Style="{DynamicResource DatePickerMain}" VerticalAlignment="Top"/>-->
         <Expander Style="{DynamicResource ExpanderMain}" Header="Предварительный просмотр" Grid.Row="2" Grid.ColumnSpan="2" IsExpanded="True" Margin="3,3,3,3">
             <TextBox x:Name="ResultView" Style="{DynamicResource TextBoxBig}" MinHeight="150" Tag="Результат" IsReadOnly="True" TextWrapping="WrapWithOverflow">

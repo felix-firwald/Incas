@@ -123,8 +123,11 @@ namespace Incubator_2.Forms
                     "Новый", "Существующий") == DialogStatus.Yes)
                     {
                         CreateTextTemplate ctt = new();
-                        ctt.ShowDialog();
-                        this.vm.DefaultValue = ctt.template.id.ToString();
+                        ctt.Show();
+                        if (ctt.template.id > 0)
+                        {
+                            this.vm.DefaultValue = ctt.template.id.ToString();
+                        }                
                     }
                     else
                     {
@@ -139,7 +142,7 @@ namespace Incubator_2.Forms
                 {
                     using Template t = new();
                     CreateTextTemplate ctt = new(t.GetTemplateById(int.Parse(this.vm.DefaultValue)));
-                    ctt.ShowDialog();
+                    ctt.Show();
                 }
             }
             catch (Exception ex)

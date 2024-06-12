@@ -70,12 +70,12 @@
                 </Style>
             </StackPanel.Style>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Style="{DynamicResource ButtonMain}" Click="SaveClick" ToolTip="На строку выше">
+                <Button Style="{DynamicResource ButtonMain}" ToolTip="На строку выше">
                     <StackPanel Orientation="Horizontal" Margin="8,0,9,3">
                         <Path Fill="White" VerticalAlignment="Center" Data="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{DynamicResource ButtonMain}" Click="SaveClick" ToolTip="На строку ниже">
+                <Button Style="{DynamicResource ButtonMain}" ToolTip="На строку ниже">
                     <StackPanel Orientation="Horizontal" Margin="8,0,9,3">
                         <Path Fill="White" VerticalAlignment="Center" Data="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
                     </StackPanel>

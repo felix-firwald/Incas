@@ -90,6 +90,7 @@ namespace Incas.Templates.ViewModels
                     case TagType.LocalConstant:
                     case TagType.HiddenField:
                     case TagType.Generator:
+                    case TagType.Macrogenerator:
                         return Visibility.Collapsed;
                 }
             }
@@ -154,6 +155,10 @@ namespace Incas.Templates.ViewModels
                     return TagType.Generator;
                 case "9":
                     this.Description = "";
+                    this.DefaultValue = "";
+                    return TagType.Macrogenerator;
+                case "10":
+                    this.Description = "";
                     return TagType.Table;
             }
         }
@@ -169,12 +174,13 @@ namespace Incas.Templates.ViewModels
                 TagType.LocalConstant => "6",
                 TagType.HiddenField => "7",
                 TagType.Generator => "8",
-                TagType.Table => "9",
+                TagType.Macrogenerator => "9",
+                TagType.Table => "10",
                 _ => "0",
             };
         }
         public Visibility ButtonRelationVisibility => this.mainTag.type == TagType.Relation ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility ButtonGeneratorVisibility => this.mainTag.type is TagType.Generator ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ButtonGeneratorVisibility => this.mainTag.type is TagType.Generator or TagType.Macrogenerator ? Visibility.Visible : Visibility.Collapsed;
         public Visibility DefaultValueVisibility
         {
             get
@@ -185,6 +191,7 @@ namespace Incas.Templates.ViewModels
                         return Visibility.Visible;
                     case TagType.Relation:
                     case TagType.Generator:
+                    case TagType.Macrogenerator:
                         return Visibility.Collapsed;
                 }
             }

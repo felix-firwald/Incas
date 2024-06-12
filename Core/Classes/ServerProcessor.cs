@@ -292,7 +292,7 @@ namespace Incas.Core.Classes
                                 {
                                     WaitControls
                                         .GetGenerator(process.back_id)
-                                        .SetData(JsonConvert.DeserializeObject<SGeneratedDocument>(process.content), "Требуется подтверждение");
+                                        .SetData(JsonConvert.DeserializeObject<GeneratedElement>(process.content), "Требуется подтверждение");
                                 }
                                 catch { }
                             });
@@ -414,11 +414,11 @@ namespace Incas.Core.Classes
         {
             try
             {
-                SGeneratedDocument part = JsonConvert.DeserializeObject<SGeneratedDocument>(p.content);
+                List<GeneratedElement> part = JsonConvert.DeserializeObject<List<GeneratedElement>>(p.content);
                 using Template t = new();
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    UseTemplateText ut = new(t.GetTemplateById(part.template), part);
+                    UseTemplateText ut = new(t.GetTemplateById(part[0].template), part[0]);
                     ut.Show();
                     ut.OnFinishedEditing += new(() =>
                     {
@@ -574,7 +574,7 @@ namespace Incas.Core.Classes
             process.content = JsonConvert.SerializeObject(documents);
             SendToPort(process);
         }
-        public static void SendOpenGeneratorProcess(SGeneratedDocument part, Generator tagfiller, string recipient)
+        public static void SendOpenGeneratorProcess(List<GeneratedElement> part, Generator tagfiller, string recipient)
         {
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.OPEN_GENERATOR;
@@ -591,7 +591,7 @@ namespace Incas.Core.Classes
             outputProcess.content = ds == DialogStatus.Yes ? "Да" : "Нет";
             SendToPort(outputProcess);
         }
-        private static void SendOpenGeneratorResultResponse(Process inputProcess, SGeneratedDocument part)
+        private static void SendOpenGeneratorResultResponse(Process inputProcess, GeneratedElement part)
         {
             Process outputProcess = CreateResponseProcess(inputProcess);
             outputProcess.content = JsonConvert.SerializeObject(part);

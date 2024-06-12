@@ -180,7 +180,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="{DynamicResource GrayLight}"/>
-        <Setter Property="TextElement.FontFamily" Value="/Fonts/#JetBrains Mono"/>
+        <Setter Property="TextElement.FontFamily" Value="/Static/Fonts/#JetBrains Mono"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
@@ -189,7 +189,7 @@
                             <ScrollViewer 
                                 x:Name="PART_ContentHost" 
                                 Focusable="False"
-                                TextElement.FontFamily="/Static/Fonts/#JetBrains Mono"
+                                
                                 
                                 HorizontalScrollBarVisibility="Hidden" 
                                 VerticalScrollBarVisibility="Hidden" VerticalAlignment="Center"/>

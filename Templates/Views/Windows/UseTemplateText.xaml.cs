@@ -4,6 +4,7 @@ using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
+using Incas.Templates.Views.Pages;
 using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
 using System;
@@ -20,14 +21,17 @@ namespace Incas.Templates.Views.Windows
         public DialogStatus Result = DialogStatus.Undefined;
         private Template template;
         private List<Tag> tags;
+        private ElementCreator creator;
         public delegate void Base();
         public event Base OnFinishedEditing;
-        public UseTemplateText(Template templ, SGeneratedDocument data)
+        public UseTemplateText(Template templ, GeneratedElement data)
         {
             this.InitializeComponent();
             this.template = templ;
             this.Title = this.template.name;
             this.GetTags();
+            this.creator = new ElementCreator(this.template, this.tags);
+            this.ContentPanel.Child = this.creator;
             if (data.filledTags != null)
             {
                 this.ApplyData(data);
@@ -39,91 +43,26 @@ namespace Incas.Templates.Views.Windows
             {
                 this.tags = tag.GetAllTagsByTemplate(this.template.id);
             }
-            foreach (Tag tag in this.tags)
-            {
-                this.AddField(tag);
-            }
-        }
-        private void AddField(Tag t)
-        {
-            TagFiller tf = new(t);
-            tf.OnScriptRequested += this.OnScriptRequested;
-            this.ContentPanel.Children.Add(tf);
         }
 
-        private void OnScriptRequested(string script)
+        public void ApplyData(GeneratedElement data)
         {
-            try
-            {
-                ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                foreach (TagFiller tf in this.ContentPanel.Children)
-                {
-                    scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
-                }
-                ScriptManager.Execute(script, scope);
-                foreach (TagFiller tf in this.ContentPanel.Children)
-                {
-                    tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
-                }
-            }
-            catch (Exception ex)
-            {
-                DialogsManager.ShowErrorDialog("При обработке скрипта на стороне формы возникла ошибка:\n" + ex.Message);
-            }
+            this.creator.ApplyData(data);
         }
-
-        public void ApplyData(SGeneratedDocument data)
+        public GeneratedElement GetData()
         {
-            foreach (SGeneratedTag tag in data.GetFilledTags())
-            {
-                foreach (TagFiller tagfiller in this.ContentPanel.Children)
-                {
-                    if (tagfiller.tag.id == tag.tag)
-                    {
-                        tagfiller.SetValue(tag.value);
-                        break;
-                    }
-                }
-            }
-        }
-        public SGeneratedDocument GetData()
-        {
-            SGeneratedDocument result = new()
-            {
-                id = this.template.id
-            };
-            List<SGeneratedTag> tags = [];
-            foreach (TagFiller tf in this.ContentPanel.Children)
-            {
-                SGeneratedTag gt = new()
-                {
-                    tag = tf.tag.id,
-                    value = tf.tag.type == TagType.Generator ? tf.GetData() : tf.GetValue()
-                };
-                tags.Add(gt);
-            }
-            result.filledTags = tags;
-            return result;
+            return this.creator.GetData();
         }
         public string GetText()
         {
-            string result = this.template.path;
-            foreach (TagFiller tf in this.ContentPanel.Children)
-            {
-                result = result.Replace($"[{tf.tag.name}]", tf.GetValue());
-            }
-            return result;
+            return this.creator.GetText();
         }
 
         private void ApplyClick(object sender, RoutedEventArgs e)
         {
-            foreach (TagFiller tf in this.ContentPanel.Children)
+            if (!this.creator.SimpleValidate())
             {
-                if (string.IsNullOrEmpty(tf.GetData()))
-                {
-                    DialogsManager.ShowExclamationDialog($"Тег \"{tf.tag.name}\" не заполнен!", "Сохранение отклонено");
-                    return;
-                }
+                return;
             }
             OnFinishedEditing?.Invoke();
 

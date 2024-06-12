@@ -68,7 +68,7 @@
         <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" ToolTip="Открыть справочную информацию" MouseDown="GetMoreInfoClick" HorizontalAlignment="Left"/>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="3">
             <Label Style="{DynamicResource LabelElement}" Content="# Python 3"/>
-            <avalonEdit:TextEditor x:Name="CodeEditor" MinHeight="200" SyntaxHighlighting="Python"
+            <avalonEdit:TextEditor x:Name="CodeEditor" MinHeight="200" SyntaxHighlighting="Python" HorizontalScrollBarVisibility="Disabled"
                 FontFamily="Consolas" Text="for i in range():" 
                 FontSize="11pt" Background="{DynamicResource Black}" Padding="5" ShowLineNumbers="True" Foreground="White">
                 

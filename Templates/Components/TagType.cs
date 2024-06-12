@@ -17,6 +17,7 @@ namespace Incas.Templates.Components
         HiddenField,
         Date,
         Generator,
-        Table
+        Table,
+        Macrogenerator
     }
 }

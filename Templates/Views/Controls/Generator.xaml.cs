@@ -1,11 +1,13 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
+using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Windows;
 using Incas.Users.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -44,24 +46,40 @@ namespace Incas.Templates.Views.Controls
     {
         public GeneratorStatus Status = GeneratorStatus.NotContented;
         public int TemplateId;
-        public SGeneratedDocument Result;
+        public List<GeneratedElement> Result;
         private string resultText;
+        private TagType tagType;
         public delegate void ValueChanged(object sender);
         public event ValueChanged OnValueChanged;
-        public Generator() // new
+        public Generator(TagType type) // new
         {
             this.InitializeComponent();
+            this.tagType = type;
         }
         public void SetData(string data)
         {
             try
             {
-                this.Result = JsonConvert.DeserializeObject<SGeneratedDocument>(data);
+                this.Result = JsonConvert.DeserializeObject<List<GeneratedElement>>(data);
                 this.SetWarning("Требуется открыть для обновления");
             }
             catch { }
         }
-        public void SetData(SGeneratedDocument data, string warning = "Требуется открыть для обновления")
+        public void SetData(GeneratedElement data, string warning = "Требуется открыть для обновления")
+        {
+            try
+            {
+                this.Result = new();
+                this.Result[0] = data;
+                this.SetWarning(warning);
+                OnValueChanged?.Invoke(this);
+            }
+            catch (Exception)
+            {
+                this.SetNotContented();
+            }
+        }
+        public void SetData(List<GeneratedElement> data, string warning = "Требуется открыть для обновления")
         {
             try
             {
@@ -86,17 +104,36 @@ namespace Incas.Templates.Views.Controls
                 case GeneratorStatus.Warning:
                     using (Template t = new())
                     {
-                        UseTemplateText utt = new(t.GetTemplateById(this.TemplateId), this.Result);
-                        try
+                        switch (this.tagType)
                         {
-                            this.Result = utt.GetData();
-                            this.resultText = utt.GetText();
-                            this.SetContented();
+                            case TagType.Generator:
+                                UseTemplateText utt = new(t.GetTemplateById(this.TemplateId), this.Result[0]);
+                                try
+                                {
+                                    this.Result[0] = utt.GetData();
+                                    this.resultText = utt.GetText();
+                                    this.SetContented();
+                                }
+                                catch (Exception)
+                                {
+                                    return "";
+                                }
+                                break;
+                            case TagType.Macrogenerator:
+                                UseTemplateCircularText utc = new(t.GetTemplateById(this.TemplateId), this.Result);
+                                try
+                                {
+                                    this.Result = utc.GetData();
+                                    this.resultText = utc.GetText();
+                                    this.SetContented();
+                                }
+                                catch (Exception)
+                                {
+                                    return "";
+                                }
+                                break;
                         }
-                        catch (Exception)
-                        {
-                            throw new GeneratorUndefinedStateException("Генератор требует подтверждения данных.");
-                        }
+                        
                     }
                     break;
             }
@@ -106,9 +143,9 @@ namespace Incas.Templates.Views.Controls
         {
             return JsonConvert.SerializeObject(this.Result);
         }
-        private void ApplyGenerated(SGeneratedDocument data)
+        private void ApplyGenerated(GeneratedElement data)
         {
-            this.Result = data;
+            this.Result[0] = data;
             this.SetContented();
         }
         private void SetContented()
@@ -166,7 +203,9 @@ namespace Incas.Templates.Views.Controls
                     Session session;
                     if (DialogsManager.ShowActiveUserSelector(out session, "Выберите пользователя для заполнения этой части документа."))
                     {
-                        this.Result.template = this.TemplateId;
+                        GeneratedElement ge = this.Result[0];
+                        ge.template = this.TemplateId;
+                        this.Result[0] = ge;
                         ServerProcessor.SendOpenGeneratorProcess(this.Result, this, session.slug);
                         this.SetInProcess($"Делегировано: {session.user}");
                     }
@@ -177,17 +216,16 @@ namespace Incas.Templates.Views.Controls
         private void OpenClick(object sender, MouseButtonEventArgs e)
         {
             using Template t = new();
-            UseTemplateText utt = new(t.GetTemplateById(this.TemplateId), this.Result);
+            UseTemplateText utt = new(t.GetTemplateById(this.TemplateId), this.Result[0]);
             utt.ShowDialog();
             try
             {
                 if (utt.Result == DialogStatus.Yes)
                 {
-                    this.Result = utt.GetData();
+                    this.Result[0] = utt.GetData();
                     this.resultText = utt.GetText();
                     this.SetContented();
                 }
-
             }
             catch (Exception ex)
             {

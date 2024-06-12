@@ -13,7 +13,7 @@ namespace Incas.Core.Classes
 {
     public static class DatabaseManager // static cause server connection must be only one per session
     {
-        private static List<string> commandsText = [];
+        private static List<Query> commandsText = [];
         public static SQLiteConnection connection;
         public static void OpenConnection(string path)
         {
@@ -205,7 +205,7 @@ namespace Incas.Core.Classes
 
         public static void AppendBackgroundQuery(Query q)
         {
-            commandsText.Add(q.Result);
+            commandsText.Add(q);
         }
         public static async void ExecuteBackground()
         {

@@ -473,6 +473,15 @@ namespace Incas.Core.Classes
             }
             this.parameters.Clear();
         }
+        public void ShowParameterQuery()
+        {
+            string result = this.Result;
+            foreach (KeyValuePair<string, string> pair in this.parameters)
+            {
+                result += $"\nPARAM {pair.Key} = {pair.Value}";
+            }
+            DialogsManager.ShowInfoDialog(result);
+        }
         public DataTable Execute()
         {
             try
@@ -484,6 +493,7 @@ namespace Incas.Core.Classes
                 System.Diagnostics.Debug.WriteLine(this.Result);
                 cmd.CommandText = this.GetRequest();
                 this.ApplyParams(cmd);
+                
                 SQLiteDataReader sqlreader = cmd.ExecuteReader();
                 DataTable objDataTable = new();
                 objDataTable.Load(sqlreader);
@@ -525,6 +535,7 @@ namespace Incas.Core.Classes
                 return null;
             }
         }
+
         public void ExecuteVoid()
         {
             try
@@ -534,10 +545,10 @@ namespace Incas.Core.Classes
                 SQLiteCommand cmd = conn.CreateCommand();
                 cmd.CommandText = this.GetRequest();
                 this.ApplyParams(cmd);
+                //this.ShowParameterQuery();
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 return;
-
             }
 
             catch (SQLiteException ex)
@@ -614,6 +625,13 @@ namespace Incas.Core.Classes
         {
             DatabaseManager.AppendBackgroundQuery(this);
             this.Clear();
+        }
+        public void Combine(List<Query> queries)
+        {
+            foreach (Query query in queries)
+            {
+
+            }
         }
         #endregion
     }

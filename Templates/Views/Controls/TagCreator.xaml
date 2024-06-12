@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incubator_2.Forms" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="380" d:DesignWidth="600">
+             d:DesignHeight="390" d:DesignWidth="600">
     <Border x:Name="MainBorder" Margin="5" CornerRadius="5" Background="{DynamicResource Dark}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -34,11 +34,11 @@
                 </TextBox>
                 <Label Style="{DynamicResource LabelElement}" Content="]" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
             </StackPanel>
-            
+
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2" />
 
             <StackPanel Grid.Row="2" x:Name="ContentPanel">
-                
+
                 <TextBox Style="{DynamicResource TextBoxMain}" Tag="Отображаемое название" Text="{Binding VisibleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" TextWrapping="Wrap">
                     <TextBox.ContextMenu>
                         <ContextMenu>
@@ -48,7 +48,7 @@
                         </ContextMenu>
                     </TextBox.ContextMenu>
                 </TextBox>
-                <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding TypeOfTagValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding TypeOfTagValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxDropDownHeight="240">
                     <ComboBoxItem >
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Fill="{DynamicResource Success}" Width="5" Height="5"/>
@@ -63,6 +63,7 @@
                             <Label Content="Ручной ввод" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
                         </StackPanel>
                     </ComboBoxItem>
+
                     <ComboBoxItem >
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
@@ -112,7 +113,13 @@
                             <Label Content="Заполнение выделенной формы для генерации текста" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11" Cursor=""/>
                         </StackPanel>
                     </ComboBoxItem>
-                    
+                    <ComboBoxItem >
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Fill="{DynamicResource Purple}" Width="5" Height="5"/>
+                            <Label Content="Макрогенератор" Style="{DynamicResource LabelElement}"/>
+                            <Label Content="Заполнение форм для создания большого текста" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11" Cursor=""/>
+                        </StackPanel>
+                    </ComboBoxItem>
                     <ComboBoxItem>
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Fill="{DynamicResource Purple}" Width="5" Height="5"/>

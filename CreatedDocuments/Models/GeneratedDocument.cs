@@ -110,7 +110,7 @@ namespace Incas.CreatedDocuments.Models
                     {nameof(this.content), this.content },
                     {nameof(this.author), this.author }
                 })
-                .Accumulate();
+                .ExecuteVoid();
         }
         public void UpdateRecord()
         {
