@@ -155,5 +155,9 @@ namespace Incas.Core.Models
                 .ExecuteVoid();
             return this;
         }
+        public void RemoveParameterById(long id)
+        {
+            this.StartCommandToService().Delete().WhereEqual("id", id.ToString()).ExecuteVoid();
+        }
     }
 }

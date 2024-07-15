@@ -10,6 +10,8 @@ using Org.BouncyCastle.Asn1.X509.Qualified;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,12 +32,12 @@ namespace Incas.Core.Views.Windows
             this.Result = values;
             this.TitleText.Content = title;
 
-            foreach (FieldInfo field in values.GetType().GetFields())
+            foreach (PropertyInfo field in values.GetType().GetProperties())
             {
                 this.AddField(field);
             }
         }
-        private void AddField(FieldInfo field)
+        private void AddField(PropertyInfo field)
         {
             string description = this.GetFieldDescription(field);
             //DialogsManager.ShowInfoDialog(field.FieldType.Name);
@@ -46,8 +48,9 @@ namespace Incas.Core.Views.Windows
                 FontSize = 11,
                 Style = this.FindResource("LabelPrimary") as Style
             };
-            
-            switch (field.FieldType.Name)
+
+            //DialogsManager.ShowInfoDialog(field.PropertyType.Name);
+            switch (field.PropertyType.Name)
             {
                 case "String":
                     control = this.GenerateTextBox(description, (string)field.GetValue(this.Result));
@@ -63,8 +66,20 @@ namespace Incas.Core.Views.Windows
                     control = this.GenerateDateBox(description, (DateTime)field.GetValue(this.Result));
                     this.Fields.Children.Add(label);
                     break;
+                case "DataTable":
+                    control = this.GenerateDataGrid(description, (DataTable)field.GetValue(this.Result));
+                    this.Fields.Children.Add(label);
+                    break;
             }
-            
+            //if (field.FieldType.IsEnum)
+            //{
+            //    DialogsManager.ShowInfoDialog(field.Name);
+            //    this.GetEnumDescriptions(field);
+            //}
+            if (field.SetMethod.IsPrivate)
+            {
+                control.IsEnabled = false;
+            }
             this.Fields.Children.Add(control);
         }
         private Control GenerateTextBox(string description, string value)
@@ -88,11 +103,26 @@ namespace Incas.Core.Views.Windows
         }
         private Control GenerateDateBox(string description, DateTime value)
         {
+            if (value == DateTime.MinValue)
+            {
+                value = DateTime.Today;
+            }
             DatePicker control = new()
             {
                 Tag = description,
                 SelectedDate = value,
                 Style = this.FindResource("DatePickerMain") as Style
+            };
+            return control;
+        }
+        private Control GenerateDataGrid(string description, DataTable value)
+        {
+            DataGrid control = new()
+            {
+                Tag = description,
+                ItemsSource = value?.DefaultView,
+                MinHeight = 80,
+                Style = this.FindResource("DataGridMain") as Style
             };
             return control;
         }
@@ -108,7 +138,33 @@ namespace Incas.Core.Views.Windows
             return control;
         }
 
-        private string GetFieldDescription(FieldInfo field)
+        private void GetEnumDescriptions(FieldInfo f)
+        {
+            string GetEnumDescription(Enum enumValue)
+            {
+                var field = enumValue.GetType().GetField(enumValue.ToString());
+                if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
+                {
+                    return attribute.Description;
+                }
+                return "";
+            }
+            Array values = Enum.GetValues(f.ReflectedType);
+
+            foreach (Enum value in values)
+            {
+                GetEnumDescription(value);
+                //MemberInfo memberInfo = f.GetType().GetMember(value.ToString()).FirstOrDefault();
+                //if (memberInfo == null)
+                //{
+                //    DescriptionAttribute descriptionAttribute = f.GetType().GetMember(f.ToString())[0]
+                //        .GetCustomAttributes(typeof(DescriptionAttribute), inherit: false)[0] as DescriptionAttribute;
+                //    //DescriptionAttribute attr = memberInfo.GetCustomAttribute<DescriptionAttribute>(false);
+                //    DialogsManager.ShowInfoDialog($"{value} - {descriptionAttribute.Description}");
+                //}
+            }
+        }
+        private string GetFieldDescription(PropertyInfo field)
         {
             DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>(true);
             if (attribute != null)
@@ -120,7 +176,7 @@ namespace Incas.Core.Views.Windows
 
         private void FinishClick(object sender, RoutedEventArgs e)
         {
-            foreach (FieldInfo field in this.Result.GetType().GetFields())
+            foreach (PropertyInfo field in this.Result.GetType().GetProperties())
             {
                 foreach (Control control in this.Fields.Children)
                 {
@@ -128,7 +184,7 @@ namespace Incas.Core.Views.Windows
                     if (control.Tag?.ToString() == descript)
                     {
                         
-                        switch (field.FieldType.Name)
+                        switch (field.PropertyType.Name)
                         {
                             case "String":
                                 string resultString = ((TextBox)control).Text;
@@ -140,6 +196,7 @@ namespace Incas.Core.Views.Windows
                                 field.SetValue(this.Result, resultString);
                                 break;
                             case "Int32":
+                                
                                 field.SetValue(this.Result, ((NumericBox)control).Value);
                                 break;
                             case "Boolean":
@@ -147,6 +204,9 @@ namespace Incas.Core.Views.Windows
                                 break;
                             case "DateTime":
                                 field.SetValue(this.Result, ((DatePicker)control).SelectedDate);
+                                break;
+                            case "DataTable":
+                                field.SetValue(this.Result, ((DataView)((DataGrid)control).ItemsSource).ToTable());
                                 break;
                         }
                         break;

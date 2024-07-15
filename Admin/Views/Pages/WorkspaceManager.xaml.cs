@@ -18,10 +18,10 @@ namespace Incas.Admin.Views.Pages
     public class ParameterConstant
     {
         [Description("Наименование константы")]
-        public string Name;
+        public string Name { get; set; }
 
         [Description("Значение константы")]
-        public string Value;
+        public string Value { get; set; }
     }
     public partial class WorkspaceManager : UserControl
     {
@@ -66,6 +66,10 @@ namespace Incas.Admin.Views.Pages
         {
             try
             {
+                if (this.ConstantsTable.SelectedItems.Count == 0)
+                {
+                    return;
+                }
                 long id = (long)((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Идентификатор"];
                 ParameterConstant c = new();
                 using (Parameter p = new())
@@ -91,7 +95,28 @@ namespace Incas.Admin.Views.Pages
 
         private void RemoveConstantClick(object sender, RoutedEventArgs e)
         {
-
+            if (this.ConstantsTable.SelectedItems.Count == 0)
+            {
+                return;
+            }
+            try
+            {
+                object name = ((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Наименование константы"];
+                if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить константу [{name}] из этого рабочего пространства?", "Удалить константу?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.No)
+                {
+                    return;
+                }
+                long id = (long)((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Идентификатор"];
+                using (Parameter p = new())
+                {
+                    p.RemoveParameterById(id);
+                }
+                this.FillConstants();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex.Message);
+            }
         }
 
         private void UpdateConstantsClick(object sender, RoutedEventArgs e)
