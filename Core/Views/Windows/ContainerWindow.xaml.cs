@@ -18,28 +18,9 @@ namespace Incas.Core.Views.Windows
             this.Title = title;
             this.ContentPanel.Child = control;
         }
-
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.DragMove();
         }
-
-        //private void MinimizeClick(object sender, RoutedEventArgs e)
-        //{
-        //    WindowState = WindowState.Minimized;
-        //}
-        //private void MaximizeClick(object sender, RoutedEventArgs e)
-        //{
-        //    WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        //}
-        //private void CloseClick(object sender, RoutedEventArgs e)
-        //{
-        //    this.Close();
-        //}
-
-        //private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        //{
-        //    this.DragMove();
-        //}
     }
 }

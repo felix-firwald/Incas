@@ -35,6 +35,10 @@ namespace Incas.Core.Views.Controls
 
         public void ApplyMinAndMax(string input)
         {
+            if (string.IsNullOrEmpty(input))
+            {
+                return;
+            }
             string[] parts = input.Split(';');
             switch (parts.Length)
             {

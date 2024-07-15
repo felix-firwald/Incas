@@ -9,7 +9,7 @@ namespace Incas.Core.Models
     {
         INCUBATOR,
         DATABASE,
-        CHAT,
+        CONSTANT,
         RESTRICT_EDIT_TABLE,
         MISC
     }
@@ -53,6 +53,45 @@ namespace Incas.Core.Models
             this.Serialize(dr);
             this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
             return this;
+        }
+        public Parameter GetParameter(long id)
+        {
+            DataRow dr = this.StartCommandToService()
+                        .Select()
+                        .WhereEqual("id", id.ToString())
+                        .ExecuteOne();
+            this.Serialize(dr);
+            this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
+            return this;
+        }
+        public void UpdateParameter(long id)
+        {
+            this.StartCommandToService()
+                .Update("name", this.name)
+                .Update("value", this.value)
+                .WhereEqual("id", id.ToString())
+                .ExecuteVoid();
+        }
+        public DataTable GetConstants()
+        {
+            return this.StartCommandToService()
+                .Select("[id] AS [Идентификатор], [name] AS [Наименование константы], [value] AS [Значение константы]")
+                .WhereEqual("type", ParameterType.CONSTANT.ToString())
+                .Execute();
+        }
+        public string GetConstantValue(string withName)
+        {
+            DataRow dr = this.StartCommandToService()
+                .Select("value")
+                .WhereEqual("type", ParameterType.CONSTANT.ToString())
+                .WhereEqual("name", withName)
+                .ExecuteOne();
+            if (dr is not null)
+            {
+                return dr["value"].ToString();
+            }
+            DialogsManager.ShowExclamationDialog($"Константа с именем \"{withName}\" не определена.", "Константа не определена");
+            return "";
         }
         public bool Exists(ParameterType typeOf, string nameOf, string expectedValue, bool like = true)
         {

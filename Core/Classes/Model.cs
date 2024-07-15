@@ -215,8 +215,6 @@ namespace Incas.Core.Classes
             DataRow dr = this.GetOne(dt);
             return int.Parse(dr["count"].ToString());
         }
-
-
     }
 }
 

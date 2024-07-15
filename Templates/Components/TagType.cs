@@ -14,6 +14,7 @@ namespace Incas.Templates.Components
         Relation,
         LocalEnumeration,
         LocalConstant,
+        GlobalConstant,
         HiddenField,
         Date,
         Generator,

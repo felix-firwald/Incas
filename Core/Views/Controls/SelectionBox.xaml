@@ -6,10 +6,12 @@
              xmlns:local="clr-namespace:Incas.Core.Views.Controls" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="350" MaxHeight="40">
-    <Border Grid.ColumnSpan="3" MinWidth="40" MinHeight="30" MaxHeight="30" Background="{DynamicResource Black}" BorderBrush="{DynamicResource Element}" BorderThickness="1,1,1,1" CornerRadius="6,6,6,6" Margin="5,5,5,5" Cursor="Hand">
+    <Border x:Name="Border" Grid.ColumnSpan="3" MinWidth="40" MinHeight="30" MaxHeight="30" Background="{DynamicResource Black}" BorderBrush="{DynamicResource Element}" BorderThickness="1,1,1,1" CornerRadius="8" Margin="5,5,5,5" Cursor="Hand">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="254*"/>
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="1"/>
                 <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
@@ -21,11 +23,40 @@
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
-            <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="1" Height="23" VerticalAlignment="Center"/>
-            <fa:FontAwesome Icon="EllipsisH" Grid.Column="2" Style="{DynamicResource IconButton}" Margin="5,5,5,2" MouseDown="ButtonClick" ToolTip="Выбрать запись"></fa:FontAwesome>
+            <Popup 
+                x:Name="Hints" 
+                Style="{StaticResource PopupMain}" 
+                PopupAnimation = "Slide"
+                PlacementTarget="{Binding ElementName=Input}"
+                 Placement="Left" UseLayoutRounding="True"
+                HorizontalOffset="{Binding ActualWidth, ElementName=Input}" Grid.ColumnSpan="3"
+                 >
+                <Border CornerRadius="6" Background="{StaticResource Black}">
+                    <StackPanel>
+                        <TextBox x:Name="HintsSearchField" Style="{StaticResource TextBoxMain}" MinWidth="200" TextChanged="HintsSearchField_TextChanged" Tag="Текст для поиска"/>
+                        <ListBox x:Name="HintsList" MaxWidth="280" Style="{StaticResource ListBoxMain}" SelectionChanged="HintsList_SelectionChanged">
+                            
+                        </ListBox>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <!--<Button Style="{StaticResource ButtonMainFinish}" Grid.Column="0" Content="Выбрать"/>-->
+                            <Button Style="{StaticResource ButtonMain}" Grid.Column="1" Content="Отменить" Click="CancelSearch"/>
+                        </Grid>
+                    </StackPanel>
+                    
+                </Border>
+
+            </Popup>
+            <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="1" Height="24" VerticalAlignment="Center"/>
+            <fa:FontAwesome Icon="Search" Grid.Column="2" Style="{DynamicResource IconButton}" MouseDown="FindClick" ToolTip="Найти и выбрать запись"/>
+            <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="3" Height="24" VerticalAlignment="Center"/>
+            <fa:FontAwesome Icon="EllipsisH" Grid.Column="4" Style="{DynamicResource IconButton}" MouseDown="ButtonClick" ToolTip="Выбрать запись"/>
             <!--<Path Grid.Column="2" Style="{DynamicResource PathMain}" VerticalAlignment="Center" HorizontalAlignment="Center" MouseDown="ButtonClick" ToolTip="Выбрать запись" Data="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" Stretch="Uniform" Margin="12,12,12,12" />-->
         </Grid>
-        
+
     </Border>
     <UserControl.Resources>
         <Style TargetType="{x:Type local:SelectionBox}">

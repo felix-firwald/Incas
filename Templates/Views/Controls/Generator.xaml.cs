@@ -195,6 +195,11 @@ namespace Incas.Templates.Views.Controls
         }
         private void SendToUserClick(object sender, MouseButtonEventArgs e)
         {
+            if (this.TemplateId == 0)
+            {
+                DialogsManager.ShowExclamationDialog("Шаблон не определен", "Действие прервано");
+                return;
+            }
             switch (this.Status)
             {
                 case GeneratorStatus.InProcess:
@@ -217,6 +222,11 @@ namespace Incas.Templates.Views.Controls
 
         private void OpenClick(object sender, MouseButtonEventArgs e)
         {
+            if (this.TemplateId == 0)
+            {
+                DialogsManager.ShowExclamationDialog("Шаблон не определен", "Действие прервано");
+                return;
+            }
             if (this.Result.Count == 0)
             {
                 this.Result.Add(new GeneratedElement { });

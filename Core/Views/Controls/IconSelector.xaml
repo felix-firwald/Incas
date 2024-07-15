@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="Incas.Core.Views.Controls.IconSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.Core.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="400">
+    <UserControl.Resources>
+        <Style x:Key="PathStyleMain" TargetType="{x:Type Path}">
+            <Setter Property="Fill" Value="White"/>
+            <Setter Property="MinHeight" Value="40"/>
+            <Setter Property="MinWidth" Value="40"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="64*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <ListBox x:Name="List" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1" Background="{DynamicResource Black}" SelectionChanged="List_SelectionChanged" BorderBrush="{x:Null}" Grid.ColumnSpan="2">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" UseLayoutRounding="True"  />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+        <Button Style="{StaticResource ButtonMainFinish}" Grid.Row="2" Content="Сохранить" Click="ClickSave"/>
+        <Button Style="{StaticResource ButtonMain}" Grid.Column="1" Grid.Row="2">
+            <StackPanel Orientation="Horizontal">
+                <Path x:Name="IconTest" Fill="White" VerticalAlignment="Center"/>
+                <Label Content="Тестовая кнопка" Foreground="White"/>
+            </StackPanel>
+        </Button>
+    </Grid>
+</UserControl>

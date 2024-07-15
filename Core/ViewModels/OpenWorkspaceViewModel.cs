@@ -129,7 +129,6 @@ namespace Incas.Core.ViewModels
                     {
                         RegistryData.SetWorkspaceSelectedUser(this.SelectedWorkspace, value.id.ToString());
                     }
-
                 }
                 catch (Exception) { }
             }

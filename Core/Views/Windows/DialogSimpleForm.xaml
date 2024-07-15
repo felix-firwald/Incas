@@ -1,0 +1,50 @@
+﻿<Window x:Class="Incas.Core.Views.Windows.DialogSimpleForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Incas.Core.Views.Windows"
+        mc:Ignorable="d"
+        Title="Форма заполнения" Style="{DynamicResource Dialog}" Height="150" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
+                         From="0.0" To="1.0" Duration="0:0:0.180"
+                         AutoReverse="False"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+
+    </Window.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="19*"/>
+            <ColumnDefinition Width="26*"/>
+            <ColumnDefinition Width="45*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Path Fill="{StaticResource LightPurple}" Data="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z" Stretch="Uniform" Grid.RowSpan="2" MaxWidth="40" MaxHeight="40"/>
+        <Label x:Name="TitleText" Grid.Column="1" Grid.ColumnSpan="2" Content="Заголовок формы" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" FontWeight="Bold" FontFamily="JetBrains Mono"/>
+        <ScrollViewer Grid.Column="1" Grid.Row="1" MaxHeight="260" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,5,5" >
+            <StackPanel x:Name="Fields">
+                
+            </StackPanel>
+        </ScrollViewer>
+        <!--<Rectangle Fill="{DynamicResource Element}" Grid.Row="3" Grid.ColumnSpan="3"/>-->
+        <Button x:Name="Yes" Style="{DynamicResource ButtonMainFinish}" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="FinishClick" Margin="5,0,5,0" IsDefault="True">
+            <StackPanel Orientation="Horizontal">
+                <Path Fill="White" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" VerticalAlignment="Center"/>
+                <Label Foreground="White" Content="Сохранить"/>
+            </StackPanel>
+        </Button>
+        <Button x:Name="No" Style="{DynamicResource ButtonMain}" Content="Отменить" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Click="CancelClick" Margin="5,0,5,0" IsCancel="True"/>
+    </Grid>
+</Window>

@@ -72,7 +72,6 @@ namespace Incas.Templates.Models
                 Core.Classes.DialogsManager.ShowErrorDialog("Шаблон с таким идентификатором не был найден.", "Ошибка");
                 return null;
             }
-
         }
         private List<STemplate> GetAllTemplatesBy(TemplateType tt, string cat)
         {
@@ -166,8 +165,8 @@ namespace Incas.Templates.Models
                 {
                     { "name", this.name },
                     { "path", this.path },
-                    { "parent", isChild? this.parent.ToString(): Query.Null }, // раньше тут было просто null а теперь будет 'null'
-                    { "suggestedPath", isChild? Query.Null : this.suggestedPath },
+                    { "parent", isChild? this.parent.ToString(): null }, // раньше тут было просто null а теперь будет 'null'
+                    { "suggestedPath", isChild? "" : this.suggestedPath },
                     { "type", this.type.ToString() } ,
                     { "settings", this.settings }
                 })

@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется посредством следующего 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // общие сведения об этой сборке.
-[assembly: AssemblyTitle("Incas")]
+[assembly: AssemblyTitle("Incas Offline")]
 [assembly: AssemblyDescription("Программа для оптимизации процессов документооборота")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Firwald Technologies")]
-[assembly: AssemblyProduct("Incas")]
+[assembly: AssemblyProduct("Incas Offline")]
 [assembly: AssemblyCopyright("Copyright © 2024 Firwald Technologies")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -30,5 +30,5 @@ using System.Runtime.InteropServices;
 //      Номер сборки
 //      Редакция
 //
-[assembly: AssemblyVersion("0.9.21.1")]
-[assembly: AssemblyFileVersion("0.9.21.1")]
+[assembly: AssemblyVersion("0.9.21.6")]
+[assembly: AssemblyFileVersion("0.9.21.6")]

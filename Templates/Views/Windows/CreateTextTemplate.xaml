@@ -35,7 +35,7 @@
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>
-        <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Column="1" Grid.RowSpan="2">
+        <Border CornerRadius="8" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Column="1" Grid.RowSpan="2">
             <StackPanel>
                 <Border Background="{StaticResource Dark}" CornerRadius="5" Margin="5">
                     <StackPanel>
@@ -61,7 +61,7 @@
 
             </StackPanel>
         </Border>
-        <Border Grid.Column="3" Margin="5,5,5,5" Background="{DynamicResource Black}" CornerRadius="5" Grid.RowSpan="2">
+        <Border Grid.Column="3" Margin="5,5,5,5" Background="{DynamicResource Black}" CornerRadius="8" Grid.RowSpan="2">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" >
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" ToolTip="Добавить тег" MouseDown="AddTagClick" />
                 <fa:FontAwesome x:Name="FindInFileButton" Style="{DynamicResource IconButton}" Icon="SearchPlus" Grid.Column="1" Grid.Row="1" ToolTip="Обнаружить теги в основном тексте (все текущие теги будут удалены)" MouseDown="GetTagsFromTextClick" />
@@ -72,7 +72,7 @@
             </StackPanel>
         </Border>
 
-        <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Column="2" ScrollViewer.CanContentScroll="True" Grid.RowSpan="2">
+        <Border CornerRadius="8" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Column="2" ScrollViewer.CanContentScroll="True" Grid.RowSpan="2">
             <ScrollViewer Style="{DynamicResource ScrollViewerBase}" HorizontalContentAlignment="Stretch" Grid.Row="2" Grid.Column="1">
                 <StackPanel x:Name="ContentPanel"/>
             </ScrollViewer>

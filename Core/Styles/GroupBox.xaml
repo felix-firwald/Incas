@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="GroupBox">
-                    <Border CornerRadius="6" BorderBrush="{StaticResource Focus}" BorderThickness="2">
+                    <Border CornerRadius="8" BorderBrush="{StaticResource Focus}" BorderThickness="2">
 
                         <Grid>
                             <Grid.RowDefinitions>
@@ -16,7 +16,7 @@
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
 
-                            <Border Grid.Row="0" CornerRadius="6" Background="Transparent" BorderBrush="{StaticResource Element}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35">
+                            <Border Grid.Row="0" CornerRadius="8" Background="Transparent" BorderBrush="{StaticResource Element}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="35">
                                 <Label x:Name="HeaderLabel" FontSize="16" FontFamily="/Static/Fonts/#JetBrains Mono" FontWeight="ExtraLight" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource DarkLight}">
                                     <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" >
                                     </ContentPresenter>

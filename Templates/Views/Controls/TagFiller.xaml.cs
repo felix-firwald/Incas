@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Models;
 using Incas.Core.Views.Controls;
 using Incas.Templates.Components;
 using Incas.Users.Models;
@@ -81,8 +82,13 @@ namespace Incas.Templates.Views.Controls
                     this.PlaceUIControl(textBox);
                     break;
                 case TagType.LocalEnumeration:
+                    if (this.tag.value is null)
+                    {
+                        this.tag.value = "";
+                    }
                     ComboBox comboBox = new()
                     {
+                        
                         ItemsSource = this.tag.value.Split(';'),
                         SelectedIndex = 0,
                         Style = this.FindResource("ComboBoxMain") as Style
@@ -101,6 +107,7 @@ namespace Incas.Templates.Views.Controls
                     this.PlaceUIControl(numeric);
                     break;
                 case TagType.LocalConstant:
+                case TagType.GlobalConstant:
                 case TagType.HiddenField:
                     this.Visibility = Visibility.Collapsed;
                     break;
@@ -124,9 +131,11 @@ namespace Incas.Templates.Views.Controls
                     break;
                 case TagType.Generator:
                 case TagType.Macrogenerator:
+                    int num = 0;
+                    int.TryParse(this.tag.value, out num);
                     Generator generator = new(this.tag.type)
                     {
-                        TemplateId = int.Parse(this.tag.value)
+                        TemplateId = num
                     };
                     generator.OnValueChanged += this.Generator_OnValueChanged;
                     this.PlaceUIControl(generator);
@@ -194,6 +203,7 @@ namespace Incas.Templates.Views.Controls
                     ((SelectionBox)this.control).Value = value;
                     break;
                 case TagType.LocalConstant:
+                case TagType.GlobalConstant:
                     return;
                 case TagType.HiddenField:
                     this.tag.value = value;
@@ -255,8 +265,12 @@ namespace Incas.Templates.Views.Controls
         private string GetDateInFormat()
         {
             DatePicker picker = ((DatePicker)this.control);
+            if (picker.SelectedDate is null)
+            {
+                return "";
+            }
             return string.IsNullOrWhiteSpace(this.tag.value)
-                ? picker.SelectedDate.ToString()
+                ? ((DateTime)picker.SelectedDate).ToString("dd.MM.yyyy")
                 : picker.SelectedDate.HasValue ? ((DateTime)picker.SelectedDate).ToString(this.tag.value) : "";
         }
         public string GetValue()
@@ -272,6 +286,11 @@ namespace Incas.Templates.Views.Controls
                 case TagType.LocalConstant:
                 case TagType.HiddenField:
                     return this.tag.value;
+                case TagType.GlobalConstant:
+                    using (Parameter p = new())
+                    {
+                        return p.GetConstantValue(this.tag.value);
+                    }
                 case TagType.Relation:
                     return ((SelectionBox)this.control).Value;
                 case TagType.LocalEnumeration:

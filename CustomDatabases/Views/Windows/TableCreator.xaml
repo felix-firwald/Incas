@@ -3,10 +3,90 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Incas.CustomDatabases.Views.Windows"
+        xmlns:local="clr-namespace:Incas.CustomDatabases.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Создание таблицы" Height="450" Width="800" Style="{DynamicResource WindowBase}">
+        Title="Создание таблицы" Height="650" Width="800" Style="{DynamicResource WindowBase}">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="19*"/>
+            <ColumnDefinition Width="21*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" MinWidth="250" MaxWidth="500"/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <!--файл и обзор-->
+                <RowDefinition Height="*"/>
+                <!--таблица с тегами-->
+                <RowDefinition Height="40"/>
+                <!--кнопка создания файла или печати-->
+            </Grid.RowDefinitions>
+            <TextBox x:Name="sourceFile" Style="{DynamicResource TextBoxMain}" Text="{Binding Source}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Наименование таблицы (должно быть уникальным)" Grid.Column="0" Margin="5,0,5,0" Grid.ColumnSpan="2">
+            </TextBox>
+
+            <Border Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="5" Grid.RowSpan="2">
+                <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить поле" MouseDown="AddFieldClick" />
+                    <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" ToolTip="Свернуть все вкладки" MouseDown="CollapseNodesClick" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" ToolTip="Развернуть все вкладки" MouseDown="ShowNodesClick" />
+                    <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" Grid.Column="1" Grid.Row="1" ToolTip="Открыть справочную информацию" MouseDown="OpenDocumentationClick" />
+                </StackPanel>
+            </Border>
+            <Border CornerRadius="5" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="1">
+                <StackPanel>
+                    <Border Background="{StaticResource Dark}" CornerRadius="5" Margin="5">
+                        <StackPanel>
+                            <Grid Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Path Fill="{DynamicResource Yellow}" Data="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
+
+                                <Label Content="Привязанные скрипты:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                            </Grid>
+                            <MenuItem Style="{StaticResource Command}" Header="Действия при сохранении записи"  Tag="Save"/>
+                            <MenuItem Style="{StaticResource Command}" Header="Валидация" Tag="Validate" />
+                        </StackPanel>
+                    </Border>
+
+                    <!--<Separator Background="{StaticResource LightBlack}"/>-->
+                    <Border Background="{StaticResource Dark}" CornerRadius="5" Margin="5">
+                        <StackPanel>
+                            <Grid Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Path Fill="{DynamicResource Yellow}" Data="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5M3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
+
+                                <Label Content="Особенности таблицы:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                            </Grid>
+                            <CheckBox Style="{StaticResource Toggle}" Content="Может выступать документом"/>
+                            <CheckBox Style="{StaticResource Toggle}" Content="Генерировать стандартную форму"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Separator Background="{StaticResource LightBlack}"/>
+                    <Label Style="{StaticResource LabelElement}" Content="Иной функционал станет доступен позднее" HorizontalAlignment="Center" Foreground="{DynamicResource Area}"/>
+
+
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1" CornerRadius="5" Margin="5" Background="{StaticResource Black}" Grid.Column="1" ScrollViewer.CanContentScroll="True">
+                <ScrollViewer Style="{DynamicResource ScrollViewerBase}" HorizontalContentAlignment="Stretch" Grid.Row="2" Grid.Column="1">
+                    <StackPanel x:Name="ContentPanel"/>
+                </ScrollViewer>
+            </Border>
+
+            <Button Style="{StaticResource ButtonMain}" Grid.Row="3" Content="Сохранить таблицу" Margin="5,5,5,5" Grid.ColumnSpan="3" />
+        </Grid>
     </Grid>
 </Window>

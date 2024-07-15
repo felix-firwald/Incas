@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="Core/Styles/CheckBox.xaml" />
                 <ResourceDictionary Source="Core/Styles/GroupBox.xaml" />
                 <ResourceDictionary Source="Core/Styles/ListBox.xaml" />
+                <ResourceDictionary Source="Core/Styles/TreeView.xaml" />
                 <ResourceDictionary Source="Core/Styles/Label.xaml" />
                 <ResourceDictionary Source="Core/Styles/Scroll.xaml" />
                 <ResourceDictionary Source="Core/Styles/DataGrid.xaml" />

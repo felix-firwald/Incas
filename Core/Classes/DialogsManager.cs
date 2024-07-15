@@ -69,6 +69,11 @@ namespace Incas.Core.Classes
             }
             return false;
         }
+        public static bool ShowSimpleFormDialog(object data, string title)
+        {
+            DialogSimpleForm ds = new(data, title);
+            return (bool)ds.ShowDialog();
+        }
         public static void ShowAccessErrorDialog(string message, string title = "Нет доступа")
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>

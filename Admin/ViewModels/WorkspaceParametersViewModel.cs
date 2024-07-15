@@ -2,6 +2,7 @@
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Users.Models;
+using System.Data;
 
 namespace Incas.Admin.ViewModels
 {

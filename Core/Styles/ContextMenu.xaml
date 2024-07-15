@@ -10,7 +10,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
-                    <Border x:Name="Border" Background="{StaticResource Black}" CornerRadius="5" BorderThickness="1" BorderBrush="{DynamicResource LightBlack}">
+                    <Border x:Name="Border" Background="{StaticResource Black}" CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource LightBlack}">
                         <Border.Effect>
                             <DropShadowEffect Color="#1d1d1f" BlurRadius="2" ShadowDepth="5" Opacity="0.5"/>
                         </Border.Effect>

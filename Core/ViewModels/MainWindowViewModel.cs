@@ -111,6 +111,13 @@ namespace Incas.Core.ViewModels
                 this.OnPropertyChanged(nameof(this.ProcessHandled));
             }
         }
+        public string Version
+        {
+            get
+            {
+                return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+        }
 
         public string Surname
         {

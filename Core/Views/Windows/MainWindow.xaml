@@ -35,7 +35,7 @@
             <TextBlock x:Name="LPost" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
             <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
 
-            <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}" IsChecked="True" Cursor="Hand" >
+            <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}" GroupName="Tabs" IsChecked="True" Cursor="Hand" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
@@ -43,31 +43,36 @@
                     </Grid.ColumnDefinitions>
                     <Path Fill="{Binding ElementName=DocumentsRadio, Path=Foreground}" Data="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
                     <Path Fill="{Binding ElementName=DocumentsRadio, Path=Foreground}" Data="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
-                    <TextBlock Text="Документы" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DocumentsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
+                    <TextBlock Text="Документы" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockImportant}" FontSize="11" Foreground="{Binding ElementName=DocumentsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
-            <RadioButton x:Name="MailRadio" Style="{DynamicResource MenuButton}" Visibility="{Binding TasksVisibility}">
+            <RadioButton x:Name="MailRadio" Style="{DynamicResource MenuButton}" GroupName="Tabs" Visibility="{Binding TasksVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Path Fill="{Binding ElementName=MailRadio, Path=Foreground}" Data="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z M15.854 10.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.707 0l-1.5-1.5a.5.5 0 0 1 .707-.708l1.146 1.147 2.646-2.647a.5.5 0 0 1 .708 0"/>
-                    <TextBlock Text="Файловый менеджер" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=MailRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
+                    <TextBlock Text="Файловый менеджер" Style="{DynamicResource TextBlockImportant}" FontSize="11" Foreground="{Binding ElementName=MailRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
-            <RadioButton x:Name="DatabaseRadio" Style="{DynamicResource MenuButton}" Cursor="Hand" Visibility="{Binding DatabaseVisibility}">
+            <RadioButton x:Name="DatabaseRadio" Style="{DynamicResource MenuButton}" GroupName="Tabs" Cursor="Hand" Visibility="{Binding DatabaseVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Path Fill="{Binding ElementName=DatabaseRadio, Path=Foreground}" Data="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5"/>
-                    <TextBlock Text="Базы данных" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DatabaseRadio, Path=Foreground}" Cursor="" Grid.Column="1" TextTrimming="WordEllipsis" />
+                    <TextBlock Text="Базы данных" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DatabaseRadio, Path=Foreground}" Cursor="" Grid.Column="1" TextTrimming="WordEllipsis" FontSize="11" />
                 </Grid>
             </RadioButton>
+            <StackPanel x:Name="CustomTabs">
+                <!--<RadioButton Style="{StaticResource MenuButton}" GroupName="Tabs" Content="Приказ по личному составу"/>
+                <RadioButton Style="{StaticResource MenuButton}" GroupName="Tabs" Content="Академическая справка"/>-->
+            </StackPanel>
+            
             <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" Visibility="{Binding ModeratorFunctionVisibility}" />
-            <RadioButton x:Name="SettingsRadio" Style="{DynamicResource MenuButton}" ToolTip="Настройки рабочего пространства" Visibility="{Binding AdminFunctionVisibility}">
+            <RadioButton x:Name="SettingsRadio" Style="{DynamicResource MenuButton}" GroupName="Tabs" ToolTip="Настройки рабочего пространства" Visibility="{Binding AdminFunctionVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
@@ -75,29 +80,33 @@
                     </Grid.ColumnDefinitions>
                     <Path Fill="{Binding ElementName=SettingsRadio, Path=Foreground}" Data="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
                     <Path Fill="{Binding ElementName=SettingsRadio, Path=Foreground}" Data="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" Cursor=""/>
-                    <TextBlock Text="Рабочее пространство" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=SettingsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
+                    <TextBlock Text="Рабочее пространство" Style="{DynamicResource TextBlockImportant}" FontSize="11" Foreground="{Binding ElementName=SettingsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
                 </Grid>
             </RadioButton>
-            <RadioButton x:Name="UsersRadio" Style="{DynamicResource MenuButton}" ToolTip="Управление пользователями" Visibility="{Binding AdminFunctionVisibility}">
+            <RadioButton x:Name="UsersRadio" Style="{DynamicResource MenuButton}" GroupName="Tabs" ToolTip="Управление пользователями" Visibility="{Binding AdminFunctionVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Path Fill="{Binding ElementName=UsersRadio, Path=Foreground}" Data="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
-                    <TextBlock Text="Пользователи" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=UsersRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
+                    <TextBlock Text="Пользователи" Style="{DynamicResource TextBlockImportant}" FontSize="11" Foreground="{Binding ElementName=UsersRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
                 </Grid>
             </RadioButton>
-            <RadioButton x:Name="SessionsRadio" Style="{DynamicResource MenuButton}" ToolTip="Управление сессиями" Visibility="{Binding ModeratorFunctionVisibility}">
+            <RadioButton x:Name="SessionsRadio" Style="{DynamicResource MenuButton}" GroupName="Tabs" ToolTip="Управление сессиями" Visibility="{Binding ModeratorFunctionVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Path Fill="{Binding ElementName=SessionsRadio, Path=Foreground}" Data="M6 2a.5.5 0 0 1 .47.33L10 12.036l1.53-4.208A.5.5 0 0 1 12 7.5h3.5a.5.5 0 0 1 0 1h-3.15l-1.88 5.17a.5.5 0 0 1-.94 0L6 3.964 4.47 8.171A.5.5 0 0 1 4 8.5H.5a.5.5 0 0 1 0-1h3.15l1.88-5.17A.5.5 0 0 1 6 2"/>
-                    <TextBlock Text="Сессии" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=SessionsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
+                    <TextBlock Text="Сессии" Style="{DynamicResource TextBlockImportant}" FontSize="11" Foreground="{Binding ElementName=SessionsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" />
                 </Grid>
             </RadioButton>
+            <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
+            <Label Style="{StaticResource LabelElement}" Content="© INCAS 2024" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" VerticalContentAlignment="Center"/>
+            <Label Style="{StaticResource LabelElement}" Content="{Binding Version}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+            
         </StackPanel>
 
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" ResizeDirection="Columns" Grid.Row="0" Margin="1,0,0,0" />

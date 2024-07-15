@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="Incas.Objects.Views.Pages.ObjectsList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.Objects.Views.Pages"
+             mc:Ignorable="d" 
+             d:DesignHeight="550" d:DesignWidth="800">
+    <GroupBox Style="{DynamicResource MainGroupBox}" Header="Имя не определено">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" MinHeight="40"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+                <Button Style="{StaticResource ButtonMainFinish}" Click="AddClick" ToolTip="Добавить новый экземпляр объекта">
+                    <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
+                        <Path Fill="#FF96FF8E" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
+                        <Label Content="Добавить" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource ButtonMainFinish}" Click="CopyClick" ToolTip="Добавить новый экземпляр объекта, скопировав поля из выбранного">
+                    <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
+                        <Path Fill="#FF96FF8E" Data="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm4.5 6V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
+                        <Label Content="Скопировать" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource ButtonMain}" Click="SearchClick">
+                    <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
+                        <Path Fill="#FFD580FF" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" VerticalAlignment="Center"/>
+                        <Label Content="Найти" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource ButtonMain}" Click="FindBySelectionClick">
+                    <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
+                        <Path Fill="#FFD580FF" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0 M 10.041 3.091 a 0.25 0.25 90 0 1 0.0515 0.2785 L 7.264 9.7335 a 0.25 0.25 90 0 1 -0.4585 -0.0035 L 5.785 7.347 L 3.4015 6.326 a 0.25 0.25 90 0 1 -0.003 -0.458 l 6.364 -2.8285 a 0.25 0.25 90 0 1 0.278 0.0515 z" VerticalAlignment="Center"/>
+                        <Label Content="Найти по выбранной ячейке" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource ButtonMain}" Click="CancelSearchClick">
+                    <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
+                        <Path Fill="#FFD580FF" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0 M 3.146 3.146 a 0.5 0.5 0 0 1 0.708 0 L 6.5 5.793 l 2.646 -2.647 a 0.5 0.5 0 0 1 0.708 0.708 L 7.207 6.5 l 2.647 2.646 a 0.5 0.5 0 0 1 -0.708 0.708 L 6.5 7.207 l -2.646 2.647 a 0.5 0.5 0 0 1 -0.708 -0.708 L 5.793 6.5 L 3.146 3.854 a 0.5 0.5 0 0 1 0 -0.708" VerticalAlignment="Center"/>
+                        <Label Content="Отменить поиск" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource ButtonMain}" Click="RemoveClick">
+                    <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
+                        <Path Fill="White" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
+                        <Label Content="Удалить" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource ButtonMainFinish}" Click="CopyClick" Padding="10,0,10,0">
+                    <Path Fill="#FF96FF8E" Data="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5 M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" VerticalAlignment="Center"/>
+                </Button>
+            </WrapPanel>
+            <DataGrid Style="{StaticResource DataGridMain}" Grid.Row="1" ItemsSource="{Binding Data}">
+                
+            </DataGrid>
+            <StackPanel x:Name="RightPanel" Grid.Row="1" Grid.Column="1">
+                
+            </StackPanel>
+            <WrapPanel x:Name="DownPanel" Grid.Row="2" Grid.ColumnSpan="2">
+                
+            </WrapPanel>
+        </Grid>
+    </GroupBox>
+</UserControl>

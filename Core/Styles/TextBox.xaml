@@ -30,6 +30,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style TargetType="{x:Type RibbonTextBox}">
         <Setter Property="ContextMenu">
             <Setter.Value>
@@ -86,7 +87,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border x:Name="Border" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="6,6,6,6" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" UseLayoutRounding="True">
+                    <Border x:Name="Border" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="8" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" UseLayoutRounding="True">
                         <Grid>
                             <ScrollViewer 
                                 x:Name="PART_ContentHost" 
@@ -326,5 +327,8 @@
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="TextElement.FontFamily" Value="/Static/Fonts/#JetBrains Mono"/>
         <Setter Property="AcceptsReturn" Value="True"/>
+    </Style>
+    <Style x:Key="SliderMain" TargetType="{x:Type Slider}">
+        
     </Style>
 </ResourceDictionary>

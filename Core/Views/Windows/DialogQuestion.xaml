@@ -39,7 +39,7 @@
             <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="По умолчанию, такой текст обозначает неисправность в работе программы." Margin="5,0,10,0"/>
         </ScrollViewer>
         <!--<Rectangle Fill="{DynamicResource Element}" Grid.Row="3" Grid.ColumnSpan="3"/>-->
-        <Button x:Name="Yes" Style="{DynamicResource ButtonMain}" Content="Да" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="Yes_Click" Margin="5,0,5,0" IsDefault="True"/>
+        <Button x:Name="Yes" Style="{DynamicResource ButtonMainFinish}" Content="Да" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="Yes_Click" Margin="5,0,5,0" IsDefault="True"/>
         <Button x:Name="No" Style="{DynamicResource ButtonMain}" Content="Нет" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Click="No_Click" Margin="5,0,5,0" IsCancel="True"/>
     </Grid>
 </Window>

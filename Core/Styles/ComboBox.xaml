@@ -13,7 +13,7 @@
             </Grid.ColumnDefinitions>
             <Border Grid.ColumnSpan="3" Name="Border"
               BorderBrush="{StaticResource Focus}" 
-              CornerRadius="6" BorderThickness="1" UseLayoutRounding="True"
+              CornerRadius="8" BorderThickness="1" UseLayoutRounding="True"
               Background="{StaticResource Black}" />
             
             <Border Grid.Column="2" Margin="1" BorderBrush="#444" Name="ButtonBorder" CornerRadius="6,6,6,6" BorderThickness="0"  Background="{StaticResource Black}" VerticalAlignment="Center" HorizontalAlignment="Center">

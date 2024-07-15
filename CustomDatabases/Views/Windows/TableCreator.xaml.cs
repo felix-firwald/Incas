@@ -11,5 +11,25 @@ namespace Incas.CustomDatabases.Views.Windows
         {
             this.InitializeComponent();
         }
+
+        private void AddFieldClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void CollapseNodesClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void ShowNodesClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void OpenDocumentationClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

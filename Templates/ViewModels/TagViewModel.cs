@@ -88,6 +88,7 @@ namespace Incas.Templates.ViewModels
                     default:
                         return Visibility.Visible;
                     case TagType.LocalConstant:
+                    case TagType.GlobalConstant:
                     case TagType.HiddenField:
                     case TagType.Generator:
                     case TagType.Macrogenerator:
@@ -148,16 +149,19 @@ namespace Incas.Templates.ViewModels
                     return TagType.LocalConstant;
                 case "7":
                     this.Description = "";
-                    return TagType.HiddenField;
+                    return TagType.GlobalConstant;
                 case "8":
                     this.Description = "";
-                    this.DefaultValue = "";
-                    return TagType.Generator;
+                    return TagType.HiddenField;
                 case "9":
                     this.Description = "";
                     this.DefaultValue = "";
-                    return TagType.Macrogenerator;
+                    return TagType.Generator;
                 case "10":
+                    this.Description = "";
+                    this.DefaultValue = "";
+                    return TagType.Macrogenerator;
+                case "11":
                     this.Description = "";
                     return TagType.Table;
             }

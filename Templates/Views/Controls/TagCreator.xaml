@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Incubator_2.Forms" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="390" d:DesignWidth="600">
-    <Border x:Name="MainBorder" Margin="5" CornerRadius="5" Background="{DynamicResource Dark}">
+    <Border x:Name="MainBorder" Margin="5" CornerRadius="8" Background="{DynamicResource Dark}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="55*"/>
@@ -97,6 +97,13 @@
                             <Ellipse Fill="{DynamicResource Error}" Width="5" Height="5"/>
                             <Label Content="Константа" Style="{DynamicResource LabelElement}"/>
                             <Label Content="Неизменяемое значение" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem >
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Fill="{DynamicResource Error}" Width="5" Height="5"/>
+                            <Label Content="Глобальная константа" Style="{DynamicResource LabelElement}"/>
+                            <Label Content="Неизменяемое значение (устанавливается глобально)" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="11"/>
                         </StackPanel>
                     </ComboBoxItem>
                     <ComboBoxItem >
