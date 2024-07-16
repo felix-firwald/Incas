@@ -9,6 +9,9 @@ using System.Windows.Controls;
 using System;
 using System.Data;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using Newtonsoft.Json;
+using DocumentFormat.OpenXml.Wordprocessing;
+using System.Collections.Generic;
 
 namespace Incas.Admin.Views.Pages
 {
@@ -23,6 +26,14 @@ namespace Incas.Admin.Views.Pages
         [Description("Значение константы")]
         public string Value { get; set; }
     }
+    public class ParameterEnum
+    {
+        [Description("Наименование перечисления")]
+        public string Name { get; set; }
+
+        [Description("Значения перечисления")]
+        public List<string> Value { get; set; }
+    }
     public partial class WorkspaceManager : UserControl
     {
         private WorkspaceParametersViewModel vm;
@@ -32,6 +43,7 @@ namespace Incas.Admin.Views.Pages
             this.vm = new WorkspaceParametersViewModel();
             this.DataContext = this.vm;
             this.FillConstants();
+            this.FillEnumerations();
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
@@ -43,6 +55,13 @@ namespace Incas.Admin.Views.Pages
             using (Parameter p = new())
             {
                 this.ConstantsTable.ItemsSource = p.GetConstants().DefaultView;
+            }
+        }
+        private void FillEnumerations()
+        {
+            using (Parameter p = new())
+            {
+                this.EnumsTable.ItemsSource = p.GetEnumerators().DefaultView;
             }
         }
 
@@ -122,6 +141,85 @@ namespace Incas.Admin.Views.Pages
         private void UpdateConstantsClick(object sender, RoutedEventArgs e)
         {
             this.FillConstants();
+        }
+
+        private void AddEnumerationClick(object sender, RoutedEventArgs e)
+        {
+            ParameterEnum en = new();
+            en.Value = new();
+            en.Value.Add("");
+            if (DialogsManager.ShowSimpleFormDialog(en, "Назначение константы") == true)
+            {
+                using (Parameter p = new())
+                {
+                    p.name = en.Name;
+                    p.SetValue(en.Value);
+                    p.type = ParameterType.ENUMERATION;
+                    p.CreateParameter();
+                }
+                this.FillEnumerations();
+            }
+        }
+
+        private void RemoveEnumerationClick(object sender, RoutedEventArgs e)
+        {
+            if (this.EnumsTable.SelectedItems.Count == 0)
+            {
+                return;
+            }
+            try
+            {
+                object name = ((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Наименование перечисления"];
+                if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить перечисление [{name}] из этого рабочего пространства?", "Удалить константу?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.No)
+                {
+                    return;
+                }
+                long id = (long)((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"];
+                using (Parameter p = new())
+                {
+                    p.RemoveParameterById(id);
+                }
+                this.FillEnumerations();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex.Message);
+            }
+        }
+        private void UpdateEnumerationsClick(object sender, RoutedEventArgs e)
+        {
+            this.FillEnumerations();
+        }
+
+        private void EditEnumerationClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (this.EnumsTable.SelectedItems.Count == 0)
+                {
+                    return;
+                }
+                long id = (long)((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"];
+                ParameterEnum en = new();
+                using (Parameter p = new())
+                {
+                    Parameter par = p.GetParameter(id);
+                    en.Name = par.name;
+                    en.Value = JsonConvert.DeserializeObject<List<string>>(par.value);
+                }
+                DialogsManager.ShowSimpleFormDialog(en, "Редактирование перечисления");
+                using (Parameter p = new())
+                {
+                    p.name = en.Name;
+                    p.SetValue(en.Value);
+                    p.UpdateParameter(id);
+                }
+                this.FillEnumerations();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex.Message);
+            }
         }
     }
 }

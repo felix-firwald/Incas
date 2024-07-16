@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +11,7 @@ namespace Incas.Core.Models
         INCUBATOR,
         DATABASE,
         CONSTANT,
+        ENUMERATION,
         RESTRICT_EDIT_TABLE,
         MISC
     }
@@ -30,6 +32,10 @@ namespace Incas.Core.Models
         {
             this.tableName = "Parameters";
             this.type = ParameterType.MISC;
+        }
+        public void SetValue(object value)
+        {
+            this.value = JsonConvert.SerializeObject(value);
         }
         public Parameter GetParameter(ParameterType typeOf, string nameOf, string defaultValue = "0", bool createIfNotExists = true)
         {
@@ -77,6 +83,13 @@ namespace Incas.Core.Models
             return this.StartCommandToService()
                 .Select("[id] AS [Идентификатор], [name] AS [Наименование константы], [value] AS [Значение константы]")
                 .WhereEqual("type", ParameterType.CONSTANT.ToString())
+                .Execute();
+        }
+        public DataTable GetEnumerators()
+        {
+            return this.StartCommandToService()
+                .Select("[id] AS [Идентификатор], [name] AS [Наименование перечисления], [value] AS [Значения перечисления]")
+                .WhereEqual("type", ParameterType.ENUMERATION.ToString())
                 .Execute();
         }
         public string GetConstantValue(string withName)

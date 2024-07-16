@@ -37,7 +37,7 @@
                 <Setter Property="Opacity" Value="0.3"/>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{StaticResource Element}"/>
+                        <Setter Property="Background" Value="{StaticResource Icon}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -52,7 +52,7 @@
                 <Setter Property="Opacity" Value="0.3"/>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{StaticResource Element}"/>
+                        <Setter Property="Background" Value="{StaticResource Icon}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>

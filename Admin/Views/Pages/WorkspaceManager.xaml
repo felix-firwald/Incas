@@ -7,11 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="520" d:DesignWidth="1200">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" MinHeight="180"/>
+            <RowDefinition Height="1*" MinHeight="180"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition MinWidth="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ПЕРВИЧНАЯ ИНФОРМАЦИЯ">
+
+        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ПЕРВИЧНАЯ ИНФОРМАЦИЯ" Margin="5,5,5,5" Grid.RowSpan="2">
             <StackPanel>
                 <TextBox Style="{DynamicResource TextBoxMain}" Tag="Имя рабочего пространства" Text="{Binding WorkspaceName}"/>
                 <CheckBox Style="{DynamicResource Toggle}" Content="Рабочее пространство открыто" IsChecked="{Binding WorkspaceOpened}"/>
@@ -27,14 +32,19 @@
                 <Button Style="{DynamicResource ButtonMain}" Content="Сохранить изменения" Click="SaveClick"/>
             </StackPanel>
         </GroupBox>
-        <GroupBox Style="{DynamicResource MainGroupBox}" Header="КОНСТАНТЫ" Grid.Column="1">
+        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ГЛОБАЛЬНЫЕ КОНСТАНТЫ" Grid.Column="1" Margin="5,5,5,5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <WrapPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource ButtonMainFinish}" Click="AddConstantClick" Width="160" Content="Добавить константу" HorizontalAlignment="Left"/>
+                    <Button Style="{StaticResource ButtonMainFinish}" Click="AddConstantClick" Width="180" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Fill="White" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
+                            <Label Foreground="White" Content="Добавить константу"/>
+                        </StackPanel>
+                    </Button>
                     <Button Style="{StaticResource ButtonMain}" Click="EditConstantClick">
                         <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
                             <Path Fill="White" Data="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" VerticalAlignment="Center"/>
@@ -54,9 +64,49 @@
                         </StackPanel>
                     </Button>
                 </WrapPanel>
-                
+
                 <DataGrid x:Name="ConstantsTable" Style="{StaticResource DataGridMain}" IsReadOnly="True" Grid.Row="1">
-                    
+
+                </DataGrid>
+            </Grid>
+        </GroupBox>
+        <GridSplitter Grid.RowSpan="2"/>
+        <GridSplitter Style="{StaticResource SplitterHorizontal}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="1"/>
+        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ГЛОБАЛЬНЫЕ ПЕРЕЧИСЛЕНИЯ" Grid.Column="1" Margin="5,5,5,5" Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <WrapPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource ButtonMainFinish}" Click="AddEnumerationClick" Width="180" HorizontalAlignment="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Fill="White" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
+                            <Label Foreground="White" Content="Добавить перечисление"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource ButtonMain}" Click="EditEnumerationClick">
+                        <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                            <Path Fill="White" Data="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" VerticalAlignment="Center"/>
+                            <Label Foreground="White" Content="Редактировать"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource ButtonMain}" Click="RemoveEnumerationClick">
+                        <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                            <Path Fill="White" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
+                            <Label Foreground="White" Content="Удалить"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource ButtonMain}" Click="UpdateEnumerationsClick">
+                        <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                            <Path Fill="White" Data="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9 M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" VerticalAlignment="Center"/>
+                            <Label Foreground="White" Content="Обновить"/>
+                        </StackPanel>
+                    </Button>
+                </WrapPanel>
+
+                <DataGrid x:Name="EnumsTable" Style="{StaticResource DataGridMain}" IsReadOnly="True" Grid.Row="1">
+
                 </DataGrid>
             </Grid>
         </GroupBox>

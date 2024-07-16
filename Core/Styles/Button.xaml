@@ -27,7 +27,8 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <!--<ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>-->
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
@@ -35,7 +36,8 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation Duration="0:0:0.250" To="#FF2D2D33" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
-                                        <ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <!--<ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>-->
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>

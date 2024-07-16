@@ -1,21 +1,13 @@
-﻿using DIaLOGIKa.b2xtranslator.Tools;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
-using Microsoft.Scripting.Metadata;
-
-
-//using Microsoft.Scripting.Utils;
-using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.X509.Qualified;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace Incas.Core.Views.Windows
 {
@@ -25,7 +17,6 @@ namespace Incas.Core.Views.Windows
     public partial class DialogSimpleForm : Window
     {
         public object Result;
-        private List<TextBox> textBoxes = [];
         public DialogSimpleForm(object values, string title)
         {
             InitializeComponent();
@@ -69,6 +60,17 @@ namespace Incas.Core.Views.Windows
                 case "DataTable":
                     control = this.GenerateDataGrid(description, (DataTable)field.GetValue(this.Result));
                     this.Fields.Children.Add(label);
+                    break;
+                default:
+                    if (field.PropertyType.Name.Contains("List"))
+                    {
+                        control = this.GenerateDataGrid(description, (List<string>)field.GetValue(this.Result));
+                        this.Fields.Children.Add(label);
+                    }
+                    else
+                    {
+                        return;
+                    }
                     break;
             }
             //if (field.FieldType.IsEnum)
@@ -124,6 +126,43 @@ namespace Incas.Core.Views.Windows
                 MinHeight = 80,
                 Style = this.FindResource("DataGridMain") as Style
             };
+            return control;
+        }
+        private Control GenerateDataGrid(string description, List<string> value)
+        {
+            DataTable dt = new();
+            dt.Columns.Add("Значение");
+            foreach (string item in value)
+            {
+                dt.Rows.Add(item);
+            }
+            DataGrid control = new()
+            {
+                Tag = description,
+                MinHeight = 80,
+                ItemsSource = dt.DefaultView,
+                Style = this.FindResource("DataGridMain") as Style
+            };
+            
+            return control;
+        }
+        private Control GenerateDataGrid(string description, Dictionary<string, string> value)
+        {
+            DataTable dt = new();
+            dt.Columns.Add("Ключ");
+            dt.Columns.Add("Значение");
+            foreach (KeyValuePair<string, string> item in value)
+            {
+                dt.Rows.Add(item.Key, item.Value);
+            }
+            DataGrid control = new()
+            {
+                Tag = description,
+                MinHeight = 80,
+                ItemsSource = dt.DefaultView,
+                Style = this.FindResource("DataGridMain") as Style
+            };
+
             return control;
         }
         private Control GenerateCheckBox(string description, bool value)
@@ -195,8 +234,7 @@ namespace Incas.Core.Views.Windows
                                 }
                                 field.SetValue(this.Result, resultString);
                                 break;
-                            case "Int32":
-                                
+                            case "Int32":                               
                                 field.SetValue(this.Result, ((NumericBox)control).Value);
                                 break;
                             case "Boolean":
@@ -207,6 +245,28 @@ namespace Incas.Core.Views.Windows
                                 break;
                             case "DataTable":
                                 field.SetValue(this.Result, ((DataView)((DataGrid)control).ItemsSource).ToTable());
+                                break;
+                            default:
+                                if (field.PropertyType.Name.Contains("List"))
+                                {
+                                    DataTable dt = ((DataView)((DataGrid)control).ItemsSource).ToTable();
+                                    List<string> values = new();
+                                    foreach (DataRow row in dt.Rows)
+                                    {
+                                        values.Add(row[0].ToString());
+                                    }
+                                    field.SetValue(this.Result, values);
+                                }
+                                else if (field.PropertyType.Name.Contains("Dictionary"))
+                                {
+                                    DataTable dt = ((DataView)((DataGrid)control).ItemsSource).ToTable();
+                                    Dictionary<string,string> values = new();
+                                    foreach (DataRow row in dt.Rows)
+                                    {
+                                        values.Add(row[0].ToString(), row[1].ToString());
+                                    }
+                                    field.SetValue(this.Result, values);
+                                }
                                 break;
                         }
                         break;
