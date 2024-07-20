@@ -213,6 +213,7 @@ namespace Incas.Templates.Views.Controls
                     this.tag.value = value;
                     break;
                 case TagType.LocalEnumeration:
+                case TagType.GlobalEnumeration:
                     ((ComboBox)this.control).SelectedValue = value;
                     break;
                 case TagType.Date:
@@ -329,10 +330,6 @@ namespace Incas.Templates.Views.Controls
         {
             return this.tag.id;
         }
-        //private void ClearClick(object sender, RoutedEventArgs e)
-        //{
-        //    this.Textbox.Text = "";
-        //}
 
         private void CopyAllClick(object sender, RoutedEventArgs e)
         {

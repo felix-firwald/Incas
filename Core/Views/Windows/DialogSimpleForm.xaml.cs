@@ -23,7 +23,7 @@ namespace Incas.Core.Views.Windows
             InitializeComponent();
             this.Result = values;
             this.TitleText.Content = title;
-
+            this.SafetyCallMethod("Load");
             foreach (PropertyInfo field in values.GetType().GetProperties())
             {
                 this.AddField(field);
@@ -227,6 +227,14 @@ namespace Incas.Core.Views.Windows
             }
             return "";
         }
+        private void SafetyCallMethod(string name)
+        {
+            MethodInfo method = this.Result.GetType().GetMethod(name);
+            if (method is not null)
+            {
+                method.Invoke(this.Result, null);
+            }
+        }
 
         private void FinishClick(object sender, RoutedEventArgs e)
         {
@@ -291,11 +299,7 @@ namespace Incas.Core.Views.Windows
                     }
                 }               
             }
-            MethodInfo method = this.Result.GetType().GetMethod("Save");
-            if (method is not null)
-            {
-                method.Invoke(this.Result, null);
-            }
+            this.SafetyCallMethod("Save");
             this.DialogResult = true;
             this.Close();
         }
