@@ -1,13 +1,14 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Incas.Core.Views.Windows
 {
@@ -17,7 +18,7 @@ namespace Incas.Core.Views.Windows
     public partial class DialogSimpleForm : Window
     {
         public object Result;
-        public DialogSimpleForm(object values, string title)
+        public DialogSimpleForm(object values, string title, string pathIcon = null)
         {
             InitializeComponent();
             this.Result = values;
@@ -26,6 +27,10 @@ namespace Incas.Core.Views.Windows
             foreach (PropertyInfo field in values.GetType().GetProperties())
             {
                 this.AddField(field);
+            }
+            if (pathIcon != null)
+            {
+                this.PathIcon.Data = Geometry.Parse(IconsManager.GetIconByName(pathIcon));
             }
         }
         private void AddField(PropertyInfo field)
@@ -61,6 +66,10 @@ namespace Incas.Core.Views.Windows
                     control = this.GenerateDataGrid(description, (DataTable)field.GetValue(this.Result));
                     this.Fields.Children.Add(label);
                     break;
+                case "ComboSelector":
+                    control = this.GenerateComboBox(description, (ComboSelector)field.GetValue(this.Result));
+                    this.Fields.Children.Add(label);
+                    break;
                 default:
                     if (field.PropertyType.Name.Contains("List"))
                     {
@@ -73,11 +82,6 @@ namespace Incas.Core.Views.Windows
                     }
                     break;
             }
-            //if (field.FieldType.IsEnum)
-            //{
-            //    DialogsManager.ShowInfoDialog(field.Name);
-            //    this.GetEnumDescriptions(field);
-            //}
             if (field.SetMethod.IsPrivate)
             {
                 control.IsEnabled = false;
@@ -91,6 +95,17 @@ namespace Incas.Core.Views.Windows
                 Tag = description,
                 Text = value,
                 Style = this.FindResource("TextBoxMain") as Style
+            };
+            return control;
+        }
+        private Control GenerateComboBox(string description, ComboSelector selector)
+        {
+            ComboBox control = new()
+            {
+                Tag = description,
+                ItemsSource = selector.VisibleItems,
+                SelectedValue = selector.SelectedValue,
+                Style = this.FindResource("ComboBoxMain") as Style
             };
             return control;
         }
@@ -246,6 +261,9 @@ namespace Incas.Core.Views.Windows
                             case "DataTable":
                                 field.SetValue(this.Result, ((DataView)((DataGrid)control).ItemsSource).ToTable());
                                 break;
+                            case "ComboSelector":
+                                ((ComboSelector)field.GetValue(this.Result)).SetSelection(((ComboBox)control).SelectedValue.ToString());
+                                break;
                             default:
                                 if (field.PropertyType.Name.Contains("List"))
                                 {
@@ -273,6 +291,11 @@ namespace Incas.Core.Views.Windows
                     }
                 }               
             }
+            MethodInfo method = this.Result.GetType().GetMethod("Save");
+            if (method is not null)
+            {
+                method.Invoke(this.Result, null);
+            }
             this.DialogResult = true;
             this.Close();
         }
@@ -281,6 +304,14 @@ namespace Incas.Core.Views.Windows
         {
             this.DialogResult = false;
             this.Close();
+        }
+
+        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }          
         }
     }
 }

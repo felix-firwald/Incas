@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Incas.Core.Views.Windows
 {
@@ -30,6 +31,14 @@ namespace Incas.Core.Views.Windows
         private void InputValue_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }
         }
     }
 }

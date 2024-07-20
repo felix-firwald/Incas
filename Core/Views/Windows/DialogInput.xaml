@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows"
-        mc:Ignorable="d"
+        mc:Ignorable="d" MouseDown="Window_MouseDown"
         Title="Ввод данных" Height="165" Style="{DynamicResource Dialog}" AllowsTransparency="True" SizeToContent="Height" WindowStartupLocation="CenterScreen">
     <Grid FocusManager.FocusedElement="{Binding ElementName=InputValue}">
         <Grid.ColumnDefinitions>

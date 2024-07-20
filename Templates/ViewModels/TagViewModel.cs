@@ -1,6 +1,9 @@
-﻿using Incas.Core.ViewModels;
+﻿using Incas.Core.Models;
+using Incas.Core.ViewModels;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
+using System.Collections.Generic;
+using System.Data;
 using System.Windows;
 
 namespace Incas.Templates.ViewModels
@@ -45,6 +48,56 @@ namespace Incas.Templates.ViewModels
                     this.OnPropertyChanged(nameof(this.OrderNumber));
                 }
             }
+        }
+        public List<string> Values
+        {
+            get
+            {
+                switch (this.mainTag.type)
+                {
+                    case TagType.GlobalConstant:
+                    default:
+                        return this.GetConstants();
+                    case TagType.GlobalEnumeration:
+                        return this.GetEnumerations();
+                }
+            }
+        }
+        public string SelectedValue
+        {
+            get
+            {
+                return this.mainTag.value;
+            }
+            set
+            {
+                this.mainTag.value = value;
+                OnPropertyChanged(nameof(this.SelectedValue));
+            }
+        }
+        public Visibility ComboValuesVisibility
+        {
+            get
+            {
+                switch (this.mainTag.type)
+                {
+                    case TagType.GlobalConstant:
+                    case TagType.GlobalEnumeration:
+                        return Visibility.Visible;                  
+                    default:
+                        return Visibility.Collapsed;
+                }
+            }
+        }
+        public List<string> GetConstants()
+        {
+            using Parameter p = new();
+            return p.GetConstantsList();
+        }
+        public List<string> GetEnumerations()
+        {
+            using Parameter p = new();
+            return p.GetEnumeratorsList();
         }
         public void IncrementOrder()
         {
@@ -122,6 +175,8 @@ namespace Incas.Templates.ViewModels
                 this.OnPropertyChanged(nameof(this.ButtonGeneratorVisibility));
                 this.OnPropertyChanged(nameof(this.DefaultValueVisibility));
                 this.OnPropertyChanged(nameof(this.DescriptionVisibility));
+                this.OnPropertyChanged(nameof(this.ComboValuesVisibility));
+                this.OnPropertyChanged(nameof(this.Values));
             }
         }
 
@@ -139,29 +194,31 @@ namespace Incas.Templates.ViewModels
                 case "2":
                     return TagType.LocalEnumeration;
                 case "3":
-                    return TagType.Relation;
+                    return TagType.GlobalEnumeration;
                 case "4":
-                    return TagType.Date;
+                    return TagType.Relation;
                 case "5":
-                    return TagType.Number;
+                    return TagType.Date;
                 case "6":
-                    this.Description = "";
-                    return TagType.LocalConstant;
+                    return TagType.Number;
                 case "7":
                     this.Description = "";
-                    return TagType.GlobalConstant;
+                    return TagType.LocalConstant;
                 case "8":
                     this.Description = "";
-                    return TagType.HiddenField;
+                    return TagType.GlobalConstant;
                 case "9":
                     this.Description = "";
-                    this.DefaultValue = "";
-                    return TagType.Generator;
+                    return TagType.HiddenField;
                 case "10":
                     this.Description = "";
                     this.DefaultValue = "";
-                    return TagType.Macrogenerator;
+                    return TagType.Generator;
                 case "11":
+                    this.Description = "";
+                    this.DefaultValue = "";
+                    return TagType.Macrogenerator;
+                case "12":
                     this.Description = "";
                     return TagType.Table;
             }
@@ -172,14 +229,16 @@ namespace Incas.Templates.ViewModels
             {
                 TagType.Text => "1",
                 TagType.LocalEnumeration => "2",
-                TagType.Relation => "3",
-                TagType.Date => "4",
-                TagType.Number => "5",
-                TagType.LocalConstant => "6",
-                TagType.HiddenField => "7",
-                TagType.Generator => "8",
-                TagType.Macrogenerator => "9",
-                TagType.Table => "10",
+                TagType.GlobalEnumeration => "3",
+                TagType.Relation => "4",
+                TagType.Date => "5",
+                TagType.Number => "6",
+                TagType.LocalConstant => "7",
+                TagType.GlobalConstant => "8",
+                TagType.HiddenField => "9",
+                TagType.Generator => "10",
+                TagType.Macrogenerator => "11",
+                TagType.Table => "12",
                 _ => "0",
             };
         }
@@ -194,6 +253,8 @@ namespace Incas.Templates.ViewModels
                     default:
                         return Visibility.Visible;
                     case TagType.Relation:
+                    case TagType.GlobalConstant:
+                    case TagType.GlobalEnumeration:
                     case TagType.Generator:
                     case TagType.Macrogenerator:
                         return Visibility.Collapsed;

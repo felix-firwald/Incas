@@ -68,9 +68,9 @@ namespace Incas.Core.Classes
             }
             return false;
         }
-        public static bool ShowSimpleFormDialog(object data, string title)
+        public static bool ShowSimpleFormDialog(object data, string title, string pathIcon = null)
         {
-            DialogSimpleForm ds = new(data, title);
+            DialogSimpleForm ds = new(data, title, pathIcon);
             return (bool)ds.ShowDialog();
         }
         public static void ShowAccessErrorDialog(string message, string title = "Нет доступа")

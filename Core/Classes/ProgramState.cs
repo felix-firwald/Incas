@@ -425,5 +425,19 @@ namespace Incas.Core.Classes
                 LastGarbageCollect = DateTime.Now;
             }
         }
+        public static string GetConstant(string name)
+        {
+            using (Parameter p = new())
+            {
+                return p.GetConstantValue(name);
+            }
+        }
+        public static List<string> GetEnumeration(string name)
+        {
+            using (Parameter p = new())
+            {
+                return p.GetEnumerationValue(name);
+            }
+        }
     }
 }

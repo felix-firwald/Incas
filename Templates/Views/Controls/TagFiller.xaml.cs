@@ -82,6 +82,7 @@ namespace Incas.Templates.Views.Controls
                     this.PlaceUIControl(textBox);
                     break;
                 case TagType.LocalEnumeration:
+                case TagType.GlobalEnumeration:
                     if (this.tag.value is null)
                     {
                         this.tag.value = "";
@@ -89,7 +90,7 @@ namespace Incas.Templates.Views.Controls
                     ComboBox comboBox = new()
                     {
                         
-                        ItemsSource = this.tag.value.Split(';'),
+                        ItemsSource = this.tag.type == TagType.LocalEnumeration? this.tag.value.Split(';') : ProgramState.GetEnumeration(this.tag.value),
                         SelectedIndex = 0,
                         Style = this.FindResource("ComboBoxMain") as Style
                     };
@@ -106,10 +107,13 @@ namespace Incas.Templates.Views.Controls
                     numeric.ApplyMinAndMax(this.tag.value);
                     this.PlaceUIControl(numeric);
                     break;
-                case TagType.LocalConstant:
-                case TagType.GlobalConstant:
+                case TagType.LocalConstant:              
                 case TagType.HiddenField:
                     this.Visibility = Visibility.Collapsed;
+                    break;
+                case TagType.GlobalConstant:
+                    this.Visibility = Visibility.Collapsed;
+                    this.tag.value = ProgramState.GetConstant(this.tag.value);
                     break;
                 case TagType.Relation:
                     SelectionBox selectionBox = new()
@@ -285,15 +289,12 @@ namespace Incas.Templates.Views.Controls
                     return ((NumericBox)this.control).Value.ToString();
                 case TagType.LocalConstant:
                 case TagType.HiddenField:
-                    return this.tag.value;
                 case TagType.GlobalConstant:
-                    using (Parameter p = new())
-                    {
-                        return p.GetConstantValue(this.tag.value);
-                    }
+                    return this.tag.value;
                 case TagType.Relation:
                     return ((SelectionBox)this.control).Value;
                 case TagType.LocalEnumeration:
+                case TagType.GlobalEnumeration:
                     ComboBox cb = (ComboBox)this.control;
                     if (cb.SelectedIndex != -1)
                     {

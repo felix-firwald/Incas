@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows"
         xmlns:fa="http://schemas.fontawesome.io/icons/" x:Class="Incas.Core.Views.Windows.Dialog"
-        mc:Ignorable="d"
+        mc:Ignorable="d" MouseDown="Window_MouseDown"
         Title="Диалоговое окно" Style="{DynamicResource Dialog}" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height" Background="{DynamicResource Black}">
     <Window.Resources>
         <Style x:Key="IconStyle" TargetType="{x:Type Path}">

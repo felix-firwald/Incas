@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace Incas.Core.Views.Windows
 {
@@ -27,6 +28,14 @@ namespace Incas.Core.Views.Windows
         {
             this.status = DialogStatus.No;
             this.Close();
+        }
+
+        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                this.DragMove();
+            }
         }
     }
 }

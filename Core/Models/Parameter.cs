@@ -85,12 +85,38 @@ namespace Incas.Core.Models
                 .WhereEqual("type", ParameterType.CONSTANT.ToString())
                 .Execute();
         }
+        public List<string> GetConstantsList()
+        {
+            List<string> list = new();
+            DataTable dt = this.GetConstants();
+            if (dt != null)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    list.Add(dr["Наименование константы"].ToString());
+                }
+            }          
+            return list;
+        }
         public DataTable GetEnumerators()
         {
             return this.StartCommandToService()
-                .Select("[id] AS [Идентификатор], [name] AS [Наименование перечисления], [value] AS [Значения перечисления]")
+                .Select("[id] AS [Идентификатор], [name] AS [Наименование перечисления]")
                 .WhereEqual("type", ParameterType.ENUMERATION.ToString())
                 .Execute();
+        }
+        public List<string> GetEnumeratorsList()
+        {
+            List<string> list = new();
+            DataTable dt = this.GetEnumerators();
+            if (dt != null)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    list.Add(dr["Наименование перечисления"].ToString());
+                }
+            }
+            return list;
         }
         public string GetConstantValue(string withName)
         {
@@ -105,6 +131,20 @@ namespace Incas.Core.Models
             }
             DialogsManager.ShowExclamationDialog($"Константа с именем \"{withName}\" не определена.", "Константа не определена");
             return "";
+        }
+        public List<string> GetEnumerationValue(string withName)
+        {
+            DataRow dr = this.StartCommandToService()
+                .Select("value")
+                .WhereEqual("type", ParameterType.ENUMERATION.ToString())
+                .WhereEqual("name", withName)
+                .ExecuteOne();
+            if (dr is not null)
+            {
+                return JsonConvert.DeserializeObject<List<string>>(dr["value"].ToString());
+            }
+            DialogsManager.ShowExclamationDialog($"Перечисление с именем \"{withName}\" не определено.", "Перечисление не определено");
+            return new();
         }
         public bool Exists(ParameterType typeOf, string nameOf, string expectedValue, bool like = true)
         {

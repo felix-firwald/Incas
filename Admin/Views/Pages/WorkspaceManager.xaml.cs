@@ -12,6 +12,7 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using Newtonsoft.Json;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.Collections.Generic;
+using Incas.Admin.AutoUI;
 
 namespace Incas.Admin.Views.Pages
 {
@@ -43,7 +44,7 @@ namespace Incas.Admin.Views.Pages
             this.vm = new WorkspaceParametersViewModel();
             this.DataContext = this.vm;
             this.FillConstants();
-            this.FillEnumerations();
+            //this.FillEnumerations();
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)
@@ -55,13 +56,6 @@ namespace Incas.Admin.Views.Pages
             using (Parameter p = new())
             {
                 this.ConstantsTable.ItemsSource = p.GetConstants().DefaultView;
-            }
-        }
-        private void FillEnumerations()
-        {
-            using (Parameter p = new())
-            {
-                this.EnumsTable.ItemsSource = p.GetEnumerators().DefaultView;
             }
         }
 
@@ -148,7 +142,7 @@ namespace Incas.Admin.Views.Pages
             ParameterEnum en = new();
             en.Value = new();
             en.Value.Add("");
-            if (DialogsManager.ShowSimpleFormDialog(en, "Назначение константы") == true)
+            if (DialogsManager.ShowSimpleFormDialog(en, "Назначение перечисления", "Numeric list") == true)
             {
                 using (Parameter p = new())
                 {
@@ -157,7 +151,7 @@ namespace Incas.Admin.Views.Pages
                     p.type = ParameterType.ENUMERATION;
                     p.CreateParameter();
                 }
-                this.FillEnumerations();
+                this.vm.UpdateEnumerations();
             }
         }
 
@@ -179,7 +173,7 @@ namespace Incas.Admin.Views.Pages
                 {
                     p.RemoveParameterById(id);
                 }
-                this.FillEnumerations();
+                this.vm.UpdateEnumerations();
             }
             catch (Exception ex)
             {
@@ -188,7 +182,7 @@ namespace Incas.Admin.Views.Pages
         }
         private void UpdateEnumerationsClick(object sender, RoutedEventArgs e)
         {
-            this.FillEnumerations();
+            this.vm.UpdateEnumerations();
         }
 
         private void EditEnumerationClick(object sender, RoutedEventArgs e)
@@ -207,19 +201,25 @@ namespace Incas.Admin.Views.Pages
                     en.Name = par.name;
                     en.Value = JsonConvert.DeserializeObject<List<string>>(par.value);
                 }
-                DialogsManager.ShowSimpleFormDialog(en, "Редактирование перечисления");
+                DialogsManager.ShowSimpleFormDialog(en, "Редактирование перечисления", "Numeric list");
                 using (Parameter p = new())
                 {
                     p.name = en.Name;
                     p.SetValue(en.Value);
                     p.UpdateParameter(id);
                 }
-                this.FillEnumerations();
+                this.vm.UpdateEnumerations();
             }
             catch (Exception ex)
             {
                 DialogsManager.ShowErrorDialog(ex.Message);
             }
+        }
+
+        private void OpenSettingsClick(object sender, RoutedEventArgs e)
+        {
+            WorkspaceSettings ws = new();
+            DialogsManager.ShowSimpleFormDialog(ws, "Редактирование настроек", "Gear wide");
         }
     }
 }

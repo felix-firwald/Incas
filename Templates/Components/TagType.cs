@@ -13,6 +13,7 @@ namespace Incas.Templates.Components
         Number,
         Relation,
         LocalEnumeration,
+        GlobalEnumeration,
         LocalConstant,
         GlobalConstant,
         HiddenField,
