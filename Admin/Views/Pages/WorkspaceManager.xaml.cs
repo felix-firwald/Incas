@@ -3,38 +3,17 @@ using Incas.Admin.Views.Controls;
 using Incas.Core.Classes;
 using Incas.Core.Models;
 using Incubator_2.Windows.AdminWindows;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System;
 using System.Data;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using Newtonsoft.Json;
-using DocumentFormat.OpenXml.Wordprocessing;
 using System.Collections.Generic;
 using Incas.Admin.AutoUI;
 
 namespace Incas.Admin.Views.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для WorkspaceManager.xaml
-    /// </summary>
-    public class ParameterConstant
-    {
-        [Description("Наименование константы")]
-        public string Name { get; set; }
-
-        [Description("Значение константы")]
-        public string Value { get; set; }
-    }
-    public class ParameterEnum
-    {
-        [Description("Наименование перечисления")]
-        public string Name { get; set; }
-
-        [Description("Значения перечисления")]
-        public List<string> Value { get; set; }
-    }
     public partial class WorkspaceManager : UserControl
     {
         private WorkspaceParametersViewModel vm;
@@ -201,14 +180,16 @@ namespace Incas.Admin.Views.Pages
                     en.Name = par.name;
                     en.Value = JsonConvert.DeserializeObject<List<string>>(par.value);
                 }
-                DialogsManager.ShowSimpleFormDialog(en, "Редактирование перечисления", "Numeric list");
-                using (Parameter p = new())
+                if (DialogsManager.ShowSimpleFormDialog(en, "Редактирование перечисления", "Numeric list"))
                 {
-                    p.name = en.Name;
-                    p.SetValue(en.Value);
-                    p.UpdateParameter(id);
-                }
-                this.vm.UpdateEnumerations();
+                    using (Parameter p = new())
+                    {
+                        p.name = en.Name;
+                        p.SetValue(en.Value);
+                        p.UpdateParameter(id);
+                    }
+                    this.vm.UpdateEnumerations();
+                }                
             }
             catch (Exception ex)
             {
@@ -220,6 +201,21 @@ namespace Incas.Admin.Views.Pages
         {
             WorkspaceSettings ws = new();
             DialogsManager.ShowSimpleFormDialog(ws, "Редактирование настроек", "Gear wide");
+        }
+
+        private void AddClassClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EditClassClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RemoveClassClick(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

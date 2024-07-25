@@ -14,31 +14,31 @@ namespace Incas.Core.Classes
         }
         public AutoTableCreator Initialize(Type type, string name)
         {
-            definition.Clear();
-            TableName = name;
-            modelClass = type;
-            ParseToDict();
+            this.definition.Clear();
+            this.TableName = name;
+            this.modelClass = type;
+            this.ParseToDict();
             return this;
         }
         #region Common
         public void ParseToDict()
         {
-            foreach (PropertyInfo prop in modelClass.GetProperties())
+            foreach (PropertyInfo prop in this.modelClass.GetProperties())
             {
                 FieldCreator fc = new(prop.Name, SwitchOnType(prop.PropertyType));
                 if (prop.Name == "id")
                 {
                     fc.IsPK = true;
                 }
-                definition[prop.Name] = fc;
+                this.definition[prop.Name] = fc;
             }
         }
 
 
         public string GetQueryText()
         {
-            string result = $"CREATE TABLE IF NOT EXISTS [{TableName}] (\n";
-            result += string.Join(",\n", definition.Values);
+            string result = $"CREATE TABLE IF NOT EXISTS [{this.TableName}] (\n";
+            result += string.Join(",\n", this.definition.Values);
             result += "\n);";
             return result;
         }
@@ -68,41 +68,39 @@ namespace Incas.Core.Classes
             {
                 return "INTEGER";
             }
-            else if (type == typeof(long) || type == typeof(double))
-            {
-                return "DOUBLE";
-            }
             else
             {
-                return type == typeof(DateTime) ? "TEXT" : type == typeof(bool) ? "BOOLEAN" : "STRING";
+                return type == typeof(long) || type == typeof(double)
+                    ? "DOUBLE"
+                    : type == typeof(DateTime) ? "TEXT" : type == typeof(bool) ? "BOOLEAN" : "STRING";
             }
         }
         #endregion
 
         public void SetNotNull(string name, bool inNotNull)
         {
-            FieldCreator fc = definition[name];
+            FieldCreator fc = this.definition[name];
             fc.NotNULL = inNotNull;
-            definition[name] = fc;
+            this.definition[name] = fc;
         }
         public void SetAsUnique(string name)
         {
-            FieldCreator fc = definition[name];
+            FieldCreator fc = this.definition[name];
             fc.IsUNIQUE = true;
-            definition[name] = fc;
+            this.definition[name] = fc;
         }
         public void SetFK(string name, string table, string field)
         {
-            FieldCreator fc = definition[name];
+            FieldCreator fc = this.definition[name];
             fc.FKtable = table;
             fc.FKfield = field;
-            definition[name] = fc;
+            this.definition[name] = fc;
         }
         public void SetTextType(string name)
         {
-            FieldCreator fc = definition[name];
+            FieldCreator fc = this.definition[name];
             fc.TypeOf = "TEXT";
-            definition[name] = fc;
+            this.definition[name] = fc;
         }
     }
 }

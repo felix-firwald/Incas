@@ -1,9 +1,11 @@
 ﻿using Common;
+using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 
 namespace Incas.Core.Views.Windows
 {
@@ -32,7 +34,6 @@ namespace Incas.Core.Views.Windows
             {
                 ProgramState.SetCommonPath(this.cpath.Text);
                 ProgramState.GetDBFile();
-
                 if (Directory.Exists(this.cpath.Text))
                 {
                     this.TryAuthenticate();
@@ -57,7 +58,7 @@ namespace Incas.Core.Views.Windows
                     }
                     else
                     {
-                        ProgramState.SetSectorByUser(ProgramState.CurrentUser);
+                        //ProgramState.SetSectorByUser(ProgramState.CurrentUser);
                         ProgramState.OpenSession();
                         ServerProcessor.Listen();
                         DialogsManager.ShowWaitCursor(false);
@@ -98,13 +99,12 @@ namespace Incas.Core.Views.Windows
 
         private void EditClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            DefExistWorkspaceViewModel vmedit = new()
+            DefineExistingWorkspace dew = new()
             {
-                WorkspaceName = this.vm.SelectedWorkspace,
-                WorkspacePath = this.vm.Path
+                Name = this.vm.SelectedWorkspace,
+                Path = this.vm.Path
             };
-            DefineExistingWorkspace dew = new(vmedit);
-            dew.ShowDialog();
+            DialogsManager.ShowSimpleFormDialog(dew, "Редактирование элемента", "Folder");
             this.vm.Refresh();
         }
 
@@ -115,14 +115,29 @@ namespace Incas.Core.Views.Windows
                 case DialogStatus.Yes:
                 default:
                     CreateWorkspace cw = new();
-                    cw.ShowDialog();
+                    if (DialogsManager.ShowSimpleFormDialog(cw, "Создание рабочего пространства", "Folder"))
+                    {
+                        ProgramState.InitWorkspace(cw);
+                    }
                     break;
                 case DialogStatus.No:
                     DefineExistingWorkspace dew = new();
-                    dew.ShowDialog();
+                    DialogsManager.ShowSimpleFormDialog(dew, "Добавление рабочего пространства", "Folder");
                     break;
             }
             this.vm.Refresh();
+        }
+
+        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                try
+                {
+                    this.DragMove();
+                }
+                catch { }
+            }
         }
     }
 }

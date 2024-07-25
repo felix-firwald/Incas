@@ -1,4 +1,5 @@
-﻿using Incas.Core.Classes;
+﻿using Incas.Core.Attributes;
+using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -49,7 +50,15 @@ namespace Incas.Core.Views.Windows
             switch (field.PropertyType.Name)
             {
                 case "String":
-                    control = this.GenerateTextBox(description, (string)field.GetValue(this.Result));
+                    Attribute attr = field.GetCustomAttribute(typeof(UrlRequired), false);
+                    if (attr is not null)
+                    {
+                        control = this.GeneratePathBox(description, (string)field.GetValue(this.Result));
+                    }
+                    else
+                    {
+                        control = this.GenerateTextBox(description, (string)field.GetValue(this.Result));
+                    }
                     break;
                 case "Int32":
                     control = this.GenerateNumericBox(description, (int)field.GetValue(this.Result));
@@ -95,6 +104,15 @@ namespace Incas.Core.Views.Windows
                 Tag = description,
                 Text = value,
                 Style = this.FindResource("TextBoxMain") as Style
+            };
+            return control;
+        }
+        private Control GeneratePathBox(string description, string value)
+        {
+            PathSelector control = new()
+            {
+                Value = value,
+                Tag = description,
             };
             return control;
         }
@@ -232,7 +250,14 @@ namespace Incas.Core.Views.Windows
             MethodInfo method = this.Result.GetType().GetMethod(name);
             if (method is not null)
             {
-                method.Invoke(this.Result, null);
+                try
+                {
+                    method.Invoke(this.Result, null);
+                }
+                catch (TargetInvocationException)
+                {
+                    //DialogsManager.ShowInfoDialog(e.InnerException.Message);
+                }
             }
         }
 
@@ -249,7 +274,16 @@ namespace Incas.Core.Views.Windows
                         switch (field.PropertyType.Name)
                         {
                             case "String":
-                                string resultString = ((TextBox)control).Text;
+                                string resultString = "";
+                                Attribute attr = field.GetCustomAttribute(typeof(UrlRequired), false);
+                                if (attr is not null)
+                                {
+                                    resultString = ((PathSelector)control).Value;
+                                }
+                                else
+                                {
+                                    resultString = ((TextBox)control).Text;
+                                }                             
                                 if (string.IsNullOrEmpty(resultString))
                                 {
                                     DialogsManager.ShowExclamationDialog($"Поле \"{descript}\" не заполнено!", "Сохранение прервано");

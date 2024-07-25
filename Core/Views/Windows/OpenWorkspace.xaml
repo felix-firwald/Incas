@@ -1,9 +1,9 @@
-﻿<Window xmlns:fa="http://schemas.fontawesome.io/icons/"  x:Class="Incas.Core.Views.Windows.OpenWorkspace"
+﻿<Window xmlns:fa="http://schemas.fontawesome.io/icons/" x:Class="Incas.Core.Views.Windows.OpenWorkspace"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Incas.Core.Views.Windows"
+        xmlns:local="clr-namespace:Incas.Core.Views.Windows" MouseDown="Window_MouseDown"
         mc:Ignorable="d" Style="{DynamicResource Dialog}" Background="{StaticResource Black}"
         Title="Выбор рабочего пространства" Height="400" Width="400" WindowStartupLocation="CenterScreen">
     <Grid FocusManager.FocusedElement="{Binding ElementName=pwd}">

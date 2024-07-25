@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.AutoUI;
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
@@ -24,15 +25,6 @@ namespace Incas.Core.Classes
     public class SessionBrokenException : Exception
     {
         public SessionBrokenException() { }
-    }
-
-    internal struct FirstWorkspaceData
-    {
-        public string workspacePath;
-        public string workspaceName;
-        public string userSurname;
-        public string userFullname;
-        public string userPassword;
     }
 
     internal static class ProgramState
@@ -172,7 +164,7 @@ namespace Incas.Core.Classes
         }
 
         #region Incubator
-        public static void InitWorkspace(FirstWorkspaceData data)
+        public static void InitWorkspace(CreateWorkspace data)
         {
             int recursion = 0;
             void Create()
@@ -185,43 +177,31 @@ namespace Incas.Core.Classes
                     {
                         par.type = ParameterType.INCUBATOR;
                         par.name = "ws_name";
-                        par.value = data.workspaceName;
+                        par.value = data.WorkspaceName;
                         par.CreateParameter();
-                        par.name = "ws_opened";
-                        par.WriteBoolValue(true);
-                        par.CreateParameter();
-                        par.name = "ws_locked";
-                        par.WriteBoolValue(false);
-                        par.CreateParameter();
-
                     }
 
                     DialogsManager.ShowInfoDialog("Рабочее пространство успешно создано.");
-                    using (Sector sector = new())
-                    {
-                        sector.slug = "data";
-                        sector.name = "Базовый сектор";
-                        sector.AddSector(false);
-                    }
 
-                    using User user = new();
-                    user.username = "admin";
-                    user.post = "Администратор рабочего пространства";
-                    user.surname = data.userSurname;
-                    user.secondName = data.userFullname;
-                    user.fullname = $"{user.surname} {user.secondName}";
-                    user.sector = "data";
-                    UserParameters up = new()
+                    using (User user = new())
                     {
-                        permission_group = PermissionGroup.Admin,
-                        tasks_visibility = true,
-                        communication_visibility = true,
-                        database_visibility = true,
-                        password = data.userPassword
-                    };
-                    user.GenerateSign();
-                    user.SaveParametersContext(up);
-                    user.AddUser();
+                        user.username = "admin";
+                        user.post = "Администратор рабочего пространства";
+                        user.surname = "Администратор";
+                        user.fullname = "Администратор";
+                        user.sector = "data";
+                        UserParameters up = new()
+                        {
+                            permission_group = PermissionGroup.Admin,
+                            tasks_visibility = true,
+                            communication_visibility = true,
+                            database_visibility = true,
+                            password = data.Password,
+                        };
+                        user.GenerateSign();
+                        user.SaveParametersContext(up);
+                        user.AddUser();
+                    }                  
                 }
                 catch (IOException)
                 {
@@ -239,11 +219,11 @@ namespace Incas.Core.Classes
 
             DialogsManager.ShowWaitCursor();
             Permission.CurrentUserPermission = PermissionGroup.Admin;
-            SetCommonPath(data.workspacePath, false);
+            SetCommonPath(data.Path, false);
             if (CreateTablesInDatabase())
             {
                 DialogsManager.ShowWaitCursor(false);
-                RegistryData.SetWorkspacePath(data.workspaceName, data.workspacePath);
+                RegistryData.SetWorkspacePath(data.WorkspaceName, data.Path);
                 Create();
             }
         }

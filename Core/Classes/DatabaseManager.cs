@@ -174,14 +174,11 @@ namespace Incas.Core.Classes
         private static string GetTemplateDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Template), "Templates");
-            atc.SetFK("parent", "Templates", "id");
             return atc.GetQueryText();
         }
         private static string GetGeneratedDocumentDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(GeneratedDocument), "GeneratedDocuments");
-            atc.SetFK("template", "Templates", "id");
-            atc.SetAsUnique("reference");
             return atc.GetQueryText();
         }
 
@@ -189,7 +186,6 @@ namespace Incas.Core.Classes
         {
             atc.Initialize(typeof(Tag), "Tags");
             atc.SetFK("template", "Templates", "id");
-            atc.SetFK("parent", "Tags", "id");
             return atc.GetQueryText();
         }
         private static string GetCommandDefinition(AutoTableCreator atc)

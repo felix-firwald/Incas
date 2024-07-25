@@ -243,7 +243,6 @@
     <Folder Include="FileManager\Views\Controls\" />
     <Folder Include="Objects\ViewModels\" />
     <Folder Include="Objects\Views\Controls\" />
-    <Folder Include="Objects\Views\Windows\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>

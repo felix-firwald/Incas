@@ -27,7 +27,7 @@
 
 
         <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize" Cursor="">
-            <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,15" Text="{Binding SectorName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
+            <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,15" Text="{Binding WorkspaceName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
             <Image x:Name="Logo" Height="auto" Width="auto" Source="/Core/Views/Windows/Logo.png" UseLayoutRounding="False" Margin="50,25,50,25" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" MouseDown="Logo_MouseDown">
             </Image>
             <TextBlock x:Name="LSurname" Foreground="White" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis"/>

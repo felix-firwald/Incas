@@ -55,7 +55,6 @@ namespace Incas.CustomDatabases.Models
         {
             DataTable dt = this.StartCommandToService()
                 .Select()
-                .WhereLike(nameof(this.sectors), ProgramState.CurrentSector.slug)
                 .Execute();
             return this.ParseToList(dt);
         }

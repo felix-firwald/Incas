@@ -169,18 +169,7 @@ namespace Incas.Core.ViewModels
                 }
             }
         }
-        public string SectorName
-        {
-            get => ProgramState.CurrentSector.name;
-            set
-            {
-                if (ProgramState.CurrentSector.name != value)
-                {
-                    ProgramState.CurrentSector.name = value;
-                    this.OnPropertyChanged("SectorName");
-                }
-            }
-        }
+
 
         private Visibility VisibilityConverter(bool b)
         {
