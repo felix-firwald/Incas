@@ -12,7 +12,6 @@
             {
                 id = this.id,
                 name = this.name,
-                sectors = this.sectors,
                 path = this.path
             };
             return db;

@@ -87,63 +87,46 @@ namespace Incas.Templates.Views.Controls
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
-            if (ProgramState.CurrentUserParameters.modify_templates)
+            if (ProgramState.IsWorkspaceOpened())
             {
-                if (ProgramState.IsWorkspaceOpened())
+                if (this.ChildPanel.Children.Count > 0)
                 {
-                    if (this.ChildPanel.Children.Count > 0)
-                    {
-                        DialogsManager.ShowExclamationDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
-                        return;
-                    }
-                    if (DialogsManager.ShowQuestionDialog($"Шаблон \"{this.template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
-                    {
-                        Tag tag = new();
-                        tag.RemoveAllTagsByTemplate(this.template.id);
-                        this.template.AsModel().RemoveTemplate();
-                        this.UpdateList();
-                    }
+                    DialogsManager.ShowExclamationDialog("Шаблон нельзя удалить, пока на него ссылается хотя бы один наследник.", "Удаление прервано");
+                    return;
                 }
-            }
-            else
-            {
-                DialogsManager.ShowAccessErrorDialog("Вам недоступна функция удаления шаблонов.", "Удаление прервано");
+                if (DialogsManager.ShowQuestionDialog($"Шаблон \"{this.template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
+                {
+                    Tag tag = new();
+                    tag.RemoveAllTagsByTemplate(this.template.id);
+                    this.template.AsModel().RemoveTemplate();
+                    this.UpdateList();
+                }
             }
         }
 
         private void EditClick(object sender, MouseButtonEventArgs e)
         {
-            if (ProgramState.CurrentUserParameters.modify_templates)
+            if (ProgramState.IsWorkspaceOpened())
             {
-                if (ProgramState.IsWorkspaceOpened())
-                {
-                    DialogsManager.ShowWaitCursor();
-                    CreateDocumentTemplate ctw = new(this.template.AsModel());
-                    ctw.OnCreated += this.UpdateList;
-                    ctw.Show();
-                }
-            }
-            else
-            {
-                DialogsManager.ShowAccessErrorDialog("Вам недоступна функция редактирования шаблонов.", "Редактирование прервано");
+                DialogsManager.ShowWaitCursor();
+                CreateDocumentTemplate ctw = new(this.template.AsModel());
+                ctw.OnCreated += this.UpdateList;
+                ctw.Show();
             }
         }
 
         private void CreateChildClick(object sender, MouseButtonEventArgs e)
         {
-            if (ProgramState.CurrentUserParameters.create_templates)
+            if (ProgramState.IsWorkspaceOpened())
             {
-                if (ProgramState.IsWorkspaceOpened())
+                string parents = this.template.id.ToString();
+                if (!string.IsNullOrWhiteSpace(this.template.parent))
                 {
-                    string parents = this.template.id.ToString();
-                    if (!string.IsNullOrWhiteSpace(this.template.parent))
-                    {
-                        parents = this.template.parent + ";" + parents;
-                    }
-                    CreateDocumentTemplate ctw = new(parents: parents);
-                    ctw.OnCreated += this.UpdateList;
-                    ctw.Show();
+                    parents = this.template.parent + ";" + parents;
                 }
+                CreateDocumentTemplate ctw = new(parents: parents);
+                ctw.OnCreated += this.UpdateList;
+                ctw.Show();
             }
             else
             {

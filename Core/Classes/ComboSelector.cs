@@ -36,5 +36,9 @@ namespace Incas.Core.Classes
         {
             this.SelectedObject = this.Pairs.FirstOrDefault(x => x.Value == selection).Key;
         }
+        public void SetSelection(object selection)
+        {
+            this.SelectedObject = selection;
+        }
     }
 }

@@ -75,25 +75,10 @@ namespace Incas.Core.Classes
             input = input.Trim();
             switch (input)
             {
-                case "sector":
-                    using (Sector sector = new())
-                    {
-                        sector.name = DialogsManager.ShowInputBox("Имя сектора", "Введите имя сектора");
-                        sector.AddSector();
-                    }
-                    break;
-                case "user":
-                    UserEditor ue = new(new User());
-                    ue.ShowDialog();
-                    break;
                 case "database":
                     using (Database db = new())
                     {
                         db.name = DialogsManager.ShowInputBox("База данных", "Введите имя базы данных");
-                        using (Sector sector = new())
-                        {
-                            db.sectors = string.Join(" ", sector.GetSectorSlugs());
-                        }
                         db.AddDatabase();
                     }
                     break;

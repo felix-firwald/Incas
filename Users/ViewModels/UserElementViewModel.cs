@@ -1,5 +1,7 @@
 ﻿using Common;
+using Incas.Core.Classes;
 using Incas.Core.ViewModels;
+using Incas.Users.AutoUI;
 using Incas.Users.Models;
 using Incas.Users.Views.Windows;
 
@@ -48,8 +50,18 @@ namespace Incas.Users.ViewModels
         }
         public void EditUser()
         {
-            UserEditor editor = new(this._user);
-            editor.ShowDialog();
+            //UserEditor editor = new(this._user);
+            //editor.ShowDialog();
+            if (this._user.username == "admin" && this._user.id == 1)
+            {
+                UserSuperAdminSettings usa = new(this._user);
+                DialogsManager.ShowSimpleFormDialog(usa, "Редактирование владельца", Icon.UserGears);
+            }
+            else
+            {
+                UserSettings us = new(this._user);
+                DialogsManager.ShowSimpleFormDialog(us, "Редактирование пользователя", Icon.UserGears);
+            }          
             this.OnPropertyChanged(nameof(this.UserName));
             this.OnPropertyChanged(nameof(this.UserStatus));
             this.OnPropertyChanged(nameof(this.UserPost));

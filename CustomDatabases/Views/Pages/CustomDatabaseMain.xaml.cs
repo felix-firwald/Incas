@@ -166,7 +166,6 @@ namespace Incas.CustomDatabases.Views.Pages
 
         }
 
-
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
 
@@ -425,13 +424,6 @@ namespace Incas.CustomDatabases.Views.Pages
         {
             using Incas.CustomDatabases.Models.Database db = new();
             db.name = DialogsManager.ShowInputBox("Имя базы данных");
-            using (Sector s = new())
-            {
-                foreach (Sector sec in s.GetSectors())
-                {
-                    db.sectors += $"{sec.slug} ";
-                }
-            }
             db.AddDatabase();
         }
 

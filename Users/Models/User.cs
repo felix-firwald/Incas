@@ -29,7 +29,6 @@ namespace Incas.Users.Models
                 secondName = this.secondName,
                 fullname = this.fullname,
                 post = this.post,
-                sector = this.sector,
                 context = this.context
             };
             return user;
@@ -45,7 +44,6 @@ namespace Incas.Users.Models
         public string secondName { get; set; }
         public string fullname { get; set; }
         public string post { get; set; }
-        public string sector { get; set; }
         public string context { get; set; }
 
         public User()
@@ -99,7 +97,6 @@ namespace Incas.Users.Models
                 .Update("secondName", this.secondName)
                 .Update("fullname", this.fullname)
                 .Update("post", this.post)
-                .Update("sector", this.sector)
                 .Update("context", this.context)
                 .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
@@ -119,7 +116,6 @@ namespace Incas.Users.Models
                     { "secondName", this.secondName },
                     { "fullname", this.fullname },
                     { "post", this.post },
-                    { "sector", this.sector },
                     { "context", this.context }
                 })
                 .ExecuteVoid();
@@ -127,6 +123,7 @@ namespace Incas.Users.Models
         }
         public void SaveUser()
         {
+            this.fullname = this.surname + " " + this.secondName;
             if (this.id == 0)
             {
                 this.AddUser();

@@ -104,7 +104,7 @@ namespace Incas.Core.Views.Windows
                 Name = this.vm.SelectedWorkspace,
                 Path = this.vm.Path
             };
-            DialogsManager.ShowSimpleFormDialog(dew, "Редактирование элемента", "Folder");
+            DialogsManager.ShowSimpleFormDialog(dew, "Редактирование элемента", Classes.Icon.Folder);
             this.vm.Refresh();
         }
 
@@ -115,14 +115,14 @@ namespace Incas.Core.Views.Windows
                 case DialogStatus.Yes:
                 default:
                     CreateWorkspace cw = new();
-                    if (DialogsManager.ShowSimpleFormDialog(cw, "Создание рабочего пространства", "Folder"))
+                    if (DialogsManager.ShowSimpleFormDialog(cw, "Создание рабочего пространства", Classes.Icon.Folder))
                     {
                         ProgramState.InitWorkspace(cw);
                     }
                     break;
                 case DialogStatus.No:
                     DefineExistingWorkspace dew = new();
-                    DialogsManager.ShowSimpleFormDialog(dew, "Добавление рабочего пространства", "Folder");
+                    DialogsManager.ShowSimpleFormDialog(dew, "Добавление рабочего пространства", Classes.Icon.Folder);
                     break;
             }
             this.vm.Refresh();

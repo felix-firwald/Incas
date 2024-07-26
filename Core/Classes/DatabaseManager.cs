@@ -76,7 +76,6 @@ namespace Incas.Core.Classes
             };
             q
              .AddCustomRequest(GetParameterDefinition(atc))
-             .AddCustomRequest(GetSectorDefinition(atc))
              .AddCustomRequest(GetUserDefinition(atc))
              .AddCustomRequest(GetSessionDefinition(atc))
              .AddCustomRequest(GetDatabasesDefinition(atc))
@@ -90,7 +89,6 @@ namespace Incas.Core.Classes
         public static void ActualizeTables()
         {
             CheckFieldsInTable(typeof(Parameter), "Parameters", DBConnectionType.SERVICE);
-            CheckFieldsInTable(typeof(Sector), "Sectors", DBConnectionType.SERVICE);
             CheckFieldsInTable(typeof(User), "Users", DBConnectionType.SERVICE);
             CheckFieldsInTable(typeof(Session), "Sessions", DBConnectionType.SERVICE);
             CheckFieldsInTable(typeof(Database), "Databases", DBConnectionType.SERVICE);
@@ -134,13 +132,6 @@ namespace Incas.Core.Classes
         {
             atc.Initialize(typeof(Models.Process), "Processes");
             atc.SetAsUnique("identifier");
-            return atc.GetQueryText();
-        }
-        private static string GetSectorDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Sector), "Sectors");
-            atc.SetAsUnique("slug");
-            atc.SetAsUnique("name");
             return atc.GetQueryText();
         }
         private static string GetDatabasesDefinition(AutoTableCreator atc)
@@ -237,9 +228,6 @@ namespace Incas.Core.Classes
                 {
                     case "Processes":
                         q.AddCustomRequest(GetProcessDefinition(atc));
-                        break;
-                    case "Sectors":
-                        q.AddCustomRequest(GetSectorDefinition(atc));
                         break;
                     case "Databases":
                         q.AddCustomRequest(GetDatabasesDefinition(atc));

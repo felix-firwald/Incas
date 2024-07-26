@@ -55,7 +55,6 @@ namespace Incas.Core.Classes
         public static UserParameters CurrentUserParameters { get; set; }
         public static Session CurrentSession { get; private set; }
         #endregion
-        public static Sector CurrentSector { get; private set; }
         public static MainWindowViewModel MainWindow { get; set; }
 
         private static DateTime LastGarbageCollect = DateTime.Now;
@@ -189,13 +188,9 @@ namespace Incas.Core.Classes
                         user.post = "Администратор рабочего пространства";
                         user.surname = "Администратор";
                         user.fullname = "Администратор";
-                        user.sector = "data";
                         UserParameters up = new()
                         {
                             permission_group = PermissionGroup.Admin,
-                            tasks_visibility = true,
-                            communication_visibility = true,
-                            database_visibility = true,
                             password = data.Password,
                         };
                         user.GenerateSign();
@@ -340,21 +335,6 @@ namespace Incas.Core.Classes
                 DialogsManager.ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex.Message}", "Действие невозможно");
             }
         }
-
-        #region Sector Managing
-        public static void SetSectorByUser(User user)
-        {
-            string result = $"{CommonPath}\\{user.sector}.dbinc";
-            if (File.Exists(result))
-            {
-                DatabasePath = result;
-                using Sector s = new();
-                s.slug = user.sector;
-                s.GetSector();
-                CurrentSector = s;
-            }
-        }
-        #endregion
 
         public static async void ClearRuntimeFiles()
         {

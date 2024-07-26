@@ -121,7 +121,7 @@ namespace Incas.Admin.Views.Pages
             ParameterEnum en = new();
             en.Value = new();
             en.Value.Add("");
-            if (DialogsManager.ShowSimpleFormDialog(en, "Назначение перечисления", "Numeric list") == true)
+            if (DialogsManager.ShowSimpleFormDialog(en, "Назначение перечисления", Icon.NumericList) == true)
             {
                 using (Parameter p = new())
                 {
@@ -180,7 +180,7 @@ namespace Incas.Admin.Views.Pages
                     en.Name = par.name;
                     en.Value = JsonConvert.DeserializeObject<List<string>>(par.value);
                 }
-                if (DialogsManager.ShowSimpleFormDialog(en, "Редактирование перечисления", "Numeric list"))
+                if (DialogsManager.ShowSimpleFormDialog(en, "Редактирование перечисления", Icon.NumericList))
                 {
                     using (Parameter p = new())
                     {
@@ -200,7 +200,7 @@ namespace Incas.Admin.Views.Pages
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
             WorkspaceSettings ws = new();
-            DialogsManager.ShowSimpleFormDialog(ws, "Редактирование настроек", "Gear wide");
+            DialogsManager.ShowSimpleFormDialog(ws, "Редактирование настроек", Icon.GearWide);
         }
 
         private void AddClassClick(object sender, RoutedEventArgs e)

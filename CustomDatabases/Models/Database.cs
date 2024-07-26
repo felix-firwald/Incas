@@ -10,7 +10,6 @@ namespace Incas.CustomDatabases.Models
         public int id { get; set; }
         public string name { get; set; }
         public string path { get; set; }
-        public string sectors { get; set; }
 
         public Database()
         {
@@ -22,7 +21,6 @@ namespace Incas.CustomDatabases.Models
             {
                 id = this.id,
                 name = this.name,
-                sectors = this.sectors,
                 path = this.path
             };
             return db;
@@ -36,7 +34,6 @@ namespace Incas.CustomDatabases.Models
                 {
                     { nameof(this.name), this.name },
                     { nameof(this.path), this.path },
-                    { nameof(this.sectors), this.sectors },
                 })
                 .ExecuteVoid();
 

@@ -1,4 +1,6 @@
-﻿using Incas.Users.Models;
+﻿using Incas.Core.Classes;
+using Incas.Users.AutoUI;
+using Incas.Users.Models;
 using Incas.Users.Views.Controls;
 using Incas.Users.Views.Windows;
 using System.Windows.Controls;
@@ -43,8 +45,8 @@ namespace Incas.Admin.Views.Pages
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
             User user = new();
-            UserEditor editor = new(user);
-            editor.ShowDialog();
+            UserSettings us = new(user);
+            DialogsManager.ShowSimpleFormDialog(us, "Создание пользователя", Icon.UserPlus);
             this.FillUsersList();
         }
     }

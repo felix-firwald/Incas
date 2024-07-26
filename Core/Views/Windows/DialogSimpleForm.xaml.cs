@@ -19,7 +19,7 @@ namespace Incas.Core.Views.Windows
     public partial class DialogSimpleForm : Window
     {
         public object Result;
-        public DialogSimpleForm(object values, string title, string pathIcon = null)
+        private void Initialize(object values, string title)
         {
             InitializeComponent();
             this.Result = values;
@@ -29,10 +29,15 @@ namespace Incas.Core.Views.Windows
             {
                 this.AddField(field);
             }
-            if (pathIcon != null)
-            {
-                this.PathIcon.Data = Geometry.Parse(IconsManager.GetIconByName(pathIcon));
-            }
+        }
+        public DialogSimpleForm(object values, string title)
+        {
+            this.Initialize(values, title);
+        }
+        public DialogSimpleForm(object values, string title, Icon pathIcon)
+        {
+            this.Initialize(values, title);
+            this.PathIcon.Data = Geometry.Parse(IconsManager.GetIconByName(pathIcon));
         }
         private void AddField(PropertyInfo field)
         {
@@ -304,6 +309,11 @@ namespace Incas.Core.Views.Windows
                                 field.SetValue(this.Result, ((DataView)((DataGrid)control).ItemsSource).ToTable());
                                 break;
                             case "ComboSelector":
+                                if (((ComboBox)control).SelectedValue is null)
+                                {
+                                    DialogsManager.ShowExclamationDialog("Одно из полей не заполнено.", "Сохранение прервано");
+                                    return;
+                                }
                                 ((ComboSelector)field.GetValue(this.Result)).SetSelection(((ComboBox)control).SelectedValue.ToString());
                                 break;
                             default:

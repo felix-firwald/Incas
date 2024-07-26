@@ -182,9 +182,9 @@ namespace Incas.Core.ViewModels
             }
         }
 
-        public Visibility TasksVisibility => this.VisibilityConverter(ProgramState.CurrentUserParameters.tasks_visibility);
-        public Visibility CommunicationVisibility => this.VisibilityConverter(ProgramState.CurrentUserParameters.communication_visibility);
-        public Visibility DatabaseVisibility => this.VisibilityConverter(ProgramState.CurrentUserParameters.database_visibility);
+        //public Visibility TasksVisibility => this.VisibilityConverter(ProgramState.CurrentUserParameters.tasks_visibility);
+        //public Visibility CommunicationVisibility => this.VisibilityConverter(ProgramState.CurrentUserParameters.communication_visibility);
+        //public Visibility DatabaseVisibility => this.VisibilityConverter(ProgramState.CurrentUserParameters.database_visibility);
 
         //public event PropertyChangedEventHandler PropertyChanged;
         //protected virtual void OnPropertyChanged(string propertyName)
