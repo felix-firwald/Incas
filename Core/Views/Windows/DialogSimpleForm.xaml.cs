@@ -24,6 +24,7 @@ namespace Incas.Core.Views.Windows
             InitializeComponent();
             this.Result = values;
             this.TitleText.Content = title;
+            this.Title = title;
             this.SafetyCallMethod("Load");
             foreach (PropertyInfo field in values.GetType().GetProperties())
             {

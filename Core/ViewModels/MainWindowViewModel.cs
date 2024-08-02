@@ -115,7 +115,7 @@ namespace Incas.Core.ViewModels
         {
             get
             {
-                return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                return "Beta " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
 
@@ -169,7 +169,13 @@ namespace Incas.Core.ViewModels
                 }
             }
         }
-
+        public string Title
+        {
+            get
+            {
+                return "Рабочее пространство: " + this.WorkspaceName;
+            }
+        }
 
         private Visibility VisibilityConverter(bool b)
         {

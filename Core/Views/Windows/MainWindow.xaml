@@ -9,7 +9,7 @@
         Width="1300"
         Style="{DynamicResource WindowBase}"
         WindowState="Maximized"
-        Title="{Binding WorkspaceName}"
+        Title="{Binding Title}"
         Closed="OnClosed"     
         AllowDrop="True"
         MinHeight="700" MinWidth="900" PreviewKeyDown="window_PreviewKeyDown"

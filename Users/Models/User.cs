@@ -64,6 +64,7 @@ namespace Incas.Users.Models
                 mu.Serialize(dr);
                 output.Add(mu);
             }
+            
             return output;
         }
         public DataTable GetAllUsersAsDT()

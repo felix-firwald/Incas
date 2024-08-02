@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Exceptions;
 using Incas.Users.Models;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,10 @@ namespace Incas.Core.ViewModels
                 {
                     this._users.Clear();
                     this._users = user.GetAllUsers();
+                    if (this._users.Count == 0)
+                    {
+                        DialogsManager.ShowErrorDialog("В рабочем пространстве не найдено ни одного пользователя, что означает его неисправность.", "Ошибка загрузки");
+                    }
                 }
                 this.UpdateSelectedUser();
             }
@@ -60,14 +65,28 @@ namespace Incas.Core.ViewModels
             set
             {
                 RegistryData.SetSelectedWorkspace(value);
-
-                ProgramState.SetCommonPath(this.Path);
-                this.OnPropertyChanged(nameof(this.SelectedWorkspace));
-                this.OnPropertyChanged(nameof(this.Path));
-                this.UpdateUsers();
-                this.OnPropertyChanged(nameof(this.Password));
-                this.OnPropertyChanged(nameof(this.Users));
+                if (this.SetPath())
+                {
+                    this.OnPropertyChanged(nameof(this.SelectedWorkspace));
+                    this.OnPropertyChanged(nameof(this.Path));
+                    this.UpdateUsers();
+                    this.OnPropertyChanged(nameof(this.Password));
+                    this.OnPropertyChanged(nameof(this.Users));
+                }                
             }
+        }
+        public bool SetPath()
+        {
+            try
+            {
+                ProgramState.SetCommonPath(this.Path);
+            }
+            catch (Exception e)
+            {
+                DialogsManager.ShowErrorDialog(e, "Ошибка загрузки");
+                return false;
+            }
+            return true;
         }
         public string Path
         {

@@ -1,5 +1,6 @@
 ﻿using Common;
 using Incas.Core.AutoUI;
+using Incas.Core.Exceptions;
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace Incas.Core.Classes
@@ -63,6 +65,10 @@ namespace Incas.Core.Classes
         {
             CommonPath = path;
             DatabasePath = path + @"\data.dbinc";
+            if (!File.Exists(DatabasePath))
+            {
+                throw new BadWorkspaceException("Рабочее пространство повреждено или не существует по указанному пути: " + path);
+            }
             Directory.CreateDirectory(Templates);
             Directory.CreateDirectory(TemplatesSourcesWordPath);
             Directory.CreateDirectory(TemplatesSourcesExcelPath);
@@ -78,8 +84,6 @@ namespace Incas.Core.Classes
                 DatabaseManager.ActualizeTables();
             }
             CollectGarbage();
-            //ScriptManager.Execute("from Incas import Service", ScriptManager.GetEngine().CreateScope());
-            //TelegramProcessor.StartBot("6911917508:AAHJeEhfNKzzOJjp0IlGtZ51lqNrE2LBnK4");
         }
         public static string GetFullPathOfCustomDb(string path)
         {
