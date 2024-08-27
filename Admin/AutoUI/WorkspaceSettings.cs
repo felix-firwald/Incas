@@ -1,4 +1,5 @@
-﻿using Incas.Core.Classes;
+﻿using Incas.Core.AutoUI;
+using Incas.Core.Classes;
 using Incas.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Incas.Admin.AutoUI
 {
-    public class WorkspaceSettings
+    public class WorkspaceSettings : AutoUIBase
     {
         [Description("Имя рабочего пространства")]
         public string Name

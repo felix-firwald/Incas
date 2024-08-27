@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Incas.Core.AutoUI
 {
-    class CreateWorkspace
+    internal class CreateWorkspace : AutoUIBase
     {
         [Description("Наименование рабочего пространство")]
         public string WorkspaceName { get; set; }
@@ -15,10 +15,5 @@ namespace Incas.Core.AutoUI
 
         [Description("Пароль для входа")]
         public string Password { get; set; }
-
-        //public void Save()
-        //{
-        //    DialogsManager.ShowInfoDialog("path " + this.Path);
-        //}
     }
 }

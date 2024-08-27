@@ -47,8 +47,8 @@
         <Border Grid.Row="2" CornerRadius="5" Margin="6,6,6,6" Background="{DynamicResource LightBlack}" Grid.Column="1">
 
             <StackPanel Orientation="Vertical" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить новое рабочее пространство в список" MouseDown="AddClick" FontSize="16" />
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранное рабочее пространство" MouseDown="RemoveClick"/>
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить рабочее пространство в список" MouseDown="AddClick" FontSize="16" />
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранное рабочее пространство из этого списка" MouseDown="RemoveClick"/>
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" ToolTip="Обновить список" MouseDown="RefreshClick" FontSize="16" />
             </StackPanel>
         </Border>

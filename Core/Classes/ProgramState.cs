@@ -67,7 +67,9 @@ namespace Incas.Core.Classes
             DatabasePath = path + @"\data.dbinc";
             if (!File.Exists(DatabasePath))
             {
-                throw new BadWorkspaceException("Рабочее пространство повреждено или не существует по указанному пути: " + path);
+                DialogsManager.ShowErrorDialog("Рабочее пространство повреждено или не существует по указанному пути: " + path);
+                SetCommonPath("", checkout);
+                return;
             }
             Directory.CreateDirectory(Templates);
             Directory.CreateDirectory(TemplatesSourcesWordPath);

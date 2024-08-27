@@ -12,6 +12,7 @@ using Windows.UI;
 using Windows.ApplicationModel.Core;
 using Avalonia.Controls.Chrome;
 using System.Media;
+using Incas.Core.AutoUI;
 
 namespace Incas.Core.Views.Windows
 {
@@ -36,8 +37,8 @@ namespace Incas.Core.Views.Windows
                 if (DialogsManager.ShowQuestionDialog("Текущий пароль, использованный вами для входа, " +
                     "является временным, потому известен администратору и может быть им изменен.\nРекомендуем вам придумать свой пароль. Его не сможет увидеть и изменить никто, кроме вас.", "Завершение активации", "Установить пароль", "Не сейчас") == DialogStatus.Yes)
                 {
-                    SetPassword windowSet = new();
-                    windowSet.ShowDialog();
+                    SetPassword sp = new();
+                    DialogsManager.ShowSimpleFormDialog(sp, "Установление нового пароля", Classes.Icon.UserGears);
                 }
             }
 
@@ -50,7 +51,7 @@ namespace Incas.Core.Views.Windows
                 if (RegistryData.IsRoosterExists())
                 {
                     using FileStream stream = File.Open($"Static\\{name}.wav", FileMode.Open);
-                    SoundPlayer myNewSound = new SoundPlayer(stream);
+                    SoundPlayer myNewSound = new(stream);
                     myNewSound.Load();
                     myNewSound.Play();
                 }

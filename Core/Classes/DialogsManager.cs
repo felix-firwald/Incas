@@ -1,4 +1,5 @@
-﻿using Incas.Core.Views.Windows;
+﻿using Incas.Core.AutoUI;
+using Incas.Core.Views.Windows;
 using Incas.CustomDatabases.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
@@ -68,12 +69,12 @@ namespace Incas.Core.Classes
             }
             return false;
         }
-        public static bool ShowSimpleFormDialog(object data, string title)
+        public static bool ShowSimpleFormDialog(AutoUIBase data, string title)
         {
             DialogSimpleForm ds = new(data, title);
             return (bool)ds.ShowDialog();
         }
-        public static bool ShowSimpleFormDialog(object data, string title, Icon pathIcon)
+        public static bool ShowSimpleFormDialog(AutoUIBase data, string title, Icon pathIcon)
         {
             DialogSimpleForm ds = new(data, title, pathIcon);
             return (bool)ds.ShowDialog();

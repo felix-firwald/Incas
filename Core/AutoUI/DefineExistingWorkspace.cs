@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Incas.Core.AutoUI
 {
-    class DefineExistingWorkspace
+    internal class DefineExistingWorkspace : AutoUIBase
     {
         [Description("Имя в списке")]
         public string Name { get; set; }

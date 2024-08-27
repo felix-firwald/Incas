@@ -1,4 +1,5 @@
 ﻿using Common;
+using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Users.Models;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Incas.Users.AutoUI
 {
-    class UserSettings
+    class UserSettings : AutoUIBase
     {
         private User _user;
         private UserParameters _userParameters = new();
@@ -113,7 +114,7 @@ namespace Incas.Users.AutoUI
         }
     }
 
-    class UserSuperAdminSettings
+    class UserSuperAdminSettings : AutoUIBase
     {
         private User _user;
         private UserParameters _userParameters = new();

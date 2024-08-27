@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Attributes;
+using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using System;
@@ -19,9 +20,9 @@ namespace Incas.Core.Views.Windows
     public partial class DialogSimpleForm : Window
     {
         public object Result;
-        private void Initialize(object values, string title)
+        private void Initialize(AutoUIBase values, string title)
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.Result = values;
             this.TitleText.Content = title;
             this.Title = title;
@@ -31,11 +32,11 @@ namespace Incas.Core.Views.Windows
                 this.AddField(field);
             }
         }
-        public DialogSimpleForm(object values, string title)
+        public DialogSimpleForm(AutoUIBase values, string title)
         {
             this.Initialize(values, title);
         }
-        public DialogSimpleForm(object values, string title, Icon pathIcon)
+        public DialogSimpleForm(AutoUIBase values, string title, Icon pathIcon)
         {
             this.Initialize(values, title);
             this.PathIcon.Data = Geometry.Parse(IconsManager.GetIconByName(pathIcon));
@@ -57,14 +58,9 @@ namespace Incas.Core.Views.Windows
             {
                 case "String":
                     Attribute attr = field.GetCustomAttribute(typeof(UrlRequired), false);
-                    if (attr is not null)
-                    {
-                        control = this.GeneratePathBox(description, (string)field.GetValue(this.Result));
-                    }
-                    else
-                    {
-                        control = this.GenerateTextBox(description, (string)field.GetValue(this.Result));
-                    }
+                    control = attr is not null
+                        ? this.GeneratePathBox(description, (string)field.GetValue(this.Result))
+                        : this.GenerateTextBox(description, (string)field.GetValue(this.Result));
                     break;
                 case "Int32":
                     control = this.GenerateNumericBox(description, (int)field.GetValue(this.Result));
@@ -182,7 +178,7 @@ namespace Incas.Core.Views.Windows
                 ItemsSource = dt.DefaultView,
                 Style = this.FindResource("DataGridMain") as Style
             };
-            
+
             return control;
         }
         private Control GenerateDataGrid(string description, Dictionary<string, string> value)
@@ -220,36 +216,22 @@ namespace Incas.Core.Views.Windows
         {
             string GetEnumDescription(Enum enumValue)
             {
-                var field = enumValue.GetType().GetField(enumValue.ToString());
-                if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute)
-                {
-                    return attribute.Description;
-                }
-                return "";
+                FieldInfo field = enumValue.GetType().GetField(enumValue.ToString());
+                return Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute
+                    ? attribute.Description
+                    : "";
             }
             Array values = Enum.GetValues(f.ReflectedType);
 
             foreach (Enum value in values)
             {
                 GetEnumDescription(value);
-                //MemberInfo memberInfo = f.GetType().GetMember(value.ToString()).FirstOrDefault();
-                //if (memberInfo == null)
-                //{
-                //    DescriptionAttribute descriptionAttribute = f.GetType().GetMember(f.ToString())[0]
-                //        .GetCustomAttributes(typeof(DescriptionAttribute), inherit: false)[0] as DescriptionAttribute;
-                //    //DescriptionAttribute attr = memberInfo.GetCustomAttribute<DescriptionAttribute>(false);
-                //    DialogsManager.ShowInfoDialog($"{value} - {descriptionAttribute.Description}");
-                //}
             }
         }
         private string GetFieldDescription(PropertyInfo field)
         {
             DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>(true);
-            if (attribute != null)
-            {
-                return attribute.Description;
-            }
-            return "";
+            return attribute != null ? attribute.Description : "";
         }
         private void SafetyCallMethod(string name)
         {
@@ -276,20 +258,13 @@ namespace Incas.Core.Views.Windows
                     string descript = this.GetFieldDescription(field);
                     if (control.Tag?.ToString() == descript)
                     {
-                        
+
                         switch (field.PropertyType.Name)
                         {
                             case "String":
                                 string resultString = "";
                                 Attribute attr = field.GetCustomAttribute(typeof(UrlRequired), false);
-                                if (attr is not null)
-                                {
-                                    resultString = ((PathSelector)control).Value;
-                                }
-                                else
-                                {
-                                    resultString = ((TextBox)control).Text;
-                                }                             
+                                resultString = attr is not null ? ((PathSelector)control).Value : ((TextBox)control).Text;
                                 if (string.IsNullOrEmpty(resultString))
                                 {
                                     DialogsManager.ShowExclamationDialog($"Поле \"{descript}\" не заполнено!", "Сохранение прервано");
@@ -297,7 +272,7 @@ namespace Incas.Core.Views.Windows
                                 }
                                 field.SetValue(this.Result, resultString);
                                 break;
-                            case "Int32":                               
+                            case "Int32":
                                 field.SetValue(this.Result, ((NumericBox)control).Value);
                                 break;
                             case "Boolean":
@@ -321,7 +296,7 @@ namespace Incas.Core.Views.Windows
                                 if (field.PropertyType.Name.Contains("List"))
                                 {
                                     DataTable dt = ((DataView)((DataGrid)control).ItemsSource).ToTable();
-                                    List<string> values = new();
+                                    List<string> values = [];
                                     foreach (DataRow row in dt.Rows)
                                     {
                                         values.Add(row[0].ToString());
@@ -331,7 +306,7 @@ namespace Incas.Core.Views.Windows
                                 else if (field.PropertyType.Name.Contains("Dictionary"))
                                 {
                                     DataTable dt = ((DataView)((DataGrid)control).ItemsSource).ToTable();
-                                    Dictionary<string,string> values = new();
+                                    Dictionary<string, string> values = [];
                                     foreach (DataRow row in dt.Rows)
                                     {
                                         values.Add(row[0].ToString(), row[1].ToString());
@@ -342,7 +317,7 @@ namespace Incas.Core.Views.Windows
                         }
                         break;
                     }
-                }               
+                }
             }
             this.SafetyCallMethod("Save");
             this.DialogResult = true;
@@ -360,7 +335,7 @@ namespace Incas.Core.Views.Windows
             if (e.ChangedButton == MouseButton.Left)
             {
                 this.DragMove();
-            }          
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using Incas.Users.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace Incas.Core.ViewModels
 {
@@ -24,10 +25,10 @@ namespace Incas.Core.ViewModels
                 {
                     this._users.Clear();
                     this._users = user.GetAllUsers();
-                    if (this._users.Count == 0)
-                    {
-                        DialogsManager.ShowErrorDialog("В рабочем пространстве не найдено ни одного пользователя, что означает его неисправность.", "Ошибка загрузки");
-                    }
+                    //if (this._users.Count == 0)
+                    //{
+                    //    DialogsManager.ShowErrorDialog("В рабочем пространстве не найдено ни одного пользователя, что означает его неисправность.", "Ошибка загрузки");
+                    //}
                 }
                 this.UpdateSelectedUser();
             }
@@ -77,15 +78,7 @@ namespace Incas.Core.ViewModels
         }
         public bool SetPath()
         {
-            try
-            {
-                ProgramState.SetCommonPath(this.Path);
-            }
-            catch (Exception e)
-            {
-                DialogsManager.ShowErrorDialog(e, "Ошибка загрузки");
-                return false;
-            }
+            ProgramState.SetCommonPath(this.Path);
             return true;
         }
         public string Path
