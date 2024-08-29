@@ -14,7 +14,7 @@ namespace Incas.Core.ViewModels
         public OpenWorkspaceViewModel()
         {
             this.UpdateUsers();
-            this.UpdateSelectedUser();
+            this.UpdateSelectedUser();       
         }
 
         private void UpdateUsers()
@@ -73,7 +73,7 @@ namespace Incas.Core.ViewModels
                     this.UpdateUsers();
                     this.OnPropertyChanged(nameof(this.Password));
                     this.OnPropertyChanged(nameof(this.Users));
-                }                
+                }
             }
         }
         public bool SetPath()
@@ -104,7 +104,7 @@ namespace Incas.Core.ViewModels
         private List<User> _users = [];
         public ObservableCollection<User> Users
         {
-            get => new ObservableCollection<User>(this._users);
+            get => new (this._users);
             set
             {
                 this._users = new List<User>(value);

@@ -186,5 +186,10 @@ namespace Incubator_2.Forms
         {
             this.vm.VisibleName = this.vm.NameOfTag;
         }
+
+        private void DefineTableClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

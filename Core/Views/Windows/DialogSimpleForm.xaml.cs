@@ -258,7 +258,6 @@ namespace Incas.Core.Views.Windows
                     string descript = this.GetFieldDescription(field);
                     if (control.Tag?.ToString() == descript)
                     {
-
                         switch (field.PropertyType.Name)
                         {
                             case "String":

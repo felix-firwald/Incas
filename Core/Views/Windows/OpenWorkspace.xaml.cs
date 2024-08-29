@@ -117,7 +117,7 @@ namespace Incas.Core.Views.Windows
                     CreateWorkspace cw = new();
                     if (DialogsManager.ShowSimpleFormDialog(cw, "Создание рабочего пространства", Classes.Icon.Folder))
                     {
-                        ProgramState.InitWorkspace(cw);
+                        //ProgramState.InitWorkspace(cw);
                     }
                     break;
                 case DialogStatus.No:

@@ -243,6 +243,7 @@ namespace Incas.Templates.ViewModels
             };
         }
         public Visibility ButtonRelationVisibility => this.mainTag.type == TagType.Relation ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility ButtonTableVisibility => this.mainTag.type == TagType.Table ? Visibility.Visible : Visibility.Collapsed;
         public Visibility ButtonGeneratorVisibility => this.mainTag.type is TagType.Generator or TagType.Macrogenerator ? Visibility.Visible : Visibility.Collapsed;
         public Visibility DefaultValueVisibility
         {

@@ -59,18 +59,36 @@ namespace Incas.Core.Classes
         #endregion
         public static MainWindowViewModel MainWindow { get; set; }
 
+        public static void CheckoutWorkspaces()
+        {
+            foreach (string ws in RegistryData.GetWorkspaces())
+            {
+                string path = RegistryData.GetWorkspacePath(ws);
+                if (string.IsNullOrEmpty(path) || !File.Exists(path + @"\data.dbinc") || !File.Exists(path + @"\Root\service.dbinc"))
+                {
+                    DialogsManager.ShowErrorDialog($"Рабочее пространство, записанное под именем \"{ws}\", " +
+                        $"повреждено или не существует по пути:\n\"{path}\", в связи с чем оно будет удалено из списка доступных рабочих пространств.");
+                    RegistryData.RemoveWorkspace(ws);
+                    if (RegistryData.GetSelectedWorkspace() == ws)
+                    {
+                        RegistryData.SetSelectedWorkspace("");
+                    }
+                }
+            }
+        }
+
         private static DateTime LastGarbageCollect = DateTime.Now;
         #region Path and init
         public static void SetCommonPath(string path, bool checkout = true)
         {
             CommonPath = path;
             DatabasePath = path + @"\data.dbinc";
-            if (!File.Exists(DatabasePath))
-            {
-                DialogsManager.ShowErrorDialog("Рабочее пространство повреждено или не существует по указанному пути: " + path);
-                SetCommonPath("", checkout);
-                return;
-            }
+            //if (!File.Exists(DatabasePath))
+            //{
+            //    DialogsManager.ShowErrorDialog("Рабочее пространство повреждено или не существует по указанному пути: " + path);
+            //    SetCommonPath("", checkout);
+            //    return;
+            //}
             Directory.CreateDirectory(Templates);
             Directory.CreateDirectory(TemplatesSourcesWordPath);
             Directory.CreateDirectory(TemplatesSourcesExcelPath);
@@ -223,9 +241,9 @@ namespace Incas.Core.Classes
             SetCommonPath(data.Path, false);
             if (CreateTablesInDatabase())
             {
-                DialogsManager.ShowWaitCursor(false);
-                RegistryData.SetWorkspacePath(data.WorkspaceName, data.Path);
+                DialogsManager.ShowWaitCursor(false);  
                 Create();
+                RegistryData.SetWorkspacePath(data.WorkspaceName, data.Path);
             }
         }
         public static string GetWorkspaceName()

@@ -119,7 +119,7 @@ namespace Incas.Core.Classes
             {
                 return GetTemplatesData().OpenSubKey(name, true);
             }
-            AddTemplate(name, "", "", "");
+            AddTemplate(name, "", "", "");         
             return GetTemplatesData().OpenSubKey(name, true);
         }
         public static string GetTemplatePreferredPath(string template)

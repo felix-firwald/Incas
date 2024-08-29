@@ -1,10 +1,7 @@
-﻿using Incas.Core.Classes;
+﻿using Incas.Core.AutoUI;
+using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Data;
 using System.Windows;
 
 namespace Incas
@@ -18,12 +15,12 @@ namespace Incas
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            
             if (DateTime.Now > DateTime.Parse("20.09.2024"))
             {
                 DialogsManager.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");
                 App.Current.Shutdown();
             }
+            ProgramState.CheckoutWorkspaces();
             OpenWorkspace ow = new();
             if (ow.ShowDialog() == false)
             {
