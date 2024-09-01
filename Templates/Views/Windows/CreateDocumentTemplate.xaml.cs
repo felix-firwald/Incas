@@ -279,7 +279,7 @@ namespace Incas.Templates.Views.Windows
 
         private void GetMoreInfoClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ProgramState.OpenWebPage("https://teletype.in/@incas/UM8Uf15j2fB");
+            ProgramState.OpenWebPage("https://teletype.in/@incas/templates");
         }
 
         private void AddCommandClick(object sender, RoutedEventArgs e)

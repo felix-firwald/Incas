@@ -63,7 +63,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Path Fill="{Binding ElementName=DatabaseRadio, Path=Foreground}" Data="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5"/>
-                    <TextBlock Text="Базы данных" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DatabaseRadio, Path=Foreground}" Cursor="" Grid.Column="1" TextTrimming="WordEllipsis" FontSize="11" />
+                    <TextBlock Text="Объекты данных" Style="{DynamicResource TextBlockImportant}" Foreground="{Binding ElementName=DatabaseRadio, Path=Foreground}" Cursor="" Grid.Column="1" TextTrimming="WordEllipsis" FontSize="11" />
                 </Grid>
             </RadioButton>
             <StackPanel x:Name="CustomTabs">
@@ -106,7 +106,7 @@
             <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
             <Label Style="{StaticResource LabelElement}" Content="© INCAS 2024" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" VerticalContentAlignment="Center"/>
             <Label Style="{StaticResource LabelElement}" Content="{Binding Version}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-            
+            <Label Style="{StaticResource LabelElement}" Content="Devised by Felix Firwald" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" VerticalContentAlignment="Center" Foreground="{DynamicResource Icon}"/>
         </StackPanel>
 
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" ResizeDirection="Columns" Grid.Row="0" Margin="1,0,0,0" />

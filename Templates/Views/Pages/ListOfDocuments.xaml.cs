@@ -83,14 +83,13 @@ namespace Incas.Templates.Views.Pages
             }
         }
 
-        private void AddFC_Click(object sender, MouseButtonEventArgs e)
+        private void SearchClick(object sender, RoutedEventArgs e)
         {
-            if (ProgramState.IsWorkspaceOpened())
-            {
-                CreateDocumentTemplate ctw = new();
-                ctw.OnCreated += this.Refresh;
-                ctw.Show();
-            }
+            
+        }
+        private void CancelSearchClick(object sender, RoutedEventArgs e)
+        {
+
         }
         private void FindSelectedInRefreshedList()
         {
@@ -116,9 +115,19 @@ namespace Incas.Templates.Views.Pages
             this.FindSelectedInRefreshedList();
         }
 
-        private void Refresh_Click(object sender, MouseButtonEventArgs e)
+        private void RefreshClick(object sender, RoutedEventArgs e)
         {
             this.Refresh();
+        }
+
+        private void AddClick(object sender, RoutedEventArgs e)
+        {
+            if (ProgramState.IsWorkspaceOpened())
+            {
+                CreateDocumentTemplate ctw = new();
+                ctw.OnCreated += this.Refresh;
+                ctw.Show();
+            }
         }
     }
 }

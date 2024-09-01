@@ -1,6 +1,5 @@
 ﻿using Incas.Core.Attributes;
 using Incas.Core.AutoUI;
-using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -9,51 +8,51 @@ using System.Data;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 
-namespace Incas.Core.Views.Windows
+namespace Incas.Core.Classes
 {
-    /// <summary>
-    /// Логика взаимодействия для DialogSimpleForm.xaml
-    /// </summary>
-    public partial class DialogSimpleForm : Window
+    internal class SimpleFormGenerator
     {
+        public StackPanel Container;
         public AutoUIBase Result;
-        private void Initialize(AutoUIBase values, string title)
+        public SimpleFormGenerator(AutoUIBase values, string title)
         {
-            this.InitializeComponent();
-            this.Result = values;
-            this.TitleText.Content = title;
-            this.Title = title;
             this.SafetyCallMethod("Load");
             foreach (PropertyInfo field in values.GetType().GetProperties())
             {
                 this.AddField(field);
             }
         }
-        public DialogSimpleForm(AutoUIBase values, string title)
+        private string GetFieldDescription(PropertyInfo field)
         {
-            this.Initialize(values, title);
+            DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>(true);
+            return attribute != null ? attribute.Description : "";
         }
-        public DialogSimpleForm(AutoUIBase values, string title, Icon pathIcon)
+        private void SafetyCallMethod(string name)
         {
-            this.Initialize(values, title);
-            this.PathIcon.Data = Geometry.Parse(IconsManager.GetIconByName(pathIcon));
+            MethodInfo method = this.Result.GetType().GetMethod(name);
+            if (method is not null)
+            {
+                try
+                {
+                    method.Invoke(this.Result, null);
+                }
+                catch (TargetInvocationException)
+                {
+
+                }
+            }
         }
         private void AddField(PropertyInfo field)
         {
             string description = this.GetFieldDescription(field);
-            //DialogsManager.ShowInfoDialog(field.FieldType.Name);
             Control control = new();
             Label label = new()
             {
                 Content = description + ":",
                 FontSize = 11,
-                Style = this.FindResource("LabelPrimary") as Style
+                Style = this.Container.FindResource("LabelPrimary") as Style
             };
-
-            //DialogsManager.ShowInfoDialog(field.PropertyType.Name);
             switch (field.PropertyType.Name)
             {
                 case "String":
@@ -64,28 +63,28 @@ namespace Incas.Core.Views.Windows
                     break;
                 case "Int32":
                     control = this.GenerateNumericBox(description, (int)field.GetValue(this.Result));
-                    this.Fields.Children.Add(label);
+                    this.Container.Children.Add(label);
                     break;
                 case "Boolean":
                     control = this.GenerateCheckBox(description, (bool)field.GetValue(this.Result));
                     break;
                 case "DateTime":
                     control = this.GenerateDateBox(description, (DateTime)field.GetValue(this.Result));
-                    this.Fields.Children.Add(label);
+                    this.Container.Children.Add(label);
                     break;
                 case "DataTable":
                     control = this.GenerateDataGrid(description, (DataTable)field.GetValue(this.Result));
-                    this.Fields.Children.Add(label);
+                    this.Container.Children.Add(label);
                     break;
                 case "ComboSelector":
                     control = this.GenerateComboBox(description, (ComboSelector)field.GetValue(this.Result));
-                    this.Fields.Children.Add(label);
+                    this.Container.Children.Add(label);
                     break;
                 default:
                     if (field.PropertyType.Name.Contains("List"))
                     {
                         control = this.GenerateDataGrid(description, (List<string>)field.GetValue(this.Result));
-                        this.Fields.Children.Add(label);
+                        this.Container.Children.Add(label);
                     }
                     else
                     {
@@ -93,11 +92,12 @@ namespace Incas.Core.Views.Windows
                     }
                     break;
             }
+            control.Uid = field.Name;
             if (field.SetMethod.IsPrivate)
             {
                 control.IsEnabled = false;
             }
-            this.Fields.Children.Add(control);
+            this.Container.Children.Add(control);
         }
         private Control GenerateTextBox(string description, string value)
         {
@@ -105,10 +105,17 @@ namespace Incas.Core.Views.Windows
             {
                 Tag = description,
                 Text = value,
-                Style = this.FindResource("TextBoxMain") as Style
+                Style = this.Container.FindResource("TextBoxMain") as Style
             };
+            control.TextChanged += this.TextBox_TextChanged;
             return control;
         }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         private Control GeneratePathBox(string description, string value)
         {
             PathSelector control = new()
@@ -125,7 +132,7 @@ namespace Incas.Core.Views.Windows
                 Tag = description,
                 ItemsSource = selector.VisibleItems,
                 SelectedValue = selector.SelectedValue,
-                Style = this.FindResource("ComboBoxMain") as Style
+                Style = this.Container.FindResource("ComboBoxMain") as Style
             };
             return control;
         }
@@ -148,7 +155,7 @@ namespace Incas.Core.Views.Windows
             {
                 Tag = description,
                 SelectedDate = value,
-                Style = this.FindResource("DatePickerMain") as Style
+                Style = this.Container.FindResource("DatePickerMain") as Style
             };
             return control;
         }
@@ -159,7 +166,7 @@ namespace Incas.Core.Views.Windows
                 Tag = description,
                 ItemsSource = value?.DefaultView,
                 MinHeight = 80,
-                Style = this.FindResource("DataGridMain") as Style
+                Style = this.Container.FindResource("DataGridMain") as Style
             };
             return control;
         }
@@ -176,7 +183,7 @@ namespace Incas.Core.Views.Windows
                 Tag = description,
                 MinHeight = 80,
                 ItemsSource = dt.DefaultView,
-                Style = this.FindResource("DataGridMain") as Style
+                Style = this.Container.FindResource("DataGridMain") as Style
             };
 
             return control;
@@ -195,7 +202,7 @@ namespace Incas.Core.Views.Windows
                 Tag = description,
                 MinHeight = 80,
                 ItemsSource = dt.DefaultView,
-                Style = this.FindResource("DataGridMain") as Style
+                Style = this.Container.FindResource("DataGridMain") as Style
             };
 
             return control;
@@ -207,56 +214,18 @@ namespace Incas.Core.Views.Windows
                 Content = description,
                 Tag = description,
                 IsChecked = value,
-                Style = this.FindResource("Toggle") as Style
+                Style = this.Container.FindResource("Toggle") as Style
             };
             return control;
         }
-
-        private void GetEnumDescriptions(FieldInfo f)
-        {
-            string GetEnumDescription(Enum enumValue)
-            {
-                FieldInfo field = enumValue.GetType().GetField(enumValue.ToString());
-                return Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute
-                    ? attribute.Description
-                    : "";
-            }
-            Array values = Enum.GetValues(f.ReflectedType);
-
-            foreach (Enum value in values)
-            {
-                GetEnumDescription(value);
-            }
-        }
-        private string GetFieldDescription(PropertyInfo field)
-        {
-            DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>(true);
-            return attribute != null ? attribute.Description : "";
-        }
-        private void SafetyCallMethod(string name)
-        {
-            MethodInfo method = this.Result.GetType().GetMethod(name);
-            if (method is not null)
-            {
-                try
-                {
-                    method.Invoke(this.Result, null);
-                }
-                catch (TargetInvocationException)
-                {
-                    //DialogsManager.ShowInfoDialog(e.InnerException.Message);
-                }
-            }
-        }
-
-        private void FinishClick(object sender, RoutedEventArgs e)
+        public bool Save()
         {
             foreach (PropertyInfo field in this.Result.GetType().GetProperties())
             {
-                foreach (Control control in this.Fields.Children)
+                foreach (Control control in this.Container.Children)
                 {
                     string descript = this.GetFieldDescription(field);
-                    if (control.Tag?.ToString() == descript)
+                    if (control.Uid == field.Name)
                     {
                         switch (field.PropertyType.Name)
                         {
@@ -267,7 +236,7 @@ namespace Incas.Core.Views.Windows
                                 if (string.IsNullOrEmpty(resultString))
                                 {
                                     DialogsManager.ShowExclamationDialog($"Поле \"{descript}\" не заполнено!", "Сохранение прервано");
-                                    return;
+                                    return false;
                                 }
                                 field.SetValue(this.Result, resultString);
                                 break;
@@ -287,7 +256,7 @@ namespace Incas.Core.Views.Windows
                                 if (((ComboBox)control).SelectedValue is null)
                                 {
                                     DialogsManager.ShowExclamationDialog("Одно из полей не заполнено.", "Сохранение прервано");
-                                    return;
+                                    return false;
                                 }
                                 ((ComboSelector)field.GetValue(this.Result)).SetSelection(((ComboBox)control).SelectedValue.ToString());
                                 break;
@@ -319,22 +288,6 @@ namespace Incas.Core.Views.Windows
                 }
             }
             this.SafetyCallMethod("Save");
-            this.DialogResult = true;
-            this.Close();
-        }
-
-        private void CancelClick(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-            this.Close();
-        }
-
-        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.DragMove();
-            }
         }
     }
 }

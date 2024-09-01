@@ -235,14 +235,15 @@
     <Folder Include="Admin\Models\" />
     <Folder Include="Admin\Components\" />
     <Folder Include="CreatedDocuments\ViewModels\" />
+    <Folder Include="CreatedDocuments\Views\Pages\" />
     <Folder Include="CreatedDocuments\Views\Windows\" />
     <Folder Include="CustomDatabases\Components\" />
+    <Folder Include="CustomDatabases\Views\Controls\" />
     <Folder Include="FileManager\Models\" />
     <Folder Include="FileManager\ViewModels\" />
     <Folder Include="FileManager\Views\Windows\" />
     <Folder Include="FileManager\Views\Controls\" />
     <Folder Include="Objects\ViewModels\" />
-    <Folder Include="Objects\Views\Controls\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>

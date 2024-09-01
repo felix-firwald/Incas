@@ -20,14 +20,12 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <!--файл и обзор-->
-                <RowDefinition Height="40"/>
-                <!--файл и обзор-->
                 <RowDefinition Height="*"/>
                 <!--таблица с тегами-->
                 <RowDefinition Height="40"/>
                 <!--кнопка создания файла или печати-->
             </Grid.RowDefinitions>
-            <TextBox x:Name="sourceFile" Style="{DynamicResource TextBoxMain}" Text="{Binding Source}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Файл шаблона в формате .docx или .xlsx" Grid.Column="0" Margin="5,0,5,0" Grid.ColumnSpan="2">
+            <TextBox x:Name="category" Style="{DynamicResource TextBoxMain}" Text="{Binding Category}" IsEnabled="{Binding CategoryEnabled}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Категория" Margin="5,0,5,0" Grid.Row="0" MaxLength="25">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -35,15 +33,7 @@
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
-            <TextBox x:Name="category" Style="{DynamicResource TextBoxMain}" Text="{Binding Category}" IsEnabled="{Binding CategoryEnabled}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Категория" Margin="5,0,5,0" Grid.Row="1" MaxLength="25">
-                <TextBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
-                        <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
-                    </ContextMenu>
-                </TextBox.ContextMenu>
-            </TextBox>
-            <TextBox x:Name="nameOfTemplate" Style="{DynamicResource TextBoxMain}" Text="{Binding NameOfTemplate}" MinWidth="200" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Имя класса" Margin="5,0,5,0" Grid.Row="1" Grid.Column="1" MaxLength="50">
+            <TextBox x:Name="nameOfTemplate" Style="{DynamicResource TextBoxMain}" Text="{Binding NameOfTemplate}" MinWidth="200" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Имя класса" Margin="5,0,5,0" Grid.Row="0" Grid.Column="1" MaxLength="50">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -52,33 +42,28 @@
                 </TextBox.ContextMenu>
             </TextBox>
 
-
-            <Button Style="{StaticResource ButtonMain}" Grid.Row="0" Grid.Column="2" Margin="5,5,5,5" Cursor="Hand">
-                <Path Fill="White" Data="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z"/>
-            </Button>
-
-            <Border Grid.Row="1" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8" Grid.RowSpan="2">
-                <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить тег"  />
-                    <fa:FontAwesome x:Name="FindInFileButton" Style="{DynamicResource IconButton}" Icon="SearchPlus" ToolTip="Обнаружить теги в выбранном файле (все текущие теги будут удалены)"  />
+            <Border Grid.Row="0" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8" Grid.RowSpan="2">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить поле" MouseDown="AddFieldClick" />
+                    <fa:FontAwesome x:Name="FindInFileButton" Style="{DynamicResource IconButton}" Icon="SearchPlus" ToolTip="Обнаружить поля в выбранном файле"  />
 
                     <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" ToolTip="Свернуть все вкладки" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" ToolTip="Развернуть все вкладки"  />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" ToolTip="Предпросмотр формы"  />
                     <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="SortNumericAsc" ToolTip="Пронумеровать теги исходя из текущего положения"  />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Asterisk" ToolTip="Проставить для пустых видимых имен исходя из названий тегов"  />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Upload" ToolTip="Импортировать шаблон"  />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Download" ToolTip="Экспортировать шаблон"  />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="SortNumericAsc" ToolTip="Пронумеровать поля исходя из текущего положения"  />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Asterisk" ToolTip="Проставить для пустых видимых имен исходя из названий полей"  />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Upload" ToolTip="Импортировать класс"  />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Download" ToolTip="Экспортировать класс" />
 
                     <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" Grid.Column="1" Grid.Row="1" ToolTip="Редактировать исходный файл" />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" Grid.Column="1" Grid.Row="1" ToolTip="Открыть справочную информацию" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" Grid.Column="1" Grid.Row="1" ToolTip="Открыть справочную информацию" MouseDown="GetMoreInfoClick" />
                 </StackPanel>
             </Border>
-            <Border CornerRadius="8" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="2">
+            <Border CornerRadius="8" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="1">
                 <StackPanel>
+                    
                     <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
                         <StackPanel>
                             <Grid Margin="5,5,0,0">
@@ -94,7 +79,7 @@
                             <MenuItem Style="{StaticResource Command}" Header="Валидация" Tag="Validate" />
                         </StackPanel>
                     </Border>
-
+                    
                     <!--<Separator Background="{StaticResource LightBlack}"/>-->
                     <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
                         <StackPanel>
@@ -107,36 +92,24 @@
 
                                 <Label Content="Привязанные шаблоны:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                             </Grid>
-                            <TextBlock Style="{StaticResource TextBlockMain}" Text="Для документов одного процесса" Foreground="{DynamicResource Element}" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>
+                            <!--<TextBlock Style="{StaticResource TextBlockMain}" Text="Для документов" Foreground="{DynamicResource Element}" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>-->
+                            <WrapPanel>
+                                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить шаблон"  />
+                                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" ToolTip="Редактировать шаблон" />
+                                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить шаблон" />
+                            </WrapPanel>
                             <DataGrid Style="{StaticResource DataGridMain}" MinHeight="140"/>
                         </StackPanel>
                     </Border>
-                    <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
-                        <StackPanel>
-                            <Grid Margin="5,5,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="30"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Path Fill="{DynamicResource Yellow}" Data="m3.266 12.496.96-2.853H7.76l.96 2.853H10L6.62 3H5.38L2 12.496zm2.748-8.063 1.419 4.23h-2.88l1.426-4.23zm6.132 7.203v-.075c0-.332.234-.618.619-.618.354 0 .618.256.618.58 0 .362-.271.649-.52.898l-1.788 1.832V15h3.59v-.958h-1.923v-.045l.973-1.04c.415-.438.867-.845.867-1.547 0-.8-.701-1.41-1.787-1.41-1.23 0-1.795.8-1.795 1.576v.06z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
-
-                                <Label Content="Имя документа:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
-                            </Grid>
-                            <TextBlock Style="{StaticResource TextBlockMain}" Text="Для подстановки тегов используйте конструкцию [Название тега]" Foreground="{DynamicResource Element}" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>
-                            <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding FileNameTemplate}" Tag="Шаблон названия" MaxLength="50"/>
-                        </StackPanel>
-                    </Border>
-
                 </StackPanel>
             </Border>
 
-            <Border Grid.Row="2" CornerRadius="8" Margin="5" Background="{StaticResource Black}" Grid.Column="1" ScrollViewer.CanContentScroll="True">
-                <ScrollViewer Style="{DynamicResource ScrollViewerBase}" HorizontalContentAlignment="Stretch" Grid.Row="2" Grid.Column="1">
-                    <StackPanel x:Name="ContentPanel"/>
-                </ScrollViewer>
-            </Border>
+            <Border Grid.Row="1" CornerRadius="8" Margin="5" Background="{StaticResource Black}" Grid.Column="1" ScrollViewer.CanContentScroll="True">
+                <StackPanel x:Name="ContentPanel">
 
-            <Button Style="{StaticResource ButtonMain}" Grid.Row="3" Content="Сохранить шаблон" Margin="5,5,5,5" Grid.ColumnSpan="3"/>
+                </StackPanel>
+            </Border>
+            <Button Style="{StaticResource ButtonMain}" Grid.Row="3" Content="Сохранить класс" Margin="5,5,5,5" Grid.ColumnSpan="3"/>
         </Grid>
     </Grid>
 </Window>

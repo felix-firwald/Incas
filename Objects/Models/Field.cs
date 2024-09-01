@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Incas.Objects.Models
 {
-    class FieldEntity
+    class Field
     {
         public Guid Guid { get; set; }
         public string VisibleName { get; set; }

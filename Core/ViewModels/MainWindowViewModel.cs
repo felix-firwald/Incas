@@ -115,7 +115,7 @@ namespace Incas.Core.ViewModels
         {
             get
             {
-                return "Beta " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                return "Pre-Release " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
 

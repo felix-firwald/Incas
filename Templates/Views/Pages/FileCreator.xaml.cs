@@ -411,19 +411,19 @@ namespace Incas.Templates.Views.Pages
                             });
                             break;
                     }
-                    if (save)
-                    {
-                        using GeneratedDocument doc = new();
-                        doc.id = this.document.id;
-                        doc.number = this.Number.Text;
-                        doc.fullNumber = this.GetNumber();
-                        doc.status = this.document.status;
-                        doc.fileName = this.Filename.Text;
-                        doc.template = this.template.id;
-                        doc.templateName = category;
-                        doc.SaveFilledTags(filledTags);
-                        doc.AddRecord();
-                    }
+                    //if (save)
+                    //{
+                    //    using GeneratedDocument doc = new();
+                    //    doc.id = this.document.id;
+                    //    doc.number = this.Number.Text;
+                    //    doc.fullNumber = this.GetNumber();
+                    //    doc.status = this.document.status;
+                    //    doc.fileName = this.Filename.Text;
+                    //    doc.template = this.template.id;
+                    //    doc.templateName = category;
+                    //    doc.SaveFilledTags(filledTags);
+                    //    doc.AddRecord();
+                    //}
                     return true;
                 }
                 return false;

@@ -4,14 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:pages="clr-namespace:Incas.Templates.Views.Pages" 
-             xmlns:pages1="clr-namespace:Incas.CreatedDocuments.Views.Pages"
              x:Class="Incas.Templates.Views.Pages.UC_Templator"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200">
     <Grid Background="#2f3239">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" MinWidth="200"/>
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition MinWidth="200"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0"/>
@@ -24,16 +22,8 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.ColumnSpan="2"/>
-            <!--<Label Grid.Column="1" Style="{DynamicResource LabelPrimary}" Content="Документы" HorizontalAlignment="Left" Margin="10,10,10,10" VerticalAlignment="Center" FontSize="18" FontWeight="Bold">
-
-            </Label>
-            <fa:FontAwesome Grid.Column="0" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="36" Icon="FolderOpen" Margin="0,0,0,-10" Foreground="{DynamicResource GrayLight}">
-
-            </fa:FontAwesome>-->
         </Grid>
         <pages:ListOfDocuments Grid.Row="1" Grid.Column="0"/>
-        <pages1:ListOfGenerations Grid.Row="1" Grid.Column="1" />
 
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,0" Grid.Row="1"/>
     </Grid>
 </UserControl>

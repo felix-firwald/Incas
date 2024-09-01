@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Incas.Core.Classes;
+
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -21,7 +12,17 @@ namespace Incas.Objects.Views.Windows
     {
         public CreateClass()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+        }
+
+        private void GetMoreInfoClick(object sender, MouseButtonEventArgs e)
+        {
+            ProgramState.OpenWebPage("https://teletype.in/@incas/classes");
+        }
+
+        private void AddFieldClick(object sender, MouseButtonEventArgs e)
+        {
+            this.ContentPanel.Children.Add(new Incas.Objects.Views.Controls.FieldCreator());
         }
     }
 }

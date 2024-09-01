@@ -149,6 +149,7 @@ namespace Incas.Core.Classes
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 ProgramState.PlaySound("UI-Exclamation");
+                ShowWaitCursor(false);
                 Dialog d = new(message, title, Dialog.DialogIcon.DatabaseError);
                 d.ShowDialog();
             });
@@ -159,6 +160,7 @@ namespace Incas.Core.Classes
             {
                 
                 ProgramState.PlaySound("UI-Exclamation");
+                ShowWaitCursor(false);
                 Dialog d = new($"{startMessage}.\nТип исключения: {ex.GetType().Name}\n\nТехнические подробности:\n" + ex.Message, "Возникла ошибка", Dialog.DialogIcon.Error);
                 d.ShowDialog();
             });
@@ -172,6 +174,7 @@ namespace Incas.Core.Classes
                     return;
                 }
                 ProgramState.PlaySound("UI-Exclamation");
+                ShowWaitCursor(false);
                 Dialog d = new(message, title, Dialog.DialogIcon.Error);
                 d.ShowDialog();
             });
@@ -181,6 +184,7 @@ namespace Incas.Core.Classes
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 ProgramState.PlaySound("UI-Attention");
+                ShowWaitCursor(false);
                 Dialog d = new(message, title, Dialog.DialogIcon.Exclamation);
                 d.ShowDialog();
             });
@@ -190,6 +194,7 @@ namespace Incas.Core.Classes
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 ProgramState.PlaySound("UI-Attention");
+                ShowWaitCursor(false);
                 Dialog d = new(message, title, Dialog.DialogIcon.Info);
                 d.ShowDialog();
             });
@@ -200,6 +205,7 @@ namespace Incas.Core.Classes
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 ProgramState.PlaySound("UI-Attention");
+                ShowWaitCursor(false);
                 Dialog d = new(message.ToString(), title, Dialog.DialogIcon.Info);
                 d.ShowDialog();
             });
@@ -223,6 +229,7 @@ namespace Incas.Core.Classes
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 ProgramState.PlaySound("UI-Attention");
+                ShowWaitCursor(false);
                 d.ShowDialog();
             });
             return d.status;

@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Models;
 using Incas.CreatedDocuments.Models;
 using Incas.CustomDatabases.Models;
+using Incas.Objects.Models;
 using Incas.Templates.Models;
 using Incas.Users.Models;
 using System;
@@ -60,7 +61,6 @@ namespace Incas.Core.Classes
             q
              .AddCustomRequest(GetTemplateDefinition(atc))
              .AddCustomRequest(GetTagDefinition(atc))
-             .AddCustomRequest(GetGeneratedDocumentDefinition(atc))
              .ExecuteVoid();
             //SQLiteConnection.ClearAllPools();
         }
@@ -80,7 +80,7 @@ namespace Incas.Core.Classes
              .AddCustomRequest(GetSessionDefinition(atc))
              .AddCustomRequest(GetDatabasesDefinition(atc))
              .AddCustomRequest(GetCommandDefinition(atc))
-
+             .AddCustomRequest(GetClassesDefinition(atc))
              .ExecuteVoid();
             InitializeData();
             return true;
@@ -93,10 +93,9 @@ namespace Incas.Core.Classes
             CheckFieldsInTable(typeof(Session), "Sessions", DBConnectionType.SERVICE);
             CheckFieldsInTable(typeof(Database), "Databases", DBConnectionType.SERVICE);
             CheckFieldsInTable(typeof(Command), "Commands", DBConnectionType.SERVICE);
-
             CheckFieldsInTable(typeof(Template), "Templates", DBConnectionType.BASE);
             CheckFieldsInTable(typeof(Tag), "Tags", DBConnectionType.BASE);
-            CheckFieldsInTable(typeof(GeneratedDocument), "GeneratedDocuments", DBConnectionType.BASE);
+            CheckFieldsInTable(typeof(Class), "Classes", DBConnectionType.SERVICE);
         }
         private static void CheckFieldsInTable(Type model, string tableName, DBConnectionType type)
         {
@@ -109,15 +108,16 @@ namespace Incas.Core.Classes
                 names.Add((string)row[1]);
             }
             bool needAlter = false;
-            string result = $"ALTER TABLE [{tableName}]\n";
+            string result = $"BEGIN TRANSACTION;\n";
             foreach (PropertyInfo pi in model.GetProperties())
             {
                 if (!names.Contains(pi.Name))
                 {
                     needAlter = true;
-                    result += $"\nADD COLUMN {pi.Name} {AutoTableCreator.SwitchOnType(pi.PropertyType)}";
+                    result += $"ALTER TABLE [{tableName}] ADD COLUMN {pi.Name} {AutoTableCreator.SwitchOnType(pi.PropertyType)};\n";
                 }
             }
+            result = result += "COMMIT";
             if (needAlter)
             {
                 DialogsManager.ShowDatabaseErrorDialog($"В базе данных не было найдено поле для таблицы {tableName}. Таблица будет обновлена.", "Актуализация базы данных");
@@ -149,6 +149,11 @@ namespace Incas.Core.Classes
             atc.SetNotNull("value", false);
             return atc.GetQueryText();
         }
+        private static string GetClassesDefinition(AutoTableCreator atc)
+        {
+            atc.Initialize(typeof(Class), "Classes");
+            return atc.GetQueryText();
+        }
 
         private static string GetUserDefinition(AutoTableCreator atc)
         {
@@ -165,11 +170,6 @@ namespace Incas.Core.Classes
         private static string GetTemplateDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Template), "Templates");
-            return atc.GetQueryText();
-        }
-        private static string GetGeneratedDocumentDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(GeneratedDocument), "GeneratedDocuments");
             return atc.GetQueryText();
         }
 
@@ -243,9 +243,6 @@ namespace Incas.Core.Classes
                         break;
                     case "Templates":
                         q.AddCustomRequest(GetTemplateDefinition(atc));
-                        break;
-                    case "GeneratedDocuments":
-                        q.AddCustomRequest(GetGeneratedDocumentDefinition(atc));
                         break;
                     case "Tags":
                         q.AddCustomRequest(GetTagDefinition(atc));

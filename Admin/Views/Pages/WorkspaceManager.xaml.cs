@@ -11,6 +11,7 @@ using DocumentFormat.OpenXml.Office2010.Excel;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using Incas.Admin.AutoUI;
+using Incas.Objects.Views.Windows;
 
 namespace Incas.Admin.Views.Pages
 {
@@ -205,7 +206,8 @@ namespace Incas.Admin.Views.Pages
 
         private void AddClassClick(object sender, RoutedEventArgs e)
         {
-
+            CreateClass cc = new();
+            cc.ShowDialog();
         }
 
         private void EditClassClick(object sender, RoutedEventArgs e)
