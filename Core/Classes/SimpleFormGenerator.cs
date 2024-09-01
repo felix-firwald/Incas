@@ -15,9 +15,11 @@ namespace Incas.Core.Classes
     {
         public StackPanel Container;
         public AutoUIBase Result;
-        public SimpleFormGenerator(AutoUIBase values, string title)
-        {
+        public SimpleFormGenerator(AutoUIBase values, StackPanel container)
+        {          
+            this.Result = values;
             this.SafetyCallMethod("Load");
+            this.Container = container;
             foreach (PropertyInfo field in values.GetType().GetProperties())
             {
                 this.AddField(field);
@@ -39,9 +41,20 @@ namespace Incas.Core.Classes
                 }
                 catch (TargetInvocationException)
                 {
-
+                    //DialogsManager.ShowInfoDialog(e.InnerException.Message);
                 }
             }
+            //if (this.Result.GetType().GetMethod(name) is not null)
+            //{
+            //    try
+            //    {
+            //        this.Result.GetType().GetMethod(name)?.Invoke(this.Result, null);
+            //    }
+            //    catch (TargetInvocationException)
+            //    {
+
+            //    }
+            //}
         }
         private void AddField(PropertyInfo field)
         {
@@ -99,6 +112,30 @@ namespace Incas.Core.Classes
             }
             this.Container.Children.Add(control);
         }
+        #region Updates
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+        private void NumericBox_OnNumberChanged(object sender)
+        {
+
+        }
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+        private void CheckBox_OnChanged(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
+        #region Generate
         private Control GenerateTextBox(string description, string value)
         {
             TextBox control = new()
@@ -111,11 +148,6 @@ namespace Incas.Core.Classes
             return control;
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private Control GeneratePathBox(string description, string value)
         {
             PathSelector control = new()
@@ -123,6 +155,7 @@ namespace Incas.Core.Classes
                 Value = value,
                 Tag = description,
             };
+            
             return control;
         }
         private Control GenerateComboBox(string description, ComboSelector selector)
@@ -134,8 +167,10 @@ namespace Incas.Core.Classes
                 SelectedValue = selector.SelectedValue,
                 Style = this.Container.FindResource("ComboBoxMain") as Style
             };
+            control.SelectionChanged += this.ComboBox_SelectionChanged;
             return control;
-        }
+        }   
+
         private Control GenerateNumericBox(string description, int value)
         {
             NumericBox control = new()
@@ -143,8 +178,10 @@ namespace Incas.Core.Classes
                 Tag = description,
                 Value = value,
             };
+            control.OnNumberChanged += this.NumericBox_OnNumberChanged;
             return control;
         }
+
         private Control GenerateDateBox(string description, DateTime value)
         {
             if (value == DateTime.MinValue)
@@ -157,16 +194,16 @@ namespace Incas.Core.Classes
                 SelectedDate = value,
                 Style = this.Container.FindResource("DatePickerMain") as Style
             };
+            control.SelectedDateChanged += this.DatePicker_SelectedDateChanged;
             return control;
         }
+
         private Control GenerateDataGrid(string description, DataTable value)
         {
-            DataGrid control = new()
+            DataGridWithButtons control = new(value)
             {
                 Tag = description,
-                ItemsSource = value?.DefaultView,
-                MinHeight = 80,
-                Style = this.Container.FindResource("DataGridMain") as Style
+                MinHeight = 80
             };
             return control;
         }
@@ -178,12 +215,10 @@ namespace Incas.Core.Classes
             {
                 dt.Rows.Add(item);
             }
-            DataGrid control = new()
+            DataGridWithButtons control = new(dt)
             {
                 Tag = description,
-                MinHeight = 80,
-                ItemsSource = dt.DefaultView,
-                Style = this.Container.FindResource("DataGridMain") as Style
+                MinHeight = 80
             };
 
             return control;
@@ -197,12 +232,10 @@ namespace Incas.Core.Classes
             {
                 dt.Rows.Add(item.Key, item.Value);
             }
-            DataGrid control = new()
+            DataGridWithButtons control = new(dt)
             {
                 Tag = description,
-                MinHeight = 80,
-                ItemsSource = dt.DefaultView,
-                Style = this.Container.FindResource("DataGridMain") as Style
+                MinHeight = 80
             };
 
             return control;
@@ -216,7 +249,26 @@ namespace Incas.Core.Classes
                 IsChecked = value,
                 Style = this.Container.FindResource("Toggle") as Style
             };
+            control.Checked += this.CheckBox_OnChanged;
+            control.Unchecked += this.CheckBox_OnChanged;
             return control;
+        }
+        #endregion
+        private void GetEnumDescriptions(FieldInfo f)
+        {
+            string GetEnumDescription(Enum enumValue)
+            {
+                FieldInfo field = enumValue.GetType().GetField(enumValue.ToString());
+                return Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute
+                    ? attribute.Description
+                    : "";
+            }
+            Array values = Enum.GetValues(f.ReflectedType);
+
+            foreach (Enum value in values)
+            {
+                GetEnumDescription(value);
+            }
         }
         public bool Save()
         {
@@ -250,7 +302,7 @@ namespace Incas.Core.Classes
                                 field.SetValue(this.Result, ((DatePicker)control).SelectedDate);
                                 break;
                             case "DataTable":
-                                field.SetValue(this.Result, ((DataView)((DataGrid)control).ItemsSource).ToTable());
+                                field.SetValue(this.Result, ((DataGridWithButtons)control).DataTable);
                                 break;
                             case "ComboSelector":
                                 if (((ComboBox)control).SelectedValue is null)
@@ -263,7 +315,7 @@ namespace Incas.Core.Classes
                             default:
                                 if (field.PropertyType.Name.Contains("List"))
                                 {
-                                    DataTable dt = ((DataView)((DataGrid)control).ItemsSource).ToTable();
+                                    DataTable dt = ((DataGridWithButtons)control).DataTable;
                                     List<string> values = [];
                                     foreach (DataRow row in dt.Rows)
                                     {
@@ -273,7 +325,7 @@ namespace Incas.Core.Classes
                                 }
                                 else if (field.PropertyType.Name.Contains("Dictionary"))
                                 {
-                                    DataTable dt = ((DataView)((DataGrid)control).ItemsSource).ToTable();
+                                    DataTable dt = ((DataGridWithButtons)control).DataTable;
                                     Dictionary<string, string> values = [];
                                     foreach (DataRow row in dt.Rows)
                                     {
@@ -288,6 +340,7 @@ namespace Incas.Core.Classes
                 }
             }
             this.SafetyCallMethod("Save");
+            return true;
         }
     }
 }
