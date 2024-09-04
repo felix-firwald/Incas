@@ -4,6 +4,7 @@ using Incas.Core.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Reflection;
 using System.Windows;
@@ -30,6 +31,11 @@ namespace Incas.Core.Classes
             DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>(true);
             return attribute != null ? attribute.Description : "";
         }
+        private int GetFieldTextMaxLength(PropertyInfo field)
+        {
+            StringLengthAttribute attribute = field.GetCustomAttribute<StringLengthAttribute>(true);
+            return attribute != null ? attribute.MaximumLength : 120;
+        }
         private void SafetyCallMethod(string name)
         {
             MethodInfo method = this.Result.GetType().GetMethod(name);
@@ -41,20 +47,9 @@ namespace Incas.Core.Classes
                 }
                 catch (TargetInvocationException)
                 {
-                    //DialogsManager.ShowInfoDialog(e.InnerException.Message);
+
                 }
             }
-            //if (this.Result.GetType().GetMethod(name) is not null)
-            //{
-            //    try
-            //    {
-            //        this.Result.GetType().GetMethod(name)?.Invoke(this.Result, null);
-            //    }
-            //    catch (TargetInvocationException)
-            //    {
-
-            //    }
-            //}
         }
         private void AddField(PropertyInfo field)
         {
@@ -72,7 +67,7 @@ namespace Incas.Core.Classes
                     Attribute attr = field.GetCustomAttribute(typeof(UrlRequired), false);
                     control = attr is not null
                         ? this.GeneratePathBox(description, (string)field.GetValue(this.Result))
-                        : this.GenerateTextBox(description, (string)field.GetValue(this.Result));
+                        : this.GenerateTextBox(description, (string)field.GetValue(this.Result), this.GetFieldTextMaxLength(field));
                     break;
                 case "Int32":
                     control = this.GenerateNumericBox(description, (int)field.GetValue(this.Result));
@@ -136,14 +131,22 @@ namespace Incas.Core.Classes
         #endregion
 
         #region Generate
-        private Control GenerateTextBox(string description, string value)
+        private Control GenerateTextBox(string description, string value, int maxlength)
         {
             TextBox control = new()
             {
                 Tag = description,
                 Text = value,
-                Style = this.Container.FindResource("TextBoxMain") as Style
+                MaxLength = maxlength
             };
+            if (maxlength > 120)
+            {
+                control.Style = this.Container.FindResource("TextBoxBig") as Style;
+            }
+            else
+            {
+                control.Style = this.Container.FindResource("TextBoxMain") as Style;
+            }
             control.TextChanged += this.TextBox_TextChanged;
             return control;
         }

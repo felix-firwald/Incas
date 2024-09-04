@@ -4,8 +4,14 @@ using System.ComponentModel;
 
 namespace Incas.Core.AutoUI
 {
-    public class CreateWorkspace : AutoUIBase
+    /// <summary>
+    /// Класс автоматической генерации формы и сбора данных для CreateWorkspace.
+    /// Метод Load вызывается перед генерацией формы.
+    /// Метод Save вызывается после применения изменений на форме.
+    /// </summary>
+    internal class CreateWorkspace : AutoUIBase
     {
+        #region Data     
         [Description("Наименование рабочего пространства")]
         public string WorkspaceName { get; set; }
 
@@ -15,10 +21,13 @@ namespace Incas.Core.AutoUI
 
         [Description("Пароль для входа")]
         public string Password { get; set; }
+        #endregion
 
+        #region Functionality   
         public void Save()
         {
             ProgramState.InitWorkspace(this);
         }
+        #endregion
     }
 }

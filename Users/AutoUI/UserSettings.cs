@@ -2,17 +2,19 @@
 using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Users.Models;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incas.Users.AutoUI
 {
-    class UserSettings : AutoUIBase
+    /// <summary>
+    /// Класс автоматической генерации формы и сбора данных для UserSettings.
+    /// Метод Load вызывается перед генерацией формы.
+    /// Метод Save вызывается после применения изменений на форме.
+    /// </summary>
+    internal class UserSettings : AutoUIBase
     {
+        #region Data
         private User _user;
         private UserParameters _userParameters = new();
 
@@ -86,7 +88,9 @@ namespace Incas.Users.AutoUI
                 this._userParameters.startup_password = value;
             }
         }
+        #endregion
 
+        #region Functionality
         public UserSettings(User user)
         {
             this.Status = new(
@@ -112,6 +116,7 @@ namespace Incas.Users.AutoUI
             this._user.SaveParametersContext(this._userParameters);
             this._user.SaveUser();
         }
+        #endregion
     }
 
     class UserSuperAdminSettings : AutoUIBase

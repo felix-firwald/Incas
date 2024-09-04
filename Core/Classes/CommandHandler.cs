@@ -58,10 +58,6 @@ namespace Incas.Core.Classes
                 case "#drop":
                     SwitchOnDeleteCommands(arguments);
                     break;
-                case "#restrict":
-                case "#set restriction":
-                    SwitchOnRestrictCommands(arguments);
-                    break;
                 case "#set":
 
                     break;
@@ -98,54 +94,6 @@ namespace Incas.Core.Classes
                     {
                         u.RemoveUser();
                     }
-                    break;
-            }
-        }
-        private static void SwitchOnRestrictCommands(string input)
-        {
-            input = input.Trim();
-            switch (input)
-            {
-                case "table administrator":
-                case "table moderator":
-                    using (Parameter p = new())
-                    {
-                        p.type = ParameterType.RESTRICT_EDIT_TABLE;
-                        BindingSelector bs = DialogsManager.ShowBindingSelector();
-                        if (bs.Result == DialogStatus.Yes)
-                        {
-                            p.name = $"{bs.SelectedDatabase}.{bs.SelectedTable}";
-                            p.DeleteParameterByTypeAndName();
-                            p.value = input.Split(' ')[1];
-                            p.CreateParameter();
-                        }
-                        else
-                        {
-                            return;
-                        }
-
-                    }
-                    break;
-                case "nullify table":
-                case "nullify edit table":
-                case "nullify editing table":
-                    using (Parameter p = new())
-                    {
-                        p.type = ParameterType.RESTRICT_EDIT_TABLE;
-                        BindingSelector bs = DialogsManager.ShowBindingSelector();
-                        if (bs.Result == DialogStatus.Yes)
-                        {
-                            p.name = $"{bs.SelectedDatabase}.{bs.SelectedTable}";
-                            p.DeleteParameterByTypeAndName();
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-                    break;
-                default:
-                    ShowObjectNotFound("restrict", input);
                     break;
             }
         }

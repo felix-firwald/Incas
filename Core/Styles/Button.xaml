@@ -145,8 +145,8 @@
         <Setter Property="BorderBrush" Value="{StaticResource LightPurple}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="MinWidth" Value="60"/>
-
+        <Setter Property="MinWidth" Value="50"/>
+        <Setter Property="MinHeight" Value="50"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -159,7 +159,7 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation Duration="0:0:0.100" To="#2D2D30" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="0,4,0,0" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="4,0,0,0" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>

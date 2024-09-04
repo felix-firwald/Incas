@@ -93,7 +93,7 @@ namespace Incas.Core.Views.Windows
             switch (e.Key)
             {
                 case Key.F1:
-                    this.vm.DoCopyToClipBoard("");
+                    this.vm.DoOpenClipBoard("");
                     break;
                 case Key.F2:
                     this.vm.DoCopyFile("");

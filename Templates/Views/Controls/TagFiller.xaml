@@ -21,7 +21,7 @@
             <TextBlock.ContextMenu>
                 <ContextMenu FontFamily="Segoe UI" FontWeight="Normal">
                     <MenuItem Header="Проставить во всех файлах" Click="InsertToOther" Tag="Значение этого тега будет скопировано в поля ввода этого же тега для других файлов." />
-                    
+                    <MenuItem Header="Вставить значение из буфера обмена" Click="CopyFromIncasClipboard" Tag="Будет показано окно пользовательского буфера обмена" />
                 </ContextMenu>
             </TextBlock.ContextMenu>
         </TextBlock>

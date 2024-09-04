@@ -490,5 +490,14 @@ namespace Incas.Templates.Views.Controls
         {
             this.CheckForScriptOnUpdate();
         }
+
+        private void CopyFromIncasClipboard(object sender, RoutedEventArgs e)
+        {
+            string value = DialogsManager.ShowClipboardManager(true);
+            if (!string.IsNullOrEmpty(value))
+            {
+                this.SetValue(value);
+            }          
+        }
     }
 }

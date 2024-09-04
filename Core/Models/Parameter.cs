@@ -12,7 +12,7 @@ namespace Incas.Core.Models
         DATABASE,
         CONSTANT,
         ENUMERATION,
-        RESTRICT_EDIT_TABLE,
+        USER_CLIPBOARD,
         MISC
     }
     public class DBParamNotFound : Exception

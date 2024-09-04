@@ -22,7 +22,7 @@ namespace Incas.Objects.Views.Windows
 
         private void AddFieldClick(object sender, MouseButtonEventArgs e)
         {
-            this.ContentPanel.Children.Add(new Incas.Objects.Views.Controls.FieldCreator());
+            //this.ContentPanel.Children.Add(new Incas.Objects.Views.Controls.FieldCreator());
         }
     }
 }

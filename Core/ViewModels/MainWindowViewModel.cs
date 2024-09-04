@@ -1,6 +1,7 @@
 ﻿using Common;
 using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Miniservices.Clipboard.Views.Windows;
 using Incas.Users.Models;
 using System.Collections.Generic;
 using System.Windows;
@@ -22,7 +23,7 @@ namespace Incas.Core.ViewModels
         private void SetCommands()
         {
             this.TextCommand = new Command(this.DoTextCommand);
-            this.CopyToClipBoard = new Command(this.DoCopyToClipBoard);
+            this.OpenClipBoard = new Command(this.DoOpenClipBoard);
             this.CopyFile = new Command(this.DoCopyFile);
             this.OpenFile = new Command(this.DoOpenFile);
             this.OpenWeb = new Command(this.DoOpenWeb);
@@ -30,7 +31,7 @@ namespace Incas.Core.ViewModels
 
         #region ICommands
         public ICommand TextCommand { get; private set; }
-        public ICommand CopyToClipBoard { get; private set; }
+        public ICommand OpenClipBoard { get; private set; }
         public ICommand CopyFile { get; private set; }
         public ICommand OpenFile { get; private set; }
         public ICommand OpenWeb { get; private set; }
@@ -42,14 +43,9 @@ namespace Incas.Core.ViewModels
             CommandHandler.Handle(DialogsManager.ShowInputBox("Введите команду"));
         }
 
-        public void DoCopyToClipBoard(object parameter)
+        public void DoOpenClipBoard(object parameter)
         {
-            Session target;
-            if (DialogsManager.ShowActiveUserSelector(out target, "Выберите пользователя для копирования в буфер обмена."))
-            {
-                string result = DialogsManager.ShowInputBox("Текст для буфера обмена", "Укажите текст для буфера обмена");
-                ServerProcessor.SendCopyTextProcess(result, target.slug);
-            }
+            DialogsManager.ShowClipboardManager();
         }
         public void DoCopyFile(object parameter)
         {
@@ -86,17 +82,7 @@ namespace Incas.Core.ViewModels
         }
         public void DoOpenWeb(object parameter)
         {
-            Session target;
-            if (DialogsManager.ShowActiveUserSelector(out target, "Выберите пользователя для открытия страницы."))
-            {
-                string url = DialogsManager.ShowInputBox("Укажите адрес");
-                if (!url.StartsWith("https://"))
-                {
-                    DialogsManager.ShowExclamationDialog("Введенный адрес либо не является адресом сети, либо небезопасен.", "Действие прервано");
-                    return;
-                }
-                ServerProcessor.SendOpenWebProcess(url, target.slug);
-            }
+            ProgramState.OpenWebPage("https://teletype.in/@incas/main");
         }
 
         #endregion

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Incas.Objects.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:local="clr-namespace:Incas.Objects.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:classes="clr-namespace:Incas.Objects.Views.Controls"
         mc:Ignorable="d"
         Title="Создать класс" Height="650" Width="800" WindowStartupLocation="CenterScreen" Style="{StaticResource WindowBase}">
     <Grid>
@@ -105,9 +105,22 @@
             </Border>
 
             <Border Grid.Row="1" CornerRadius="8" Margin="5" Background="{StaticResource Black}" Grid.Column="1" ScrollViewer.CanContentScroll="True">
-                <StackPanel x:Name="ContentPanel">
-
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding Fields}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel>
+                                </StackPanel>
+                            </ItemsPanelTemplate>
+                            
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <classes:FieldCreator/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </Border>
             <Button Style="{StaticResource ButtonMain}" Grid.Row="3" Content="Сохранить класс" Margin="5,5,5,5" Grid.ColumnSpan="3"/>
         </Grid>

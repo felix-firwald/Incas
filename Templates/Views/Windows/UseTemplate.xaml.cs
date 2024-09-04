@@ -182,23 +182,7 @@ namespace Incas.Templates.Views.Windows
         }
         private void RecalculateNamesClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            List<string> names = [];
-            foreach (Tag tag in this.tags)
-            {
-                if (tag.type is not TagType.LocalConstant and not TagType.Text and not TagType.Table)
-                {
-                    names.Add(tag.name);
-                }
-            }
-            FilenamesRecalculator fr = new(this.template.id, names);
-            fr.ShowDialog();
-            if (fr.status == DialogStatus.Yes)
-            {
-                foreach (FileCreator fc in this.creators)
-                {
-                    fc.RenameByTag(fr.SelectedTag, fr.Prefix, fr.Postfix, fr.IsAdditive);
-                }
-            }
+
         }
         private void SimpleRecalculateNames(string tag)
         {

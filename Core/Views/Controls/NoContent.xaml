@@ -11,8 +11,8 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="120"/>
-            <RowDefinition MinHeight="120"/>
+            <RowDefinition MinHeight="80"/>
+            <RowDefinition MinHeight="80"/>
         </Grid.RowDefinitions>
         <fa:FontAwesome Icon="LocationArrow" Grid.Row="0" Grid.Column="0" Foreground="{DynamicResource Icon}" FontSize="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15">
             
