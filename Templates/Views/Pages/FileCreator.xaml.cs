@@ -390,7 +390,7 @@ namespace Incas.Templates.Views.Pages
                             {
                                 File.Delete(newFile);
                             }
-                            File.Copy(ProgramState.GetFullnameOfWordFile(this.template.path), newFile, true);
+                            File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
                             WordTemplator wt = new(newFile);
                             this.Dispatcher.Invoke(() =>
                             {
@@ -403,7 +403,7 @@ namespace Incas.Templates.Views.Pages
                             {
                                 File.Delete(newFile);
                             }
-                            File.Copy(ProgramState.GetFullnameOfExcelFile(this.template.path), newFile, true);
+                            File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
                             ExcelTemplator et = new(newFile);
                             this.Dispatcher.Invoke(() =>
                             {
@@ -483,7 +483,7 @@ namespace Incas.Templates.Views.Pages
             {
 
                 string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.docx";
-                System.IO.File.Copy(ProgramState.GetFullnameOfWordFile(this.template.path), newFile, true);
+                System.IO.File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
                 WordTemplator wt = new(newFile);
 
                 List<string> tagsToReplace = [];

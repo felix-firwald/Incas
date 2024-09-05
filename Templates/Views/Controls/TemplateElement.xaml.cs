@@ -82,7 +82,7 @@ namespace Incas.Templates.Views.Controls
         }
         private bool IsFileExists()
         {
-            return File.Exists($"{ProgramState.TemplatesSourcesWordPath}\\{this.template.path}") || File.Exists($"{ProgramState.TemplatesSourcesExcelPath}\\{this.template.path}");
+            return File.Exists(ProgramState.GetFullnameOfDocumentFile(this.template.path));
         }
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)

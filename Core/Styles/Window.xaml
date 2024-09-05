@@ -3,6 +3,34 @@
     <Style x:Key="WindowBase" TargetType="{x:Type Window}">
         <Setter Property="Background" Value="{DynamicResource Basic}"/>
         <Setter Property="Foreground" Value="{DynamicResource Light}"/>
+        <Setter Property="BorderBrush" Value="DodgerBlue"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Style.Triggers>
+            <EventTrigger RoutedEvent="DragEnter">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation Duration="0:0:0.100" To="#2D3B50" Storyboard.TargetProperty="Background.Color"/>
+                        <ThicknessAnimation Duration="0:0:0.05" To="2" Storyboard.TargetProperty="BorderThickness"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="DragLeave">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation Duration="0:0:0.100" To="#FF2F323C" Storyboard.TargetProperty="Background.Color"/>
+                        <ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetProperty="BorderThickness"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="Drop">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation Duration="0:0:0.200" To="#FF2F323C" Storyboard.TargetProperty="Background.Color"/>
+                        <ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetProperty="BorderThickness"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Style.Triggers>
     </Style>
     <ControlTemplate x:Key="WindowDialog" TargetType="{x:Type Window}">
         <Border CornerRadius="6" BorderThickness="2" BorderBrush="{DynamicResource Dark}" Background="{DynamicResource Black}">

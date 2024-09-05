@@ -59,35 +59,57 @@ namespace Incas.Templates.Views.Windows
             OpenFileDialog fd = new()
             {
                 Filter = "Word и Excel|*.docx;*.xlsx",
-                InitialDirectory = ProgramState.TemplatesSourcesWordPath
+                InitialDirectory = ProgramState.TemplatesSources
             };
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string result;
-                result = fd.SafeFileName;
-                this.vm.Source = result;
-                if (fd.FileName.EndsWith(".docx"))
-                {
-                    if (!fd.FileName.StartsWith(ProgramState.TemplatesSourcesWordPath))
-                    {
-                        File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesWordPath}\\{fd.SafeFileName}");
-                    }
-                    this.vm.Type = TemplateType.Word;
-                }
-                else if (fd.FileName.EndsWith(".xlsx"))
-                {
-                    if (!fd.FileName.StartsWith(ProgramState.TemplatesSourcesExcelPath))
-                    {
-                        File.Copy(fd.FileName, $"{ProgramState.TemplatesSourcesExcelPath}\\{fd.SafeFileName}");
-                    }
-                    this.vm.Type = TemplateType.Excel;
-                }
+                this.ApplySource(fd.FileName);
             }
+        }
+
+        private void ApplySource(string path)
+        {
+            if (path.EndsWith(".docx"))
+            {
+                this.vm.Type = TemplateType.Word;
+            }
+            else if (path.EndsWith(".xlsx"))
+            {
+                this.vm.Type = TemplateType.Excel;
+            }
+            string result = Path.GetFileName(path);
+            this.vm.Source = result;
+            if (!path.StartsWith(ProgramState.TemplatesSources)) // если файл еще не в каталоге рабочего пространства
+            {
+                if (File.Exists(ProgramState.GetFullnameOfDocumentFile(result))) // если в каталоге рабочего пространства есть файл с таким же именем
+                {
+                    if (DialogsManager.ShowQuestionDialog($"Файл с именем \"{result}\" уже существует в рабочем пространстве. Вы хотите выбрать присвоить выбранному файлу другое имя или использовать уже существующий файл?", "Файл уже существует", "Переименовать выбранный", "Использовать существующий") == DialogStatus.Yes)
+                    {
+                        string name = DialogsManager.ShowInputBox("Имя файла", "Введите имя файла без расширения").Replace(".xlsx", "").Replace(".docx", "");
+                        switch (this.vm.Type)
+                        {
+                            case TemplateType.Excel:
+                                name += ".xlsx";
+                                break;
+                            case TemplateType.Word:
+                                name += ".docx";
+                                break;
+                        }
+                        File.Copy(path, ProgramState.GetFullnameOfDocumentFile(name));
+                    }
+                }
+                else
+                {
+                    File.Copy(path, ProgramState.GetFullnameOfDocumentFile(result));
+                }
+                
+            }
+            
         }
 
         private bool CheckForSave()
         {
-            if (!File.Exists(ProgramState.GetFullnameOfWordFile(this.vm.Source)) && !File.Exists(ProgramState.GetFullnameOfExcelFile(this.vm.Source)))
+            if (!File.Exists(ProgramState.GetFullnameOfDocumentFile(this.vm.Source)))
             {
                 DialogsManager.ShowErrorDialog($"Файл ({this.vm.Source}) не найден в служебном каталоге.", "Сохранение прервано");
                 return false;
@@ -183,8 +205,12 @@ namespace Incas.Templates.Views.Windows
         {
             this.AddTag();
         }
+        private void FindTagsInFileClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.FindTagsInFile();
+        }
 
-        private void FindTagsInFile(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void FindTagsInFile()
         {
             bool CheckNameUniqueness(string name)
             {
@@ -197,7 +223,7 @@ namespace Incas.Templates.Views.Windows
                 }
                 return true;
             }
-            string pathFile = ProgramState.GetFullnameOfWordFile(this.vm.Source);
+            string pathFile = ProgramState.GetFullnameOfDocumentFile(this.vm.Source);
             if (!File.Exists(pathFile))
             {
                 DialogsManager.ShowExclamationDialog($"Файл ({this.vm.Source}) не существует!\nТеги не могут быть обнаружены.", "Поиск невозможен");
@@ -246,18 +272,7 @@ namespace Incas.Templates.Views.Windows
 
         private void EditSourceClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            string pathFile = "";
-            switch (this.vm.Type)
-            {
-                case TemplateType.Excel:
-                    pathFile = ProgramState.GetFullnameOfExcelFile(this.vm.Source);
-                    break;
-                case TemplateType.Word:
-                    pathFile = ProgramState.GetFullnameOfWordFile(this.vm.Source);
-                    break;
-                default:
-                    break;
-            }
+            string pathFile = ProgramState.GetFullnameOfDocumentFile(this.vm.Source);
 
             if (!File.Exists(pathFile))
             {
@@ -351,7 +366,7 @@ namespace Incas.Templates.Views.Windows
                     {
                         tp.FillData(this.vm.GetTemplate(), false);
                     }
-                    tp.ToFile(folder.SelectedPath, this.vm.Type == TemplateType.Word ? ProgramState.GetFullnameOfWordFile(this.vm.Source) : ProgramState.GetFullnameOfExcelFile(this.vm.Source), this.vm.Source);
+                    tp.ToFile(folder.SelectedPath, ProgramState.GetFullnameOfDocumentFile(this.vm.Source), this.vm.Source);
                 }
                 catch (Exception ex)
                 {
@@ -360,32 +375,37 @@ namespace Incas.Templates.Views.Windows
             }
         }
 
-        private void Upload(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void UploadClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (this.vm.Id != 0)
             {
                 DialogsManager.ShowExclamationDialog("Невозможно применить импорт, поскольку это грозит утерей текущего шаблона", "Импорт прерван");
                 return;
             }
-            try
+            OpenFileDialog fd = new()
             {
-                OpenFileDialog fd = new()
+                Filter = "Шаблоны INCAS|*.tinc",
+                InitialDirectory = ProgramState.TemplatesSources
+            };
+            if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                this.Upload(fd.FileName);
+            }
+        }
+
+        private void Upload(string filename)
+        {
+            try
+            {              
+                TemplatePort tp = new();
+                tp.ParseData(filename);
+                if (tp.Data != null)
                 {
-                    Filter = "Шаблоны INCAS|*.tinc",
-                    InitialDirectory = ProgramState.TemplatesSourcesWordPath
-                };
-                if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    TemplatePort tp = new();
-                    tp.ParseData(fd.FileName);
-                    if (tp.Data != null)
+                    tp.GetSourceFile(filename, tp.Data.SourceTemplate.path);
+                    this.vm.ApplyNewTemplate(tp.Data.SourceTemplate);
+                    foreach (Tag t in tp.Data.Tags)
                     {
-                        tp.GetSourceFile(fd.FileName, tp.Data.SourceTemplate.path);
-                        this.vm.ApplyNewTemplate(tp.Data.SourceTemplate);
-                        foreach (Tag t in tp.Data.Tags)
-                        {
-                            this.AddTag(t);
-                        }
+                        this.AddTag(t);
                     }
                 }
             }
@@ -419,6 +439,36 @@ namespace Incas.Templates.Views.Windows
         {
             UseTemplate ut = new(this.vm.NameOfTemplate, this.GetTagsData());
             ut.ShowDialog();
+        }
+
+        private void Window_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {                
+                string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+                string result = Path.GetFileName(files[0]);
+                if (files[0].EndsWith(".docx") || files[0].EndsWith(".xlsx"))
+                {
+                    this.ApplySource(files[0]);
+                    this.FindTagsInFile();
+                }
+                else if (files[0].EndsWith(".tinc"))
+                {
+                    this.Upload(files[0]);
+                }
+            }
+        }
+
+        private void Window_DragEnter(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                e.Effects = System.Windows.DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = System.Windows.DragDropEffects.None;
+            }
         }
     }
 }

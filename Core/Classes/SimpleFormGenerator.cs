@@ -142,13 +142,35 @@ namespace Incas.Core.Classes
             if (maxlength > 120)
             {
                 control.Style = this.Container.FindResource("TextBoxBig") as Style;
+                MenuItem mi = new()
+                {
+                    Header = "Вставить из пользовательского буфера обмена",
+                    Tag = description
+                };
+                mi.Click += this.Mi_Click;
+                control.ContextMenu.Items.Add(mi);
             }
             else
             {
                 control.Style = this.Container.FindResource("TextBoxMain") as Style;
             }
+            
             control.TextChanged += this.TextBox_TextChanged;
             return control;
+        }
+
+        private void Mi_Click(object sender, RoutedEventArgs e)
+        {
+            string text = DialogsManager.ShowClipboardManager(true);
+            string tag = ((MenuItem)sender).Tag.ToString();
+            foreach (Control c in this.Container.Children)
+            {
+                if (c.Tag.ToString() == tag)
+                {
+                    ((TextBox)c).Text = text;
+                    break;
+                }
+            }
         }
 
         private Control GeneratePathBox(string description, string value)

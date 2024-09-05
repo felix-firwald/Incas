@@ -47,8 +47,7 @@ namespace Incas.Core.Classes
         #region Templates
 
         private static string Templates => Root + @"\Templates";     // ...\Root\Templates
-        public static string TemplatesSourcesWordPath => Templates + @"\Sources\Word";     // ...\Root\Templates\Sources\Word
-        public static string TemplatesSourcesExcelPath => Templates + @"\Sources\Excel";     // ...\Root\Templates\Sources\Excel
+        public static string TemplatesSources => Templates + @"\Sources";
         public static string TemplatesRuntime => Templates + @"\Runtime";     // ...\Root\Templates\Runtime
         #endregion
 
@@ -83,15 +82,7 @@ namespace Incas.Core.Classes
         {
             CommonPath = path;
             DatabasePath = path + @"\data.dbinc";
-            //if (!File.Exists(DatabasePath))
-            //{
-            //    DialogsManager.ShowErrorDialog("Рабочее пространство повреждено или не существует по указанному пути: " + path);
-            //    SetCommonPath("", checkout);
-            //    return;
-            //}
             Directory.CreateDirectory(Templates);
-            Directory.CreateDirectory(TemplatesSourcesWordPath);
-            Directory.CreateDirectory(TemplatesSourcesExcelPath);
             Directory.CreateDirectory(ServerProcesses);
             Directory.CreateDirectory(Scripts);
             Directory.CreateDirectory(Exchanges);
@@ -166,13 +157,9 @@ namespace Incas.Core.Classes
         #endregion
 
         #region WorkspaceFiles
-        public static string GetFullnameOfWordFile(string name)
+        public static string GetFullnameOfDocumentFile(string name)
         {
-            return TemplatesSourcesWordPath + "\\" + name;
-        }
-        public static string GetFullnameOfExcelFile(string name)
-        {
-            return TemplatesSourcesExcelPath + "\\" + name;
+            return TemplatesSources + "\\" + name;
         }
         #endregion
         private static bool CreateTablesInDatabase()
