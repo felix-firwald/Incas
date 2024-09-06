@@ -1,10 +1,11 @@
 ﻿using Incas.Templates.Components;
+using System;
 
 namespace Incas.Templates.Models
 {
     public struct STemplate
     {
-        public int id { get; set; }
+        public Guid id { get; set; }
         public string name { get; set; }
         public string path { get; set; }
         public string suggestedPath { get; set; }

@@ -29,7 +29,7 @@ namespace Incas.Templates.Views.Pages
         private List<TableFiller> Tables = [];
         private TemplateSettings templateSettings;
 
-        public delegate void TagAction(int tag, string value);
+        public delegate void TagAction(Guid tag, string value);
         public event TagAction OnInsertRequested;
         public delegate void FileCreatorAction(FileCreator creator);
         public event FileCreatorAction OnCreatorDestroy;
@@ -111,7 +111,7 @@ namespace Incas.Templates.Views.Pages
             }
         }
 
-        private void OnInsert(int tag, string value)
+        private void OnInsert(Guid tag, string value)
         {
             OnInsertRequested?.Invoke(tag, value);
         }
@@ -119,7 +119,7 @@ namespace Incas.Templates.Views.Pages
         {
             OnRenameRequested?.Invoke(tag);
         }
-        public async void InsertTagValue(int tag, string value)
+        public async void InsertTagValue(Guid tag, string value)
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
@@ -244,7 +244,7 @@ namespace Incas.Templates.Views.Pages
             List<SGeneratedTag> filledTags = [];
             foreach (TagFiller tf in this.TagFillers)
             {
-                int id = tf.GetId();
+                Guid id = tf.GetId();
                 string name = tf.GetTagName();
                 string value = tf.GetData();
                 SGeneratedTag gtg = new()
@@ -253,27 +253,6 @@ namespace Incas.Templates.Views.Pages
                     value = tf.GetData()
                 };
                 filledTags.Add(gtg);
-                //if (tf.tag.type != TagType.LocalConstant)
-                //{
-                //    if (tf.tag.type is TagType.Generator or Components.TagType.Macrogenerator or TagType.Date)
-                //    {
-                //        SGeneratedTag gtg = new()
-                //        {
-                //            tag = id,
-                //            value = tf.GetData()
-                //        };
-                //        filledTags.Add(gtg);
-                //    }
-                //    else
-                //    {
-                //        SGeneratedTag gt = new()
-                //        {
-                //            tag = id,
-                //            value = value
-                //        };
-                //        filledTags.Add(gt);
-                //    }
-                //}
             }
             foreach (TableFiller table in this.Tables)
             {

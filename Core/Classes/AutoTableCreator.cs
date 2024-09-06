@@ -28,12 +28,11 @@ namespace Incas.Core.Classes
                 FieldCreator fc = new(prop.Name, SwitchOnType(prop.PropertyType));
                 if (prop.Name == "id")
                 {
-                    fc.IsPK = true;
+                    fc.IsUNIQUE = true;
                 }
                 this.definition[prop.Name] = fc;
             }
         }
-
 
         public string GetQueryText()
         {

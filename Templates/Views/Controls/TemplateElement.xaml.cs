@@ -96,8 +96,6 @@ namespace Incas.Templates.Views.Controls
                 }
                 if (DialogsManager.ShowQuestionDialog($"Шаблон \"{this.template.name}\" будет безвозвратно удален, однако файл, используемый шаблоном, останется.", "Удалить шаблон?", "Удалить шаблон", "Не удалять") == DialogStatus.Yes)
                 {
-                    Tag tag = new();
-                    tag.RemoveAllTagsByTemplate(this.template.id);
                     this.template.AsModel().RemoveTemplate();
                     this.UpdateList();
                 }

@@ -45,9 +45,5 @@ namespace Incas.Templates.ViewModels
             set => this.OnPropertyChanged(nameof(this.Enumeration));
         }
         public TagType TypeOf => this.tag.type;
-        public void UpdateTagAsChild()
-        {
-            this.tag.GetChild();
-        }
     }
 }

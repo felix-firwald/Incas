@@ -45,7 +45,7 @@ namespace Incas.Templates.Views.Controls
     public partial class Generator : UserControl
     {
         public GeneratorStatus Status = GeneratorStatus.NotContented;
-        public int TemplateId;
+        public Guid TemplateId;
         public List<GeneratedElement> Result = new();
         private string resultText;
         private TagType tagType;
@@ -195,7 +195,7 @@ namespace Incas.Templates.Views.Controls
         }
         private void SendToUserClick(object sender, MouseButtonEventArgs e)
         {
-            if (this.TemplateId == 0)
+            if (this.TemplateId == Guid.Empty)
             {
                 DialogsManager.ShowExclamationDialog("Шаблон не определен", "Действие прервано");
                 return;
@@ -222,7 +222,7 @@ namespace Incas.Templates.Views.Controls
 
         private void OpenClick(object sender, MouseButtonEventArgs e)
         {
-            if (this.TemplateId == 0)
+            if (this.TemplateId == Guid.Empty)
             {
                 DialogsManager.ShowExclamationDialog("Шаблон не определен", "Действие прервано");
                 return;

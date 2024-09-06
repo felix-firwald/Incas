@@ -10,19 +10,20 @@ namespace Incas.Templates.Models
 {
     public class Template : Model
     {
-        public int id { get; set; }
+        public Guid id { get; set; }
         public string name { get; set; }
         public string path { get; set; }
         public string suggestedPath { get; set; }
         public TemplateType type { get; set; }
         public string parent { get; set; }
         public string settings { get; set; }
+        public string tags { get; private set; }
 
         public Template()
         {
             this.tableName = "Templates";
         }
-        public Template(int newId)
+        public Template(Guid newId)
         {
             this.tableName = "Templates";
             this.GetTemplateById(newId);
@@ -55,7 +56,7 @@ namespace Incas.Templates.Models
             return resulting;
         }
 
-        public Template GetTemplateById(int id)
+        public Template GetTemplateById(Guid id)
         {
             DataRow dr = this.StartCommand()
                 .Select()
@@ -160,29 +161,24 @@ namespace Incas.Templates.Models
         public void AddTemplate()
         {
             bool isChild = !string.IsNullOrWhiteSpace(this.parent);
+            this.id = Guid.NewGuid();
             this.StartCommand()
                 .Insert(new Dictionary<string, string>
                 {
+                    { "id", this.id.ToString() },
                     { "name", this.name },
                     { "path", this.path },
                     { "parent", isChild? this.parent.ToString(): null }, // раньше тут было просто null а теперь будет 'null'
                     { "suggestedPath", isChild? "" : this.suggestedPath },
-                    { "type", this.type.ToString() } ,
-                    { "settings", this.settings }
+                    { "type", this.type.ToString() },
+                    { "settings", this.settings },
+                    { "tags", this.tags }
                 })
                 .ExecuteVoid();
-            this.id = int.Parse(
-                        this.StartCommand()
-                            .Select()
-                            .WhereEqual("name", this.name)
-                            .WhereEqual("path", this.path)
-                            .OrderByDESC("id")
-                            .ExecuteOne()["id"].ToString()
-                );
         }
         public void UpdateTemplate()
         {
-            if (this.id == 0)
+            if (this.id == Guid.Empty)
             {
                 this.AddTemplate();
                 return;
@@ -192,6 +188,7 @@ namespace Incas.Templates.Models
                 .Update("path", this.path)
                 .Update("suggestedPath", this.suggestedPath)
                 .Update("settings", this.settings)
+                .Update("tags", this.tags)
                 .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
         }
@@ -253,6 +250,16 @@ namespace Incas.Templates.Models
             {
                 return new();
             }
+        }
+        public List<Tag> GetTags(bool withoutParent = false)
+        {
+            List<Tag> tags = JsonConvert.DeserializeObject<List<Tag>>(this.tags);
+            tags.Sort((x, y) => x.orderNumber.CompareTo(y.orderNumber));
+            return tags;
+        }
+        public void SetTags(List<Tag> tags)
+        {
+            this.tags = JsonConvert.SerializeObject(tags);
         }
         public void SaveTemplateSettings(TemplateSettings ts)
         {

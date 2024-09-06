@@ -2,6 +2,7 @@
 using Incas.Core.Views.Windows;
 using Incas.Templates.Models;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -26,17 +27,14 @@ namespace Incas.Templates.Components
         public void FillData(Template temp, bool applyParent)
         {
             this.Data.SourceTemplate = temp;
-            using (Tag tag = new())
-            {
-                this.Data.Tags = applyParent
-                    ? tag.GetAllTagsByTemplate(this.Data.SourceTemplate.id, this.Data.SourceTemplate.parent)
-                    : tag.GetAllTagsByTemplate(this.Data.SourceTemplate.id);
-            }
+            this.Data.Tags = applyParent
+                ? this.Data.SourceTemplate.GetTags(false)
+                : this.Data.SourceTemplate.GetTags(true);
             foreach (Tag tag in this.Data.Tags)
             {
-                tag.id = 0;
+                tag.id = Guid.Empty;
             }
-            this.Data.SourceTemplate.id = 0;
+            this.Data.SourceTemplate.id = Guid.Empty;
             this.Data.SourceTemplate.parent = "";
         }
         public void ToFile(string folder, string sourceFullname, string sourceFilename)
@@ -54,7 +52,6 @@ namespace Incas.Templates.Components
             ZipArchiveEntry entry = zip.GetEntry(dataName);
             if (entry != null)
             {
-                // Read the content of the entry without extracting the entire file
                 using Stream entryStream = entry.Open();
                 using StreamReader reader = new(entryStream);
                 this.Data = JsonConvert.DeserializeObject<TemplateData>(reader.ReadToEnd());

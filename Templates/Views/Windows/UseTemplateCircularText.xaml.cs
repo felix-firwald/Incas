@@ -33,10 +33,7 @@ namespace Incas.Templates.Views.Windows
         }
         private void GetTags()
         {
-            using (Tag tag = new())
-            {
-                this.tags = tag.GetAllTagsByTemplate(this.template.id);
-            }
+            this.tags = this.template.GetTags();
         }
 
         public void ApplyData(List<GeneratedElement> data)

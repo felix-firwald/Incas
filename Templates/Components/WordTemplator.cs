@@ -87,7 +87,7 @@ namespace Incas.Templates.Components
             }
             foreach (TagFiller tf in tagFillers)
             {
-                int id = tf.GetId();
+                Guid id = tf.GetId();
                 string name = tf.GetTagName();
                 string value = tf.GetValue();
                 if (tf.tag.type != TagType.LocalConstant)

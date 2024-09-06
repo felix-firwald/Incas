@@ -276,7 +276,7 @@ namespace Incas.Core.Classes
                                 string value = process.content.Split("|||")[1];
                                 for (int i = 0; i <= WaitControls.TagFillers.Count; i++)
                                 {
-                                    if (WaitControls.TagFillers[i].GetId() == int.Parse(uid))
+                                    if (WaitControls.TagFillers[i].GetId() == Guid.Parse(uid))
                                     {
                                         WaitControls.TagFillers[i].SetValue(value);
                                         WaitControls.TagFillers.Remove(WaitControls.TagFillers[i]);

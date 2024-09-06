@@ -2,6 +2,7 @@
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
+using System;
 using System.Windows;
 
 namespace Incas.Templates.Views.Windows
@@ -24,7 +25,7 @@ namespace Incas.Templates.Views.Windows
 
         private void SelectClick(object sender, RoutedEventArgs e)
         {
-            if (this.vm.SelectedTemplate.id != 0)
+            if (this.vm.SelectedTemplate.id != Guid.Empty)
             {
                 this.Close();
             }

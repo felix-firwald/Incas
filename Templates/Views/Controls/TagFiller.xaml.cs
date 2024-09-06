@@ -41,7 +41,7 @@ namespace Incas.Templates.Views.Controls
         private bool validated = true;
         private Control control;
         private CommandSettings command;
-        public delegate void StringAction(int tag, string text);
+        public delegate void StringAction(Guid tag, string text);
         public event StringAction OnInsert;
         public delegate void CommandScript(string script);
         public event CommandScript OnScriptRequested;
@@ -135,8 +135,8 @@ namespace Incas.Templates.Views.Controls
                     break;
                 case TagType.Generator:
                 case TagType.Macrogenerator:
-                    int num = 0;
-                    int.TryParse(this.tag.value, out num);
+                    Guid num = Guid.Empty;
+                    Guid.TryParse(this.tag.value, out num);
                     Generator generator = new(this.tag.type)
                     {
                         TemplateId = num
@@ -326,7 +326,7 @@ namespace Incas.Templates.Views.Controls
 
             }
         }
-        public int GetId()
+        public Guid GetId()
         {
             return this.tag.id;
         }
@@ -335,75 +335,6 @@ namespace Incas.Templates.Views.Controls
         {
             Clipboard.SetText(this.GetValue());
         }
-        //private void PasteClick(object sender, RoutedEventArgs e)
-        //{
-        //    this.Textbox.Text = Clipboard.GetText();
-        //}
-
-        //private bool IsAnythingSelected()
-        //{
-        //    return !string.IsNullOrEmpty(this.Textbox.SelectedText);
-        //}
-        //private void MakeTitleClick(object sender, RoutedEventArgs e)
-        //{
-        //    if (this.IsAnythingSelected())
-        //    {
-        //        this.Textbox.SelectedText = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(this.Textbox.SelectedText.ToLower());
-        //    }
-        //    else
-        //    {
-        //        this.Textbox.Text = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(this.Textbox.Text.ToLower());
-        //    }
-        //}
-        //private void MakeUpperClick(object sender, RoutedEventArgs e)
-        //{
-        //    if (this.IsAnythingSelected())
-        //    {
-        //        this.Textbox.SelectedText = this.Textbox.SelectedText.ToUpper();
-        //    }
-        //    else
-        //    {
-        //        this.Textbox.Text = this.Textbox.Text.ToUpper();
-        //    }
-        //}
-        //private void MakeLowerClick(object sender, RoutedEventArgs e)
-        //{
-        //    if (this.IsAnythingSelected())
-        //    {
-        //        this.Textbox.SelectedText = this.Textbox.SelectedText.ToLower();
-        //    }
-        //    else
-        //    {
-        //        this.Textbox.Text = this.Textbox.Text.ToLower();
-        //    }
-        //}
-        //private void RemoveWhitespacesClick(object sender, RoutedEventArgs e)
-        //{
-        //    this.Textbox.Text = Regex.Replace(this.Textbox.Text, @"\s+", " ");
-        //}
-        //private void RemoveLineBreaksClick(object sender, RoutedEventArgs e)
-        //{
-        //    this.Textbox.Text = this.Textbox.Text.Replace(System.Environment.NewLine, " ");
-        //}
-        //private void WrapAsQuoteClick(object sender, RoutedEventArgs e)
-        //{
-        //    if (this.IsAnythingSelected())
-        //    {
-        //        this.Textbox.SelectedText = $"«{this.Textbox.SelectedText}»";
-        //    }
-        //    else
-        //    {
-        //        this.Textbox.Text = $"«{this.Textbox.Text}»";
-        //    }
-        //}
-        //private void AddDateNow(object sender, RoutedEventArgs e)
-        //{
-        //    this.Textbox.Text += DateTime.Now.ToString("dd.MM.yyyy");
-        //}
-        //private void AddDateLongNow(object sender, RoutedEventArgs e)
-        //{
-        //    this.Textbox.Text += DateTime.Now.ToString("D");
-        //}
 
         private void InsertToOther(object sender, RoutedEventArgs e)
         {

@@ -7,14 +7,14 @@ namespace Incas.CreatedDocuments.Models
 {
     public struct GeneratedElement
     {
-        public int template;
+        public Guid template;
         public string filler;
         public List<SGeneratedTag> filledTags;      
     }
     public struct SGeneratedDocument
     {
-        public int id;
-        public int template;
+        public Guid id;
+        public Guid template;
         public string templateName;
         public DateTime generatedTime;
         public string fileName;
@@ -32,24 +32,6 @@ namespace Incas.CreatedDocuments.Models
         public void SaveFilledTags(List<SGeneratedTag> tags)
         {
             this.filledTagsString = Cryptographer.EncryptString(Newtonsoft.Json.JsonConvert.SerializeObject(tags));
-        }
-
-        public GeneratedDocument AsModel()
-        {
-            GeneratedDocument d = new()
-            {
-                id = this.id,
-                template = this.template,
-                templateName = this.templateName,
-                generatedTime = this.generatedTime,
-                fileName = this.fileName,
-                number = this.number,
-                fullNumber = this.fullNumber,
-                status = this.status,
-                content = this.filledTagsString,
-                author = this.author
-            };
-            return d;
         }
     }
 }

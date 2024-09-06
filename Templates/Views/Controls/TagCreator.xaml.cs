@@ -53,11 +53,6 @@ namespace Incubator_2.Forms
             }
         }
 
-        public void SaveTag(int templ)
-        {
-            this.tag.template = templ;
-            this.tag.UpdateTag();
-        }
         public void Minimize()
         {
             this.ExpanderButton.IsChecked = false;
@@ -80,7 +75,6 @@ namespace Incubator_2.Forms
         private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             onDelete?.Invoke(this);
-            this.tag.RemoveTag();
         }
 
         private void CopyAllClick(object sender, System.Windows.RoutedEventArgs e)
@@ -124,7 +118,7 @@ namespace Incubator_2.Forms
                     {
                         CreateTextTemplate ctt = new();
                         ctt.Show();
-                        if (ctt.template.id > 0)
+                        if (ctt.template.id != Guid.Empty)
                         {
                             this.vm.DefaultValue = ctt.template.id.ToString();
                         }                
@@ -132,7 +126,7 @@ namespace Incubator_2.Forms
                     else
                     {
                         Template t = DialogsManager.ShowTemplateSelector(TemplateType.Text, "Выберите генератор для использования");
-                        if (t.id != 0)
+                        if (t.id != Guid.Empty)
                         {
                             this.vm.DefaultValue = t.id.ToString();
                         }
@@ -141,7 +135,7 @@ namespace Incubator_2.Forms
                 else
                 {
                     using Template t = new();
-                    CreateTextTemplate ctt = new(t.GetTemplateById(int.Parse(this.vm.DefaultValue)));
+                    CreateTextTemplate ctt = new(t.GetTemplateById(Guid.Parse(this.vm.DefaultValue)));
                     ctt.Show();
                 }
             }

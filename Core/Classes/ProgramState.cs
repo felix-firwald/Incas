@@ -34,8 +34,8 @@ namespace Incas.Core.Classes
         public static string CommonPath { get; private set; }
         public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incas";
         public static string DatabasePath { get; private set; }
-        public static string CustomDatabasePath => Root + @"\Databases";
-        public static string ServiceDatabasePath => Root + @"\service.dbinc";
+        public static string ObjectsPath => Root + @"\Objects";
+        public static string ServiceDatabasePath => CommonPath + @"\service.incas";
         public static string Root => CommonPath + @"\Root";
         public static string ServerProcesses => Root + @"\ServerProcesses";  // ...\Root\ServerProccesses
         public static string Exchanges => Root + @"\Exchanges";  // ...\Root\Exchanges
@@ -63,7 +63,7 @@ namespace Incas.Core.Classes
             foreach (string ws in RegistryData.GetWorkspaces())
             {
                 string path = RegistryData.GetWorkspacePath(ws);
-                if (string.IsNullOrEmpty(path) || !File.Exists(path + @"\data.dbinc") || !File.Exists(path + @"\Root\service.dbinc"))
+                if (string.IsNullOrEmpty(path) || !File.Exists(path + @"\service.incas"))
                 {
                     DialogsManager.ShowErrorDialog($"Рабочее пространство, записанное под именем \"{ws}\", " +
                         $"повреждено или не существует по пути:\n\"{path}\", в связи с чем оно будет удалено из списка доступных рабочих пространств.");
@@ -86,7 +86,7 @@ namespace Incas.Core.Classes
             Directory.CreateDirectory(ServerProcesses);
             Directory.CreateDirectory(Scripts);
             Directory.CreateDirectory(Exchanges);
-            Directory.CreateDirectory(CustomDatabasePath);
+            Directory.CreateDirectory(ObjectsPath);
             Directory.CreateDirectory(Messages);
             Directory.CreateDirectory(LogData);
             Directory.CreateDirectory(TemplatesRuntime);
@@ -98,7 +98,7 @@ namespace Incas.Core.Classes
         }
         public static string GetFullPathOfCustomDb(string path)
         {
-            return $"{CustomDatabasePath}\\{path}.db";
+            return $"{ObjectsPath}\\{path}.db";
         }
         public static void ClearDataForRestart()
         {

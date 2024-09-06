@@ -88,10 +88,6 @@ namespace Incas.Templates.Views.Windows
                 case "ShowInputBox":
                     this.Append("Service.ShowInputBox(\"Описание\", \"Заголовок\")");
                     break;
-                case "ShowDatabaseSelection":
-                    BindingSelector bs = DialogsManager.ShowBindingSelector();
-                    this.Append($"Service.ShowDatabaseSelection(\"{bs.SelectedDatabase}\", \"{bs.SelectedTable}\", \"{bs.SelectedField}\")");
-                    break;
             }
         }
     }

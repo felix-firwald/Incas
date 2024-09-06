@@ -47,7 +47,7 @@ namespace Incas.Templates.Views.Windows
         private void GetTags()
         {
             Tag tag = new();
-            foreach (Tag t in tag.GetAllTagsByTemplate(this.vm.Id))
+            foreach (Tag t in this.vm.Tags)
             {
                 this.AddTag(t);
             }
@@ -165,22 +165,21 @@ namespace Incas.Templates.Views.Windows
             {
                 DialogsManager.ShowWaitCursor();
                 this.Close();
-                this.vm.SaveTemplate();
                 this.SaveTags();
+                this.vm.SaveTemplate();                
                 OnCreated?.Invoke();
                 DialogsManager.ShowWaitCursor(false);
             }
         }
 
-        private async void SaveTags()
+        private void SaveTags()
         {
+            List<Tag> tags = new();
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    tag.SaveTag(this.vm.Id);
-                });
+                tags.Add(tag.tag);
             }
+            this.vm.Tags = tags;
         }
 
         private void AddTag(Tag tag = null)
@@ -377,7 +376,7 @@ namespace Incas.Templates.Views.Windows
 
         private void UploadClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (this.vm.Id != 0)
+            if (this.vm.Id != Guid.Empty)
             {
                 DialogsManager.ShowExclamationDialog("Невозможно применить импорт, поскольку это грозит утерей текущего шаблона", "Импорт прерван");
                 return;

@@ -121,7 +121,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Border Name="bor" Grid.Column="1" Background="{StaticResource Area}" CornerRadius="3" BorderThickness="1" BorderBrush="{StaticResource Element}" Margin="0,0,0,0">
+                    <Border Name="bor" Grid.Column="1" Background="{StaticResource Area}" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource Element}" Margin="0,0,0,0">
                         <StackPanel Orientation="Horizontal">
                             <Polygon x:Name="PolygonMain" Points="10, 20, 10, 0, 20, 10" Fill="{StaticResource LightPurple}" Visibility="Collapsed" VerticalAlignment="Center" Margin="-10,0,0,0" Width="NaN" Height="NaN" Panel.ZIndex="-9"/>
                             <ContentPresenter TextElement.FontFamily="/Static/Fonts/#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>

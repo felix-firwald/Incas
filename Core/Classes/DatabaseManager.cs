@@ -1,6 +1,4 @@
 ﻿using Incas.Core.Models;
-using Incas.CreatedDocuments.Models;
-using Incas.CustomDatabases.Models;
 using Incas.Objects.Models;
 using Incas.Templates.Models;
 using Incas.Users.Models;
@@ -43,28 +41,6 @@ namespace Incas.Core.Classes
             q.AddCustomRequest(GetProcessDefinition(atc));
             q.ExecuteVoid();
         }
-        public static void InitializeData(string customName = null)
-        {
-            AutoTableCreator atc = new();
-            Query q = new("");
-            if (customName == null)
-            {
-                q.typeOfConnection = DBConnectionType.BASE;
-            }
-            else
-            {
-                customName = $"{ProgramState.CommonPath}\\{customName}.dbinc";
-                SQLiteConnection.CreateFile(customName);
-                q.typeOfConnection = DBConnectionType.OTHER;
-                q.DBPath = customName;
-            }
-            q
-             .AddCustomRequest(GetTemplateDefinition(atc))
-             .AddCustomRequest(GetTagDefinition(atc))
-             .ExecuteVoid();
-            //SQLiteConnection.ClearAllPools();
-        }
-
         public static bool InitializeService()
         {
             SQLiteConnection.CreateFile(ProgramState.DatabasePath);
@@ -78,28 +54,25 @@ namespace Incas.Core.Classes
              .AddCustomRequest(GetParameterDefinition(atc))
              .AddCustomRequest(GetUserDefinition(atc))
              .AddCustomRequest(GetSessionDefinition(atc))
-             .AddCustomRequest(GetDatabasesDefinition(atc))
              .AddCustomRequest(GetCommandDefinition(atc))
              .AddCustomRequest(GetClassesDefinition(atc))
+             .AddCustomRequest(GetTemplateDefinition(atc))
              .ExecuteVoid();
-            InitializeData();
             return true;
         }
 
         public static void ActualizeTables()
         {
-            CheckFieldsInTable(typeof(Parameter), "Parameters", DBConnectionType.SERVICE);
-            CheckFieldsInTable(typeof(User), "Users", DBConnectionType.SERVICE);
-            CheckFieldsInTable(typeof(Session), "Sessions", DBConnectionType.SERVICE);
-            CheckFieldsInTable(typeof(Database), "Databases", DBConnectionType.SERVICE);
-            CheckFieldsInTable(typeof(Command), "Commands", DBConnectionType.SERVICE);
-            CheckFieldsInTable(typeof(Template), "Templates", DBConnectionType.BASE);
-            CheckFieldsInTable(typeof(Tag), "Tags", DBConnectionType.BASE);
-            CheckFieldsInTable(typeof(Class), "Classes", DBConnectionType.SERVICE);
+            CheckFieldsInTable(typeof(Parameter), "Parameters");
+            CheckFieldsInTable(typeof(User), "Users");
+            CheckFieldsInTable(typeof(Session), "Sessions");
+            CheckFieldsInTable(typeof(Command), "Commands");
+            CheckFieldsInTable(typeof(Template), "Templates");
+            CheckFieldsInTable(typeof(Class), "Classes");
         }
-        private static void CheckFieldsInTable(Type model, string tableName, DBConnectionType type)
+        private static void CheckFieldsInTable(Type model, string tableName)
         {
-            Query q = new(tableName, type);
+            Query q = new(tableName, DBConnectionType.SERVICE);
             q.AddCustomRequest($"PRAGMA table_info([{tableName}]);");
             DataTable dt = q.Execute();
             List<string> names = new(dt.Rows.Count);
@@ -134,15 +107,6 @@ namespace Incas.Core.Classes
             atc.SetAsUnique("identifier");
             return atc.GetQueryText();
         }
-        private static string GetDatabasesDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Database), "Databases");
-            atc.SetAsUnique("name");
-            atc.SetAsUnique("path");
-            atc.SetNotNull("name", true);
-            atc.SetNotNull("path", true);
-            return atc.GetQueryText();
-        }
         private static string GetParameterDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Parameter), "Parameters");
@@ -173,12 +137,6 @@ namespace Incas.Core.Classes
             return atc.GetQueryText();
         }
 
-        private static string GetTagDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Tag), "Tags");
-            atc.SetFK("template", "Templates", "id");
-            return atc.GetQueryText();
-        }
         private static string GetCommandDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Command), "Commands");
@@ -229,9 +187,6 @@ namespace Incas.Core.Classes
                     case "Processes":
                         q.AddCustomRequest(GetProcessDefinition(atc));
                         break;
-                    case "Databases":
-                        q.AddCustomRequest(GetDatabasesDefinition(atc));
-                        break;
                     case "Parameters":
                         q.AddCustomRequest(GetParameterDefinition(atc));
                         break;
@@ -244,11 +199,11 @@ namespace Incas.Core.Classes
                     case "Templates":
                         q.AddCustomRequest(GetTemplateDefinition(atc));
                         break;
-                    case "Tags":
-                        q.AddCustomRequest(GetTagDefinition(atc));
-                        break;
                     case "Commands":
                         q.AddCustomRequest(GetCommandDefinition(atc));
+                        break;
+                    case "Classes":
+                        q.AddCustomRequest(GetClassesDefinition(atc));
                         break;
                     default:
                         return;

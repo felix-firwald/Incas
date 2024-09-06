@@ -45,20 +45,19 @@ namespace Incas.Templates.Views.Windows
         private void GetTags()
         {
             Tag tag = new();
-            foreach (Tag t in tag.GetAllTagsByTemplate(this.template.id))
+            foreach (Tag t in this.template.GetTags())
             {
                 this.AddTag(t);
             }
         }
-        private async void SaveTags()
+        private void SaveTags()
         {
+            List<Tag> tags = new();
             foreach (TagCreator tag in this.ContentPanel.Children)
             {
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    tag.SaveTag(this.template.id);
-                });
+                tags.Add(tag.tag);
             }
+            this.vm.Tags = tags;
         }
 
         private void AddTag(Tag tag = null)
@@ -157,8 +156,8 @@ namespace Incas.Templates.Views.Windows
             {
                 DialogsManager.ShowWaitCursor();
                 this.Close();
-                this.vm.SaveTemplate();
                 this.SaveTags();
+                this.vm.SaveTemplate();               
                 OnCreated?.Invoke();
                 DialogsManager.ShowWaitCursor(false);
             }

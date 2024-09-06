@@ -2,6 +2,9 @@
 using Incas.Core.ViewModels;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
+using System;
+using System.Collections.Generic;
+using System.Windows.Documents;
 
 namespace Incas.Templates.ViewModels
 {
@@ -34,8 +37,24 @@ namespace Incas.Templates.ViewModels
         {
             return this.templateMain;
         }
-        public bool IsEdit => this.templateMain.id != 0;
-        public int Id => this.templateMain.id;
+        public bool IsEdit => this.templateMain.id != Guid.Empty;
+        public Guid Id => this.templateMain.id;
+        public List<Tag> Tags
+        {
+            get
+            {
+                return this.templateMain.GetTags();
+            }
+            set
+            {
+                foreach (Tag t in value)
+                {
+                    t.SetId();
+                }
+                this.templateMain.SetTags(value);
+            }
+        }
+
         public TemplateType Type
         {
             get => this.templateMain.type;

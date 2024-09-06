@@ -1,9 +1,4 @@
-﻿using Incas.Core.Models;
-using Incas.Core.Views.Windows;
-using Incas.CustomDatabases.Models;
-using Incas.CustomDatabases.Views.Windows;
-using Incas.Users.Models;
-using Incas.Users.Views.Windows;
+﻿using Incas.Users.Models;
 using System;
 
 namespace Incas.Core.Classes
@@ -68,20 +63,7 @@ namespace Incas.Core.Classes
         }
         private static void SwitchOnCreationCommands(string input)
         {
-            input = input.Trim();
-            switch (input)
-            {
-                case "database":
-                    using (Database db = new())
-                    {
-                        db.name = DialogsManager.ShowInputBox("База данных", "Введите имя базы данных");
-                        db.AddDatabase();
-                    }
-                    break;
-                default:
-                    ShowObjectNotFound("new", input);
-                    break;
-            }
+
         }
         private static void SwitchOnDeleteCommands(string input)
         {

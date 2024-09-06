@@ -104,30 +104,6 @@ namespace Incas.Core.Classes
             session = null;
             return false;
         }
-        public static BindingSelector ShowBindingSelector()
-        {
-            BindingSelector bd = new();
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            {
-                bd.ShowDialog();
-            });
-            return bd;
-        }
-        public static BindingSelector ShowBindingSelector(string database, bool dbEnabled = true)
-        {
-            BindingSelector bd = new(database, dbEnabled);
-            bd.ShowDialog();
-            return bd;
-        }
-        public static BindingSelector ShowBindingSelector(string database, string table, bool dbEnabled = true, bool tableEnabled = true)
-        {
-            BindingSelector bd = new(database, table, dbEnabled, tableEnabled);
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            {
-                bd.ShowDialog();
-            });
-            return bd;
-        }
         public static string ShowClipboardManager(bool autoclose = false)
         {
             Miniservices.Clipboard.Views.Windows.Clipboard c = new(autoclose);

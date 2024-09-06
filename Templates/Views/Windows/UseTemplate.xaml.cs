@@ -72,8 +72,7 @@ namespace Incas.Templates.Views.Windows
         }
         private void LoadTags()
         {
-            using Tag t = new();
-            this.tags = t.GetAllTagsByTemplate(this.template.id, this.template.parent);
+            this.tags = this.template.GetTags();
         }
 
         private FileCreator AddFileCreator()
@@ -102,7 +101,7 @@ namespace Incas.Templates.Views.Windows
             this.ContentPanel.Children.Remove(creator);
         }
 
-        private void InsertValuesByTag(int tag, string value)
+        private void InsertValuesByTag(Guid tag, string value)
         {
             foreach (FileCreator fc in this.creators)
             {
