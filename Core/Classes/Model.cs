@@ -85,7 +85,7 @@ namespace Incas.Core.Classes
         }
         protected Query StartCommand()
         {
-            return new Query(this.tableName);
+            return new Query(this.tableName, DBConnectionType.SERVICE);
         }
         protected Query StartCommandToService()
         {

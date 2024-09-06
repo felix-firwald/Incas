@@ -97,12 +97,12 @@ namespace Incubator_2.Forms
 
         private void DefineRelationClick(object sender, RoutedEventArgs e)
         {
-            BindingSelector bs = new();
-            bs.ShowDialog();
-            if (bs.Result == DialogStatus.Yes)
-            {
-                this.vm.DefaultValue = $"{bs.SelectedDatabase}.{bs.SelectedTable}.{bs.SelectedField}";
-            }
+            //BindingSelector bs = new();
+            //bs.ShowDialog();
+            //if (bs.Result == DialogStatus.Yes)
+            //{
+            //    this.vm.DefaultValue = $"{bs.SelectedDatabase}.{bs.SelectedTable}.{bs.SelectedField}";
+            //}
         }
 
         private void DefineGeneratorClick(object sender, RoutedEventArgs e)

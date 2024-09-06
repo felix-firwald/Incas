@@ -124,6 +124,11 @@ namespace Incas.Templates.Views.Windows
                 DialogsManager.ShowExclamationDialog($"Неверное имя шаблона.", "Сохранение прервано");
                 return false;
             }
+            if (!string.IsNullOrEmpty(this.vm.Parents) && string.IsNullOrWhiteSpace(this.category.Text))
+            {
+                DialogsManager.ShowExclamationDialog($"Категория не может быть пустой.", "Сохранение прервано");
+                return false;
+            }
             if (this.ContentPanel.Children.Count == 0 && string.IsNullOrWhiteSpace(this.vm.Parents))
             {
                 DialogsManager.ShowExclamationDialog($"Шаблон без единого тега не является шаблоном.", "Сохранение прервано");

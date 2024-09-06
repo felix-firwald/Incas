@@ -12,6 +12,7 @@ namespace Incas.Templates.Models
         public string parent { get; set; }
         public TemplateType type { get; set; }
         public string settings { get; set; }
+        public string tags { get; set; }
 
         public Template AsModel()
         {
@@ -23,7 +24,8 @@ namespace Incas.Templates.Models
                 suggestedPath = this.suggestedPath,
                 parent = this.parent,
                 type = this.type,
-                settings = this.settings
+                settings = this.settings,
+                tags = this.tags
             };
             return template;
         }
