@@ -43,7 +43,6 @@ namespace Incas.Core.Classes
         }
         public static bool InitializeService()
         {
-            SQLiteConnection.CreateFile(ProgramState.DatabasePath);
             SQLiteConnection.CreateFile(ProgramState.ServiceDatabasePath);
             AutoTableCreator atc = new();
             Query q = new("")
@@ -72,6 +71,10 @@ namespace Incas.Core.Classes
         }
         private static void CheckFieldsInTable(Type model, string tableName)
         {
+            if (RegistryData.GetSelectedWorkspace() == "")
+            {
+                return;
+            }
             Query q = new(tableName, DBConnectionType.SERVICE);
             q.AddCustomRequest($"PRAGMA table_info([{tableName}]);");
             DataTable dt = q.Execute();

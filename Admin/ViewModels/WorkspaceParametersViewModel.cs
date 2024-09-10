@@ -10,9 +10,9 @@ namespace Incas.Admin.ViewModels
 {
     public class WorkspaceParametersViewModel : BaseViewModel
     {
-        private Parameter _workspaceName = new Parameter().GetParameter(ParameterType.INCUBATOR, "ws_name");
-        private Parameter _workspaceOpened = new Parameter().GetParameter(ParameterType.INCUBATOR, "ws_opened");
-        private Parameter _workspaceLocked = new Parameter().GetParameter(ParameterType.INCUBATOR, "ws_locked");
+        private Parameter _workspaceName = new Parameter().GetParameter(ParameterType.WORKSPACE, "ws_name");
+        private Parameter _workspaceOpened = new Parameter().GetParameter(ParameterType.WORKSPACE, "ws_opened");
+        private Parameter _workspaceLocked = new Parameter().GetParameter(ParameterType.WORKSPACE, "ws_locked");
         private bool _terminateSessions = false;
         public WorkspaceParametersViewModel()
         {

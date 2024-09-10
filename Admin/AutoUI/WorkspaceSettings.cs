@@ -1,6 +1,7 @@
 ﻿using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Core.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,39 +13,21 @@ namespace Incas.Admin.AutoUI
 {
     public class WorkspaceSettings : AutoUIBase
     {
+        private WorkspacePrimarySettings data;
+        public void Load()
+        {
+            this.data = JsonConvert.DeserializeObject<WorkspacePrimarySettings>(ProgramState.GetParameter(ParameterType.WORKSPACE, "ws_data").value);
+        }
         [Description("Имя рабочего пространства")]
         public string Name
         {
             get
             {
-                return ProgramState.GetParameter(ParameterType.INCUBATOR, "ws_name").value;
+                return this.data.Name;
             }
             set
             {
-                using (Parameter p = new())
-                {
-                    p.GetParameter(ParameterType.INCUBATOR, "ws_name");
-                    p.value = value;
-                    p.UpdateValue();
-                }
-            }
-        }
-
-        [Description("Рабочее пространство открыто")]
-        public bool WorkspaceOpened
-        {
-            get
-            {
-                return ProgramState.GetParameter(ParameterType.INCUBATOR, "ws_opened").GetValueAsBool();
-            }
-            set
-            {
-                using (Parameter p = new())
-                {
-                    p.GetParameter(ParameterType.INCUBATOR, "ws_opened").GetValueAsBool();
-                    p.WriteBoolValue(value);
-                    p.UpdateValue();                   
-                }
+                this.data.Name = value;
             }
         }
 
@@ -53,16 +36,11 @@ namespace Incas.Admin.AutoUI
         {
             get
             {
-                return ProgramState.GetParameter(ParameterType.INCUBATOR, "ws_locked").GetValueAsBool();
+                return this.data.IsLocked;
             }
             set
             {
-                using (Parameter p = new())
-                {
-                    p.GetParameter(ParameterType.INCUBATOR, "ws_locked").GetValueAsBool();
-                    p.WriteBoolValue(value);
-                    p.UpdateValue();
-                }
+                this.data.IsLocked = value;
             }
         }
     }

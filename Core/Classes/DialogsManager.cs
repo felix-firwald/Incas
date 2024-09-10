@@ -140,8 +140,7 @@ namespace Incas.Core.Classes
         public static void ShowErrorDialog(Exception ex, string startMessage = "При выполнении действия возникла непредвиденная ошибка")
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            {
-                
+            {              
                 ProgramState.PlaySound("UI-Exclamation");
                 ShowWaitCursor(false);
                 Dialog d = new($"{startMessage}.\nТип исключения: {ex.GetType().Name}\n\nТехнические подробности:\n" + ex.Message, "Возникла ошибка", Dialog.DialogIcon.Error);

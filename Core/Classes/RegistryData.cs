@@ -11,18 +11,7 @@ namespace Incas.Core.Classes
     {
         public static RegistryKey GetRoot()
         {
-            return Registry.CurrentUser.CreateSubKey("Incubator", true);
-        }
-        public static string GetComputer()
-        {
-            string key = "computer";
-            if (GetRoot().GetValueNames().Contains(key))
-            {
-                return GetRoot().GetValue(key).ToString();
-            }
-            string slug = ProgramState.GenerateSlug(20);
-            GetRoot().SetValue(key, slug);
-            return slug;
+            return Registry.CurrentUser.CreateSubKey("SOFTWARE\\Incas", true);
         }
         #region workspaces
 
@@ -36,7 +25,12 @@ namespace Incas.Core.Classes
         }
         public static string GetSelectedWorkspace()
         {
-            return GetRoot().GetValue("selected_workspace", "").ToString();
+            if (GetRoot().GetValueNames().Contains("selected_workspace"))
+            {
+                return GetRoot().GetValue("selected_workspace", true).ToString();
+            }
+            GetRoot().SetValue("selected_workspace", "");
+            return "";
         }
         public static void SetSelectedWorkspace(string selected)
         {

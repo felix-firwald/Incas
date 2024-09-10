@@ -433,10 +433,7 @@ namespace Incas.Core.Classes
             string path;
             switch (this.typeOfConnection)
             {
-                case DBConnectionType.BASE:
                 default:
-                    path = ProgramState.DatabasePath;
-                    break;
                 case DBConnectionType.SERVICE:
                     path = ProgramState.ServiceDatabasePath;
                     break;

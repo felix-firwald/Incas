@@ -33,7 +33,6 @@ namespace Incas.Core.Views.Windows
             else
             {
                 ProgramState.SetCommonPath(this.cpath.Text);
-                ProgramState.GetDBFile();
                 if (Directory.Exists(this.cpath.Text))
                 {
                     this.TryAuthenticate();

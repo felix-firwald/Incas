@@ -113,7 +113,6 @@ namespace Incas.Users.Models
             this.user = $"{ProgramState.CurrentUser.fullname}";
             this.userId = ProgramState.CurrentUser.id;
             this.timeStarted = DateTime.Now;
-            this.computer = RegistryData.GetComputer();
             this.active = true;
             await System.Threading.Tasks.Task.Run(() =>
             {
@@ -124,7 +123,6 @@ namespace Incas.Users.Models
                         { "user", this.user },
                         { "userId", this.userId.ToString() },
                         { "timeStarted", this.timeStarted.ToString() },
-                        { "computer", this.computer },
                         { "active", this.BoolToInt(this.active).ToString() },
                     })
                     .ExecuteVoid();

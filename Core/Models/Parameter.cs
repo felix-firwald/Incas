@@ -8,7 +8,7 @@ namespace Incas.Core.Models
 {
     public enum ParameterType
     {
-        INCUBATOR,
+        WORKSPACE,
         DATABASE,
         CONSTANT,
         ENUMERATION,

@@ -12,7 +12,7 @@ namespace Incas.Core.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
-        private string _workspaceName = "Имя инкубатора";
+        private string _workspaceName = "Имя рабочего пространства";
         private bool _processHandled = false;
 
         public MainWindowViewModel()
@@ -22,7 +22,6 @@ namespace Incas.Core.ViewModels
         }
         private void SetCommands()
         {
-            this.TextCommand = new Command(this.DoTextCommand);
             this.OpenClipBoard = new Command(this.DoOpenClipBoard);
             this.CopyFile = new Command(this.DoCopyFile);
             this.OpenFile = new Command(this.DoOpenFile);
@@ -30,7 +29,6 @@ namespace Incas.Core.ViewModels
         }
 
         #region ICommands
-        public ICommand TextCommand { get; private set; }
         public ICommand OpenClipBoard { get; private set; }
         public ICommand CopyFile { get; private set; }
         public ICommand OpenFile { get; private set; }
@@ -38,10 +36,6 @@ namespace Incas.Core.ViewModels
         public static RoutedCommand CopyToClipBoard2 = new("CopyToClipBoard", typeof(MainWindow), [new KeyGesture(Key.F2)]);
         #endregion
         #region Tools
-        private void DoTextCommand(object obj)
-        {
-            CommandHandler.Handle(DialogsManager.ShowInputBox("Введите команду"));
-        }
 
         public void DoOpenClipBoard(object parameter)
         {

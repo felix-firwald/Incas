@@ -113,7 +113,6 @@ namespace Incas.Users.AutoUI
         public void Save()
         {
             this._userParameters.permission_group = (PermissionGroup)this.Status.SelectedObject;
-            this._user.GenerateSign();
             this._user.SaveParametersContext(this._userParameters);
             this._user.SaveUser();
         }

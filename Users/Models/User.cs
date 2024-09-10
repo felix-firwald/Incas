@@ -10,7 +10,6 @@ namespace Incas.Users.Models
     {
         public Guid id { get; set; }
         public string username { get; set; }
-        public string sign { get; set; }
         public string surname { get; set; }
         public string secondName { get; set; }
         public string fullname { get; set; }
@@ -24,7 +23,6 @@ namespace Incas.Users.Models
             {
                 id = this.id,
                 username = this.username,
-                sign = this.sign,
                 surname = this.surname,
                 secondName = this.secondName,
                 fullname = this.fullname,
@@ -39,7 +37,6 @@ namespace Incas.Users.Models
     {
         public Guid id { get; set; }
         public string username { get; set; }
-        public string sign { get; set; }
         public string surname { get; set; }
         public string secondName { get; set; }
         public string fullname { get; set; }
@@ -83,17 +80,9 @@ namespace Incas.Users.Models
             return this;
         }
 
-        public void GenerateSign()
-        {
-            if (string.IsNullOrEmpty(this.sign))
-            {
-                this.sign = ProgramState.GenerateSlug(12);
-            }
-        }
         public void UpdateUser()
         {
             this.StartCommandToService()
-                .Update("sign", this.sign)
                 .Update("surname", this.surname)
                 .Update("secondName", this.secondName)
                 .Update("fullname", this.fullname)
@@ -104,9 +93,10 @@ namespace Incas.Users.Models
         }
         public void AddUser()
         {
-            if (string.IsNullOrEmpty(this.sign))
+            if (this.id != Guid.Empty)
             {
-                this.GenerateSign();
+                this.UpdateUser();
+                return;
             }
             this.id = Guid.NewGuid();
             this.StartCommandToService()
@@ -114,7 +104,6 @@ namespace Incas.Users.Models
                 {
                     { "id", this.id.ToString() },
                     { "username", this.username},
-                    { "sign", this.sign },
                     { "surname", this.surname },
                     { "secondName", this.secondName },
                     { "fullname", this.fullname },
@@ -153,18 +142,13 @@ namespace Incas.Users.Models
                 .ExecuteVoid();
         }
         #endregion
-        private string GetKey()
-        {
-            string result = Cryptographer.GenerateKey(this.sign);
-            return result;
-        }
         public UserParameters GetParametersContext()
         {
-            return JsonConvert.DeserializeObject<UserParameters>(Cryptographer.DecryptString(this.GetKey(), this.context));
+            return JsonConvert.DeserializeObject<UserParameters>(this.context);
         }
         public void SaveParametersContext(UserParameters parameters)
         {
-            this.context = Cryptographer.EncryptString(this.GetKey(), JsonConvert.SerializeObject(parameters));
+            this.context = JsonConvert.SerializeObject(parameters);
         }
     }
 }

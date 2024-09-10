@@ -186,13 +186,10 @@ namespace Incas.Templates.Models
 
         public void RemoveTemplate()
         {
-            if (ProgramState.IsWorkspaceOpened())
-            {
-                this.StartCommand()
-                    .Delete()
-                    .WhereEqual("id", this.id.ToString())
-                    .Execute();
-            }
+            this.StartCommand()
+                .Delete()
+                .WhereEqual("id", this.id.ToString())
+                .Execute();
         }
         public List<STemplate> GetAllChildren(List<string> ids)
         {

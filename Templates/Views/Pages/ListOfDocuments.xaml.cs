@@ -122,12 +122,9 @@ namespace Incas.Templates.Views.Pages
 
         private void AddClick(object sender, RoutedEventArgs e)
         {
-            if (ProgramState.IsWorkspaceOpened())
-            {
-                CreateDocumentTemplate ctw = new();
-                ctw.OnCreated += this.Refresh;
-                ctw.Show();
-            }
+            CreateDocumentTemplate ctw = new();
+            ctw.OnCreated += this.Refresh;
+            ctw.Show();
         }
     }
 }

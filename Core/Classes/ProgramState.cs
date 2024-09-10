@@ -1,17 +1,15 @@
 ﻿using Common;
 using Incas.Core.AutoUI;
-using Incas.Core.Exceptions;
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
-using Incas.Core.Views.Windows;
 using Incas.Users.Models;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Media;
-using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace Incas.Core.Classes
@@ -33,7 +31,6 @@ namespace Incas.Core.Classes
     {
         public static string CommonPath { get; private set; }
         public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incas";
-        public static string DatabasePath { get; private set; }
         public static string ObjectsPath => Root + @"\Objects";
         public static string ServiceDatabasePath => CommonPath + @"\service.incas";
         public static string Root => CommonPath + @"\Root";
@@ -60,7 +57,12 @@ namespace Incas.Core.Classes
 
         public static void CheckoutWorkspaces()
         {
-            foreach (string ws in RegistryData.GetWorkspaces())
+            List<string> workspaces = RegistryData.GetWorkspaces();
+            if (!workspaces.Contains(RegistryData.GetSelectedWorkspace()))
+            {
+                RegistryData.SetSelectedWorkspace("");
+            }
+            foreach (string ws in workspaces)
             {
                 string path = RegistryData.GetWorkspacePath(ws);
                 if (string.IsNullOrEmpty(path) || !File.Exists(path + @"\service.incas"))
@@ -81,7 +83,6 @@ namespace Incas.Core.Classes
         public static void SetCommonPath(string path, bool checkout = true)
         {
             CommonPath = path;
-            DatabasePath = path + @"\data.dbinc";
             Directory.CreateDirectory(Templates);
             Directory.CreateDirectory(ServerProcesses);
             Directory.CreateDirectory(Scripts);
@@ -114,19 +115,6 @@ namespace Incas.Core.Classes
         public static bool IsCommonPathExists()
         {
             return Directory.Exists(CommonPath);
-        }
-        private static string getDBFilePath()
-        {
-            return CommonPath + @"\data.dbinc";
-        }
-        public static void GetDBFile()
-        {
-            if (!File.Exists(getDBFilePath()))
-            {
-                Dialog q = new("По указанному пути рабочее пространство не обнаружено.\n" +
-                "Проверьте правильность введенного пути или создайте новое рабочее пространство.", "Рабочее пространство не обнаружено");
-                q.ShowDialog();
-            }
         }
         #endregion
 
@@ -182,12 +170,16 @@ namespace Incas.Core.Classes
                 try
                 {
                     recursion++;
-
+                    WorkspacePrimarySettings wps = new()
+                    {
+                        Name = data.WorkspaceName,
+                        IsLocked = false
+                    };
                     using (Parameter par = new())
                     {
-                        par.type = ParameterType.INCUBATOR;
-                        par.name = "ws_name";
-                        par.value = data.WorkspaceName;
+                        par.type = ParameterType.WORKSPACE;
+                        par.name = "ws_data";
+                        par.value = JsonConvert.SerializeObject(wps);
                         par.CreateParameter();
                     }
 
@@ -204,7 +196,6 @@ namespace Incas.Core.Classes
                             permission_group = PermissionGroup.Admin,
                             password = data.Password,
                         };
-                        user.GenerateSign();
                         user.SaveParametersContext(up);
                         user.AddUser();
                     }                  
@@ -233,54 +224,18 @@ namespace Incas.Core.Classes
                 RegistryData.SetWorkspacePath(data.WorkspaceName, data.Path);
             }
         }
+        private static WorkspacePrimarySettings GetWorkspaceSettings()
+        {
+            using Parameter par = GetParameter(ParameterType.WORKSPACE, "ws_data", "Рабочая область");
+            return JsonConvert.DeserializeObject<WorkspacePrimarySettings>(par.value);
+        }
         public static string GetWorkspaceName()
         {
-            using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name", "Рабочая область");
-            return par.value;
-        }
-        public static void SetWorkspaceName(string name)
-        {
-            using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_name", "Рабочая область");
-            par.value = name;
-            par.UpdateValue();
-        }
-        public static void SetWorkspaceOpened(bool opened)
-        {
-            using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1");
-            par.WriteBoolValue(opened);
-            par.UpdateValue();
-        }
-        public static bool IsWorkspaceOpened()
-        {
-            if (Permission.CurrentUserPermission != PermissionGroup.Admin)
-            {
-                using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_opened", "1");
-                bool result = par.GetValueAsBool();
-                if (!result)
-                {
-                    DialogsManager.ShowErrorDialog("Действия по добавлению, изменению " +
-                        "или удалению информации из базы данных недоступны, " +
-                        "пока рабочее пространство находится в статусе \"Закрыто\".\n" +
-                        "Рабочее пространство по-прежнему можно использовать, однако " +
-                        "только для чтения.", "Рабочее пространство закрыто");
-                }
-                return result;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        public static void SetWorkspaceLocked(bool locked)
-        {
-            using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked");
-            par.WriteBoolValue(locked);
-            par.UpdateValue();
+            return GetWorkspaceSettings().Name;
         }
         public static bool IsWorkspaceLocked()
         {
-            using Parameter par = GetParameter(ParameterType.INCUBATOR, "ws_locked");
-            return par.GetValueAsBool();
+            return GetWorkspaceSettings().IsLocked;
         }
 
         #endregion
