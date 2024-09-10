@@ -20,12 +20,6 @@
                     Style="{DynamicResource ListBoxMain}"
                     ItemContainerStyle="{DynamicResource ListBoxItemPurple}"
                     ItemsSource="{Binding Databases}" SelectedItem="{Binding SelectedDatabase}" DisplayMemberPath="name" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                                <ListBox.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="Удалить выбранную базу данных" Visibility="{Binding CreateCommandVisibility}"/>
-                                        <MenuItem Header="Редактировать выбранную базу данных" Visibility="{Binding CreateCommandVisibility}"/>
-                                    </ContextMenu>
-                                </ListBox.ContextMenu>
                             </ListBox>
                         </StackPanel>
                     </Expander>

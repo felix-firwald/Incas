@@ -7,19 +7,18 @@ using System.Data;
 
 namespace Incas.Objects.Models
 {
-    class ClassData
+    public class ClassData
     {
-        List<Field> fields { get; set; }
-
+        public List<Field> fields { get; set; }
     }
 
-    class Class : Model
+    public class Class : Model
     {
         public Guid identifier { get; set; }
         public string category { get; set; }
         public string visibleName { get; set; }
         public string name { get; set; }
-        public ClassData data { get; set; }
+        public string data { get; set; }
         public Class()
         {
             this.tableName = "Classes";
@@ -30,7 +29,7 @@ namespace Incas.Objects.Models
             foreach (DataRow dr in dt.Rows)
             {
                 this.Serialize(dr);
-                this.data = JsonConvert.DeserializeObject<ClassData>(dr["data"].ToString());
+
                 resulting.Add(this);
             }
             return resulting;
@@ -40,6 +39,13 @@ namespace Incas.Objects.Models
             DataTable dt = this.StartCommandToService().Select().Execute();
             return this.FromDataTable(dt);
         }
-        
+        public ClassData GetClassData()
+        {
+            return JsonConvert.DeserializeObject<ClassData>(this.data);
+        }
+        public void SetClassData(ClassData data)
+        {
+            this.data = JsonConvert.SerializeObject(data);
+        }
     }
 }

@@ -13,6 +13,7 @@ using Windows.ApplicationModel.Core;
 using Avalonia.Controls.Chrome;
 using System.Media;
 using Incas.Core.AutoUI;
+using Incas.Objects.Components;
 
 namespace Incas.Core.Views.Windows
 {

@@ -182,7 +182,14 @@ namespace Incas.Core.Classes
             {
                 try
                 {
-                    property.SetValue(this, Convert.ChangeType(dr[property.Name], property.PropertyType)); // берет из datarow по названию переменной столбец и устанавливает значение к свойству
+                    if (property.PropertyType == typeof(Guid))
+                    {
+                        property.SetValue(this, Guid.Parse(dr[property.Name].ToString()));
+                    }
+                    else
+                    {
+                        property.SetValue(this, Convert.ChangeType(dr[property.Name], property.PropertyType)); // берет из datarow по названию переменной столбец и устанавливает значение к свойству
+                    }    
                 }
                 catch (Exception)
                 {

@@ -1,12 +1,10 @@
 ﻿using Common;
-using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Windows;
 using Incas.Users.Models;
-using IncasEngine;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

@@ -1,0 +1,61 @@
+﻿<Window x:Class="Incas.Core.Views.Windows.DialogBinding"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Incas.Core.Views.Windows"
+        mc:Ignorable="d"
+        Title="Выбор привязки" Style="{StaticResource Dialog}" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown" Height="350">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
+                 From="0.0" To="1.0" Duration="0:0:0.180"
+                 AutoReverse="False"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+
+    </Window.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="19*" MaxWidth="110"/>
+            <ColumnDefinition Width="26*"/>
+            <ColumnDefinition Width="45*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Path Fill="{StaticResource LightPurple}" Stretch="Uniform" Grid.RowSpan="2" MaxWidth="40" MaxHeight="40" Data="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434zM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567zM7.5 9.933l-2.75 1.571v3.134l2.75-1.571zm1 3.134 2.75 1.571v-3.134L8.5 9.933zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567zm2.242-2.433V3.504L8.5 5.076V8.21zM7.5 8.21V5.076L4.75 3.504v3.134zM5.258 2.643 8 4.21l2.742-1.567L8 1.076zM15 9.933l-2.75 1.571v3.134L15 13.067zM3.75 14.638v-3.134L1 9.933v3.134z"/>
+        <Label x:Name="TitleText" Grid.Column="1" Grid.ColumnSpan="2" Content="Выбор привязки" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" FontWeight="Bold" FontFamily="JetBrains Mono"/>
+        <Border Background="{StaticResource Black}" Margin="5" MaxHeight="300" BorderThickness="2" BorderBrush="{StaticResource Basic}" CornerRadius="8" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="ContentPanel" VirtualizingStackPanel.IsVirtualizing="True">
+                    <TreeView Background="{x:Null}" BorderBrush="{x:Null}">
+                        <TreeViewItem Header="Ведомость"/>
+                        <TreeViewItem Header="Приказ" IsExpanded="True">
+                            <TreeViewItem Header="Наименование" IsSelected="True"/>
+                            <TreeViewItem Header="Номер"/>
+                            <TreeViewItem Header="Дата"/>
+                        </TreeViewItem>
+                        <TreeViewItem Header="Указ">
+                            <TreeViewItem Header="w453" IsSelected="True"/>
+                        </TreeViewItem>
+                    </TreeView>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <Button x:Name="Yes" Style="{DynamicResource ButtonMainFinish}" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="FinishClick" Margin="5,0,5,0" IsDefault="True">
+            <StackPanel Orientation="Horizontal">
+                <Path Fill="White" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" VerticalAlignment="Center"/>
+                <Label Foreground="White" Content="Сохранить"/>
+            </StackPanel>
+        </Button>
+        <Button x:Name="No" Style="{DynamicResource ButtonMain}" Content="Закрыть" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Margin="5,0,5,0" IsCancel="True" Click="CancelClick"/>
+    </Grid>
+</Window>

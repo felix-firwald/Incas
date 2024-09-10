@@ -42,14 +42,14 @@ namespace Incas.Users.ViewModels
             get => this._user.post;
             set => this.OnPropertyChanged(nameof(this.UserPost));
         }
-        public bool IsRemovable => this._user.id != 1 && this._user.username != "admin";
+        public bool IsRemovable => this._user.username != "admin";
         public void RemoveUser()
         {
             this._user.RemoveUser();
         }
         public void EditUser()
         {
-            if (this._user.username == "admin" && this._user.id == 1)
+            if (this._user.username == "admin")
             {
                 UserSuperAdminSettings usa = new(this._user);
                 DialogsManager.ShowSimpleFormDialog(usa, "Редактирование владельца", Icon.UserGears);

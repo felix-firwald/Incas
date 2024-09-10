@@ -27,7 +27,7 @@ namespace Incas
 
             }
         }
-
+        
         private void Unhandled(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             try

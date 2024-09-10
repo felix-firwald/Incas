@@ -1,5 +1,5 @@
 ﻿using Incas.Core.Classes;
-
+using Incas.Objects.ViewModels;
 using System.Windows;
 using System.Windows.Input;
 
@@ -10,9 +10,12 @@ namespace Incas.Objects.Views.Windows
     /// </summary>
     public partial class CreateClass : Window
     {
+        ClassViewModel vm;
         public CreateClass()
         {
             this.InitializeComponent();
+            this.vm = new(new());
+            this.DataContext = this.vm;
         }
 
         private void GetMoreInfoClick(object sender, MouseButtonEventArgs e)
@@ -22,7 +25,8 @@ namespace Incas.Objects.Views.Windows
 
         private void AddFieldClick(object sender, MouseButtonEventArgs e)
         {
-            //this.ContentPanel.Children.Add(new Incas.Objects.Views.Controls.FieldCreator());
+            Incas.Objects.Views.Controls.FieldCreator fc = new();
+            this.ContentPanel.Children.Add(fc);
         }
     }
 }

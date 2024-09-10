@@ -1,6 +1,5 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using Incas.CustomDatabases.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
@@ -97,12 +96,7 @@ namespace Incubator_2.Forms
 
         private void DefineRelationClick(object sender, RoutedEventArgs e)
         {
-            //BindingSelector bs = new();
-            //bs.ShowDialog();
-            //if (bs.Result == DialogStatus.Yes)
-            //{
-            //    this.vm.DefaultValue = $"{bs.SelectedDatabase}.{bs.SelectedTable}.{bs.SelectedField}";
-            //}
+
         }
 
         private void DefineGeneratorClick(object sender, RoutedEventArgs e)

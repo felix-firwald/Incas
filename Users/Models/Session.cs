@@ -9,7 +9,7 @@ namespace Incas.Users.Models
     {
         public string slug { get; set; }
         public string user { get; set; }
-        public int userId { get; set; }
+        public Guid userId { get; set; }
         public DateTime timeStarted { get; set; }
         public DateTime timeFinished { get; set; }
         public string computer { get; set; }
@@ -34,7 +34,7 @@ namespace Incas.Users.Models
     {
         public string slug { get; set; }
         public string user { get; set; }
-        public int userId { get; set; }
+        public Guid userId { get; set; }
         public DateTime timeStarted { get; set; }
         public DateTime timeFinished { get; set; }
         public string computer { get; set; }

@@ -116,27 +116,27 @@ namespace Incas.Templates.Views.Windows
             }
             if (!this.vm.Source.EndsWith(".docx") && !this.vm.Source.EndsWith(".xlsx"))
             {
-                DialogsManager.ShowExclamationDialog($"Исходный файл шаблона должен быть с расширением .docx или .xlsx, любое другое расширение использовать нельзя.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog("Исходный файл шаблона должен быть с расширением .docx или .xlsx, любое другое расширение использовать нельзя.", "Сохранение прервано");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(this.nameOfTemplate.Text))
             {
-                DialogsManager.ShowExclamationDialog($"Неверное имя шаблона.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog("Неверное имя шаблона.", "Сохранение прервано");
                 return false;
             }
-            if (!string.IsNullOrEmpty(this.vm.Parents) && string.IsNullOrWhiteSpace(this.category.Text))
+            if (string.IsNullOrEmpty(this.vm.Parents) && string.IsNullOrWhiteSpace(this.category.Text))
             {
-                DialogsManager.ShowExclamationDialog($"Категория не может быть пустой.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog("Категория не может быть пустой.", "Сохранение прервано");
                 return false;
             }
             if (this.ContentPanel.Children.Count == 0 && string.IsNullOrWhiteSpace(this.vm.Parents))
             {
-                DialogsManager.ShowExclamationDialog($"Шаблон без единого тега не является шаблоном.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog("Шаблон без единого тега не является шаблоном.", "Сохранение прервано");
                 return false;
             }
             if (this.ContentPanel.Children.Count > 25)
             {
-                DialogsManager.ShowExclamationDialog($"Шаблон не может содержать более 25 тегов.\nРекомендуется использовать генераторы.", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog("Шаблон не может содержать более 25 тегов.\nРекомендуется использовать генераторы.", "Сохранение прервано");
                 return false;
             }
 

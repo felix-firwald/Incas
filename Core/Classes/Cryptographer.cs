@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace IncasEngine
+namespace Incas.Core.Classes
 {
     public static class Cryptographer
     {

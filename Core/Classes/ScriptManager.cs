@@ -13,10 +13,6 @@ namespace Incas.Core.Classes
     {
         public Service() { }
         public static string CurrentSessionId = ProgramState.CurrentSession.slug;
-        public static int GetUserId()
-        {
-            return ProgramState.CurrentUser.id;
-        }
         public static string GetUserUsername()
         {
             return ProgramState.CurrentUser.username;

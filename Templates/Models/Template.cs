@@ -1,10 +1,10 @@
 ﻿using Incas.Core.Classes;
 using Incas.Templates.Components;
-using IncasEngine;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Incas.Templates.Models
 {
@@ -105,17 +105,7 @@ namespace Incas.Templates.Models
         {
             return this.GetAllByType(TemplateType.Text);
         }
-        public List<STemplate> GetAllMailTemplates(string category)
-        {
-            DataTable dt = this.StartCommand()
-                .Select()
-                .WhereEqual("suggestedPath", category)
-                .WhereIn("type", new List<string> { "Mail" })
-                .WhereNULL("parent")
-                .OrderByASC("name")
-                .Execute();
-            return this.Parse(dt);
-        }
+
         private List<STemplate> GetAllByType(TemplateType type)
         {
             DataTable dt = this.StartCommand()
@@ -254,7 +244,22 @@ namespace Incas.Templates.Models
         }
         public List<Tag> GetTags(bool withoutParent = false)
         {
-            List<Tag> tags = JsonConvert.DeserializeObject<List<Tag>>(this.tags);
+            List<Tag> tags = new();
+            tags = JsonConvert.DeserializeObject<List<Tag>>(this.tags);
+            if (!withoutParent)
+            {
+                if (!string.IsNullOrEmpty(this.parent))
+                {
+                    DataTable dt = this.StartCommand()
+                    .Select("tags")
+                    .WhereIn("id", this.parent.Split(';').ToList())
+                    .Execute();
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        tags.AddRange(JsonConvert.DeserializeObject<List<Tag>>(dr["tags"].ToString()));
+                    }
+                }
+            }
             tags.Sort((x, y) => x.orderNumber.CompareTo(y.orderNumber));
             return tags;
         }

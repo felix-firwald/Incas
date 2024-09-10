@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Incas.Objects.Models
 {
-    class Field
+    public class Field
     {
         public Guid Guid { get; set; }
         public string VisibleName { get; set; }
-        public string Name { get; set; }
-         
+        public string Name { get; set; }        
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Incas.Core.Classes;
-using IncasEngine;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -8,7 +8,7 @@ namespace Incas.Users.Models
 {
     public struct SUser
     {
-        public int id { get; set; }
+        public Guid id { get; set; }
         public string username { get; set; }
         public string sign { get; set; }
         public string surname { get; set; }
@@ -37,7 +37,7 @@ namespace Incas.Users.Models
 
     public class User : Model
     {
-        public int id { get; set; }
+        public Guid id { get; set; }
         public string username { get; set; }
         public string sign { get; set; }
         public string surname { get; set; }
@@ -108,9 +108,11 @@ namespace Incas.Users.Models
             {
                 this.GenerateSign();
             }
+            this.id = Guid.NewGuid();
             this.StartCommandToService()
                 .Insert(new Dictionary<string, string>
                 {
+                    { "id", this.id.ToString() },
                     { "username", this.username},
                     { "sign", this.sign },
                     { "surname", this.surname },
@@ -125,7 +127,7 @@ namespace Incas.Users.Models
         public void SaveUser()
         {
             this.fullname = this.surname + " " + this.secondName;
-            if (this.id == 0)
+            if (this.id == Guid.Empty)
             {
                 this.AddUser();
             }

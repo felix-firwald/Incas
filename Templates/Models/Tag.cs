@@ -1,11 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Templates.Components;
-using IncasEngine;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 
 namespace Incas.Templates.Models
 {

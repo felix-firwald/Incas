@@ -2,6 +2,7 @@
 using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Users.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -30,7 +31,7 @@ namespace Incas.Users.AutoUI
             }
             set
             {
-                if (this._user.id == 0)
+                if (this._user.id == Guid.Empty)
                 {
                     this._user.username = value;
                 }              
@@ -103,7 +104,7 @@ namespace Incas.Users.AutoUI
                 }
             );
             this._user = user;            
-            if (this._user.id != 0)
+            if (this._user.id != Guid.Empty)
             {
                 this._userParameters = this._user.GetParametersContext();
             }
