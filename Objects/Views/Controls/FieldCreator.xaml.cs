@@ -27,10 +27,6 @@ namespace Incas.Objects.Views.Controls
             }           
             this.DataContext = this.vm;
         }
-        public FieldCreator()
-        {
-            this.InitializeComponent();
-        }
 
         private void MaximizeClick(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -59,21 +55,6 @@ namespace Incas.Objects.Views.Controls
 
         }
 
-        private void DefineRelationClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DefineGeneratorClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void DefineTableClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void EditScriptClick(object sender, RoutedEventArgs e)
         {
 
@@ -90,6 +71,11 @@ namespace Incas.Objects.Views.Controls
         }
 
         private void AddVirtualTagClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
 
         }

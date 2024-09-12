@@ -1,7 +1,6 @@
 ﻿using Incas.Core.AutoUI;
 using Incas.Core.Views.Windows;
-using Incas.CustomDatabases.Views.Windows;
-using Incas.Miniservices.Clipboard.Views.Windows;
+using Incas.Miniservices.Tasks.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Windows;
@@ -109,6 +108,11 @@ namespace Incas.Core.Classes
             Miniservices.Clipboard.Views.Windows.Clipboard c = new(autoclose);
             c.ShowDialog();
             return c.SelectedText;
+        }
+        public static void ShowTasksManager()
+        {
+            Taskboard t = new();
+            t.ShowDialog();
         }
         public static string ShowComboBoxDialog(string title, List<string> elements)
         {         

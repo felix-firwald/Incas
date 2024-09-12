@@ -242,7 +242,6 @@
     <Folder Include="FileManager\ViewModels\" />
     <Folder Include="FileManager\Views\Windows\" />
     <Folder Include="FileManager\Views\Controls\" />
-    <Folder Include="Objects\AutoUI\" />
     <Folder Include="Resources\" />
     <Folder Include="Templates\AutoUI\" />
   </ItemGroup>

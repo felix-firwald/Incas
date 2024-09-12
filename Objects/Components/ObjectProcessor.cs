@@ -30,7 +30,7 @@ namespace Incas.Objects.Components
             request.Append($" [{IdField}] TEXT UNIQUE, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, ");
             foreach (Incas.Objects.Models.Field f in cl.GetClassData().fields)
             {
-                request.Append($"[{f.Guid}] TEXT,\n");
+                request.Append($"[{f.Id}] TEXT,\n");
             }
             request.Append($"[{CommentField}] TEXT, [{MetaField}] TEXT\n)");
             q.AddCustomRequest(request.ToString());
@@ -67,7 +67,7 @@ namespace Incas.Objects.Components
             List<string> classFields = new();
             foreach (Models.Field f in cl.GetClassData().fields)
             {
-                classFields.Add(f.Guid.ToString());
+                classFields.Add(f.Id.ToString());
             }
             List<string> missingFields = (List<string>)classFields.Except(mapFields); // отсутствующие поля
             List<string> excessFields = (List<string>)mapFields.Except(classFields); // лишние поля

@@ -57,7 +57,6 @@ namespace Incas.Core.Views.Windows
                     }
                     else
                     {
-                        //ProgramState.SetSectorByUser(ProgramState.CurrentUser);
                         ProgramState.OpenSession();
                         ServerProcessor.Listen();
                         DialogsManager.ShowWaitCursor(false);

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Incas.Core.Models
 {
@@ -13,6 +14,7 @@ namespace Incas.Core.Models
         CONSTANT,
         ENUMERATION,
         USER_CLIPBOARD,
+        USER_TASKS,
         MISC
     }
     public class DBParamNotFound : Exception
@@ -23,7 +25,7 @@ namespace Incas.Core.Models
 
     internal class Parameter : Model
     {
-        public int id { get; private set; }
+        public Guid id { get; private set; }
         public ParameterType type { get; set; }
         public string name { get; set; }
         public string value { get; set; }
@@ -60,7 +62,7 @@ namespace Incas.Core.Models
             this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
             return this;
         }
-        public Parameter GetParameter(long id)
+        public Parameter GetParameter(Guid id)
         {
             DataRow dr = this.StartCommandToService()
                         .Select()
@@ -70,7 +72,7 @@ namespace Incas.Core.Models
             this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
             return this;
         }
-        public void UpdateParameter(long id)
+        public void UpdateParameter(Guid id)
         {
             this.StartCommandToService()
                 .Update("name", this.name)
@@ -84,6 +86,14 @@ namespace Incas.Core.Models
                 .Select("[id] AS [Идентификатор], [name] AS [Наименование константы], [value] AS [Значение константы]")
                 .WhereEqual("type", ParameterType.CONSTANT.ToString())
                 .Execute();
+        }
+        public Dictionary<Guid, string> GetConstantsDictionary()
+        {
+            return this.StartCommandToService()
+                .Select("[id] AS [Идентификатор], [name] AS [Наименование константы], [value] AS [Значение константы]")
+                .WhereEqual("type", ParameterType.CONSTANT.ToString())
+                .Execute().AsEnumerable().ToDictionary<DataRow, Guid, string>(row => row.Field<Guid>(0),
+                                row => row.Field<string>(1));
         }
         public List<string> GetConstantsList()
         {
@@ -167,7 +177,7 @@ namespace Incas.Core.Models
             }
             this.Serialize(dr);
             this.type = (ParameterType)Enum.Parse(typeof(ParameterType), dr["type"].ToString());
-            return this.id > 0;
+            return this.id != Guid.Empty;
         }
         public bool GetValueAsBool()
         {
@@ -180,9 +190,15 @@ namespace Incas.Core.Models
         }
         public Parameter CreateParameter()
         {
+            if (this.id != Guid.Empty)
+            {
+                return this.UpdateValue();
+            }
+            this.id = Guid.NewGuid();
             this.StartCommandToService()
                 .Insert(new Dictionary<string, string>
                     {
+                        {"id", this.id.ToString()},
                         {"type", this.type.ToString()},
                         {"name", this.name},
                         {"value", this.value}
@@ -208,7 +224,7 @@ namespace Incas.Core.Models
                 .ExecuteVoid();
             return this;
         }
-        public void RemoveParameterById(long id)
+        public void RemoveParameterById(Guid id)
         {
             this.StartCommandToService().Delete().WhereEqual("id", id.ToString()).ExecuteVoid();
         }

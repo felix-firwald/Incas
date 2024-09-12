@@ -12,7 +12,7 @@ namespace Incas.Core.Classes
         {
             this.Pairs = pairs;
         }
-        public Dictionary<object, string> Pairs { get; private set; }
+        public Dictionary<object, string> Pairs { get; set; }
         public List<string> VisibleItems
         {
             get

@@ -14,7 +14,7 @@ namespace Incas
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            if (DateTime.Now > DateTime.Parse("21.10.2024"))
+            if (DateTime.Now > DateTime.Parse("21.11.2024"))
             {
                 DialogsManager.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");
                 App.Current.Shutdown();

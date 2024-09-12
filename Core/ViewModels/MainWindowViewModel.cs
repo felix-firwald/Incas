@@ -23,6 +23,7 @@ namespace Incas.Core.ViewModels
         private void SetCommands()
         {
             this.OpenClipBoard = new Command(this.DoOpenClipBoard);
+            this.OpenTasks = new Command(this.DoOpenTasks);
             this.CopyFile = new Command(this.DoCopyFile);
             this.OpenFile = new Command(this.DoOpenFile);
             this.OpenWeb = new Command(this.DoOpenWeb);
@@ -30,6 +31,7 @@ namespace Incas.Core.ViewModels
 
         #region ICommands
         public ICommand OpenClipBoard { get; private set; }
+        public ICommand OpenTasks { get; private set; }
         public ICommand CopyFile { get; private set; }
         public ICommand OpenFile { get; private set; }
         public ICommand OpenWeb { get; private set; }
@@ -40,6 +42,10 @@ namespace Incas.Core.ViewModels
         public void DoOpenClipBoard(object parameter)
         {
             DialogsManager.ShowClipboardManager();
+        }
+        public void DoOpenTasks(object parameter)
+        {
+            DialogsManager.ShowTasksManager();
         }
         public void DoCopyFile(object parameter)
         {

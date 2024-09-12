@@ -27,10 +27,6 @@ namespace Incas.Admin.Views.Pages
             //this.FillEnumerations();
         }
 
-        private void SaveClick(object sender, RoutedEventArgs e)
-        {
-            this.vm.SaveParameters();
-        }
         private void FillConstants()
         {
             using (Parameter p = new())
@@ -63,7 +59,7 @@ namespace Incas.Admin.Views.Pages
                 {
                     return;
                 }
-                long id = (long)((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Идентификатор"];
+                Guid id = Guid.Parse(((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Идентификатор"].ToString());
                 ParameterConstant c = new();
                 using (Parameter p = new())
                 {
@@ -99,7 +95,7 @@ namespace Incas.Admin.Views.Pages
                 {
                     return;
                 }
-                long id = (long)((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Идентификатор"];
+                Guid id = Guid.Parse(((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Идентификатор"].ToString());
                 using (Parameter p = new())
                 {
                     p.RemoveParameterById(id);
@@ -148,7 +144,7 @@ namespace Incas.Admin.Views.Pages
                 {
                     return;
                 }
-                long id = (long)((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"];
+                Guid id = Guid.Parse(((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"].ToString());
                 using (Parameter p = new())
                 {
                     p.RemoveParameterById(id);
@@ -173,7 +169,7 @@ namespace Incas.Admin.Views.Pages
                 {
                     return;
                 }
-                long id = (long)((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"];
+                Guid id = Guid.Parse(((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"].ToString());
                 ParameterEnum en = new();
                 using (Parameter p = new())
                 {

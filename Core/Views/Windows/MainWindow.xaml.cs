@@ -14,6 +14,7 @@ using Avalonia.Controls.Chrome;
 using System.Media;
 using Incas.Core.AutoUI;
 using Incas.Objects.Components;
+using Incas.Objects.AutoUI;
 
 namespace Incas.Core.Views.Windows
 {
@@ -25,6 +26,8 @@ namespace Incas.Core.Views.Windows
         private MainWindowViewModel vm;
         public MainWindow()
         {
+            //GlobalConstantFieldSettings gc = new();
+            //DialogsManager.ShowSimpleFormDialog(gc, "Проверка");
             this.InitializeComponent();
             if (!ProgramState.CheckSensitive())
             {
@@ -97,7 +100,7 @@ namespace Incas.Core.Views.Windows
                     this.vm.DoOpenClipBoard("");
                     break;
                 case Key.F2:
-                    this.vm.DoCopyFile("");
+                    this.vm.DoOpenTasks("");
                     break;
                 case Key.F3:
                     this.vm.DoOpenFile("Pdf");
