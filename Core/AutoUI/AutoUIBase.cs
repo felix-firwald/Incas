@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Incas.Core.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace Incas.Core.AutoUI
 {
     public abstract class AutoUIBase
     {
-
+        public void ShowDialog(string title, Icon icon)
+        {
+            DialogsManager.ShowSimpleFormDialog(this, title, icon);
+        }
     }
 }

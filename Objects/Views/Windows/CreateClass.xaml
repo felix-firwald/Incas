@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Objects.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:classes="clr-namespace:Incas.Objects.Views.Controls" xmlns:classField="clr-namespace:Incas.Objects.Models"
         mc:Ignorable="d"
-        Title="Создать класс" Height="650" Width="800" WindowStartupLocation="CenterScreen" Style="{StaticResource WindowBase}">
+        Title="Создать класс" Height="650" Width="900" MinHeight="650" MinWidth="850" WindowStartupLocation="CenterScreen" Style="{StaticResource WindowBase}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>

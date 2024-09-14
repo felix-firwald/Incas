@@ -3,6 +3,7 @@ using Incas.Core.Classes;
 using Incas.Core.AutoUI;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using Incas.Objects.Models;
 
 namespace Incas.Objects.AutoUI
 {
@@ -19,8 +20,19 @@ namespace Incas.Objects.AutoUI
         public string Text { get; set; }
         #endregion
 
-        #region Functionality
+        public TextBigFieldSettings(Incas.Objects.Models.Field field)
+        {
+            this.Source = field;
+            this.GetBaseData();
+            this.Text = field.Value;
+        }
 
+        #region Functionality
+        public void Save()
+        {
+            this.SaveBaseData();
+            this.Source.Value = this.Text;
+        }
         #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
@@ -16,8 +17,26 @@ namespace Incas.Objects.AutoUI
         public List<string> Values { get; set; }
         #endregion
 
-        #region Functionality
+        public LocalEnumerationFieldSettings(Incas.Objects.Models.Field field)
+        {
+            this.Source = field;
+            this.GetBaseData();
+            try
+            {
+                this.Values = JsonConvert.DeserializeObject<List<string>>(field.Value);
+            }
+            catch
+            {
+                this.Values = new();
+            }
+        }
 
+        #region Functionality
+        public void Save()
+        {
+            this.SaveBaseData();
+            this.Source.Value = JsonConvert.SerializeObject(this.Values);
+        }
         #endregion
     }
 }

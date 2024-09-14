@@ -12,13 +12,24 @@ namespace Incas.Objects.AutoUI
     public class ConstantFieldSettings : AutoUIBase
     {
         #region Data
+        private Incas.Objects.Models.Field Source;
+
         [Description("Значение константы")]
         [MaxLength(1200)]
         public string Text { get; set; }
         #endregion
 
-        #region Functionality
+        public ConstantFieldSettings(Incas.Objects.Models.Field field)
+        {
+            this.Source = field;
+            this.Text = field.Value;
+        }
 
+        #region Functionality
+        public void Save()
+        {
+            this.Source.Value = this.Text;
+        }
         #endregion
     }
 }

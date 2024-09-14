@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using Incas.Objects.Components;
+using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
 {
@@ -20,8 +22,35 @@ namespace Incas.Objects.AutoUI
         public int MaxValue { get; set; }
         #endregion
 
-        #region Functionality
+        public NumberFieldSettings(Incas.Objects.Models.Field field)
+        {
+            this.Source = field;
+            this.GetBaseData();
+            try
+            {
+                NumberFieldData nf = JsonConvert.DeserializeObject<NumberFieldData>(field.Value);
+                this.MinValue = nf.MinValue;
+                this.DefaultValue = nf.DefaultValue;
+                this.MaxValue = nf.MaxValue;
+            }
+            catch
+            {
 
+            }
+        }
+
+        #region Functionality
+        public void Save()
+        {
+            this.SaveBaseData();
+            NumberFieldData nf = new()
+            {
+                MinValue = this.MinValue,
+                MaxValue = this.MaxValue,
+                DefaultValue = this.DefaultValue
+            };
+            this.Source.Value = JsonConvert.SerializeObject(nf);
+        }
         #endregion
     }
 }

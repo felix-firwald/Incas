@@ -32,13 +32,21 @@ namespace Incas.Core.Classes
                 return "";
             }
         }
-        public void SetSelection(string selection)
+        public void SetSelectionByValue(string selection)
         {
+
             this.SelectedObject = this.Pairs.FirstOrDefault(x => x.Value == selection).Key;
         }
         public void SetSelection(object selection)
         {
-            this.SelectedObject = selection;
+            foreach (object item in this.Pairs)
+            {
+                if (item == selection)
+                {
+                    this.SelectedObject = selection;
+                    break;
+                } 
+            }            
         }
     }
 }

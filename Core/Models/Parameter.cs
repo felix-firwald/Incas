@@ -89,11 +89,29 @@ namespace Incas.Core.Models
         }
         public Dictionary<Guid, string> GetConstantsDictionary()
         {
-            return this.StartCommandToService()
-                .Select("[id] AS [Идентификатор], [name] AS [Наименование константы], [value] AS [Значение константы]")
+            Dictionary<Guid, string> result = new();
+            DataTable dt = this.StartCommandToService()
+                .Select("[id], [name]")
                 .WhereEqual("type", ParameterType.CONSTANT.ToString())
-                .Execute().AsEnumerable().ToDictionary<DataRow, Guid, string>(row => row.Field<Guid>(0),
-                                row => row.Field<string>(1));
+                .Execute();
+            foreach (DataRow dr in dt.Rows)
+            {
+                result.Add(Guid.Parse(dr["id"].ToString()), dr["name"].ToString());
+            }
+            return result;
+        }
+        public Dictionary<Guid, string> GetEnumerationsDictionary()
+        {
+            Dictionary<Guid, string> result = new();
+            DataTable dt = this.StartCommandToService()
+                .Select("[id], [name]")
+                .WhereEqual("type", ParameterType.ENUMERATION.ToString())
+                .Execute();
+            foreach (DataRow dr in dt.Rows)
+            {
+                result.Add(Guid.Parse(dr["id"].ToString()), dr["name"].ToString());
+            }
+            return result;
         }
         public List<string> GetConstantsList()
         {

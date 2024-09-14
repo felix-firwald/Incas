@@ -3,6 +3,7 @@ using Incas.Core.Classes;
 using Incas.Core.AutoUI;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Incas.Objects.Models;
 
 namespace Incas.Objects.AutoUI
 {
@@ -14,6 +15,8 @@ namespace Incas.Objects.AutoUI
     public class BaseFieldSettings : AutoUIBase
     {
         #region Data
+        protected Incas.Objects.Models.Field Source;
+
         [MaxLength(200)]
         [Description("Описание поля (для форм)")]
         public string Description { get; set; }
@@ -25,7 +28,16 @@ namespace Incas.Objects.AutoUI
         #endregion
 
         #region Functionality
-
+        protected void GetBaseData()
+        {
+            this.NotNull = this.Source.NotNull;
+            this.Description = this.Source.Description;
+        }
+        protected void SaveBaseData()
+        {
+            this.Source.NotNull = this.NotNull;
+            this.Source.Description = this.Description;
+        }
         #endregion
     }
 }

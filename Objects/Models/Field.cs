@@ -17,6 +17,7 @@ namespace Incas.Objects.Models
         public TagType Type { get; set; }
         public string Value { get; set; }
         public int OrderNumber { get; set; }
+        public bool NotNull { get; set; }
         public string Description { get; set; }
         public string Command { get; set; }
         public void SetId()

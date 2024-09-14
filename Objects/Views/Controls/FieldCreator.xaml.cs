@@ -1,6 +1,8 @@
-﻿using Incas.Objects.Models;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Incas.Core.Classes;
+using Incas.Objects.AutoUI;
+using Incas.Objects.Models;
 using Incas.Objects.ViewModels;
-using Incubator_2.Forms;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,7 +16,7 @@ namespace Incas.Objects.Views.Controls
         public delegate void FieldAction(FieldCreator t);
         public event FieldAction onDelete;
         public FieldViewModel vm;
-        public FieldCreator(Field data = null)
+        public FieldCreator(Incas.Objects.Models.Field data = null)
         {
             this.InitializeComponent();
             if (data == null)
@@ -47,12 +49,12 @@ namespace Incas.Objects.Views.Controls
 
         private void UpClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
+            this.vm.IncrementOrder();
         }
 
         private void DownClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
+            this.vm.DecrementOrder();
         }
 
         private void EditScriptClick(object sender, RoutedEventArgs e)
@@ -65,19 +67,46 @@ namespace Incas.Objects.Views.Controls
 
         }
 
-        private void ClearClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void AddVirtualTagClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
-
+            Incas.Objects.Models.Field f = this.vm.Source;
+            switch (f.Type)
+            {
+                case Templates.Components.TagType.Variable:
+                    TextFieldSettings tf = new(f);
+                    tf.ShowDialog("Настройки поля", Icon.Sliders);
+                    break;
+                case Templates.Components.TagType.Text:
+                    TextBigFieldSettings tb = new(f);
+                    tb.ShowDialog("Настройки поля", Icon.Sliders);
+                    break;
+                case Templates.Components.TagType.Number:
+                    NumberFieldSettings n = new(f);
+                    n.ShowDialog("Настройки поля", Icon.Sliders);
+                    break;
+                case Templates.Components.TagType.Relation:
+                    break;
+                case Templates.Components.TagType.LocalEnumeration:
+                    LocalEnumerationFieldSettings le = new(f);
+                    le.ShowDialog("Настройки поля", Icon.Sliders);
+                    break;
+                case Templates.Components.TagType.GlobalEnumeration:
+                    GlobalEnumerationFieldSettings ge = new(f);
+                    ge.ShowDialog("Настройки поля", Icon.Sliders);
+                    break;
+                case Templates.Components.TagType.LocalConstant:
+                    break;
+                case Templates.Components.TagType.GlobalConstant:
+                    GlobalConstantFieldSettings gc = new(f);
+                    gc.ShowDialog("Настройки поля", Icon.Sliders);
+                    break;
+                case Templates.Components.TagType.HiddenField:
+                    break;
+                case Templates.Components.TagType.Date:
+                    break;
+                case Templates.Components.TagType.Generator:
+                    break;
+            }
         }
     }
 }
