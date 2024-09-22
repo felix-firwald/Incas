@@ -1,5 +1,7 @@
 ﻿using Incas.Core.AutoUI;
 using Incas.Core.Classes;
+using Incas.Objects.Components;
+using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 
@@ -10,10 +12,9 @@ namespace Incas.Objects.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class DateFieldSettings : AutoUIBase
+    public class DateFieldSettings : BaseFieldSettings
     {
         #region Data
-        private Incas.Objects.Models.Field Source;
 
         [Description("Выбор форматирования даты из списка")]
         public ComboSelector Format { get; set; }
@@ -28,25 +29,35 @@ namespace Incas.Objects.AutoUI
         public DateFieldSettings(Incas.Objects.Models.Field field)
         {
             this.Source = field;
-            this.Format.Pairs = new()
+            this.GetBaseData();
+            this.Format = new(new());
+            this.Format.Pairs.Add(DateFormats.Usual, "01.01.2001");
+            this.Format.Pairs.Add(DateFormats.Full, "01 января 2001");
+            this.Format.Pairs.Add(DateFormats.FullWithQuotes, "«01» января 2001");
+            try
             {
-                {
-                    "dd.MM.yyyy", "01.01.2001"
-                },
-                {
-                    "dd/MM/yyyy", "01/01/2001"
-                },
-                {
-                    "dd MMMM yyyy", "01 января 2001"
-                },
-            };
-            this.Format.SetSelection(field.Value);
+                DateFieldData df = JsonConvert.DeserializeObject<DateFieldData>(field.Value);
+                this.StartDate = df.StartDate;
+                this.EndDate = df.EndDate;
+                this.Format.SetSelection(df.Format);
+            }
+            catch
+            {
+
+            }         
         }
 
         #region Functionality
         public void Save()
         {
-
+            this.SaveBaseData();
+            DateFieldData df = new()
+            {
+                StartDate = this.StartDate,
+                EndDate = this.EndDate,
+                Format = (DateFormats)this.Format.SelectedObject
+            };
+            this.Source.Value = JsonConvert.SerializeObject(df);
         }
         #endregion
     }

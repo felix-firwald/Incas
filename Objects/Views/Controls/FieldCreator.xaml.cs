@@ -3,6 +3,7 @@ using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Models;
 using Incas.Objects.ViewModels;
+using Newtonsoft.Json;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -70,39 +71,44 @@ namespace Incas.Objects.Views.Controls
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
             Incas.Objects.Models.Field f = this.vm.Source;
+            string name = $"Настройки поля ({f.Name})";
             switch (f.Type)
             {
                 case Templates.Components.TagType.Variable:
                     TextFieldSettings tf = new(f);
-                    tf.ShowDialog("Настройки поля", Icon.Sliders);
+                    tf.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.Text:
                     TextBigFieldSettings tb = new(f);
-                    tb.ShowDialog("Настройки поля", Icon.Sliders);
+                    tb.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.Number:
                     NumberFieldSettings n = new(f);
-                    n.ShowDialog("Настройки поля", Icon.Sliders);
+                    n.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.Relation:
+                    Objects.Components.BindingData db = DialogsManager.ShowBindingDialog(f.Value);
+                    f.Value = JsonConvert.SerializeObject(db);
                     break;
                 case Templates.Components.TagType.LocalEnumeration:
                     LocalEnumerationFieldSettings le = new(f);
-                    le.ShowDialog("Настройки поля", Icon.Sliders);
+                    le.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.GlobalEnumeration:
                     GlobalEnumerationFieldSettings ge = new(f);
-                    ge.ShowDialog("Настройки поля", Icon.Sliders);
+                    ge.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.LocalConstant:
                     break;
                 case Templates.Components.TagType.GlobalConstant:
                     GlobalConstantFieldSettings gc = new(f);
-                    gc.ShowDialog("Настройки поля", Icon.Sliders);
+                    gc.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.HiddenField:
                     break;
                 case Templates.Components.TagType.Date:
+                    DateFieldSettings dt = new(f);
+                    dt.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.Generator:
                     break;

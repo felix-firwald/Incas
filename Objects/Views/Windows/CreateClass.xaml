@@ -25,7 +25,7 @@
                 <RowDefinition Height="40"/>
                 <!--кнопка создания файла или печати-->
             </Grid.RowDefinitions>
-            <TextBox x:Name="category" Style="{DynamicResource TextBoxMain}" Text="{Binding Category}" IsEnabled="{Binding CategoryEnabled}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Категория" Margin="5,0,5,0" Grid.Row="0" MaxLength="25">
+            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding CategoryOfClass}" IsEnabled="{Binding CategoryEnabled}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Категория" Margin="5,0,5,0" Grid.Row="0" MaxLength="25">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -33,7 +33,7 @@
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
-            <TextBox x:Name="nameOfTemplate" Style="{DynamicResource TextBoxMain}" Text="{Binding NameOfTemplate}" MinWidth="200" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Имя класса" Margin="5,0,5,0" Grid.Row="0" Grid.Column="1" MaxLength="50">
+            <TextBox Style="{DynamicResource TextBoxMain}" Text="{Binding NameOfClass}" MinWidth="200" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalContentAlignment="Left" Tag="Имя класса" Margin="5,0,5,0" Grid.Row="0" Grid.Column="1" MaxLength="50">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -42,7 +42,7 @@
                 </TextBox.ContextMenu>
             </TextBox>
 
-            <Border Grid.Row="0" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8" Grid.RowSpan="2">
+            <Border Grid.Row="0" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8" Grid.RowSpan="3">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить поле" MouseDown="AddFieldClick" />
                     <fa:FontAwesome x:Name="FindInFileButton" Style="{DynamicResource IconButton}" Icon="SearchPlus" ToolTip="Обнаружить поля в выбранном файле"  />
@@ -141,14 +141,14 @@
                 </StackPanel>
             </Border>
             
-            <Border Grid.Row="1" CornerRadius="8" Margin="5" Background="{StaticResource Black}" Grid.Column="1" ScrollViewer.CanContentScroll="True">
+            <Border Grid.Row="1" CornerRadius="8" Margin="5" Background="{StaticResource Black}" Grid.Column="1" ScrollViewer.CanContentScroll="True" Grid.RowSpan="2">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <StackPanel x:Name="ContentPanel">
                         
                     </StackPanel>
                 </ScrollViewer>
             </Border>
-            <Button Style="{StaticResource ButtonMain}" Grid.Row="3" Content="Сохранить класс" Margin="5,5,5,5" Grid.ColumnSpan="3"/>
+            <Button Style="{StaticResource ButtonMain}" Grid.Row="3" Content="Сохранить класс" Margin="5,5,5,5" Click="SaveClick" />
         </Grid>
     </Grid>
 </Window>

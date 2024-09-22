@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incas.Core.Classes
 {
@@ -34,19 +31,28 @@ namespace Incas.Core.Classes
         }
         public void SetSelectionByValue(string selection)
         {
-
             this.SelectedObject = this.Pairs.FirstOrDefault(x => x.Value == selection).Key;
         }
+        /// <summary>
+        /// НЕ РАБОТАЕТ!
+        /// </summary>
+        /// <param name="selection"></param>
         public void SetSelection(object selection)
         {
-            foreach (object item in this.Pairs)
-            {
-                if (item == selection)
-                {
-                    this.SelectedObject = selection;
-                    break;
-                } 
-            }            
+            this.SelectedObject = selection;
+            //foreach (KeyValuePair<object, string> item in this.Pairs)
+            //{
+            //    if (item.Key == selection)
+            //    {
+            //        this.SelectedObject = selection;
+            //        return;
+            //    } 
+            //}
+            //DialogsManager.ShowInfoDialog("Не найдено!");
+        }
+        public void SetSelectionByIndex(int index)
+        {
+            this.SelectedObject = this.Pairs.Keys.ElementAt(index);
         }
     }
 }

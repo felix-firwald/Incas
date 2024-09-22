@@ -185,6 +185,10 @@ namespace Incas.Core.Classes
         }
         private Control GenerateComboBox(string description, ComboSelector selector)
         {
+            //if (selector.SelectedValue is not null)
+            //{
+            //    DialogsManager.ShowInfoDialog(selector.SelectedValue);
+            //}
             ComboBox control = new()
             {
                 Tag = description,
@@ -192,6 +196,7 @@ namespace Incas.Core.Classes
                 SelectedValue = selector.SelectedValue,
                 Style = this.Container.FindResource("ComboBoxMain") as Style
             };
+            //DialogsManager.ShowInfoDialog(selector.SelectedObject);
             control.SelectionChanged += this.ComboBox_SelectionChanged;
             return control;
         }   
@@ -335,7 +340,7 @@ namespace Incas.Core.Classes
                                     DialogsManager.ShowExclamationDialog("Одно из полей не заполнено.", "Сохранение прервано");
                                     return false;
                                 }
-                                ((ComboSelector)field.GetValue(this.Result)).SetSelection(((ComboBox)control).SelectedValue.ToString());
+                                ((ComboSelector)field.GetValue(this.Result)).SetSelectionByIndex(((ComboBox)control).SelectedIndex);
                                 break;
                             default:
                                 if (field.PropertyType.Name.Contains("List"))

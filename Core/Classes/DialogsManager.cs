@@ -1,6 +1,8 @@
 ﻿using Incas.Core.AutoUI;
 using Incas.Core.Views.Windows;
 using Incas.Miniservices.Tasks.Views.Windows;
+using Incas.Objects.Components;
+using Incas.Objects.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Windows;
@@ -130,6 +132,20 @@ namespace Incas.Core.Classes
             DialogComboBox dc = new(elements, title, description);
             dc.ShowDialog();
             return dc.SelectedValue;
+        }
+        public static BindingData ShowBindingDialog(string data)
+        {
+            DialogBinding db = new(data);
+            db.ShowDialog();
+            if (db.Result == true)
+            {
+                return new()
+                {
+                    Class = db.SelectedClass,
+                    Field = db.SelectedField
+                };
+            }
+            return new();
         }
         public static void ShowDatabaseErrorDialog(string message, string title = "Ошибка при выполнении запроса")
         {

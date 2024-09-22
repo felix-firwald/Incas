@@ -81,8 +81,8 @@
                     <ComboBoxItem>
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
-                            <Label Content="Данные" Style="{DynamicResource LabelElement}" FontSize="11"/>
-                            <Label Content="Окно выбора записи из базы данных" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
+                            <Label Content="Объект" Style="{DynamicResource LabelElement}" FontSize="11"/>
+                            <Label Content="Окно выбора объекта из базы данных" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                         </StackPanel>
                     </ComboBoxItem>
                     <ComboBoxItem>

@@ -9,15 +9,41 @@ namespace Incas.Objects.ViewModels
 {
     internal class ClassViewModel : BaseViewModel
     {
-        private Class source;
+        public ClassData SourceData { get; set; }
+        public Class Source;
         public ClassViewModel(Class source)
         {
-            this.source = source;
-            if (this.source.data == null)
+            this.Source = source;
+            this.SourceData = this.Source.GetClassData();
+        }
+        public string NameOfClass
+        {
+            get
             {
-                //this.source.GetClassData = new();
-                //this.source.data.fields = new();
+                return this.Source.name;
             }
+            set
+            {
+                this.Source.name = value;
+                this.OnPropertyChanged(nameof(this.NameOfClass));
+            }
+        }
+        public string CategoryOfClass
+        {
+            get
+            {
+                return this.Source.category;
+            }
+            set
+            {
+                this.Source.category = value;
+                this.OnPropertyChanged(nameof(this.CategoryOfClass));
+            }
+        }
+        public void SetData(List<Field> fields)
+        {
+            this.SourceData.fields = fields;
+            this.Source.SetClassData(this.SourceData);
         }
     }
 }
