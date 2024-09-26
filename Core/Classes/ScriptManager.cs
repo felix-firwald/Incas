@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.CustomDatabases.Views.Windows;
+using Incas.Objects.Views.Windows;
 using Incas.Templates.Models;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;

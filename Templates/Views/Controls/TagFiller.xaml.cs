@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Models;
 using Incas.Core.Views.Controls;
+using Incas.Objects.Models;
 using Incas.Templates.Components;
 using Incas.Users.Models;
 using Incubator_2.Common;
@@ -27,7 +28,7 @@ namespace Incas.Templates.Views.Controls
     public enum FillerMode
     {
         Tag,
-        RecordField
+        Field
     }
     /// <summary>
     /// Логика взаимодействия для TagFiller.xaml
@@ -36,6 +37,7 @@ namespace Incas.Templates.Views.Controls
     {
         //public static Dictionary<TagType, >
         public readonly Tag tag;
+        public readonly Objects.Models.Field field;
         public FillerMode Mode;
         private bool isRequired = false;
         private bool validated = true;
@@ -53,23 +55,54 @@ namespace Incas.Templates.Views.Controls
             this.Mode = FillerMode.Tag;
             this.tag = t;
             this.MainLabel.Text = string.IsNullOrWhiteSpace(this.tag.visibleName) ? this.tag.name + ":" : this.tag.visibleName + ":";
-            this.GenerateUIControl();
+            this.GenerateUIControl(this.tag.type);
             this.MakeButton();
         }
-
-        private void GenerateUIControl()
+        public TagFiller(Objects.Models.Field f)
         {
-            switch (this.tag.type)
+            this.InitializeComponent();
+            this.Mode = FillerMode.Field;
+            this.field = f;
+            this.MainLabel.Text = string.IsNullOrWhiteSpace(this.field.VisibleName) ? this.field.Name + ":" : this.field.VisibleName + ":";
+            this.GenerateUIControl(this.field.Type);
+        }
+        private TagType GetFillerType()
+        {
+            switch (this.Mode)
+            {
+                case FillerMode.Field:
+                default:
+                    return this.field.Type;
+                case FillerMode.Tag:
+                    return this.tag.type;
+            }
+        }
+        private void GenerateUIControl(TagType type)
+        {
+            string value = "";
+            string description = "";
+            switch (this.Mode)
+            {
+                case FillerMode.Field:
+                    value = this.field.Value;
+                    description = this.field.Description;
+                    break;
+                case FillerMode.Tag:
+                    value = this.tag.value;
+                    description = this.tag.description;
+                    break;
+            }
+            switch (type)
             {
                 case TagType.Variable:
                 case TagType.Text:
                     TextBox textBox = new()
                     {
-                        Text = this.tag.value,
-                        Tag = this.tag.description
+                        Text = value,
+                        Tag = description
                     };
                     textBox.TextChanged += this.Textbox_TextChanged;
-                    if (this.tag.type == TagType.Variable)
+                    if (type == TagType.Variable)
                     {
                         textBox.Style = this.FindResource("TextBoxMain") as Style;
                         textBox.MaxLength = 120;
@@ -83,28 +116,27 @@ namespace Incas.Templates.Views.Controls
                     break;
                 case TagType.LocalEnumeration:
                 case TagType.GlobalEnumeration:
-                    if (this.tag.value is null)
+                    if (value is null)
                     {
-                        this.tag.value = "";
+                        value = "";
                     }
                     ComboBox comboBox = new()
-                    {
-                        
-                        ItemsSource = this.tag.type == TagType.LocalEnumeration? this.tag.value.Split(';') : ProgramState.GetEnumeration(this.tag.value),
+                    {                       
+                        ItemsSource = type == TagType.LocalEnumeration? value.Split(';') : ProgramState.GetEnumeration(value),
                         SelectedIndex = 0,
                         Style = this.FindResource("ComboBoxMain") as Style
                     };
                     comboBox.SelectionChanged += this.Combobox_SelectionChanged;
-                    if (!string.IsNullOrWhiteSpace(this.tag.description))
+                    if (!string.IsNullOrWhiteSpace(description))
                     {
-                        comboBox.ToolTip = this.tag.description;
+                        comboBox.ToolTip = description;
                     }
                     this.PlaceUIControl(comboBox);
                     break;
                 case TagType.Number:
                     NumericBox numeric = new();
                     numeric.OnNumberChanged += this.NumericBox_OnNumberChanged;
-                    numeric.ApplyMinAndMax(this.tag.value);
+                    numeric.ApplyMinAndMax(value);
                     this.PlaceUIControl(numeric);
                     break;
                 case TagType.LocalConstant:              
@@ -113,13 +145,21 @@ namespace Incas.Templates.Views.Controls
                     break;
                 case TagType.GlobalConstant:
                     this.Visibility = Visibility.Collapsed;
-                    this.tag.value = ProgramState.GetConstant(this.tag.value);
+                    switch (this.Mode)
+                    {
+                        case FillerMode.Field:
+                            this.field.Value = ProgramState.GetConstant(value);
+                            break;
+                        case FillerMode.Tag:
+                            this.tag.value = ProgramState.GetConstant(value);
+                            break;
+                    }                  
                     break;
                 case TagType.Relation:
                     SelectionBox selectionBox = new()
                     {
-                        Source = this.tag.value,
-                        ToolTip = this.tag.description
+                        Source = value,
+                        ToolTip = description
                     };
                     selectionBox.OnValueChanged += this.SelectionBox_OnValueChanged;
                     this.PlaceUIControl(selectionBox);
@@ -127,7 +167,7 @@ namespace Incas.Templates.Views.Controls
                 case TagType.Date:
                     DatePicker picker = new()
                     {
-                        ToolTip = this.tag.description,
+                        ToolTip = description,
                         Style = this.FindResource("DatePickerMain") as Style
                     };
                     picker.SelectedDateChanged += this.DatePicker_SelectedDateChanged;
@@ -136,8 +176,8 @@ namespace Incas.Templates.Views.Controls
                 case TagType.Generator:
                 case TagType.Macrogenerator:
                     Guid num = Guid.Empty;
-                    Guid.TryParse(this.tag.value, out num);
-                    Generator generator = new(this.tag.type)
+                    Guid.TryParse(value, out num);
+                    Generator generator = new(type)
                     {
                         TemplateId = num
                     };
@@ -171,25 +211,10 @@ namespace Incas.Templates.Views.Controls
             this.validated = false;
             this.MainLabel.Foreground = this.FindResource("Error") as SolidColorBrush;
         }
-        public TagFiller(FieldCreator fc, string path)
-        {
-            this.InitializeComponent();
-            this.tag = new();
-            this.Mode = FillerMode.RecordField;
-            this.tag.name = fc.Name;
-            this.MainLabel.Text = this.tag.name + ":";
-            this.isRequired = fc.NotNULL;
-            this.tag.type = TagType.Text;           
-            if (fc.FKtable != null)
-            {
-                this.tag.type = TagType.Relation;
-            }
-            this.GenerateUIControl();
-        }
 
         public void SetValue(string value)
         {
-            switch (this.tag.type)
+            switch (this.GetFillerType())
             {
                 case TagType.Variable:
                 case TagType.Text:
@@ -280,8 +305,7 @@ namespace Incas.Templates.Views.Controls
         }
         public string GetValue()
         {
-
-            switch (this.tag.type)
+            switch (this.GetFillerType())
             {
                 case TagType.Variable:
                 default:
@@ -311,7 +335,7 @@ namespace Incas.Templates.Views.Controls
         }
         public string GetData()
         {
-            switch (this.tag.type)
+            switch (this.GetFillerType())
             {
                 case TagType.Generator:
                 case TagType.Macrogenerator:

@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.CustomDatabases.Views.Windows;
+using Incas.Objects.Views.Windows;
 using System;
 using System.Data;
 using System.Linq;

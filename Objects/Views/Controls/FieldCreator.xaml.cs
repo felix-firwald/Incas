@@ -99,12 +99,16 @@ namespace Incas.Objects.Views.Controls
                     ge.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.LocalConstant:
+                    ConstantFieldSettings cf = new(f);
+                    cf.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.GlobalConstant:
                     GlobalConstantFieldSettings gc = new(f);
                     gc.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.HiddenField:
+                    ConstantFieldSettings hf = new(f);
+                    hf.ShowDialog(name, Icon.Sliders);
                     break;
                 case Templates.Components.TagType.Date:
                     DateFieldSettings dt = new(f);

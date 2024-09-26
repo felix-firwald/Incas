@@ -27,6 +27,7 @@ namespace Incas.Templates.Views.Controls
     {
         private TableFillerViewModel vm;
         public Tag tag;
+        public Objects.Models.Field field;
         private CommandSettings command;
         public DataTable DataTable => this.vm.Grid;
         public TableFiller(Tag t)
@@ -36,6 +37,15 @@ namespace Incas.Templates.Views.Controls
             this.vm = new TableFillerViewModel(t);
             this.DataContext = this.vm;
             this.command = t.GetCommand();
+            this.MakeButton();
+            this.MakeFields();
+        }
+        public TableFiller(Objects.Models.Field f)
+        {
+            this.InitializeComponent();
+            this.field = f;
+            this.vm = new TableFillerViewModel(f);
+            this.DataContext = this.vm;
             this.MakeButton();
             this.MakeFields();
         }

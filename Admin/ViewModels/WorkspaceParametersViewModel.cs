@@ -5,6 +5,8 @@ using Incas.Users.Models;
 using Mono.Unix;
 using System.Data;
 using System.Collections.Generic;
+using Incas.Objects.Models;
+using System;
 
 namespace Incas.Admin.ViewModels
 {
@@ -83,6 +85,30 @@ namespace Incas.Admin.ViewModels
                 return result;
             }
         }
+        public DataTable Classes
+        {
+            get
+            {
+                using (Class cl = new())
+                {
+                    return cl.GetAllClassesAsDataTable();
+                }
+            }
+        }
+        //private DataRow selectedRow;
+        //public DataRow SelectedClass
+        //{
+        //    get
+        //    {
+        //        return this.selectedRow;
+        //    }
+        //    set
+        //    {
+        //        this.selectedRow = value;
+        //        this.OnPropertyChanged(nameof(this.SelectedClass));
+        //    }
+        //}
+
         public void UpdateConstants()
         {
             this.OnPropertyChanged(nameof(this.Constants));

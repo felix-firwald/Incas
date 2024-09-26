@@ -167,20 +167,6 @@ namespace Incas.Templates.Views.Pages
                     }
                 }
             }
-            switch (record.status)
-            {
-                case DocumentStatus.Approved:
-                    this.Number.IsEnabled = false;
-                    break;
-                case DocumentStatus.Printed:
-                    this.Number.IsEnabled = false;
-                    break;
-                case DocumentStatus.Done:
-                    this.ContentPanel.IsEnabled = false;
-                    this.Filename.IsEnabled = false;
-                    this.Number.IsEnabled = false;
-                    break;
-            }
         }
         public void ApplyFromExcel(Dictionary<string, string> pairs)
         {
@@ -351,7 +337,7 @@ namespace Incas.Templates.Views.Pages
                 this.Filename.Text = result;
             }
         }
-        public bool CreateFile(string newPath, string category, bool async = true, bool save = true)
+        public bool CreateFile(string newPath, bool async = true, bool save = true)
         {
             try
             {
@@ -390,19 +376,6 @@ namespace Incas.Templates.Views.Pages
                             });
                             break;
                     }
-                    //if (save)
-                    //{
-                    //    using GeneratedDocument doc = new();
-                    //    doc.id = this.document.id;
-                    //    doc.number = this.Number.Text;
-                    //    doc.fullNumber = this.GetNumber();
-                    //    doc.status = this.document.status;
-                    //    doc.fileName = this.Filename.Text;
-                    //    doc.template = this.template.id;
-                    //    doc.templateName = category;
-                    //    doc.SaveFilledTags(filledTags);
-                    //    doc.AddRecord();
-                    //}
                     return true;
                 }
                 return false;
@@ -505,18 +478,8 @@ namespace Incas.Templates.Views.Pages
 
         private void OpenFileClick(object sender, MouseButtonEventArgs e)
         {
-            if (this.document.status == DocumentStatus.Done)
-            {
-                DialogsManager.ShowAccessErrorDialog("Функция генерации документа недоступна, пока он находится в статусе \"Завершен\".");
-                return;
-            }
-            if (this.templateSettings.RequiresSave)
-            {
-                DialogsManager.ShowExclamationDialog("Этот тип документа требует сохранения в историю, для создания файла используйте кнопку \"Создать файлы по шаблону\".", "Генерация прервана");
-                return;
-            }
             DialogsManager.ShowWaitCursor();
-            this.CreateFile(ProgramState.TemplatesRuntime, "", false, false);
+            this.CreateFile(ProgramState.TemplatesRuntime, false, false);
             string filename;
             switch (this.template.type)
             {

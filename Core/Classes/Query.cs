@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Text;
 using System.Threading;
 using static IronPython.Modules._ast;
 
@@ -30,15 +31,19 @@ namespace Incas.Core.Classes
             this.Table = table;
             this.DBPath = path;
         }
+        private string Resolve(string paramName)
+        {
+            return paramName.Replace("-", "_");
+        }
         private void RegisterParameter(string name, string value)
         {
             if (name.Contains("@"))
             {
-                this.parameters.Add(name, value);
+                this.parameters.Add(this.Resolve(name), value);
             }
             else
             {
-                this.parameters.Add("@" + name, value);
+                this.parameters.Add("@" + this.Resolve(name), value);
             }
         }
         private void RegisterParameters(Dictionary<string, string> pairs)
@@ -137,7 +142,24 @@ namespace Incas.Core.Classes
             {
                 start = "INSERT OR REPLACE INTO";
             }
-            this.Result += $"{start} [{this.Table}] ([{string.Join("], [", dict.Keys)}])\nVALUES (@{string.Join(", @", dict.Keys)})";
+            this.Result += $"{start} [{this.Table}] (\"{string.Join("\", \"", dict.Keys)}\")\nVALUES (@{string.Join(", @", dict.Keys)})";
+            this.RegisterParameters(dict);
+            this.ReplaceNull();
+            return this;
+        }
+        public Query InsertWithGuids(Dictionary<string, string> dict, bool replace = false)
+        {
+            string start = "INSERT INTO";
+            if (replace)
+            {
+                start = "INSERT OR REPLACE INTO";
+            }
+            List<string> paramNames = new();
+            foreach (KeyValuePair<string, string> kvp in dict)
+            {
+                paramNames.Add(this.Resolve(kvp.Key));
+            }
+            this.Result += $"{start} [{this.Table}] (\"{string.Join("\", \"", dict.Keys)}\")\nVALUES (@{string.Join(", @", paramNames)})";
             this.RegisterParameters(dict);
             this.ReplaceNull();
             return this;
@@ -152,10 +174,23 @@ namespace Incas.Core.Classes
             else
             {
                 this.Result += $"UPDATE [{this.Table}]\n" +
-                $"SET [{cell}] = @{cell}";
+                $"SET [{cell}] = @{this.Resolve(cell)}";
                 this.isUpdateAlready = true;
             }
             this.RegisterParameter(cell, value);
+            return this;
+        }
+        public Query Update(Dictionary<string, string> dict)
+        {
+            this.Result += $"UPDATE [{this.Table}]\n" +
+            $"SET ";
+            List<string> result = new();
+            foreach (KeyValuePair<string, string> kvp in dict)
+            {
+                result.Add("[" + kvp.Key + "] = @" + this.Resolve(kvp.Key));
+                this.RegisterParameter(kvp.Key, kvp.Value);
+            }
+            this.Result += string.Join(", ", result);
             return this;
         }
         public Query Delete()
@@ -202,7 +237,6 @@ namespace Incas.Core.Classes
                 this.Result = resulting;
                 return this;
             }
-
         }
         /// <summary>
         /// Where A is not NULL

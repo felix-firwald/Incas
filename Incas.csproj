@@ -238,6 +238,7 @@
     <Folder Include="CustomDatabases\Components\" />
     <Folder Include="CustomDatabases\Models\" />
     <Folder Include="CustomDatabases\Views\Controls\" />
+    <Folder Include="CustomDatabases\Views\Pages\" />
     <Folder Include="FileManager\Models\" />
     <Folder Include="FileManager\ViewModels\" />
     <Folder Include="FileManager\Views\Windows\" />

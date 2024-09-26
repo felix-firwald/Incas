@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Collections.Generic;
+using System;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -20,16 +21,32 @@ namespace Incas.Objects.Views.Windows
             this.vm = new(new());
             this.DataContext = this.vm;
         }
+        public CreateClass(Guid id)
+        {
+            this.InitializeComponent();
+            Class cl = new(id);
+            this.vm = new(cl);
+            this.DataContext = this.vm;
+            foreach (Models.Field f in cl.GetClassData().fields)
+            {
+                this.AddField(f);
+            }
+        }
 
         private void GetMoreInfoClick(object sender, MouseButtonEventArgs e)
         {
             ProgramState.OpenWebPage("https://teletype.in/@incas/classes");
         }
 
+        private void AddField(Incas.Objects.Models.Field data = null)
+        {
+            Incas.Objects.Views.Controls.FieldCreator fc = new(data);
+            this.ContentPanel.Children.Add(fc);
+        }
+
         private void AddFieldClick(object sender, MouseButtonEventArgs e)
         {
-            Incas.Objects.Views.Controls.FieldCreator fc = new();
-            this.ContentPanel.Children.Add(fc);
+            this.AddField();
         }
 
         private void SaveClick(object sender, RoutedEventArgs e)

@@ -208,7 +208,13 @@ namespace Incas.Admin.Views.Pages
 
         private void EditClassClick(object sender, RoutedEventArgs e)
         {
-
+            if (this.ClassesTable.SelectedItems.Count == 0)
+            {
+                return;
+            }
+            Guid id = Guid.Parse(((DataRowView)this.ClassesTable.SelectedItems[0]).Row["Идентификатор"].ToString());
+            CreateClass cc = new(id);
+            cc.ShowDialog();
         }
 
         private void RemoveClassClick(object sender, RoutedEventArgs e)

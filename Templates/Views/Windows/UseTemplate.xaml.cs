@@ -37,7 +37,6 @@ namespace Incas.Templates.Views.Windows
             this.InitializeComponent();
             this.template = t;
             this.Title = t.name;
-            this.CategoryName.Text = t.name;
             this.templateSettings = t.GetTemplateSettings();
             this.LoadTags();
             this.dir.Text = RegistryData.GetTemplatePreferredPath(this.template.id.ToString());
@@ -51,7 +50,6 @@ namespace Incas.Templates.Views.Windows
         public UseTemplate(Template t, List<SGeneratedDocument> records)
         {
             this.Setup(t);
-            this.CategoryName.Text = records[0].templateName;
             foreach (SGeneratedDocument item in records)
             {
                 this.AddFileCreator().ApplyRecord(item);
@@ -63,7 +61,6 @@ namespace Incas.Templates.Views.Windows
             this.InitializeComponent();
             this.tags = tags;
             this.Title = "Режим предпросмотра: " + templateName;
-            this.CategoryName.IsEnabled = false;
             this.ToolBar.IsEnabled = false;
             this.GenerateButton.IsEnabled = false;
             this.dir.IsEnabled = false;
@@ -138,7 +135,7 @@ namespace Incas.Templates.Views.Windows
             bool needSave = !this.template.GetTemplateSettings().PreventSave;
             foreach (FileCreator fc in this.ContentPanel.Children)
             {
-                if (!fc.CreateFile(this.dir.Text, this.CategoryName.Text, true, needSave))
+                if (!fc.CreateFile(this.dir.Text, true, needSave))
                 {
                     Mouse.OverrideCursor = null;
                     DatabaseManager.NullifyBackground();

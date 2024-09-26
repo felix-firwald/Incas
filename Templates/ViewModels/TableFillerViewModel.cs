@@ -15,6 +15,11 @@ namespace Incas.Templates.ViewModels
             this._data = new DataTable();
             this.MakeColumns(t.value);
         }
+        public TableFillerViewModel(Objects.Models.Field f)
+        {
+            this._data = new DataTable();
+            this.MakeColumns(f.Value);
+        }
         private void MakeColumns(string columns)
         {
             foreach (string c in columns.Split(';'))

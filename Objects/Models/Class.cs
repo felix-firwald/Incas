@@ -23,6 +23,11 @@ namespace Incas.Objects.Models
         {
             this.tableName = "Classes";
         }
+        public Class(Guid id)
+        {
+            this.tableName = "Classes";
+            this.GetClassById(id);
+        }
         private List<Class> FromDataTable(DataTable dt)
         {
             List<Class> resulting = new();
@@ -34,6 +39,24 @@ namespace Incas.Objects.Models
                 resulting.Add(c);
             }
             return resulting;
+        }
+        public List<string> GetCategories()
+        {
+            DataTable dt = this.StartCommand()
+                .SelectUnique("category")
+                .OrderByASC("category")
+                .Execute();
+            List<string> categories = [];
+            foreach (DataRow dr in dt.Rows)
+            {
+                categories.Add(dr["category"].ToString());
+            }
+            return categories;
+
+        }
+        public List<Class> GetClassesByCategory(string category)
+        {
+            return this.FromDataTable(this.StartCommand().Select().WhereEqual(nameof(category), category).Execute());
         }
         public Class GetClassById(Guid id)
         {
@@ -48,6 +71,10 @@ namespace Incas.Objects.Models
         {
             DataTable dt = this.StartCommandToService().Select().Execute();
             return this.FromDataTable(dt);
+        }
+        public DataTable GetAllClassesAsDataTable()
+        {
+            return this.StartCommandToService().Select("[identifier] AS [Идентификатор], [category] AS [Категория], [name] AS [Наименование]").Execute();
         }
         private void Update()
         {

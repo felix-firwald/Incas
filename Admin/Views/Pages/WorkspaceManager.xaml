@@ -68,6 +68,9 @@
                             </StackPanel>
                         </Button>
                     </WrapPanel>
+                    <DataGrid x:Name="ClassesTable" Style="{StaticResource DataGridMain}" IsReadOnly="True" ItemsSource="{Binding Classes}" SelectedValue="{Binding SelectedClass}" Grid.Row="1">
+                        
+                    </DataGrid>
                 </Grid>
                 
             </GroupBox>

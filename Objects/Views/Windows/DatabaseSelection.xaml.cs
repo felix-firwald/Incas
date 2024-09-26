@@ -5,7 +5,7 @@ using System.Data;
 using System.Windows;
 using Query = Incas.Core.Classes.Query;
 
-namespace Incas.CustomDatabases.Views.Windows
+namespace Incas.Objects.Views.Windows
 {
     /// <summary>
     /// Логика взаимодействия для DatabaseSelection.xaml
