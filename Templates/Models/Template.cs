@@ -3,6 +3,7 @@ using Incas.Templates.Components;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 
@@ -17,7 +18,7 @@ namespace Incas.Templates.Models
         public TemplateType type { get; set; }
         public string parent { get; set; }
         public string settings { get; set; }
-        public string tags { get; set; }
+        public string fields { get; set; }
 
         public Template()
         {
@@ -39,7 +40,7 @@ namespace Incas.Templates.Models
                 parent = this.parent,
                 type = this.type,
                 settings = this.settings,
-                tags = this.tags
+                fields = this.fields
             };
             return template;
         }
@@ -163,7 +164,7 @@ namespace Incas.Templates.Models
                     { "suggestedPath", isChild? "" : this.suggestedPath },
                     { "type", this.type.ToString() },
                     { "settings", this.settings },
-                    { "tags", this.tags }
+                    { "fields", this.fields }
                 })
                 .ExecuteVoid();
         }
@@ -179,7 +180,7 @@ namespace Incas.Templates.Models
                 .Update("path", this.path)
                 .Update("suggestedPath", this.suggestedPath)
                 .Update("settings", this.settings)
-                .Update("tags", this.tags)
+                .Update("fields", this.fields)
                 .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
         }
@@ -239,30 +240,30 @@ namespace Incas.Templates.Models
                 return new();
             }
         }
-        public List<Tag> GetTags(bool withoutParent = false)
+        public List<Objects.Models.Field> GetFields(bool withoutParent = false)
         {
-            List<Tag> tags = new();
-            tags = JsonConvert.DeserializeObject<List<Tag>>(this.tags);
+            List<Objects.Models.Field> tags = new();
+            tags = JsonConvert.DeserializeObject<List<Objects.Models.Field>>(this.fields);
             if (!withoutParent)
             {
                 if (!string.IsNullOrEmpty(this.parent))
                 {
                     DataTable dt = this.StartCommand()
-                    .Select("tags")
+                    .Select("fields")
                     .WhereIn("id", this.parent.Split(';').ToList())
                     .Execute();
                     foreach (DataRow dr in dt.Rows)
                     {
-                        tags.AddRange(JsonConvert.DeserializeObject<List<Tag>>(dr["tags"].ToString()));
+                        tags.AddRange(JsonConvert.DeserializeObject<List<Objects.Models.Field>>(dr["fields"].ToString()));
                     }
                 }
             }
-            tags.Sort((x, y) => x.orderNumber.CompareTo(y.orderNumber));
+            //tags.Sort((x, y) => x.orderNumber.CompareTo(y.orderNumber));
             return tags;
         }
-        public void SetTags(List<Tag> tags)
+        public void SetTags(List<Objects.Models.Field> tags)
         {
-            this.tags = JsonConvert.SerializeObject(tags);
+            this.fields = JsonConvert.SerializeObject(tags);
         }
         public void SaveTemplateSettings(TemplateSettings ts)
         {

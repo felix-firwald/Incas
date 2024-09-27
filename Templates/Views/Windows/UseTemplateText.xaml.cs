@@ -1,13 +1,7 @@
-﻿using Incas.Core.Classes;
-using Incas.Core.Views.Windows;
+﻿using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
-using Incas.Templates.Components;
 using Incas.Templates.Models;
-using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Pages;
-using Incubator_2.Common;
-using Microsoft.Scripting.Hosting;
-using System;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -20,7 +14,7 @@ namespace Incas.Templates.Views.Windows
     {
         public DialogStatus Result = DialogStatus.Undefined;
         private Template template;
-        private List<Tag> tags;
+        private List<Objects.Models.Field> fields;
         private ElementCreator creator;
         public delegate void Base();
         public event Base OnFinishedEditing;
@@ -30,7 +24,7 @@ namespace Incas.Templates.Views.Windows
             this.template = templ;
             this.Title = this.template.name;
             this.GetTags();
-            this.creator = new ElementCreator(this.template, this.tags);
+            this.creator = new ElementCreator(this.template, this.fields);
             this.ContentPanel.Child = this.creator;
             if (data.filledTags != null)
             {
@@ -39,7 +33,7 @@ namespace Incas.Templates.Views.Windows
         }
         private void GetTags()
         {
-            this.tags = this.template.GetTags();
+            this.fields = this.template.GetFields();
         }
 
         public void ApplyData(GeneratedElement data)

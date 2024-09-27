@@ -15,7 +15,7 @@ namespace Incas.Objects.Views.Controls
     public partial class FieldCreator : UserControl
     {
         public delegate void FieldAction(FieldCreator t);
-        public event FieldAction onDelete;
+        public event FieldAction OnRemove;
         public FieldViewModel vm;
         public FieldCreator(Incas.Objects.Models.Field data = null)
         {
@@ -29,23 +29,36 @@ namespace Incas.Objects.Views.Controls
                 this.vm = new(data);
             }           
             this.DataContext = this.vm;
+            this.ExpanderButton.IsChecked = true;
         }
-
-        private void MaximizeClick(object sender, System.Windows.RoutedEventArgs e)
+        public void DublicateName()
+        {
+            this.vm.VisibleName = this.vm.NameOfTag;
+        }
+        public void Maximize()
         {
             this.MainBorder.Height = this.ContentPanel.Height + 40;
             this.NumberUp.Visibility = Visibility.Collapsed;
         }
-
-        private void MinimizeClick(object sender, System.Windows.RoutedEventArgs e)
+        public void Minimize()
         {
             this.MainBorder.Height = 40;
             this.NumberUp.Visibility = Visibility.Visible;
         }
 
+        private void MaximizeClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.Maximize();
+        }
+
+        private void MinimizeClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.Minimize();
+        }
+
         private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.onDelete?.Invoke(this);
+            this.OnRemove?.Invoke(this);
         }
 
         private void UpClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

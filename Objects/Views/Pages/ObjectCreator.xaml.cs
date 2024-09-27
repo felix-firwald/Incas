@@ -1,4 +1,4 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
 using Incas.Templates.Components;
@@ -18,16 +18,18 @@ namespace Incas.Objects.Views.Pages
     {
         public Components.Object Object { get; set; }
         public Class Class { get; set; }
+        public ClassData ClassData { get; set; }
         public List<TagFiller> TagFillers = new();
         public List<TableFiller> Tables = new();
         public delegate void ObjectCreatorData(ObjectCreator creator);
         public event ObjectCreatorData OnSaveRequested;
         public event ObjectCreatorData OnRemoveRequested;
 
-        public ObjectCreator(Class source, Components.Object obj = null)
+        public ObjectCreator(Class source, ClassData data, Components.Object obj = null)
         {
             this.InitializeComponent();
             this.Class = source;
+            this.ClassData = data;
             this.FillContentPanel();
             if (obj != null)
             {
@@ -36,12 +38,15 @@ namespace Incas.Objects.Views.Pages
             else
             {
                 this.Object = new();
+            }           
+            if (data.ClassType != ClassType.Document)
+            {
+                this.RenderArea.Visibility = Visibility.Collapsed;
             }
-            
         }
         private void FillContentPanel()
         {
-            foreach (Objects.Models.Field f in this.Class.GetClassData().fields)
+            foreach (Objects.Models.Field f in this.ClassData.fields)
             {
                 if (f.Type != TagType.Table)
                 {
@@ -49,6 +54,7 @@ namespace Incas.Objects.Views.Pages
                     tf.Uid = f.Id.ToString();
                     tf.OnInsert += this.Tf_OnInsert;
                     tf.OnRename += this.Tf_OnRename;
+                    tf.OnFieldUpdate += this.Tf_OnFieldUpdate;
                     //tf.OnScriptRequested += this.OnScriptRequested;
                     this.ContentPanel.Children.Add(tf);
                     this.TagFillers.Add(tf);
@@ -62,10 +68,17 @@ namespace Incas.Objects.Views.Pages
                 }
             }
         }
+
+        private void Tf_OnFieldUpdate(TagFiller sender)
+        {
+            
+        }
+
         public void ApplyObject(Components.Object obj)
         {
             this.Object = obj;
-            foreach (FieldData data in obj.Fields)
+            this.ObjectName.Text = obj.Name;
+            foreach (Components.FieldData data in obj.Fields)
             {
                 foreach (TagFiller tagfiller in this.TagFillers)
                 {
@@ -88,6 +101,8 @@ namespace Incas.Objects.Views.Pages
         }
         public Components.Object PullObject()
         {
+            this.UpdateName();
+            this.Object.Name = this.ObjectName.Text;
             if (this.Object.Fields == null)
             {
                 this.Object.Fields = new();
@@ -95,7 +110,7 @@ namespace Incas.Objects.Views.Pages
             this.Object.Fields.Clear();
             foreach (TagFiller tf in this.TagFillers)
             {
-                FieldData data = new()
+                Components.FieldData data = new()
                 {
                     ClassFieldId = tf.field.Id,
                     Value = tf.GetData()
@@ -105,7 +120,7 @@ namespace Incas.Objects.Views.Pages
             }
             foreach (TableFiller table in this.Tables)
             {
-                FieldData data = new()
+                Components.FieldData data = new()
                 {
                     ClassFieldId = table.field.Id,
                     Value = table.GetData()
@@ -113,6 +128,30 @@ namespace Incas.Objects.Views.Pages
                 this.Object.Fields.Add(data);
             }
             return this.Object;
+        }
+        private string UpdateName()
+        {
+            string name = "";
+            if (this.ClassData.NameTemplate is not null)
+            {
+                name = this.ClassData.NameTemplate;
+            }
+            if (string.IsNullOrWhiteSpace(name) && string.IsNullOrEmpty(this.ObjectName.Text))
+            {
+                name = "Объект от " + DateTime.Now;
+                this.ObjectName.Text = name;
+                return name;
+            }
+            foreach (TagFiller tf in this.TagFillers)
+            {
+                string val = tf.GetValue();
+                if (val != null)
+                {
+                    name = name.Replace("[" + tf.GetTagName() + "]", val);
+                }               
+            }
+            this.ObjectName.Text = name;
+            return name;
         }
 
         private void Tf_OnRename(string tag)

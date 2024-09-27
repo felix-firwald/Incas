@@ -1,11 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
 using Incas.CreatedDocuments.Models;
-using Incas.Templates.Components;
-using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
-using Incas.Templates.Views.Pages;
-using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
 using System;
@@ -16,7 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace Incas.Templates.Views.Controls
 {
@@ -26,37 +21,16 @@ namespace Incas.Templates.Views.Controls
     public partial class TableFiller : UserControl
     {
         private TableFillerViewModel vm;
-        public Tag tag;
         public Objects.Models.Field field;
-        private CommandSettings command;
         public DataTable DataTable => this.vm.Grid;
-        public TableFiller(Tag t)
-        {
-            this.InitializeComponent();
-            this.tag = t;
-            this.vm = new TableFillerViewModel(t);
-            this.DataContext = this.vm;
-            this.command = t.GetCommand();
-            this.MakeButton();
-            this.MakeFields();
-        }
+
         public TableFiller(Objects.Models.Field f)
         {
             this.InitializeComponent();
             this.field = f;
             this.vm = new TableFillerViewModel(f);
             this.DataContext = this.vm;
-            this.MakeButton();
             this.MakeFields();
-        }
-        private void MakeButton()
-        {
-            if (this.command.ScriptType == ScriptType.Button)
-            {
-                this.CommandButtonIcon.Data = this.FindResource(this.command.Icon.ToString()) as PathGeometry;
-                this.CommandButton.Visibility = Visibility.Visible;
-                this.CommandButtonText.Content = this.command.Name;
-            }
         }
         private void MakeFields()
         {
@@ -90,7 +64,7 @@ namespace Incas.Templates.Views.Controls
         {
             SGeneratedTag result = new()
             {
-                tag = this.tag.id,
+                tag = this.field.Id,
                 value = this.GetData()
             };
             return result;
@@ -103,7 +77,7 @@ namespace Incas.Templates.Views.Controls
                 List<Dictionary<string, string>> data = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(json);
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                 scope.SetVariable("input_data", data);
-                ScriptManager.Execute(this.command.Script, scope);
+                //ScriptManager.Execute(this.command.Script, scope);
                 List<Dictionary<string, string>> result = scope.GetVariable("output");
                 DataTable dt = JsonConvert.DeserializeObject<DataTable>(JsonConvert.SerializeObject(result));
                 this.SetData(dt);

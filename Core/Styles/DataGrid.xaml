@@ -189,6 +189,10 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="ColumnHeaderSpecial" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource ColumnHeaderMain}">
+        <Setter Property="Background" Value="{DynamicResource Icon}"/>
+        <Setter Property="Foreground" Value="{StaticResource DarkYellow}"/>
+    </Style>
     <Style x:Key="DataGridMain" TargetType="{x:Type DataGrid}">
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>

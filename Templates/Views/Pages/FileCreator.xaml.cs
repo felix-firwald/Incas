@@ -1,11 +1,9 @@
 ﻿using Incas.Core.Classes;
-using Incas.CreatedDocuments.Components;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Windows;
-using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;
@@ -22,9 +20,8 @@ namespace Incas.Templates.Views.Pages
     /// </summary>
     public partial class FileCreator : UserControl
     {
-        private SGeneratedDocument document;
         private Template template;
-        private List<Tag> tags;
+        private List<Objects.Models.Field> fields;
         private List<TagFiller> TagFillers = [];
         private List<TableFiller> Tables = [];
         private TemplateSettings templateSettings;
@@ -36,10 +33,10 @@ namespace Incas.Templates.Views.Pages
         public delegate void TagActionRecalculate(string tag);
         public event TagActionRecalculate OnRenameRequested;
         public bool SelectorChecked => (bool)this.Selector.IsChecked;
-        public FileCreator(Template templ, ref TemplateSettings settings, List<Tag> tagsList)
+        public FileCreator(Template templ, ref TemplateSettings settings, List<Objects.Models.Field> tagsList)
         {
             this.InitializeComponent();
-            this.tags = tagsList;
+            this.fields = tagsList;
             this.template = templ;
             this.FillContentPanel();
             this.templateSettings = settings;
@@ -52,10 +49,10 @@ namespace Incas.Templates.Views.Pages
             }
             this.ExpanderButton.IsChecked = true;
         }
-        public FileCreator(List<Tag> tagsList) // dev mode
+        public FileCreator(List<Objects.Models.Field> tagsList) // dev mode
         {
             this.InitializeComponent();
-            this.tags = tagsList;
+            this.fields = tagsList;
             this.FillContentPanel();
             this.DocumentTools.Visibility = Visibility.Collapsed;
             this.DevModeLabel.Visibility = Visibility.Visible;
@@ -67,9 +64,9 @@ namespace Incas.Templates.Views.Pages
 
         private void FillContentPanel()
         {
-            this.tags.ForEach(t =>
+            this.fields.ForEach(t =>
             {
-                if (t.type != TagType.Table)
+                if (t.Type != TagType.Table)
                 {
                     TagFiller tf = new(t);
                     tf.OnInsert += this.OnInsert;
@@ -94,14 +91,14 @@ namespace Incas.Templates.Views.Pages
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                 foreach (TagFiller tf in this.TagFillers)
                 {
-                    scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
+                    scope.SetVariable(tf.field.Name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
                 foreach (TagFiller tf in this.TagFillers)
                 {
-                    if (tf.tag.type != TagType.Generator)
+                    if (tf.field.Type != TagType.Generator)
                     {
-                        tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
+                        tf.SetValue(scope.GetVariable(tf.field.Name.Replace(" ", "_")));
                     }
                 }
             }
@@ -125,7 +122,7 @@ namespace Incas.Templates.Views.Pages
             {
                 foreach (TagFiller tf in this.TagFillers)
                 {
-                    if (tf.tag.id == tag)
+                    if (tf.field.Id == tag)
                     {
                         this.Dispatcher.Invoke(() =>
                         {
@@ -138,43 +135,13 @@ namespace Incas.Templates.Views.Pages
             });
         }
 
-        public void ApplyRecord(SGeneratedDocument record)
-        {
-            if (record.filledTagsString == null)
-            {
-                DialogsManager.ShowDatabaseErrorDialog("Не удалось получить информацию о полях документа.", "Запись повреждена");
-                return;
-            }
-            this.document = record;
-            this.Filename.Text = record.fileName;
-            this.Number.Text = record.number;
-            foreach (SGeneratedTag tag in record.GetFilledTags())
-            {
-                foreach (TagFiller tagfiller in this.TagFillers)
-                {
-                    if (tagfiller.tag.id == tag.tag)
-                    {
-                        tagfiller.SetValue(tag.value);
-                        break;
-                    }
-                }
-                foreach (TableFiller table in this.Tables)
-                {
-                    if (table.tag.id == tag.tag)
-                    {
-                        table.SetData(tag.value);
-                        break;
-                    }
-                }
-            }
-        }
         public void ApplyFromExcel(Dictionary<string, string> pairs)
         {
             foreach (KeyValuePair<string, string> pair in pairs)
             {
                 foreach (TagFiller tf in this.ContentPanel.Children)
                 {
-                    if (tf.tag.name == pair.Key)
+                    if (tf.field.Name == pair.Key)
                     {
                         tf.SetValue(pair.Value);
                         break;
@@ -222,9 +189,6 @@ namespace Incas.Templates.Views.Pages
             SGeneratedDocument result = new()
             {
                 template = this.template.id,
-                number = this.Number.Text,
-                fullNumber = this.GetNumber(),
-                status = this.document.status,
                 fileName = this.Filename.Text
             };
             List<SGeneratedTag> filledTags = [];
@@ -244,52 +208,7 @@ namespace Incas.Templates.Views.Pages
             {
                 filledTags.Add(table.GetAsGeneratedTag());
             }
-            result.SaveFilledTags(filledTags);
             return result;
-        }
-        private bool CustomValidate()
-        {
-            try
-            {
-                if (this.document.status == DocumentStatus.Done)
-                {
-                    DialogsManager.ShowAccessErrorDialog("Документ находится в статусе \"Завершен\", он будет пропущен.");
-                    return false;
-                }
-                bool result = true;
-                if (!string.IsNullOrEmpty(this.templateSettings.Validation))
-                {
-                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                    scope.SetVariable("result", true);
-                    scope.SetVariable("document_number", this.Number.Text);
-                    scope.SetVariable("fields", new List<string>());
-                    scope.SetVariable("failed_text", "Текст не установлен.");
-                    foreach (TagFiller tf in this.TagFillers)
-                    {
-                        scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
-                    }
-                    ScriptManager.Execute(this.templateSettings.Validation, scope);
-                    result = scope.GetVariable("result");
-                    if (!result)
-                    {
-                        DialogsManager.ShowExclamationDialog(scope.GetVariable("failed_text"));
-                        dynamic fields = scope.GetVariable("fields");
-                        foreach (TagFiller tf in this.TagFillers)
-                        {
-                            if (fields.Contains(tf.tag.name.Replace(" ", "_")))
-                            {
-                                tf.MarkAsNotValidated();
-                            }
-                        }
-                    }
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                DialogsManager.ShowErrorDialog("При выполнении скрипта валидации возникла ошибка:\n" + ex.Message);
-                return true;
-            }
         }
         private void PlaySavingScript()
         {
@@ -300,7 +219,7 @@ namespace Incas.Templates.Views.Pages
                     ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                     foreach (TagFiller tf in this.TagFillers)
                     {
-                        scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
+                        scope.SetVariable(tf.field.Name.Replace(" ", "_"), tf.GetData());
                     }
                     scope.SetVariable("file_name", this.Filename.Text);
                     scope.SetVariable("document_number", this.Number.Text);
@@ -309,9 +228,9 @@ namespace Incas.Templates.Views.Pages
                     this.Number.Text = scope.GetVariable("document_number");
                     foreach (TagFiller tf in this.TagFillers)
                     {
-                        if (tf.tag.type != TagType.Generator)
+                        if (tf.field.Type != TagType.Generator)
                         {
-                            tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
+                            tf.SetValue(scope.GetVariable(tf.field.Name.Replace(" ", "_")));
                         }
                     }
                 }
@@ -337,48 +256,44 @@ namespace Incas.Templates.Views.Pages
                 this.Filename.Text = result;
             }
         }
-        public bool CreateFile(string newPath, bool async = true, bool save = true)
+        public bool CreateFile(string newPath, bool async = true)
         {
             try
             {
-                if (this.CustomValidate())
+                this.ApplyNameByTemplate();
+                this.PlaySavingScript();
+                string newFile;
+                List<SGeneratedTag> filledTags = [];
+                switch (this.template.type)
                 {
-                    this.ApplyNameByTemplate();
-                    this.PlaySavingScript();
-                    string newFile;
-                    List<SGeneratedTag> filledTags = [];
-                    switch (this.template.type)
-                    {
-                        case TemplateType.Word:
-                            newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.docx";
-                            if (File.Exists(newFile))
-                            {
-                                File.Delete(newFile);
-                            }
-                            File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
-                            WordTemplator wt = new(newFile);
-                            this.Dispatcher.Invoke(() =>
-                            {
-                                filledTags = wt.GenerateDocument(this.TagFillers, this.Tables, this.GetNumber(), async);
-                            });
-                            break;
-                        case TemplateType.Excel:
-                            newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
-                            if (File.Exists(newFile))
-                            {
-                                File.Delete(newFile);
-                            }
-                            File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
-                            ExcelTemplator et = new(newFile);
-                            this.Dispatcher.Invoke(() =>
-                            {
-                                filledTags = et.GenerateDocument(this.TagFillers, this.Tables, this.GetNumber(), async);
-                            });
-                            break;
-                    }
-                    return true;
+                    case TemplateType.Word:
+                        newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.docx";
+                        if (File.Exists(newFile))
+                        {
+                            File.Delete(newFile);
+                        }
+                        File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
+                        WordTemplator wt = new(newFile);
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            filledTags = wt.GenerateDocument(this.TagFillers, this.Tables, this.GetNumber(), async);
+                        });
+                        break;
+                    case TemplateType.Excel:
+                        newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
+                        if (File.Exists(newFile))
+                        {
+                            File.Delete(newFile);
+                        }
+                        File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
+                        ExcelTemplator et = new(newFile);
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            filledTags = et.GenerateDocument(this.TagFillers, this.Tables, this.GetNumber(), async);
+                        });
+                        break;
                 }
-                return false;
+                return true;
             }
             catch (GeneratorUndefinedStateException ex)
             {
@@ -454,7 +369,7 @@ namespace Incas.Templates.Views.Pages
                         wt.Replace(tagsToReplace, values, false);
                         foreach (TableFiller tab in this.Tables)
                         {
-                            wt.CreateTable(tab.tag.name, tab.DataTable);
+                            wt.CreateTable(tab.field.Name, tab.DataTable);
                         }
                         string fileXPS = wt.TurnToXPS();
                         DialogsManager.ShowWaitCursor(false);
@@ -479,7 +394,7 @@ namespace Incas.Templates.Views.Pages
         private void OpenFileClick(object sender, MouseButtonEventArgs e)
         {
             DialogsManager.ShowWaitCursor();
-            this.CreateFile(ProgramState.TemplatesRuntime, false, false);
+            this.CreateFile(ProgramState.TemplatesRuntime, false);
             string filename;
             switch (this.template.type)
             {

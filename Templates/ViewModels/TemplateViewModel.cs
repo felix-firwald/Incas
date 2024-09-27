@@ -39,15 +39,15 @@ namespace Incas.Templates.ViewModels
         }
         public bool IsEdit => this.templateMain.id != Guid.Empty;
         public Guid Id => this.templateMain.id;
-        public List<Tag> Tags
+        public List<Objects.Models.Field> Tags
         {
             get
             {
-                return this.templateMain.GetTags();
+                return this.templateMain.GetFields();
             }
             set
             {
-                foreach (Tag t in value)
+                foreach (Objects.Models.Field t in value)
                 {
                     t.SetId();
                 }

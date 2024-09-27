@@ -23,10 +23,15 @@ namespace Incas.Objects.Views.Windows
     public partial class ObjectsEditor : Window
     {
         public readonly Class Class;
+        public readonly ClassData ClassData;
+        public delegate void UpdateRequested();
+        public event UpdateRequested OnUpdateRequested;
         public ObjectsEditor(Class source, List<Components.Object> objects = null)
         {
             this.InitializeComponent();
+            this.Title = source.name;
             this.Class = source;
+            this.ClassData = source.GetClassData();
             if (objects != null)
             {
                 foreach (Components.Object obj in objects)
@@ -41,7 +46,7 @@ namespace Incas.Objects.Views.Windows
         }
         private void AddObjectCreator(Components.Object obj = null)
         {
-            ObjectCreator creator = new(this.Class, obj);
+            ObjectCreator creator = new(this.Class, this.ClassData, obj);
             creator.OnSaveRequested += this.Creator_OnSaveRequested;
             creator.OnRemoveRequested += this.Creator_OnRemoveRequested;
             this.ContentPanel.Children.Add(creator);
@@ -55,6 +60,7 @@ namespace Incas.Objects.Views.Windows
         private void Creator_OnSaveRequested(ObjectCreator creator)
         {
             ObjectProcessor.WriteObjects(this.Class, creator.PullObject());
+            this.OnUpdateRequested?.Invoke();
         }
 
         private void AddClick(object sender, MouseButtonEventArgs e)
@@ -90,6 +96,8 @@ namespace Incas.Objects.Views.Windows
                 objects.Add(c.PullObject());
             }
             ObjectProcessor.WriteObjects(this.Class, objects);
+            this.Close();
+            this.OnUpdateRequested?.Invoke();
         }
     }
 }

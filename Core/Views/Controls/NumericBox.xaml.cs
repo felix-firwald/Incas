@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Incas.Objects.Components;
+using System;
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -33,29 +34,11 @@ namespace Incas.Core.Views.Controls
             this.DataContext = this;
         }
 
-        public void ApplyMinAndMax(string input)
+        public void ApplyMinAndMax(NumberFieldData input)
         {
-            if (string.IsNullOrEmpty(input))
-            {
-                return;
-            }
-            string[] parts = input.Split(';');
-            switch (parts.Length)
-            {
-                case 2:
-                    int.TryParse(parts[0], out this.MinValue);
-                    int.TryParse(parts[1], out this.MaxValue);
-                    break;
-                case 3:
-                    int.TryParse(parts[0], out this.MinValue);
-                    int currentDigit;
-                    if (int.TryParse(parts[1], out currentDigit))
-                    {
-                        this.Value = currentDigit;
-                    }
-                    int.TryParse(parts[2], out this.MaxValue);
-                    break;
-            }
+            this.MinValue = input.MinValue;
+            this.Value = input.DefaultValue;
+            this.MaxValue = input.MaxValue;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

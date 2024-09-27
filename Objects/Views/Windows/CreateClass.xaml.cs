@@ -6,6 +6,8 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System;
+using Incas.Objects.AutoUI;
+using Incas.Objects.Components;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -15,15 +17,19 @@ namespace Incas.Objects.Views.Windows
     public partial class CreateClass : Window
     {
         ClassViewModel vm;
-        public CreateClass()
+        public CreateClass(ClassTypeSettings primary)
         {
             this.InitializeComponent();
             this.vm = new(new());
+            this.vm.CategoryOfClass = primary.Category;
+            this.vm.NameOfClass = primary.Name;
+            this.vm.Type = (ClassType)primary.Selector.SelectedObject;
             this.DataContext = this.vm;
         }
         public CreateClass(Guid id)
         {
             this.InitializeComponent();
+            this.Title = "Редактирование класса";
             Class cl = new(id);
             this.vm = new(cl);
             this.DataContext = this.vm;
@@ -41,7 +47,13 @@ namespace Incas.Objects.Views.Windows
         private void AddField(Incas.Objects.Models.Field data = null)
         {
             Incas.Objects.Views.Controls.FieldCreator fc = new(data);
+            fc.OnRemove += this.Fc_OnRemove;
             this.ContentPanel.Children.Add(fc);
+        }
+
+        private void Fc_OnRemove(Controls.FieldCreator t)
+        {
+            this.ContentPanel.Children.Remove(t);
         }
 
         private void AddFieldClick(object sender, MouseButtonEventArgs e)

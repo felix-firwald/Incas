@@ -12,12 +12,20 @@ namespace Incas.Objects.Components
 {
     public static class ObjectProcessor
     {
-        public const string TableName = "OBJECTS_MAP";
+        #region Tables
+        public const string MainTable = "OBJECTS_MAP";
+        public const string EditsTable = "EDITS_MAP";
+        public const string AttachmentsTable = "ATTACHMENTS_MAP";
+        public const string CommentsTable = "COMMENTS_MAP";
+        #endregion
+        #region Fields
         public const string IdField = "SERVICE_ID";
+        public const string NameField = "OBJECT_NAME";
         public const string DateCreatedField = "CREATED_DATE";
         public const string AuthorField = "AUTHOR_ID";
-        public const string CommentField = "COMMENT";
+        public const string StatusField = "STATUS_ID";
         public const string MetaField = "META_INFORMATION";
+        #endregion
         public static string GetPathToObjectsMap(Class cl)
         {
             if (cl == null)
@@ -26,19 +34,28 @@ namespace Incas.Objects.Components
             }
             return $"{ProgramState.ObjectsPath}\\{cl.identifier}.objinc";
         }
+        private static string GetPathToObjectsMap(Guid id)
+        {
+            return $"{ProgramState.ObjectsPath}\\{id}.objinc";
+        }
 
         public static void InitializeObjectMap(Class cl)
         {
+            ClassData data = cl.GetClassData();
             string path = GetPathToObjectsMap(cl);
             Query q = new("", path);
 
-            StringBuilder request = new($"CREATE TABLE [{TableName}] (\n");
-            request.Append($" [{IdField}] TEXT UNIQUE, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, ");
+            StringBuilder request = new($"CREATE TABLE [{MainTable}] (\n");
+            request.Append($" [{IdField}] TEXT UNIQUE, [{NameField}] TEXT, [{AuthorField}] TEXT, ");
+            if (data.ClassType == ClassType.Document)
+            {
+                request.Append($"[{DateCreatedField}] TEXT, [{StatusField}] TEXT, ");
+            }
             foreach (Incas.Objects.Models.Field f in cl.GetClassData().fields)
             {
                 request.Append($"[{f.Id}] TEXT,\n");
             }
-            request.Append($"[{CommentField}] TEXT, [{MetaField}] TEXT\n)");
+            request.Append($"[{MetaField}] TEXT\n)");
             q.AddCustomRequest(request.ToString());
             q.ExecuteVoid();
         }
@@ -52,14 +69,15 @@ namespace Incas.Objects.Components
             List<string> serviceColumns = new()
             {
                 IdField,
+                NameField,
                 DateCreatedField,
                 AuthorField,
-                CommentField,
+                StatusField,
                 MetaField,
             };
             string path = GetPathToObjectsMap(cl);
             Query q = new("", path);
-            q.AddCustomRequest($"PRAGMA table_info([{TableName}])");
+            q.AddCustomRequest($"PRAGMA table_info([{MainTable}])");
             List<string> mapFields = new();
             DataTable dt = q.Execute();
             foreach (DataRow row in dt.Rows)
@@ -80,11 +98,11 @@ namespace Incas.Objects.Components
             StringBuilder updateRequest = new("BEGIN TRANSACTION;");
             foreach (string misf in missingFields)
             {
-                updateRequest.Append($"ALTER TABLE [{TableName}] ADD COLUMN [{misf}] TEXT;");
+                updateRequest.Append($"ALTER TABLE [{MainTable}] ADD COLUMN [{misf}] TEXT;");
             }
             foreach (string excf in excessFields)
             {
-                updateRequest.Append($"ALTER TABLE [{TableName}] DROP COLUMN [{excf}];");
+                updateRequest.Append($"ALTER TABLE [{MainTable}] DROP COLUMN [{excf}];");
             }
             updateRequest.Append("COMMIT");
             q.Clear();
@@ -94,11 +112,11 @@ namespace Incas.Objects.Components
         public static void WriteObjects(Class cl, List<Object> objects)
         {
             string path = GetPathToObjectsMap(cl);
-            Query q = new(ObjectProcessor.TableName, path);
+            Query q = new(ObjectProcessor.MainTable, path);
             q.BeginTransaction();
             foreach (Object obj in objects)
             {
-                ObjectProcessor.GetRequestForWritingObject(q, obj);
+                ObjectProcessor.GetRequestForWritingObject(q, cl.GetClassData(), obj);
             }
             q.EndTransaction();
             q.ExecuteVoid();
@@ -109,9 +127,10 @@ namespace Incas.Objects.Components
             objects.Add(obj);
             ObjectProcessor.WriteObjects(cl, objects);
         }
-        private static void GetRequestForWritingObject(Query q, Object obj)
+        private static void GetRequestForWritingObject(Query q, ClassData data, Object obj)
         {
             Dictionary<string, string> values = new();
+            values.Add(NameField, obj.Name.ToString());
             foreach (FieldData fd in obj.Fields)
             {               
                 values.Add(fd.ClassFieldId.ToString(), fd.Value);
@@ -119,22 +138,25 @@ namespace Incas.Objects.Components
             if (obj.Id == Guid.Empty) // if NEW
             {              
                 obj.Id = Guid.NewGuid();
+                
                 obj.AuthorId = ProgramState.CurrentUser.id;
                 obj.CreationDate = DateTime.Now;
                 values.Add(IdField, obj.Id.ToString());
                 values.Add(AuthorField, obj.AuthorId.ToString());
-                values.Add(DateCreatedField, obj.CreationDate.ToString());
+                if (data.ClassType == ClassType.Document)
+                {
+                    values.Add(DateCreatedField, obj.CreationDate.ToString());
+                    values.Add(StatusField, obj.Status.ToString());
+                }
                 obj.AuthorId = ProgramState.CurrentUser.id;
                 obj.CreationDate = DateTime.Now;
                 
-                q.InsertWithGuids(values);              
+                q.Insert(values);              
                 q.SeparateCommand();
             }
             else // if EDIT
-            {
-                
-                q.Update(values);
-                
+            {             
+                q.Update(values);                
                 q.WhereEqual(IdField, obj.Id.ToString());
                 q.SeparateCommand();
             }
@@ -142,30 +164,61 @@ namespace Incas.Objects.Components
         public static DataTable GetObjectsList(Class cl)
         {
             Query q = new("", GetPathToObjectsMap(cl));
-            List<Objects.Models.Field> fields = cl.GetClassData().fields;
+            ClassData data = cl.GetClassData();
+            List<Objects.Models.Field> fields = data.GetFieldsForMap();
             List<string> fieldsRequest = new();
-            fieldsRequest.Add($"[{IdField}]");
-            fieldsRequest.Add($"[{DateCreatedField}] AS [Дата создания]");
+            fieldsRequest.Add($"[OBJECTS_MAP].[{IdField}]");
+            if (data.ClassType == ClassType.Document)
+            {
+                fieldsRequest.Add($"[OBJECTS_MAP].[{DateCreatedField}]");
+                fieldsRequest.Add($"[OBJECTS_MAP].[{StatusField}]");
+            }           
+            fieldsRequest.Add($"[OBJECTS_MAP].[{NameField}]");
+            List<string> innerJoins = new();
             foreach (Models.Field f in fields)
             {
-                fieldsRequest.Add($"[{f.Id}] AS [{f.VisibleName}]");
+                if (f.Type == Templates.Components.TagType.Relation)
+                {       
+                    BindingData bd = f.GetBindingData();
+                    string dbName = bd.Class.ToString("N");
+                    q.AttachDatabase(GetPathToObjectsMap(bd.Class), dbName);
+                    
+                    char[] charArray = dbName.ToCharArray();
+                    Array.Reverse(charArray);
+                    string dbNamePseudoname = new(charArray);
+                    fieldsRequest.Add($"[{bd.Field}] AS [{f.VisibleName}]");
+                    innerJoins.Add($"LEFT JOIN \"{dbName}\".[{MainTable}] AS [{dbNamePseudoname}] ON [{dbNamePseudoname}].[{IdField}] = [{MainTable}].\"{f.Id}\"");
+                }
+                else
+                {
+                    fieldsRequest.Add($"[{f.Id}] AS [{f.VisibleName}]");
+                }          
             }
             q.AddCustomRequest("SELECT " + string.Join(", ", fieldsRequest.ToArray()));
-            q.AddCustomRequest($"FROM [{TableName}]");
+            q.AddCustomRequest($"FROM [{MainTable}]");
+            q.AddCustomRequest(string.Join("\n", innerJoins));
             return q.Execute();
         }
         public static Object GetObject(Class cl, Guid id)
         {
             Object obj = new();
             obj.Fields = new();
-            Query q = new(ObjectProcessor.TableName, GetPathToObjectsMap(cl));
+            Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
             DataRow dr = q.Select().WhereEqual(IdField, id.ToString()).ExecuteOne();
             if (dr != null)
             {
                 obj.Id = id;
                 obj.AuthorId = Guid.Parse(dr[ObjectProcessor.AuthorField].ToString());
-                obj.CreationDate = DateTime.Parse(dr[ObjectProcessor.DateCreatedField].ToString());
-                obj.Comment = dr[ObjectProcessor.CommentField].ToString();
+                if (cl.GetClassData().ClassType == ClassType.Document)
+                {
+                    if (dr[ObjectProcessor.DateCreatedField] is not null)
+                    {
+                        obj.CreationDate = DateTime.Parse(dr[ObjectProcessor.DateCreatedField].ToString());
+                    }
+                    obj.Status = Guid.Parse(dr[ObjectProcessor.StatusField].ToString());
+                }
+                
+                obj.Name = dr[ObjectProcessor.NameField].ToString();
                 foreach (Models.Field f in cl.GetClassData().fields)
                 {
                     FieldData fd = new()
@@ -177,6 +230,12 @@ namespace Incas.Objects.Components
                 }
             }
             return obj;
+        }
+        public static void RemoveObject(Class cl, Guid id)
+        {
+            Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+            q.Delete();
+            q.WhereEqual(IdField, id.ToString()).Execute();
         }
     }
 }

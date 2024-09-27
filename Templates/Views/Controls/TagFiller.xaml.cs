@@ -1,20 +1,17 @@
 ﻿using Incas.Core.Classes;
-using Incas.Core.Models;
 using Incas.Core.Views.Controls;
-using Incas.Objects.Models;
+using Incas.Objects.Components;
 using Incas.Templates.Components;
 using Incas.Users.Models;
-using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Tag = Incas.Templates.Models.Tag;
 
 namespace Incas.Templates.Views.Controls
 {
@@ -25,20 +22,14 @@ namespace Incas.Templates.Views.Controls
             return (Geometry)TypeDescriptor.GetConverter(typeof(Geometry)).ConvertFrom(input);
         }
     }
-    public enum FillerMode
-    {
-        Tag,
-        Field
-    }
     /// <summary>
     /// Логика взаимодействия для TagFiller.xaml
     /// </summary>
     public partial class TagFiller : UserControl
     {
         //public static Dictionary<TagType, >
-        public readonly Tag tag;
         public readonly Objects.Models.Field field;
-        public FillerMode Mode;
+
         private bool isRequired = false;
         private bool validated = true;
         private Control control;
@@ -49,49 +40,32 @@ namespace Incas.Templates.Views.Controls
         public event CommandScript OnScriptRequested;
         public delegate void StringActionRecalculate(string tag);
         public event StringActionRecalculate OnRename;
-        public TagFiller(Tag t)
-        {
-            this.InitializeComponent();
-            this.Mode = FillerMode.Tag;
-            this.tag = t;
-            this.MainLabel.Text = string.IsNullOrWhiteSpace(this.tag.visibleName) ? this.tag.name + ":" : this.tag.visibleName + ":";
-            this.GenerateUIControl(this.tag.type);
-            this.MakeButton();
-        }
+        public delegate void TagAction(TagFiller sender);
+        public event TagAction OnFieldUpdate;
+
         public TagFiller(Objects.Models.Field f)
         {
             this.InitializeComponent();
-            this.Mode = FillerMode.Field;
             this.field = f;
             this.MainLabel.Text = string.IsNullOrWhiteSpace(this.field.VisibleName) ? this.field.Name + ":" : this.field.VisibleName + ":";
-            this.GenerateUIControl(this.field.Type);
+            try
+            {
+                this.GenerateUIControl(this.field.Type);
+                //this.MakeButton();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+            }
         }
         private TagType GetFillerType()
         {
-            switch (this.Mode)
-            {
-                case FillerMode.Field:
-                default:
-                    return this.field.Type;
-                case FillerMode.Tag:
-                    return this.tag.type;
-            }
+            return this.field.Type;
         }
         private void GenerateUIControl(TagType type)
         {
-            string value = "";
-            string description = "";
-            switch (this.Mode)
-            {
-                case FillerMode.Field:
-                    value = this.field.Value;
-                    description = this.field.Description;
-                    break;
-                case FillerMode.Tag:
-                    value = this.tag.value;
-                    description = this.tag.description;
-                    break;
-            }
+            string value = this.field.Value;
+            string description = this.field.Description;
             switch (type)
             {
                 case TagType.Variable:
@@ -121,8 +95,8 @@ namespace Incas.Templates.Views.Controls
                         value = "";
                     }
                     ComboBox comboBox = new()
-                    {                       
-                        ItemsSource = type == TagType.LocalEnumeration? value.Split(';') : ProgramState.GetEnumeration(value),
+                    {                      
+                        ItemsSource = type == TagType.LocalEnumeration? JsonConvert.DeserializeObject<List<string>>(value) : ProgramState.GetEnumeration(Guid.Parse(value)),
                         SelectedIndex = 0,
                         Style = this.FindResource("ComboBoxMain") as Style
                     };
@@ -136,7 +110,7 @@ namespace Incas.Templates.Views.Controls
                 case TagType.Number:
                     NumericBox numeric = new();
                     numeric.OnNumberChanged += this.NumericBox_OnNumberChanged;
-                    numeric.ApplyMinAndMax(value);
+                    numeric.ApplyMinAndMax(Objects.Components.NumberFieldData.GetFromString(value));
                     this.PlaceUIControl(numeric);
                     break;
                 case TagType.LocalConstant:              
@@ -145,22 +119,10 @@ namespace Incas.Templates.Views.Controls
                     break;
                 case TagType.GlobalConstant:
                     this.Visibility = Visibility.Collapsed;
-                    switch (this.Mode)
-                    {
-                        case FillerMode.Field:
-                            this.field.Value = ProgramState.GetConstant(value);
-                            break;
-                        case FillerMode.Tag:
-                            this.tag.value = ProgramState.GetConstant(value);
-                            break;
-                    }                  
+                    this.field.Value = ProgramState.GetConstant(value);           
                     break;
                 case TagType.Relation:
-                    SelectionBox selectionBox = new()
-                    {
-                        Source = value,
-                        ToolTip = description
-                    };
+                    SelectionBox selectionBox = new(BindingData.GetFromString(value));
                     selectionBox.OnValueChanged += this.SelectionBox_OnValueChanged;
                     this.PlaceUIControl(selectionBox);
                     break;
@@ -197,7 +159,7 @@ namespace Incas.Templates.Views.Controls
 
         private void MakeButton()
         {
-            this.command = this.tag.GetCommand();
+            this.command = this.field.GetCommand();
             if (this.command.ScriptType != ScriptType.Button)
             {
                 return;
@@ -229,13 +191,13 @@ namespace Incas.Templates.Views.Controls
                     }
                     break;
                 case TagType.Relation:
-                    ((SelectionBox)this.control).Value = value;
+                    ((SelectionBox)this.control).SetObject(value);
                     break;
                 case TagType.LocalConstant:
                 case TagType.GlobalConstant:
                     return;
                 case TagType.HiddenField:
-                    this.tag.value = value;
+                    this.field.Value = value;
                     break;
                 case TagType.LocalEnumeration:
                 case TagType.GlobalEnumeration:
@@ -278,15 +240,15 @@ namespace Incas.Templates.Views.Controls
 
         public string GetTagName()
         {
-            return this.tag.name;
+            return this.field.Name;
         }
         public bool ValidateContent()
         {
-            if (this.tag.type is TagType.Variable or TagType.Text)
+            if (this.field.Type is TagType.Variable or TagType.Text)
             {
                 if (this.isRequired && string.IsNullOrEmpty(((TextBox)this.control).Text))
                 {
-                    DialogsManager.ShowExclamationDialog($"Поле \"{this.tag.name}\" обязательно для заполнения!", "Действие прервано");
+                    DialogsManager.ShowExclamationDialog($"Поле \"{this.field.Name}\" обязательно для заполнения!", "Действие прервано");
                     return false;
                 }
             }
@@ -299,9 +261,9 @@ namespace Incas.Templates.Views.Controls
             {
                 return "";
             }
-            return string.IsNullOrWhiteSpace(this.tag.value)
+            return string.IsNullOrWhiteSpace(this.field.Value)
                 ? ((DateTime)picker.SelectedDate).ToString("dd.MM.yyyy")
-                : picker.SelectedDate.HasValue ? ((DateTime)picker.SelectedDate).ToString(this.tag.value) : "";
+                : picker.SelectedDate.HasValue ? ((DateTime)picker.SelectedDate).ToString(this.field.Value) : "";
         }
         public string GetValue()
         {
@@ -315,7 +277,7 @@ namespace Incas.Templates.Views.Controls
                 case TagType.LocalConstant:
                 case TagType.HiddenField:
                 case TagType.GlobalConstant:
-                    return this.tag.value;
+                    return this.field.Value;
                 case TagType.Relation:
                     return ((SelectionBox)this.control).Value;
                 case TagType.LocalEnumeration:
@@ -346,13 +308,16 @@ namespace Incas.Templates.Views.Controls
                         return ((DateTime)((DatePicker)this.control).SelectedDate).ToString("dd.MM.yyyy");
                     }
                     return "";
+                case TagType.Relation:
+                    return ((SelectionBox)this.control).SelectedObject?.Id.ToString();
                 default: return this.GetValue();
 
             }
         }
+
         public Guid GetId()
         {
-            return this.tag.id;
+            return this.field.Id;
         }
 
         private void CopyAllClick(object sender, RoutedEventArgs e)
@@ -362,20 +327,16 @@ namespace Incas.Templates.Views.Controls
 
         private void InsertToOther(object sender, RoutedEventArgs e)
         {
-            OnInsert?.Invoke(this.tag.id, this.GetData());
+            OnInsert?.Invoke(this.field.Id, this.GetData());
         }
         private void RecalculateNamesClick(object sender, RoutedEventArgs e)
         {
-            OnRename?.Invoke(this.tag.name);
+            OnRename?.Invoke(this.field.Name);
         }
 
         private void TextRequest(object sender, RoutedEventArgs e)
         {
-            Session session;
-            if (DialogsManager.ShowActiveUserSelector(out session, "Выберите пользователя для запроса данных"))
-            {
-                ServerProcessor.SendRequestTextProcess(this, session.slug);
-            }
+
         }
         private void PlayScript()
         {
@@ -415,34 +376,44 @@ namespace Incas.Templates.Views.Controls
                 this.MainLabel.Foreground = this.FindResource("GrayLight") as SolidColorBrush;
             }
         }
+        private void RunUpdateEvent()
+        {
+            this.OnFieldUpdate?.Invoke(this);
+        }
 
         private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.CheckForScriptOnUpdate();
+            this.RunUpdateEvent();
+            this.CheckForScriptOnUpdate();          
         }
 
         private void Textbox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            this.RunUpdateEvent();
             this.CheckForScriptOnUpdate();
         }
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
+            this.RunUpdateEvent();
             this.CheckForScriptOnUpdate();
         }
 
         private void SelectionBox_OnValueChanged(object sender, TextChangedEventArgs e)
         {
+            this.RunUpdateEvent();
             this.CheckForScriptOnUpdate();
         }
 
         private void Generator_OnValueChanged(object sender)
         {
+            this.RunUpdateEvent();
             this.CheckForScriptOnUpdate();
         }
 
         private void NumericBox_OnNumberChanged(object sender)
         {
+            this.RunUpdateEvent();
             this.CheckForScriptOnUpdate();
         }
 

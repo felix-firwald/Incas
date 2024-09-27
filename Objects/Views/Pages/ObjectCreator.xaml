@@ -22,15 +22,15 @@
                 <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" Margin="10,0,10,0" MouseDown="ResizeClick" ToolTip="Свернуть / Развернуть окно"/>-->
                 <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" Checked="MaximizeClick" Unchecked="MinimizeClick"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,5,0,5" Opacity="0.5" />
-                <StackPanel Orientation="Horizontal">
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Save" VerticalAlignment="Center" FontSize="18" ToolTip="Сохранить объект" Cursor="Hand" MouseDown="SaveClick" Margin="8,5,5,5"/>
-                    <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,5,5,5" Opacity="0.5"/>
+                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Save" VerticalAlignment="Center" ToolTip="Сохранить объект" Cursor="Hand" MouseDown="SaveClick" Margin="8,5,5,5" />
+                <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,5,5,5" Opacity="0.5"/>
+                <StackPanel x:Name="RenderArea" Orientation="Horizontal">
+                    <fa:FontAwesome x:Name="EyeButton" Style="{DynamicResource IconButton}" Icon="Eye" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть средство предпросмотра и рендера" Cursor="Hand" MouseDown="PreviewCLick" Margin="5,5,1,5"/>
+                    <Rectangle x:Name="EyeButtonSeparator" Width="1" Fill="{DynamicResource Element}" Opacity="0.5" Margin="10,5,10,5"/>
                 </StackPanel>
 
-                <fa:FontAwesome x:Name="EyeButton" Style="{DynamicResource IconButton}" Icon="Eye" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть средство предпросмотра и рендера" Cursor="Hand" MouseDown="PreviewCLick" Margin="5,5,1,5"/>
-                <Rectangle x:Name="EyeButtonSeparator" Width="1" Fill="{DynamicResource Element}" Opacity="0.5" Margin="10,5,10,5"/>
-
-                <TextBox x:Name="Filename" Style="{DynamicResource TextBoxTransparent}" Text="Новый объект">
+                
+                <TextBox x:Name="ObjectName" Style="{DynamicResource TextBoxTransparent}">
                     <TextBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>

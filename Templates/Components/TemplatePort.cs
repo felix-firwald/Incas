@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Objects.Models;
 using Incas.Templates.Models;
 using Newtonsoft.Json;
 using System;
@@ -16,7 +17,7 @@ namespace Incas.Templates.Components
         public class TemplateData
         {
             public Template SourceTemplate { get; set; }
-            public List<Tag> Tags { get; set; }
+            public List<Objects.Models.Field> Tags { get; set; }
         }
 
         public TemplatePort()
@@ -28,11 +29,11 @@ namespace Incas.Templates.Components
         {
             this.Data.SourceTemplate = temp;
             this.Data.Tags = applyParent
-                ? this.Data.SourceTemplate.GetTags(false)
-                : this.Data.SourceTemplate.GetTags(true);
-            foreach (Tag tag in this.Data.Tags)
+                ? this.Data.SourceTemplate.GetFields(false)
+                : this.Data.SourceTemplate.GetFields(true);
+            foreach (Objects.Models.Field tag in this.Data.Tags)
             {
-                tag.id = Guid.Empty;
+                tag.Id = Guid.Empty;
             }
             this.Data.SourceTemplate.id = Guid.Empty;
             this.Data.SourceTemplate.parent = "";

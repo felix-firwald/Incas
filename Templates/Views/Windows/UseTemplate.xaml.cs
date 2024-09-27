@@ -1,6 +1,5 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
-using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
@@ -16,7 +15,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Tag = Incas.Templates.Models.Tag;
 
 namespace Incas.Templates.Views.Windows
 {
@@ -27,7 +25,7 @@ namespace Incas.Templates.Views.Windows
     {
         private Template template;
         private TemplateSettings templateSettings;
-        private List<Tag> tags;
+        private List<Objects.Models.Field> tags;
         private List<FileCreator> creators = [];
 
         private delegate void UpdateProgressBarDelegate(DependencyProperty dp, object value);
@@ -47,16 +45,7 @@ namespace Incas.Templates.Views.Windows
             this.Setup(t);
             this.AddFileCreator();
         }
-        public UseTemplate(Template t, List<SGeneratedDocument> records)
-        {
-            this.Setup(t);
-            foreach (SGeneratedDocument item in records)
-            {
-                this.AddFileCreator().ApplyRecord(item);
-            }
-            DialogsManager.ShowWaitCursor(false);
-        }
-        public UseTemplate(string templateName, List<Tag> tags) // dev mode
+        public UseTemplate(string templateName, List<Objects.Models.Field> tags) // dev mode
         {
             this.InitializeComponent();
             this.tags = tags;
@@ -69,7 +58,7 @@ namespace Incas.Templates.Views.Windows
         }
         private void LoadTags()
         {
-            this.tags = this.template.GetTags();
+            this.tags = this.template.GetFields();
         }
 
         private FileCreator AddFileCreator()
@@ -135,7 +124,7 @@ namespace Incas.Templates.Views.Windows
             bool needSave = !this.template.GetTemplateSettings().PreventSave;
             foreach (FileCreator fc in this.ContentPanel.Children)
             {
-                if (!fc.CreateFile(this.dir.Text, true, needSave))
+                if (!fc.CreateFile(this.dir.Text, true))
                 {
                     Mouse.OverrideCursor = null;
                     DatabaseManager.NullifyBackground();
@@ -212,12 +201,12 @@ namespace Incas.Templates.Views.Windows
                 }
                 this.ContentPanel.Children.Clear();
                 this.creators.Clear();
-                foreach (Tag tag in this.tags)
+                foreach (Objects.Models.Field tag in this.tags)
                 {
                     IXLCell colCell;
                     try
                     {
-                        colCell = ws.Search(tag.name, CompareOptions.IgnoreCase).First();   // ищем заголовок столбца с именем аналогичным тегу
+                        colCell = ws.Search(tag.Name, CompareOptions.IgnoreCase).First();   // ищем заголовок столбца с именем аналогичным тегу
                         int columnNumber = colCell.WorksheetColumn().ColumnNumber();    // номер столбца в листе Excel
                         int rowNumber = colCell.WorksheetRow().RowNumber() + 1; // номер строки в листе Excel
                         int fileIndex = 0; // индекс в List
@@ -228,7 +217,7 @@ namespace Incas.Templates.Views.Windows
                                 pairs.Add([]);
                             }
                             string value = ws.Cell(i, columnNumber).Value.ToString();
-                            pairs[fileIndex].Add(tag.name, value);
+                            pairs[fileIndex].Add(tag.Name, value);
                             fileIndex++;
                         }
                     }
@@ -254,7 +243,7 @@ namespace Incas.Templates.Views.Windows
                 IXLWorksheet ws = wb.AddWorksheet("Из INCAS");
                 for (int i = 0; i < this.tags.Count; i++) // columns
                 {
-                    IXLCell c = ws.Cell(1, i + 1).SetValue(this.tags[i].name);
+                    IXLCell c = ws.Cell(1, i + 1).SetValue(this.tags[i].Name);
                     c.Style.Font.Bold = true;
                 }
                 int row = 2;

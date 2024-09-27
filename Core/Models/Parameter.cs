@@ -160,18 +160,17 @@ namespace Incas.Core.Models
             DialogsManager.ShowExclamationDialog($"Константа с именем \"{withName}\" не определена.", "Константа не определена");
             return "";
         }
-        public List<string> GetEnumerationValue(string withName)
+        public List<string> GetEnumerationValue(Guid id)
         {
             DataRow dr = this.StartCommandToService()
                 .Select("value")
                 .WhereEqual("type", ParameterType.ENUMERATION.ToString())
-                .WhereEqual("name", withName)
+                .WhereEqual(nameof(this.id), id.ToString())
                 .ExecuteOne();
             if (dr is not null)
             {
                 return JsonConvert.DeserializeObject<List<string>>(dr["value"].ToString());
             }
-            DialogsManager.ShowExclamationDialog($"Перечисление с именем \"{withName}\" не определено.", "Перечисление не определено");
             return new();
         }
         public bool Exists(ParameterType typeOf, string nameOf, string expectedValue, bool like = true)

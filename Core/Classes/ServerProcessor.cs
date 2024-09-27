@@ -229,9 +229,6 @@ namespace Incas.Core.Classes
                         case ProcessTarget.EXPLICIT: // admin process
                             ShowExplicitMessageProcessHandle(process.content, process);
                             break;
-                        case ProcessTarget.OPEN_SEQUENCER:
-                            OpenSequencerProcessHandle(process.content);
-                            break;
                         case ProcessTarget.OPEN_GENERATOR:
                             OpenGeneratorProcessHandle(process);
                             break;
@@ -391,23 +388,6 @@ namespace Incas.Core.Classes
                 DialogsManager.ShowErrorDialog($"Не удалось открыть присланную ссылку:\n{ex}", "Действие невозможно");
             }
         }
-        private static void OpenSequencerProcessHandle(string content)
-        {
-            try
-            {
-                List<SGeneratedDocument> documents = JsonConvert.DeserializeObject<List<SGeneratedDocument>>(content);
-                using Template t = new();
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                {
-                    UseTemplate ut = new(t.GetTemplateById(documents[0].template), documents);
-                    ut.Show();
-                });
-            }
-            catch (Exception ex)
-            {
-                DialogsManager.ShowErrorDialog($"Не удалось открыть присланную запись:\n{ex}", "Действие невозможно");
-            }
-        }
         private static void OpenGeneratorProcessHandle(Process p)
         {
             try
@@ -522,14 +502,6 @@ namespace Incas.Core.Classes
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.COPY_TEXT;
             process.content = text;
-            SendToPort(process);
-        }
-        public static void SendRequestTextProcess(TagFiller tagfiller, string recipient)
-        {
-            Process process = CreateQueryProcess(recipient);
-            process.target = ProcessTarget.REQUEST_TEXT;
-            process.content = $"{tagfiller.GetId()}|||{tagfiller.tag.name}";
-            WaitControls.TagFillers.Add(tagfiller);
             SendToPort(process);
         }
         private static void SendFileProcess(string filename, string fullname, string recipient, ProcessTarget target)

@@ -3,7 +3,6 @@ using Incas.Core.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
-using Incubator_2.Forms;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -44,40 +43,38 @@ namespace Incas.Templates.Views.Windows
         }
         private void GetTags()
         {
-            Tag tag = new();
-            foreach (Tag t in this.template.GetTags())
+            Objects.Models.Field tag = new();
+            foreach (Objects.Models.Field t in this.template.GetFields())
             {
                 this.AddTag(t);
             }
         }
         private void SaveTags()
         {
-            List<Tag> tags = new();
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            List<Objects.Models.Field> tags = new();
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
-                tags.Add(tag.tag);
+                tags.Add(tag.vm.Source);
             }
             this.vm.Tags = tags;
         }
 
-        private void AddTag(Tag tag = null)
+        private void AddTag(Objects.Models.Field tag = null)
         {
-            Tag t = new();
-            bool isNew = false;
+            Objects.Models.Field t = new();
             if (tag == null)
             {
-                t.name = "Новый";
-                isNew = true;
+                t.Name = "Новый";
             }
             else
             {
                 t = tag;
             }
-            TagCreator tc = new(t, isNew);
-            tc.onDelete += this.RemoveTagFromList;
+            Objects.Views.Controls.FieldCreator tc = new(t);
+            tc.OnRemove += this.RemoveTagFromList;
             this.ContentPanel.Children.Add(tc);
         }
-        private void RemoveTagFromList(TagCreator tag)
+        private void RemoveTagFromList(Objects.Views.Controls.FieldCreator tag)
         {
             this.ContentPanel.Children.Remove(tag);
         }
@@ -98,23 +95,23 @@ namespace Incas.Templates.Views.Windows
             }
             foreach (string tagname in result)
             {
-                Tag tag = new()
+                Objects.Models.Field tag = new()
                 {
-                    name = tagname
+                    Name = tagname
                 };
                 this.AddTag(tag);
             }
         }
         private void MinimizeAllClick(object sender, MouseButtonEventArgs e)
         {
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
                 tag.Minimize();
             }
         }
         private void MaximizeAllClick(object sender, MouseButtonEventArgs e)
         {
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
                 tag.Maximize();
             }
@@ -133,14 +130,14 @@ namespace Incas.Templates.Views.Windows
             }
 
             List<string> names = [];
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
                 if (names.Contains(tag.TagName.Text))
                 {
                     DialogsManager.ShowExclamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
                     return false;
                 }
-                if (tag.tag.type == TagType.Table)
+                if (tag.vm.Source.Type == TagType.Table)
                 {
                     DialogsManager.ShowExclamationDialog($"В генераторах нельзя использовать таблицы!", "Сохранение прервано");
                     return false;

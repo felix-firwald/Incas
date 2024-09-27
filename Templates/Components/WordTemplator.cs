@@ -82,7 +82,7 @@ namespace Incas.Templates.Components
             List<string> values = [number];
             foreach (TableFiller tab in tableFillers)
             {
-                this.CreateTable(tab.tag.name, tab.DataTable);
+                this.CreateTable(tab.field.Name, tab.DataTable);
                 filledTags.Add(tab.GetAsGeneratedTag());
             }
             foreach (TagFiller tf in tagFillers)
@@ -90,9 +90,9 @@ namespace Incas.Templates.Components
                 Guid id = tf.GetId();
                 string name = tf.GetTagName();
                 string value = tf.GetValue();
-                if (tf.tag.type != TagType.LocalConstant)
+                if (tf.field.Type != TagType.LocalConstant)
                 {
-                    if (tf.tag.type is TagType.Generator or Components.TagType.Macrogenerator or TagType.Date)
+                    if (tf.field.Type is TagType.Generator or Components.TagType.Macrogenerator or TagType.Date)
                     {
                         SGeneratedTag gtg = new()
                         {

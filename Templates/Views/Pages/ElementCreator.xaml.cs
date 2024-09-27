@@ -3,7 +3,6 @@ using Incas.CreatedDocuments.Models;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
-using Incubator_2.Common;
 using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;
@@ -19,13 +18,13 @@ namespace Incas.Templates.Views.Pages
     public partial class ElementCreator : UserControl
     {
         private Template template;
-        private List<Tag> tags;
+        private List<Objects.Models.Field> tags;
 
         public delegate void ElementCreatorAction(ElementCreator creator);
         public event ElementCreatorAction OnCreatorDestroy;
 
         public delegate void TagActionRecalculate(string tag);
-        public ElementCreator(Template template, List<Tag> tags)
+        public ElementCreator(Template template, List<Objects.Models.Field> tags)
         {
             this.InitializeComponent();
             this.template = template;
@@ -35,12 +34,12 @@ namespace Incas.Templates.Views.Pages
         }
         private void FillPanel()
         {
-            foreach (Tag tag in this.tags)
+            foreach (Objects.Models.Field tag in this.tags)
             {
                 this.AddField(tag);
             }
         }
-        private void AddField(Tag t)
+        private void AddField(Objects.Models.Field t)
         {
             TagFiller tf = new(t);
             tf.OnScriptRequested += this.OnScriptRequested;
@@ -54,7 +53,7 @@ namespace Incas.Templates.Views.Pages
                 {
                     foreach (TagFiller tagfiller in this.ContentPanel.Children)
                     {
-                        if (tagfiller.tag.id == tag.tag)
+                        if (tagfiller.field.Id == tag.tag)
                         {
                             tagfiller.SetValue(tag.value);
                             break;
@@ -74,8 +73,8 @@ namespace Incas.Templates.Views.Pages
             {
                 SGeneratedTag gt = new()
                 {
-                    tag = tf.tag.id,
-                    value = tf.tag.type == TagType.Generator ? tf.GetData() : tf.GetValue()
+                    tag = tf.field.Id,
+                    value = tf.field.Type == TagType.Generator ? tf.GetData() : tf.GetValue()
                 };
                 tags.Add(gt);
             }
@@ -87,7 +86,7 @@ namespace Incas.Templates.Views.Pages
             string result = this.template.path;
             foreach (TagFiller tf in this.ContentPanel.Children)
             {
-                result = result.Replace($"[{tf.tag.name}]", tf.GetValue());
+                result = result.Replace($"[{tf.field.Name}]", tf.GetValue());
             }
             return result;
         }
@@ -99,12 +98,12 @@ namespace Incas.Templates.Views.Pages
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                 foreach (TagFiller tf in this.ContentPanel.Children)
                 {
-                    scope.SetVariable(tf.tag.name.Replace(" ", "_"), tf.GetData());
+                    scope.SetVariable(tf.field.Name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
                 foreach (TagFiller tf in this.ContentPanel.Children)
                 {
-                    tf.SetValue(scope.GetVariable(tf.tag.name.Replace(" ", "_")));
+                    tf.SetValue(scope.GetVariable(tf.field.Name.Replace(" ", "_")));
                 }
             }
             catch (Exception ex)
@@ -118,7 +117,7 @@ namespace Incas.Templates.Views.Pages
             {
                 if (string.IsNullOrEmpty(tf.GetData()))
                 {
-                    DialogsManager.ShowExclamationDialog($"Тег \"{tf.tag.name}\" не заполнен!", "Сохранение отклонено");
+                    DialogsManager.ShowExclamationDialog($"Тег \"{tf.field.Name}\" не заполнен!", "Сохранение отклонено");
                     return false;
                 }
             }

@@ -11,6 +11,28 @@ namespace Incas.Objects.Models
     public class ClassData
     {
         public List<Field> fields { get; set; }
+        public string NameTemplate { get; set; }
+        public ClassType ClassType { get; set; }
+        public List<Field> GetFieldsForMap()
+        {
+            List<Field> list = new();
+            foreach (Field field in this.fields)
+            {
+                switch (field.Type)
+                {
+                    case TagType.Variable:
+                    case TagType.Text:
+                    case TagType.Number:
+                    case TagType.Relation:
+                    case TagType.LocalEnumeration:
+                    case TagType.GlobalEnumeration:
+                    case TagType.Date:
+                        list.Add(field);
+                        break;
+                }
+            }
+            return list;
+        }
     }
 
     public class Class : Model
@@ -74,14 +96,24 @@ namespace Incas.Objects.Models
         }
         public DataTable GetAllClassesAsDataTable()
         {
-            return this.StartCommandToService().Select("[identifier] AS [Идентификатор], [category] AS [Категория], [name] AS [Наименование]").Execute();
+            return this.StartCommandToService().Select("[identifier] AS [Идентификатор], [category] AS [Категория], [name] AS [Наименование]").OrderByASC("Категория").Execute();
         }
         private void Update()
         {
+            Dictionary<string, string> dict = new()
+            {
+                {
+                    nameof(this.category), this.category
+                },
+                {
+                    nameof(this.name), this.name
+                },
+                {
+                    nameof(this.data), this.data
+                }
+            };
             this.StartCommand()
-                .Update(nameof(this.category), this.category)
-                .Update(nameof(this.name), this.name)
-                .Update(nameof(this.data), this.data)
+                .Update(dict)
                 .WhereEqual(nameof(this.identifier), this.identifier.ToString())
                 .ExecuteVoid();
             ObjectProcessor.UpdateObjectMap(this);
@@ -108,6 +140,11 @@ namespace Incas.Objects.Models
                     }
                 ).ExecuteVoid();
             ObjectProcessor.InitializeObjectMap(this);
+        }
+        public void Remove(Guid id)
+        {
+            this.StartCommand().Delete().WhereEqual(nameof(this.identifier), id.ToString()).ExecuteVoid();
+            ObjectProcessor.DropObjectMap(this);
         }
         public ClassData GetClassData()
         {

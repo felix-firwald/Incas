@@ -19,7 +19,7 @@
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
                 <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" ToolTip="Свернуть / Развернуть окно" Cursor="Hand" MouseDown="TurnSizeClick"/>-->
-                <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" Checked="MaximizeClick" Unchecked="MinimizeClick"/>
+                <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" Checked="MaximizeClick" Unchecked="MinimizeClick" ToolTip="Свернуть / развернуть поле объекта"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,5,0,5" Opacity="0.5" />
                 <Label x:Name="NumberUp" Style="{DynamicResource LabelElement}" MinWidth="40" Visibility="Collapsed" Content="{Binding OrderNumber, FallbackValue=0}" Foreground="{DynamicResource Icon}" Cursor="Hand" ToolTip="Инкремент номера" ToolTipService.InitialShowDelay="200" MouseDown="UpClick" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                 </Label>
@@ -158,7 +158,7 @@
                 </WrapPanel>
             </StackPanel>
             <Rectangle Width="1" Fill="{DynamicResource Element}" Grid.Column="1" HorizontalAlignment="Left"  Margin="-2,5,0,5" Opacity="0.5" />
-            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" ToolTip="Удалить тег" Cursor="Hand" MouseDown="RemoveClick" Grid.Column="1"/>
+            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" ToolTip="Удалить поле" Cursor="Hand" MouseDown="RemoveClick" Grid.Column="1"/>
             <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowUp" MouseDown="UpClick" />
                 <Label Style="{DynamicResource LabelElement}" Content="{Binding OrderNumber, FallbackValue=0}" HorizontalAlignment="Center" FontSize="14"/>

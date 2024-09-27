@@ -3,7 +3,8 @@ using Incas.Core.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
-using Incubator_2.Forms;
+using Incas.Objects.Views.Controls;
+using Incas.Objects.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,8 +47,8 @@ namespace Incas.Templates.Views.Windows
 
         private void GetTags()
         {
-            Tag tag = new();
-            foreach (Tag t in this.vm.Tags)
+            Objects.Models.Field tag = new();
+            foreach (Objects.Models.Field t in this.vm.Tags)
             {
                 this.AddTag(t);
             }
@@ -141,13 +142,8 @@ namespace Incas.Templates.Views.Windows
             }
 
             List<string> names = [];
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
-                if (!tag.Check())
-                {
-                    DialogsManager.ShowExclamationDialog($"Тег \"{tag.tag.name}\" не заполнен.", "Сохранение прервано");
-                    return false;
-                }
                 if (names.Contains(tag.TagName.Text))
                 {
                     DialogsManager.ShowExclamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
@@ -159,7 +155,7 @@ namespace Incas.Templates.Views.Windows
             return true;
         }
 
-        private void RemoveTagFromList(TagCreator tag)
+        private void RemoveTagFromList(Objects.Views.Controls.FieldCreator tag)
         {
             this.ContentPanel.Children.Remove(tag);
         }
@@ -179,29 +175,27 @@ namespace Incas.Templates.Views.Windows
 
         private void SaveTags()
         {
-            List<Tag> tags = new();
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            List<Objects.Models.Field> tags = new();
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
-                tags.Add(tag.tag);
+                tags.Add(tag.vm.Source);
             }
             this.vm.Tags = tags;
         }
 
-        private void AddTag(Tag tag = null)
+        private void AddTag(Objects.Models.Field tag = null)
         {
-            Tag t = new();
-            bool isNew = false;
+            Objects.Models.Field t = new();
             if (tag == null)
             {
-                t.name = "Новый";
-                isNew = true;
+                t.Name = "Новый";
             }
             else
             {
                 t = tag;
             }
-            TagCreator tc = new(t, isNew);
-            tc.onDelete += this.RemoveTagFromList;
+            Objects.Views.Controls.FieldCreator tc = new(t);
+            tc.OnRemove += this.RemoveTagFromList;
             this.ContentPanel.Children.Add(tc);
         }
 
@@ -218,9 +212,9 @@ namespace Incas.Templates.Views.Windows
         {
             bool CheckNameUniqueness(string name)
             {
-                foreach (TagCreator creator in this.ContentPanel.Children)
+                foreach (Objects.Views.Controls.FieldCreator creator in this.ContentPanel.Children)
                 {
-                    if (creator.tag.name == name)
+                    if (creator.vm.Source.Name == name)
                     {
                         return false;
                     }
@@ -242,10 +236,10 @@ namespace Incas.Templates.Views.Windows
                     {
                         continue;
                     }
-                    Tag tag = new()
+                    Objects.Models.Field tag = new()
                     {
-                        name = tagname,
-                        visibleName = tagname
+                        Name = tagname,
+                        VisibleName = tagname
                     };
                     this.AddTag(tag);
                 }
@@ -259,7 +253,7 @@ namespace Incas.Templates.Views.Windows
 
         private void MinimizeAll(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
                 tag.Minimize();
             }
@@ -267,7 +261,7 @@ namespace Incas.Templates.Views.Windows
 
         private void MaximizeAll(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
                 tag.Maximize();
             }
@@ -335,10 +329,9 @@ namespace Incas.Templates.Views.Windows
         private void Sort(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             int order = 0;
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
                 order++;
-                tag.SetOrderNumber(order);
             }
         }
 
@@ -407,7 +400,7 @@ namespace Incas.Templates.Views.Windows
                 {
                     tp.GetSourceFile(filename, tp.Data.SourceTemplate.path);
                     this.vm.ApplyNewTemplate(tp.Data.SourceTemplate);
-                    foreach (Tag t in tp.Data.Tags)
+                    foreach (Objects.Models.Field t in tp.Data.Tags)
                     {
                         this.AddTag(t);
                     }
@@ -421,20 +414,20 @@ namespace Incas.Templates.Views.Windows
 
         private void DublicateNames(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
-                if (string.IsNullOrWhiteSpace(tag.tag.visibleName))
+                if (string.IsNullOrWhiteSpace(tag.vm.Source.VisibleName))
                 {
                     tag.DublicateName();
                 }
             }
         }
-        private List<Tag> GetTagsData()
+        private List<Objects.Models.Field> GetTagsData()
         {
-            List<Tag> tags = [];
-            foreach (TagCreator tag in this.ContentPanel.Children)
+            List<Objects.Models.Field> tags = [];
+            foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
-                tags.Add(tag.tag);
+                tags.Add(tag.vm.Source);
             }
             return tags;
         }

@@ -358,11 +358,11 @@ namespace Incas.Core.Classes
                 return p.GetConstantValue(name);
             }
         }
-        public static List<string> GetEnumeration(string name)
+        public static List<string> GetEnumeration(Guid id)
         {
             using (Parameter p = new())
             {
-                return p.GetEnumerationValue(name);
+                return p.GetEnumerationValue(id);
             }
         }
     }

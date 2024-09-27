@@ -12,7 +12,7 @@ namespace Incas.Templates.Models
         public string parent { get; set; }
         public TemplateType type { get; set; }
         public string settings { get; set; }
-        public string tags { get; set; }
+        public string fields { get; set; }
 
         public Template AsModel()
         {
@@ -25,7 +25,7 @@ namespace Incas.Templates.Models
                 parent = this.parent,
                 type = this.type,
                 settings = this.settings,
-                tags = this.tags
+                fields = this.fields
             };
             return template;
         }

@@ -13,8 +13,20 @@ namespace Incas.Objects.Components
         public Guid Id { get; set; }
         public DateTime CreationDate { get; set; }
         public Guid AuthorId { get; set; }
-        public string Comment { get; set; }
+        public Guid Status { get; set; }
+        public string Name { get; set; }
         public object Meta { get; set; }
         public List<FieldData> Fields { get; set; }
+        public string GetFieldValue(Guid id)
+        {
+            foreach (FieldData field in this.Fields)
+            {
+                if (field.ClassFieldId == id)
+                {
+                    return field.Value;
+                }
+            }
+            return "";
+        }
     }
 }

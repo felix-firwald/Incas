@@ -10,16 +10,12 @@ namespace Incas.Templates.ViewModels
     {
         private DataTable _data;
         private bool showForm = false;
-        public TableFillerViewModel(Tag t)
+        public TableFillerViewModel(Objects.Models.Field t)
         {
             this._data = new DataTable();
-            this.MakeColumns(t.value);
+            this.MakeColumns(t.Value);
         }
-        public TableFillerViewModel(Objects.Models.Field f)
-        {
-            this._data = new DataTable();
-            this.MakeColumns(f.Value);
-        }
+
         private void MakeColumns(string columns)
         {
             foreach (string c in columns.Split(';'))

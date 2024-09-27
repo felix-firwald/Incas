@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
+using Incas.Objects.Components;
 using Incas.Objects.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +16,18 @@ namespace Incas.Objects.ViewModels
         {
             this.Source = source;
             this.SourceData = this.Source.GetClassData();
+        }
+        public ClassType Type
+        {
+            get
+            {
+                return this.SourceData.ClassType;
+            }
+            set
+            {
+                this.SourceData.ClassType = value;
+                this.OnPropertyChanged(nameof(this.Type));
+            }
         }
         public string NameOfClass
         {
@@ -38,6 +51,18 @@ namespace Incas.Objects.ViewModels
             {
                 this.Source.category = value;
                 this.OnPropertyChanged(nameof(this.CategoryOfClass));
+            }
+        }
+        public string NameTemplate
+        {
+            get
+            {
+                return this.SourceData.NameTemplate;
+            }
+            set
+            {
+                this.SourceData.NameTemplate = value;
+                this.OnPropertyChanged(nameof(this.NameTemplate));
             }
         }
         public void SetData(List<Field> fields)

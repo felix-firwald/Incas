@@ -127,19 +127,6 @@ namespace Incas.Templates.Views.Controls
                                     return "";
                                 }
                                 break;
-                            case TagType.Macrogenerator:
-                                UseTemplateCircularText utc = new(t.GetTemplateById(this.TemplateId), this.Result);
-                                try
-                                {
-                                    this.Result = utc.GetData();
-                                    this.resultText = utc.GetText();
-                                    this.SetContented();
-                                }
-                                catch (Exception)
-                                {
-                                    return "";
-                                }
-                                break;
                         }        
                     }
                     break;
@@ -243,23 +230,6 @@ namespace Incas.Templates.Views.Controls
                         {
                             this.Result[0] = utt.GetData();
                             this.resultText = utt.GetText();
-                            this.SetContented();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        DialogsManager.ShowErrorDialog(ex.Message);
-                    }
-                    break;
-                case TagType.Macrogenerator:
-                    UseTemplateCircularText utc = new(t.GetTemplateById(this.TemplateId), this.Result);
-                    utc.ShowDialog();
-                    try
-                    {
-                        if (utc.Result == DialogStatus.Yes)
-                        {
-                            this.Result = utc.GetData();
-                            this.resultText = utc.GetText();
                             this.SetContented();
                         }
                     }

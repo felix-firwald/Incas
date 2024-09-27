@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Incas.Objects.Components;
 using Incas.Templates.Components;
 using Newtonsoft.Json;
 using System;
@@ -26,6 +27,10 @@ namespace Incas.Objects.Models
             {
                 this.Id = Guid.NewGuid();
             }
+        }
+        public BindingData GetBindingData()
+        {
+            return JsonConvert.DeserializeObject<BindingData>(this.Value);
         }
         public CommandSettings GetCommand()
         {

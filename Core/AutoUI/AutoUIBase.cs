@@ -9,9 +9,9 @@ namespace Incas.Core.AutoUI
 {
     public abstract class AutoUIBase
     {
-        public void ShowDialog(string title, Icon icon)
+        public bool ShowDialog(string title, Icon icon)
         {
-            DialogsManager.ShowSimpleFormDialog(this, title, icon);
+            return DialogsManager.ShowSimpleFormDialog(this, title, icon);
         }
     }
 }

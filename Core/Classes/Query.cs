@@ -1,11 +1,9 @@
-﻿using Incas.Core.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Text;
+using System.Linq;
 using System.Threading;
-using static IronPython.Modules._ast;
 
 namespace Incas.Core.Classes
 {
@@ -35,23 +33,24 @@ namespace Incas.Core.Classes
         {
             return paramName.Replace("-", "_");
         }
-        private void RegisterParameter(string name, string value)
+        /// <summary>
+        /// Return the Guid with @ symbol
+        /// </summary>
+        /// <param name="value"></param>
+        private string RegisterParameter(string value)
         {
-            if (name.Contains("@"))
-            {
-                this.parameters.Add(this.Resolve(name), value);
-            }
-            else
-            {
-                this.parameters.Add("@" + this.Resolve(name), value);
-            }
+            string result = "@" + Guid.NewGuid().ToString("N");
+            this.parameters.Add(result, value);
+            return result;
         }
-        private void RegisterParameters(Dictionary<string, string> pairs)
+        private List<string> RegisterParameters(List<string> values)
         {
-            foreach (KeyValuePair<string, string> pair in pairs)
+            List<string> result = new();
+            foreach (string value in values)
             {
-                this.RegisterParameter(pair.Key, pair.Value);
+                result.Add(this.RegisterParameter(value));
             }
+            return result;
         }
         public override string ToString()
         {
@@ -108,9 +107,15 @@ namespace Incas.Core.Classes
             return this;
         }
         #endregion
-
+        public Query AttachDatabase(string path, string name)
+        {
+            this.Result = $"ATTACH DATABASE '{path}' AS \"{name}\";\n" + this.Result;
+            return this;
+        }
         public Query SeparateCommand()
         {
+            this.isUpdateAlready = false;
+            this.isWhereAlready = false;
             this.Result += ";\n";
             return this;
         }
@@ -142,25 +147,7 @@ namespace Incas.Core.Classes
             {
                 start = "INSERT OR REPLACE INTO";
             }
-            this.Result += $"{start} [{this.Table}] (\"{string.Join("\", \"", dict.Keys)}\")\nVALUES (@{string.Join(", @", dict.Keys)})";
-            this.RegisterParameters(dict);
-            this.ReplaceNull();
-            return this;
-        }
-        public Query InsertWithGuids(Dictionary<string, string> dict, bool replace = false)
-        {
-            string start = "INSERT INTO";
-            if (replace)
-            {
-                start = "INSERT OR REPLACE INTO";
-            }
-            List<string> paramNames = new();
-            foreach (KeyValuePair<string, string> kvp in dict)
-            {
-                paramNames.Add(this.Resolve(kvp.Key));
-            }
-            this.Result += $"{start} [{this.Table}] (\"{string.Join("\", \"", dict.Keys)}\")\nVALUES (@{string.Join(", @", paramNames)})";
-            this.RegisterParameters(dict);
+            this.Result += $"{start} [{this.Table}] (\"{string.Join("\", \"", dict.Keys)}\")\nVALUES ({string.Join(", ", this.RegisterParameters(dict.Values.ToList()))})";
             this.ReplaceNull();
             return this;
         }
@@ -174,10 +161,9 @@ namespace Incas.Core.Classes
             else
             {
                 this.Result += $"UPDATE [{this.Table}]\n" +
-                $"SET [{cell}] = @{this.Resolve(cell)}";
+                $"SET [{cell}] = {this.RegisterParameter(value)}";
                 this.isUpdateAlready = true;
             }
-            this.RegisterParameter(cell, value);
             return this;
         }
         public Query Update(Dictionary<string, string> dict)
@@ -187,8 +173,7 @@ namespace Incas.Core.Classes
             List<string> result = new();
             foreach (KeyValuePair<string, string> kvp in dict)
             {
-                result.Add("[" + kvp.Key + "] = @" + this.Resolve(kvp.Key));
-                this.RegisterParameter(kvp.Key, kvp.Value);
+                result.Add("[" + kvp.Key + "] = " + this.RegisterParameter(kvp.Value));
             }
             this.Result += string.Join(", ", result);
             return this;
@@ -478,7 +463,7 @@ namespace Incas.Core.Classes
                     path = this.DBPath;
                     break;
             }
-            SQLiteConnection conn = new SQLiteConnection($"Data source={path}; Version=3; UseUTF16Encoding=True", true);
+            SQLiteConnection conn = new($"Data source={path}; Version=3; UseUTF16Encoding=True", true);
             return conn;
         }
         private string GetRequest(bool clear = false)

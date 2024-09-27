@@ -50,8 +50,8 @@ namespace Incas.Admin.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedConstant));
             }
         }
-        private string selectedEnumeration;
-        public string SelectedEnumeration
+        private Guid selectedEnumeration;
+        public Guid SelectedEnumeration
         {
             get
             {
@@ -69,10 +69,6 @@ namespace Incas.Admin.ViewModels
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(this.SelectedEnumeration))
-                {
-                    return "";
-                }
                 List<string> list = ProgramState.GetEnumeration(this.SelectedEnumeration);
                 string result = "";
                 int counter = 1;
@@ -94,6 +90,10 @@ namespace Incas.Admin.ViewModels
                     return cl.GetAllClassesAsDataTable();
                 }
             }
+        }
+        public void UpdateClasses()
+        {
+            this.OnPropertyChanged(nameof(this.Classes));
         }
         //private DataRow selectedRow;
         //public DataRow SelectedClass

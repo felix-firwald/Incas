@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using Incas.Admin.AutoUI;
 using Incas.Objects.Views.Windows;
+using Incas.Objects.AutoUI;
 
 namespace Incas.Admin.Views.Pages
 {
@@ -202,24 +203,37 @@ namespace Incas.Admin.Views.Pages
 
         private void AddClassClick(object sender, RoutedEventArgs e)
         {
-            CreateClass cc = new();
-            cc.ShowDialog();
+            ClassTypeSettings ct = new();
+            if (ct.ShowDialog("Первичная настройка", Icon.Lightning))
+            {
+                CreateClass cc = new(ct);
+                cc.ShowDialog();
+                this.vm.UpdateClasses();
+            }         
         }
-
-        private void EditClassClick(object sender, RoutedEventArgs e)
+        private Guid GetSelectedClass()
         {
             if (this.ClassesTable.SelectedItems.Count == 0)
             {
-                return;
+                return Guid.Empty;
             }
-            Guid id = Guid.Parse(((DataRowView)this.ClassesTable.SelectedItems[0]).Row["Идентификатор"].ToString());
-            CreateClass cc = new(id);
+            return Guid.Parse(((DataRowView)this.ClassesTable.SelectedItems[0]).Row["Идентификатор"].ToString());
+        }
+
+        private void EditClassClick(object sender, RoutedEventArgs e)
+        {         
+            CreateClass cc = new(this.GetSelectedClass());
             cc.ShowDialog();
+            this.vm.UpdateClasses();
         }
 
         private void RemoveClassClick(object sender, RoutedEventArgs e)
         {
-
+            using (Objects.Models.Class cl = new())
+            {
+                cl.Remove(this.GetSelectedClass());
+            }
+            this.vm.UpdateClasses();
         }
     }
 }

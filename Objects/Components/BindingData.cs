@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,9 @@ namespace Incas.Objects.Components
     {
         public Guid Class { get; set; }
         public Guid Field { get; set; }
+        public static BindingData GetFromString(string value)
+        {
+            return JsonConvert.DeserializeObject<BindingData>(value);
+        }
     }
 }

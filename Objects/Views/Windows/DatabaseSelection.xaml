@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Objects.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Выбор записи" Height="650" Width="800" MinHeight="550" MinWidth="550" Style="{DynamicResource WindowBase}" SnapsToDevicePixels="True" UseLayoutRounding="True" Topmost="True" WindowStartupLocation="CenterScreen">
+        Title="Выбор записи" Height="550" Width="700" MinHeight="350" MinWidth="550" Style="{DynamicResource WindowBase}" SnapsToDevicePixels="True" UseLayoutRounding="True" Topmost="True" WindowStartupLocation="CenterScreen">
     <Grid>
 
         <Grid.RowDefinitions>
@@ -31,7 +31,13 @@
             <fa:FontAwesome Icon="Remove" Style="{DynamicResource IconButton}" MouseDown="ClearClick" HorizontalAlignment="Right" Grid.Column="1"/>
         </Grid>
 
-        <DataGrid x:Name="Grid" Style="{DynamicResource DataGridMain}" Background="{DynamicResource Black}" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" HeadersVisibility="Column" Margin="5,5,5,5" Grid.Row="1" SelectionChanged="OnSelectionChanged" />
+        <DataGrid x:Name="Grid" Style="{DynamicResource DataGridMain}" Background="{DynamicResource Black}" AutoGeneratingColumn="Grid_AutoGeneratingColumn" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" HeadersVisibility="Column" Margin="5,5,5,5" Grid.Row="1" SelectionChanged="OnSelectionChanged">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RowMain}">
+                    <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"/>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Button Style="{DynamicResource ButtonMain}" MinWidth="150" Click="SelectClick" IsDefault="True">
                 <StackPanel Orientation="Horizontal">
