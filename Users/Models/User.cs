@@ -47,6 +47,12 @@ namespace Incas.Users.Models
         {
             this.tableName = "Users";
         }
+        public User(Guid id)
+        {
+            this.tableName = "Users";
+            this.id = id;
+            this.GetUserById();
+        }
         #region Base
         public List<User> GetAllUsers()
         {
@@ -70,6 +76,15 @@ namespace Incas.Users.Models
                 .Select()
                 .Execute();
         }
+        public User GetUserById()
+        {
+            DataRow dr = this.StartCommandToService()
+                    .Select()
+                    .WhereEqual(nameof(this.id), this.id.ToString())
+                    .ExecuteOne();
+            this.Serialize(dr);
+            return this;
+        }
         public User GetUserByName()
         {
             DataRow dr = this.StartCommandToService()
@@ -82,12 +97,16 @@ namespace Incas.Users.Models
 
         public void UpdateUser()
         {
+            Dictionary<string, string> map = new()
+            {
+                {nameof(this.surname), this.surname },
+                {nameof(this.secondName), this.secondName},
+                {nameof(this.fullname), this.fullname},
+                {nameof(this.post), this.post},
+                {nameof(this.context), this.context},
+            };
             this.StartCommandToService()
-                .Update("surname", this.surname)
-                .Update("secondName", this.secondName)
-                .Update("fullname", this.fullname)
-                .Update("post", this.post)
-                .Update("context", this.context)
+                .Update(map)
                 .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
         }

@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Incas.Objects.Components;
+using Incas.Objects.Models;
+using Incas.Objects.Views.Controls;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -20,9 +10,38 @@ namespace Incas.Objects.Views.Pages
     /// </summary>
     public partial class ObjectCard : UserControl
     {
-        public ObjectCard()
+        private Class Class { get; set; }
+        private ClassData ClassData { get; set; }
+        public delegate void FieldDataAction(FieldData data);
+        public event FieldDataAction OnFilterRequested;
+        public ObjectCard(Class source)
         {
-            InitializeComponent();
+            this.InitializeComponent();
+            this.Class = source;
+            this.ClassData = source.GetClassData();
+        }
+        public void UpdateFor(Object obj)
+        {
+            this.FieldsContentPanel.Children.Clear();
+            this.ObjectName.Text = obj.Name;
+            ObjectFieldViewer ofAuthor = new(obj.AuthorId);
+            this.FieldsContentPanel.Children.Add(ofAuthor);
+            if (this.ClassData.ClassType == ClassType.Document)
+            {
+                ObjectFieldViewer ofDate = new(obj.CreationDate);
+                this.FieldsContentPanel.Children.Add(ofDate);
+            }          
+            foreach (FieldData field in obj.Fields)
+            {
+                ObjectFieldViewer of = new(field);
+                of.OnFilterRequested += this.Of_OnFilterRequested;
+                this.FieldsContentPanel.Children.Add(of);
+            }         
+        }
+
+        private void Of_OnFilterRequested(FieldData data)
+        {
+            this.OnFilterRequested?.Invoke(data);
         }
     }
 }

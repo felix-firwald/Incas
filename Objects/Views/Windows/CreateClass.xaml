@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Objects.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:classes="clr-namespace:Incas.Objects.Views.Controls" xmlns:classField="clr-namespace:Incas.Objects.Models"
         mc:Ignorable="d"
-        Title="Создать класс" Height="650" Width="900" MinHeight="650" MinWidth="850" WindowStartupLocation="CenterScreen" Style="{StaticResource WindowBase}">
+        Title="Создать класс" Height="750" Width="1000" MinHeight="750" MinWidth="950" WindowStartupLocation="CenterScreen" WindowState="Maximized" Style="{StaticResource WindowBase}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>
@@ -91,8 +91,33 @@
 
                                     <Label Content="Наименование:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                 </Grid>
-                                <TextBlock Style="{StaticResource TextBlockMain}" Text="Для подстановки тегов используйте конструкцию [Название тега]" Foreground="{DynamicResource Element}" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>
+                                <TextBlock Style="{StaticResource TextBlockMain}" Text="Для подстановки полей используйте конструкцию [Название поля]" Foreground="{DynamicResource Element}" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>
                                 <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding NameTemplate}" Tag="Шаблон названия" MaxLength="50"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                            <StackPanel>
+                                <Grid Margin="5,5,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Data="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0"/>
+
+                                    <Label Content="Карточка объекта:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                                </Grid>
+                                <CheckBox Content="Показывать карточку" IsChecked="{Binding ShowCard}">
+                                    <CheckBox.Style>
+                                        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource Toggle}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, ElementName=SaveAuthors}" Value="False">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                    <Setter Property="IsChecked" Value="False"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </CheckBox.Style>
+                                </CheckBox>
                             </StackPanel>
                         </Border>
                         <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
@@ -104,9 +129,8 @@
                                     </Grid.ColumnDefinitions>
                                     <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Data="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5v-1a2 2 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693Q8.844 9.002 8 9c-5 0-6 3-6 4m7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
 
-                                    <Label Content="Доступ и видимость:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                                    <Label Content="Доступ:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                 </Grid>
-                                <CheckBox x:Name="SaveAuthors" Style="{StaticResource Toggle}" Content="Сохранять авторов объектов"/>
                                 <CheckBox Content="Редактирует только автор">
                                     <CheckBox.Style>
                                         <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource Toggle}">
@@ -133,6 +157,7 @@
                                 </CheckBox>
                             </StackPanel>
                         </Border>
+                        
                         <!--<Separator Background="{StaticResource LightBlack}"/>-->
                         <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
                             <StackPanel>

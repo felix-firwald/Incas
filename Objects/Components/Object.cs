@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Incas.Objects.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Incas.Objects.Components
 {
     public struct FieldData
     {
-        public Guid ClassFieldId { get; set; }
+        public Field ClassField { get; set; }
         public string Value { get; set; }
     }
     public class Object
@@ -21,7 +22,7 @@ namespace Incas.Objects.Components
         {
             foreach (FieldData field in this.Fields)
             {
-                if (field.ClassFieldId == id)
+                if (field.ClassField.Id == id)
                 {
                     return field.Value;
                 }

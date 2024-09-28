@@ -5,8 +5,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incas.Objects.Views.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+             d:DesignHeight="450" d:DesignWidth="350" MinWidth="350" MaxWidth="450" Margin="5">
+    <Border x:Name="MainBorder" BorderBrush="{StaticResource Element}" Padding="5" Background="{StaticResource Black}" CornerRadius="0,0,6,0" BorderThickness="2">
+        <Grid>
+        <Grid.RowDefinitions>
+                <RowDefinition Height="auto" MinHeight="100"/>
+                <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+            <Border Background="{DynamicResource BlackInfra}" Margin="-5" CornerRadius="0,0,8,8">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBox x:Name="ObjectName" Style="{StaticResource TextBoxEmpty}" Margin="10" IsReadOnly="True" Text="(не выбран)" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource DarkYellow}" TextWrapping="WrapWithOverflow" FontSize="14" FontFamily="JetBrains Mono">
+                        <TextBox.ContextMenu>
+                            <ContextMenu>
+
+                            </ContextMenu>
+                        </TextBox.ContextMenu>
+                    </TextBox>
+
+                </StackPanel>
+            </Border>
+            <ScrollViewer Grid.Row="1" Margin="0,5,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel x:Name="FieldsContentPanel" >
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
 </UserControl>

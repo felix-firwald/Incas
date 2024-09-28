@@ -65,6 +65,18 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.NameTemplate));
             }
         }
+        public bool ShowCard
+        {
+            get
+            {
+                return this.SourceData.ShowCard;
+            }
+            set
+            {
+                this.SourceData.ShowCard = value;
+                this.OnPropertyChanged(nameof(this.ShowCard));
+            }
+        }
         public void SetData(List<Field> fields)
         {
             this.SourceData.fields = fields;

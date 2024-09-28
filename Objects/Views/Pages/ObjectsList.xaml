@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="550" d:DesignWidth="800">
 
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" MinHeight="40"/>
             <RowDefinition Height="1*"/>
@@ -17,7 +17,7 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+        <WrapPanel Orientation="Horizontal">
             <Button Style="{StaticResource ButtonMainFinish}" Click="AddClick" ToolTip="Добавить новый экземпляр объекта">
                 <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
                     <Path Fill="White" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
@@ -48,11 +48,11 @@
                     <Label Content="Удалить" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
                 </StackPanel>
             </Button>
-            <Button Style="{StaticResource ButtonMainFinish}" Click="CopyClick" Padding="10,0,10,0">
+            <Button Visibility="Collapsed" Style="{StaticResource ButtonMainFinish}" Click="OpenInAnotherWindowClick" Padding="10,0,10,0">
                 <Path Fill="White" Data="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5 M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" VerticalAlignment="Center"/>
             </Button>
         </WrapPanel>
-        <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" MinRowHeight="20" PreviewKeyDown="Data_PreviewKeyDown" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1">
+        <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" SelectionChanged="Data_SelectionChanged" PreviewKeyDown="Data_PreviewKeyDown" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RowMain}">
                     <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"/>

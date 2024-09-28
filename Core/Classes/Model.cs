@@ -178,10 +178,15 @@ namespace Incas.Core.Classes
         /// </summary>
         protected void Serialize(DataRow dr)
         {
+            
             foreach (System.Reflection.PropertyInfo property in this.GetType().GetProperties())
             {
                 try
                 {
+                    if (dr is null)
+                    {
+                        return;
+                    }
                     if (property.PropertyType == typeof(Guid))
                     {
                         property.SetValue(this, Guid.Parse(dr[property.Name].ToString()));

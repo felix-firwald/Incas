@@ -83,7 +83,7 @@ namespace Incas.Objects.Views.Pages
                 foreach (TagFiller tagfiller in this.TagFillers)
                 {
                     //DialogsManager.ShowInfoDialog(tagfiller);
-                    if (tagfiller.field.Id == data.ClassFieldId)
+                    if (tagfiller.field.Id == data.ClassField.Id)
                     {
                         tagfiller.SetValue(data.Value);
                         break;
@@ -91,7 +91,7 @@ namespace Incas.Objects.Views.Pages
                 }
                 foreach (TableFiller table in this.Tables)
                 {
-                    if (table.field.Id == data.ClassFieldId)
+                    if (table.field.Id == data.ClassField.Id)
                     {
                         table.SetData(data.Value);
                         break;
@@ -112,7 +112,7 @@ namespace Incas.Objects.Views.Pages
             {
                 Components.FieldData data = new()
                 {
-                    ClassFieldId = tf.field.Id,
+                    ClassField = tf.field,
                     Value = tf.GetData()
                 };
                 this.Object.Fields.Add(data);
@@ -122,7 +122,7 @@ namespace Incas.Objects.Views.Pages
             {
                 Components.FieldData data = new()
                 {
-                    ClassFieldId = table.field.Id,
+                    ClassField = table.field,
                     Value = table.GetData()
                 };
                 this.Object.Fields.Add(data);

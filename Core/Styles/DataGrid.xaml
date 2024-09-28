@@ -25,7 +25,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF000000"/>
+    <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF9FC7B2"/>
     <Style x:Key="RowMain" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>

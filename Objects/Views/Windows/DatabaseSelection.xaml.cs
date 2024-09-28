@@ -41,17 +41,23 @@ namespace Incas.Objects.Views.Windows
         }
 
         public string SelectedValue => ((DataRowView)this.Grid.SelectedItems[0]).Row[ObjectProcessor.IdField].ToString();
-        public DatabaseSelection(BindingData data, string custom = "")
+        public DatabaseSelection(BindingData data)
         {
             this.InitializeComponent();
             this.Binding = data;
             this.Class = new(this.Binding.Class);
             this.Title = $"Выбор записи ({this.Class.name})";
-            this.FillList(custom);
+            this.FillList();
         }
-        private void FillList(string custom)
+        private void FillList()
         {
             DataTable dt = ObjectProcessor.GetObjectsList(this.Class);
+            this.UpdateItemsSource(dt.Columns);
+            this.Grid.ItemsSource = dt.DefaultView;
+        }
+        private void FillList(string field, string value)
+        {
+            DataTable dt = ObjectProcessor.GetObjectsListWhereLike(this.Class, field, value);
             this.UpdateItemsSource(dt.Columns);
             this.Grid.ItemsSource = dt.DefaultView;
         }
@@ -117,13 +123,13 @@ namespace Incas.Objects.Views.Windows
 
         private void SearchClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.FillList($"WHERE [{this.Fields.SelectedValue}] LIKE '%{this.SearchText.Text}%'");
+            this.FillList(this.Fields.SelectedValue.ToString(), this.SearchText.Text);
         }
 
         private void ClearClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.SearchText.Text = "";
-            this.FillList("");
+            this.FillList();
         }
 
         private void OnSelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

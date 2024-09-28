@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Spire.Pdf.Graphics;
 
 namespace Incas.Objects.Components
 {
@@ -26,6 +27,7 @@ namespace Incas.Objects.Components
         public const string StatusField = "STATUS_ID";
         public const string MetaField = "META_INFORMATION";
         #endregion
+        public const int MaxObjectCompareCount = 5;
         public static string GetPathToObjectsMap(Class cl)
         {
             if (cl == null)
@@ -133,7 +135,7 @@ namespace Incas.Objects.Components
             values.Add(NameField, obj.Name.ToString());
             foreach (FieldData fd in obj.Fields)
             {               
-                values.Add(fd.ClassFieldId.ToString(), fd.Value);
+                values.Add(fd.ClassField.Id.ToString(), fd.Value);
             }
             if (obj.Id == Guid.Empty) // if NEW
             {              
@@ -161,7 +163,7 @@ namespace Incas.Objects.Components
                 q.SeparateCommand();
             }
         }
-        public static DataTable GetObjectsList(Class cl)
+        public static DataTable GetObjectsList(Class cl, string WhereCondition = null)
         {
             Query q = new("", GetPathToObjectsMap(cl));
             ClassData data = cl.GetClassData();
@@ -197,7 +199,16 @@ namespace Incas.Objects.Components
             q.AddCustomRequest("SELECT " + string.Join(", ", fieldsRequest.ToArray()));
             q.AddCustomRequest($"FROM [{MainTable}]");
             q.AddCustomRequest(string.Join("\n", innerJoins));
+            if (WhereCondition != null)
+            {
+                q.AddCustomRequest(WhereCondition);
+            }           
             return q.Execute();
+        }
+        public static DataTable GetObjectsListWhereLike(Class cl, string field, string value)
+        {
+            string request = $"WHERE [{field}] LIKE '%{value}%'";
+            return GetObjectsList(cl, request);
         }
         public static Object GetObject(Class cl, Guid id)
         {
@@ -223,7 +234,7 @@ namespace Incas.Objects.Components
                 {
                     FieldData fd = new()
                     {
-                        ClassFieldId = f.Id,
+                        ClassField = f,
                         Value = dr[f.Id.ToString()].ToString()
                     };
                     obj.Fields.Add(fd);
@@ -231,6 +242,11 @@ namespace Incas.Objects.Components
             }
             return obj;
         }
+        //public List<Object> GetObjectsLike(Class cl, Guid field, string pattern)
+        //{
+        //    Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+            
+        //}
         public static void RemoveObject(Class cl, Guid id)
         {
             Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));

@@ -13,6 +13,7 @@ namespace Incas.Objects.Models
         public List<Field> fields { get; set; }
         public string NameTemplate { get; set; }
         public ClassType ClassType { get; set; }
+        public bool ShowCard { get; set; }
         public List<Field> GetFieldsForMap()
         {
             List<Field> list = new();
@@ -32,6 +33,39 @@ namespace Incas.Objects.Models
                 }
             }
             return list;
+        }
+        public Field FindFieldById(Guid id)
+        {
+            foreach (Field field in this.fields)
+            {
+                if (field.Id == id)
+                {
+                    return field;
+                }
+            }
+            return new();
+        }
+        public Field FindFieldByName(string name)
+        {
+            foreach (Field field in this.fields)
+            {
+                if (field.Name == name)
+                {
+                    return field;
+                }
+            }
+            return new();
+        }
+        public Field FindFieldByVisibleName(string name)
+        {
+            foreach (Field field in this.fields)
+            {
+                if (field.VisibleName == name)
+                {
+                    return field;
+                }
+            }
+            return new();
         }
     }
 

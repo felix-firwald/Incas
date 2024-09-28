@@ -12,15 +12,12 @@ namespace Incas.Core.Views.Windows
         public ContainerWindow(UserControl control, string title)
         {
             this.InitializeComponent();
-            this.DataContext = new ContainerWindowViewModel(this);
-            this.MinHeight = control.MinHeight + 40;
-            this.MinWidth = control.MinWidth;
             this.Title = title;
             this.ContentPanel.Child = control;
         }
         private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.DragMove();
+            //this.DragMove();
         }
     }
 }

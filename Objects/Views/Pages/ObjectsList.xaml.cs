@@ -6,6 +6,7 @@ using System.Data;
 using Incas.Objects.Views.Windows;
 using System;
 using Incas.Core.Classes;
+using Incas.Core.Views.Windows;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -15,15 +16,43 @@ namespace Incas.Objects.Views.Pages
     public partial class ObjectsList : UserControl
     {
         public Class sourceClass;
+        public ClassData ClassData;
+        private ObjectCard ObjectCard;
         public ObjectsList(Class source)
         {
             this.InitializeComponent();
             this.sourceClass = source;
+            this.ClassData = source.GetClassData();
             this.UpdateView();
+            if (this.ClassData.ShowCard)
+            {
+                this.PlaceCard();
+            }
         }
+        private void PlaceCard()
+        {
+            this.ObjectCard = new(this.sourceClass);
+            this.ObjectCard.OnFilterRequested += this.ObjectCard_OnFilterRequested;
+            this.MainGrid.Children.Add(this.ObjectCard);
+            Grid.SetRow(this.ObjectCard, 0);
+            Grid.SetRowSpan(this.ObjectCard, 2);
+            Grid.SetColumn(this.ObjectCard, 1);
+        }
+
+        private void ObjectCard_OnFilterRequested(FieldData data)
+        {
+            this.UpdateViewWithSearch(data);
+        }
+
         private void UpdateView()
         {
             DataTable dt = ObjectProcessor.GetObjectsList(this.sourceClass);
+            this.Data.Columns.Clear();
+            this.Data.ItemsSource = dt.AsDataView();
+        }
+        private void UpdateViewWithSearch(FieldData data)
+        {
+            DataTable dt = ObjectProcessor.GetObjectsListWhereLike(this.sourceClass, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.Data.ItemsSource = dt.AsDataView();
         }
@@ -39,6 +68,7 @@ namespace Incas.Objects.Views.Pages
                 e.Column.Header = "Наименование";
                 e.Column.HeaderStyle = style;
                 e.Column.MinWidth = 100;
+                e.Column.MaxWidth = 180;
                 e.Column.CanUserReorder = false;
             }
             else if (e.Column.Header.ToString() is ObjectProcessor.DateCreatedField)
@@ -82,7 +112,7 @@ namespace Incas.Objects.Views.Pages
 
         private void CancelSearchClick(object sender, RoutedEventArgs e)
         {
-
+            this.UpdateView();
         }
 
         private void RemoveClick(object sender, RoutedEventArgs e)
@@ -171,9 +201,21 @@ namespace Incas.Objects.Views.Pages
                     this.UpdateView();
                     break;
 
-            }
-            
+            }           
         }
 
+        private void Data_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.ClassData.ShowCard)
+            {
+                this.ObjectCard.UpdateFor(ObjectProcessor.GetObject(this.sourceClass, this.GetSelectedObjectGuid()));
+            }
+        }
+
+        private void OpenInAnotherWindowClick(object sender, RoutedEventArgs e)
+        {
+            ContainerWindow cw = new(this, this.sourceClass.name);
+            cw.Show();
+        }
     }
 }

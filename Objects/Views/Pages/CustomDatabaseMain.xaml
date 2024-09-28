@@ -8,8 +8,8 @@
              d:DesignHeight="650" d:DesignWidth="1200" Cursor="">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="13*"/>
-            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="1*" MaxWidth="350" MinWidth="80"/>
+            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <GroupBox Style="{StaticResource MainGroupBox}" Header="ВЫБОР" Margin="5,5,5,5">
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.RowSpan="3">
@@ -35,6 +35,7 @@
                 </StackPanel>
             </ScrollViewer>
         </GroupBox>
+        <GridSplitter/>
         <GroupBox x:Name="ContentPanel" Style="{StaticResource MainGroupBox}" Grid.Column="1" Header="{Binding SelectedClassName}" Margin="5,5,5,5"/>
     </Grid>
 </UserControl>
