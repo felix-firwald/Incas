@@ -4,6 +4,7 @@ using Incas.Objects.Components;
 using Incas.Objects.Models;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Forms;
 using Field = Incas.Objects.Models.Field;
 
 namespace Incas.Objects.ViewModels
@@ -75,6 +76,18 @@ namespace Incas.Objects.ViewModels
             {
                 this.SourceData.ShowCard = value;
                 this.OnPropertyChanged(nameof(this.ShowCard));
+            }
+        }
+        public bool EditByAuthorOnly
+        {
+            get
+            {
+                return this.SourceData.EditByAuthorOnly;
+            }
+            set
+            {
+                this.SourceData.EditByAuthorOnly = value;
+                this.OnPropertyChanged(nameof(this.EditByAuthorOnly));
             }
         }
         public void SetData(List<Field> fields)

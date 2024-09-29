@@ -48,10 +48,10 @@ namespace Incas.Objects.Components
             Query q = new("", path);
 
             StringBuilder request = new($"CREATE TABLE [{MainTable}] (\n");
-            request.Append($" [{IdField}] TEXT UNIQUE, [{NameField}] TEXT, [{AuthorField}] TEXT, ");
+            request.Append($" [{IdField}] TEXT UNIQUE, [{NameField}] TEXT, [{StatusField}] TEXT, [{AuthorField}] TEXT, ");
             if (data.ClassType == ClassType.Document)
             {
-                request.Append($"[{DateCreatedField}] TEXT, [{StatusField}] TEXT, ");
+                request.Append($"[{DateCreatedField}] TEXT, ");
             }
             foreach (Incas.Objects.Models.Field f in cl.GetClassData().fields)
             {
@@ -133,6 +133,7 @@ namespace Incas.Objects.Components
         {
             Dictionary<string, string> values = new();
             values.Add(NameField, obj.Name.ToString());
+            values.Add(StatusField, obj.Status.ToString());
             foreach (FieldData fd in obj.Fields)
             {               
                 values.Add(fd.ClassField.Id.ToString(), fd.Value);
@@ -148,8 +149,8 @@ namespace Incas.Objects.Components
                 if (data.ClassType == ClassType.Document)
                 {
                     values.Add(DateCreatedField, obj.CreationDate.ToString());
-                    values.Add(StatusField, obj.Status.ToString());
                 }
+                //values.Add(StatusField, obj.Status.ToString());
                 obj.AuthorId = ProgramState.CurrentUser.id;
                 obj.CreationDate = DateTime.Now;
                 
@@ -173,8 +174,8 @@ namespace Incas.Objects.Components
             if (data.ClassType == ClassType.Document)
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{DateCreatedField}]");
-                fieldsRequest.Add($"[OBJECTS_MAP].[{StatusField}]");
-            }           
+            }
+            //fieldsRequest.Add($"[OBJECTS_MAP].[{StatusField}]");
             fieldsRequest.Add($"[OBJECTS_MAP].[{NameField}]");
             List<string> innerJoins = new();
             foreach (Models.Field f in fields)
@@ -196,6 +197,7 @@ namespace Incas.Objects.Components
                     fieldsRequest.Add($"[{f.Id}] AS [{f.VisibleName}]");
                 }          
             }
+            
             q.AddCustomRequest("SELECT " + string.Join(", ", fieldsRequest.ToArray()));
             q.AddCustomRequest($"FROM [{MainTable}]");
             q.AddCustomRequest(string.Join("\n", innerJoins));
@@ -230,10 +232,11 @@ namespace Incas.Objects.Components
                     if (dr[ObjectProcessor.DateCreatedField] is not null)
                     {
                         obj.CreationDate = DateTime.Parse(dr[ObjectProcessor.DateCreatedField].ToString());
-                    }
-                    obj.Status = Guid.Parse(dr[ObjectProcessor.StatusField].ToString());
+                    }                   
                 }
-                
+                byte status = 0;
+                byte.TryParse(dr[ObjectProcessor.StatusField].ToString(), out status);
+                obj.Status = status;
                 obj.Name = dr[ObjectProcessor.NameField].ToString();
                 foreach (Models.Field f in cl.GetClassData().fields)
                 {

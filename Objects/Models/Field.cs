@@ -16,7 +16,7 @@ namespace Incas.Objects.Models
         public string VisibleName { get; set; }
         public string Name { get; set; }
         public TagType Type { get; set; }
-        public object Value { get; set; }
+        public string Value { get; set; }
         public int OrderNumber { get; set; }
         public bool NotNull { get; set; }
         public string Description { get; set; }
@@ -27,10 +27,14 @@ namespace Incas.Objects.Models
             {
                 this.Id = Guid.NewGuid();
             }
+            if (string.IsNullOrWhiteSpace(this.VisibleName))
+            {
+                this.VisibleName = this.Name.Replace("_", " ");
+            }
         }
         public BindingData GetBindingData()
         {
-            return (BindingData)this.Value;
+            return JsonConvert.DeserializeObject<BindingData>(this.Value);
         }
         public CommandSettings GetCommand()
         {

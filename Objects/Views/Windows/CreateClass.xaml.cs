@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
+using Incas.Objects.Exceptions;
+using Incas.Objects.Views.Controls;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -28,7 +30,7 @@ namespace Incas.Objects.Views.Windows
             {
                 this.vm.ShowCard = true;
             }
-            this.DataContext = this.vm;
+            this.DataContext = this.vm;            
         }
         public CreateClass(Guid id)
         {
@@ -41,6 +43,7 @@ namespace Incas.Objects.Views.Windows
             {
                 this.AddField(f);
             }
+            this.UpdateStatusesList();
         }
 
         private void GetMoreInfoClick(object sender, MouseButtonEventArgs e)
@@ -68,15 +71,67 @@ namespace Incas.Objects.Views.Windows
         private void SaveClick(object sender, RoutedEventArgs e)
         {
             List<Incas.Objects.Models.Field> fields = new();
-            foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
+            try
             {
-                Incas.Objects.Models.Field f = item.vm.Source;
-                f.SetId();
-                fields.Add(f);
+                foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
+                {
+                    Incas.Objects.Models.Field f = item.GetField();
+                    f.SetId();
+                    fields.Add(f);
+                }
+                this.vm.SetData(fields);
+                this.vm.Source.Save();
+                this.Close();
             }
-            this.vm.SetData(fields);
-            this.vm.Source.Save();
-            this.Close();
+            catch (FieldDataFailed fd)
+            {
+                DialogsManager.ShowExclamationDialog(fd.Message, "Сохранение прервано");
+            }
         }
+
+        private void AddTemplateClick(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+        #region Statuses
+        private void AddStatusClick(object sender, MouseButtonEventArgs e)
+        {
+            StatusSettings ss = new();
+            if (ss.ShowDialog("Настройка статуса", Core.Classes.Icon.Tag) == true)
+            {
+                this.vm.SourceData.AddStatus(ss.GetData());
+                this.UpdateStatusesList();
+            }
+        }
+        private void UpdateStatusesList()
+        {
+            this.StatusesPanel.Children.Clear();
+            if (this.vm.SourceData.Statuses is null)
+            {
+                return;
+            }
+            int index = 0;
+            foreach (StatusData data in this.vm.SourceData.Statuses.Values)
+            {
+                index++;
+                StatusElement se = new(index, data);
+                se.OnEdit += this.Se_OnEdit;
+                se.OnRemove += this.Se_OnRemove;
+                this.StatusesPanel.Children.Add(se);
+            }
+        }
+
+        private void Se_OnRemove(int index, StatusData statusData)
+        {
+            this.vm.SourceData.RemoveStatus(statusData);
+        }
+
+        private void Se_OnEdit(int index, StatusData statusData)
+        {
+            this.vm.SourceData.Statuses[index] = statusData;
+            this.UpdateStatusesList();
+        }
+
+        #endregion
     }
 }

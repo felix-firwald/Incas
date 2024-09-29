@@ -133,7 +133,7 @@ namespace Incas.Core.Classes
             dc.ShowDialog();
             return dc.SelectedValue;
         }
-        public static BindingData ShowBindingDialog(object data)
+        public static BindingData ShowBindingDialog(string data)
         {
             DialogBinding db = new(data);
             db.ShowDialog();

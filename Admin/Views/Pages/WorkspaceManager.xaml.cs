@@ -229,11 +229,18 @@ namespace Incas.Admin.Views.Pages
 
         private void RemoveClassClick(object sender, RoutedEventArgs e)
         {
-            using (Objects.Models.Class cl = new())
+            if (DialogsManager.ShowQuestionDialog(
+                "Класс будет возвратно удален, вместе с объектами, которые к нему относятся. Вы уверены?", 
+                "Удалить класс?", 
+                "Удалить", 
+                "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
             {
-                cl.Remove(this.GetSelectedClass());
-            }
-            this.vm.UpdateClasses();
+                using (Objects.Models.Class cl = new())
+                {
+                    cl.Remove(this.GetSelectedClass());
+                }
+                this.vm.UpdateClasses();
+            }           
         }
     }
 }

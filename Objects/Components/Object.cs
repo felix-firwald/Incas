@@ -14,7 +14,7 @@ namespace Incas.Objects.Components
         public Guid Id { get; set; }
         public DateTime CreationDate { get; set; }
         public Guid AuthorId { get; set; }
-        public Guid Status { get; set; }
+        public byte Status { get; set; }
         public string Name { get; set; }
         public object Meta { get; set; }
         public List<FieldData> Fields { get; set; }

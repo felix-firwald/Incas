@@ -9,6 +9,7 @@ using System.Data;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Incas.Core.Classes
 {
@@ -87,6 +88,9 @@ namespace Incas.Core.Classes
                 case "ComboSelector":
                     control = this.GenerateComboBox(description, (ComboSelector)field.GetValue(this.Result));
                     this.Container.Children.Add(label);
+                    break;
+                case "Color":
+                    control = this.GenerateColorBox(description, (Color)field.GetValue(this.Result));
                     break;
                 default:
                     if (field.PropertyType.Name.Contains("List"))
@@ -283,6 +287,15 @@ namespace Incas.Core.Classes
             control.Unchecked += this.CheckBox_OnChanged;
             return control;
         }
+        private Control GenerateColorBox(string description, Color value)
+        {
+            ColorBox control = new()
+            {
+                Tag = description,
+                SelectedColor = value,
+            };
+            return control;
+        }
         #endregion
         private void GetEnumDescriptions(FieldInfo f)
         {
@@ -315,7 +328,7 @@ namespace Incas.Core.Classes
                                 string resultString = "";
                                 Attribute attr = field.GetCustomAttribute(typeof(UrlRequired), false);
                                 resultString = attr is not null ? ((PathSelector)control).Value : ((TextBox)control).Text;
-                                if (string.IsNullOrEmpty(resultString))
+                                if (string.IsNullOrEmpty(resultString) && field.GetCustomAttribute(typeof(CanBeNull), false) is null)
                                 {
                                     DialogsManager.ShowExclamationDialog($"Поле \"{descript}\" не заполнено!", "Сохранение прервано");
                                     return false;
@@ -341,6 +354,9 @@ namespace Incas.Core.Classes
                                     return false;
                                 }
                                 ((ComboSelector)field.GetValue(this.Result)).SetSelectionByIndex(((ComboBox)control).SelectedIndex);
+                                break;
+                            case "Color":
+                                field.SetValue(this.Result, ((ColorBox)control).SelectedColor);
                                 break;
                             default:
                                 if (field.PropertyType.Name.Contains("List"))

@@ -1,7 +1,10 @@
 ﻿using Incas.Core.Models;
 using Incas.Core.ViewModels;
+using Incas.Objects.Components;
 using Incas.Objects.Models;
 using Incas.Templates.Components;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -23,7 +26,6 @@ namespace Incas.Objects.ViewModels
             get => this.Source.VisibleName;
             set
             {
-                this.Source.VisibleName = value;
                 this.OnPropertyChanged(nameof(this.VisibleName));
             }
         }
@@ -57,26 +59,26 @@ namespace Incas.Objects.ViewModels
             this.OrderNumber--;
         }
 
-        public string NameOfTag
+        public string NameOfField
         {
             get => this.Source.Name;
             set
             {
                 if (value != this.Source.Name)
                 {
-                    this.Source.Name = value;
-                    this.OnPropertyChanged(nameof(this.NameOfTag));
+                    this.Source.Name = value.Replace(" ", "_");
+                    this.OnPropertyChanged(nameof(this.NameOfField));
                 }
             }
         }
 
-        public string TypeOfTagValue
+        public string TypeOfFieldValue
         {
             get => this.SerializeToInput(this.Source.Type);
             set
             {
                 this.Source.Type = this.SerializeFromInput(value);
-                this.OnPropertyChanged(nameof(this.TypeOfTagValue));
+                this.OnPropertyChanged(nameof(this.TypeOfFieldValue));
             }
         }
 
@@ -133,6 +135,42 @@ namespace Incas.Objects.ViewModels
                 TagType.Table => "12",
                 _ => "0",
             };
+        }
+        public void CheckField()
+        {
+            try
+            {
+                switch (this.Source.Type)
+                {
+                    case TagType.Text:
+                    case TagType.Variable:
+                        break;
+                    case TagType.LocalEnumeration:
+                        JsonConvert.DeserializeObject<List<string>>(this.Source.Value);
+                        break;
+                    case TagType.GlobalEnumeration:
+                        Guid.Parse(this.Source.Value);
+                        break;
+                    case TagType.Relation:
+                        JsonConvert.DeserializeObject<BindingData>(this.Source.Value);
+                        break;
+                    case TagType.GlobalConstant:
+                        Guid.Parse(this.Source.Value);
+                        break;
+                    case TagType.HiddenField:
+                        break;
+                    case TagType.Number:
+                        JsonConvert.DeserializeObject<NumberFieldData>(this.Source.Value);
+                        break;
+                    case TagType.Date:
+                        JsonConvert.DeserializeObject<DateFieldData>(this.Source.Value);
+                        break;
+                }
+            }
+            catch
+            {
+                throw new Exceptions.FieldDataFailed($"Поле [{this.Source.Name}] (\"{this.Source.VisibleName}\") не настроено. Настройте поле, а затем попробуйте снова.");
+            }
         }
     }
 }

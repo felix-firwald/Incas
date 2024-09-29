@@ -19,7 +19,7 @@ namespace Incas.Objects.Views.Windows
         public Guid SelectedField { get; set; }
         public DialogBindingViewModel vm;
         public bool Result = false;
-        public DialogBinding(object data)
+        public DialogBinding(string data)
         {
             this.InitializeComponent();
             if (string.IsNullOrEmpty(data))

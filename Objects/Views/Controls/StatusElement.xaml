@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="Incas.Objects.Views.Controls.StatusElement"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.Objects.Views.Controls" xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="400">
+    <Border x:Name="MainBorder" CornerRadius="8" MaxHeight="40" Margin="5" Cursor="">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="MainLabel" Content="Завершен" VerticalAlignment="Center" FontWeight="Bold" Grid.ColumnSpan="3"/>
+            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Pencil" Grid.Column="1" MouseDown="EditClick"/>
+            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Remove" Grid.Column="2" MouseDown="RemoveClick" />
+        </Grid>
+    </Border>
+</UserControl>

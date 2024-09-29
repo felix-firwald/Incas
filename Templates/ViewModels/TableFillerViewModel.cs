@@ -13,7 +13,7 @@ namespace Incas.Templates.ViewModels
         public TableFillerViewModel(Objects.Models.Field t)
         {
             this._data = new DataTable();
-            this.MakeColumns(t.Value);
+            this.MakeColumns(t.Value.ToString());
         }
 
         private void MakeColumns(string columns)

@@ -18,6 +18,7 @@ namespace Incas.Objects.AutoUI
         protected Incas.Objects.Models.Field Source;
 
         [MaxLength(200)]
+        [CanBeNull]
         [Description("Описание поля (для форм)")]
         public string Description { get; set; }
 

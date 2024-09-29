@@ -1,9 +1,14 @@
-﻿using Incas.Core.Views.Controls;
+﻿using Incas.Core.Classes;
+using Incas.Core.Views.Controls;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Controls;
+using Incas.Objects.Views.Windows;
+using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Windows.ApplicationModel.Email.DataProvider;
 
 namespace Incas.Objects.Views.Pages
@@ -16,6 +21,8 @@ namespace Incas.Objects.Views.Pages
         private Class Class { get; set; }
         private ClassData ClassData { get; set; }
         private bool first;
+        private Guid id;
+        private byte status;
         public delegate void FieldDataAction(FieldData data);
         public event FieldDataAction OnFilterRequested;
         public ObjectCard(Class source, bool first = true)
@@ -26,21 +33,87 @@ namespace Incas.Objects.Views.Pages
             {
                 this.MainBorder.BorderThickness = new Thickness(1);
                 this.MainBorder.CornerRadius = new CornerRadius(0);
+                this.ObjectName.FontSize = 12;
+            }
+            else
+            {
+                this.TitleBorder.MinHeight = 100;
             }
             this.Class = source;
             this.ClassData = source.GetClassData();
         }
+        private SolidColorBrush GetColor(Color color, byte a = 255)
+        {
+            return new SolidColorBrush(Color.FromArgb(a, color.R, color.G, color.B));
+        }
+        private void ShowStatus(byte status)
+        {
+            if (this.ClassData?.Statuses?.Count > 0)
+            {
+                if (status == 0)
+                {
+                    status = 1;
+                }
+                this.status = status;
+                int count = this.ClassData.Statuses.Count;
+                this.StatusBorder.Visibility = Visibility.Visible;
+                StatusData data = new();
+                try
+                {
+                    data = this.ClassData.Statuses[status];              
+                }
+                catch
+                {
+                    data = this.ClassData.Statuses[count];
+                }
+                this.StatusText.Text = data.Name;
+                this.StatusDescription.Text = data.Description;
+                this.StatusBackground.Background = this.GetColor(data.Color, 50);
+                this.StatusText.Foreground = this.GetColor(data.Color);
+                this.Progress.Maximum = count;
+                this.Progress.Value = status;
+                if (status >= count)
+                {
+                    this.StatusForwardButton.Visibility = Visibility.Hidden;
+                    this.StatusBackButton.Visibility = Visibility.Visible;
+                }
+                else if (status == 1)
+                {
+                    this.StatusBackButton.Visibility = Visibility.Hidden;
+                    this.StatusForwardButton.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    this.StatusBackButton.Visibility = Visibility.Visible;
+                    this.StatusForwardButton.Visibility = Visibility.Visible;
+                }
+                this.Progress.Foreground = this.GetColor(data.Color);
+            }
+            else
+            {
+                this.StatusBorder.Visibility = Visibility.Collapsed;
+            }
+        }
         public void SetEmpty()
         {
+            this.ShowStatus(0);
             this.FieldsContentPanel.Children.Clear();
             this.ObjectName.Text = "(не выбран)";
+            this.id = Guid.Empty;
             NoContent nc = new();
             this.FieldsContentPanel.Children.Add(nc);
         }
-        public void UpdateFor(Object obj)
+        public void UpdateFor(Components.Object obj)
         {
+            this.ShowStatus(obj.Status);
+            if (this.ClassData.EditByAuthorOnly && obj.AuthorId != ProgramState.CurrentUser.id)
+            {
+                this.StatusBackButton.IsEnabled = false;
+                this.StatusForwardButton.IsEnabled = false;
+            }
             this.FieldsContentPanel.Children.Clear();
             this.ObjectName.Text = obj.Name;
+            this.id = obj.Id;
             if (this.first)
             {
                 ObjectFieldViewer ofAuthor = new(obj.AuthorId);
@@ -56,12 +129,62 @@ namespace Incas.Objects.Views.Pages
                 ObjectFieldViewer of = new(field, this.first);
                 of.OnFilterRequested += this.Of_OnFilterRequested;
                 this.FieldsContentPanel.Children.Add(of);
-            }         
+            }
+            ((ObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
         }
 
         private void Of_OnFilterRequested(FieldData data)
         {
             this.OnFilterRequested?.Invoke(data);
+        }
+
+        private void FontAwesome_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (this.id == Guid.Empty)
+            {
+                DialogsManager.ShowExclamationDialog("Объект не выбран!", "Действие невозможно");
+                return;
+            }
+            List<Components.Object> objects = new();
+            objects.Add(ObjectProcessor.GetObject(this.Class, this.id));
+            ObjectsEditor oe = new(this.Class, objects);
+            oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
+            oe.ShowDialog();
+        }
+        private void Oe_OnUpdateRequested()
+        {
+            Incas.Objects.Components.Object obj = ObjectProcessor.GetObject(this.Class, this.id);
+            this.UpdateFor(obj);
+        }
+
+        private void GoBackStatusClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Incas.Objects.Components.Object obj = ObjectProcessor.GetObject(this.Class, this.id);
+            if (obj.Status > 1)
+            {
+                obj.Status = (byte)(obj.Status - 1);
+                ObjectProcessor.WriteObjects(this.Class, obj);
+                this.UpdateFor(ObjectProcessor.GetObject(this.Class, this.id));
+            }
+            else
+            {
+                DialogsManager.ShowExclamationDialog("Понижение статуса невозможно.", "Действие прервано");
+            }
+        }
+
+        private void GoForwardStatusClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Incas.Objects.Components.Object obj = ObjectProcessor.GetObject(this.Class, this.id);
+            if (obj.Status < this.ClassData.Statuses.Count)
+            {
+                obj.Status = (byte)(obj.Status + 1);
+                ObjectProcessor.WriteObjects(this.Class, obj);
+                this.UpdateFor(ObjectProcessor.GetObject(this.Class, this.id));
+            }
+            else
+            {
+                DialogsManager.ShowExclamationDialog("Повышение статуса невозможно.", "Действие прервано");
+            }
         }
     }
 }

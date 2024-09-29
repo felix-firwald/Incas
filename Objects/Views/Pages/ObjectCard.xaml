@@ -3,28 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Incas.Objects.Views.Pages"
+             xmlns:local="clr-namespace:Incas.Objects.Views.Pages" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="350" MinWidth="350" MaxWidth="450" Margin="5">
     <Border x:Name="MainBorder" BorderBrush="{StaticResource Element}" Padding="5" Background="{StaticResource Black}" CornerRadius="0,0,6,0" BorderThickness="2">
         <Grid>
-        <Grid.RowDefinitions>
-                <RowDefinition Height="auto" MinHeight="100"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" MinHeight="50"/>
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="5*"/>
-        </Grid.RowDefinitions>
-            <Border Background="{DynamicResource BlackInfra}" Margin="-5" CornerRadius="0,0,8,8">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBox x:Name="ObjectName" Style="{StaticResource TextBoxEmpty}" Margin="10" IsReadOnly="True" Text="(не выбран)" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource DarkYellow}" TextWrapping="WrapWithOverflow" FontSize="14" FontFamily="JetBrains Mono">
+            </Grid.RowDefinitions>
+            <Border x:Name="TitleBorder" Background="{DynamicResource BlackInfra}" Margin="-5" CornerRadius="0,0,12,12">
+                <StackPanel Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" >
+                    <TextBox x:Name="ObjectName" Style="{StaticResource TextBoxEmpty}" Cursor="Hand" Margin="10" Text="(не выбран)" IsReadOnly="True" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource DarkYellow}" TextWrapping="WrapWithOverflow" FontSize="14" MaxWidth="250" FontFamily="JetBrains Mono">
                         <TextBox.ContextMenu>
                             <ContextMenu>
 
                             </ContextMenu>
                         </TextBox.ContextMenu>
                     </TextBox>
-
                 </StackPanel>
             </Border>
-            <ScrollViewer Grid.Row="1" Margin="0,5,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Pencil" ToolTip="Открыть окно редактирования объекта" MouseDown="FontAwesome_MouseDown" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            <Border x:Name="StatusBorder" Visibility="Visible" Margin="0,10,0,0" Grid.Row="1">
+                <StackPanel VerticalAlignment="Center" Grid.Column="1"  >
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5" VerticalAlignment="Center">
+                        <fa:FontAwesome x:Name="StatusBackButton" Style="{StaticResource IconButton}" Icon="ArrowLeft" ToolTip="Переместить статус на предыдущую позицию" MouseDown="GoBackStatusClick" VerticalAlignment="Top" />
+                        <Border x:Name="StatusBackground" CornerRadius="12" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBox x:Name="StatusText" IsReadOnly="True" Margin="5" Style="{StaticResource TextBoxEmpty}" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="JetBrains Mono" />
+                        </Border>
+                        <fa:FontAwesome x:Name="StatusForwardButton" Style="{StaticResource IconButton}" Icon="ArrowRight" ToolTip="Переместить статус на следующую позицию" Grid.Column="2" MouseDown="GoForwardStatusClick" VerticalAlignment="Top" />
+                    </StackPanel>
+                    <ProgressBar x:Name="Progress" Minimum="0" MinWidth="250" MinHeight="3" MaxHeight="3" BorderThickness="2" Background="{DynamicResource Element}" BorderBrush="{DynamicResource Element}" Foreground="{DynamicResource PrimaryMain}" />
+                    <TextBox x:Name="StatusDescription" Margin="5" IsReadOnly="True" FontFamily="JetBrains Mono" Style="{StaticResource TextBoxEmpty}" Foreground="{StaticResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" />
+                </StackPanel>
+            </Border>
+            <ScrollViewer Grid.Row="2" Margin="0,5,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <StackPanel x:Name="FieldsContentPanel" >
 
                 </StackPanel>

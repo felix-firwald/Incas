@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.Components;
+using Incas.Objects.Exceptions;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
 using Org.BouncyCastle.Utilities;
@@ -79,6 +80,10 @@ namespace Incas.Objects.Views.Windows
             {
                 DialogsManager.ShowExclamationDialog(nnex.Message, "Сохранение прервано");
             }
+            catch (AuthorFailed af)
+            {
+                DialogsManager.ShowAccessErrorDialog(af.Message);
+            }
             catch (Exception ex)
             {
                 DialogsManager.ShowErrorDialog(ex);
@@ -132,6 +137,10 @@ namespace Incas.Objects.Views.Windows
             catch (NotNullFailed nnex)
             {
                 DialogsManager.ShowExclamationDialog(nnex.Message, "Сохранение прервано");
+            }
+            catch (AuthorFailed af)
+            {
+                DialogsManager.ShowAccessErrorDialog(af.Message);
             }
             catch (Exception ex)
             {

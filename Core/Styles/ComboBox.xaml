@@ -118,12 +118,12 @@
         <Setter Property="Padding" Value="10 3"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
-        <Setter Property="TextElement.Foreground" Value="{StaticResource Light}"/>
+        <Setter Property="TextElement.Foreground" Value="White"/>
         <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
-                    <Grid>
+                    <Grid x:Name="Main">
                         <ToggleButton Name="ToggleButton" Grid.Column="2"
                 ClickMode="Press" Focusable="False"
                 IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
@@ -136,7 +136,7 @@
                               ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
                         <TextBox Name="PART_EditableTextBox" Margin="3, 3, 23, 3"                     
                             IsReadOnly="{TemplateBinding IsReadOnly}"
-                            Visibility="Hidden" Background="Transparent"
+                            Visibility="Hidden" Foreground="{TemplateBinding Foreground}" Background="Transparent"
                             HorizontalAlignment="Left" VerticalAlignment="Center"
                             Focusable="True" Padding="{TemplateBinding Padding}">
                             <TextBox.Template>
@@ -167,8 +167,9 @@
                         <Trigger Property="ItemsControl.HasItems" Value="False">
                             <Setter Property="FrameworkElement.MinHeight" TargetName="DropDownBorder" Value="95"/>
                         </Trigger>
-                        <Trigger Property="UIElement.IsEnabled" Value="False">
-                            <Setter Property="TextElement.Foreground" Value="{StaticResource GrayLight}"/>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ContentSite" Property="Opacity" Value="0.5"/>
+                            <Setter TargetName="PART_EditableTextBox" Property="Opacity" Value="0.5"/>
                         </Trigger>
                         <Trigger Property="ItemsControl.IsGrouping" Value="True">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>

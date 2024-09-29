@@ -31,9 +31,14 @@ namespace Incas.Objects.Views.Controls
             this.DataContext = this.vm;
             this.ExpanderButton.IsChecked = true;
         }
+        public Models.Field GetField()
+        {
+            this.vm.CheckField();
+            return this.vm.Source;
+        }
         public void DublicateName()
         {
-            this.vm.VisibleName = this.vm.NameOfTag;
+            this.vm.VisibleName = this.vm.NameOfField;
         }
         public void Maximize()
         {

@@ -111,6 +111,9 @@
                         <Trigger Property="ContextMenu.IsOpen" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="DodgerBlue"/>
                         </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Opacity" Value="0.5"/>
+                        </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="Text" Value=""/>
@@ -151,9 +154,7 @@
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.5"/>
-                        </Trigger>
+
                         <Trigger Property="Validation.HasError" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Error}"/>
                         </Trigger>

@@ -24,7 +24,7 @@
                 <Label x:Name="NumberUp" Style="{DynamicResource LabelElement}" MinWidth="40" Visibility="Collapsed" Content="{Binding OrderNumber, FallbackValue=0}" Foreground="{DynamicResource Icon}" Cursor="Hand" ToolTip="Инкремент номера" ToolTipService.InitialShowDelay="200" MouseDown="UpClick" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                 </Label>
                 <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
-                <TextBox x:Name="TagName" Style="{DynamicResource TextBoxTransparent}" Text="{Binding NameOfTag, UpdateSourceTrigger=PropertyChanged}" MaxLength="25">
+                <TextBox x:Name="TagName" Style="{DynamicResource TextBoxTransparent}" Text="{Binding NameOfField, UpdateSourceTrigger=PropertyChanged}" MaxLength="25">
                     <TextBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -48,7 +48,7 @@
                         </ContextMenu>
                     </TextBox.ContextMenu>
                 </TextBox>
-                <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding TypeOfTagValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxDropDownHeight="240">
+                <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding TypeOfFieldValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxDropDownHeight="240">
                     <ComboBoxItem >
                         <StackPanel Orientation="Horizontal">
                             <Ellipse Fill="{DynamicResource Success}" Width="5" Height="5"/>

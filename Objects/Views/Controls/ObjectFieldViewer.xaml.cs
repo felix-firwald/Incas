@@ -97,7 +97,10 @@ namespace Incas.Objects.Views.Controls
             this.ColorizeField(74, 243, 170);
             this.FilterButton.IsEnabled = false;
         }
-
+        public void HideSeparator()
+        {
+            this.Separator.Visibility = Visibility.Collapsed;
+        }
         private void ColorizeField(byte r, byte g, byte b)
         {
             this.FieldValue.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(r, g, b));

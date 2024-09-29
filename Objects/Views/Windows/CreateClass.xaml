@@ -13,8 +13,8 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*" MinWidth="250" MaxWidth="500"/>
-                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="4*" MinWidth="250" />
+                <ColumnDefinition Width="6*" MaxWidth="800"/>
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -62,10 +62,10 @@
                 </StackPanel>
             </Border>
             <Border CornerRadius="8" Margin="5,5,5,5" Background="{DynamicResource Black}" Grid.Row="1">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <StackPanel>
+                <ScrollViewer Style="{StaticResource ScrollViewerBase}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Orientation="Vertical">
 
-                        <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                        <Border Background="{StaticResource Dark}" MinWidth="300" CornerRadius="8" Margin="5">
                             <StackPanel>
                                 <Grid Margin="5,5,0,0">
                                     <Grid.ColumnDefinitions>
@@ -80,7 +80,7 @@
                                 <MenuItem Style="{StaticResource Command}" Header="Валидация" Tag="Validate" />
                             </StackPanel>
                         </Border>
-                        <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                        <Border Background="{StaticResource Dark}" MinWidth="300" CornerRadius="8" Margin="5">
                             <StackPanel>
                                 <Grid Margin="5,5,0,0">
                                     <Grid.ColumnDefinitions>
@@ -91,11 +91,11 @@
 
                                     <Label Content="Наименование:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                 </Grid>
-                                <TextBlock Style="{StaticResource TextBlockMain}" Text="Для подстановки полей используйте конструкцию [Название поля]" Foreground="{DynamicResource Element}" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>
+                                <TextBlock Style="{StaticResource TextBlockMain}" Text="Для подстановки полей используйте конструкцию [Название_поля]" Foreground="{DynamicResource Element}" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>
                                 <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding NameTemplate}" Tag="Шаблон названия" MaxLength="50"/>
                             </StackPanel>
                         </Border>
-                        <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                        <Border Background="{StaticResource Dark}" MinWidth="300" CornerRadius="8" Margin="5">
                             <StackPanel>
                                 <Grid Margin="5,5,0,0">
                                     <Grid.ColumnDefinitions>
@@ -106,21 +106,11 @@
 
                                     <Label Content="Карточка объекта:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                 </Grid>
-                                <CheckBox Content="Показывать карточку" IsChecked="{Binding ShowCard}">
-                                    <CheckBox.Style>
-                                        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource Toggle}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsChecked, ElementName=SaveAuthors}" Value="False">
-                                                    <Setter Property="IsEnabled" Value="False" />
-                                                    <Setter Property="IsChecked" Value="False"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </CheckBox.Style>
+                                <CheckBox Style="{StaticResource Toggle}" Content="Показывать карточку объекта" IsChecked="{Binding ShowCard}">
                                 </CheckBox>
                             </StackPanel>
                         </Border>
-                        <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                        <Border Background="{StaticResource Dark}" MinWidth="300" CornerRadius="8" Margin="5">
                             <StackPanel>
                                 <Grid Margin="5,5,0,0">
                                     <Grid.ColumnDefinitions>
@@ -131,19 +121,7 @@
 
                                     <Label Content="Доступ:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                 </Grid>
-                                <CheckBox Content="Редактирует только автор">
-                                    <CheckBox.Style>
-                                        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource Toggle}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsChecked, ElementName=SaveAuthors}" Value="False">
-                                                    <Setter Property="IsEnabled" Value="False" />
-                                                    <Setter Property="IsChecked" Value="False"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </CheckBox.Style>
-                                </CheckBox>
-                                <CheckBox Content="Объект может быть удален">
+                                <CheckBox Content="Редактирование объекта доступно только автору" IsChecked="{Binding EditByAuthorOnly}">
                                     <CheckBox.Style>
                                         <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource Toggle}">
                                             <Style.Triggers>
@@ -157,6 +135,27 @@
                                 </CheckBox>
                             </StackPanel>
                         </Border>
+                        <Border Background="{StaticResource Dark}" MinWidth="300" CornerRadius="8" Margin="5">
+                            <StackPanel>
+                                <Grid Margin="5,5,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="40"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Data="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+        
+                                    <Label Content="Статусы и состояния:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить статус" Grid.Column="2" MouseDown="AddStatusClick"  />
+                                </Grid>
+                                <Border Background="{StaticResource Black}" CornerRadius="8" Margin="5" MinHeight="100">
+                                    <StackPanel x:Name="StatusesPanel">
+                                        
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        
                         
                         <!--<Separator Background="{StaticResource LightBlack}"/>-->
                         <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
@@ -165,18 +164,17 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="30"/>
                                         <ColumnDefinition/>
+                                        <ColumnDefinition Width="40"/>
                                     </Grid.ColumnDefinitions>
                                     <Path Fill="{DynamicResource Yellow}" Data="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8m0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
 
                                     <Label Content="Привязанные шаблоны:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить шаблон" Grid.Column="3" MouseDown="AddTemplateClick" />
                                 </Grid>
                                 <!--<TextBlock Style="{StaticResource TextBlockMain}" Text="Для документов" Foreground="{DynamicResource Element}" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>-->
-                                <WrapPanel>
-                                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить шаблон"  />
-                                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Pencil" ToolTip="Редактировать шаблон" />
-                                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить шаблон" />
-                                </WrapPanel>
-                                <DataGrid Style="{StaticResource DataGridMain}" MinHeight="140"/>
+                                <Border Background="{StaticResource Black}" CornerRadius="8" Margin="5" MinHeight="100">
+
+                                </Border>
                             </StackPanel>
                         </Border>
                     </StackPanel>

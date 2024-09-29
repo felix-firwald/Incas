@@ -28,7 +28,7 @@ namespace Incas.Objects.Views.Pages
         public event FieldCopyAction OnInsertRequested;
         public event ObjectCreatorData OnSaveRequested;
         public event ObjectCreatorData OnRemoveRequested;
-
+        private bool Locked = false;
         public ObjectCreator(Class source, ClassData data, Components.Object obj = null)
         {
             this.InitializeComponent();
@@ -48,6 +48,22 @@ namespace Incas.Objects.Views.Pages
                 this.RenderArea.Visibility = Visibility.Collapsed;
             }
             this.ExpanderButton.IsChecked = true;
+            this.ApplyAuthorConstraint();
+        }
+        private void ApplyAuthorConstraint()
+        {
+            if (this.Object.Id != Guid.Empty && this.ClassData.EditByAuthorOnly == true && this.Object.AuthorId != ProgramState.CurrentUser.id)
+            {
+                this.Locked = true;
+                this.ContentPanel.IsEnabled = false;
+                Label label = new()
+                {
+                    Content = "Вы не можете редактировать этот объект, поскольку не являетесь его автором.",
+                    Margin = new Thickness(5),
+                    Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 0, 0))
+                };
+                this.ContentPanel.Children.Insert(0, label);
+            }
         }
         private void FillContentPanel()
         {
@@ -127,6 +143,10 @@ namespace Incas.Objects.Views.Pages
         }
         public Components.Object PullObject()
         {
+            if (this.Locked == true)
+            {
+                throw new Exceptions.AuthorFailed($"Объект с именем \"{this.Object.Name}\" не может быть модифицирован, поскольку не вы являетесь его автором.");
+            }
             this.UpdateName();
             this.Object.Name = this.ObjectName.Text;
             if (this.Object.Fields == null)

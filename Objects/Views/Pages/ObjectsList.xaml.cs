@@ -173,8 +173,14 @@ namespace Incas.Objects.Views.Pages
             {
                 return;
             }
+            Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
+            if (this.ClassData.EditByAuthorOnly == true && obj.AuthorId != ProgramState.CurrentUser.id)
+            {
+                DialogsManager.ShowAccessErrorDialog("Этот объект не может быть удален, поскольку вы не являетесь его автором.");
+                return;
+            }
             if (DialogsManager.ShowQuestionDialog(
-                $"Вы действительно хотите удалить объект \"{ObjectProcessor.GetObject(this.sourceClass, id).Name}\" из базы данных?", 
+                $"Вы действительно хотите удалить объект \"{obj.Name}\" из базы данных?", 
                 "Удалить?", 
                 "Удалить", 
                 "Не удалять") == Core.Views.Windows.DialogStatus.Yes)

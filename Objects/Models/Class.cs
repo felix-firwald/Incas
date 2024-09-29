@@ -14,6 +14,30 @@ namespace Incas.Objects.Models
         public string NameTemplate { get; set; }
         public ClassType ClassType { get; set; }
         public bool ShowCard { get; set; }
+        public bool EditByAuthorOnly { get; set; }
+        public Dictionary<int, StatusData> Statuses { get; set; }
+        public void AddStatus(StatusData data)
+        {
+            if (this.Statuses is null)
+            {
+                this.Statuses = new();
+            }
+            this.Statuses.Add(this.Statuses.Count + 1, data);
+        }
+        public void RemoveStatus(StatusData data)
+        {
+            if (this.Statuses is null)
+            {
+                return;
+            }
+            foreach (KeyValuePair<int, StatusData> item in this.Statuses)
+            {
+                if (item.Value.Equals(data))
+                {
+                    this.Statuses.Remove(item.Key);
+                }
+            }
+        }
         public List<Field> GetFieldsForMap()
         {
             List<Field> list = new();
