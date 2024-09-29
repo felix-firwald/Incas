@@ -25,5 +25,10 @@ namespace Incas.Objects.Views.Pages
             }
             this.ContentPanel.Content = new ObjectsList(selectedClass);
         }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.vm.UpdateAll();
+        }
     }
 }

@@ -175,12 +175,17 @@ namespace Incas.Templates.Models
                 this.AddTemplate();
                 return;
             }
+            Dictionary<string, string> dict = new()
+            {
+                { nameof(this.name), this.name},
+                { nameof(this.path), this.path},
+                { nameof(this.suggestedPath), this.suggestedPath},
+                { nameof(this.settings), this.settings },
+                { nameof(this.fields), this.fields},
+            };
+
             this.StartCommand()
-                .Update("name", this.name)
-                .Update("path", this.path)
-                .Update("suggestedPath", this.suggestedPath)
-                .Update("settings", this.settings)
-                .Update("fields", this.fields)
+                .Update(dict)
                 .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
         }

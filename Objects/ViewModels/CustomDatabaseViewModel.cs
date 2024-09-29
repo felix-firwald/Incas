@@ -19,6 +19,11 @@ namespace Incas.Objects.ViewModels
                 return cl.GetCategories();
             }
         }
+        public void UpdateAll()
+        {
+            this.OnPropertyChanged(nameof(this.Categories));
+            this.OnPropertyChanged(nameof(this.SelectedCategory));
+        }
         public string SelectedCategory
         {
             get => this.selectedCategory;

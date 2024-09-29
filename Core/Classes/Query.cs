@@ -13,7 +13,6 @@ namespace Incas.Core.Classes
         public string Table;
         public string Result { get; private set; }
         private bool isWhereAlready = false;
-        private bool isUpdateAlready = false;
         private Dictionary<string, string> parameters = new();
         private uint recursion = 0;
         public DBConnectionType typeOfConnection { get; set; }
@@ -59,7 +58,6 @@ namespace Incas.Core.Classes
         public void Clear()
         {
             this.isWhereAlready = false;
-            this.isUpdateAlready = false;
             this.Result = "";
         }
         public Query AddCustomRequest(string text)
@@ -114,7 +112,6 @@ namespace Incas.Core.Classes
         }
         public Query SeparateCommand()
         {
-            this.isUpdateAlready = false;
             this.isWhereAlready = false;
             this.Result += ";\n";
             return this;
@@ -149,21 +146,6 @@ namespace Incas.Core.Classes
             }
             this.Result += $"{start} [{this.Table}] (\"{string.Join("\", \"", dict.Keys)}\")\nVALUES ({string.Join(", ", this.RegisterParameters(dict.Values.ToList()))})";
             this.ReplaceNull();
-            return this;
-        }
-        public Query Update(string cell, string value, bool isStr = true)
-        {
-            if (this.isUpdateAlready)
-            {
-                this.Result += $",\n" +
-                $"[{cell}] = @{cell}";
-            }
-            else
-            {
-                this.Result += $"UPDATE [{this.Table}]\n" +
-                $"SET [{cell}] = {this.RegisterParameter(value)}";
-                this.isUpdateAlready = true;
-            }
             return this;
         }
         public Query Update(Dictionary<string, string> dict)

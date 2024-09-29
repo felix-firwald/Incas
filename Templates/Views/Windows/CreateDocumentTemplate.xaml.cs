@@ -102,10 +102,8 @@ namespace Incas.Templates.Views.Windows
                 else
                 {
                     File.Copy(path, ProgramState.GetFullnameOfDocumentFile(result));
-                }
-                
-            }
-            
+                }                
+            }           
         }
 
         private bool CheckForSave()

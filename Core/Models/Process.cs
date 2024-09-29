@@ -43,8 +43,12 @@ namespace Incas.Core.Models
         }
         private void SetReceived()
         {
+            Dictionary<string, string> dict = new()
+            {
+                {nameof(this.received), "1" }
+            };
             this.StartCommandToMyPort()
-                .Update(nameof(this.received), "1")
+                .Update(dict)
                 .ExecuteVoid();
         }
     }

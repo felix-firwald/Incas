@@ -74,9 +74,13 @@ namespace Incas.Core.Models
         }
         public void UpdateParameter(Guid id)
         {
+            Dictionary<string, string> dict = new()
+            {
+                {nameof(this.name), this.name },
+                {nameof(this.value), this.value }
+            };
             this.StartCommandToService()
-                .Update("name", this.name)
-                .Update("value", this.value)
+                .Update(dict)
                 .WhereEqual("id", id.ToString())
                 .ExecuteVoid();
         }
@@ -226,8 +230,12 @@ namespace Incas.Core.Models
         }
         public Parameter UpdateValue()
         {
+            Dictionary<string, string> dict = new()
+            {
+                {nameof(this.value), this.value }
+            };
             this.StartCommandToService()
-                .Update("value", this.value)
+                .Update(dict)
                 .WhereEqual("id", this.id.ToString())
                 .ExecuteVoid();
             return this;

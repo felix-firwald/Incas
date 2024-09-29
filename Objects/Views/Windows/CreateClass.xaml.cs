@@ -29,6 +29,7 @@ namespace Incas.Objects.Views.Windows
             if (this.vm.Type == ClassType.Document)
             {
                 this.vm.ShowCard = true;
+                this.TemplatesArea.Visibility = Visibility.Visible;
             }
             this.DataContext = this.vm;            
         }
@@ -88,11 +89,37 @@ namespace Incas.Objects.Views.Windows
                 DialogsManager.ShowExclamationDialog(fd.Message, "Сохранение прервано");
             }
         }
-
+        #region Templates
         private void AddTemplateClick(object sender, MouseButtonEventArgs e)
         {
 
         }
+        private void UpdateTemplatesList()
+        {
+            this.TemplatesPanel.Children.Clear();
+            if (this.vm.SourceData.Templates is null)
+            {
+                return;
+            }
+            foreach (KeyValuePair<string, string> template in this.vm.SourceData.Templates)
+            {
+                TemplateClassElement tce = new(template.Key, template.Value);
+                tce.OnEdit += this.Tce_OnEdit;
+                tce.OnRemove += this.Tce_OnRemove;
+            }
+        }
+
+        private void Tce_OnRemove(string name, string path)
+        {
+            
+        }
+
+        private void Tce_OnEdit(string name, string path)
+        {
+            
+        }
+        #endregion
+
         #region Statuses
         private void AddStatusClick(object sender, MouseButtonEventArgs e)
         {

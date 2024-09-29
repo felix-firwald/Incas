@@ -91,6 +91,7 @@ namespace Incas.Core.Classes
             Directory.CreateDirectory(Messages);
             Directory.CreateDirectory(LogData);
             Directory.CreateDirectory(TemplatesRuntime);
+            Directory.CreateDirectory(TemplatesSources);
             if (checkout)
             {
                 DatabaseManager.ActualizeTables();

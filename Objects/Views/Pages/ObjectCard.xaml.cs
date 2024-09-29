@@ -96,7 +96,7 @@ namespace Incas.Objects.Views.Pages
         }
         public void SetEmpty()
         {
-            this.ShowStatus(0);
+            this.StatusBorder.Visibility = Visibility.Collapsed;
             this.FieldsContentPanel.Children.Clear();
             this.ObjectName.Text = "(не выбран)";
             this.id = Guid.Empty;
@@ -106,10 +106,15 @@ namespace Incas.Objects.Views.Pages
         public void UpdateFor(Components.Object obj)
         {
             this.ShowStatus(obj.Status);
-            if (this.ClassData.EditByAuthorOnly && obj.AuthorId != ProgramState.CurrentUser.id)
+            if (this.ClassData.EditByAuthorOnly == true && obj.AuthorId != ProgramState.CurrentUser.id)
             {
                 this.StatusBackButton.IsEnabled = false;
                 this.StatusForwardButton.IsEnabled = false;
+            }
+            else
+            {
+                this.StatusBackButton.IsEnabled = true;
+                this.StatusForwardButton.IsEnabled = true;
             }
             this.FieldsContentPanel.Children.Clear();
             this.ObjectName.Text = obj.Name;

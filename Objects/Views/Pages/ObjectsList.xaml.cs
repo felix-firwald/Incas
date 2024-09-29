@@ -158,6 +158,8 @@ namespace Incas.Objects.Views.Pages
             }
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
             obj.Id = Guid.Empty;
+            obj.AuthorId = Guid.Empty;
+            obj.Status = 0;
             ObjectsEditor oc = new(this.sourceClass, new() { obj });
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();

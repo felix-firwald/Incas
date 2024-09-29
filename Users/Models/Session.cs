@@ -130,9 +130,13 @@ namespace Incas.Users.Models
         }
         public void CloseSession()
         {
+            Dictionary<string, string> dict = new()
+            {
+                {nameof(this.active), "0" },
+                {nameof(this.timeFinished), $"{DateTime.Now}" },
+            };
             this.StartCommandToService()
-                .Update("active", "0")
-                .Update("timeFinished", $"{DateTime.Now}")
+                .Update(dict)
                 .WhereEqual("slug", this.slug)
                 .ExecuteVoid();
         }

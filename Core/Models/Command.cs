@@ -126,11 +126,15 @@ namespace Incas.Core.Models
         }
         public void Update()
         {
+            Dictionary<string, string> dict = new()
+            {
+                {nameof(this.name), this.name },
+                {nameof(this.query), this.EncryptQuery() },
+                {nameof(this.type), this.type.ToString() },
+                {nameof(this.restrictions), this.restrictions }
+            };
             this.StartCommandToService()
-                .Update(nameof(this.name), this.name)
-                .Update(nameof(this.query), this.EncryptQuery())
-                .Update(nameof(this.type), this.type.ToString())
-                .Update(nameof(this.restrictions), this.restrictions)
+                .Update(dict)
                 .WhereEqual(nameof(this.id), this.id)
                 .ExecuteVoid();
         }

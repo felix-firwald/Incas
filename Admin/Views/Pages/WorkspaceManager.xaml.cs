@@ -1,18 +1,15 @@
-﻿using Incas.Admin.ViewModels;
-using Incas.Admin.Views.Controls;
+﻿using Incas.Admin.AutoUI;
+using Incas.Admin.ViewModels;
 using Incas.Core.Classes;
 using Incas.Core.Models;
-using Incubator_2.Windows.AdminWindows;
+using Incas.Objects.AutoUI;
+using Incas.Objects.Views.Windows;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using System;
-using System.Data;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using Incas.Admin.AutoUI;
-using Incas.Objects.Views.Windows;
-using Incas.Objects.AutoUI;
 
 namespace Incas.Admin.Views.Pages
 {
