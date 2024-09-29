@@ -16,7 +16,7 @@ namespace Incas.Objects.Models
         public string VisibleName { get; set; }
         public string Name { get; set; }
         public TagType Type { get; set; }
-        public string Value { get; set; }
+        public object Value { get; set; }
         public int OrderNumber { get; set; }
         public bool NotNull { get; set; }
         public string Description { get; set; }
@@ -30,7 +30,7 @@ namespace Incas.Objects.Models
         }
         public BindingData GetBindingData()
         {
-            return JsonConvert.DeserializeObject<BindingData>(this.Value);
+            return (BindingData)this.Value;
         }
         public CommandSettings GetCommand()
         {

@@ -24,6 +24,10 @@ namespace Incas.Objects.Views.Windows
             this.vm.CategoryOfClass = primary.Category;
             this.vm.NameOfClass = primary.Name;
             this.vm.Type = (ClassType)primary.Selector.SelectedObject;
+            if (this.vm.Type == ClassType.Document)
+            {
+                this.vm.ShowCard = true;
+            }
             this.DataContext = this.vm;
         }
         public CreateClass(Guid id)

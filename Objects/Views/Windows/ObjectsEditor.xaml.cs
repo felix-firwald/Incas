@@ -1,6 +1,8 @@
-﻿using Incas.Objects.Components;
+﻿using Incas.Core.Classes;
+using Incas.Objects.Components;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +51,16 @@ namespace Incas.Objects.Views.Windows
             ObjectCreator creator = new(this.Class, this.ClassData, obj);
             creator.OnSaveRequested += this.Creator_OnSaveRequested;
             creator.OnRemoveRequested += this.Creator_OnRemoveRequested;
+            creator.OnInsertRequested += this.Creator_OnInsertRequested;
             this.ContentPanel.Children.Add(creator);
+        }
+
+        private void Creator_OnInsertRequested(Guid id, string text)
+        {
+            foreach (ObjectCreator c in this.ContentPanel.Children)
+            {
+                c.InsertToField(id, text);
+            }
         }
 
         private void Creator_OnRemoveRequested(ObjectCreator creator)
@@ -59,8 +70,19 @@ namespace Incas.Objects.Views.Windows
 
         private void Creator_OnSaveRequested(ObjectCreator creator)
         {
-            ObjectProcessor.WriteObjects(this.Class, creator.PullObject());
-            this.OnUpdateRequested?.Invoke();
+            try
+            {
+                ObjectProcessor.WriteObjects(this.Class, creator.PullObject());
+                this.OnUpdateRequested?.Invoke();
+            }
+            catch (NotNullFailed nnex)
+            {
+                DialogsManager.ShowExclamationDialog(nnex.Message, "Сохранение прервано");
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+            }
         }
 
         private void AddClick(object sender, MouseButtonEventArgs e)
@@ -80,24 +102,41 @@ namespace Incas.Objects.Views.Windows
 
         private void MinimizeAll(object sender, MouseButtonEventArgs e)
         {
-
+            foreach (ObjectCreator c in this.ContentPanel.Children)
+            {
+                c.Minimize();
+            }
         }
 
         private void MaximizeAll(object sender, MouseButtonEventArgs e)
         {
-
+            foreach (ObjectCreator c in this.ContentPanel.Children)
+            {
+                c.Maximize();
+            }
         }
 
         private void CreateObjectsClick(object sender, RoutedEventArgs e)
         {
             List<Components.Object> objects = new();
-            foreach (ObjectCreator c in this.ContentPanel.Children)
+            try
             {
-                objects.Add(c.PullObject());
+                foreach (ObjectCreator c in this.ContentPanel.Children)
+                {
+                    objects.Add(c.PullObject());
+                }
+                ObjectProcessor.WriteObjects(this.Class, objects);
+                this.Close();
+                this.OnUpdateRequested?.Invoke();
+            }            
+            catch (NotNullFailed nnex)
+            {
+                DialogsManager.ShowExclamationDialog(nnex.Message, "Сохранение прервано");
             }
-            ObjectProcessor.WriteObjects(this.Class, objects);
-            this.Close();
-            this.OnUpdateRequested?.Invoke();
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+            }
         }
     }
 }

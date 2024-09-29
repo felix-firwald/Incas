@@ -210,6 +210,11 @@ namespace Incas.Objects.Components
             string request = $"WHERE [{field}] LIKE '%{value}%'";
             return GetObjectsList(cl, request);
         }
+        public static DataTable GetObjectsListWhereEqual(Class cl, string field, string value)
+        {
+            string request = $"WHERE [{field}] = '{value}'";
+            return GetObjectsList(cl, request);
+        }
         public static Object GetObject(Class cl, Guid id)
         {
             Object obj = new();

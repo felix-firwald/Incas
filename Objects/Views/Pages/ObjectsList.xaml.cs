@@ -37,11 +37,12 @@ namespace Incas.Objects.Views.Pages
             Grid.SetRow(this.ObjectCard, 0);
             Grid.SetRowSpan(this.ObjectCard, 2);
             Grid.SetColumn(this.ObjectCard, 1);
+            this.ObjectCard.SetEmpty();
         }
 
         private void ObjectCard_OnFilterRequested(FieldData data)
         {
-            this.UpdateViewWithSearch(data);
+            this.UpdateViewWithFilter(data);
         }
 
         private void UpdateView()
@@ -53,6 +54,12 @@ namespace Incas.Objects.Views.Pages
         private void UpdateViewWithSearch(FieldData data)
         {
             DataTable dt = ObjectProcessor.GetObjectsListWhereLike(this.sourceClass, data.ClassField.VisibleName, data.Value);
+            this.Data.Columns.Clear();
+            this.Data.ItemsSource = dt.AsDataView();
+        }
+        private void UpdateViewWithFilter(FieldData data)
+        {
+            DataTable dt = ObjectProcessor.GetObjectsListWhereEqual(this.sourceClass, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.Data.ItemsSource = dt.AsDataView();
         }
@@ -208,7 +215,15 @@ namespace Incas.Objects.Views.Pages
         {
             if (this.ClassData.ShowCard)
             {
-                this.ObjectCard.UpdateFor(ObjectProcessor.GetObject(this.sourceClass, this.GetSelectedObjectGuid()));
+                Guid id = this.GetSelectedObjectGuid();
+                if (id == Guid.Empty)
+                {
+                    this.ObjectCard.SetEmpty();
+                }
+                else
+                {
+                    this.ObjectCard.UpdateFor(ObjectProcessor.GetObject(this.sourceClass, id));
+                }         
             }
         }
 

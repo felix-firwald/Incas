@@ -29,20 +29,18 @@ namespace Incas.Templates.Views.Controls
     {
         //public static Dictionary<TagType, >
         public readonly Objects.Models.Field field;
-
-        private bool isRequired = false;
         private bool validated = true;
         private Control control;
         private CommandSettings command;
         public delegate void StringAction(Guid tag, string text);
-        public event StringAction OnInsert;
         public delegate void CommandScript(string script);
-        public event CommandScript OnScriptRequested;
         public delegate void StringActionRecalculate(string tag);
-        public event StringActionRecalculate OnRename;
-        public delegate void TagAction(TagFiller sender);
-        public event TagAction OnFieldUpdate;
-
+        public delegate void FieldFillerAction(TagFiller sender);
+        public event StringAction OnInsert;        
+        public event CommandScript OnScriptRequested;       
+        public event StringActionRecalculate OnRename;       
+        public event FieldFillerAction OnFieldUpdate;
+        public event FieldFillerAction OnDatabaseObjectCopyRequested;
         public TagFiller(Objects.Models.Field f)
         {
             this.InitializeComponent();
@@ -242,18 +240,7 @@ namespace Incas.Templates.Views.Controls
         {
             return this.field.Name;
         }
-        public bool ValidateContent()
-        {
-            if (this.field.Type is TagType.Variable or TagType.Text)
-            {
-                if (this.isRequired && string.IsNullOrEmpty(((TextBox)this.control).Text))
-                {
-                    DialogsManager.ShowExclamationDialog($"Поле \"{this.field.Name}\" обязательно для заполнения!", "Действие прервано");
-                    return false;
-                }
-            }
-            return true;
-        }
+
         private string GetDateInFormat()
         {
             DatePicker picker = ((DatePicker)this.control);
@@ -271,7 +258,12 @@ namespace Incas.Templates.Views.Controls
             {
                 case TagType.Variable:
                 default:
-                    return ((TextBox)this.control).Text;
+                    string value = ((TextBox)this.control).Text;
+                    if (this.field.NotNull == true || string.IsNullOrEmpty(value))
+                    {
+                        this.ThrowNotNullFailed();
+                    }
+                    return value;
                 case TagType.Number:
                     return ((NumericBox)this.control).Value.ToString();
                 case TagType.LocalConstant:
@@ -307,12 +299,25 @@ namespace Incas.Templates.Views.Controls
                     {
                         return ((DateTime)((DatePicker)this.control).SelectedDate).ToString("dd.MM.yyyy");
                     }
+                    else if (this.field.NotNull == true)
+                    {
+                        this.ThrowNotNullFailed();
+                    }
                     return "";
                 case TagType.Relation:
-                    return ((SelectionBox)this.control).SelectedObject?.Id.ToString();
+                    Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
+                    if (this.field.NotNull == true || obj is null)
+                    {
+                        this.ThrowNotNullFailed();
+                    }
+                    return obj?.Id.ToString();
                 default: return this.GetValue();
 
             }
+        }
+        public void ThrowNotNullFailed()
+        {
+            throw new NotNullFailed($"Поле \"{this.field.VisibleName}\" является обязательным, однако не заполнено.");
         }
 
         public Guid GetId()
@@ -327,7 +332,14 @@ namespace Incas.Templates.Views.Controls
 
         private void InsertToOther(object sender, RoutedEventArgs e)
         {
-            OnInsert?.Invoke(this.field.Id, this.GetData());
+            try
+            {
+                OnInsert?.Invoke(this.field.Id, this.GetData());
+            }
+            catch (NotNullFailed)
+            {
+                DialogsManager.ShowExclamationDialog("Поле является обязательным, необходимо сначала присвоить ему значение.", "Переназначение прервано");
+            }
         }
         private void RecalculateNamesClick(object sender, RoutedEventArgs e)
         {
@@ -424,6 +436,11 @@ namespace Incas.Templates.Views.Controls
             {
                 this.SetValue(value);
             }          
+        }
+
+        private void ObjectCopyRequestClick(object sender, RoutedEventArgs e)
+        {
+            this.OnDatabaseObjectCopyRequested?.Invoke(this);
         }
     }
 }

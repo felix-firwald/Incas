@@ -1,6 +1,8 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Incas.Core.Classes;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
+using Incas.Objects.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Views.Controls;
 using System;
@@ -22,6 +24,8 @@ namespace Incas.Objects.Views.Pages
         public List<TagFiller> TagFillers = new();
         public List<TableFiller> Tables = new();
         public delegate void ObjectCreatorData(ObjectCreator creator);
+        public delegate void FieldCopyAction(Guid id, string text);
+        public event FieldCopyAction OnInsertRequested;
         public event ObjectCreatorData OnSaveRequested;
         public event ObjectCreatorData OnRemoveRequested;
 
@@ -43,6 +47,7 @@ namespace Incas.Objects.Views.Pages
             {
                 this.RenderArea.Visibility = Visibility.Collapsed;
             }
+            this.ExpanderButton.IsChecked = true;
         }
         private void FillContentPanel()
         {
@@ -55,6 +60,7 @@ namespace Incas.Objects.Views.Pages
                     tf.OnInsert += this.Tf_OnInsert;
                     tf.OnRename += this.Tf_OnRename;
                     tf.OnFieldUpdate += this.Tf_OnFieldUpdate;
+                    tf.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
                     //tf.OnScriptRequested += this.OnScriptRequested;
                     this.ContentPanel.Children.Add(tf);
                     this.TagFillers.Add(tf);
@@ -67,6 +73,26 @@ namespace Incas.Objects.Views.Pages
                     this.Tables.Add(tf);
                 }
             }
+        }
+
+        private void Tf_OnDatabaseObjectCopyRequested(TagFiller sender)
+        {
+            BindingData bd = new()
+            {
+                Class = this.Class.identifier,
+                Field = sender.field.Id
+            };
+            DatabaseSelection ds = new(bd);
+            ds.ShowDialog();
+            foreach (Components.FieldData field in ds.SelectedObject?.Fields)
+            {
+                if (field.ClassField.Id == sender.field.Id)
+                {
+                        
+                    sender.SetValue(field.Value);
+                    return;
+                }
+            }               
         }
 
         private void Tf_OnFieldUpdate(TagFiller sender)
@@ -161,12 +187,35 @@ namespace Incas.Objects.Views.Pages
 
         private void Tf_OnInsert(Guid tag, string text)
         {
-            
+            this.OnInsertRequested?.Invoke(tag, text);
+        }
+        public void InsertToField(Guid id, string data)
+        {
+            foreach (TagFiller tf in this.TagFillers)
+            {
+                if (tf.field.Id == id)
+                {
+                    tf.SetValue(data);
+                    return;
+                }
+            }
         }
 
+        public void Maximize()
+        {
+            this.ExpanderButton.IsChecked = true;
+        }
+        public void Minimize()
+        {
+            this.ExpanderButton.IsChecked = false;
+        }
         private void MaximizeClick(object sender, RoutedEventArgs e)
         {
-
+            this.MainBorder.Height = this.ContentPanel.Height + 40;
+        }
+        private void MinimizeClick(object sender, RoutedEventArgs e)
+        {
+            this.MainBorder.Height = 40;
         }
 
         private void SaveClick(object sender, MouseButtonEventArgs e)
@@ -182,11 +231,6 @@ namespace Incas.Objects.Views.Pages
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {
             this.OnRemoveRequested?.Invoke(this);
-        }
-
-        private void MinimizeClick(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

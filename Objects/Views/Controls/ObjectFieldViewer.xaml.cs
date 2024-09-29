@@ -4,6 +4,7 @@ using Incas.Objects.Views.Pages;
 using Incas.Users.Models;
 using System;
 using System.Drawing;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Incas.Objects.Views.Controls
@@ -20,11 +21,15 @@ namespace Incas.Objects.Views.Controls
         public delegate void FieldDataAction(FieldData data);
         public event FieldDataAction OnFilterRequested;
         public FieldData Data { get; private set; }
-        public ObjectFieldViewer(FieldData data)
+        public ObjectFieldViewer(FieldData data, bool first = true)
         {
             this.InitializeComponent();
             this.Data = data;
             this.FieldName.Text = data.ClassField.VisibleName + ":";
+            if (!first)
+            {
+                this.FilterButton.Visibility = Visibility.Collapsed;
+            }
             if (data.ClassField.Type == Templates.Components.TagType.Relation)
             {
                 try
@@ -42,7 +47,12 @@ namespace Incas.Objects.Views.Controls
                         this.FieldValue.ToolTip = "Кликнуть для просмотра объекта";
                     }
                 }
-                catch { }
+                catch
+                {
+                    this.FieldValue.Text = "(объект не выбран)";
+                    this.ColorizeField(200, 0, 90);
+                    this.FilterButton.IsEnabled = false;
+                }
             }
             else
             {
@@ -55,7 +65,7 @@ namespace Incas.Objects.Views.Controls
             if (this.isNestedObjectShowed == false)
             {
                 this.isNestedObjectShowed = true;
-                this.card = new(this.relationClass);
+                this.card = new(this.relationClass, false);
                 this.card.UpdateFor(this.relationObject);
                 this.MainGrid.Children.Add(this.card);
                 Grid.SetRow(this.card, 1);
