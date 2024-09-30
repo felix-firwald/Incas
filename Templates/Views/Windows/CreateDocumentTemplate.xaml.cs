@@ -153,9 +153,10 @@ namespace Incas.Templates.Views.Windows
             return true;
         }
 
-        private void RemoveTagFromList(Objects.Views.Controls.FieldCreator tag)
+        private bool RemoveTagFromList(Objects.Views.Controls.FieldCreator tag)
         {
             this.ContentPanel.Children.Remove(tag);
+            return true;
         }
 
         private void saveClick(object sender, RoutedEventArgs e)
@@ -192,7 +193,7 @@ namespace Incas.Templates.Views.Windows
             {
                 t = tag;
             }
-            Objects.Views.Controls.FieldCreator tc = new(t);
+            Objects.Views.Controls.FieldCreator tc = new(this.ContentPanel.Children.Count, t);
             tc.OnRemove += this.RemoveTagFromList;
             this.ContentPanel.Children.Add(tc);
         }
@@ -227,8 +228,8 @@ namespace Incas.Templates.Views.Windows
             }
             try
             {
-                WordTemplator wt = new(pathFile);
-                foreach (string tagname in wt.FindAllTags())
+                FileTemplator ft = new(pathFile);
+                foreach (string tagname in ft.FindAllTags())
                 {
                     if (!CheckNameUniqueness(tagname))
                     {

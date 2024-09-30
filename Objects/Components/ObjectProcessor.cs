@@ -200,11 +200,15 @@ namespace Incas.Objects.Components
             
             q.AddCustomRequest("SELECT " + string.Join(", ", fieldsRequest.ToArray()));
             q.AddCustomRequest($"FROM [{MainTable}]");
-            q.AddCustomRequest(string.Join("\n", innerJoins));
+            q.AddCustomRequest(string.Join("\n", innerJoins));          
             if (WhereCondition != null)
             {
                 q.AddCustomRequest(WhereCondition);
-            }           
+            }
+            if (data.ClassType == ClassType.Model)
+            {
+                q.OrderByASC("OBJECT_NAME");
+            }
             return q.Execute();
         }
         public static DataTable GetObjectsListWhereLike(Class cl, string field, string value)
@@ -250,11 +254,7 @@ namespace Incas.Objects.Components
             }
             return obj;
         }
-        //public List<Object> GetObjectsLike(Class cl, Guid field, string pattern)
-        //{
-        //    Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
-            
-        //}
+
         public static void RemoveObject(Class cl, Guid id)
         {
             Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));

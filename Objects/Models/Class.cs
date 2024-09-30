@@ -16,7 +16,7 @@ namespace Incas.Objects.Models
         public bool ShowCard { get; set; }
         public bool EditByAuthorOnly { get; set; }
         public Dictionary<int, StatusData> Statuses { get; set; }
-        public Dictionary<string, string> Templates { get; set; }
+        public Dictionary<int, TemplateData> Templates { get; set; }
         public void AddStatus(StatusData data)
         {
             if (this.Statuses is null)
@@ -38,6 +38,22 @@ namespace Incas.Objects.Models
                     this.Statuses.Remove(item.Key);
                 }
             }
+        }
+        public void AddTemplate(TemplateData data)
+        {
+            if (this.Templates is null)
+            {
+                this.Templates = new();
+            }
+            this.Templates.Add(this.Templates.Count + 1, data);
+        }
+        public void EditTemplate(int index, TemplateData data)
+        {
+            try
+            {
+                this.Templates[index] = data;
+            }
+            catch { }
         }
         public List<Field> GetFieldsForMap()
         {

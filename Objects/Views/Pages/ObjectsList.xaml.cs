@@ -7,6 +7,7 @@ using Incas.Objects.Views.Windows;
 using System;
 using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using System.Collections.Generic;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -144,7 +145,7 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-            ObjectsEditor oc = new(this.sourceClass, new() { obj });
+            ObjectsEditor oc = new(this.sourceClass, new List<Components.Object>() { obj });
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -160,7 +161,7 @@ namespace Incas.Objects.Views.Pages
             obj.Id = Guid.Empty;
             obj.AuthorId = Guid.Empty;
             obj.Status = 0;
-            ObjectsEditor oc = new(this.sourceClass, new() { obj });
+            ObjectsEditor oc = new (this.sourceClass, new List<Components.Object>() { obj });
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }

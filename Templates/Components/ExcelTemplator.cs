@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
+using WebSupergoo.WordGlue3;
 using Xceed.Document.NET;
 
 namespace Incas.Templates.Components
@@ -66,47 +68,52 @@ namespace Incas.Templates.Components
             it.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             this.workbook.Save();
         }
-        public List<SGeneratedTag> GenerateDocument(List<TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true)
+        public void GenerateDocument(List<TagFiller> tagFillers, List<TableFiller> tableFillers, bool async = true)
         {
-            List<SGeneratedTag> filledTags = [];
-            List<string> tagsToReplace = ["N"];
-            List<string> values = [number];
+            List<string> tagsToReplace = new();
+            List<string> values = new();
             foreach (TableFiller tab in tableFillers)
             {
                 this.CreateTable(tab.field.Name, tab.DataTable);
-                filledTags.Add(tab.GetAsGeneratedTag());
             }
             foreach (TagFiller tf in tagFillers)
             {
                 Guid id = tf.GetId();
                 string name = tf.GetTagName();
                 string value = tf.GetValue();
-                if (tf.field.Type != TagType.LocalConstant)
-                {
-                    if (tf.field.Type is TagType.Generator or TagType.Date)
-                    {
-                        SGeneratedTag gtg = new()
-                        {
-                            tag = id,
-                            value = tf.GetData()
-                        };
-                        filledTags.Add(gtg);
-                    }
-                    else
-                    {
-                        SGeneratedTag gt = new()
-                        {
-                            tag = id,
-                            value = value
-                        };
-                        filledTags.Add(gt);
-                    }
-                }
                 tagsToReplace.Add(name);
                 values.Add(value);
+                if (tf.field.Type == TagType.Relation)
+                {
+                    foreach (Objects.Components.FieldData fd in tf.GetDataFromObjectRelation())
+                    {
+                        tagsToReplace.Add($"{name}.{fd.ClassField.Name}");
+                        values.Add(fd.Value);
+                    }
+                }
             }
-            this.Replace(tagsToReplace, values, isAsync);
-            return filledTags;
+            this.Replace(tagsToReplace, values, async);
+        }
+
+        public List<string> FindAllTags()
+        {
+            string source = "";
+            List<string> result = new();
+            Regex regex = new(@"\[[A-Za-zА-Яа-я0-9_]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
+            foreach (IXLCell cell in this.worksheet.CellsUsed())
+            {
+                string value = cell.Value.ToString();
+                if (value.Contains('['))
+                {
+                    source = source + "\n" + value;
+                }
+            }
+            MatchCollection matches = regex.Matches(source);
+            foreach (Match match in matches)
+            {
+                result.Add(match.Value.TrimStart('[').TrimEnd(']'));
+            }
+            return result;
         }
     }
 }

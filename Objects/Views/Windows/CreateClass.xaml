@@ -45,17 +45,16 @@
             <Border Grid.Row="0" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8" Grid.RowSpan="3">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить поле" MouseDown="AddFieldClick" />
-                    <fa:FontAwesome x:Name="FindInFileButton" Style="{DynamicResource IconButton}" Icon="SearchPlus" ToolTip="Обнаружить поля в выбранном файле"  />
 
                     <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" ToolTip="Свернуть все вкладки" />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" ToolTip="Развернуть все вкладки"  />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAllClick" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAllClick"  />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" ToolTip="Предпросмотр формы"  />
                     <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="SortNumericAsc" ToolTip="Пронумеровать поля исходя из текущего положения"  />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Asterisk" ToolTip="Проставить для пустых видимых имен исходя из названий полей"  />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Upload" ToolTip="Импортировать класс"  />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Download" ToolTip="Экспортировать класс" />
+                    <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="SortNumericAsc" ToolTip="Пронумеровать поля исходя из текущего положения"  />-->
+                    <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Asterisk" ToolTip="Проставить для пустых видимых имен исходя из названий полей"  />-->
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Upload" ToolTip="Импортировать класс" IsEnabled="False" />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Download" ToolTip="Экспортировать класс" IsEnabled="False" />
 
                     <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" Grid.Column="1" Grid.Row="1" ToolTip="Открыть справочную информацию" MouseDown="GetMoreInfoClick" />

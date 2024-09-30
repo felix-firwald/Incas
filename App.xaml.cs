@@ -14,7 +14,7 @@ namespace Incas
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            if (DateTime.Now > DateTime.Parse("21.11.2024"))
+            if (DateTime.Now > DateTime.Parse("30.11.2024"))
             {
                 DialogsManager.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");
                 App.Current.Shutdown();
@@ -38,7 +38,7 @@ namespace Incas
             {
 
             }
-            ProgramState.OpenWebPage($"https://forms.yandex.ru/u/66d1d24f90fa7b1262d187e7/" + "?version=" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "&description=" + e.Exception.Message);
+            ProgramState.OpenWebPage($"https://forms.yandex.ru/cloud/66fa578c505690e91c121ddc/" + "?version=" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "&description=" + e.Exception.Message);
             DialogsManager.ShowErrorDialog($"Возникла ошибка, не позволяющая приложению продолжать свою работу.\n" +
                 $"Описание: {e.Exception.Message}\nПриложение будет немедленно закрыто.", "Критическая ошибка");
         }

@@ -10,6 +10,8 @@ using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Views.Controls;
+using Incas.Templates.Components;
+using System.IO;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -44,7 +46,12 @@ namespace Incas.Objects.Views.Windows
             {
                 this.AddField(f);
             }
+            if (this.vm.Type == ClassType.Document)
+            {
+                this.TemplatesArea.Visibility = Visibility.Visible;
+            }
             this.UpdateStatusesList();
+            this.UpdateTemplatesList();
         }
 
         private void GetMoreInfoClick(object sender, MouseButtonEventArgs e)
@@ -54,14 +61,41 @@ namespace Incas.Objects.Views.Windows
 
         private void AddField(Incas.Objects.Models.Field data = null)
         {
-            Incas.Objects.Views.Controls.FieldCreator fc = new(data);
+            Incas.Objects.Views.Controls.FieldCreator fc = new(this.ContentPanel.Children.Count, data);
             fc.OnRemove += this.Fc_OnRemove;
+            fc.OnMoveDownRequested += this.Fc_OnMoveDownRequested;
+            fc.OnMoveUpRequested += this.Fc_OnMoveUpRequested;
             this.ContentPanel.Children.Add(fc);
         }
 
-        private void Fc_OnRemove(Controls.FieldCreator t)
+        private int Fc_OnMoveUpRequested(Controls.FieldCreator t)
+        {
+            int position = t.vm.OrderNumber;
+            if (position < this.ContentPanel.Children.Count - 1)
+            {
+                position += 1;
+            }
+            this.ContentPanel.Children.Remove(t);
+            this.ContentPanel.Children.Insert(position, t);
+            return position;
+        }
+
+        private int Fc_OnMoveDownRequested(Controls.FieldCreator t)
+        {
+            int position = t.vm.OrderNumber;
+            if (position > 0)
+            {
+                position -= 1;
+            }
+            this.ContentPanel.Children.Remove(t);
+            this.ContentPanel.Children.Insert(position, t);
+            return position;
+        }
+
+        private bool Fc_OnRemove(Controls.FieldCreator t)
         {
             this.ContentPanel.Children.Remove(t);
+            return true;
         }
 
         private void AddFieldClick(object sender, MouseButtonEventArgs e)
@@ -92,7 +126,18 @@ namespace Incas.Objects.Views.Windows
         #region Templates
         private void AddTemplateClick(object sender, MouseButtonEventArgs e)
         {
-
+            TemplateClassEditor ce = new();
+            ce.ShowDialog();
+            if (ce.Result)
+            {
+                TemplateData td = new()
+                {
+                    Name = ce.SelectedName,
+                    File = ce.SelectedPath
+                };
+                this.vm.SourceData.AddTemplate(td);
+            }
+            this.UpdateTemplatesList();
         }
         private void UpdateTemplatesList()
         {
@@ -101,22 +146,62 @@ namespace Incas.Objects.Views.Windows
             {
                 return;
             }
-            foreach (KeyValuePair<string, string> template in this.vm.SourceData.Templates)
+            foreach (KeyValuePair<int, TemplateData> template in this.vm.SourceData.Templates)
             {
                 TemplateClassElement tce = new(template.Key, template.Value);
                 tce.OnEdit += this.Tce_OnEdit;
                 tce.OnRemove += this.Tce_OnRemove;
+                tce.OnSearchInFileRequested += this.Tce_OnSearchInFileRequested;
+                this.TemplatesPanel.Children.Add(tce);
             }
         }
 
-        private void Tce_OnRemove(string name, string path)
+        private void Tce_OnSearchInFileRequested(string path)
         {
-            
+            bool CheckNameUniqueness(string name)
+            {
+                foreach (Objects.Views.Controls.FieldCreator creator in this.ContentPanel.Children)
+                {
+                    if (creator.vm.Source.Name == name)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            try
+            {
+                WordTemplator wt = new(path);
+                foreach (string tagname in wt.FindAllTags())
+                {
+                    if (!CheckNameUniqueness(tagname))
+                    {
+                        continue;
+                    }
+                    Objects.Models.Field tag = new()
+                    {
+                        Name = tagname,
+                        VisibleName = tagname.Replace("_", " ")
+                    };
+                    this.AddField(tag);
+                }
+            }
+            catch (IOException)
+            {
+                DialogsManager.ShowErrorDialog("Файл занят другим процесом. Его использование невозможно.");
+            }
         }
 
-        private void Tce_OnEdit(string name, string path)
+        private void Tce_OnRemove(int index, TemplateData data)
         {
-            
+            this.vm.SourceData.Templates.Remove(index);
+            this.UpdateTemplatesList();
+        }
+
+        private void Tce_OnEdit(int index, TemplateData data)
+        {
+            this.vm.SourceData.EditTemplate(index, data);
+            this.UpdateTemplatesList();
         }
         #endregion
 
@@ -160,5 +245,21 @@ namespace Incas.Objects.Views.Windows
         }
 
         #endregion
+
+        private void MinimizeAllClick(object sender, MouseButtonEventArgs e)
+        {
+            foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
+            {
+                item.Minimize();
+            }
+        }
+
+        private void MaximizeAllClick(object sender, MouseButtonEventArgs e)
+        {
+            foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
+            {
+                item.Maximize();
+            }
+        }
     }
 }

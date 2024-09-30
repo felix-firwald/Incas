@@ -276,7 +276,7 @@ namespace Incas.Templates.Views.Pages
                         WordTemplator wt = new(newFile);
                         this.Dispatcher.Invoke(() =>
                         {
-                            filledTags = wt.GenerateDocument(this.TagFillers, this.Tables, this.GetNumber(), async);
+                            wt.GenerateDocument(this.TagFillers, this.Tables);
                         });
                         break;
                     case TemplateType.Excel:
@@ -289,7 +289,7 @@ namespace Incas.Templates.Views.Pages
                         ExcelTemplator et = new(newFile);
                         this.Dispatcher.Invoke(() =>
                         {
-                            filledTags = et.GenerateDocument(this.TagFillers, this.Tables, this.GetNumber(), async);
+                            et.GenerateDocument(this.TagFillers, this.Tables);
                         });
                         break;
                 }

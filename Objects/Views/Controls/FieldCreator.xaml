@@ -21,7 +21,7 @@
                 <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="ArrowCircleDown" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="18" ToolTip="Свернуть / Развернуть окно" Cursor="Hand" MouseDown="TurnSizeClick"/>-->
                 <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" Checked="MaximizeClick" Unchecked="MinimizeClick" ToolTip="Свернуть / развернуть поле объекта"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,5,0,5" Opacity="0.5" />
-                <Label x:Name="NumberUp" Style="{DynamicResource LabelElement}" MinWidth="40" Visibility="Collapsed" Content="{Binding OrderNumber, FallbackValue=0}" Foreground="{DynamicResource Icon}" Cursor="Hand" ToolTip="Инкремент номера" ToolTipService.InitialShowDelay="200" MouseDown="UpClick" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                <Label x:Name="NumberUp" Style="{DynamicResource LabelElement}" MinWidth="40" Visibility="Collapsed" Content="{Binding OrderNumber, FallbackValue=0}" Foreground="{DynamicResource Icon}" Cursor="Hand" ToolTip="Инкремент номера" ToolTipService.InitialShowDelay="200" MouseDown="DownClick" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
                 </Label>
                 <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
                 <TextBox x:Name="TagName" Style="{DynamicResource TextBoxTransparent}" Text="{Binding NameOfField, UpdateSourceTrigger=PropertyChanged}" MaxLength="25">
@@ -39,7 +39,7 @@
 
             <StackPanel Grid.Row="2" x:Name="ContentPanel">
 
-                <TextBox Style="{DynamicResource TextBoxMain}" Tag="Отображаемое название" Text="{Binding VisibleName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" TextWrapping="Wrap">
+                <TextBox Style="{DynamicResource TextBoxMain}" IsReadOnly="False" Tag="Отображаемое название" Text="{Binding VisibleName, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" TextWrapping="Wrap">
                     <TextBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>

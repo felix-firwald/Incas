@@ -12,10 +12,14 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
             <Label x:Name="MainLabel" FontFamily="JetBrains Mono" Content="Наименование" VerticalAlignment="Center" FontWeight="Bold" Foreground="{DynamicResource DarkLight}" />
-            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Pencil" Grid.Column="1" MouseDown="EditClick" />
-            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Remove" Grid.Column="2" MouseDown="RemoveClick" />
+            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Eye" ToolTip="Открыть файл шаблона" Grid.Column="1" MouseDown="ViewFileClick" />
+            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="SearchPlus" ToolTip="Найти поля в привязанном файле шаблона" Grid.Column="2" MouseDown="SearchFields"  />
+            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Pencil" ToolTip="Редактировать шаблон" Grid.Column="3" MouseDown="EditClick" />
+            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Remove" ToolTip="Удалить шаблон" Grid.Column="4" MouseDown="RemoveClick" />
         </Grid>
     </Border>
 </UserControl>

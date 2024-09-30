@@ -1,22 +1,28 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
 using Incas.Core.Classes;
+using Incas.CreatedDocuments.Models;
+using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Views.Controls;
+using Incas.Templates.Views.Windows;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
+using Windows.Devices.Geolocation;
 
 namespace Incas.Objects.Views.Pages
 {
     /// <summary>
     /// Логика взаимодействия для ObjectCreator.xaml
     /// </summary>
-    public partial class ObjectCreator : UserControl
+    public partial class ObjectCreator : System.Windows.Controls.UserControl
     {
         public Components.Object Object { get; set; }
         public Class Class { get; set; }
@@ -50,13 +56,22 @@ namespace Incas.Objects.Views.Pages
             this.ExpanderButton.IsChecked = true;
             this.ApplyAuthorConstraint();
         }
+        public ObjectCreator(ClassData data) // dev mode
+        {
+            this.InitializeComponent();
+            this.ClassData = data;
+            this.FillContentPanel();
+            this.Object = new();
+            this.DocumentTools.Visibility = Visibility.Collapsed;
+            this.RemoveButton.Visibility = Visibility.Collapsed;
+        }
         private void ApplyAuthorConstraint()
         {
             if (this.Object.Id != Guid.Empty && this.ClassData.EditByAuthorOnly == true && this.Object.AuthorId != ProgramState.CurrentUser.id)
             {
                 this.Locked = true;
                 this.ContentPanel.IsEnabled = false;
-                Label label = new()
+                System.Windows.Controls.Label label = new()
                 {
                     Content = "Вы не можете редактировать этот объект, поскольку не являетесь его автором.",
                     Margin = new Thickness(5),
@@ -71,8 +86,10 @@ namespace Incas.Objects.Views.Pages
             {
                 if (f.Type != TagType.Table)
                 {
-                    TagFiller tf = new(f);
-                    tf.Uid = f.Id.ToString();
+                    TagFiller tf = new(f)
+                    {
+                        Uid = f.Id.ToString()
+                    };
                     tf.OnInsert += this.Tf_OnInsert;
                     tf.OnRename += this.Tf_OnRename;
                     tf.OnFieldUpdate += this.Tf_OnFieldUpdate;
@@ -83,8 +100,10 @@ namespace Incas.Objects.Views.Pages
                 }
                 else
                 {
-                    TableFiller tf = new(f);
-                    tf.Uid = f.Id.ToString();
+                    TableFiller tf = new(f)
+                    {
+                        Uid = f.Id.ToString()
+                    };
                     this.ContentPanel.Children.Add(tf);
                     this.Tables.Add(tf);
                 }
@@ -115,7 +134,20 @@ namespace Incas.Objects.Views.Pages
         {
             
         }
-
+        public void ApplyFromExcel(Dictionary<string, string> pairs)
+        {
+            foreach (KeyValuePair<string, string> pair in pairs)
+            {
+                foreach (TagFiller tf in this.ContentPanel.Children)
+                {
+                    if (tf.field.Name == pair.Key)
+                    {
+                        tf.SetValue(pair.Value);
+                        break;
+                    }
+                }
+            }
+        }
         public void ApplyObject(Components.Object obj)
         {
             this.Object = obj;
@@ -174,6 +206,101 @@ namespace Incas.Objects.Views.Pages
                 this.Object.Fields.Add(data);
             }
             return this.Object;
+        }
+        private string RemoveUnresolvedChars(string input)
+        {
+            return input
+                .Replace("/", "")
+                .Replace("\\", "")
+                .Replace(":", "")
+                .Replace("?", "")
+                .Replace("*", "")
+                .Replace("<", "")
+                .Replace(">", "")
+                .Replace("|", "")
+                .Replace("\"", "")
+                .Trim();
+        }
+        public void GenerateDocument()
+        {
+            string name = this.ObjectName.Text;
+            string path = "";
+            if (this.ClassData.Templates?.Count == 1)
+            {
+                if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
+                {
+                    this.GenerateDocument(this.ClassData.Templates[1].File, path);
+                }
+            }
+            else if (this.ClassData.Templates?.Count > 1)
+            {
+                TemplateSelection ts = new(this.ClassData);
+                if (ts.ShowDialog("Выбор шаблона", Icon.Magic) == true)
+                {
+                    if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
+                    {
+                        this.GenerateDocument(ts.GetSelectedPath(), path);
+                    }
+                }              
+            }
+            else
+            {
+
+            }
+        }
+        public string GenerateDocument(string filePath, string folder, bool async = true)
+        {
+            string newFile = "";
+            filePath = ProgramState.GetFullnameOfDocumentFile(filePath);
+            try
+            {
+                if (filePath.EndsWith(".docx"))
+                {
+                    newFile = $"{folder}\\{this.RemoveUnresolvedChars(this.ObjectName.Text)}.docx";
+                    if (File.Exists(newFile))
+                    {
+                        File.Delete(newFile);
+                    }
+                    File.Copy(filePath, newFile, true);
+                    WordTemplator wt = new(newFile);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        wt.GenerateDocument(this.TagFillers, this.Tables, async);
+                    });
+                }
+                else if (filePath.EndsWith(".xlsx"))
+                {
+                    newFile = $"{folder}\\{this.RemoveUnresolvedChars(this.ObjectName.Text)}.xlsx";
+                    if (File.Exists(newFile))
+                    {
+                        File.Delete(newFile);
+                    }
+                    File.Copy(filePath, newFile, true);
+                    ExcelTemplator et = new(newFile);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        et.GenerateDocument(this.TagFillers, this.Tables, async);
+                    });
+                }
+                return newFile;
+            }          
+            catch (GeneratorUndefinedStateException ex)
+            {
+                DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
+                return "";
+            }
+            catch (IOException ioex)
+            {
+                DialogsManager.ShowErrorDialog($"При доступе к файлу \"{this.ObjectName.Text}\" или его папке возникла ошибка.\n" +
+                    $"Возможно существует файл с таким же именем, который уже открыт другим пользователем.\nПодробности: " + ioex.Message + "\n" +
+                    $"Файл будет пропущен.");
+                return "";
+            }
+            catch (Exception e)
+            {
+                DialogsManager.ShowErrorDialog(e.Message);
+                return "";
+            }
         }
         private string UpdateName()
         {
@@ -243,9 +370,49 @@ namespace Incas.Objects.Views.Pages
             this.OnSaveRequested?.Invoke(this);
         }
 
-        private void PreviewCLick(object sender, MouseButtonEventArgs e)
+        private  void PreviewCLick(object sender, MouseButtonEventArgs e)
         {
-
+            try
+            {
+                DialogsManager.ShowWaitCursor(true);
+                string path = ProgramState.TemplatesRuntime;
+                if (this.ClassData.Templates?.Count == 1)
+                {
+                    if (this.ClassData.Templates[1].File.EndsWith(".xlsx"))
+                    {
+                        DialogsManager.ShowExclamationDialog("Предпросмотр для Excel файлов недоступен.", "Рендеринг прерван");
+                        return;
+                    }
+                    string name = this.GenerateDocument(this.ClassData.Templates[1].File, path, false);
+                    WordTemplator wt = new(name);
+                    string fileXPS = wt.TurnToXPS();
+                    DialogsManager.ShowWaitCursor(false);
+                    PreviewWindow pr = new(fileXPS, true);
+                    pr.Show();
+                }
+                else if (this.ClassData.Templates?.Count > 1)
+                {
+                    TemplateSelection ts = new(this.ClassData);
+                    if (ts.ShowDialog("Выбор шаблона", Icon.Magic) == true)
+                    {
+                        if (ts.GetSelectedPath().EndsWith(".xlsx"))
+                        {
+                            DialogsManager.ShowExclamationDialog("Предпросмотр для Excel файлов недоступен.", "Рендеринг прерван");
+                            return;
+                        }
+                        string name = this.GenerateDocument(ts.GetSelectedPath(), path, false);
+                        WordTemplator wt = new(name);
+                        string fileXPS = wt.TurnToXPS();
+                        DialogsManager.ShowWaitCursor(false);
+                        PreviewWindow pr = new(fileXPS, true);
+                        pr.Show();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+            }
         }
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)

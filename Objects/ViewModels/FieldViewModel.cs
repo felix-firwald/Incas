@@ -26,6 +26,7 @@ namespace Incas.Objects.ViewModels
             get => this.Source.VisibleName;
             set
             {
+                this.Source.VisibleName = value;
                 this.OnPropertyChanged(nameof(this.VisibleName));
             }
         }

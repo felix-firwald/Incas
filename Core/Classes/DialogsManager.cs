@@ -18,6 +18,16 @@ namespace Incas.Core.Classes
 {
     internal static class DialogsManager
     {
+        public static bool ShowFolderBrowserDialog(ref string path)
+        {
+            FolderBrowserDialog fb = new();
+            if (fb.ShowDialog() == DialogResult.OK)
+            {
+                path = fb.SelectedPath;
+                return true;
+            }
+            return false;
+        }
         public static bool ShowSaveFileDialog(ref string file, string filter)
         {
             SaveFileDialog saveFileDialog = new()

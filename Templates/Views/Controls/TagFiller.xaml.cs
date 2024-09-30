@@ -5,6 +5,7 @@ using Incas.Templates.Components;
 using Incas.Users.Models;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
+using Spire.Doc.Fields;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -68,7 +69,7 @@ namespace Incas.Templates.Views.Controls
             {
                 case TagType.Variable:
                 case TagType.Text:
-                    TextBox textBox = new()
+                    System.Windows.Controls.TextBox textBox = new()
                     {
                         Text = value,
                         Tag = description
@@ -179,7 +180,7 @@ namespace Incas.Templates.Views.Controls
                 case TagType.Variable:
                 case TagType.Text:
                 default:
-                    ((TextBox)this.control).Text = value;
+                    ((System.Windows.Controls.TextBox)this.control).Text = value;
                     break;
                 case TagType.Number:
                     int digitValue;
@@ -248,9 +249,22 @@ namespace Incas.Templates.Views.Controls
             {
                 return "";
             }
-            return string.IsNullOrWhiteSpace(this.field.Value.ToString())
-                ? ((DateTime)picker.SelectedDate).ToString("dd.MM.yyyy")
-                : picker.SelectedDate.HasValue ? ((DateTime)picker.SelectedDate).ToString(this.field.Value.ToString()) : "";
+            DateFieldData df = JsonConvert.DeserializeObject<DateFieldData>(this.field.Value);
+            string format = "dd.MM.yyyy";
+            switch (df.Format)
+            {
+                case DateFormats.Usual:
+                default:
+                    break;
+                case DateFormats.Full:
+                    format = "dd MMMM yyyy";
+                    break;
+                case DateFormats.FullWithQuotes:
+                    format = "«dd» MMMM yyyy";
+                    break;
+            }
+
+            return picker.SelectedDate.HasValue ? ((DateTime)picker.SelectedDate).ToString(format) : "";
         }
         public string GetValue()
         {
@@ -258,7 +272,7 @@ namespace Incas.Templates.Views.Controls
             {
                 case TagType.Variable:
                 default:
-                    string value = ((TextBox)this.control).Text;
+                    string value = ((System.Windows.Controls.TextBox)this.control).Text;
                     if (this.field.NotNull == true || string.IsNullOrEmpty(value))
                     {
                         this.ThrowNotNullFailed();
@@ -314,6 +328,10 @@ namespace Incas.Templates.Views.Controls
                 default: return this.GetValue();
 
             }
+        }
+        public List<FieldData> GetDataFromObjectRelation()
+        {
+            return ((SelectionBox)this.control).SelectedObject.Fields;
         }
         public void ThrowNotNullFailed()
         {

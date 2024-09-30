@@ -19,9 +19,11 @@ namespace Incas.Templates.Components
     {
         public void Replace(List<string> tags, List<string> values, bool async = true);
 
-        public List<SGeneratedTag> GenerateDocument(List<TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true);
+        public void GenerateDocument(List<TagFiller> tagFillers, List<TableFiller> tableFillers, bool async = true);
 
         public void CreateTable(string tag, DataTable dt);
+        public List<string> FindAllTags();
+        //public void CreateByObject(Incas.Objects.Components.Object obj);
     }
 
     public class WordTemplator : ITemplator
@@ -75,47 +77,42 @@ namespace Incas.Templates.Components
             doc.Save();
         }
 
-        public List<SGeneratedTag> GenerateDocument(List<TagFiller> tagFillers, List<TableFiller> tableFillers, string number, bool isAsync = true)
+        public void GenerateDocument(List<TagFiller> tagFillers, List<TableFiller> tableFillers, bool async = true)
         {
-            List<SGeneratedTag> filledTags = [];
-            List<string> tagsToReplace = ["N"];
-            List<string> values = [number];
+            List<string> tagsToReplace = new();
+            List<string> values = new();
             foreach (TableFiller tab in tableFillers)
             {
                 this.CreateTable(tab.field.Name, tab.DataTable);
-                filledTags.Add(tab.GetAsGeneratedTag());
             }
             foreach (TagFiller tf in tagFillers)
             {
                 Guid id = tf.GetId();
                 string name = tf.GetTagName();
                 string value = tf.GetValue();
-                if (tf.field.Type != TagType.LocalConstant)
-                {
-                    if (tf.field.Type is TagType.Generator or Components.TagType.Macrogenerator or TagType.Date)
-                    {
-                        SGeneratedTag gtg = new()
-                        {
-                            tag = id,
-                            value = tf.GetData()
-                        };
-                        filledTags.Add(gtg);
-                    }
-                    else
-                    {
-                        SGeneratedTag gt = new()
-                        {
-                            tag = id,
-                            value = value
-                        };
-                        filledTags.Add(gt);
-                    }
-                }
                 tagsToReplace.Add(name);
                 values.Add(value);
+                if (tf.field.Type == TagType.Relation)
+                {
+                    foreach (Objects.Components.FieldData fd in tf.GetDataFromObjectRelation())
+                    {
+                        tagsToReplace.Add($"{name}.{fd.ClassField.Name}");
+                        values.Add(fd.Value);
+                    }
+                }
             }
-            this.Replace(tagsToReplace, values, isAsync);
-            return filledTags;
+            this.Replace(tagsToReplace, values, async);
+        }
+
+        public void CreateByObject(Objects.Components.Object obj)
+        {
+            //List<string> tags = new();
+            //List<string> values = new();
+            //foreach (Objects.Components.FieldData item in obj.Fields)
+            //{
+            //    tags.Add(item.ClassField.Name);
+            //    values.Add(item.Value);
+            //}
         }
 
         public void CreateTable(string tag, DataTable dt)
@@ -172,7 +169,7 @@ namespace Incas.Templates.Components
         {
             List<string> result = [];
             DocX doc = DocX.Load(this.Path);
-            Regex regex = new(@"\[[A-Za-zА-Яа-я ]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
+            Regex regex = new(@"\[[A-Za-zА-Яа-я0-9_]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
             MatchCollection matches = regex.Matches(doc.Text);
 
             foreach (Match match in matches)

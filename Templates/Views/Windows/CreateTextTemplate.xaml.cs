@@ -70,13 +70,14 @@ namespace Incas.Templates.Views.Windows
             {
                 t = tag;
             }
-            Objects.Views.Controls.FieldCreator tc = new(t);
+            Objects.Views.Controls.FieldCreator tc = new(this.ContentPanel.Children.Count, t);
             tc.OnRemove += this.RemoveTagFromList;
             this.ContentPanel.Children.Add(tc);
         }
-        private void RemoveTagFromList(Objects.Views.Controls.FieldCreator tag)
+        private bool RemoveTagFromList(Objects.Views.Controls.FieldCreator tag)
         {
             this.ContentPanel.Children.Remove(tag);
+            return true;
         }
 
         private void AddTagClick(object sender, MouseButtonEventArgs e)

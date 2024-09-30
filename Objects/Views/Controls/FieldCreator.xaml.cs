@@ -14,10 +14,13 @@ namespace Incas.Objects.Views.Controls
     /// </summary>
     public partial class FieldCreator : UserControl
     {
-        public delegate void FieldAction(FieldCreator t);
+        public delegate bool FieldAction(FieldCreator t);
+        public delegate int FieldMoving(FieldCreator t);
         public event FieldAction OnRemove;
+        public event FieldMoving OnMoveDownRequested;
+        public event FieldMoving OnMoveUpRequested;
         public FieldViewModel vm;
-        public FieldCreator(Incas.Objects.Models.Field data = null)
+        public FieldCreator(int index, Incas.Objects.Models.Field data = null)
         {
             this.InitializeComponent();
             if (data == null)
@@ -27,7 +30,8 @@ namespace Incas.Objects.Views.Controls
             else
             {
                 this.vm = new(data);
-            }           
+            }
+            this.vm.OrderNumber = index;
             this.DataContext = this.vm;
             this.ExpanderButton.IsChecked = true;
         }
@@ -42,38 +46,44 @@ namespace Incas.Objects.Views.Controls
         }
         public void Maximize()
         {
+            this.ExpanderButton.IsChecked = true;           
+        }
+        public void Minimize()
+        {
+            this.ExpanderButton.IsChecked = false;           
+        }
+
+        private void MaximizeClick(object sender, System.Windows.RoutedEventArgs e)
+        {
             this.MainBorder.Height = this.ContentPanel.Height + 40;
             this.NumberUp.Visibility = Visibility.Collapsed;
         }
-        public void Minimize()
+
+        private void MinimizeClick(object sender, System.Windows.RoutedEventArgs e)
         {
             this.MainBorder.Height = 40;
             this.NumberUp.Visibility = Visibility.Visible;
         }
 
-        private void MaximizeClick(object sender, System.Windows.RoutedEventArgs e)
-        {
-            this.Maximize();
-        }
-
-        private void MinimizeClick(object sender, System.Windows.RoutedEventArgs e)
-        {
-            this.Minimize();
-        }
-
         private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.OnRemove?.Invoke(this);
+            if (DialogsManager.ShowQuestionDialog(
+                "Вы уверены, что хотите удалить поле? Отменить это действие после сохранения будет невозможно.",
+                "Удалить поле?",
+                "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
+            {
+                this.OnRemove?.Invoke(this);
+            }           
         }
 
         private void UpClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.vm.IncrementOrder();
+            this.vm.OrderNumber = (int)this.OnMoveDownRequested?.Invoke(this);
         }
 
         private void DownClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.vm.DecrementOrder();
+            this.vm.OrderNumber = (int)this.OnMoveUpRequested?.Invoke(this);
         }
 
         private void EditScriptClick(object sender, RoutedEventArgs e)
