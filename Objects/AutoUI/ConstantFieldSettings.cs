@@ -15,7 +15,7 @@ namespace Incas.Objects.AutoUI
         private Incas.Objects.Models.Field Source;
 
         [Description("Значение")]
-        [MaxLength(1200)]
+        [StringLength(1200)]
         public string Text { get; set; }
         #endregion
 

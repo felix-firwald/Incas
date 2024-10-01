@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="Incas.Objects.Views.Controls.TerminateObjectProcessMessage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.Objects.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="80"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Path x:Name="Icon" Fill="{StaticResource Yellow}" VerticalAlignment="Center" HorizontalAlignment="Center" Data="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2" Stretch="Uniform" MaxWidth="40" MaxHeight="40"/>
+        <TextBlock x:Name="Text" Margin="5,5,12,5" Text="Установлен последний допустимый статус. Вы можете пометить процесс как завершенный. Это действие отменить нельзя." Foreground="{DynamicResource GrayLight}" FontFamily="JetBrains Mono" TextWrapping="WrapWithOverflow" Grid.ColumnSpan="2" Grid.Column="1"/>
+        <Label Style="{StaticResource LabelElement}" Content="Завершить процесс" Grid.Row="1" VerticalAlignment="Center" FontWeight="Bold" Grid.ColumnSpan="2"/>
+        <CheckBox Style="{StaticResource Toggle}" Content=" " Panel.ZIndex="2" Checked="CheckBox_Checked" TextElement.FontFamily="JetBrains Mono" Grid.Row="1" Margin="5,5,5,5" Grid.ColumnSpan="3"/>
+    </Grid>
+</UserControl>

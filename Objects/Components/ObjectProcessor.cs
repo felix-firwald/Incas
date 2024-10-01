@@ -158,10 +158,11 @@ namespace Incas.Objects.Components
                 obj.AuthorId = ProgramState.CurrentUser.id;
                 obj.CreationDate = DateTime.Now;
                 values.Add(IdField, obj.Id.ToString());
-                values.Add(AuthorField, obj.AuthorId.ToString());
+                values.Add(AuthorField, obj.AuthorId.ToString());               
                 if (data.ClassType == ClassType.Document)
                 {
                     values.Add(DateCreatedField, obj.CreationDate.ToString());
+                    values.Add(TerminatedField, "0");
                 }
                 //values.Add(StatusField, obj.Status.ToString());
                 obj.AuthorId = ProgramState.CurrentUser.id;
@@ -171,11 +172,22 @@ namespace Incas.Objects.Components
                 q.SeparateCommand();
             }
             else // if EDIT
-            {             
+            {
+                if (data.ClassType == ClassType.Document)
+                {
+                    values.Add(DateTerminatedField, obj.TerminatedDate.ToString());
+                    values.Add(TerminatedField, obj.Terminated ? "1" : "0");
+                }
                 q.Update(values);                
                 q.WhereEqual(IdField, obj.Id.ToString());
                 q.SeparateCommand();
             }
+        }
+        public static void SetObjectAsTerminated(Class cl, Object obj)
+        {
+            obj.TerminatedDate = DateTime.Now;
+            obj.Terminated = true;
+            ObjectProcessor.WriteObjects(cl, obj);
         }
         public static DataTable GetObjectsList(Class cl, string WhereCondition = null)
         {
@@ -218,10 +230,6 @@ namespace Incas.Objects.Components
             {
                 q.AddCustomRequest(WhereCondition);
             }
-            if (data.ClassType == ClassType.Model)
-            {
-                q.OrderByASC("OBJECT_NAME");
-            }
             return q.Execute();
         }
         public static DataTable GetObjectsListWhereLike(Class cl, string field, string value)
@@ -248,8 +256,14 @@ namespace Incas.Objects.Components
                 {
                     if (dr[ObjectProcessor.DateCreatedField] is not null)
                     {
-                        obj.CreationDate = DateTime.Parse(dr[ObjectProcessor.DateCreatedField].ToString());
-                    }                   
+                        DateTime cd;
+                        DateTime.TryParse(dr[ObjectProcessor.DateCreatedField].ToString(), out cd);
+                        obj.CreationDate = cd;
+                    }
+                    obj.Terminated = dr[ObjectProcessor.TerminatedField].ToString() == "0" ? false : true;
+                    DateTime dt;
+                    DateTime.TryParse(dr[ObjectProcessor.DateTerminatedField].ToString(), out dt);
+                    obj.TerminatedDate = dt;
                 }
                 byte status = 0;
                 byte.TryParse(dr[ObjectProcessor.StatusField].ToString(), out status);

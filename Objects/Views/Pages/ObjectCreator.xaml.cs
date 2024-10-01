@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
 using Windows.Devices.Geolocation;
 
 namespace Incas.Objects.Views.Pages
@@ -53,6 +54,10 @@ namespace Incas.Objects.Views.Pages
             {
                 this.RenderArea.Visibility = Visibility.Collapsed;
             }
+            else
+            {
+                this.ApplyTerminated();
+            }
             this.ExpanderButton.IsChecked = true;
             this.ApplyAuthorConstraint();
         }
@@ -64,6 +69,25 @@ namespace Incas.Objects.Views.Pages
             this.Object = new();
             this.DocumentTools.Visibility = Visibility.Collapsed;
             this.RemoveButton.Visibility = Visibility.Collapsed;
+        }
+        private void ApplyTerminated()
+        {
+            if (this.Object.Terminated == true)
+            {
+                this.RenderArea.Visibility = Visibility.Collapsed;
+                this.SaveArea.Visibility = Visibility.Collapsed;
+                this.TerminatedIcon.Visibility = Visibility.Visible;
+                this.ContentPanel.IsEnabled = false;
+                SolidColorBrush color = new(System.Windows.Media.Color.FromRgb(52, 201, 36));
+                this.Separator.Fill = color;
+                System.Windows.Controls.Label label = new()
+                {
+                    Content = "Процесс завершен.",
+                    Margin = new Thickness(5),
+                    Foreground = color
+                };
+                this.ContentPanel.Children.Insert(0, label);
+            }
         }
         private void ApplyAuthorConstraint()
         {

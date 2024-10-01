@@ -16,6 +16,7 @@ namespace Incas.Objects.AutoUI
     {
         #region Data
         [Description("Значение по умолчанию")]
+        [CanBeNull]
         [MaxLength(1200)]
         public string Text { get; set; }
         #endregion

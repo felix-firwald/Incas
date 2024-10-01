@@ -16,8 +16,16 @@ namespace Incas.Objects.Components
         public Guid AuthorId { get; set; }
         public byte Status { get; set; }
         public string Name { get; set; }
+        public bool Terminated { get; set; }
+        public DateTime TerminatedDate { get; set; }
         public object Meta { get; set; }
         public List<FieldData> Fields { get; set; }
+        public Object Copy()
+        {
+            Object obj = new();
+            obj.Fields = this.Fields;
+            return obj;
+        }
         public string GetFieldValue(Guid id)
         {
             foreach (FieldData field in this.Fields)

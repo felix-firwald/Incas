@@ -46,21 +46,21 @@ namespace Incas.Objects.Views.Pages
         {
             return new SolidColorBrush(Color.FromArgb(a, color.R, color.G, color.B));
         }
-        private void ShowStatus(byte status)
+        private void ShowStatus(Components.Object obj)
         {
             if (this.ClassData?.Statuses?.Count > 0)
             {
-                if (status == 0)
+                if (obj.Status == 0)
                 {
-                    status = 1;
+                    obj.Status = 1;
                 }
-                this.status = status;
+                this.status = obj.Status;
                 int count = this.ClassData.Statuses.Count;
                 this.StatusBorder.Visibility = Visibility.Visible;
                 StatusData data = new();
                 try
                 {
-                    data = this.ClassData.Statuses[status];              
+                    data = this.ClassData.Statuses[obj.Status];              
                 }
                 catch
                 {
@@ -71,13 +71,13 @@ namespace Incas.Objects.Views.Pages
                 this.StatusBackground.Background = this.GetColor(data.Color, 50);
                 this.StatusText.Foreground = this.GetColor(data.Color);
                 this.Progress.Maximum = count;
-                this.Progress.Value = status;
-                if (status >= count)
+                this.Progress.Value = obj.Status;
+                if (obj.Status >= count)
                 {
                     this.StatusForwardButton.Visibility = Visibility.Hidden;
                     this.StatusBackButton.Visibility = Visibility.Visible;
                 }
-                else if (status == 1)
+                else if (obj.Status == 1)
                 {
                     this.StatusBackButton.Visibility = Visibility.Hidden;
                     this.StatusForwardButton.Visibility = Visibility.Visible;
@@ -105,18 +105,20 @@ namespace Incas.Objects.Views.Pages
         }
         public void UpdateFor(Components.Object obj)
         {
-            this.ShowStatus(obj.Status);
+            this.ShowStatus(obj);         
             if (this.ClassData.EditByAuthorOnly == true && obj.AuthorId != ProgramState.CurrentUser.id)
             {
-                this.StatusBackButton.IsEnabled = false;
-                this.StatusForwardButton.IsEnabled = false;
+                this.StatusBorder.IsEnabled = false;
+                this.EditIcon.Visibility = Visibility.Collapsed;
             }
             else
             {
+                this.StatusBorder.IsEnabled = true;
+                this.EditIcon.Visibility = Visibility.Visible;
                 this.StatusBackButton.IsEnabled = true;
                 this.StatusForwardButton.IsEnabled = true;
-            }
-            this.FieldsContentPanel.Children.Clear();
+            }           
+            this.FieldsContentPanel.Children.Clear();          
             this.ObjectName.Text = obj.Name;
             this.id = obj.Id;
             if (this.first)
@@ -125,8 +127,26 @@ namespace Incas.Objects.Views.Pages
                 this.FieldsContentPanel.Children.Add(ofAuthor);
                 if (this.ClassData.ClassType == ClassType.Document)
                 {
-                    ObjectFieldViewer ofDate = new(obj.CreationDate);
+                    ObjectFieldViewer ofDate = new(obj.CreationDate, "Дата создания");
                     this.FieldsContentPanel.Children.Add(ofDate);
+                    if (obj.Terminated)
+                    {
+                        this.StatusBorder.IsEnabled = false;
+                        this.EditIcon.Visibility = Visibility.Collapsed;
+                        ObjectFieldViewer terminatedCheck = new("Процесс был завершен.", 52, 201, 36);
+                        this.FieldsContentPanel.Children.Insert(0, terminatedCheck);
+                        ObjectFieldViewer ofTerminatedDate = new(obj.TerminatedDate, "Дата завершения процесса");
+                        this.FieldsContentPanel.Children.Add(ofTerminatedDate);
+                    }
+                    else
+                    {
+                        if (this.ClassData.Statuses?.Count == obj.Status)
+                        {
+                            TerminateObjectProcessMessage box = new();
+                            box.OnTerminateRequested += this.Box_OnTerminateRequested;
+                            this.FieldsContentPanel.Children.Insert(0, box);
+                        }
+                    }
                 }
             }                  
             foreach (FieldData field in obj.Fields)
@@ -136,6 +156,13 @@ namespace Incas.Objects.Views.Pages
                 this.FieldsContentPanel.Children.Add(of);
             }
             ((ObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
+        }
+
+        private void Box_OnTerminateRequested()
+        {
+            this.StatusBorder.IsEnabled = false;
+            this.EditIcon.Visibility = Visibility.Collapsed;
+            ObjectProcessor.SetObjectAsTerminated(this.Class, ObjectProcessor.GetObject(this.Class, this.id));
         }
 
         private void Of_OnFilterRequested(FieldData data)

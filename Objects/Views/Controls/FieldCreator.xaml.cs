@@ -100,7 +100,7 @@ namespace Incas.Objects.Views.Controls
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
             Incas.Objects.Models.Field f = this.vm.Source;
-            string name = $"Настройки поля ({f.Name})";
+            string name = $"Настройки поля [{f.Name}]";
             switch (f.Type)
             {
                 case Templates.Components.TagType.Variable:

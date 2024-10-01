@@ -146,13 +146,6 @@ namespace Incas.Core.Classes
             if (maxlength > 120)
             {
                 control.Style = this.Container.FindResource("TextBoxBig") as Style;
-                MenuItem mi = new()
-                {
-                    Header = "Вставить из пользовательского буфера обмена",
-                    Tag = description
-                };
-                mi.Click += this.Mi_Click;
-                control.ContextMenu.Items.Add(mi);
             }
             else
             {

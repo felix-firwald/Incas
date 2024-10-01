@@ -89,13 +89,22 @@ namespace Incas.Objects.Views.Controls
             this.ColorizeField(243, 74, 147);
             this.FilterButton.IsEnabled = false;
         }
-        public ObjectFieldViewer(DateTime date) // date
+        public ObjectFieldViewer(DateTime date, string name) // date
         {
             this.InitializeComponent();
-            this.FieldName.Text = "Дата создания:";
+            this.FieldName.Text = name + ":";
             this.FieldValue.Text = date.ToString("f");
             this.ColorizeField(74, 243, 170);
             this.FilterButton.IsEnabled = false;
+        }
+        public ObjectFieldViewer(string value, byte r, byte g, byte b) // custom
+        {
+            this.InitializeComponent();
+            this.FieldName.Text = value;
+            this.FieldValue.Text = "";
+            Grid.SetColumnSpan(this.FieldName, 2);
+            this.ColorizeName(r, g, b);
+            this.FilterButton.Visibility = Visibility.Collapsed;
         }
         public void HideSeparator()
         {
@@ -104,6 +113,10 @@ namespace Incas.Objects.Views.Controls
         private void ColorizeField(byte r, byte g, byte b)
         {
             this.FieldValue.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(r, g, b));
+        }
+        private void ColorizeName(byte r, byte g, byte b)
+        {
+            this.FieldName.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(r, g, b));
         }
 
         private void FilterClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

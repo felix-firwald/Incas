@@ -193,10 +193,7 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-            obj.Id = Guid.Empty;
-            obj.AuthorId = Guid.Empty;
-            obj.Status = 0;
-            ObjectsEditor oc = new (this.sourceClass, new List<Components.Object>() { obj });
+            ObjectsEditor oc = new (this.sourceClass, new List<Components.Object>() { obj.Copy() });
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
