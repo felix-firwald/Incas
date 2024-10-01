@@ -67,7 +67,10 @@ namespace Incas.Objects.ViewModels
             {
                 if (value != this.Source.Name)
                 {
-                    this.Source.Name = value.Replace(" ", "_");
+                    this.Source.Name = value
+                        .Replace(" ", "_")
+                        .Replace(".", "_")
+                        .Replace("$", "_");
                     this.OnPropertyChanged(nameof(this.NameOfField));
                 }
             }
@@ -139,6 +142,10 @@ namespace Incas.Objects.ViewModels
         }
         public void CheckField()
         {
+            if (string.IsNullOrWhiteSpace(this.NameOfField))
+            {
+                throw new Exceptions.FieldDataFailed($"Одному из полей не присвоено имя. Настройте поле, а затем попробуйте снова.");
+            }
             try
             {
                 switch (this.Source.Type)

@@ -108,9 +108,18 @@ namespace Incas.Objects.Views.Windows
             List<Incas.Objects.Models.Field> fields = new();
             try
             {
+                List<string> names = new();
                 foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
                 {
                     Incas.Objects.Models.Field f = item.GetField();
+                    if (names.Contains(f.Name))
+                    {
+                        throw new FieldDataFailed($"Поле [{f.Name}] встречается более одного раза. Имена полей должны быть уникальными.");
+                    }
+                    else
+                    {
+                        names.Add(f.Name);
+                    }
                     f.SetId();
                     fields.Add(f);
                 }

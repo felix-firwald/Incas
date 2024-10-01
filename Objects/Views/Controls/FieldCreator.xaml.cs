@@ -26,6 +26,7 @@ namespace Incas.Objects.Views.Controls
             if (data == null)
             {
                 this.vm = new();
+                this.vm.NameOfField = "Новое_поле";
             }
             else
             {
