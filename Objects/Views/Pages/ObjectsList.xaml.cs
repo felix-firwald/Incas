@@ -8,6 +8,9 @@ using System;
 using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using System.Collections.Generic;
+using System.Windows.Media;
+using System.Globalization;
+using MailKit.Search;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -21,15 +24,45 @@ namespace Incas.Objects.Views.Pages
         private ObjectCard ObjectCard;
         public ObjectsList(Class source)
         {
-            this.InitializeComponent();
+            this.InitializeComponent();         
             this.sourceClass = source;
             this.ClassData = source.GetClassData();
+            //this.InitStyle();
             this.UpdateView();
             if (this.ClassData.ShowCard)
             {
                 this.PlaceCard();
-            }
+            }         
         }
+        private void InitStyle()
+        {
+            Style style = new(typeof(DataGridRow), this.FindResource("RowMain") as Style);
+            if (this.ClassData.Statuses is null)
+            {
+                return;
+            }
+            foreach (KeyValuePair<int, StatusData> status in this.ClassData.Statuses)
+            {
+                System.Windows.Data.Binding bind = new();
+                bind.Source = ObjectProcessor.StatusField;
+                DataTrigger trigger = new()
+                {
+                    Binding = bind,
+                    
+                    Value = status.Key.ToString(),
+                };
+                Setter setter = new()
+                {
+                    Property = DataGridRow.BackgroundProperty,
+                    Value = new SolidColorBrush(status.Value.Color)
+                };
+                trigger.Setters.Add(setter);
+                style.Triggers.Add(trigger);
+            }
+            this.Data.RowStyle = style;
+            
+        }
+
         private void PlaceCard()
         {
             this.ObjectCard = new(this.sourceClass);
@@ -89,13 +122,15 @@ namespace Incas.Objects.Views.Pages
             }
             else if (e.Column.Header.ToString() is ObjectProcessor.StatusField)
             {
-                e.Column.Header = "Статус";
+                //e.Column.Header = "Статус";
                 e.Column.HeaderStyle = style;
                 e.Column.MinWidth = 100;
                 e.Column.MaxWidth = 180;
                 e.Column.CanUserReorder = false;
             }
         }
+
+
         private void AddClick(object sender, RoutedEventArgs e)
         {
             ObjectsEditor oc = new(this.sourceClass);
@@ -241,5 +276,7 @@ namespace Incas.Objects.Views.Pages
             ContainerWindow cw = new(this, this.sourceClass.name);
             cw.Show();
         }
+
+        
     }
 }

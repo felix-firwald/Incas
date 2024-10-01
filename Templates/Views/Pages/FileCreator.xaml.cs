@@ -1,5 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.CreatedDocuments.Models;
+using Incas.Objects.Components;
+using Incas.Objects.Exceptions;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
@@ -40,8 +42,6 @@ namespace Incas.Templates.Views.Pages
             this.template = templ;
             this.FillContentPanel();
             this.templateSettings = settings;
-            this.NumberPrefix.Content = this.templateSettings.NumberPrefix;
-            this.NumberPostfix.Content = this.templateSettings.NumberPostfix;
             if (this.template.type == TemplateType.Excel)
             {
                 this.EyeButton.Visibility = Visibility.Collapsed;
@@ -58,7 +58,6 @@ namespace Incas.Templates.Views.Pages
             this.DevModeLabel.Visibility = Visibility.Visible;
             this.RemoveButton.Visibility = Visibility.Collapsed;
             this.RemoveButtonRect.Visibility = Visibility.Collapsed;
-            this.DefineNumberButton.IsEnabled = false;
             this.ExpanderButton.IsChecked = true;
         }
 
@@ -222,10 +221,8 @@ namespace Incas.Templates.Views.Pages
                         scope.SetVariable(tf.field.Name.Replace(" ", "_"), tf.GetData());
                     }
                     scope.SetVariable("file_name", this.Filename.Text);
-                    scope.SetVariable("document_number", this.Number.Text);
                     ScriptManager.Execute(this.templateSettings.OnSaving, scope);
                     this.Filename.Text = scope.GetVariable("file_name");
-                    this.Number.Text = scope.GetVariable("document_number");
                     foreach (TagFiller tf in this.TagFillers)
                     {
                         if (tf.field.Type != TagType.Generator)
@@ -239,10 +236,6 @@ namespace Incas.Templates.Views.Pages
             {
                 DialogsManager.ShowErrorDialog("При выполнении скрипта возникла ошибка:\n" + ex.Message);
             }
-        }
-        public string GetNumber()
-        {
-            return this.templateSettings.NumberPrefix + this.Number.Text + this.templateSettings.NumberPostfix;
         }
         private void ApplyNameByTemplate()
         {
@@ -295,6 +288,16 @@ namespace Incas.Templates.Views.Pages
                 }
                 return true;
             }
+            catch (NotNullFailed nn)
+            {
+                DialogsManager.ShowExclamationDialog(nn.Message, "Рендеринг прерван");
+                return false;
+            }
+            catch (FieldDataFailed fd)
+            {
+                DialogsManager.ShowExclamationDialog(fd.Message, "Рендеринг прерван");
+                return false;
+            }
             catch (GeneratorUndefinedStateException ex)
             {
                 DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
@@ -338,47 +341,51 @@ namespace Incas.Templates.Views.Pages
             return output;
         }
 
-        private async void PreviewCLick(object sender, MouseButtonEventArgs e)
+        private void PreviewCLick(object sender, MouseButtonEventArgs e)
         {
             if (this.template.type == TemplateType.Excel)
             {
                 DialogsManager.ShowExclamationDialog("Предпросмотр недоступен для шаблонов Excel", "Действие недоступно");
                 return;
             }
-            DialogsManager.ShowWaitCursor();
-            await System.Threading.Tasks.Task.Run(() =>
+            try
             {
-
+                DialogsManager.ShowWaitCursor();
                 string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.docx";
                 System.IO.File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
                 WordTemplator wt = new(newFile);
 
                 List<string> tagsToReplace = [];
                 List<string> values = [];
-                Application.Current.Dispatcher.BeginInvoke(
-                    DispatcherPriority.Normal,
-                    new Action(() =>
-                    {
-                        foreach (TagFiller tf in this.TagFillers)
-                        {
-                            string nameOf = tf.GetTagName();
-                            string value = tf.GetValue();
-                            tagsToReplace.Add(nameOf);
-                            values.Add(value);
-                        }
-                        wt.Replace(tagsToReplace, values, false);
-                        foreach (TableFiller tab in this.Tables)
-                        {
-                            wt.CreateTable(tab.field.Name, tab.DataTable);
-                        }
-                        string fileXPS = wt.TurnToXPS();
-                        DialogsManager.ShowWaitCursor(false);
-                        PreviewWindow pr = new(fileXPS, !this.templateSettings.RequiresSave);
-                        pr.Show();
-                    })
-                );
-            });
-
+                foreach (TagFiller tf in this.TagFillers)
+                {
+                    string nameOf = tf.GetTagName();
+                    string value = tf.GetValue();
+                    tagsToReplace.Add(nameOf);
+                    values.Add(value);
+                }
+                wt.Replace(tagsToReplace, values, false);
+                foreach (TableFiller tab in this.Tables)
+                {
+                    wt.CreateTable(tab.field.Name, tab.DataTable);
+                }
+                string fileXPS = wt.TurnToXPS();
+                DialogsManager.ShowWaitCursor(false);
+                PreviewWindow pr = new(fileXPS, !this.templateSettings.RequiresSave);
+                pr.Show();   
+            }
+            catch (NotNullFailed nn)
+            {
+                DialogsManager.ShowExclamationDialog(nn.Message, "Рендеринг прерван");
+            }
+            catch (FieldDataFailed fd)
+            {
+                DialogsManager.ShowExclamationDialog(fd.Message, "Рендеринг прерван");
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+            }
         }
 
         private void OnSelectorChecked(object sender, RoutedEventArgs e)
@@ -393,25 +400,34 @@ namespace Incas.Templates.Views.Pages
 
         private void OpenFileClick(object sender, MouseButtonEventArgs e)
         {
-            DialogsManager.ShowWaitCursor();
-            this.CreateFile(ProgramState.TemplatesRuntime, false);
-            string filename;
-            switch (this.template.type)
-            {
-                case TemplateType.Word:
-                default:
-                    filename = $"{ProgramState.TemplatesRuntime}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.docx";
-                    break;
-                case TemplateType.Excel:
-                    filename = $"{ProgramState.TemplatesRuntime}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
-                    break;
-            }
             try
-            {
+            {          
+                DialogsManager.ShowWaitCursor();
+                this.CreateFile(ProgramState.TemplatesRuntime, false);
+                string filename;
+                switch (this.template.type)
+                {
+                    case TemplateType.Word:
+                    default:
+                        filename = $"{ProgramState.TemplatesRuntime}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.docx";
+                        break;
+                    case TemplateType.Excel:
+                        filename = $"{ProgramState.TemplatesRuntime}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
+                        break;
+                }
+
                 System.Diagnostics.Process proc = new();
                 proc.StartInfo.FileName = filename;
                 proc.StartInfo.UseShellExecute = true;
                 proc.Start();
+            }
+            catch (NotNullFailed nn)
+            {
+                DialogsManager.ShowExclamationDialog(nn.Message, "Рендеринг прерван");
+            }
+            catch (FieldDataFailed fd)
+            {
+                DialogsManager.ShowExclamationDialog(fd.Message, "Рендеринг прерван");
             }
             catch (Exception ex)
             {

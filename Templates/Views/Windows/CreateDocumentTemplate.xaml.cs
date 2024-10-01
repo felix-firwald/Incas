@@ -11,6 +11,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using Incas.Objects.Exceptions;
 
 namespace Incas.Templates.Views.Windows
 {
@@ -163,12 +164,19 @@ namespace Incas.Templates.Views.Windows
         {
             if (this.CheckForSave())
             {
-                DialogsManager.ShowWaitCursor();
-                this.Close();
-                this.SaveTags();
-                this.vm.SaveTemplate();                
-                OnCreated?.Invoke();
-                DialogsManager.ShowWaitCursor(false);
+                try
+                {
+                    DialogsManager.ShowWaitCursor();
+                    this.SaveTags();
+                    this.vm.SaveTemplate();
+                    OnCreated?.Invoke();
+                    this.Close();
+                    DialogsManager.ShowWaitCursor(false);
+                }
+                catch (FieldDataFailed fd)
+                {
+                    DialogsManager.ShowExclamationDialog(fd.Message, "Сохранение прервано");
+                }
             }
         }
 
@@ -177,7 +185,7 @@ namespace Incas.Templates.Views.Windows
             List<Objects.Models.Field> tags = new();
             foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
-                tags.Add(tag.vm.Source);
+                tags.Add(tag.GetField());
             }
             this.vm.Tags = tags;
         }
@@ -426,15 +434,22 @@ namespace Incas.Templates.Views.Windows
             List<Objects.Models.Field> tags = [];
             foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
-                tags.Add(tag.vm.Source);
+                tags.Add(tag.GetField());
             }
             return tags;
         }
 
         private void PreviewClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            UseTemplate ut = new(this.vm.NameOfTemplate, this.GetTagsData());
-            ut.ShowDialog();
+            try
+            {
+                UseTemplate ut = new(this.vm.NameOfTemplate, this.GetTagsData());
+                ut.ShowDialog();
+            }
+            catch (FieldDataFailed fd)
+            {
+                DialogsManager.ShowExclamationDialog(fd.Message, "Предпросмотр прерван");
+            }
         }
 
         private void Window_Drop(object sender, System.Windows.DragEventArgs e)

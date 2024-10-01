@@ -47,31 +47,7 @@
             <fa:FontAwesome x:Name="RemoveButton" Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" MouseDown="Remove" ToolTip="Удалить файл" Cursor="Hand" Grid.Column="1"/>
             <Rectangle Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
             <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="150" MaxWidth="200" />
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="MainLabel" Style="{DynamicResource TextBlockImportant}" Text="Номер документа:" VerticalAlignment="Top" Grid.Column="0" Margin="8,12,5,5" MaxHeight="30" Foreground="{DynamicResource GrayLight}" TextWrapping="Wrap"/>
-                    <Label x:Name="NumberPrefix" Style="{DynamicResource LabelElement}" Content="" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,-5,0" Grid.Column="1"/>
 
-                    <TextBox x:Name="Number" Style="{DynamicResource TextBoxTransparent}" Text="001" Grid.Column="2">
-                        <TextBox.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
-                                <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
-                            </ContextMenu>
-                        </TextBox.ContextMenu>
-                    </TextBox>
-                    <Label x:Name="NumberPostfix" Style="{DynamicResource LabelElement}" Content="" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="-5,0,0,0" Grid.Column="3"/>
-                    <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button x:Name="DefineNumberButton" Style="{StaticResource ButtonMain}" Content="Определить" MinWidth="120"/>
-                    </StackPanel>
-                </Grid>
-                <Rectangle Stroke="{DynamicResource Element}" StrokeDashArray="4 4" Height="1" Margin="5,0,5,0"/>
                 <StackPanel x:Name="ContentPanel" >
 
                 </StackPanel>

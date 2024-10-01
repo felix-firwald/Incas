@@ -247,6 +247,10 @@ namespace Incas.Templates.Views.Controls
             DatePicker picker = ((DatePicker)this.control);
             if (picker.SelectedDate is null)
             {
+                if (this.field.NotNull == true)
+                {
+                    this.ThrowNotNullFailed();
+                }
                 return "";
             }
             DateFieldData df = JsonConvert.DeserializeObject<DateFieldData>(this.field.Value);
@@ -273,7 +277,7 @@ namespace Incas.Templates.Views.Controls
                 case TagType.Variable:
                 default:
                     string value = ((System.Windows.Controls.TextBox)this.control).Text;
-                    if (this.field.NotNull == true || string.IsNullOrEmpty(value))
+                    if (this.field.NotNull == true && string.IsNullOrEmpty(value))
                     {
                         this.ThrowNotNullFailed();
                     }

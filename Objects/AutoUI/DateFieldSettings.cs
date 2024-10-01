@@ -43,7 +43,8 @@ namespace Incas.Objects.AutoUI
             }
             catch
             {
-
+                this.StartDate = DateTime.MinValue;
+                this.EndDate= DateTime.MaxValue;
             }         
         }
 

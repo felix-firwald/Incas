@@ -1,6 +1,8 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
 using Incas.CreatedDocuments.Models;
+using Incas.Objects.Components;
+using Incas.Objects.Exceptions;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Pages;
@@ -120,21 +122,31 @@ namespace Incas.Templates.Views.Windows
 
         private void CreateFiles()
         {
-            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-            bool needSave = !this.template.GetTemplateSettings().PreventSave;
-            foreach (FileCreator fc in this.ContentPanel.Children)
+            try
             {
-                if (!fc.CreateFile(this.dir.Text, true))
+                Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+                foreach (FileCreator fc in this.ContentPanel.Children)
                 {
-                    Mouse.OverrideCursor = null;
-                    DatabaseManager.NullifyBackground();
-                    return;
+                    if (!fc.CreateFile(this.dir.Text, true))
+                    {
+                        Mouse.OverrideCursor = null;
+                        DatabaseManager.NullifyBackground();
+                        return;
+                    }
                 }
+                DatabaseManager.ExecuteBackground();
+                Mouse.OverrideCursor = null;
+                this.Close();
+                ProgramState.OpenFolder(this.dir.Text);
             }
-            DatabaseManager.ExecuteBackground();
-            Mouse.OverrideCursor = null;
-            this.Close();
-            ProgramState.OpenFolder(this.dir.Text);
+            catch (NotNullFailed nn)
+            {
+                DialogsManager.ShowExclamationDialog(nn.Message, "Рендеринг прерван");
+            }
+            catch (FieldDataFailed fd)
+            {
+                DialogsManager.ShowExclamationDialog(fd.Message, "Рендеринг прерван");
+            }
         }
 
         private void AddFC_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
