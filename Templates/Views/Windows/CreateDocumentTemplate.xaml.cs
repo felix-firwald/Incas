@@ -201,9 +201,35 @@ namespace Incas.Templates.Views.Windows
             {
                 t = tag;
             }
-            Objects.Views.Controls.FieldCreator tc = new(this.ContentPanel.Children.Count, t);
-            tc.OnRemove += this.RemoveTagFromList;
-            this.ContentPanel.Children.Add(tc);
+            Objects.Views.Controls.FieldCreator fc = new(this.ContentPanel.Children.Count, t);
+            fc.OnRemove += this.RemoveTagFromList;
+            fc.OnMoveDownRequested += this.Fc_OnMoveDownRequested;
+            fc.OnMoveUpRequested += this.Fc_OnMoveUpRequested;
+            this.ContentPanel.Children.Add(fc);
+        }
+
+        private int Fc_OnMoveUpRequested(Objects.Views.Controls.FieldCreator t)
+        {
+            int position = t.vm.OrderNumber;
+            if (position < this.ContentPanel.Children.Count - 1)
+            {
+                position += 1;
+            }
+            this.ContentPanel.Children.Remove(t);
+            this.ContentPanel.Children.Insert(position, t);
+            return position;
+        }
+
+        private int Fc_OnMoveDownRequested(Objects.Views.Controls.FieldCreator t)
+        {
+            int position = t.vm.OrderNumber;
+            if (position > 0)
+            {
+                position -= 1;
+            }
+            this.ContentPanel.Children.Remove(t);
+            this.ContentPanel.Children.Insert(position, t);
+            return position;
         }
 
         private void AddTagClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

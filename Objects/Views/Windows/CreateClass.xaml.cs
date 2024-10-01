@@ -261,5 +261,26 @@ namespace Incas.Objects.Views.Windows
                 item.Maximize();
             }
         }
+
+        private void ShowFormClick(object sender, MouseButtonEventArgs e)
+        {
+            List<Incas.Objects.Models.Field> fields = new();
+            try
+            {
+                foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
+                {
+                    Incas.Objects.Models.Field f = item.GetField();
+                    f.SetId();
+                    fields.Add(f);
+                }
+                this.vm.SourceData.fields = fields;
+                ObjectsEditor oe = new(this.vm.Source, this.vm.SourceData);
+                oe.ShowDialog();
+            }
+            catch (FieldDataFailed fd)
+            {
+                DialogsManager.ShowExclamationDialog(fd.Message, "Предпросмотр прерван");
+            }          
+        }
     }
 }

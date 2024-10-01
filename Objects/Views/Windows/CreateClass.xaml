@@ -49,7 +49,7 @@
                     <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAllClick" />
                     <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAllClick"  />
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" ToolTip="Предпросмотр формы"  />
+                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" ToolTip="Предпросмотр формы" MouseDown="ShowFormClick"  />
                     <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
                     <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="SortNumericAsc" ToolTip="Пронумеровать поля исходя из текущего положения"  />-->
                     <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Asterisk" ToolTip="Проставить для пустых видимых имен исходя из названий полей"  />-->

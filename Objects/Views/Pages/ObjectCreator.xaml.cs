@@ -414,6 +414,15 @@ namespace Incas.Objects.Views.Pages
                 DialogsManager.ShowErrorDialog(ex);
             }
         }
+        public List<string> GetExcelRow()
+        {
+            List<string> output = [];
+            foreach (TagFiller tf in this.TagFillers)
+            {
+                output.Add(tf.GetValue());
+            }
+            return output;
+        }
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
         {

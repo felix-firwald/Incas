@@ -216,7 +216,7 @@ namespace Incas.Templates.Views.Controls
         {
             List<string> formats = new()
             {
-                "dd.MM.yyyy", "dd.MM.yyyy HH:mm:ss", "dd.MM.yy"
+                "dd.MM.yyyy", "dd.MM.yyyy HH:mm:ss", "dd.MM.yy", "«dd» MMMM yyyy"
             };
             bool tryApply(string format)
             {
