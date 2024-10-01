@@ -4,6 +4,7 @@ using Incas.CustomDatabases.Views.Windows;
 using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Controls;
@@ -38,6 +39,18 @@ namespace Incas.Core.Views.Controls
                 }
             }
             catch { } 
+        }
+        public void SetObject(Guid id)
+        {
+            try
+            {
+                if (id != Guid.Empty)
+                {
+                    this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);
+                    this.Input.Text = this.SelectedObject.GetFieldValue(this.Binding.Field);
+                }
+            }
+            catch { }
         }
 
         private void ButtonClick(object sender, MouseButtonEventArgs e)
@@ -82,24 +95,30 @@ namespace Incas.Core.Views.Controls
 
         private void HintsSearchField_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //Query q = new("")
-            //{
-            //    typeOfConnection = DBConnectionType.CUSTOM,
-            //    DBPath = ProgramState.GetFullPathOfCustomDb(this.Database)
-            //};
-            //q.AddCustomRequest($"SELECT [{this.Field}] FROM [{this.Table}] WHERE [{this.Field}] LIKE '%{this.HintsSearchField.Text}%' LIMIT 4");
-            //DataTable dt = q.Execute();
-            //this.HintsList.ItemsSource = dt.AsEnumerable().Select(x => x[0].ToString()).ToList();
-            ////this.HintsHints
+
         }
 
         private void HintsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (((ListBox)sender).SelectedValue is not null)
+     
+        }
+
+        private void EditClick(object sender, MouseButtonEventArgs e)
+        {
+            try
             {
-                this.Input.Text = ((ListBox)sender).SelectedValue.ToString();
-                this.Hints.IsOpen = false;
-            }          
+                Objects.Models.Class cl = new(this.Binding.Class);
+                cl.GetClassData();
+                ObjectsEditor oe = new(cl, new List<Objects.Components.Object>() { this.SelectedObject });
+                oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
+                oe.ShowDialog();
+            }
+            catch { }
+        }
+
+        private void Oe_OnUpdateRequested()
+        {
+            this.SetObject(this.SelectedObject.Id);
         }
     }
 }

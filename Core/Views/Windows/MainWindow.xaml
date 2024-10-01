@@ -35,7 +35,7 @@
             <TextBlock x:Name="LPost" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
             <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
 
-            <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}" GroupName="Tabs" IsChecked="True" Cursor="Hand" >
+            <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}" GroupName="Tabs" Cursor="Hand" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
@@ -46,7 +46,7 @@
                     <TextBlock Text="Простые документы" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockImportant}" FontSize="11" Foreground="{Binding ElementName=DocumentsRadio, Path=Foreground}" Grid.Column="1" TextTrimming="WordEllipsis" Cursor="" />
                 </Grid>
             </RadioButton>
-            <RadioButton x:Name="DatabaseRadio" Style="{DynamicResource MenuButton}" GroupName="Tabs" Cursor="Hand" Visibility="{Binding DatabaseVisibility}">
+            <RadioButton x:Name="DatabaseRadio" Style="{DynamicResource MenuButton}" IsChecked="True" GroupName="Tabs" Cursor="Hand" Visibility="{Binding DatabaseVisibility}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>

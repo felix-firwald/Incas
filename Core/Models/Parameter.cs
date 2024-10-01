@@ -164,6 +164,19 @@ namespace Incas.Core.Models
             DialogsManager.ShowExclamationDialog($"Константа с именем \"{withName}\" не определена.", "Константа не определена");
             return "";
         }
+        public string GetConstantValue(Guid id)
+        {
+            DataRow dr = this.StartCommandToService()
+                .Select("value")
+                .WhereEqual("type", ParameterType.CONSTANT.ToString())
+                .WhereEqual(nameof(this.id), id.ToString())
+                .ExecuteOne();
+            if (dr is not null)
+            {
+                return dr["value"].ToString();
+            }
+            return "";
+        }
         public List<string> GetEnumerationValue(Guid id)
         {
             DataRow dr = this.StartCommandToService()

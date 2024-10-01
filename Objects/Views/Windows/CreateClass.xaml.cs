@@ -12,6 +12,7 @@ using Incas.Objects.Exceptions;
 using Incas.Objects.Views.Controls;
 using Incas.Templates.Components;
 using System.IO;
+using AvaloniaEdit.Utils;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -148,6 +149,23 @@ namespace Incas.Objects.Views.Windows
             }
             this.UpdateTemplatesList();
         }
+        private void CopyTemplatesClick(object sender, MouseButtonEventArgs e)
+        {
+            ClassSelector cs = new();
+            if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
+            {
+                ClassData cd = cs.GetSelectedClassData();
+                if (cd.Templates == null)
+                {
+                    return;
+                }
+                foreach (TemplateData sd in cd.Templates.Values)
+                {
+                    this.vm.SourceData.AddTemplate(sd);
+                }
+            }
+            this.UpdateStatusesList();
+        }
         private void UpdateTemplatesList()
         {
             this.TemplatesPanel.Children.Clear();
@@ -224,6 +242,23 @@ namespace Incas.Objects.Views.Windows
                 this.UpdateStatusesList();
             }
         }
+        private void CopyStatusesClick(object sender, MouseButtonEventArgs e)
+        {
+            ClassSelector cs = new();
+            if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
+            {
+                ClassData cd = cs.GetSelectedClassData();
+                if (cd.Statuses == null)
+                {
+                    return;
+                }
+                foreach (StatusData sd in cd.Statuses.Values)
+                {
+                    this.vm.SourceData.AddStatus(sd);
+                }
+            }
+            this.UpdateStatusesList();
+        }
         private void UpdateStatusesList()
         {
             this.StatusesPanel.Children.Clear();
@@ -244,7 +279,8 @@ namespace Incas.Objects.Views.Windows
 
         private void Se_OnRemove(int index, StatusData statusData)
         {
-            this.vm.SourceData.RemoveStatus(statusData);
+            this.vm.SourceData.RemoveStatus(index);
+            this.UpdateStatusesList();
         }
 
         private void Se_OnEdit(int index, StatusData statusData)

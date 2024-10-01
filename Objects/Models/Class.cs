@@ -25,19 +25,9 @@ namespace Incas.Objects.Models
             }
             this.Statuses.Add(this.Statuses.Count + 1, data);
         }
-        public void RemoveStatus(StatusData data)
+        public void RemoveStatus(int index)
         {
-            if (this.Statuses is null)
-            {
-                return;
-            }
-            foreach (KeyValuePair<int, StatusData> item in this.Statuses)
-            {
-                if (item.Value.Equals(data))
-                {
-                    this.Statuses.Remove(item.Key);
-                }
-            }
+            this.Statuses.Remove(index);
         }
         public void AddTemplate(TemplateData data)
         {
@@ -54,6 +44,10 @@ namespace Incas.Objects.Models
                 this.Templates[index] = data;
             }
             catch { }
+        }
+        public void RemoveTemplate(int index)
+        {
+            this.Templates.Remove(index);
         }
         public List<Field> GetFieldsForMap()
         {

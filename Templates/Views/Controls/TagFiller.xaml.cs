@@ -118,7 +118,9 @@ namespace Incas.Templates.Views.Controls
                     break;
                 case TagType.GlobalConstant:
                     this.Visibility = Visibility.Collapsed;
-                    this.field.Value = ProgramState.GetConstant(value.ToString());           
+                    Guid id;
+                    Guid.TryParse(value.ToString(), out id);
+                    this.field.Value = ProgramState.GetConstant(id);           
                     break;
                 case TagType.Relation:
                     SelectionBox selectionBox = new(JsonConvert.DeserializeObject<BindingData>(value));

@@ -47,6 +47,7 @@ namespace Incas.Objects.Views.Windows
             this.Binding = data;
             this.Class = new(this.Binding.Class);
             this.Title = $"Выбор записи ({this.Class.name})";
+            this.SetFields();
             this.FillList();
         }
         private void FillList()
@@ -61,6 +62,15 @@ namespace Incas.Objects.Views.Windows
             this.UpdateItemsSource(dt.Columns);
             this.Grid.ItemsSource = dt.DefaultView;
         }
+        private void SetFields()
+        {
+            List<string> fields = new();
+            foreach (Models.Field field in this.Class.GetClassData().fields)
+            {
+                fields.Add(field.VisibleName);
+            }
+            this.Fields.ItemsSource = fields;
+        }
         private void UpdateItemsSource(DataColumnCollection cols)
         {
             List<string> result = [];
@@ -68,7 +78,7 @@ namespace Incas.Objects.Views.Windows
             {
                 result.Add(col.ColumnName);
             }
-            this.Fields.ItemsSource = result;
+            
             try
             {
                 this.Fields.SelectedIndex = 0;
@@ -136,7 +146,11 @@ namespace Incas.Objects.Views.Windows
         {
             try
             {
-                this.SearchText.Text = this.SelectedValue;
+                if (this.Grid.SelectedItems == null)
+                {
+                    return;
+                }
+                this.SearchText.Text = ((DataRowView)this.Grid.SelectedItems[0]).Row[this.Fields.SelectedValue.ToString()].ToString();
             }
             catch { }
         }

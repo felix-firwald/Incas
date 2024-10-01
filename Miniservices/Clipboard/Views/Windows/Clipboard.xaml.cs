@@ -55,7 +55,14 @@ namespace Incas.Miniservices.Clipboard.Views.Windows
             }
             else
             {
-                System.Windows.Clipboard.SetText(this.SelectedText);
+                try
+                {
+                    System.Windows.Clipboard.SetText(this.SelectedText);
+                }
+                catch (Exception e)
+                {
+                    DialogsManager.ShowErrorDialog(e);
+                }
             }
         }
 

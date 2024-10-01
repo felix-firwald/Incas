@@ -101,7 +101,7 @@ namespace Incas.Core.ViewModels
         {
             get
             {
-                return "Pre-Release " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                return "Release " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
 

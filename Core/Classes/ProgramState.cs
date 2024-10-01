@@ -359,6 +359,13 @@ namespace Incas.Core.Classes
                 return p.GetConstantValue(name);
             }
         }
+        public static string GetConstant(Guid id)
+        {
+            using (Parameter p = new())
+            {
+                return p.GetConstantValue(id);
+            }
+        }
         public static List<string> GetEnumeration(Guid id)
         {
             using (Parameter p = new())

@@ -23,6 +23,8 @@ namespace Incas.Objects.ViewModels
         {
             this.OnPropertyChanged(nameof(this.Categories));
             this.OnPropertyChanged(nameof(this.SelectedCategory));
+            this.OnPropertyChanged(nameof(this.Classes));
+            this.OnPropertyChanged(nameof(this.SelectedClass));
         }
         public string SelectedCategory
         {

@@ -11,9 +11,21 @@ using System.Collections.Generic;
 using System.Windows.Media;
 using System.Globalization;
 using MailKit.Search;
+using Incas.Objects.AutoUI;
 
 namespace Incas.Objects.Views.Pages
 {
+    //class StatusToColorConverter : System.Windows.Data.IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        return new SolidColorBrush(Colors.OrangeRed);
+    //    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        throw new Exception("The method or operation is not implemented.");
+    //    }
+    //}
     /// <summary>
     /// Логика взаимодействия для ObjectsList.xaml
     /// </summary>
@@ -130,7 +142,6 @@ namespace Incas.Objects.Views.Pages
             }
         }
 
-
         private void AddClick(object sender, RoutedEventArgs e)
         {
             ObjectsEditor oc = new(this.sourceClass);
@@ -145,7 +156,18 @@ namespace Incas.Objects.Views.Pages
 
         private void SearchClick(object sender, RoutedEventArgs e)
         {
-            this.UpdateView();
+            DataSearch ds = new(this.ClassData);
+            if (ds.ShowDialog("Поиск", Icon.Search))
+            {
+                if (ds.OnlyEqual)
+                {
+                    this.UpdateViewWithFilter(ds.GetData());
+                }
+                else
+                {
+                    this.UpdateViewWithSearch(ds.GetData());
+                }
+            }
         }
 
         private void FindBySelectionClick(object sender, RoutedEventArgs e)
@@ -225,6 +247,7 @@ namespace Incas.Objects.Views.Pages
         }
         private void OnMouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            //DialogsManager.ShowInfoDialog("click");
             this.OpenSelectedObject();
         }
 
