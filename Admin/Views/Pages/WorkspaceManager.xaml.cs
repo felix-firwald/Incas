@@ -3,6 +3,7 @@ using Incas.Admin.ViewModels;
 using Incas.Core.Classes;
 using Incas.Core.Models;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
 using System;
@@ -238,6 +239,40 @@ namespace Incas.Admin.Views.Pages
                 }
                 this.vm.UpdateClasses();
             }           
+        }
+
+        private void ClassesTable_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.Column.Header.ToString() == "Идентификатор")
+            {
+                e.Column.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void EnumsTable_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.Column.Header.ToString() == "Идентификатор")
+            {
+                e.Column.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void ConstantsTable_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.Column.Header.ToString() == "Идентификатор")
+            {
+                e.Column.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void EnumsTable_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.EnumsTable.SelectedItems.Count > 0)
+            {
+                string source = ((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"].ToString();
+                List<string> names = ProgramState.GetEnumeration(Guid.Parse(source));
+                this.vm.SelectedEnumValues = string.Join(",\n", names);
+            }
         }
     }
 }

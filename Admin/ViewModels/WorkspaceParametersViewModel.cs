@@ -7,6 +7,7 @@ using System.Data;
 using System.Collections.Generic;
 using Incas.Objects.Models;
 using System;
+using Incas.Objects.Components;
 
 namespace Incas.Admin.ViewModels
 {
@@ -50,8 +51,8 @@ namespace Incas.Admin.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedConstant));
             }
         }
-        private Guid selectedEnumeration;
-        public Guid SelectedEnumeration
+        private DataRow selectedEnumeration;
+        public DataRow SelectedEnumeration
         {
             get
             {
@@ -61,15 +62,32 @@ namespace Incas.Admin.ViewModels
             {
                 this.selectedEnumeration = value;
                 this.OnPropertyChanged(nameof(this.SelectedEnumeration));
+                this.OnPropertyChanged(nameof(this.SelectedEnumerationName));
                 this.OnPropertyChanged(nameof(this.SelectedEnumValues));
             }
         }
-
+        public string SelectedEnumerationName
+        {
+            get
+            {
+                if (this.selectedEnumeration == null)
+                {
+                    return "(не выбрано)";
+                }
+                return this.SelectedEnumeration["Наименование перечисления"].ToString();
+            }
+        }
+        private string enumvals;
         public string SelectedEnumValues
         {
             get
             {
-                List<string> list = ProgramState.GetEnumeration(this.SelectedEnumeration);
+                if (this.selectedEnumeration == null)
+                {
+                    return "";
+                }
+                string source = this.SelectedEnumeration["Идентификатор"].ToString();
+                List<string> list = ProgramState.GetEnumeration(Guid.Parse(source));
                 string result = "";
                 int counter = 1;
                 foreach (string value in list)
@@ -79,6 +97,11 @@ namespace Incas.Admin.ViewModels
                 }
                 //DialogsManager.ShowInfoDialog(result);
                 return result;
+            }
+            set
+            {
+                this.enumvals = value;
+                this.OnPropertyChanged(nameof(this.SelectedEnumValues));
             }
         }
         public DataTable Classes
