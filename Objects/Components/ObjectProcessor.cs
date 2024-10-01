@@ -22,10 +22,15 @@ namespace Incas.Objects.Components
         #region Fields
         public const string IdField = "SERVICE_ID";
         public const string NameField = "OBJECT_NAME";
-        public const string DateCreatedField = "CREATED_DATE";
+        public const string DateCreatedField = "CREATED_DATE"; // only docs
         public const string AuthorField = "AUTHOR_ID";
         public const string StatusField = "STATUS_ID";
         public const string MetaField = "META_INFORMATION";
+        public const string DateTerminatedField = "TERMINATED_DATE"; // only docs
+        public const string TerminatedField = "TERMINATED"; // only docs
+        public const string ObjectLinkField = "TARGET_OBJECT_ID"; // only docs
+        public const string TypeField = "TYPE"; // only docs
+        public const string DataField = "DATA"; // only docs
         #endregion
         public const int MaxObjectCompareCount = 5;
         public static string GetPathToObjectsMap(Class cl)
@@ -45,19 +50,26 @@ namespace Incas.Objects.Components
         {
             ClassData data = cl.GetClassData();
             string path = GetPathToObjectsMap(cl);
+            string adding = "";
             Query q = new("", path);
 
-            StringBuilder request = new($"CREATE TABLE [{MainTable}] (\n");
+            StringBuilder request = new($"BEGIN TRANSACTION; CREATE TABLE [{MainTable}] (\n");
             request.Append($" [{IdField}] TEXT UNIQUE, [{NameField}] TEXT, [{StatusField}] TEXT, [{AuthorField}] TEXT, ");
             if (data.ClassType == ClassType.Document)
             {
-                request.Append($"[{DateCreatedField}] TEXT, ");
+                request.Append($"[{DateCreatedField}] TEXT, [{DateTerminatedField}] TEXT, [{TerminatedField}] TEXT, ");
+                adding += $"CREATE TABLE [{EditsTable}] ([{IdField}] TEXT UNIQUE, [{ObjectLinkField}] TEXT, [{StatusField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);\n";
+                adding += $"CREATE TABLE [{CommentsTable}] ([{IdField}] TEXT UNIQUE, [{ObjectLinkField}] TEXT, [{TypeField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
             }
+            List<string> customFields = new();
             foreach (Incas.Objects.Models.Field f in cl.GetClassData().fields)
             {
-                request.Append($"[{f.Id}] TEXT,\n");
+                customFields.Add($"[{f.Id}] TEXT");
             }
-            request.Append($"[{MetaField}] TEXT\n)");
+            request.Append(string.Join(", ", customFields));
+            request.Append(");");
+            request.Append(adding);
+            request.Append("\nCOMMIT");
             q.AddCustomRequest(request.ToString());
             q.ExecuteVoid();
         }
@@ -75,7 +87,8 @@ namespace Incas.Objects.Components
                 DateCreatedField,
                 AuthorField,
                 StatusField,
-                MetaField,
+                DateTerminatedField,
+                TerminatedField
             };
             string path = GetPathToObjectsMap(cl);
             Query q = new("", path);
