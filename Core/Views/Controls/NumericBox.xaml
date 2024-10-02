@@ -35,7 +35,7 @@
 
     </Border>
     <UserControl.Resources>
-        <Style TargetType="{x:Type local:SelectionBox}">
+        <Style TargetType="{x:Type local:NumericBox}">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Opacity" Value="0.5"/>

@@ -289,7 +289,7 @@ namespace Incas.Templates.Views.Controls
                 case TagType.LocalConstant:
                 case TagType.HiddenField:
                 case TagType.GlobalConstant:
-                    return this.field.Value.ToString();
+                    return this.field.Value?.ToString();
                 case TagType.Relation:
                     return ((SelectionBox)this.control).Value;
                 case TagType.LocalEnumeration:

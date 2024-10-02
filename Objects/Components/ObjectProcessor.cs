@@ -62,7 +62,7 @@ namespace Incas.Objects.Components
                 adding += $"CREATE TABLE [{CommentsTable}] ([{IdField}] TEXT UNIQUE, [{ObjectLinkField}] TEXT, [{TypeField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
             }
             List<string> customFields = new();
-            foreach (Incas.Objects.Models.Field f in cl.GetClassData().fields)
+            foreach (Incas.Objects.Models.Field f in cl.GetClassData().GetSavebleFields())
             {
                 customFields.Add($"[{f.Id}] TEXT");
             }
@@ -104,7 +104,7 @@ namespace Incas.Objects.Components
                 }
             }
             List<string> classFields = new();
-            foreach (Models.Field f in cl.GetClassData().fields)
+            foreach (Models.Field f in cl.GetClassData().GetSavebleFields())
             {
                 classFields.Add(f.Id.ToString());
             }
@@ -149,7 +149,10 @@ namespace Incas.Objects.Components
             values.Add(StatusField, obj.Status.ToString());
             foreach (FieldData fd in obj.Fields)
             {               
-                values.Add(fd.ClassField.Id.ToString(), fd.Value);
+                if (fd.ClassField.Type is not Templates.Components.TagType.GlobalConstant and not Templates.Components.TagType.LocalConstant)
+                {
+                    values.Add(fd.ClassField.Id.ToString(), fd.Value);
+                }                
             }
             if (obj.Id == Guid.Empty) // if NEW
             {              
@@ -269,7 +272,7 @@ namespace Incas.Objects.Components
                 byte.TryParse(dr[ObjectProcessor.StatusField].ToString(), out status);
                 obj.Status = status;
                 obj.Name = dr[ObjectProcessor.NameField].ToString();
-                foreach (Models.Field f in cl.GetClassData().fields)
+                foreach (Models.Field f in cl.GetClassData().GetSavebleFields())
                 {
                     FieldData fd = new()
                     {

@@ -48,7 +48,7 @@
     <StartupObject>Incas.App</StartupObject>
     <PackageIcon>Logo.png</PackageIcon>
     <PackageId>firwald/incas</PackageId>
-    <SupportedOSPlatformVersion>8.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
     <Product>INCAS</Product>
     <Title>INCAS</Title>
     <Description>Офисное приложение</Description>

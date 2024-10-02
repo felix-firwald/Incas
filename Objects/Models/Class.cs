@@ -69,6 +69,23 @@ namespace Incas.Objects.Models
             }
             return list;
         }
+        public List<Field> GetSavebleFields()
+        {
+            List<Field> list = new();
+            foreach (Field field in this.fields)
+            {
+                switch (field.Type)
+                {
+                    default:
+                        list.Add(field);
+                        break;
+                    case TagType.LocalConstant:
+                    case TagType.GlobalConstant:
+                        break;
+                }
+            }
+            return list;
+        }
         public Field FindFieldById(Guid id)
         {
             foreach (Field field in this.fields)

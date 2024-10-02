@@ -58,7 +58,7 @@ namespace Incas.Templates.Components
                 for (int i = 0; i < tags.Count; i++)
                 {
                     options.SearchValue = this.ConvertTag(tags[i]);
-                    options.NewValue = values[i].Trim(); // а нахуя Trim?
+                    options.NewValue = string.IsNullOrEmpty(values[i])? "" : values[i].Trim(); // а нахуя Trim?
                     doc.ReplaceText(options);
                 }
                 // MakeFormatting(doc);

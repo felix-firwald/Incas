@@ -8,7 +8,7 @@
              d:DesignHeight="650" d:DesignWidth="1200" Cursor="">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" MaxWidth="350" MinWidth="80"/>
+            <ColumnDefinition Width="auto" MaxWidth="350" MinWidth="90"/>
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <GroupBox Style="{StaticResource MainGroupBox}" Header="ВЫБОР" Margin="5,5,5,5">
