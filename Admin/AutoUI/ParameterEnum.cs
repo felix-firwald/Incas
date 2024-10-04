@@ -13,5 +13,19 @@ namespace Incas.Admin.AutoUI
 
         [Description("Значения перечисления")]
         public List<string> Value { get; set; }
+
+        public void Validate()
+        {
+            using (Parameter p = new())
+            {
+                foreach (string name in p.GetEnumeratorsList())
+                {
+                    if (name == this.Name)
+                    {
+                        throw new Core.Exceptions.SimpleFormFailed("Глобальное перечисление с таким наименованием уже есть в рабочем пространстве.");
+                    }
+                }
+            }
+        }
     }
 }

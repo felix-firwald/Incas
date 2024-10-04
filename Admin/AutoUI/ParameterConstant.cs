@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Incas.Core.AutoUI;
+using Incas.Core.Models;
 
 namespace Incas.Admin.AutoUI
 {
@@ -14,5 +15,19 @@ namespace Incas.Admin.AutoUI
 
         [Description("Значение константы")]
         public string Value { get; set; }
+
+        public void Validate()
+        {
+            using (Parameter p = new())
+            {
+                foreach (string name in p.GetConstantsList())
+                {
+                    if (name == this.Name)
+                    {
+                        throw new Core.Exceptions.SimpleFormFailed("Глобальная константа с таким наименованием уже есть в рабочем пространстве.");
+                    }
+                }
+            }
+        }
     }
 }
