@@ -18,6 +18,7 @@ namespace Incas.Objects.Views.Windows
         public DialogStatus Result = DialogStatus.Undefined;
         public readonly BindingData Binding;
         public readonly Class Class;
+        public readonly ClassData ClassData;
         public Objects.Components.Object SelectedObject
         {
             get
@@ -46,6 +47,13 @@ namespace Incas.Objects.Views.Windows
             this.InitializeComponent();
             this.Binding = data;
             this.Class = new(this.Binding.Class);
+            this.ClassData = this.Class.GetClassData();
+            if (this.ClassData is null || this.ClassData.fields is null)
+            {
+                DialogsManager.ShowDatabaseErrorDialog("Не удалось идентифицировать класс и показать карту его объектов. Вероятно, это означает, что класс удален. Обратитесь к администратору рабочего пространства для устранения ошибки.", "Привязка сломана");
+                this.IsEnabled = false;
+                return;
+            }
             this.Title = $"Выбор записи ({this.Class.name})";
             this.SetFields();
             this.FillList();
@@ -65,7 +73,7 @@ namespace Incas.Objects.Views.Windows
         private void SetFields()
         {
             List<string> fields = new();
-            foreach (Models.Field field in this.Class.GetClassData().fields)
+            foreach (Models.Field field in this.ClassData.fields)
             {
                 fields.Add(field.VisibleName);
             }
@@ -133,7 +141,7 @@ namespace Incas.Objects.Views.Windows
 
         private void SearchClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.FillList(this.Fields.SelectedValue.ToString(), this.SearchText.Text);
+            this.FillList(this.Fields.SelectedValue?.ToString(), this.SearchText.Text);
         }
 
         private void ClearClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

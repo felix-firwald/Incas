@@ -1,4 +1,5 @@
-﻿using Incas.Core.ViewModels;
+﻿using Incas.Core.Classes;
+using Incas.Core.ViewModels;
 using Incas.Objects.Models;
 using System.Collections.Generic;
 
@@ -10,13 +11,23 @@ namespace Incas.Objects.ViewModels
         private Class selectedClass;
         public delegate void SelectedClassDelegate(Class selectedClass);
         public event SelectedClassDelegate OnClassSelected;
-        public CustomDatabaseViewModel() { }
+        public CustomDatabaseViewModel()
+        {
+            ProgramState.DatabasePage = this;
+        }
         public List<string> Categories
         {
             get
             {
                 using Class cl = new();
                 return cl.GetCategories();
+            }
+        }
+        public string CategoryName
+        {
+            get
+            {
+                return this.selectedCategory;
             }
         }
         public void UpdateAll()

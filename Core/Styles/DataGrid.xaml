@@ -88,7 +88,7 @@
                         <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" TextElement.Foreground="White" Margin="4,0,0,0" MinWidth="40">
                             <ContentPresenter.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                                    <!--<MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>-->
                                 </ContextMenu>
                             </ContentPresenter.ContextMenu>
                         </ContentPresenter>
@@ -98,7 +98,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource Area}"/>
+                <!--<Setter Property="Background" Value="{StaticResource Area}"/>-->
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>

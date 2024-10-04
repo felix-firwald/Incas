@@ -16,6 +16,17 @@ namespace Incas.Objects.Views.Pages
             this.vm.OnClassSelected += this.OnClassSelected;
             this.DataContext = this.vm;
         }
+        public CustomDatabaseMain(string category)
+        {
+            this.InitializeComponent();
+            this.vm = new()
+            {
+                SelectedCategory = category
+            };
+            
+            this.vm.OnClassSelected += this.OnClassSelected;
+            this.DataContext = this.vm;
+        }
 
         private void OnClassSelected(Models.Class selectedClass)
         {

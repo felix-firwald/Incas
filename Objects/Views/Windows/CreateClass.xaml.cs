@@ -34,11 +34,21 @@ namespace Incas.Objects.Views.Windows
                 this.vm.ShowCard = true;
                 this.TemplatesArea.Visibility = Visibility.Visible;
             }
+            else
+            {
+                this.TemplatesArea.Visibility = Visibility.Collapsed;
+            }
             this.DataContext = this.vm;            
         }
         public CreateClass(Guid id)
         {
             this.InitializeComponent();
+            if (id == Guid.Empty)
+            {
+                this.Title = "(класс не выбран)";
+                this.IsEnabled = false;
+                return;
+            }
             this.Title = "Редактирование класса";
             Class cl = new(id);
             this.vm = new(cl);
@@ -50,6 +60,10 @@ namespace Incas.Objects.Views.Windows
             if (this.vm.Type == ClassType.Document)
             {
                 this.TemplatesArea.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                this.TemplatesArea.Visibility = Visibility.Collapsed;
             }
             this.UpdateStatusesList();
             this.UpdateTemplatesList();
@@ -71,7 +85,7 @@ namespace Incas.Objects.Views.Windows
 
         private int Fc_OnMoveUpRequested(Controls.FieldCreator t)
         {
-            int position = t.vm.OrderNumber;
+            int position = this.ContentPanel.Children.IndexOf(t);
             if (position < this.ContentPanel.Children.Count - 1)
             {
                 position += 1;
@@ -83,11 +97,12 @@ namespace Incas.Objects.Views.Windows
 
         private int Fc_OnMoveDownRequested(Controls.FieldCreator t)
         {
-            int position = t.vm.OrderNumber;
+            int position = this.ContentPanel.Children.IndexOf(t);
             if (position > 0)
             {
                 position -= 1;
             }
+            
             this.ContentPanel.Children.Remove(t);
             this.ContentPanel.Children.Insert(position, t);
             return position;
@@ -95,7 +110,29 @@ namespace Incas.Objects.Views.Windows
 
         private bool Fc_OnRemove(Controls.FieldCreator t)
         {
-            this.ContentPanel.Children.Remove(t);
+            BindingData data = new()
+            {
+                Class = this.vm.Source.identifier,
+                Field = t.vm.Source.Id
+            };
+            if (data.Class == Guid.Empty || data.Field == Guid.Empty)
+            {
+                this.ContentPanel.Children.Remove(t);
+                return true;
+            }
+            using (Class cl = new())
+            {
+                List<string> list = cl.FindBackReferencesNames(data);
+                if (list.Count > 0)
+                {
+                    DialogsManager.ShowExclamationDialog($"Поле невозможно удалить, поскольку на него ссылаются следующие классы:\n{string.Join(",\n", list)}", "Удаление невозможно");
+                    return false;
+                }
+                else
+                {
+                    this.ContentPanel.Children.Remove(t);
+                }
+            }           
             return true;
         }
 
@@ -103,16 +140,44 @@ namespace Incas.Objects.Views.Windows
         {
             this.AddField();
         }
-
+        private void CopyFieldsFromAnotherClass(object sender, MouseButtonEventArgs e)
+        {
+            ClassSelector cs = new();
+            if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
+            {
+                ClassData cd = cs.GetSelectedClassData();
+                foreach (Objects.Models.Field f in cd.fields)
+                {
+                    f.Id = Guid.NewGuid();
+                    this.AddField(f);
+                }
+            }
+        }
+        private void AddVirtualFieldsClick(object sender, MouseButtonEventArgs e)
+        {
+            VirtualFieldsAppender appender = new();
+            if (appender.ShowDialog("Настройка виртуальных полей", Core.Classes.Icon.Magic))
+            {
+                foreach (Models.Field f in appender.GetFields())
+                {
+                    this.AddField(f);
+                }
+            }
+        }
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            List<Incas.Objects.Models.Field> fields = new();
+            List<Models.Field> fields = new();
             try
             {
                 List<string> names = new();
-                foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
+                if (this.ContentPanel.Children.Count == 0)
                 {
-                    Incas.Objects.Models.Field f = item.GetField();
+                    DialogsManager.ShowExclamationDialog("Класс не может не содержать полей.", "Сохранение прервано");
+                    return;
+                }
+                foreach (Controls.FieldCreator item in this.ContentPanel.Children)
+                {
+                    Models.Field f = item.GetField();
                     if (names.Contains(f.Name))
                     {
                         throw new FieldDataFailed($"Поле [{f.Name}] встречается более одного раза. Имена полей должны быть уникальными.");
@@ -127,6 +192,7 @@ namespace Incas.Objects.Views.Windows
                 this.vm.SetData(fields);
                 this.vm.Source.Save();
                 this.Close();
+                ProgramState.DatabasePage.UpdateAll();
             }
             catch (FieldDataFailed fd)
             {
@@ -164,7 +230,7 @@ namespace Incas.Objects.Views.Windows
                     this.vm.SourceData.AddTemplate(sd);
                 }
             }
-            this.UpdateStatusesList();
+            this.UpdateTemplatesList();
         }
         private void UpdateTemplatesList()
         {

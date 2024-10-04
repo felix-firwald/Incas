@@ -1,20 +1,14 @@
-﻿using Incas.Core.Classes;
+﻿using Incas.Core.AutoUI;
+using Incas.Core.Classes;
 using Incas.Core.ViewModels;
-using Incas.Users.Views.Windows;
+using Incas.Objects.Models;
 using System;
-using System.Drawing;
 using System.IO;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using Windows.UI.ViewManagement;
-using Windows.UI;
-using Windows.ApplicationModel.Core;
-using Avalonia.Controls.Chrome;
 using System.Media;
-using Incas.Core.AutoUI;
-using Incas.Objects.Components;
-using Incas.Objects.AutoUI;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
 
 namespace Incas.Core.Views.Windows
 {
@@ -26,8 +20,6 @@ namespace Incas.Core.Views.Windows
         private MainWindowViewModel vm;
         public MainWindow()
         {
-            //GlobalConstantFieldSettings gc = new();
-            //DialogsManager.ShowSimpleFormDialog(gc, "Проверка");
             this.InitializeComponent();
             if (!ProgramState.CheckSensitive())
             {
@@ -45,7 +37,7 @@ namespace Incas.Core.Views.Windows
                     DialogsManager.ShowSimpleFormDialog(sp, "Установление нового пароля", Classes.Icon.UserGears);
                 }
             }
-
+            //this.UpdateTabs();
             this.PlayEasterEgg();
         }
         private void PlayEasterEgg(string name = "Chicken")
@@ -115,6 +107,40 @@ namespace Incas.Core.Views.Windows
                     this.vm.DoOpenWeb("");
                     break;
             }
+        }
+        public void UpdateTabs()
+        {
+            using (Class cl = new())
+            {
+                foreach (string category in cl.GetCategories())
+                {
+                    this.AddPage(category, new Objects.Views.Pages.CustomDatabaseMain(category));
+                }
+            }
+        }
+        private void AddPage(string name, UserControl control)
+        {
+            RadioButton rb = new()
+            {
+                Style = this.FindResource("MenuButton") as Style,
+                Content = name,
+                GroupName = "Tabs",
+                Name = name
+            };
+            this.CustomTabs.Children.Add(rb);
+            Binding binding = new()
+            {
+                ElementName = name,
+                Path = new("IsChecked")
+            };
+            TabItem tabItem = new()
+            {
+                Content = control,
+                Background = null,
+                BorderBrush = null
+            };
+            BindingOperations.SetBinding(tabItem, TabItem.IsSelectedProperty, binding);
+            this.TabMain.Items.Add(tabItem);
         }
     }
 }

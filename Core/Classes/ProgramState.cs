@@ -2,6 +2,7 @@
 using Incas.Core.AutoUI;
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
+using Incas.Objects.ViewModels;
 using Incas.Users.Models;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -54,6 +55,7 @@ namespace Incas.Core.Classes
         public static Session CurrentSession { get; private set; }
         #endregion
         public static MainWindowViewModel MainWindow { get; set; }
+        public static CustomDatabaseViewModel DatabasePage { get; set; }
 
         public static void CheckoutWorkspaces()
         {

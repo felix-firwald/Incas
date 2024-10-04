@@ -235,7 +235,15 @@ namespace Incas.Admin.Views.Pages
             {
                 using (Objects.Models.Class cl = new())
                 {
-                    cl.Remove(this.GetSelectedClass());
+                    List<string> list = cl.FindBackReferencesNames(this.GetSelectedClass());
+                    if (list.Count > 0)
+                    {
+                        DialogsManager.ShowExclamationDialog("Класс невозможно удалить, поскольку на него ссылаются следующие классы:\n" + string.Join(",\n", list), "Удаление невозможно");
+                    }
+                    else
+                    {
+                        cl.Remove(this.GetSelectedClass());
+                    }                   
                 }
                 this.vm.UpdateClasses();
             }           

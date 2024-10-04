@@ -52,6 +52,10 @@ namespace Incas.Objects.Models
         public List<Field> GetFieldsForMap()
         {
             List<Field> list = new();
+            if (this.fields is null)
+            {
+                return list;
+            }
             foreach (Field field in this.fields)
             {
                 switch (field.Type)
@@ -81,6 +85,7 @@ namespace Incas.Objects.Models
                         break;
                     case TagType.LocalConstant:
                     case TagType.GlobalConstant:
+                    case TagType.HiddenField:
                         break;
                 }
             }
@@ -93,6 +98,22 @@ namespace Incas.Objects.Models
                 if (field.Id == id)
                 {
                     return field;
+                }
+            }
+            return new();
+        }
+        public Field FindFieldByBackReference(Guid reference)
+        {
+            foreach (Field field in this.fields)
+            {
+                if (field.Type == TagType.Relation)
+                {                   
+                    BindingData bd = JsonConvert.DeserializeObject<BindingData>(field.Value);
+                    if (bd.Class == reference)
+                    {
+                        
+                        return field;
+                    }
                 }
             }
             return new();
@@ -162,9 +183,41 @@ namespace Incas.Objects.Models
             return categories;
 
         }
+        public List<Class> FindBackReferences(BindingData bd)
+        {
+            string query = "\"Value\":\"{\\\"Class\\\":\\\"[Class]\\\",\\\"Field\\\":\\\"[Field]\\\"".Replace("[Class]", bd.Class.ToString()).Replace("[Field]", bd.Field.ToString());
+            return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.data), query).OrderByASC(nameof(this.name)).Execute());
+        }
+        public List<Class> FindBackReferences(Guid classId)
+        {
+            string query = "\"Value\":\"{\\\"Class\\\":\\\"[Class]\\\",".Replace("[Class]", classId.ToString());
+            return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.data), query).OrderByASC(nameof(this.name)).Execute());
+        }
+        public List<string> FindBackReferencesNames(BindingData bd)
+        {
+            List<string> result = new();
+            string query = "\"Value\":\"{\\\"Class\\\":\\\"[Class]\\\",\\\"Field\\\":\\\"[Field]\\\"".Replace("[Class]", bd.Class.ToString()).Replace("[Field]", bd.Field.ToString());
+            DataTable dt = this.StartCommand().Select("name").WhereLike(nameof(this.data), query).OrderByASC(nameof(this.name)).Execute();
+            foreach (DataRow dr in dt.Rows)
+            {
+                result.Add(dr["name"].ToString());
+            }
+            return result;
+        }
+        public List<string> FindBackReferencesNames(Guid classId)
+        {
+            List<string> result = new();
+            string query = "\"Value\":\"{\\\"Class\\\":\\\"[Class]\\\",".Replace("[Class]", classId.ToString());
+            DataTable dt = this.StartCommand().Select("name").WhereLike(nameof(this.data), query).OrderByASC(nameof(this.name)).Execute();
+            foreach (DataRow dr in dt.Rows)
+            {
+                result.Add(dr["name"].ToString());
+            }
+            return result;
+        }
         public List<Class> GetClassesByCategory(string category)
         {
-            return this.FromDataTable(this.StartCommand().Select().WhereEqual(nameof(category), category).Execute());
+            return this.FromDataTable(this.StartCommand().Select().WhereEqual(nameof(category), category).OrderByASC(nameof(this.name)).Execute());
         }
         public Class GetClassById(Guid id)
         {
@@ -177,12 +230,22 @@ namespace Incas.Objects.Models
         }
         public List<Class> GetAllClasses()
         {
-            DataTable dt = this.StartCommandToService().Select().Execute();
+            DataTable dt = this.StartCommandToService().Select().OrderByASC("name").Execute();
             return this.FromDataTable(dt);
+        }
+        public List<string> GetAllClassesNames()
+        {
+            DataTable dt = this.StartCommandToService().Select("name").Execute();
+            List<string> result = new();
+            foreach (DataRow dr in dt.Rows)
+            {
+                result.Add(dr["name"].ToString());
+            }
+            return result;
         }
         public DataTable GetAllClassesAsDataTable()
         {
-            return this.StartCommandToService().Select("[identifier] AS [Идентификатор], [category] AS [Категория], [name] AS [Наименование]").OrderByASC("Категория").Execute();
+            return this.StartCommandToService().Select("[identifier] AS [Идентификатор], [category] AS [Категория], [name] AS [Наименование]").OrderByASC("Категория ASC, Наименование").Execute();
         }
         private void Update()
         {

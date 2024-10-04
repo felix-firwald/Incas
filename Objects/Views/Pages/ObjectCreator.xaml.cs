@@ -398,7 +398,7 @@ namespace Incas.Objects.Views.Pages
         {
             try
             {
-                DialogsManager.ShowWaitCursor(true);
+                this.OnSaveRequested?.Invoke(this);
                 string path = ProgramState.TemplatesRuntime;
                 if (this.ClassData.Templates?.Count == 1)
                 {
@@ -407,6 +407,7 @@ namespace Incas.Objects.Views.Pages
                         DialogsManager.ShowExclamationDialog("Предпросмотр для Excel файлов недоступен.", "Рендеринг прерван");
                         return;
                     }
+                    DialogsManager.ShowWaitCursor(true);
                     string name = this.GenerateDocument(this.ClassData.Templates[1].File, path, false);
                     WordTemplator wt = new(name);
                     string fileXPS = wt.TurnToXPS();

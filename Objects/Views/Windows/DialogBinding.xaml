@@ -36,13 +36,13 @@
         <Border Background="{StaticResource Black}" Margin="5" MaxHeight="300" BorderThickness="2" BorderBrush="{StaticResource Basic}" CornerRadius="8" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ListBox x:Name="ClassesPanel" ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" DisplayMemberPath="name" ItemContainerStyle="{StaticResource ListBoxItemMicro}"  Background="{x:Null}" BorderBrush="{x:Null}">
-
-                    </ListBox>
+                    <ComboBox Style="{StaticResource ComboBoxMain}" x:Name="ClassesPanel" MaxDropDownHeight="220" ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" DisplayMemberPath="name"  Background="{x:Null}" BorderBrush="{x:Null}">
+                        
+                    </ComboBox>
                 </ScrollViewer>
                 <Rectangle Height="1" VerticalAlignment="Top" Grid.Row="1" Fill="{DynamicResource Basic}"/>
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">

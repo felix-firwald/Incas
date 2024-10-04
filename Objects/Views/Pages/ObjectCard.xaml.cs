@@ -155,7 +155,12 @@ namespace Incas.Objects.Views.Pages
                 of.OnFilterRequested += this.Of_OnFilterRequested;
                 this.FieldsContentPanel.Children.Add(of);
             }
-            ((ObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
+            if (this.first)
+            {
+                ObjectBackReferenceViewer ob = new(this.Class, this.id);
+                this.FieldsContentPanel.Children.Add(ob);
+            }         
+            ((IObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
         }
 
         private void Box_OnTerminateRequested()
@@ -209,7 +214,14 @@ namespace Incas.Objects.Views.Pages
             Incas.Objects.Components.Object obj = ObjectProcessor.GetObject(this.Class, this.id);
             if (obj.Status < this.ClassData.Statuses.Count)
             {
-                obj.Status = (byte)(obj.Status + 1);
+                if (obj.Status == 0)
+                {
+                    obj.Status = (byte)(obj.Status + 2);
+                }
+                else
+                {
+                    obj.Status = (byte)(obj.Status + 1);
+                }              
                 ObjectProcessor.WriteObjects(this.Class, obj);
                 this.UpdateFor(ObjectProcessor.GetObject(this.Class, this.id));
             }

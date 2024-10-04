@@ -192,6 +192,30 @@ namespace Incas.Objects.Components
             obj.Terminated = true;
             ObjectProcessor.WriteObjects(cl, obj);
         }
+        public static DataTable GetSimpleObjectsList(Class cl, string WhereCondition = null)
+        {
+            Query q = new("", GetPathToObjectsMap(cl));
+            ClassData data = cl.GetClassData();
+            List<Objects.Models.Field> fields = data.GetFieldsForMap();
+            List<string> fieldsRequest = new();
+            fieldsRequest.Add($"[OBJECTS_MAP].[{IdField}]");
+            if (data.ClassType == ClassType.Document)
+            {
+                fieldsRequest.Add($"[OBJECTS_MAP].[{DateCreatedField}]");
+            }
+            fieldsRequest.Add($"[OBJECTS_MAP].[{NameField}]");
+            foreach (Models.Field f in fields)
+            {
+                fieldsRequest.Add($"[{f.Id}] AS [{f.VisibleName}]");
+            }
+            q.AddCustomRequest("SELECT " + string.Join(", ", fieldsRequest.ToArray()));
+            q.AddCustomRequest($"FROM [{MainTable}]");
+            if (WhereCondition != null)
+            {
+                q.AddCustomRequest(WhereCondition);
+            }
+            return q.Execute();
+        }
         public static DataTable GetObjectsList(Class cl, string WhereCondition = null)
         {
             Query q = new("", GetPathToObjectsMap(cl));
@@ -240,10 +264,20 @@ namespace Incas.Objects.Components
             string request = $"WHERE [{field}] LIKE '%{value}%'";
             return GetObjectsList(cl, request);
         }
+        public static DataTable GetSimpleObjectsListWhereLike(Class cl, string field, string value)
+        {
+            string request = $"WHERE [{field}] LIKE '%{value}%'";
+            return GetSimpleObjectsList(cl, request);
+        }
         public static DataTable GetObjectsListWhereEqual(Class cl, string field, string value)
         {
             string request = $"WHERE [{field}] = '{value}'";
             return GetObjectsList(cl, request);
+        }
+        public static DataTable GetSimpleObjectsListWhereEqual(Class cl, string field, string value)
+        {
+            string request = $"WHERE [{field}] = '{value}'";
+            return GetSimpleObjectsList(cl, request);
         }
         public static Object GetObject(Class cl, Guid id)
         {

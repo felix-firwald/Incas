@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // общие сведения об этой сборке.
 [assembly: AssemblyTitle("Incas Offline")]
-[assembly: AssemblyDescription("Программа для оптимизации процессов документооборота")]
+[assembly: AssemblyDescription("Программа для оптимизации офисных процессов")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Firwald Technologies")]
 [assembly: AssemblyProduct("Incas Offline")]
@@ -30,5 +30,5 @@ using System.Runtime.InteropServices;
 //      Номер сборки
 //      Редакция
 //
-[assembly: AssemblyVersion("1.0.0.6")]
-[assembly: AssemblyFileVersion("1.0.0.6")]
+[assembly: AssemblyVersion("1.0.1.0")]
+[assembly: AssemblyFileVersion("1.0.1.0")]

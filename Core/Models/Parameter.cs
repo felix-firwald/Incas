@@ -89,6 +89,7 @@ namespace Incas.Core.Models
             return this.StartCommandToService()
                 .Select("[id] AS [Идентификатор], [name] AS [Наименование константы], [value] AS [Значение константы]")
                 .WhereEqual("type", ParameterType.CONSTANT.ToString())
+                .OrderByASC("[Наименование константы]")
                 .Execute();
         }
         public Dictionary<Guid, string> GetConstantsDictionary()
@@ -135,6 +136,7 @@ namespace Incas.Core.Models
             return this.StartCommandToService()
                 .Select("[id] AS [Идентификатор], [name] AS [Наименование перечисления]")
                 .WhereEqual("type", ParameterType.ENUMERATION.ToString())
+                .OrderByASC("[Наименование перечисления]")
                 .Execute();
         }
         public List<string> GetEnumeratorsList()

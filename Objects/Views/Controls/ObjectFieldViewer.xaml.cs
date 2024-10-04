@@ -12,7 +12,7 @@ namespace Incas.Objects.Views.Controls
     /// <summary>
     /// Логика взаимодействия для ObjectFieldViewer.xaml
     /// </summary>
-    public partial class ObjectFieldViewer : UserControl
+    public partial class ObjectFieldViewer : UserControl, IObjectFieldViewer
     {
         private Class relationClass;
         private Components.Object relationObject;

@@ -210,7 +210,7 @@ namespace Incas.Templates.Views.Windows
 
         private int Fc_OnMoveUpRequested(Objects.Views.Controls.FieldCreator t)
         {
-            int position = t.vm.OrderNumber;
+            int position = this.ContentPanel.Children.IndexOf(t);
             if (position < this.ContentPanel.Children.Count - 1)
             {
                 position += 1;
@@ -222,7 +222,7 @@ namespace Incas.Templates.Views.Windows
 
         private int Fc_OnMoveDownRequested(Objects.Views.Controls.FieldCreator t)
         {
-            int position = t.vm.OrderNumber;
+            int position = this.ContentPanel.Children.IndexOf(t);
             if (position > 0)
             {
                 position -= 1;

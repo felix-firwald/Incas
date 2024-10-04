@@ -11,7 +11,7 @@
             <ColumnDefinition Width="auto" MaxWidth="350" MinWidth="90"/>
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
-        <GroupBox Style="{StaticResource MainGroupBox}" Header="ВЫБОР" Margin="5,5,5,5">
+        <GroupBox Style="{StaticResource MainGroupBox}" Header="{Binding CategoryName}" Margin="5,5,5,5">
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.RowSpan="3">
                 <StackPanel >
                     <Button Style="{StaticResource ButtonMain}" Click="Button_Click">

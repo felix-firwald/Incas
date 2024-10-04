@@ -378,6 +378,19 @@ namespace Incas.Core.Classes
                     }
                 }
             }
+            try
+            {
+                MethodInfo method = this.Result.GetType().GetMethod("Validate");
+                if (method is not null)
+                {
+                    method.Invoke(this.Result, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowExclamationDialog(ex.InnerException.Message, "Сохранение прервано");
+                return false;
+            }
             this.SafetyCallMethod("Save");
             return true;
         }

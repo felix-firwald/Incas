@@ -160,7 +160,11 @@ namespace Incas.Objects.ViewModels
                         Guid.Parse(this.Source.Value);
                         break;
                     case TagType.Relation:
-                        JsonConvert.DeserializeObject<BindingData>(this.Source.Value);
+                        BindingData bd = JsonConvert.DeserializeObject<BindingData>(this.Source.Value);
+                        if (bd.Class == Guid.Empty || bd.Field == Guid.Empty)
+                        {
+                            throw new Exceptions.FieldDataFailed($"Не определена привязка у поля [{this.Source.Name}] (\"{this.Source.VisibleName}\"). Настройте поле, а затем попробуйте снова.");
+                        }
                         break;
                     case TagType.GlobalConstant:
                         Guid.Parse(this.Source.Value);
