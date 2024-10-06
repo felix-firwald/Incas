@@ -20,7 +20,7 @@ namespace Incas.Objects.AutoUI
         [Description("Имя класса")]
         public string Name { get; set; }
         [Description("Тип класса")]
-        public ComboSelector Selector { get; set; }
+        public Selector Selector { get; set; }
         #endregion
 
         public ClassTypeSettings()
@@ -34,7 +34,7 @@ namespace Incas.Objects.AutoUI
         }
 
         #region Functionality
-        public void Validate()
+        public override void Validate()
         {
             using (Class cl = new())
             {

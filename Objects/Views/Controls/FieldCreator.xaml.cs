@@ -57,13 +57,15 @@ namespace Incas.Objects.Views.Controls
         private void MaximizeClick(object sender, System.Windows.RoutedEventArgs e)
         {
             this.MainBorder.Height = this.ContentPanel.Height + 40;
-            this.NumberUp.Visibility = Visibility.Collapsed;
+            //this.TitleUp.Visibility = Visibility.Collapsed;
+            //this.TitleDown.Visibility = Visibility.Collapsed;
         }
 
         private void MinimizeClick(object sender, System.Windows.RoutedEventArgs e)
         {
             this.MainBorder.Height = 40;
-            this.NumberUp.Visibility = Visibility.Visible;
+            //this.TitleUp.Visibility = Visibility.Visible;
+            //this.TitleDown.Visibility = Visibility.Visible;
         }
 
         private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -103,47 +105,47 @@ namespace Incas.Objects.Views.Controls
             string name = $"Настройки поля [{f.Name}]";
             switch (f.Type)
             {
-                case Templates.Components.TagType.Variable:
+                case Components.FieldType.Variable:
                     TextFieldSettings tf = new(f);
                     tf.ShowDialog(name, Icon.Sliders);
                     break;
-                case Templates.Components.TagType.Text:
+                case Components.FieldType.Text:
                     TextBigFieldSettings tb = new(f);
                     tb.ShowDialog(name, Icon.Sliders);
                     break;
-                case Templates.Components.TagType.Number:
+                case Components.FieldType.Number:
                     NumberFieldSettings n = new(f);
                     n.ShowDialog(name, Icon.Sliders);
                     break;
-                case Templates.Components.TagType.Relation:
+                case Components.FieldType.Relation:
                     Objects.Components.BindingData db = DialogsManager.ShowBindingDialog(f.Value);
                     f.Value = JsonConvert.SerializeObject(db);
                     break;
-                case Templates.Components.TagType.LocalEnumeration:
+                case Components.FieldType.LocalEnumeration:
                     LocalEnumerationFieldSettings le = new(f);
                     le.ShowDialog(name, Icon.Sliders);
                     break;
-                case Templates.Components.TagType.GlobalEnumeration:
+                case Components.FieldType.GlobalEnumeration:
                     GlobalEnumerationFieldSettings ge = new(f);
                     ge.ShowDialog(name, Icon.Sliders);
                     break;
-                case Templates.Components.TagType.LocalConstant:
+                case Components.FieldType.LocalConstant:
                     ConstantFieldSettings cf = new(f);
                     cf.ShowDialog(name, Icon.Sliders);
                     break;
-                case Templates.Components.TagType.GlobalConstant:
+                case Components.FieldType.GlobalConstant:
                     GlobalConstantFieldSettings gc = new(f);
                     gc.ShowDialog(name, Icon.Sliders);
                     break;
-                case Templates.Components.TagType.HiddenField:
+                case Components.FieldType.HiddenField:
                     ConstantFieldSettings hf = new(f);
                     hf.ShowDialog(name, Icon.Sliders);
                     break;
-                case Templates.Components.TagType.Date:
+                case Components.FieldType.Date:
                     DateFieldSettings dt = new(f);
                     dt.ShowDialog(name, Icon.Sliders);
                     break;
-                case Templates.Components.TagType.Generator:
+                case Components.FieldType.Generator:
                     break;
             }
         }

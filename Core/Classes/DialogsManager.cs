@@ -81,16 +81,6 @@ namespace Incas.Core.Classes
             }
             return false;
         }
-        public static bool ShowSimpleFormDialog(AutoUIBase data, string title)
-        {
-            DialogSimpleForm ds = new(data, title);
-            return (bool)ds.ShowDialog();
-        }
-        public static bool ShowSimpleFormDialog(AutoUIBase data, string title, Icon pathIcon)
-        {
-            DialogSimpleForm ds = new(data, title, pathIcon);
-            return (bool)ds.ShowDialog();
-        }
         public static void ShowAccessErrorDialog(string message, string title = "Нет доступа")
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -245,15 +235,6 @@ namespace Incas.Core.Classes
                 d.ShowDialog();
             });
             return d.status;
-        }
-        public static Template ShowTemplateSelector(TemplateType type, string help)
-        {
-            TemplateSelector ts = new(type, help);
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            {
-                ts.ShowDialog();
-            });
-            return ts.SelectedTemplate.AsModel();
         }
         public static bool ShowUserSelector(out Users.Models.User user)
         {

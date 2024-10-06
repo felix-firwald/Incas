@@ -92,7 +92,7 @@ namespace Incas.Objects.ViewModels
         }
         public void SetData(List<Field> fields)
         {
-            this.SourceData.fields = fields;
+            this.SourceData.Fields = fields;
             this.Source.SetClassData(this.SourceData);
         }
     }

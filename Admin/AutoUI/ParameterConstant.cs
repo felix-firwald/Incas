@@ -16,7 +16,7 @@ namespace Incas.Admin.AutoUI
         [Description("Значение константы")]
         public string Value { get; set; }
 
-        public void Validate()
+        public override void Validate()
         {
             using (Parameter p = new())
             {

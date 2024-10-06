@@ -39,7 +39,7 @@ namespace Incas.Objects.ViewModels
                 {
                     return new();
                 }
-                return this.SelectedClass.GetClassData().fields;
+                return this.SelectedClass.GetClassData().Fields;
             }
         }
         public Class SelectedClass

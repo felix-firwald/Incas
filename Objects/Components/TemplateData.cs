@@ -10,5 +10,6 @@ namespace Incas.Objects.Components
     {
         public string Name { get; set; }
         public string File { get; set; }
+        public List<TemplateConditionalAction> Actions { get; set; }
     }
 }

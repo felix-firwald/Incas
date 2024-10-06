@@ -19,7 +19,7 @@ namespace Incas.Objects.AutoUI
         #region Data
 
         [Description("Выбор константы из списка")]
-        public ComboSelector Selector { get; set; }
+        public Selector Selector { get; set; }
         #endregion
         public GlobalConstantFieldSettings(Incas.Objects.Models.Field field)
         {
@@ -40,7 +40,7 @@ namespace Incas.Objects.AutoUI
             }
         }
         #region Functionality
-        public void Save()
+        public override void Save()
         {
             this.SaveBaseData();
             this.Source.Value = this.Selector.SelectedObject.ToString();

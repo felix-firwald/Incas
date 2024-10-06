@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using WebSupergoo.WordGlue3;
+using Incas.Objects.Components;
 
 namespace Incas.Objects.AutoUI
 {
@@ -40,7 +41,7 @@ namespace Incas.Objects.AutoUI
                 Name = this.Name.Replace(" ", "_"),
                 VisibleName = this.Name.Replace("_", " "),
                 Value = this.Text,
-                Type = Templates.Components.TagType.LocalConstant
+                Type = FieldType.LocalConstant
             };
             fields.Add(main);
             Regex regex = new(@"\[[A-Za-zА-Яа-я0-9_]*\]");

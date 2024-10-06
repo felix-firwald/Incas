@@ -17,7 +17,7 @@ namespace Incas.Objects.AutoUI
         #region Data
 
         [Description("Выбор форматирования даты из списка")]
-        public ComboSelector Format { get; set; }
+        public Selector Format { get; set; }
 
         [Description("Минимальная дата")]
         public DateTime StartDate { get; set; }
@@ -49,7 +49,7 @@ namespace Incas.Objects.AutoUI
         }
 
         #region Functionality
-        public void Save()
+        public override void Save()
         {
             this.SaveBaseData();
             DateFieldData df = new()

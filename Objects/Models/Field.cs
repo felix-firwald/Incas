@@ -15,7 +15,7 @@ namespace Incas.Objects.Models
         public Guid Id { get; set; }
         public string VisibleName { get; set; }
         public string Name { get; set; }
-        public TagType Type { get; set; }
+        public FieldType Type { get; set; }
         public string Value { get; set; }
         public int OrderNumber { get; set; }
         public bool NotNull { get; set; }

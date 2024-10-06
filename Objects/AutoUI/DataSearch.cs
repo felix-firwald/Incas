@@ -15,7 +15,7 @@ namespace Incas.Objects.AutoUI
     {
         #region Data
         [Description("Поле для поиска")]
-        public ComboSelector ComboSelector { get; set; }
+        public Selector ComboSelector { get; set; }
 
         [Description("Значение")]
         public string Value { get; set; }
@@ -32,7 +32,7 @@ namespace Incas.Objects.AutoUI
             //{
             //    this.ComboSelector.Pairs.Add("Дата создания", "Дата создания");
             //}
-            foreach (Objects.Models.Field f in data.fields)
+            foreach (Objects.Models.Field f in data.Fields)
             {
                 this.ComboSelector.Pairs.Add(f, f.VisibleName);
             }

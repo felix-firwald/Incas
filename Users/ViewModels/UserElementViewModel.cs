@@ -52,12 +52,12 @@ namespace Incas.Users.ViewModels
             if (this._user.username == "admin")
             {
                 UserSuperAdminSettings usa = new(this._user);
-                DialogsManager.ShowSimpleFormDialog(usa, "Редактирование владельца", Icon.UserGears);
+                usa.ShowDialog("Редактирование владельца", Icon.UserGears);
             }
             else
             {
                 UserSettings us = new(this._user);
-                DialogsManager.ShowSimpleFormDialog(us, "Редактирование пользователя", Icon.UserGears);
+                us.ShowDialog("Редактирование пользователя", Icon.UserGears);
             }
             this.OnPropertyChanged(nameof(this.UserName));
             this.OnPropertyChanged(nameof(this.UserStatus));

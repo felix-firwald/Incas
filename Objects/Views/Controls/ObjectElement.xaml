@@ -11,7 +11,7 @@
             <RowDefinition MinHeight="40"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="ObjectName" Margin="5" ToolTip="Показать / скрыть" ToolTipService.InitialShowDelay="160" Foreground="{DynamicResource Light}" FontFamily="JetBrains Mono" TextWrapping="WrapWithOverflow" TextTrimming="WordEllipsis" Cursor="Hand" VerticalAlignment="Center"/>
+        <TextBlock x:Name="ObjectName" Margin="5" ToolTip="Показать / скрыть" ToolTipService.InitialShowDelay="160" Foreground="{DynamicResource Light}" FontFamily="JetBrains Mono" TextWrapping="WrapWithOverflow" TextTrimming="WordEllipsis" Cursor="Hand" VerticalAlignment="Center" FontSize="11"/>
         <Border x:Name="Border" Grid.Row="1">
             
         </Border>

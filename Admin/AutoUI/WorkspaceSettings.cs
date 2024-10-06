@@ -14,7 +14,7 @@ namespace Incas.Admin.AutoUI
     public class WorkspaceSettings : AutoUIBase
     {
         private WorkspacePrimarySettings data;
-        public void Load()
+        public override void Load()
         {
             this.data = JsonConvert.DeserializeObject<WorkspacePrimarySettings>(ProgramState.GetParameter(ParameterType.WORKSPACE, "ws_data").value);
         }

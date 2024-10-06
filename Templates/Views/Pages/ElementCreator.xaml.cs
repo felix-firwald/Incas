@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.CreatedDocuments.Models;
+using Incas.Objects.Views.Controls;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
@@ -41,7 +42,7 @@ namespace Incas.Templates.Views.Pages
         }
         private void AddField(Objects.Models.Field t)
         {
-            TagFiller tf = new(t);
+            FieldFiller tf = new(t);
             tf.OnScriptRequested += this.OnScriptRequested;
             this.ContentPanel.Children.Add(tf);
         }
@@ -51,7 +52,7 @@ namespace Incas.Templates.Views.Pages
             {
                 foreach (SGeneratedTag tag in data.filledTags)
                 {
-                    foreach (TagFiller tagfiller in this.ContentPanel.Children)
+                    foreach (FieldFiller tagfiller in this.ContentPanel.Children)
                     {
                         if (tagfiller.field.Id == tag.tag)
                         {
@@ -69,12 +70,12 @@ namespace Incas.Templates.Views.Pages
                 template = this.template.id
             };
             List<SGeneratedTag> tags = [];
-            foreach (TagFiller tf in this.ContentPanel.Children)
+            foreach (FieldFiller tf in this.ContentPanel.Children)
             {
                 SGeneratedTag gt = new()
                 {
                     tag = tf.field.Id,
-                    value = tf.field.Type == TagType.Generator ? tf.GetData() : tf.GetValue()
+                    value = tf.field.Type == Objects.Components.FieldType.Generator ? tf.GetData() : tf.GetValue()
                 };
                 tags.Add(gt);
             }
@@ -84,7 +85,7 @@ namespace Incas.Templates.Views.Pages
         public string GetText()
         {
             string result = this.template.path;
-            foreach (TagFiller tf in this.ContentPanel.Children)
+            foreach (FieldFiller tf in this.ContentPanel.Children)
             {
                 result = result.Replace($"[{tf.field.Name}]", tf.GetValue());
             }
@@ -96,12 +97,12 @@ namespace Incas.Templates.Views.Pages
             try
             {
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                foreach (TagFiller tf in this.ContentPanel.Children)
+                foreach (FieldFiller tf in this.ContentPanel.Children)
                 {
                     scope.SetVariable(tf.field.Name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
-                foreach (TagFiller tf in this.ContentPanel.Children)
+                foreach (FieldFiller tf in this.ContentPanel.Children)
                 {
                     tf.SetValue(scope.GetVariable(tf.field.Name.Replace(" ", "_")));
                 }
@@ -113,7 +114,7 @@ namespace Incas.Templates.Views.Pages
         }
         public bool SimpleValidate()
         {
-            foreach (TagFiller tf in this.ContentPanel.Children)
+            foreach (FieldFiller tf in this.ContentPanel.Children)
             {
                 if (string.IsNullOrEmpty(tf.GetData()))
                 {

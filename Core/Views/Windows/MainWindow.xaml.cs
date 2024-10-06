@@ -34,7 +34,7 @@ namespace Incas.Core.Views.Windows
                     "является временным, потому известен администратору и может быть им изменен.\nРекомендуем вам придумать свой пароль. Его не сможет увидеть и изменить никто, кроме вас.", "Завершение активации", "Установить пароль", "Не сейчас") == DialogStatus.Yes)
                 {
                     SetPassword sp = new();
-                    DialogsManager.ShowSimpleFormDialog(sp, "Установление нового пароля", Classes.Icon.UserGears);
+                    sp.ShowDialog("Установление нового пароля", Classes.Icon.UserGears);
                 }
             }
             //this.UpdateTabs();

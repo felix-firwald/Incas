@@ -14,7 +14,7 @@ namespace Incas.Admin.AutoUI
         [Description("Значения перечисления")]
         public List<string> Value { get; set; }
 
-        public void Validate()
+        public override void Validate()
         {
             using (Parameter p = new())
             {

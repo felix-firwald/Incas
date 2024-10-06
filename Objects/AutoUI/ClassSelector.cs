@@ -17,7 +17,7 @@ namespace Incas.Objects.AutoUI
     {
         #region Data
         [Description("Выбор класса")]
-        public ComboSelector ComboSelector { get; set; }
+        public Selector ComboSelector { get; set; }
         #endregion
 
         public ClassSelector()

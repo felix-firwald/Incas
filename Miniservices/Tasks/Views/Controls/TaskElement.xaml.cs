@@ -26,7 +26,7 @@ namespace Incas.Miniservices.Tasks.Views.Controls
         }
         private void EditClick(object sender, MouseButtonEventArgs e)
         {
-            DialogsManager.ShowSimpleFormDialog(this.record, "Редактирование задачи");
+            this.record.ShowDialog("Редактирование задачи");
             OnUpdateRequested?.Invoke();
         }
 

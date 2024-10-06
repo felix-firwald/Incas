@@ -4,6 +4,7 @@ using Incas.CreatedDocuments.Models;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
+using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Views.Controls;
@@ -28,8 +29,8 @@ namespace Incas.Objects.Views.Pages
         public Components.Object Object { get; set; }
         public Class Class { get; set; }
         public ClassData ClassData { get; set; }
-        public List<TagFiller> TagFillers = new();
-        public List<TableFiller> Tables = new();
+        public List<FieldFiller> TagFillers = new();
+        public List<FieldTableFiller> Tables = new();
         public delegate void ObjectCreatorData(ObjectCreator creator);
         public delegate void FieldCopyAction(Guid id, string text);
         public event FieldCopyAction OnInsertRequested;
@@ -106,11 +107,11 @@ namespace Incas.Objects.Views.Pages
         }
         private void FillContentPanel()
         {
-            foreach (Objects.Models.Field f in this.ClassData.fields)
+            foreach (Objects.Models.Field f in this.ClassData.Fields)
             {
-                if (f.Type != TagType.Table)
+                if (f.Type != FieldType.Table)
                 {
-                    TagFiller tf = new(f)
+                    FieldFiller tf = new(f)
                     {
                         Uid = f.Id.ToString()
                     };
@@ -124,7 +125,7 @@ namespace Incas.Objects.Views.Pages
                 }
                 else
                 {
-                    TableFiller tf = new(f)
+                    FieldTableFiller tf = new(f)
                     {
                         Uid = f.Id.ToString()
                     };
@@ -134,7 +135,7 @@ namespace Incas.Objects.Views.Pages
             }
         }
 
-        private void Tf_OnDatabaseObjectCopyRequested(TagFiller sender)
+        private void Tf_OnDatabaseObjectCopyRequested(FieldFiller sender)
         {
             BindingData bd = new()
             {
@@ -154,7 +155,7 @@ namespace Incas.Objects.Views.Pages
             }               
         }
 
-        private void Tf_OnFieldUpdate(TagFiller sender)
+        private void Tf_OnFieldUpdate(FieldFiller sender)
         {
             
         }
@@ -162,7 +163,7 @@ namespace Incas.Objects.Views.Pages
         {
             foreach (KeyValuePair<string, string> pair in pairs)
             {
-                foreach (TagFiller tf in this.ContentPanel.Children)
+                foreach (FieldFiller tf in this.ContentPanel.Children)
                 {
                     if (tf.field.Name == pair.Key)
                     {
@@ -178,7 +179,7 @@ namespace Incas.Objects.Views.Pages
             this.ObjectName.Text = obj.Name;
             foreach (Components.FieldData data in obj.Fields)
             {
-                foreach (TagFiller tagfiller in this.TagFillers)
+                foreach (FieldFiller tagfiller in this.TagFillers)
                 {
                     //DialogsManager.ShowInfoDialog(tagfiller);
                     if (tagfiller.field.Id == data.ClassField.Id)
@@ -187,7 +188,7 @@ namespace Incas.Objects.Views.Pages
                         break;
                     }
                 }
-                foreach (TableFiller table in this.Tables)
+                foreach (FieldTableFiller table in this.Tables)
                 {
                     if (table.field.Id == data.ClassField.Id)
                     {
@@ -210,7 +211,7 @@ namespace Incas.Objects.Views.Pages
                 this.Object.Fields = new();
             }
             this.Object.Fields.Clear();
-            foreach (TagFiller tf in this.TagFillers)
+            foreach (FieldFiller tf in this.TagFillers)
             {
                 Components.FieldData data = new()
                 {
@@ -220,7 +221,7 @@ namespace Incas.Objects.Views.Pages
                 this.Object.Fields.Add(data);
 
             }
-            foreach (TableFiller table in this.Tables)
+            foreach (FieldTableFiller table in this.Tables)
             {
                 Components.FieldData data = new()
                 {
@@ -339,7 +340,7 @@ namespace Incas.Objects.Views.Pages
                 this.ObjectName.Text = name;
                 return name;
             }
-            foreach (TagFiller tf in this.TagFillers)
+            foreach (FieldFiller tf in this.TagFillers)
             {
                 string val = tf.GetValue();
                 if (val != null)
@@ -362,7 +363,7 @@ namespace Incas.Objects.Views.Pages
         }
         public void InsertToField(Guid id, string data)
         {
-            foreach (TagFiller tf in this.TagFillers)
+            foreach (FieldFiller tf in this.TagFillers)
             {
                 if (tf.field.Id == id)
                 {
@@ -442,7 +443,7 @@ namespace Incas.Objects.Views.Pages
         public List<string> GetExcelRow()
         {
             List<string> output = [];
-            foreach (TagFiller tf in this.TagFillers)
+            foreach (FieldFiller tf in this.TagFillers)
             {
                 output.Add(tf.GetValue());
             }

@@ -28,7 +28,14 @@ namespace Incas.Objects.Views.Windows
             }
             else
             {
-                this.vm = new(JsonConvert.DeserializeObject<BindingData>(data));
+                try
+                {
+                    this.vm = new(JsonConvert.DeserializeObject<BindingData>(data));
+                }
+                catch
+                {
+                    this.vm = new(new());
+                }
             }
             this.DataContext = this.vm;
         }

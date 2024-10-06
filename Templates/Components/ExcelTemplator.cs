@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Incas.CreatedDocuments.Models;
+using Incas.Objects.Views.Controls;
 using Incas.Templates.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -68,22 +69,22 @@ namespace Incas.Templates.Components
             it.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             this.workbook.Save();
         }
-        public void GenerateDocument(List<TagFiller> tagFillers, List<TableFiller> tableFillers, bool async = true)
+        public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true)
         {
             List<string> tagsToReplace = new();
             List<string> values = new();
-            foreach (TableFiller tab in tableFillers)
+            foreach (FieldTableFiller tab in tableFillers)
             {
                 this.CreateTable(tab.field.Name, tab.DataTable);
             }
-            foreach (TagFiller tf in tagFillers)
+            foreach (FieldFiller tf in tagFillers)
             {
                 Guid id = tf.GetId();
                 string name = tf.GetTagName();
                 string value = tf.GetValue();
                 tagsToReplace.Add(name);
                 values.Add(value);
-                if (tf.field.Type == TagType.Relation)
+                if (tf.field.Type == Objects.Components.FieldType.Relation)
                 {
                     foreach (Objects.Components.FieldData fd in tf.GetDataFromObjectRelation())
                     {

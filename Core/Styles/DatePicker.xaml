@@ -29,7 +29,20 @@
                                     </Grid>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="PART_Icon" Property="Fill" Value="DodgerBlue"/>
+                                            <Trigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="PART_Icon" Storyboard.TargetProperty="Fill.Color"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.EnterActions>
+                                            <Trigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation Duration="0:0:0.250" To="#60636B" Storyboard.TargetName="PART_Icon" Storyboard.TargetProperty="Fill.Color"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.ExitActions>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -77,20 +90,11 @@
         </Setter>
     </Style>
     <!--Календарь-->
-    <Style x:Key="CalendarMain" TargetType="{x:Type Calendar}">
+    <Style TargetType="{x:Type CalendarItem}">
         <Setter Property="Foreground" Value="{StaticResource Light}"/>
         <Setter Property="Background" Value="{StaticResource LightBlack}"/>
         <Setter Property="BorderBrush" Value="{StaticResource LightBlack}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Calendar}">
-                    <StackPanel x:Name="PART_Root" HorizontalAlignment="Center">
-                        <CalendarItem x:Name="PART_CalendarItem" BorderThickness="0" Style="{TemplateBinding CalendarItemStyle}" Background="{StaticResource Black}" BorderBrush="{x:Null}" Foreground="{StaticResource Element}"/>
-                    </StackPanel>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="BorderThickness" Value="4"/>
     </Style>
     <Style x:Key="CalendarButtonStyle1" TargetType="{x:Type CalendarButton}">
         <Setter Property="Background" Value="{StaticResource Area}"/>
@@ -317,9 +321,9 @@
                         </DataTemplate>
                     </ControlTemplate.Resources>
                     <Grid x:Name="PART_Root">
-                        <Grid.Resources>
+                        <!--<Grid.Resources>
                             <SolidColorBrush x:Key="DisabledColor" Color="#A5FFFFFF"/>
-                        </Grid.Resources>
+                        </Grid.Resources>-->
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal"/>
@@ -351,7 +355,7 @@
                                                         </VisualState>
                                                     </VisualStateGroup>
                                                 </VisualStateManager.VisualStateGroups>
-                                                <Rectangle Fill="#11E5EBF1" RadiusX="15" RadiusY="15" Opacity="1" Stretch="Fill"/>
+                                                <Rectangle Fill="Black" RadiusX="15" RadiusY="15" Opacity="1" Stretch="Fill"/>
                                                 <Grid>
                                                     <Path x:Name="path" Data="M288.75,232.25 L288.75,240.625 L283,236.625 z" Fill="#FFF" HorizontalAlignment="Left" Height="10" Margin="11,0,0,0" Stretch="Fill" VerticalAlignment="Center" Width="6"/>
                                                 </Grid>

@@ -244,6 +244,7 @@
     <Folder Include="FileManager\Views\Controls\" />
     <Folder Include="Resources\" />
     <Folder Include="Templates\AutoUI\" />
+    <Folder Include="Grids\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="WordGlue3.NET8">

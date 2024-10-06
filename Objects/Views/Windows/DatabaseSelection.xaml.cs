@@ -48,7 +48,7 @@ namespace Incas.Objects.Views.Windows
             this.Binding = data;
             this.Class = new(this.Binding.Class);
             this.ClassData = this.Class.GetClassData();
-            if (this.ClassData is null || this.ClassData.fields is null)
+            if (this.ClassData is null || this.ClassData.Fields is null)
             {
                 DialogsManager.ShowDatabaseErrorDialog("Не удалось идентифицировать класс и показать карту его объектов. Вероятно, это означает, что класс удален. Обратитесь к администратору рабочего пространства для устранения ошибки.", "Привязка сломана");
                 this.IsEnabled = false;
@@ -73,7 +73,7 @@ namespace Incas.Objects.Views.Windows
         private void SetFields()
         {
             List<string> fields = new();
-            foreach (Models.Field field in this.ClassData.fields)
+            foreach (Models.Field field in this.ClassData.Fields)
             {
                 fields.Add(field.VisibleName);
             }

@@ -2,6 +2,7 @@
 using Incas.Core.Views.Controls;
 using Incas.Objects.Components;
 using Incas.Templates.Components;
+using Incas.Templates.Views.Controls;
 using Incas.Users.Models;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
@@ -14,7 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Incas.Templates.Views.Controls
+namespace Incas.Objects.Views.Controls
 {
     public static class CommandIcons
     {
@@ -24,9 +25,9 @@ namespace Incas.Templates.Views.Controls
         }
     }
     /// <summary>
-    /// Логика взаимодействия для TagFiller.xaml
+    /// Логика взаимодействия для FieldFiller.xaml
     /// </summary>
-    public partial class TagFiller : UserControl
+    public partial class FieldFiller : UserControl
     {
         //public static Dictionary<TagType, >
         public readonly Objects.Models.Field field;
@@ -36,13 +37,13 @@ namespace Incas.Templates.Views.Controls
         public delegate void StringAction(Guid tag, string text);
         public delegate void CommandScript(string script);
         public delegate void StringActionRecalculate(string tag);
-        public delegate void FieldFillerAction(TagFiller sender);
+        public delegate void FieldFillerAction(FieldFiller sender);
         public event StringAction OnInsert;        
         public event CommandScript OnScriptRequested;       
         public event StringActionRecalculate OnRename;       
         public event FieldFillerAction OnFieldUpdate;
         public event FieldFillerAction OnDatabaseObjectCopyRequested;
-        public TagFiller(Objects.Models.Field f)
+        public FieldFiller(Objects.Models.Field f)
         {
             this.InitializeComponent();
             this.field = f;
@@ -57,25 +58,25 @@ namespace Incas.Templates.Views.Controls
                 DialogsManager.ShowErrorDialog(ex);
             }
         }
-        private TagType GetFillerType()
+        private FieldType GetFillerType()
         {
             return this.field.Type;
         }
-        private void GenerateUIControl(TagType type)
+        private void GenerateUIControl(FieldType type)
         {
             string value = this.field.Value;
             string description = this.field.Description;
             switch (type)
             {
-                case TagType.Variable:
-                case TagType.Text:
+                case FieldType.Variable:
+                case FieldType.Text:
                     System.Windows.Controls.TextBox textBox = new()
                     {
                         Text = value,
                         Tag = description
                     };
                     textBox.TextChanged += this.Textbox_TextChanged;
-                    if (type == TagType.Variable)
+                    if (type == FieldType.Variable)
                     {
                         textBox.Style = this.FindResource("TextBoxMain") as Style;
                         textBox.MaxLength = 120;
@@ -87,15 +88,15 @@ namespace Incas.Templates.Views.Controls
                     }
                     this.PlaceUIControl(textBox);
                     break;
-                case TagType.LocalEnumeration:
-                case TagType.GlobalEnumeration:
+                case FieldType.LocalEnumeration:
+                case FieldType.GlobalEnumeration:
                     if (value is null)
                     {
                         value = "";
                     }
                     ComboBox comboBox = new()
                     {                      
-                        ItemsSource = type == TagType.LocalEnumeration? JsonConvert.DeserializeObject<List<string>>(value) : ProgramState.GetEnumeration(Guid.Parse(value.ToString())),
+                        ItemsSource = type == FieldType.LocalEnumeration? JsonConvert.DeserializeObject<List<string>>(value) : ProgramState.GetEnumeration(Guid.Parse(value.ToString())),
                         SelectedIndex = 0,
                         Style = this.FindResource("ComboBoxMain") as Style
                     };
@@ -106,28 +107,28 @@ namespace Incas.Templates.Views.Controls
                     }
                     this.PlaceUIControl(comboBox);
                     break;
-                case TagType.Number:
+                case FieldType.Number:
                     NumericBox numeric = new();
                     numeric.OnNumberChanged += this.NumericBox_OnNumberChanged;
                     numeric.ApplyMinAndMax(JsonConvert.DeserializeObject<Objects.Components.NumberFieldData>(value));
                     this.PlaceUIControl(numeric);
                     break;
-                case TagType.LocalConstant:              
-                case TagType.HiddenField:
+                case FieldType.LocalConstant:              
+                case FieldType.HiddenField:
                     this.Visibility = Visibility.Collapsed;
                     break;
-                case TagType.GlobalConstant:
+                case FieldType.GlobalConstant:
                     this.Visibility = Visibility.Collapsed;
                     Guid id;
                     Guid.TryParse(value.ToString(), out id);
                     this.field.Value = ProgramState.GetConstant(id);           
                     break;
-                case TagType.Relation:
+                case FieldType.Relation:
                     SelectionBox selectionBox = new(JsonConvert.DeserializeObject<BindingData>(value));
                     selectionBox.OnValueChanged += this.SelectionBox_OnValueChanged;
                     this.PlaceUIControl(selectionBox);
                     break;
-                case TagType.Date:
+                case FieldType.Date:
                     DatePicker picker = new()
                     {
                         ToolTip = description,
@@ -136,8 +137,8 @@ namespace Incas.Templates.Views.Controls
                     picker.SelectedDateChanged += this.DatePicker_SelectedDateChanged;
                     this.PlaceUIControl(picker);
                     break;
-                case TagType.Generator:
-                case TagType.Macrogenerator:
+                case FieldType.Generator:
+                case FieldType.Macrogenerator:
                     Guid num = Guid.Empty;
                     Guid.TryParse(value.ToString(), out num);
                     Generator generator = new(type)
@@ -179,36 +180,36 @@ namespace Incas.Templates.Views.Controls
         {
             switch (this.GetFillerType())
             {
-                case TagType.Variable:
-                case TagType.Text:
+                case FieldType.Variable:
+                case FieldType.Text:
                 default:
                     ((System.Windows.Controls.TextBox)this.control).Text = value;
                     break;
-                case TagType.Number:
+                case FieldType.Number:
                     int digitValue;
                     if (int.TryParse(value, out digitValue))
                     {
                         ((NumericBox)this.control).Value = digitValue;
                     }
                     break;
-                case TagType.Relation:
+                case FieldType.Relation:
                     ((SelectionBox)this.control).SetObject(value);
                     break;
-                case TagType.LocalConstant:
-                case TagType.GlobalConstant:
+                case FieldType.LocalConstant:
+                case FieldType.GlobalConstant:
                     return;
-                case TagType.HiddenField:
+                case FieldType.HiddenField:
                     this.field.Value = value;
                     break;
-                case TagType.LocalEnumeration:
-                case TagType.GlobalEnumeration:
+                case FieldType.LocalEnumeration:
+                case FieldType.GlobalEnumeration:
                     ((ComboBox)this.control).SelectedValue = value;
                     break;
-                case TagType.Date:
+                case FieldType.Date:
                     this.SetDateTimeValue(value);
                     break;
-                case TagType.Generator:
-                case TagType.Macrogenerator:
+                case FieldType.Generator:
+                case FieldType.Macrogenerator:
                     ((Generator)this.control).SetData(value);
                     break;
             }
@@ -276,7 +277,7 @@ namespace Incas.Templates.Views.Controls
         {
             switch (this.GetFillerType())
             {
-                case TagType.Variable:
+                case FieldType.Variable:
                 default:
                     string value = ((System.Windows.Controls.TextBox)this.control).Text;
                     if (this.field.NotNull == true && string.IsNullOrEmpty(value))
@@ -284,26 +285,26 @@ namespace Incas.Templates.Views.Controls
                         this.ThrowNotNullFailed();
                     }
                     return value;
-                case TagType.Number:
+                case FieldType.Number:
                     return ((NumericBox)this.control).Value.ToString();
-                case TagType.LocalConstant:
-                case TagType.HiddenField:
-                case TagType.GlobalConstant:
+                case FieldType.LocalConstant:
+                case FieldType.HiddenField:
+                case FieldType.GlobalConstant:
                     return this.field.Value?.ToString();
-                case TagType.Relation:
+                case FieldType.Relation:
                     return ((SelectionBox)this.control).Value;
-                case TagType.LocalEnumeration:
-                case TagType.GlobalEnumeration:
+                case FieldType.LocalEnumeration:
+                case FieldType.GlobalEnumeration:
                     ComboBox cb = (ComboBox)this.control;
                     if (cb.SelectedIndex != -1)
                     {
                         return cb.Items.GetItemAt(cb.SelectedIndex).ToString();
                     }
                     return "";
-                case TagType.Date:
+                case FieldType.Date:
                     return this.GetDateInFormat();
-                case TagType.Generator:
-                case TagType.Macrogenerator:
+                case FieldType.Generator:
+                case FieldType.Macrogenerator:
                     return ((Generator)this.control).GetText();
             }
         }
@@ -311,10 +312,10 @@ namespace Incas.Templates.Views.Controls
         {
             switch (this.GetFillerType())
             {
-                case TagType.Generator:
-                case TagType.Macrogenerator:
+                case FieldType.Generator:
+                case FieldType.Macrogenerator:
                     return ((Generator)this.control).GetData();
-                case TagType.Date:
+                case FieldType.Date:
                     if (((DatePicker)this.control).SelectedDate.HasValue)
                     {
                         return ((DateTime)((DatePicker)this.control).SelectedDate).ToString("dd.MM.yyyy");
@@ -324,7 +325,7 @@ namespace Incas.Templates.Views.Controls
                         this.ThrowNotNullFailed();
                     }
                     return "";
-                case TagType.Relation:
+                case FieldType.Relation:
                     Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
                     if (this.field.NotNull == true || obj is null)
                     {
@@ -337,7 +338,12 @@ namespace Incas.Templates.Views.Controls
         }
         public List<FieldData> GetDataFromObjectRelation()
         {
-            return ((SelectionBox)this.control).SelectedObject.Fields;
+            Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
+            if (obj is null)
+            {
+                return new();
+            }
+            return obj.Fields;
         }
         public void ThrowNotNullFailed()
         {

@@ -1,4 +1,5 @@
-﻿using Incas.Templates.Views.Controls;
+﻿using Incas.Objects.Views.Controls;
+using Incas.Templates.Views.Controls;
 using System.Collections.Generic;
 
 namespace Incas.Templates.Components
@@ -17,7 +18,7 @@ namespace Incas.Templates.Components
                 this.templator = new ExcelTemplator(name);
             }
         }
-        public void GenerateDocument(List<TagFiller> tagFillers, List<TableFiller> tableFillers, bool async = true)
+        public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true)
         {
             this.templator.GenerateDocument(tagFillers, tableFillers, async);
         }

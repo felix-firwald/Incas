@@ -13,6 +13,7 @@ namespace Incas.Objects.Views.Pages
         {
             this.InitializeComponent();
             this.vm = new();
+            this.ContentPanel.Content = new Core.Views.Controls.NoContent();
             this.vm.OnClassSelected += this.OnClassSelected;
             this.DataContext = this.vm;
         }
@@ -32,6 +33,7 @@ namespace Incas.Objects.Views.Pages
         {
             if (selectedClass == null)
             {
+                this.ContentPanel.Content = new Core.Views.Controls.NoContent();
                 return;
             }
             this.ContentPanel.Content = new ObjectsList(selectedClass);

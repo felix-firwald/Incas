@@ -85,8 +85,8 @@ namespace Incas.Core.Classes
                     control = this.GenerateDataGrid(description, (DataTable)field.GetValue(this.Result));
                     this.Container.Children.Add(label);
                     break;
-                case "ComboSelector":
-                    control = this.GenerateComboBox(description, (ComboSelector)field.GetValue(this.Result));
+                case "Selector":
+                    control = this.GenerateComboBox(description, (Selector)field.GetValue(this.Result));
                     this.Container.Children.Add(label);
                     break;
                 case "Color":
@@ -180,7 +180,7 @@ namespace Incas.Core.Classes
             
             return control;
         }
-        private Control GenerateComboBox(string description, ComboSelector selector)
+        private Control GenerateComboBox(string description, Selector selector)
         {
             //if (selector.SelectedValue is not null)
             //{
@@ -238,10 +238,13 @@ namespace Incas.Core.Classes
         {
             DataTable dt = new();
             dt.Columns.Add("Значение");
-            foreach (string item in value)
+            if (value is not null)
             {
-                dt.Rows.Add(item);
-            }
+                foreach (string item in value)
+                {
+                    dt.Rows.Add(item);
+                }
+            }           
             DataGridWithButtons control = new(dt)
             {
                 Tag = description,
@@ -340,13 +343,13 @@ namespace Incas.Core.Classes
                             case "DataTable":
                                 field.SetValue(this.Result, ((DataGridWithButtons)control).DataTable);
                                 break;
-                            case "ComboSelector":
+                            case "Selector":
                                 if (((ComboBox)control).SelectedValue is null)
                                 {
                                     DialogsManager.ShowExclamationDialog("Одно из полей не заполнено.", "Сохранение прервано");
                                     return false;
                                 }
-                                ((ComboSelector)field.GetValue(this.Result)).SetSelectionByIndex(((ComboBox)control).SelectedIndex);
+                                ((Selector)field.GetValue(this.Result)).SetSelectionByIndex(((ComboBox)control).SelectedIndex);
                                 break;
                             case "Color":
                                 field.SetValue(this.Result, ((ColorBox)control).SelectedColor);

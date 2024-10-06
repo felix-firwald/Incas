@@ -24,7 +24,7 @@ namespace Incas.Core.AutoUI
         #endregion
 
         #region Functionality   
-        public void Save()
+        public override void Save()
         {
             ProgramState.InitWorkspace(this);
         }

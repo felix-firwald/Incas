@@ -149,7 +149,7 @@ namespace Incas.Objects.Components
             values.Add(StatusField, obj.Status.ToString());
             foreach (FieldData fd in obj.Fields)
             {               
-                if (fd.ClassField.Type is not Templates.Components.TagType.GlobalConstant and not Templates.Components.TagType.LocalConstant)
+                if (fd.ClassField.Type is not FieldType.GlobalConstant and not FieldType.LocalConstant)
                 {
                     values.Add(fd.ClassField.Id.ToString(), fd.Value);
                 }                
@@ -232,7 +232,7 @@ namespace Incas.Objects.Components
             List<string> innerJoins = new();
             foreach (Models.Field f in fields)
             {
-                if (f.Type == Templates.Components.TagType.Relation)
+                if (f.Type == FieldType.Relation)
                 {       
                     BindingData bd = f.GetBindingData();
                     string dbName = bd.Class.ToString("N");

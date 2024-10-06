@@ -88,55 +88,55 @@ namespace Incas.Objects.ViewModels
 
         // может лучше по selected index?
         #region Not Standart Properties
-        public TagType SerializeFromInput(string val)
+        public FieldType SerializeFromInput(string val)
         {
             switch (val)
             {
                 case "0":
                 default:
-                    return TagType.Variable;
+                    return FieldType.Variable;
                 case "1":
-                    return TagType.Text;
+                    return FieldType.Text;
                 case "2":
-                    return TagType.LocalEnumeration;
+                    return FieldType.LocalEnumeration;
                 case "3":
-                    return TagType.GlobalEnumeration;
+                    return FieldType.GlobalEnumeration;
                 case "4":
-                    return TagType.Relation;
+                    return FieldType.Relation;
                 case "5":
-                    return TagType.Date;
+                    return FieldType.Date;
                 case "6":
-                    return TagType.Number;
+                    return FieldType.Number;
                 case "7":
-                    return TagType.LocalConstant;
+                    return FieldType.LocalConstant;
                 case "8":
-                    return TagType.GlobalConstant;
+                    return FieldType.GlobalConstant;
                 case "9":
-                    return TagType.HiddenField;
+                    return FieldType.HiddenField;
                 case "10":
-                    return TagType.Generator;
+                    return FieldType.Generator;
                 case "11":
-                    return TagType.Macrogenerator;
+                    return FieldType.Macrogenerator;
                 case "12":
-                    return TagType.Table;
+                    return FieldType.Table;
             }
         }
-        public string SerializeToInput(TagType tot)
+        public string SerializeToInput(FieldType tot)
         {
             return tot switch
             {
-                TagType.Text => "1",
-                TagType.LocalEnumeration => "2",
-                TagType.GlobalEnumeration => "3",
-                TagType.Relation => "4",
-                TagType.Date => "5",
-                TagType.Number => "6",
-                TagType.LocalConstant => "7",
-                TagType.GlobalConstant => "8",
-                TagType.HiddenField => "9",
-                TagType.Generator => "10",
-                TagType.Macrogenerator => "11",
-                TagType.Table => "12",
+                FieldType.Text => "1",
+                FieldType.LocalEnumeration => "2",
+                FieldType.GlobalEnumeration => "3",
+                FieldType.Relation => "4",
+                FieldType.Date => "5",
+                FieldType.Number => "6",
+                FieldType.LocalConstant => "7",
+                FieldType.GlobalConstant => "8",
+                FieldType.HiddenField => "9",
+                FieldType.Generator => "10",
+                FieldType.Macrogenerator => "11",
+                FieldType.Table => "12",
                 _ => "0",
             };
         }
@@ -150,31 +150,31 @@ namespace Incas.Objects.ViewModels
             {
                 switch (this.Source.Type)
                 {
-                    case TagType.Text:
-                    case TagType.Variable:
+                    case FieldType.Text:
+                    case FieldType.Variable:
                         break;
-                    case TagType.LocalEnumeration:
+                    case FieldType.LocalEnumeration:
                         JsonConvert.DeserializeObject<List<string>>(this.Source.Value);
                         break;
-                    case TagType.GlobalEnumeration:
+                    case FieldType.GlobalEnumeration:
                         Guid.Parse(this.Source.Value);
                         break;
-                    case TagType.Relation:
+                    case FieldType.Relation:
                         BindingData bd = JsonConvert.DeserializeObject<BindingData>(this.Source.Value);
                         if (bd.Class == Guid.Empty || bd.Field == Guid.Empty)
                         {
                             throw new Exceptions.FieldDataFailed($"Не определена привязка у поля [{this.Source.Name}] (\"{this.Source.VisibleName}\"). Настройте поле, а затем попробуйте снова.");
                         }
                         break;
-                    case TagType.GlobalConstant:
+                    case FieldType.GlobalConstant:
                         Guid.Parse(this.Source.Value);
                         break;
-                    case TagType.HiddenField:
+                    case FieldType.HiddenField:
                         break;
-                    case TagType.Number:
+                    case FieldType.Number:
                         JsonConvert.DeserializeObject<NumberFieldData>(this.Source.Value);
                         break;
-                    case TagType.Date:
+                    case FieldType.Date:
                         JsonConvert.DeserializeObject<DateFieldData>(this.Source.Value);
                         break;
                 }

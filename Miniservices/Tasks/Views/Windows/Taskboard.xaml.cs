@@ -56,7 +56,7 @@ namespace Incas.Miniservices.Tasks.Views.Windows
         private void AddClick(object sender, RoutedEventArgs e)
         {
             TaskRecord cr = new();
-            DialogsManager.ShowSimpleFormDialog(cr, "Добавление задачи");
+            cr.ShowDialog("Добавление задачи");
             this.UpdateRecordsView();
         }
 

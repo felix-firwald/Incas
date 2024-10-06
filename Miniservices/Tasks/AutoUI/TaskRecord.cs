@@ -32,13 +32,13 @@ namespace Incas.Miniservices.Tasks.AutoUI
         #endregion
 
         #region Functionality
-        public void Load()
+        public override void Load()
         {
             this.old.Name = this.Name;
             this.old.Text = this.Text;
             this.old.Deadline = this.Deadline;
         }
-        public void Save()
+        public override void Save()
         {
             if (!string.IsNullOrEmpty(this.old.Name)) // если old пустое значит мы создаем запись а не редачим
             {

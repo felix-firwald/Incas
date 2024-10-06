@@ -5,8 +5,6 @@ using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
-using Incas.Templates.Views.Pages;
-using Microsoft.Extensions.DependencyModel.Resolution;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,7 +24,9 @@ namespace Incas.Objects.Views.Windows
         public readonly Class Class;
         public readonly ClassData ClassData;
         public delegate void UpdateRequested();
+        public delegate void CreateRequested(Guid id);
         public event UpdateRequested OnUpdateRequested;
+        public event CreateRequested OnSetNewObjectRequested;
         public ObjectsEditor(Class source, List<Components.Object> objects = null)
         {
             this.InitializeComponent();
@@ -73,6 +73,11 @@ namespace Incas.Objects.Views.Windows
                 this.RenderButton.Visibility = Visibility.Collapsed;
             }
         }
+        public void SetSingleObjectMode()
+        {
+            this.GenerateButton.IsEnabled = false;
+            this.ToolBar.IsEnabled = false;
+        }
 
         private ObjectCreator AddObjectCreator(Components.Object obj = null)
         {
@@ -103,6 +108,7 @@ namespace Incas.Objects.Views.Windows
             {
                 ObjectProcessor.WriteObjects(this.Class, creator.PullObject());
                 this.OnUpdateRequested?.Invoke();
+                this.OnSetNewObjectRequested?.Invoke(creator.Object.Id);
             }
             catch (NotNullFailed nnex)
             {
@@ -146,7 +152,7 @@ namespace Incas.Objects.Views.Windows
                     return;
                 }
                 this.ContentPanel.Children.Clear();
-                foreach (Objects.Models.Field tag in this.ClassData.fields)
+                foreach (Objects.Models.Field tag in this.ClassData.Fields)
                 {
                     IXLCell colCell;
                     try
@@ -185,9 +191,9 @@ namespace Incas.Objects.Views.Windows
             try
             {
                 IXLWorksheet ws = wb.AddWorksheet("Из INCAS");
-                for (int i = 0; i < this.ClassData.fields.Count; i++) // columns
+                for (int i = 0; i < this.ClassData.Fields.Count; i++) // columns
                 {
-                    IXLCell c = ws.Cell(1, i + 1).SetValue(this.ClassData.fields[i].Name);
+                    IXLCell c = ws.Cell(1, i + 1).SetValue(this.ClassData.Fields[i].Name);
                     c.Style.Font.Bold = true;
                 }
                 int row = 2;

@@ -1,5 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Objects.AutoUI;
+using Incas.Objects.Components;
 using System;
 using System.Windows;
 
@@ -14,6 +16,8 @@ namespace Incas
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            //DateFieldSettings dfs = new(new());
+            //dfs.ShowDialog("sdf");
             if (DateTime.Now > DateTime.Parse("05.12.2024"))
             {
                 DialogsManager.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");

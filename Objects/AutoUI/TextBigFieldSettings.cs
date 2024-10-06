@@ -17,7 +17,7 @@ namespace Incas.Objects.AutoUI
         #region Data
         [Description("Значение по умолчанию")]
         [CanBeNull]
-        [MaxLength(1200)]
+        [StringLength(1200)]
         public string Text { get; set; }
         #endregion
 
@@ -29,7 +29,7 @@ namespace Incas.Objects.AutoUI
         }
 
         #region Functionality
-        public void Save()
+        public override void Save()
         {
             this.SaveBaseData();
             this.Source.Value = this.Text;

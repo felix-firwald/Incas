@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Incas.Core.Classes
 {
-    public class ComboSelector
+    public class Selector
     {
-        public ComboSelector(Dictionary<object, string> pairs)
+        public Selector(Dictionary<object, string> pairs)
         {
             this.Pairs = pairs;
         }

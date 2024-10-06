@@ -30,7 +30,7 @@ namespace Incas.Objects.Views.Controls
             {
                 this.FilterButton.Visibility = Visibility.Collapsed;
             }
-            if (data.ClassField.Type == Templates.Components.TagType.Relation)
+            if (data.ClassField.Type == FieldType.Relation)
             {
                 try
                 {

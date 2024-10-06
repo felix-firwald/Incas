@@ -99,6 +99,7 @@ namespace Incas.Objects.Views.Pages
             this.StatusBorder.Visibility = Visibility.Collapsed;
             this.FieldsContentPanel.Children.Clear();
             this.ObjectName.Text = "(не выбран)";
+            this.EditIcon.Visibility = Visibility.Collapsed;
             this.id = Guid.Empty;
             NoContent nc = new();
             this.FieldsContentPanel.Children.Add(nc);

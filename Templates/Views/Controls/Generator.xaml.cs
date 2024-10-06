@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
+using Incas.Objects.Components;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Windows;
@@ -48,10 +49,10 @@ namespace Incas.Templates.Views.Controls
         public Guid TemplateId;
         public List<GeneratedElement> Result = new();
         private string resultText;
-        private TagType tagType;
+        private FieldType tagType;
         public delegate void ValueChanged(object sender);
         public event ValueChanged OnValueChanged;
-        public Generator(TagType type) // new
+        public Generator(FieldType type) // new
         {
             this.InitializeComponent();
             this.tagType = type;
@@ -114,7 +115,7 @@ namespace Incas.Templates.Views.Controls
                     {
                         switch (this.tagType)
                         {
-                            case TagType.Generator:
+                            case FieldType.Generator:
                                 UseTemplateText utt = new(t.GetTemplateById(this.TemplateId), this.Result[0]);
                                 try
                                 {
@@ -221,7 +222,7 @@ namespace Incas.Templates.Views.Controls
             using Template t = new();
             switch (this.tagType)
             {
-                case TagType.Generator:
+                case FieldType.Generator:
                     UseTemplateText utt = new(t.GetTemplateById(this.TemplateId), this.Result[0]);
                     utt.ShowDialog();
                     try

@@ -53,7 +53,7 @@ namespace Incas.Objects.Views.Windows
             Class cl = new(id);
             this.vm = new(cl);
             this.DataContext = this.vm;
-            foreach (Models.Field f in cl.GetClassData().fields)
+            foreach (Models.Field f in cl.GetClassData().Fields)
             {
                 this.AddField(f);
             }
@@ -146,7 +146,7 @@ namespace Incas.Objects.Views.Windows
             if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
             {
                 ClassData cd = cs.GetSelectedClassData();
-                foreach (Objects.Models.Field f in cd.fields)
+                foreach (Objects.Models.Field f in cd.Fields)
                 {
                     f.Id = Guid.NewGuid();
                     this.AddField(f);
@@ -384,7 +384,7 @@ namespace Incas.Objects.Views.Windows
                     f.SetId();
                     fields.Add(f);
                 }
-                this.vm.SourceData.fields = fields;
+                this.vm.SourceData.Fields = fields;
                 ObjectsEditor oe = new(this.vm.Source, this.vm.SourceData);
                 oe.ShowDialog();
             }

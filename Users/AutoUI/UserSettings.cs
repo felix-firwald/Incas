@@ -20,7 +20,7 @@ namespace Incas.Users.AutoUI
         private UserParameters _userParameters = new();
 
         [Description("Роль")]
-        public ComboSelector Status { get; set; }
+        public Selector Status { get; set; }
 
         [Description("Юзернейм")]
         public string Username
@@ -110,7 +110,7 @@ namespace Incas.Users.AutoUI
             }
             this.Status.SetSelection(this._userParameters.permission_group);
         }
-        public void Save()
+        public override void Save()
         {
             this._userParameters.permission_group = (PermissionGroup)this.Status.SelectedObject;
             this._user.SaveParametersContext(this._userParameters);
@@ -167,7 +167,7 @@ namespace Incas.Users.AutoUI
         {
             this._user = user;
         }
-        public void Save()
+        public override void Save()
         {
             this._user.SaveUser();
         }

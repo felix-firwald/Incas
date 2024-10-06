@@ -14,9 +14,10 @@
             <RowDefinition MinHeight="80"/>
             <RowDefinition MinHeight="80"/>
         </Grid.RowDefinitions>
-        <fa:FontAwesome Icon="LocationArrow" Grid.Row="0" Grid.Column="0" Foreground="{DynamicResource Icon}" FontSize="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15">
-            
-        </fa:FontAwesome>
+        <!--<fa:FontAwesome Icon="LocationArrow" Grid.Row="0" Grid.Column="0" Foreground="{DynamicResource Icon}" FontSize="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15"/>-->
+
+
+        <Path VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15" MinWidth="40" MinHeight="40" Stretch="Uniform" MaxWidth="40" MaxHeight="40" Fill="{DynamicResource Icon}" Data="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
         <Label Style="{DynamicResource LabelPrimary}" Grid.Row="1" Content="Здесь пока ничего нет" Foreground="{DynamicResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

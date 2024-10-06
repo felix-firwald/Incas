@@ -37,7 +37,7 @@ namespace Incas.Admin.Views.Pages
         private void AddConstantClick(object sender, RoutedEventArgs e)
         {
             ParameterConstant c = new();
-            if (DialogsManager.ShowSimpleFormDialog(c, "Назначение константы") == true)
+            if (c.ShowDialog("Назначение константы") == true)
             {
                 using (Parameter p = new())
                 {
@@ -66,7 +66,7 @@ namespace Incas.Admin.Views.Pages
                     c.Name = par.name;
                     c.Value = par.value;
                 }
-                DialogsManager.ShowSimpleFormDialog(c, "Редактирование константы");
+                c.ShowDialog("Редактирование константы");
                 using (Parameter p = new())
                 {
                     p.name = c.Name;
@@ -117,7 +117,7 @@ namespace Incas.Admin.Views.Pages
             ParameterEnum en = new();
             en.Value = new();
             en.Value.Add("");
-            if (DialogsManager.ShowSimpleFormDialog(en, "Назначение перечисления", Icon.NumericList) == true)
+            if (en.ShowDialog("Назначение перечисления", Icon.NumericList) == true)
             {
                 using (Parameter p = new())
                 {
@@ -176,7 +176,7 @@ namespace Incas.Admin.Views.Pages
                     en.Name = par.name;
                     en.Value = JsonConvert.DeserializeObject<List<string>>(par.value);
                 }
-                if (DialogsManager.ShowSimpleFormDialog(en, "Редактирование перечисления", Icon.NumericList))
+                if (en.ShowDialog("Редактирование перечисления", Icon.NumericList))
                 {
                     using (Parameter p = new())
                     {
@@ -196,7 +196,7 @@ namespace Incas.Admin.Views.Pages
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
             WorkspaceSettings ws = new();
-            DialogsManager.ShowSimpleFormDialog(ws, "Редактирование настроек", Icon.GearWide);
+            ws.ShowDialog("Редактирование настроек", Icon.GearWide);
         }
 
         private void AddClassClick(object sender, RoutedEventArgs e)

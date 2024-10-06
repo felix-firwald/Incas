@@ -32,7 +32,7 @@ namespace Incas.Objects.AutoUI
         }
 
         #region Functionality
-        public void Save()
+        public override void Save()
         {
             this.SaveBaseData();
             this.Source.Value = JsonConvert.SerializeObject(this.Values);

@@ -13,18 +13,18 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Incas.Templates.Views.Controls
+namespace Incas.Objects.Views.Controls
 {
     /// <summary>
-    /// Логика взаимодействия для TableFiller.xaml
+    /// Логика взаимодействия для FieldTableFiller.xaml
     /// </summary>
-    public partial class TableFiller : UserControl
+    public partial class FieldTableFiller : UserControl
     {
         private TableFillerViewModel vm;
         public Objects.Models.Field field;
         public DataTable DataTable => this.vm.Grid;
 
-        public TableFiller(Objects.Models.Field f)
+        public FieldTableFiller(Objects.Models.Field f)
         {
             this.InitializeComponent();
             this.field = f;

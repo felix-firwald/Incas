@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Objects.Components;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
@@ -138,7 +139,7 @@ namespace Incas.Templates.Views.Windows
                     DialogsManager.ShowExclamationDialog($"Найдено несколько тегов с именем [{tag.TagName.Text}].\nНазвания тегов должны быть уникальными.", "Сохранение прервано");
                     return false;
                 }
-                if (tag.vm.Source.Type == TagType.Table)
+                if (tag.vm.Source.Type == FieldType.Table)
                 {
                     DialogsManager.ShowExclamationDialog($"В генераторах нельзя использовать таблицы!", "Сохранение прервано");
                     return false;

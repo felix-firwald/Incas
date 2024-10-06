@@ -40,7 +40,7 @@ namespace Incas.Objects.AutoUI
         }
 
         #region Functionality
-        public void Save()
+        public override void Save()
         {
             this.SaveBaseData();
             NumberFieldData nf = new()

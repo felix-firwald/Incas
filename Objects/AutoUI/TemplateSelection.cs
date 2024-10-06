@@ -16,7 +16,7 @@ namespace Incas.Objects.AutoUI
     {
         #region Data
         [Description("Шаблон для рендеринга")]
-        public ComboSelector Selector { get; set; }
+        public Selector Selector { get; set; }
         #endregion
 
         public TemplateSelection(ClassData data)

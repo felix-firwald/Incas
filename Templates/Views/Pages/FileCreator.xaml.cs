@@ -2,6 +2,7 @@
 using Incas.CreatedDocuments.Models;
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
+using Incas.Objects.Views.Controls;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
@@ -24,8 +25,8 @@ namespace Incas.Templates.Views.Pages
     {
         private Template template;
         private List<Objects.Models.Field> fields;
-        private List<TagFiller> TagFillers = [];
-        private List<TableFiller> Tables = [];
+        private List<FieldFiller> TagFillers = [];
+        private List<FieldTableFiller> Tables = [];
         private TemplateSettings templateSettings;
 
         public delegate void TagAction(Guid tag, string value);
@@ -65,9 +66,9 @@ namespace Incas.Templates.Views.Pages
         {
             this.fields.ForEach(t =>
             {
-                if (t.Type != TagType.Table)
+                if (t.Type != FieldType.Table)
                 {
-                    TagFiller tf = new(t);
+                    FieldFiller tf = new(t);
                     tf.OnInsert += this.OnInsert;
                     tf.OnRename += this.OnRename;
                     tf.OnScriptRequested += this.OnScriptRequested;
@@ -76,7 +77,7 @@ namespace Incas.Templates.Views.Pages
                 }
                 else
                 {
-                    TableFiller tf = new(t);
+                    FieldTableFiller tf = new(t);
                     this.ContentPanel.Children.Add(tf);
                     this.Tables.Add(tf);
                 }
@@ -88,14 +89,14 @@ namespace Incas.Templates.Views.Pages
             try
             {
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                foreach (TagFiller tf in this.TagFillers)
+                foreach (FieldFiller tf in this.TagFillers)
                 {
                     scope.SetVariable(tf.field.Name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
-                foreach (TagFiller tf in this.TagFillers)
+                foreach (FieldFiller tf in this.TagFillers)
                 {
-                    if (tf.field.Type != TagType.Generator)
+                    if (tf.field.Type != FieldType.Generator)
                     {
                         tf.SetValue(scope.GetVariable(tf.field.Name.Replace(" ", "_")));
                     }
@@ -119,7 +120,7 @@ namespace Incas.Templates.Views.Pages
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                foreach (TagFiller tf in this.TagFillers)
+                foreach (FieldFiller tf in this.TagFillers)
                 {
                     if (tf.field.Id == tag)
                     {
@@ -138,7 +139,7 @@ namespace Incas.Templates.Views.Pages
         {
             foreach (KeyValuePair<string, string> pair in pairs)
             {
-                foreach (TagFiller tf in this.ContentPanel.Children)
+                foreach (FieldFiller tf in this.ContentPanel.Children)
                 {
                     if (tf.field.Name == pair.Key)
                     {
@@ -191,7 +192,7 @@ namespace Incas.Templates.Views.Pages
                 fileName = this.Filename.Text
             };
             List<SGeneratedTag> filledTags = [];
-            foreach (TagFiller tf in this.TagFillers)
+            foreach (FieldFiller tf in this.TagFillers)
             {
                 Guid id = tf.GetId();
                 string name = tf.GetTagName();
@@ -203,7 +204,7 @@ namespace Incas.Templates.Views.Pages
                 };
                 filledTags.Add(gtg);
             }
-            foreach (TableFiller table in this.Tables)
+            foreach (FieldTableFiller table in this.Tables)
             {
                 filledTags.Add(table.GetAsGeneratedTag());
             }
@@ -216,16 +217,16 @@ namespace Incas.Templates.Views.Pages
                 if (!string.IsNullOrEmpty(this.templateSettings.OnSaving))
                 {
                     ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                    foreach (TagFiller tf in this.TagFillers)
+                    foreach (FieldFiller tf in this.TagFillers)
                     {
                         scope.SetVariable(tf.field.Name.Replace(" ", "_"), tf.GetData());
                     }
                     scope.SetVariable("file_name", this.Filename.Text);
                     ScriptManager.Execute(this.templateSettings.OnSaving, scope);
                     this.Filename.Text = scope.GetVariable("file_name");
-                    foreach (TagFiller tf in this.TagFillers)
+                    foreach (FieldFiller tf in this.TagFillers)
                     {
-                        if (tf.field.Type != TagType.Generator)
+                        if (tf.field.Type != FieldType.Generator)
                         {
                             tf.SetValue(scope.GetVariable(tf.field.Name.Replace(" ", "_")));
                         }
@@ -242,7 +243,7 @@ namespace Incas.Templates.Views.Pages
             if (!string.IsNullOrWhiteSpace(this.templateSettings.FileNameTemplate))
             {
                 string result = this.templateSettings.FileNameTemplate;
-                foreach (TagFiller tf in this.TagFillers)
+                foreach (FieldFiller tf in this.TagFillers)
                 {
                     result = result.Replace("[" + tf.GetTagName() + "]", tf.GetValue());
                 }
@@ -320,7 +321,7 @@ namespace Incas.Templates.Views.Pages
         public void RenameByTag(string tag, string prefix = "", string postfix = "", bool additive = false)
         {
             string result = "";
-            foreach (TagFiller tf in this.TagFillers)
+            foreach (FieldFiller tf in this.TagFillers)
             {
                 if (tf.GetTagName() == tag)
                 {
@@ -334,7 +335,7 @@ namespace Incas.Templates.Views.Pages
         public List<string> GetExcelRow()
         {
             List<string> output = [];
-            foreach (TagFiller tf in this.TagFillers)
+            foreach (FieldFiller tf in this.TagFillers)
             {
                 output.Add(tf.GetValue());
             }
@@ -357,7 +358,7 @@ namespace Incas.Templates.Views.Pages
 
                 List<string> tagsToReplace = [];
                 List<string> values = [];
-                foreach (TagFiller tf in this.TagFillers)
+                foreach (FieldFiller tf in this.TagFillers)
                 {
                     string nameOf = tf.GetTagName();
                     string value = tf.GetValue();
@@ -365,7 +366,7 @@ namespace Incas.Templates.Views.Pages
                     values.Add(value);
                 }
                 wt.Replace(tagsToReplace, values, false);
-                foreach (TableFiller tab in this.Tables)
+                foreach (FieldTableFiller tab in this.Tables)
                 {
                     wt.CreateTable(tab.field.Name, tab.DataTable);
                 }

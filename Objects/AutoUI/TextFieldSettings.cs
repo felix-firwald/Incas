@@ -28,7 +28,7 @@ namespace Incas.Objects.AutoUI
             this.Text = field.Value;
         }
         #region Functionality
-        public void Save()
+        public override void Save()
         {
             this.SaveBaseData();
             this.Source.Value = this.Text;

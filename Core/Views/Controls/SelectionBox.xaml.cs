@@ -36,6 +36,7 @@ namespace Incas.Core.Views.Controls
                 {
                     this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);
                     this.Input.Text = this.SelectedObject.GetFieldValue(this.Binding.Field);
+                    this.SetAsEditingEnabled();
                 }
             }
             catch { } 
@@ -48,6 +49,7 @@ namespace Incas.Core.Views.Controls
                 {
                     this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);
                     this.Input.Text = this.SelectedObject.GetFieldValue(this.Binding.Field);
+                    this.SetAsEditingEnabled();
                 }
             }
             catch { }
@@ -68,6 +70,7 @@ namespace Incas.Core.Views.Controls
                 {
                     this.SelectedObject = s.SelectedObject;
                     this.Input.Text = this.SelectedObject.GetFieldValue(this.Binding.Field);
+                    this.SetAsEditingEnabled();
                 }
                 catch (Exception ex)
                 {
@@ -102,6 +105,16 @@ namespace Incas.Core.Views.Controls
         {
      
         }
+        private void SetAsEditingEnabled()
+        {
+            this.AddIcon.Visibility = System.Windows.Visibility.Collapsed;
+            this.EditIcon.Visibility = System.Windows.Visibility.Visible;
+        }
+        private void SetAsCreatingEnabled()
+        {
+            this.AddIcon.Visibility = System.Windows.Visibility.Visible;
+            this.EditIcon.Visibility = System.Windows.Visibility.Collapsed;
+        }
 
         private void EditClick(object sender, MouseButtonEventArgs e)
         {
@@ -119,6 +132,19 @@ namespace Incas.Core.Views.Controls
         private void Oe_OnUpdateRequested()
         {
             this.SetObject(this.SelectedObject.Id);
+        }
+
+        private void AddClick(object sender, MouseButtonEventArgs e)
+        {
+            ObjectsEditor oe = new(new(this.Binding.Class));
+            oe.SetSingleObjectMode();
+            oe.OnSetNewObjectRequested += this.Oe_OnSetNewObjectRequested;
+            oe.ShowDialog();
+        }
+
+        private void Oe_OnSetNewObjectRequested(Guid id)
+        {
+            this.SetObject(id);
         }
     }
 }

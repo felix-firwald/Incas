@@ -46,7 +46,7 @@ namespace Incas.Admin.Views.Pages
         {
             User user = new();
             UserSettings us = new(user);
-            DialogsManager.ShowSimpleFormDialog(us, "Создание пользователя", Icon.UserPlus);
+            us.ShowDialog("Создание пользователя", Icon.UserPlus);
             this.FillUsersList();
         }
     }

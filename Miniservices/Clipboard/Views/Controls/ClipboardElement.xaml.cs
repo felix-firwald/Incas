@@ -27,7 +27,7 @@ namespace Incas.Miniservices.Clipboard.Views.Controls
 
         private void EditClick(object sender, MouseButtonEventArgs e)
         {
-            DialogsManager.ShowSimpleFormDialog(this.record, "Редактирование записи");
+            this.record.ShowDialog("Редактирование записи");
             OnUpdateRequested?.Invoke();
         }
 

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Incas.Templates.Components
+namespace Incas.Objects.Components
 {
-    public enum TagType
+    public enum FieldType
     {
         Variable,
         Text,

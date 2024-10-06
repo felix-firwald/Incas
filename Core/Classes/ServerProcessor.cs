@@ -1,6 +1,7 @@
 ﻿using Common;
 using Incas.Core.Views.Windows;
 using Incas.CreatedDocuments.Models;
+using Incas.Objects.Views.Controls;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Windows;
@@ -73,7 +74,7 @@ namespace Incas.Core.Classes
 
     internal static class WaitControls
     {
-        public static List<TagFiller> TagFillers = [];
+        public static List<FieldFiller> TagFillers = [];
         public static Dictionary<string, Generator> Generators = [];
         public static Generator GetGenerator(string process)
         {

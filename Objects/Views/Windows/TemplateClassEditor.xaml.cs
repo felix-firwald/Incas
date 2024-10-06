@@ -107,5 +107,10 @@ namespace Incas.Objects.Views.Windows
                 this.DragMove();
             }
         }
+
+        private void OpenSettingsClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

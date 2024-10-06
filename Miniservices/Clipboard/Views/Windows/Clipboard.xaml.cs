@@ -81,7 +81,7 @@ namespace Incas.Miniservices.Clipboard.Views.Windows
         private void AddClick(object sender, RoutedEventArgs e)
         {
             ClipboardRecord cr = new();
-            DialogsManager.ShowSimpleFormDialog(cr, "Добавление записи");
+            cr.ShowDialog("Добавление записи");
             this.UpdateRecordsView();
         }
 
