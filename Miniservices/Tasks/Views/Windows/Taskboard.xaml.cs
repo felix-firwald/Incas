@@ -1,8 +1,4 @@
-﻿using Incas.Core.Classes;
-using Incas.Core.Views.Controls;
-using Incas.Miniservices.Clipboard.AutoUI;
-using Incas.Miniservices.Clipboard.Classes;
-using Incas.Miniservices.Clipboard.Views.Controls;
+﻿using Incas.Core.Views.Controls;
 using Incas.Miniservices.Tasks.AutoUI;
 using Incas.Miniservices.Tasks.Classes;
 using Incas.Miniservices.Tasks.Views.Controls;

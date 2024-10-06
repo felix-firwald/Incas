@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Common
+namespace Incas.Core.Classes
 {
     public enum PermissionGroup
     {

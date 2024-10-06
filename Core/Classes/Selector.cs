@@ -10,25 +10,9 @@ namespace Incas.Core.Classes
             this.Pairs = pairs;
         }
         public Dictionary<object, string> Pairs { get; set; }
-        public List<string> VisibleItems
-        {
-            get
-            {
-                return this.Pairs.Values.ToList();
-            }
-        }
+        public List<string> VisibleItems => this.Pairs.Values.ToList();
         public object SelectedObject { get; private set; }
-        public string SelectedValue
-        {
-            get
-            {
-                if (this.SelectedObject is not null)
-                {
-                    return this.Pairs[this.SelectedObject];
-                }
-                return "";
-            }
-        }
+        public string SelectedValue => this.SelectedObject is not null ? this.Pairs[this.SelectedObject] : "";
         public void SetSelectionByValue(string selection)
         {
             this.SelectedObject = this.Pairs.FirstOrDefault(x => x.Value == selection).Key;

@@ -2,7 +2,6 @@
 using Incas.Users.AutoUI;
 using Incas.Users.Models;
 using Incas.Users.Views.Controls;
-using Incas.Users.Views.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 

@@ -110,12 +110,10 @@ namespace Incas.Core.Views.Windows
         }
         public void UpdateTabs()
         {
-            using (Class cl = new())
+            using Class cl = new();
+            foreach (string category in cl.GetCategories())
             {
-                foreach (string category in cl.GetCategories())
-                {
-                    this.AddPage(category, new Objects.Views.Pages.CustomDatabaseMain(category));
-                }
+                this.AddPage(category, new Objects.Views.Pages.CustomDatabaseMain(category));
             }
         }
         private void AddPage(string name, UserControl control)

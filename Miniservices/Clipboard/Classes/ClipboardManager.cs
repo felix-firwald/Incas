@@ -3,34 +3,28 @@ using Incas.Core.Models;
 using Incas.Miniservices.Clipboard.AutoUI;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Incas.Miniservices.Clipboard.Classes
 {
-    struct ClipboardRecordOld
+    internal struct ClipboardRecordOld
     {
         public string Name { get; set; }
         public string Text { get; set; }
     }
     internal static class ClipboardManager
     {
-        private static List<ClipboardRecord> Cache = new();
+        private static List<ClipboardRecord> Cache = [];
         private static Parameter GetByUser()
         {
-            using (Parameter p = new())
-            {
-                return p.GetParameter(ParameterType.USER_CLIPBOARD, ProgramState.CurrentUser.id.ToString());
-            }
+            using Parameter p = new();
+            return p.GetParameter(ParameterType.USER_CLIPBOARD, ProgramState.CurrentUser.id.ToString());
         }
         private static void SetByUser(List<ClipboardRecord> records)
         {
-            using (Parameter p = new())
-            {
-                p.GetParameter(ParameterType.USER_CLIPBOARD, ProgramState.CurrentUser.id.ToString());
-                p.value = JsonConvert.SerializeObject(records);
-                p.UpdateValue();
-            }
+            using Parameter p = new();
+            p.GetParameter(ParameterType.USER_CLIPBOARD, ProgramState.CurrentUser.id.ToString());
+            p.value = JsonConvert.SerializeObject(records);
+            p.UpdateValue();
         }
         public static List<ClipboardRecord> GetClipboardRecords()
         {
@@ -42,7 +36,7 @@ namespace Incas.Miniservices.Clipboard.Classes
             }
             catch
             {
-                return new();
+                return [];
             }
         }
         public static List<ClipboardRecord> FindByName(string name)
@@ -65,8 +59,8 @@ namespace Incas.Miniservices.Clipboard.Classes
                 {
                     list.Remove(recordToCompare);
                     break;
-                }                
-            }           
+                }
+            }
             ClipboardManager.SetByUser(list);
         }
         public static void UpdateInClipboard(ClipboardRecordOld oldRecord, ClipboardRecord newRecord)

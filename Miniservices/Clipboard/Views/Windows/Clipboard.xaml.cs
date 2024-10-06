@@ -1,14 +1,12 @@
-﻿using Incas.Miniservices.Clipboard.Classes;
+﻿using Incas.Core.Classes;
+using Incas.Core.Views.Controls;
 using Incas.Miniservices.Clipboard.AutoUI;
-using System.Windows;
+using Incas.Miniservices.Clipboard.Classes;
 using Incas.Miniservices.Clipboard.Views.Controls;
 using System;
-using Incas.Core.Classes;
-using System.Windows.Input;
-using Incas.Core.Views.Controls;
-using System.Windows.Documents;
 using System.Collections.Generic;
-using DocumentFormat.OpenXml.Wordprocessing;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Incas.Miniservices.Clipboard.Views.Windows
 {
@@ -27,7 +25,7 @@ namespace Incas.Miniservices.Clipboard.Views.Windows
         }
         public void UpdateRecordsView()
         {
-            this.PlaceElements(ClipboardManager.GetClipboardRecords());          
+            this.PlaceElements(ClipboardManager.GetClipboardRecords());
         }
         private void PlaceElements(List<ClipboardRecord> elements)
         {

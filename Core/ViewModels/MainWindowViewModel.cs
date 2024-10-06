@@ -1,7 +1,5 @@
-﻿using Common;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using Incas.Miniservices.Clipboard.Views.Windows;
 using Incas.Users.Models;
 using System.Collections.Generic;
 using System.Windows;
@@ -97,13 +95,7 @@ namespace Incas.Core.ViewModels
                 this.OnPropertyChanged(nameof(this.ProcessHandled));
             }
         }
-        public string Version
-        {
-            get
-            {
-                return "Release " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-        }
+        public string Version => "Release " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
         public string Surname
         {
@@ -155,13 +147,7 @@ namespace Incas.Core.ViewModels
                 }
             }
         }
-        public string Title
-        {
-            get
-            {
-                return "Рабочее пространство: " + this.WorkspaceName;
-            }
-        }
+        public string Title => "Рабочее пространство: " + this.WorkspaceName;
 
         private Visibility VisibilityConverter(bool b)
         {

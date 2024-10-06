@@ -1,5 +1,4 @@
-﻿using Incas.Core.AutoUI;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Objects.Components;
 using Newtonsoft.Json;
 using System;
@@ -30,7 +29,7 @@ namespace Incas.Objects.AutoUI
         {
             this.Source = field;
             this.GetBaseData();
-            this.Format = new(new());
+            this.Format = new([]);
             this.Format.Pairs.Add(DateFormats.Usual, "01.01.2001");
             this.Format.Pairs.Add(DateFormats.Full, "01 января 2001");
             this.Format.Pairs.Add(DateFormats.FullWithQuotes, "«01» января 2001");
@@ -44,8 +43,8 @@ namespace Incas.Objects.AutoUI
             catch
             {
                 this.StartDate = DateTime.MinValue;
-                this.EndDate= DateTime.MaxValue;
-            }         
+                this.EndDate = DateTime.MaxValue;
+            }
         }
 
         #region Functionality

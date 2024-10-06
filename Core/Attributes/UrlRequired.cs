@@ -2,7 +2,7 @@
 
 namespace Incas.Core.Attributes
 {
-    class UrlRequired : Attribute
+    internal class UrlRequired : Attribute
     {
     }
 }

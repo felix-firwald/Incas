@@ -18,7 +18,7 @@ namespace Incas.Core.Classes
         public StackPanel Container;
         public AutoUIBase Result;
         public SimpleFormGenerator(AutoUIBase values, StackPanel container)
-        {          
+        {
             this.Result = values;
             this.SafetyCallMethod("Load");
             this.Container = container;
@@ -141,17 +141,10 @@ namespace Incas.Core.Classes
             {
                 Tag = description,
                 Text = value,
-                MaxLength = maxlength
+                MaxLength = maxlength,
+                Style = maxlength > 120 ? this.Container.FindResource("TextBoxBig") as Style : this.Container.FindResource("TextBoxMain") as Style
             };
-            if (maxlength > 120)
-            {
-                control.Style = this.Container.FindResource("TextBoxBig") as Style;
-            }
-            else
-            {
-                control.Style = this.Container.FindResource("TextBoxMain") as Style;
-            }
-            
+
             control.TextChanged += this.TextBox_TextChanged;
             return control;
         }
@@ -177,7 +170,7 @@ namespace Incas.Core.Classes
                 Value = value,
                 Tag = description,
             };
-            
+
             return control;
         }
         private Control GenerateComboBox(string description, Selector selector)
@@ -196,7 +189,7 @@ namespace Incas.Core.Classes
             //DialogsManager.ShowInfoDialog(selector.SelectedObject);
             control.SelectionChanged += this.ComboBox_SelectionChanged;
             return control;
-        }   
+        }
 
         private Control GenerateNumericBox(string description, int value)
         {
@@ -244,7 +237,7 @@ namespace Incas.Core.Classes
                 {
                     dt.Rows.Add(item);
                 }
-            }           
+            }
             DataGridWithButtons control = new(dt)
             {
                 Tag = description,

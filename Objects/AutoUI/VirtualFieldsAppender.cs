@@ -1,12 +1,9 @@
-﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
-using Incas.Core.AutoUI;
+﻿using Incas.Core.AutoUI;
+using Incas.Objects.Components;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using WebSupergoo.WordGlue3;
-using Incas.Objects.Components;
 
 namespace Incas.Objects.AutoUI
 {
@@ -29,13 +26,13 @@ namespace Incas.Objects.AutoUI
 
         public VirtualFieldsAppender()
         {
-            
+
         }
 
         #region Functionality
         public List<Models.Field> GetFields()
         {
-            List<Models.Field> fields = new();
+            List<Models.Field> fields = [];
             Models.Field main = new()
             {
                 Name = this.Name.Replace(" ", "_"),

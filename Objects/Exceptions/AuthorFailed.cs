@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incas.Objects.Exceptions
 {
-    class AuthorFailed : Exception
+    internal class AuthorFailed : Exception
     {
         public AuthorFailed(string message) : base(message) { }
     }

@@ -1,10 +1,7 @@
-﻿using Incas.Miniservices.Clipboard.Classes;
-using Incas.Miniservices.Tasks.AutoUI;
-using System.Windows.Controls;
-using static Incas.Miniservices.Clipboard.Views.Controls.ClipboardElement;
-using System.Windows.Input;
+﻿using Incas.Miniservices.Tasks.AutoUI;
 using Incas.Miniservices.Tasks.Classes;
-using Incas.Core.Classes;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Incas.Miniservices.Tasks.Views.Controls
 {

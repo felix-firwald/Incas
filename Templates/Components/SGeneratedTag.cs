@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Incas.CreatedDocuments.Models
+namespace Incas.Templates.Components
 {
     public struct SGeneratedTag
     {

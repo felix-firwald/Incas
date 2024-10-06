@@ -24,7 +24,7 @@ namespace Incas.Objects.Models
         }
         private List<Class> FromDataTable(DataTable dt)
         {
-            List<Class> resulting = new();
+            List<Class> resulting = [];
             foreach (DataRow dr in dt.Rows)
             {
                 Class c = new();
@@ -60,7 +60,7 @@ namespace Incas.Objects.Models
         }
         public List<string> FindBackReferencesNames(BindingData bd)
         {
-            List<string> result = new();
+            List<string> result = [];
             string query = "\"Value\":\"{\\\"Class\\\":\\\"[Class]\\\",\\\"Field\\\":\\\"[Field]\\\"".Replace("[Class]", bd.Class.ToString()).Replace("[Field]", bd.Field.ToString());
             DataTable dt = this.StartCommand().Select("name").WhereLike(nameof(this.data), query).OrderByASC(nameof(this.name)).Execute();
             foreach (DataRow dr in dt.Rows)
@@ -71,7 +71,7 @@ namespace Incas.Objects.Models
         }
         public List<string> FindBackReferencesNames(Guid classId)
         {
-            List<string> result = new();
+            List<string> result = [];
             string query = "\"Value\":\"{\\\"Class\\\":\\\"[Class]\\\",".Replace("[Class]", classId.ToString());
             DataTable dt = this.StartCommand().Select("name").WhereLike(nameof(this.data), query).OrderByASC(nameof(this.name)).Execute();
             foreach (DataRow dr in dt.Rows)
@@ -101,7 +101,7 @@ namespace Incas.Objects.Models
         public List<string> GetAllClassesNames()
         {
             DataTable dt = this.StartCommandToService().Select("name").Execute();
-            List<string> result = new();
+            List<string> result = [];
             foreach (DataRow dr in dt.Rows)
             {
                 result.Add(dr["name"].ToString());
@@ -162,11 +162,7 @@ namespace Incas.Objects.Models
         }
         public ClassData GetClassData()
         {
-            if (string.IsNullOrEmpty(this.data))
-            {
-                return new();
-            }
-            return JsonConvert.DeserializeObject<ClassData>(this.data);
+            return string.IsNullOrEmpty(this.data) ? new() : JsonConvert.DeserializeObject<ClassData>(this.data);
         }
         public void SetClassData(ClassData data)
         {

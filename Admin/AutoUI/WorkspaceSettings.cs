@@ -2,12 +2,7 @@
 using Incas.Core.Classes;
 using Incas.Core.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incas.Admin.AutoUI
 {
@@ -21,27 +16,15 @@ namespace Incas.Admin.AutoUI
         [Description("Имя рабочего пространства")]
         public string Name
         {
-            get
-            {
-                return this.data.Name;
-            }
-            set
-            {
-                this.data.Name = value;
-            }
+            get => this.data.Name;
+            set => this.data.Name = value;
         }
 
         [Description("Рабочее пространство заблокировано")]
         public bool WorkspaceLocked
         {
-            get
-            {
-                return this.data.IsLocked;
-            }
-            set
-            {
-                this.data.IsLocked = value;
-            }
+            get => this.data.IsLocked;
+            set => this.data.IsLocked = value;
         }
     }
 }

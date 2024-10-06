@@ -1,5 +1,4 @@
-﻿using Common;
-using Incas.Core.AutoUI;
+﻿using Incas.Core.AutoUI;
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Objects.ViewModels;
@@ -188,20 +187,18 @@ namespace Incas.Core.Classes
 
                     DialogsManager.ShowInfoDialog("Рабочее пространство успешно создано.");
 
-                    using (User user = new())
+                    using User user = new();
+                    user.username = "admin";
+                    user.post = "Администратор рабочего пространства";
+                    user.surname = "Администратор";
+                    user.fullname = "Администратор";
+                    UserParameters up = new()
                     {
-                        user.username = "admin";
-                        user.post = "Администратор рабочего пространства";
-                        user.surname = "Администратор";
-                        user.fullname = "Администратор";
-                        UserParameters up = new()
-                        {
-                            permission_group = PermissionGroup.Admin,
-                            password = data.Password,
-                        };
-                        user.SaveParametersContext(up);
-                        user.AddUser();
-                    }                  
+                        permission_group = PermissionGroup.Admin,
+                        password = data.Password,
+                    };
+                    user.SaveParametersContext(up);
+                    user.AddUser();
                 }
                 catch (IOException)
                 {
@@ -222,7 +219,7 @@ namespace Incas.Core.Classes
             SetCommonPath(data.Path, false);
             if (CreateTablesInDatabase())
             {
-                DialogsManager.ShowWaitCursor(false);  
+                DialogsManager.ShowWaitCursor(false);
                 Create();
                 RegistryData.SetWorkspacePath(data.WorkspaceName, data.Path);
             }
@@ -356,24 +353,18 @@ namespace Incas.Core.Classes
         }
         public static string GetConstant(string name)
         {
-            using (Parameter p = new())
-            {
-                return p.GetConstantValue(name);
-            }
+            using Parameter p = new();
+            return p.GetConstantValue(name);
         }
         public static string GetConstant(Guid id)
         {
-            using (Parameter p = new())
-            {
-                return p.GetConstantValue(id);
-            }
+            using Parameter p = new();
+            return p.GetConstantValue(id);
         }
         public static List<string> GetEnumeration(Guid id)
         {
-            using (Parameter p = new())
-            {
-                return p.GetEnumerationValue(id);
-            }
+            using Parameter p = new();
+            return p.GetEnumerationValue(id);
         }
     }
 }

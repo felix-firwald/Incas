@@ -1,14 +1,6 @@
-﻿using Incas.Core.Attributes;
-using Incas.Core.AutoUI;
+﻿using Incas.Core.AutoUI;
 using Incas.Core.Classes;
-using Incas.Core.Views.Controls;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -45,7 +37,7 @@ namespace Incas.Core.Views.Windows
             {
                 this.DialogResult = true;
                 this.Close();
-            }    
+            }
         }
 
         private void CancelClick(object sender, RoutedEventArgs e)

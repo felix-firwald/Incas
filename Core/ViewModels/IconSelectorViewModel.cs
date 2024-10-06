@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Incas.Core.ViewModels
+﻿namespace Incas.Core.ViewModels
 {
-    class IconSelectorViewModel : BaseViewModel
+    internal class IconSelectorViewModel : BaseViewModel
     {
 
     }

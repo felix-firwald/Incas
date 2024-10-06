@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Incas.Objects.Components
+namespace Incas.Objects.Exceptions
 {
-    class NotNullFailed : Exception
+    internal class NotNullFailed : Exception
     {
         public NotNullFailed(string message) : base(message) { }
     }

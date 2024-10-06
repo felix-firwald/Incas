@@ -1,11 +1,5 @@
-﻿using Avalonia.Controls;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incas.Core.AutoUI
 {
@@ -53,6 +47,6 @@ namespace Incas.Core.AutoUI
         public virtual void Save()
         {
 
-        }      
+        }
     }
 }

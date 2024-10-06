@@ -1,7 +1,5 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
-using Incas.Objects.Models;
 using Incas.Objects.ViewModels;
 using Newtonsoft.Json;
 using System.Windows;
@@ -23,15 +21,12 @@ namespace Incas.Objects.Views.Controls
         public FieldCreator(int index, Incas.Objects.Models.Field data = null)
         {
             this.InitializeComponent();
-            if (data == null)
-            {
-                this.vm = new();
-                this.vm.NameOfField = "Новое_поле";
-            }
-            else
-            {
-                this.vm = new(data);
-            }
+            this.vm = data == null
+                ? new()
+                {
+                    NameOfField = "Новое_поле"
+                }
+                : new(data);
             this.vm.OrderNumber = index;
             this.DataContext = this.vm;
             this.ExpanderButton.IsChecked = true;
@@ -47,11 +42,11 @@ namespace Incas.Objects.Views.Controls
         }
         public void Maximize()
         {
-            this.ExpanderButton.IsChecked = true;           
+            this.ExpanderButton.IsChecked = true;
         }
         public void Minimize()
         {
-            this.ExpanderButton.IsChecked = false;           
+            this.ExpanderButton.IsChecked = false;
         }
 
         private void MaximizeClick(object sender, System.Windows.RoutedEventArgs e)
@@ -76,7 +71,7 @@ namespace Incas.Objects.Views.Controls
                 "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
             {
                 this.OnRemove?.Invoke(this);
-            }           
+            }
         }
 
         private void UpClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

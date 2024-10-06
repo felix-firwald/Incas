@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Incas.Core.Exceptions
+﻿namespace Incas.Core.Exceptions
 {
-    class ValidationFailed
+    internal class ValidationFailed
     {
     }
 }

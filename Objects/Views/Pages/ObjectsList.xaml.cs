@@ -1,17 +1,15 @@
-﻿using Incas.Objects.Components;
+﻿using Incas.Core.Classes;
+using Incas.Core.Views.Windows;
+using Incas.Objects.AutoUI;
+using Incas.Objects.Components;
 using Incas.Objects.Models;
-using System.Windows;
-using System.Windows.Controls;
-using System.Data;
 using Incas.Objects.Views.Windows;
 using System;
-using Incas.Core.Classes;
-using Incas.Core.Views.Windows;
 using System.Collections.Generic;
+using System.Data;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
-using System.Globalization;
-using MailKit.Search;
-using Incas.Objects.AutoUI;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -36,7 +34,7 @@ namespace Incas.Objects.Views.Pages
         private ObjectCard ObjectCard;
         public ObjectsList(Class source)
         {
-            this.InitializeComponent();         
+            this.InitializeComponent();
             this.sourceClass = source;
             this.ClassData = source.GetClassData();
             //this.InitStyle();
@@ -44,7 +42,7 @@ namespace Incas.Objects.Views.Pages
             if (this.ClassData.ShowCard)
             {
                 this.PlaceCard();
-            }         
+            }
         }
         private void InitStyle()
         {
@@ -55,12 +53,14 @@ namespace Incas.Objects.Views.Pages
             }
             foreach (KeyValuePair<int, StatusData> status in this.ClassData.Statuses)
             {
-                System.Windows.Data.Binding bind = new();
-                bind.Source = ObjectProcessor.StatusField;
+                System.Windows.Data.Binding bind = new()
+                {
+                    Source = ObjectProcessor.StatusField
+                };
                 DataTrigger trigger = new()
                 {
                     Binding = bind,
-                    
+
                     Value = status.Key.ToString(),
                 };
                 Setter setter = new()
@@ -72,7 +72,7 @@ namespace Incas.Objects.Views.Pages
                 style.Triggers.Add(trigger);
             }
             this.Data.RowStyle = style;
-            
+
         }
 
         private void PlaceCard()
@@ -202,7 +202,7 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-            ObjectsEditor oc = new(this.sourceClass, new List<Components.Object>() { obj });
+            ObjectsEditor oc = new(this.sourceClass, [obj]);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -215,7 +215,7 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-            ObjectsEditor oc = new (this.sourceClass, new List<Components.Object>() { obj.Copy() });
+            ObjectsEditor oc = new(this.sourceClass, [obj.Copy()]);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -237,13 +237,13 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             if (DialogsManager.ShowQuestionDialog(
-                $"Вы действительно хотите удалить объект \"{obj.Name}\" из базы данных?", 
-                "Удалить?", 
-                "Удалить", 
+                $"Вы действительно хотите удалить объект \"{obj.Name}\" из базы данных?",
+                "Удалить?",
+                "Удалить",
                 "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
             {
                 ObjectProcessor.RemoveObject(this.sourceClass, id);
-            }           
+            }
         }
         private void OnMouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -272,7 +272,7 @@ namespace Incas.Objects.Views.Pages
                     this.UpdateView();
                     break;
 
-            }           
+            }
         }
 
         private void Data_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -287,7 +287,7 @@ namespace Incas.Objects.Views.Pages
                 else
                 {
                     this.ObjectCard.UpdateFor(ObjectProcessor.GetObject(this.sourceClass, id));
-                }         
+                }
             }
         }
 
@@ -297,6 +297,6 @@ namespace Incas.Objects.Views.Pages
             cw.Show();
         }
 
-        
+
     }
 }

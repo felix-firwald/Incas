@@ -4,7 +4,6 @@ using Incas.Templates.Components;
 using Incas.Templates.Models;
 using System;
 using System.Collections.Generic;
-using System.Windows.Documents;
 
 namespace Incas.Templates.ViewModels
 {
@@ -41,10 +40,7 @@ namespace Incas.Templates.ViewModels
         public Guid Id => this.templateMain.id;
         public List<Objects.Models.Field> Tags
         {
-            get
-            {
-                return this.templateMain.GetFields();
-            }
+            get => this.templateMain.GetFields();
             set
             {
                 foreach (Objects.Models.Field t in value)

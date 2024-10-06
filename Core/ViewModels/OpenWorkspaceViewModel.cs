@@ -1,10 +1,8 @@
 ﻿using Incas.Core.Classes;
-using Incas.Core.Exceptions;
 using Incas.Users.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 
 namespace Incas.Core.ViewModels
 {
@@ -14,7 +12,7 @@ namespace Incas.Core.ViewModels
         public OpenWorkspaceViewModel()
         {
             this.UpdateUsers();
-            this.UpdateSelectedUser();       
+            this.UpdateSelectedUser();
         }
 
         private void UpdateUsers()
@@ -104,7 +102,7 @@ namespace Incas.Core.ViewModels
         private List<User> _users = [];
         public ObservableCollection<User> Users
         {
-            get => new (this._users);
+            get => new(this._users);
             set
             {
                 this._users = new List<User>(value);

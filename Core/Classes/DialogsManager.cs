@@ -1,11 +1,7 @@
-﻿using Incas.Core.AutoUI;
-using Incas.Core.Views.Windows;
+﻿using Incas.Core.Views.Windows;
 using Incas.Miniservices.Tasks.Views.Windows;
 using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
-using Incas.Templates.Components;
-using Incas.Templates.Models;
-using Incas.Templates.Views.Windows;
 using Incas.Users.Models;
 using Incas.Users.Views.Windows;
 using System;
@@ -117,7 +113,7 @@ namespace Incas.Core.Classes
             t.ShowDialog();
         }
         public static string ShowComboBoxDialog(string title, List<string> elements)
-        {         
+        {
             return ShowComboBoxDialog(title, elements, "");
         }
         public static string ShowComboBoxDialog(string title, List<string> elements, string description)
@@ -137,15 +133,13 @@ namespace Incas.Core.Classes
         {
             DialogBinding db = new(data);
             db.ShowDialog();
-            if (db.Result == true)
-            {
-                return new()
+            return db.Result == true
+                ? new()
                 {
                     Class = db.SelectedClass,
                     Field = db.SelectedField
-                };
-            }
-            return new();
+                }
+                : new();
         }
         public static void ShowDatabaseErrorDialog(string message, string title = "Ошибка при выполнении запроса")
         {
@@ -160,7 +154,7 @@ namespace Incas.Core.Classes
         public static void ShowErrorDialog(Exception ex, string startMessage = "При выполнении действия возникла непредвиденная ошибка")
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            {              
+            {
                 ProgramState.PlaySound("UI-Exclamation");
                 ShowWaitCursor(false);
                 Dialog d = new($"{startMessage}.\nТип исключения: {ex.GetType().Name}\n\nТехнические подробности:\n" + ex.Message, "Возникла ошибка", Dialog.DialogIcon.Error);

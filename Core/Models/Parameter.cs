@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace Incas.Core.Models
 {
@@ -94,7 +93,7 @@ namespace Incas.Core.Models
         }
         public Dictionary<Guid, string> GetConstantsDictionary()
         {
-            Dictionary<Guid, string> result = new();
+            Dictionary<Guid, string> result = [];
             DataTable dt = this.StartCommandToService()
                 .Select("[id], [name]")
                 .WhereEqual("type", ParameterType.CONSTANT.ToString())
@@ -107,7 +106,7 @@ namespace Incas.Core.Models
         }
         public Dictionary<Guid, string> GetEnumerationsDictionary()
         {
-            Dictionary<Guid, string> result = new();
+            Dictionary<Guid, string> result = [];
             DataTable dt = this.StartCommandToService()
                 .Select("[id], [name]")
                 .WhereEqual("type", ParameterType.ENUMERATION.ToString())
@@ -120,7 +119,7 @@ namespace Incas.Core.Models
         }
         public List<string> GetConstantsList()
         {
-            List<string> list = new();
+            List<string> list = [];
             DataTable dt = this.GetConstants();
             if (dt != null)
             {
@@ -128,7 +127,7 @@ namespace Incas.Core.Models
                 {
                     list.Add(dr["Наименование константы"].ToString());
                 }
-            }          
+            }
             return list;
         }
         public DataTable GetEnumerators()
@@ -141,7 +140,7 @@ namespace Incas.Core.Models
         }
         public List<string> GetEnumeratorsList()
         {
-            List<string> list = new();
+            List<string> list = [];
             DataTable dt = this.GetEnumerators();
             if (dt != null)
             {
@@ -173,11 +172,7 @@ namespace Incas.Core.Models
                 .WhereEqual("type", ParameterType.CONSTANT.ToString())
                 .WhereEqual(nameof(this.id), id.ToString())
                 .ExecuteOne();
-            if (dr is not null)
-            {
-                return dr["value"].ToString();
-            }
-            return "";
+            return dr is not null ? dr["value"].ToString() : "";
         }
         public List<string> GetEnumerationValue(Guid id)
         {
@@ -186,11 +181,7 @@ namespace Incas.Core.Models
                 .WhereEqual("type", ParameterType.ENUMERATION.ToString())
                 .WhereEqual(nameof(this.id), id.ToString())
                 .ExecuteOne();
-            if (dr is not null)
-            {
-                return JsonConvert.DeserializeObject<List<string>>(dr["value"].ToString());
-            }
-            return new();
+            return dr is not null ? JsonConvert.DeserializeObject<List<string>>(dr["value"].ToString()) : ([]);
         }
         public bool Exists(ParameterType typeOf, string nameOf, string expectedValue, bool like = true)
         {

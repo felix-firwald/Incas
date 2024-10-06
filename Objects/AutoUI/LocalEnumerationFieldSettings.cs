@@ -27,7 +27,7 @@ namespace Incas.Objects.AutoUI
             }
             catch
             {
-                this.Values = new();
+                this.Values = [];
             }
         }
 

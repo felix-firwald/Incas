@@ -1,13 +1,10 @@
 ﻿using ClosedXML.Excel;
-using Incas.CreatedDocuments.Models;
 using Incas.Objects.Views.Controls;
-using Incas.Templates.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
-using WebSupergoo.WordGlue3;
 using Xceed.Document.NET;
 
 namespace Incas.Templates.Components
@@ -71,8 +68,8 @@ namespace Incas.Templates.Components
         }
         public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true)
         {
-            List<string> tagsToReplace = new();
-            List<string> values = new();
+            List<string> tagsToReplace = [];
+            List<string> values = [];
             foreach (FieldTableFiller tab in tableFillers)
             {
                 this.CreateTable(tab.field.Name, tab.DataTable);
@@ -99,7 +96,7 @@ namespace Incas.Templates.Components
         public List<string> FindAllTags()
         {
             string source = "";
-            List<string> result = new();
+            List<string> result = [];
             Regex regex = new(@"\[[A-Za-zА-Яа-я0-9_]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
             foreach (IXLCell cell in this.worksheet.CellsUsed())
             {

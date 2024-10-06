@@ -1,6 +1,5 @@
-﻿using Incas.Core.Attributes;
+﻿using Incas.Core.AutoUI;
 using Incas.Core.Classes;
-using Incas.Core.AutoUI;
 using Incas.Objects.Models;
 using System.ComponentModel;
 
@@ -26,7 +25,7 @@ namespace Incas.Objects.AutoUI
 
         public DataSearch(ClassData data)
         {
-            this.ComboSelector = new(new());
+            this.ComboSelector = new([]);
             //this.ComboSelector.Pairs.Add("Наименование", "Наименование");
             //if (data.ClassType == Components.ClassType.Document)
             //{

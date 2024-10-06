@@ -1,6 +1,4 @@
-﻿using Common;
-
-namespace Incas.Core.Classes
+﻿namespace Incas.Core.Classes
 {
     public enum RestrictionType // потому что эта тупая хуета не десериализует
     {

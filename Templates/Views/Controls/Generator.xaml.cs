@@ -1,6 +1,5 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using Incas.CreatedDocuments.Models;
 using Incas.Objects.Components;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
@@ -47,7 +46,7 @@ namespace Incas.Templates.Views.Controls
     {
         public GeneratorStatus Status = GeneratorStatus.NotContented;
         public Guid TemplateId;
-        public List<GeneratedElement> Result = new();
+        public List<GeneratedElement> Result = [];
         private string resultText;
         private FieldType tagType;
         public delegate void ValueChanged(object sender);
@@ -67,15 +66,17 @@ namespace Incas.Templates.Views.Controls
             catch (Exception ex)
             {
                 DialogsManager.ShowErrorDialog(ex);
-                this.Result = new();
+                this.Result = [];
             }
         }
         public void SetData(GeneratedElement data, string warning = "Требуется открыть для обновления")
         {
             try
             {
-                this.Result = new();
-                this.Result[0] = data;
+                this.Result = new()
+                {
+                    [0] = data
+                };
                 this.SetWarning(warning);
                 OnValueChanged?.Invoke(this);
             }
@@ -128,7 +129,7 @@ namespace Incas.Templates.Views.Controls
                                     return "";
                                 }
                                 break;
-                        }        
+                        }
                     }
                     break;
             }
@@ -240,7 +241,7 @@ namespace Incas.Templates.Views.Controls
                     }
                     break;
             }
-            
+
         }
 
         private void ShowTextClick(object sender, MouseButtonEventArgs e)

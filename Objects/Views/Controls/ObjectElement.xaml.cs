@@ -1,13 +1,9 @@
 ﻿using Incas.Objects.Components;
 using Incas.Objects.Models;
-using Incas.Objects.Views.Windows;
+using Incas.Objects.Views.Pages;
 using System;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Collections.Generic;
-using Incas.Objects.Views.Pages;
-using DocumentFormat.OpenXml.Packaging;
-using Incas.Core.Classes;
 
 namespace Incas.Objects.Views.Controls
 {

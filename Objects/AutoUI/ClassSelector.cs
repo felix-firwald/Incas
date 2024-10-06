@@ -1,10 +1,8 @@
-﻿using Incas.Core.Attributes;
+﻿using Incas.Core.AutoUI;
 using Incas.Core.Classes;
-using Incas.Core.AutoUI;
-using System.ComponentModel;
 using Incas.Objects.Models;
-using System.Runtime.CompilerServices;
 using System;
+using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
 {
@@ -22,13 +20,11 @@ namespace Incas.Objects.AutoUI
 
         public ClassSelector()
         {
-            this.ComboSelector = new(new());
-            using (Class main = new())
+            this.ComboSelector = new([]);
+            using Class main = new();
+            foreach (Class cl in main.GetAllClasses())
             {
-                foreach (Class cl in main.GetAllClasses())
-                {
-                    this.ComboSelector.Pairs.Add(cl.identifier, cl.name);
-                }
+                this.ComboSelector.Pairs.Add(cl.identifier, cl.name);
             }
         }
 

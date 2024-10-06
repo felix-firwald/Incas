@@ -1,5 +1,5 @@
 ﻿using Incas.Core.Views.Windows;
-using Incas.CreatedDocuments.Models;
+using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Pages;
 using System.Collections.Generic;

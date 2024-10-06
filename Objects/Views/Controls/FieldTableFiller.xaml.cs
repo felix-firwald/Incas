@@ -1,6 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
-using Incas.CreatedDocuments.Models;
+using Incas.Templates.Components;
 using Incas.Templates.ViewModels;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
@@ -129,7 +129,7 @@ namespace Incas.Objects.Views.Controls
                     return;
                 }
                 DataTable output = new();
-                
+
                 foreach (DataColumn dc in this.vm.Grid.Columns)
                 {
                     IXLCell colCell;

@@ -1,9 +1,9 @@
 ﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
 using Incas.Core.AutoUI;
-using System.ComponentModel;
-using System.Collections.Generic;
+using Incas.Core.Classes;
 using Incas.Objects.Components;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
 {
@@ -34,13 +34,15 @@ namespace Incas.Objects.AutoUI
 
         public ConditionalAction()
         {
-            this.ComparisonSelector = new(new());
-            this.ComparisonSelector.Pairs = new()
+            this.ComparisonSelector = new([])
+            {
+                Pairs = new()
             {
                 { ComparisonType.Equal, "равно" },
                 { ComparisonType.NotEqual, "не равно" },
                 { ComparisonType.Contains, "содержит" },
                 { ComparisonType.NotContains, "не содержит" },
+            }
             };
 
         }

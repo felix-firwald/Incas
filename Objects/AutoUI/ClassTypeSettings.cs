@@ -36,14 +36,12 @@ namespace Incas.Objects.AutoUI
         #region Functionality
         public override void Validate()
         {
-            using (Class cl = new())
+            using Class cl = new();
+            foreach (Class c in cl.GetAllClasses())
             {
-                foreach (Class c in cl.GetAllClasses())
+                if (c.name == this.Name)
                 {
-                    if (c.name == this.Name)
-                    {
-                        throw new Core.Exceptions.SimpleFormFailed("Класс с таким именем уже существует.");
-                    }
+                    throw new Core.Exceptions.SimpleFormFailed("Класс с таким именем уже существует.");
                 }
             }
         }

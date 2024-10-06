@@ -1,17 +1,15 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Objects.Exceptions;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
 using Incas.Templates.ViewModels;
-using Incas.Objects.Views.Controls;
-using Incas.Objects.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using Incas.Objects.Exceptions;
 
 namespace Incas.Templates.Views.Windows
 {
@@ -103,8 +101,8 @@ namespace Incas.Templates.Views.Windows
                 else
                 {
                     File.Copy(path, ProgramState.GetFullnameOfDocumentFile(result));
-                }                
-            }           
+                }
+            }
         }
 
         private bool CheckForSave()
@@ -182,7 +180,7 @@ namespace Incas.Templates.Views.Windows
 
         private void SaveTags()
         {
-            List<Objects.Models.Field> tags = new();
+            List<Objects.Models.Field> tags = [];
             foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
                 tags.Add(tag.GetField());
@@ -426,7 +424,7 @@ namespace Incas.Templates.Views.Windows
         private void Upload(string filename)
         {
             try
-            {              
+            {
                 TemplatePort tp = new();
                 tp.ParseData(filename);
                 if (tp.Data != null)
@@ -481,7 +479,7 @@ namespace Incas.Templates.Views.Windows
         private void Window_Drop(object sender, System.Windows.DragEventArgs e)
         {
             if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
-            {                
+            {
                 string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
                 string result = Path.GetFileName(files[0]);
                 if (files[0].EndsWith(".docx") || files[0].EndsWith(".xlsx"))
@@ -498,14 +496,9 @@ namespace Incas.Templates.Views.Windows
 
         private void Window_DragEnter(object sender, System.Windows.DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
-            {
-                e.Effects = System.Windows.DragDropEffects.Copy;
-            }
-            else
-            {
-                e.Effects = System.Windows.DragDropEffects.None;
-            }
+            e.Effects = e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop)
+                ? System.Windows.DragDropEffects.Copy
+                : System.Windows.DragDropEffects.None;
         }
     }
 }

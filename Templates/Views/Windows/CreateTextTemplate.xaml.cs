@@ -52,7 +52,7 @@ namespace Incas.Templates.Views.Windows
         }
         private void SaveTags()
         {
-            List<Objects.Models.Field> tags = new();
+            List<Objects.Models.Field> tags = [];
             foreach (Objects.Views.Controls.FieldCreator tag in this.ContentPanel.Children)
             {
                 tags.Add(tag.vm.Source);
@@ -156,7 +156,7 @@ namespace Incas.Templates.Views.Windows
                 DialogsManager.ShowWaitCursor();
                 this.Close();
                 this.SaveTags();
-                this.vm.SaveTemplate();               
+                this.vm.SaveTemplate();
                 OnCreated?.Invoke();
                 DialogsManager.ShowWaitCursor(false);
             }

@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
-using DocumentFormat.OpenXml.Wordprocessing;
-using System.Collections.Generic;
-using Incas.Core.Models;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
 using Incas.Core.AutoUI;
+using Incas.Core.Models;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Incas.Admin.AutoUI
 {
@@ -16,14 +16,12 @@ namespace Incas.Admin.AutoUI
 
         public override void Validate()
         {
-            using (Parameter p = new())
+            using Parameter p = new();
+            foreach (string name in p.GetEnumeratorsList())
             {
-                foreach (string name in p.GetEnumeratorsList())
+                if (name == this.Name)
                 {
-                    if (name == this.Name)
-                    {
-                        throw new Core.Exceptions.SimpleFormFailed("Глобальное перечисление с таким наименованием уже есть в рабочем пространстве.");
-                    }
+                    throw new Core.Exceptions.SimpleFormFailed("Глобальное перечисление с таким наименованием уже есть в рабочем пространстве.");
                 }
             }
         }

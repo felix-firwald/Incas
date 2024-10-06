@@ -1,9 +1,7 @@
 ﻿using Incas.Core.Classes;
-using Incas.CreatedDocuments.Models;
 using Incas.Objects.Views.Controls;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
-using Incas.Templates.Views.Controls;
 using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;
@@ -61,7 +59,7 @@ namespace Incas.Templates.Views.Pages
                         }
                     }
                 }
-            }         
+            }
         }
         public GeneratedElement GetData()
         {

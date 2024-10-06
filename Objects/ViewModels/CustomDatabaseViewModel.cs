@@ -23,13 +23,7 @@ namespace Incas.Objects.ViewModels
                 return cl.GetCategories();
             }
         }
-        public string CategoryName
-        {
-            get
-            {
-                return this.selectedCategory;
-            }
-        }
+        public string CategoryName => this.selectedCategory;
         public void UpdateAll()
         {
             this.OnPropertyChanged(nameof(this.Categories));
@@ -51,36 +45,21 @@ namespace Incas.Objects.ViewModels
         {
             get
             {
-                using (Class cl = new())
-                {
-                    return cl.GetClassesByCategory(this.SelectedCategory);
-                }
+                using Class cl = new();
+                return cl.GetClassesByCategory(this.SelectedCategory);
             }
         }
         public Class SelectedClass
         {
-            get
-            {
-                return this.selectedClass;
-            }
+            get => this.selectedClass;
             set
             {
-                this.selectedClass = value;                
+                this.selectedClass = value;
                 this.OnPropertyChanged(nameof(this.SelectedClass));
                 this.OnPropertyChanged(nameof(this.SelectedClassName));
                 this.OnClassSelected?.Invoke(value);
             }
         }
-        public string SelectedClassName
-        {
-            get
-            {
-                if (this.SelectedClass == null)
-                {
-                    return "(класс не выбран)";
-                }
-                return this.SelectedClass.name;
-            }
-        }
+        public string SelectedClassName => this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.name;
     }
 }

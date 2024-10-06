@@ -1,12 +1,11 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using Incas.Objects.Components;
+using Incas.Objects.Exceptions;
 using Incas.Templates.Components;
 using Incas.Templates.Views.Controls;
-using Incas.Users.Models;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
-using Spire.Doc.Fields;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,9 +37,9 @@ namespace Incas.Objects.Views.Controls
         public delegate void CommandScript(string script);
         public delegate void StringActionRecalculate(string tag);
         public delegate void FieldFillerAction(FieldFiller sender);
-        public event StringAction OnInsert;        
-        public event CommandScript OnScriptRequested;       
-        public event StringActionRecalculate OnRename;       
+        public event StringAction OnInsert;
+        public event CommandScript OnScriptRequested;
+        public event StringActionRecalculate OnRename;
         public event FieldFillerAction OnFieldUpdate;
         public event FieldFillerAction OnDatabaseObjectCopyRequested;
         public FieldFiller(Objects.Models.Field f)
@@ -90,13 +89,10 @@ namespace Incas.Objects.Views.Controls
                     break;
                 case FieldType.LocalEnumeration:
                 case FieldType.GlobalEnumeration:
-                    if (value is null)
-                    {
-                        value = "";
-                    }
+                    value ??= "";
                     ComboBox comboBox = new()
-                    {                      
-                        ItemsSource = type == FieldType.LocalEnumeration? JsonConvert.DeserializeObject<List<string>>(value) : ProgramState.GetEnumeration(Guid.Parse(value.ToString())),
+                    {
+                        ItemsSource = type == FieldType.LocalEnumeration ? JsonConvert.DeserializeObject<List<string>>(value) : ProgramState.GetEnumeration(Guid.Parse(value.ToString())),
                         SelectedIndex = 0,
                         Style = this.FindResource("ComboBoxMain") as Style
                     };
@@ -113,7 +109,7 @@ namespace Incas.Objects.Views.Controls
                     numeric.ApplyMinAndMax(JsonConvert.DeserializeObject<Objects.Components.NumberFieldData>(value));
                     this.PlaceUIControl(numeric);
                     break;
-                case FieldType.LocalConstant:              
+                case FieldType.LocalConstant:
                 case FieldType.HiddenField:
                     this.Visibility = Visibility.Collapsed;
                     break;
@@ -121,7 +117,7 @@ namespace Incas.Objects.Views.Controls
                     this.Visibility = Visibility.Collapsed;
                     Guid id;
                     Guid.TryParse(value.ToString(), out id);
-                    this.field.Value = ProgramState.GetConstant(id);           
+                    this.field.Value = ProgramState.GetConstant(id);
                     break;
                 case FieldType.Relation:
                     SelectionBox selectionBox = new(JsonConvert.DeserializeObject<BindingData>(value));
@@ -217,10 +213,10 @@ namespace Incas.Objects.Views.Controls
 
         private void SetDateTimeValue(string value)
         {
-            List<string> formats = new()
-            {
+            List<string> formats =
+            [
                 "dd.MM.yyyy", "dd.MM.yyyy HH:mm:ss", "dd.MM.yy", "«dd» MMMM yyyy"
-            };
+            ];
             bool tryApply(string format)
             {
                 DateTime parsedDate;
@@ -237,7 +233,7 @@ namespace Incas.Objects.Views.Controls
                 {
                     return;
                 }
-            }            
+            }
         }
 
         public string GetTagName()
@@ -339,11 +335,7 @@ namespace Incas.Objects.Views.Controls
         public List<FieldData> GetDataFromObjectRelation()
         {
             Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
-            if (obj is null)
-            {
-                return new();
-            }
-            return obj.Fields;
+            return obj is null ? ([]) : obj.Fields;
         }
         public void ThrowNotNullFailed()
         {
@@ -426,7 +418,7 @@ namespace Incas.Objects.Views.Controls
         private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.RunUpdateEvent();
-            this.CheckForScriptOnUpdate();          
+            this.CheckForScriptOnUpdate();
         }
 
         private void Textbox_TextChanged(object sender, TextChangedEventArgs e)
@@ -465,7 +457,7 @@ namespace Incas.Objects.Views.Controls
             if (!string.IsNullOrEmpty(value))
             {
                 this.SetValue(value);
-            }          
+            }
         }
 
         private void ObjectCopyRequestClick(object sender, RoutedEventArgs e)

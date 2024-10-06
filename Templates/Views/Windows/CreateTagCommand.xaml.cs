@@ -1,16 +1,10 @@
-﻿
-using AvaloniaEdit.Highlighting.Xshd;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Rendering;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using Incas.CustomDatabases.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Incas.Templates.Views.Windows
 {

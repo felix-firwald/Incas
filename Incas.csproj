@@ -234,10 +234,6 @@
   <ItemGroup>
     <Folder Include="Admin\Models\" />
     <Folder Include="Admin\Components\" />
-    <Folder Include="CustomDatabases\Components\" />
-    <Folder Include="CustomDatabases\Models\" />
-    <Folder Include="CustomDatabases\Views\Controls\" />
-    <Folder Include="CustomDatabases\Views\Pages\" />
     <Folder Include="FileManager\Models\" />
     <Folder Include="FileManager\ViewModels\" />
     <Folder Include="FileManager\Views\Windows\" />

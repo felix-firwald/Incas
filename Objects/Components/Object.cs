@@ -22,8 +22,10 @@ namespace Incas.Objects.Components
         public List<FieldData> Fields { get; set; }
         public Object Copy()
         {
-            Object obj = new();
-            obj.Fields = this.Fields;
+            Object obj = new()
+            {
+                Fields = this.Fields
+            };
             return obj;
         }
         public string GetFieldValue(Guid id)

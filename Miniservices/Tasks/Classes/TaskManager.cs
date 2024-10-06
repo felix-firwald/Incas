@@ -1,7 +1,5 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Models;
-using Incas.Miniservices.Clipboard.AutoUI;
-using Incas.Miniservices.Clipboard.Classes;
 using Incas.Miniservices.Tasks.AutoUI;
 using Newtonsoft.Json;
 using System;
@@ -17,22 +15,18 @@ namespace Incas.Miniservices.Tasks.Classes
     }
     public static class TaskManager
     {
-        private static List<TaskRecord> Cache = new();
+        private static List<TaskRecord> Cache = [];
         private static Parameter GetByUser()
         {
-            using (Parameter p = new())
-            {
-                return p.GetParameter(ParameterType.USER_TASKS, ProgramState.CurrentUser.id.ToString());
-            }
+            using Parameter p = new();
+            return p.GetParameter(ParameterType.USER_TASKS, ProgramState.CurrentUser.id.ToString());
         }
         private static void SetByUser(List<TaskRecord> records)
         {
-            using (Parameter p = new())
-            {
-                p.GetParameter(ParameterType.USER_TASKS, ProgramState.CurrentUser.id.ToString());
-                p.value = JsonConvert.SerializeObject(records);
-                p.UpdateValue();
-            }
+            using Parameter p = new();
+            p.GetParameter(ParameterType.USER_TASKS, ProgramState.CurrentUser.id.ToString());
+            p.value = JsonConvert.SerializeObject(records);
+            p.UpdateValue();
         }
         public static List<TaskRecord> GetTaskboardRecords()
         {
@@ -44,7 +38,7 @@ namespace Incas.Miniservices.Tasks.Classes
             }
             catch
             {
-                return new();
+                return [];
             }
         }
         public static List<TaskRecord> FindByName(string name)

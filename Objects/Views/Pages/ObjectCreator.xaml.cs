@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Incas.Core.Classes;
-using Incas.CreatedDocuments.Models;
+﻿using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
@@ -13,11 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using Windows.Devices.Geolocation;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -29,8 +24,8 @@ namespace Incas.Objects.Views.Pages
         public Components.Object Object { get; set; }
         public Class Class { get; set; }
         public ClassData ClassData { get; set; }
-        public List<FieldFiller> TagFillers = new();
-        public List<FieldTableFiller> Tables = new();
+        public List<FieldFiller> TagFillers = [];
+        public List<FieldTableFiller> Tables = [];
         public delegate void ObjectCreatorData(ObjectCreator creator);
         public delegate void FieldCopyAction(Guid id, string text);
         public event FieldCopyAction OnInsertRequested;
@@ -50,7 +45,7 @@ namespace Incas.Objects.Views.Pages
             else
             {
                 this.Object = new();
-            }           
+            }
             if (data.ClassType != ClassType.Document)
             {
                 this.RenderArea.Visibility = Visibility.Collapsed;
@@ -148,16 +143,16 @@ namespace Incas.Objects.Views.Pages
             {
                 if (field.ClassField.Id == sender.field.Id)
                 {
-                        
+
                     sender.SetValue(field.Value);
                     return;
                 }
-            }               
+            }
         }
 
         private void Tf_OnFieldUpdate(FieldFiller sender)
         {
-            
+
         }
         public void ApplyFromExcel(Dictionary<string, string> pairs)
         {
@@ -208,7 +203,7 @@ namespace Incas.Objects.Views.Pages
             this.Object.Name = this.ObjectName.Text;
             if (this.Object.Fields == null)
             {
-                this.Object.Fields = new();
+                this.Object.Fields = [];
             }
             this.Object.Fields.Clear();
             foreach (FieldFiller tf in this.TagFillers)
@@ -266,7 +261,7 @@ namespace Incas.Objects.Views.Pages
                     {
                         this.GenerateDocument(ts.GetSelectedPath(), path);
                     }
-                }              
+                }
             }
             else
             {
@@ -308,7 +303,7 @@ namespace Incas.Objects.Views.Pages
                     });
                 }
                 return newFile;
-            }          
+            }
             catch (GeneratorUndefinedStateException ex)
             {
                 DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
@@ -346,7 +341,7 @@ namespace Incas.Objects.Views.Pages
                 if (val != null)
                 {
                     name = name.Replace("[" + tf.GetTagName() + "]", val);
-                }               
+                }
             }
             this.ObjectName.Text = name;
             return name;
@@ -354,7 +349,7 @@ namespace Incas.Objects.Views.Pages
 
         private void Tf_OnRename(string tag)
         {
-            
+
         }
 
         private void Tf_OnInsert(Guid tag, string text)
@@ -395,7 +390,7 @@ namespace Incas.Objects.Views.Pages
             this.OnSaveRequested?.Invoke(this);
         }
 
-        private  void PreviewCLick(object sender, MouseButtonEventArgs e)
+        private void PreviewCLick(object sender, MouseButtonEventArgs e)
         {
             try
             {

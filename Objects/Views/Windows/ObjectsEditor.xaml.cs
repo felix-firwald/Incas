@@ -33,14 +33,7 @@ namespace Incas.Objects.Views.Windows
             this.Title = source.name;
             this.Class = source;
             this.ClassData = source.GetClassData();
-            if (this.ClassData.ClassType == ClassType.Document)
-            {
-                this.RenderButton.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this.RenderButton.Visibility = Visibility.Collapsed;
-            }
+            this.RenderButton.Visibility = this.ClassData.ClassType == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
             if (objects != null)
             {
                 foreach (Components.Object obj in objects)
@@ -64,14 +57,7 @@ namespace Incas.Objects.Views.Windows
             this.ToolBar.IsEnabled = false;
             ObjectCreator creator = new(this.ClassData);
             this.ContentPanel.Children.Add(creator);
-            if (this.ClassData.ClassType == ClassType.Document)
-            {
-                this.RenderButton.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this.RenderButton.Visibility = Visibility.Collapsed;
-            }
+            this.RenderButton.Visibility = this.ClassData.ClassType == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
         }
         public void SetSingleObjectMode()
         {
@@ -207,13 +193,13 @@ namespace Incas.Objects.Views.Windows
                     }
                     row++;
                 }
-            
+
                 string path = "";
                 if (DialogsManager.ShowFolderBrowserDialog(ref path))
                 {
                     wb.SaveAs(path + $"\\{this.Class.name} {DateTime.Now.ToString("d")}.xlsx");
                     ProgramState.OpenFolder(path);
-                }               
+                }
             }
             catch (NotNullFailed nnex)
             {
@@ -251,7 +237,7 @@ namespace Incas.Objects.Views.Windows
 
         private void CreateObjectsClick(object sender, RoutedEventArgs e)
         {
-            List<Components.Object> objects = new();
+            List<Components.Object> objects = [];
             try
             {
                 foreach (ObjectCreator c in this.ContentPanel.Children)
@@ -261,7 +247,7 @@ namespace Incas.Objects.Views.Windows
                 ObjectProcessor.WriteObjects(this.Class, objects);
                 this.Close();
                 this.OnUpdateRequested?.Invoke();
-            }            
+            }
             catch (NotNullFailed nnex)
             {
                 DialogsManager.ShowExclamationDialog(nnex.Message, "Сохранение прервано");
@@ -278,7 +264,7 @@ namespace Incas.Objects.Views.Windows
 
         private void RenderObjectsClick(object sender, RoutedEventArgs e)
         {
-            List<Components.Object> objects = new();
+            List<Components.Object> objects = [];
             string templateFile = "";
             if (this.ClassData.Templates?.Count == 1)
             {
@@ -323,7 +309,7 @@ namespace Incas.Objects.Views.Windows
                 {
                     DialogsManager.ShowErrorDialog(ex);
                 }
-            }          
+            }
         }
     }
 }

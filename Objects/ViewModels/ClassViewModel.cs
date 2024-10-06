@@ -1,10 +1,7 @@
-﻿using Incas.Core.Classes;
-using Incas.Core.ViewModels;
+﻿using Incas.Core.ViewModels;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Forms;
 using Field = Incas.Objects.Models.Field;
 
 namespace Incas.Objects.ViewModels
@@ -20,10 +17,7 @@ namespace Incas.Objects.ViewModels
         }
         public ClassType Type
         {
-            get
-            {
-                return this.SourceData.ClassType;
-            }
+            get => this.SourceData.ClassType;
             set
             {
                 this.SourceData.ClassType = value;
@@ -32,10 +26,7 @@ namespace Incas.Objects.ViewModels
         }
         public string NameOfClass
         {
-            get
-            {
-                return this.Source.name;
-            }
+            get => this.Source.name;
             set
             {
                 this.Source.name = value;
@@ -44,10 +35,7 @@ namespace Incas.Objects.ViewModels
         }
         public string CategoryOfClass
         {
-            get
-            {
-                return this.Source.category;
-            }
+            get => this.Source.category;
             set
             {
                 this.Source.category = value;
@@ -56,10 +44,7 @@ namespace Incas.Objects.ViewModels
         }
         public string NameTemplate
         {
-            get
-            {
-                return this.SourceData.NameTemplate;
-            }
+            get => this.SourceData.NameTemplate;
             set
             {
                 this.SourceData.NameTemplate = value;
@@ -68,10 +53,7 @@ namespace Incas.Objects.ViewModels
         }
         public bool ShowCard
         {
-            get
-            {
-                return this.SourceData.ShowCard;
-            }
+            get => this.SourceData.ShowCard;
             set
             {
                 this.SourceData.ShowCard = value;
@@ -80,10 +62,7 @@ namespace Incas.Objects.ViewModels
         }
         public bool EditByAuthorOnly
         {
-            get
-            {
-                return this.SourceData.EditByAuthorOnly;
-            }
+            get => this.SourceData.EditByAuthorOnly;
             set
             {
                 this.SourceData.EditByAuthorOnly = value;

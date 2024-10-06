@@ -1,11 +1,11 @@
-﻿using Incas.Objects.Models;
+﻿using Incas.Objects.Components;
+using Incas.Objects.Models;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Collections.Generic;
-using System.Windows;
-using System;
-using Incas.Objects.Components;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -38,23 +38,21 @@ namespace Incas.Objects.Views.Controls
                 this.visible = true;
                 this.FieldValue2.Visibility = Visibility.Visible;
                 this.FieldValue.Visibility = Visibility.Collapsed;
-                using (Class cl = new())
+                using Class cl = new();
+                List<Class> list = cl.FindBackReferences(this.Class.identifier);
+                foreach (Class c in list)
                 {
-                    List<Class> list = cl.FindBackReferences(this.Class.identifier);
-                    foreach (Class c in list)
+                    Expander exp = new()
                     {
-                        Expander exp = new()
-                        {
-                            Header = c.name,
-                            Style = this.FindResource("ExpanderMain") as Style,
-                            Uid = c.identifier.ToString()
-                        };
-                        exp.Expanded += this.Exp_Expanded;
-                        this.ContentPanel.Children.Add(exp);
-                    }
+                        Header = c.name,
+                        Style = this.FindResource("ExpanderMain") as Style,
+                        Uid = c.identifier.ToString()
+                    };
+                    exp.Expanded += this.Exp_Expanded;
+                    this.ContentPanel.Children.Add(exp);
                 }
             }
-            
+
         }
 
         private void Exp_Expanded(object sender, RoutedEventArgs e)
@@ -62,8 +60,10 @@ namespace Incas.Objects.Views.Controls
             Expander exp = (Expander)sender;
             Guid id = Guid.Parse(exp.Uid); // back class
             Class back = new(id);
-            StackPanel panel = new();
-            panel.Margin = new(0, 5, 0, 5);
+            StackPanel panel = new()
+            {
+                Margin = new(0, 5, 0, 5)
+            };
             DataTable dt = ObjectProcessor.GetSimpleObjectsListWhereEqual(
                 back,
                 back.GetClassData().FindFieldByBackReference(this.Class.identifier).VisibleName, // не находит

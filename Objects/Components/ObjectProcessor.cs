@@ -1,13 +1,11 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.Models;
 using System;
-using System.IO;
-using System.Text;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Spire.Pdf.Graphics;
+using System.Text;
 
 namespace Incas.Objects.Components
 {
@@ -35,11 +33,7 @@ namespace Incas.Objects.Components
         public const int MaxObjectCompareCount = 5;
         public static string GetPathToObjectsMap(Class cl)
         {
-            if (cl == null)
-            {
-                return "";
-            }
-            return $"{ProgramState.ObjectsPath}\\{cl.identifier}.objinc";
+            return cl == null ? "" : $"{ProgramState.ObjectsPath}\\{cl.identifier}.objinc";
         }
         private static string GetPathToObjectsMap(Guid id)
         {
@@ -61,7 +55,7 @@ namespace Incas.Objects.Components
                 adding += $"CREATE TABLE [{EditsTable}] ([{IdField}] TEXT UNIQUE, [{ObjectLinkField}] TEXT, [{StatusField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);\n";
                 adding += $"CREATE TABLE [{CommentsTable}] ([{IdField}] TEXT UNIQUE, [{ObjectLinkField}] TEXT, [{TypeField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
             }
-            List<string> customFields = new();
+            List<string> customFields = [];
             foreach (Incas.Objects.Models.Field f in cl.GetClassData().GetSavebleFields())
             {
                 customFields.Add($"[{f.Id}] TEXT");
@@ -80,8 +74,8 @@ namespace Incas.Objects.Components
         }
         public static void UpdateObjectMap(Class cl)
         {
-            List<string> serviceColumns = new()
-            {
+            List<string> serviceColumns =
+            [
                 IdField,
                 NameField,
                 DateCreatedField,
@@ -89,11 +83,11 @@ namespace Incas.Objects.Components
                 StatusField,
                 DateTerminatedField,
                 TerminatedField
-            };
+            ];
             string path = GetPathToObjectsMap(cl);
             Query q = new("", path);
             q.AddCustomRequest($"PRAGMA table_info([{MainTable}])");
-            List<string> mapFields = new();
+            List<string> mapFields = [];
             DataTable dt = q.Execute();
             foreach (DataRow row in dt.Rows)
             {
@@ -103,7 +97,7 @@ namespace Incas.Objects.Components
                     mapFields.Add(name);
                 }
             }
-            List<string> classFields = new();
+            List<string> classFields = [];
             foreach (Models.Field f in cl.GetClassData().GetSavebleFields())
             {
                 classFields.Add(f.Id.ToString());
@@ -138,30 +132,31 @@ namespace Incas.Objects.Components
         }
         public static void WriteObjects(Class cl, Object obj)
         {
-            List<Object> objects = new();
-            objects.Add(obj);
+            List<Object> objects = [obj];
             ObjectProcessor.WriteObjects(cl, objects);
         }
         private static void GetRequestForWritingObject(Query q, ClassData data, Object obj)
         {
-            Dictionary<string, string> values = new();
-            values.Add(NameField, obj.Name.ToString());
-            values.Add(StatusField, obj.Status.ToString());
+            Dictionary<string, string> values = new()
+            {
+                { NameField, obj.Name.ToString() },
+                { StatusField, obj.Status.ToString() }
+            };
             foreach (FieldData fd in obj.Fields)
-            {               
+            {
                 if (fd.ClassField.Type is not FieldType.GlobalConstant and not FieldType.LocalConstant)
                 {
                     values.Add(fd.ClassField.Id.ToString(), fd.Value);
-                }                
+                }
             }
             if (obj.Id == Guid.Empty) // if NEW
-            {              
+            {
                 obj.Id = Guid.NewGuid();
-                
+
                 obj.AuthorId = ProgramState.CurrentUser.id;
                 obj.CreationDate = DateTime.Now;
                 values.Add(IdField, obj.Id.ToString());
-                values.Add(AuthorField, obj.AuthorId.ToString());               
+                values.Add(AuthorField, obj.AuthorId.ToString());
                 if (data.ClassType == ClassType.Document)
                 {
                     values.Add(DateCreatedField, obj.CreationDate.ToString());
@@ -170,8 +165,8 @@ namespace Incas.Objects.Components
                 //values.Add(StatusField, obj.Status.ToString());
                 obj.AuthorId = ProgramState.CurrentUser.id;
                 obj.CreationDate = DateTime.Now;
-                
-                q.Insert(values);              
+
+                q.Insert(values);
                 q.SeparateCommand();
             }
             else // if EDIT
@@ -181,7 +176,7 @@ namespace Incas.Objects.Components
                     values.Add(DateTerminatedField, obj.TerminatedDate.ToString());
                     values.Add(TerminatedField, obj.Terminated ? "1" : "0");
                 }
-                q.Update(values);                
+                q.Update(values);
                 q.WhereEqual(IdField, obj.Id.ToString());
                 q.SeparateCommand();
             }
@@ -197,8 +192,7 @@ namespace Incas.Objects.Components
             Query q = new("", GetPathToObjectsMap(cl));
             ClassData data = cl.GetClassData();
             List<Objects.Models.Field> fields = data.GetFieldsForMap();
-            List<string> fieldsRequest = new();
-            fieldsRequest.Add($"[OBJECTS_MAP].[{IdField}]");
+            List<string> fieldsRequest = [$"[OBJECTS_MAP].[{IdField}]"];
             if (data.ClassType == ClassType.Document)
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{DateCreatedField}]");
@@ -221,23 +215,22 @@ namespace Incas.Objects.Components
             Query q = new("", GetPathToObjectsMap(cl));
             ClassData data = cl.GetClassData();
             List<Objects.Models.Field> fields = data.GetFieldsForMap();
-            List<string> fieldsRequest = new();
-            fieldsRequest.Add($"[OBJECTS_MAP].[{IdField}]");
+            List<string> fieldsRequest = [$"[OBJECTS_MAP].[{IdField}]"];
             if (data.ClassType == ClassType.Document)
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{DateCreatedField}]");
             }
             //fieldsRequest.Add($"[OBJECTS_MAP].[{StatusField}]");
             fieldsRequest.Add($"[OBJECTS_MAP].[{NameField}]");
-            List<string> innerJoins = new();
+            List<string> innerJoins = [];
             foreach (Models.Field f in fields)
             {
                 if (f.Type == FieldType.Relation)
-                {       
+                {
                     BindingData bd = f.GetBindingData();
                     string dbName = bd.Class.ToString("N");
                     q.AttachDatabase(GetPathToObjectsMap(bd.Class), dbName);
-                    
+
                     char[] charArray = dbName.ToCharArray();
                     Array.Reverse(charArray);
                     string dbNamePseudoname = new(charArray);
@@ -247,12 +240,12 @@ namespace Incas.Objects.Components
                 else
                 {
                     fieldsRequest.Add($"[{f.Id}] AS [{f.VisibleName}]");
-                }          
+                }
             }
-            
+
             q.AddCustomRequest("SELECT " + string.Join(", ", fieldsRequest.ToArray()));
             q.AddCustomRequest($"FROM [{MainTable}]");
-            q.AddCustomRequest(string.Join("\n", innerJoins));          
+            q.AddCustomRequest(string.Join("\n", innerJoins));
             if (WhereCondition != null)
             {
                 q.AddCustomRequest(WhereCondition);
@@ -281,8 +274,10 @@ namespace Incas.Objects.Components
         }
         public static Object GetObject(Class cl, Guid id)
         {
-            Object obj = new();
-            obj.Fields = new();
+            Object obj = new()
+            {
+                Fields = []
+            };
             Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
             DataRow dr = q.Select().WhereEqual(IdField, id.ToString()).ExecuteOne();
             if (dr != null)
@@ -297,7 +292,7 @@ namespace Incas.Objects.Components
                         DateTime.TryParse(dr[ObjectProcessor.DateCreatedField].ToString(), out cd);
                         obj.CreationDate = cd;
                     }
-                    obj.Terminated = dr[ObjectProcessor.TerminatedField].ToString() == "0" ? false : true;
+                    obj.Terminated = dr[ObjectProcessor.TerminatedField].ToString() != "0";
                     DateTime dt;
                     DateTime.TryParse(dr[ObjectProcessor.DateTerminatedField].ToString(), out dt);
                     obj.TerminatedDate = dt;

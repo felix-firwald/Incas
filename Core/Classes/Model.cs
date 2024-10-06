@@ -1,6 +1,4 @@
-﻿using Common;
-using Incas.Core.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 //using Microsoft.Office.Core;
@@ -178,7 +176,7 @@ namespace Incas.Core.Classes
         /// </summary>
         protected void Serialize(DataRow dr)
         {
-            
+
             foreach (System.Reflection.PropertyInfo property in this.GetType().GetProperties())
             {
                 try
@@ -194,7 +192,7 @@ namespace Incas.Core.Classes
                     else
                     {
                         property.SetValue(this, Convert.ChangeType(dr[property.Name], property.PropertyType)); // берет из datarow по названию переменной столбец и устанавливает значение к свойству
-                    }    
+                    }
                 }
                 catch (Exception)
                 {

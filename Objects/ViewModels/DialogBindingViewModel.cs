@@ -23,25 +23,9 @@ namespace Incas.Objects.ViewModels
             this.OnPropertyChanged(nameof(this.Fields));
             this.OnPropertyChanged(nameof(this.SelectedField));
         }
-        
-        public List<Class> Classes
-        {
-            get
-            {
-                return this.classes;
-            }
-        }
-        public List<Objects.Models.Field> Fields
-        {
-            get
-            {
-                if (this.SelectedClass == null)
-                {
-                    return new();
-                }
-                return this.SelectedClass.GetClassData().Fields;
-            }
-        }
+
+        public List<Class> Classes => this.classes;
+        public List<Objects.Models.Field> Fields => this.SelectedClass == null ? ([]) : this.SelectedClass.GetClassData().Fields;
         public Class SelectedClass
         {
             get
@@ -85,7 +69,7 @@ namespace Incas.Objects.ViewModels
                 if (value is not null)
                 {
                     this.selectedField = value.Id;
-                }             
+                }
                 this.OnPropertyChanged(nameof(this.SelectedField));
             }
         }

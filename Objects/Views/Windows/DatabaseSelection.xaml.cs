@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
-using Query = Incas.Core.Classes.Query;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -19,13 +18,7 @@ namespace Incas.Objects.Views.Windows
         public readonly BindingData Binding;
         public readonly Class Class;
         public readonly ClassData ClassData;
-        public Objects.Components.Object SelectedObject
-        {
-            get
-            {
-                return ObjectProcessor.GetObject(this.Class, this.SelectedId);
-            }
-        }
+        public Objects.Components.Object SelectedObject => ObjectProcessor.GetObject(this.Class, this.SelectedId);
         private Guid SelectedId
         {
             get
@@ -72,7 +65,7 @@ namespace Incas.Objects.Views.Windows
         }
         private void SetFields()
         {
-            List<string> fields = new();
+            List<string> fields = [];
             foreach (Models.Field field in this.ClassData.Fields)
             {
                 fields.Add(field.VisibleName);
@@ -86,7 +79,7 @@ namespace Incas.Objects.Views.Windows
             {
                 result.Add(col.ColumnName);
             }
-            
+
             try
             {
                 this.Fields.SelectedIndex = 0;

@@ -1,11 +1,9 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.Components;
-using Incas.Objects.Models;
 using Incas.Objects.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Incas.Objects.Views.Windows
@@ -95,7 +93,7 @@ namespace Incas.Objects.Views.Windows
         //            };
         //            sub.Selected += this.Field_Selected;
         //            this.FieldsPanel.Items.Add(sub);
-                    
+
         //        }
         //    }
         //}
@@ -127,7 +125,7 @@ namespace Incas.Objects.Views.Windows
         }
 
         private void FinishClick(object sender, RoutedEventArgs e)
-        {           
+        {
             if (this.vm.SelectedClass is null)
             {
                 DialogsManager.ShowExclamationDialog("Не выбран класс объекта!", "Сохранение прервано");

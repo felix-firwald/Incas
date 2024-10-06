@@ -3,7 +3,6 @@ using Incas.Admin.ViewModels;
 using Incas.Core.Classes;
 using Incas.Core.Models;
 using Incas.Objects.AutoUI;
-using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
 using System;
@@ -28,10 +27,8 @@ namespace Incas.Admin.Views.Pages
 
         private void FillConstants()
         {
-            using (Parameter p = new())
-            {
-                this.ConstantsTable.ItemsSource = p.GetConstants().DefaultView;
-            }
+            using Parameter p = new();
+            this.ConstantsTable.ItemsSource = p.GetConstants().DefaultView;
         }
 
         private void AddConstantClick(object sender, RoutedEventArgs e)
@@ -114,9 +111,10 @@ namespace Incas.Admin.Views.Pages
 
         private void AddEnumerationClick(object sender, RoutedEventArgs e)
         {
-            ParameterEnum en = new();
-            en.Value = new();
-            en.Value.Add("");
+            ParameterEnum en = new()
+            {
+                Value = [""]
+            };
             if (en.ShowDialog("Назначение перечисления", Icon.NumericList) == true)
             {
                 using (Parameter p = new())
@@ -185,7 +183,7 @@ namespace Incas.Admin.Views.Pages
                         p.UpdateParameter(id);
                     }
                     this.vm.UpdateEnumerations();
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -207,19 +205,17 @@ namespace Incas.Admin.Views.Pages
                 CreateClass cc = new(ct);
                 cc.ShowDialog();
                 this.vm.UpdateClasses();
-            }         
+            }
         }
         private Guid GetSelectedClass()
         {
-            if (this.ClassesTable.SelectedItems.Count == 0)
-            {
-                return Guid.Empty;
-            }
-            return Guid.Parse(((DataRowView)this.ClassesTable.SelectedItems[0]).Row["Идентификатор"].ToString());
+            return this.ClassesTable.SelectedItems.Count == 0
+                ? Guid.Empty
+                : Guid.Parse(((DataRowView)this.ClassesTable.SelectedItems[0]).Row["Идентификатор"].ToString());
         }
 
         private void EditClassClick(object sender, RoutedEventArgs e)
-        {         
+        {
             CreateClass cc = new(this.GetSelectedClass());
             cc.ShowDialog();
             this.vm.UpdateClasses();
@@ -228,9 +224,9 @@ namespace Incas.Admin.Views.Pages
         private void RemoveClassClick(object sender, RoutedEventArgs e)
         {
             if (DialogsManager.ShowQuestionDialog(
-                "Класс будет возвратно удален, вместе с объектами, которые к нему относятся. Вы уверены?", 
-                "Удалить класс?", 
-                "Удалить", 
+                "Класс будет возвратно удален, вместе с объектами, которые к нему относятся. Вы уверены?",
+                "Удалить класс?",
+                "Удалить",
                 "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
             {
                 using (Objects.Models.Class cl = new())
@@ -243,10 +239,10 @@ namespace Incas.Admin.Views.Pages
                     else
                     {
                         cl.Remove(this.GetSelectedClass());
-                    }                   
+                    }
                 }
                 this.vm.UpdateClasses();
-            }           
+            }
         }
 
         private void ClassesTable_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)

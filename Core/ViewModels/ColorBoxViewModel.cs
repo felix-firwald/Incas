@@ -1,17 +1,11 @@
-﻿using System;
-using System.Windows.Media;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows.Media;
 
 namespace Incas.Core.ViewModels
 {
-    class ColorBoxViewModel : BaseViewModel
+    internal class ColorBoxViewModel : BaseViewModel
     {
         private byte r;
-        private byte g; 
+        private byte g;
         private byte b;
         public ColorBoxViewModel(byte R, byte G, byte B)
         {
@@ -25,19 +19,10 @@ namespace Incas.Core.ViewModels
             this.G = color.G;
             this.B = color.B;
         }
-        public System.Windows.Media.Brush Color
-        {
-            get
-            {
-                return new SolidColorBrush(System.Windows.Media.Color.FromRgb(this.r, this.g, this.b));
-            }
-        }
+        public System.Windows.Media.Brush Color => new SolidColorBrush(System.Windows.Media.Color.FromRgb(this.r, this.g, this.b));
         public byte R
         {
-            get
-            {
-                return this.r;
-            }
+            get => this.r;
             set
             {
                 this.r = value;
@@ -47,10 +32,7 @@ namespace Incas.Core.ViewModels
         }
         public byte G
         {
-            get
-            {
-                return this.g;
-            }
+            get => this.g;
             set
             {
                 this.g = value;
@@ -60,10 +42,7 @@ namespace Incas.Core.ViewModels
         }
         public byte B
         {
-            get
-            {
-                return this.b;
-            }
+            get => this.b;
             set
             {
                 this.b = value;

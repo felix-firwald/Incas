@@ -1,8 +1,5 @@
 ﻿using Incas.Core.ViewModels;
-using Incas.Templates.Models;
-using System.Collections.ObjectModel;
 using System.Data;
-using System.Windows;
 
 namespace Incas.Templates.ViewModels
 {

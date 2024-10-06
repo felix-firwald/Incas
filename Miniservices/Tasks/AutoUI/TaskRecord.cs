@@ -1,11 +1,8 @@
-﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
-using Incas.Core.AutoUI;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-using System;
-using Incas.Miniservices.Clipboard.Classes;
+﻿using Incas.Core.AutoUI;
 using Incas.Miniservices.Tasks.Classes;
+using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Incas.Miniservices.Tasks.AutoUI
 {

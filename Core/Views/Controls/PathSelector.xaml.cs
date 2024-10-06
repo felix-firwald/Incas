@@ -1,5 +1,4 @@
 ﻿using Incas.Core.Classes;
-using System;
 using System.ComponentModel;
 using System.Windows.Controls;
 
@@ -13,14 +12,7 @@ namespace Incas.Core.Views.Controls
         private string currentValue;
         public string Value
         {
-            get
-            {
-                if (this.currentValue is null)
-                {
-                    return this.Input.Text;
-                }
-                return this.currentValue;
-            }
+            get => this.currentValue is null ? this.Input.Text : this.currentValue;
 
             set
             {

@@ -1,5 +1,4 @@
-﻿using Incas.CustomDatabases.ViewModels;
-using Incas.Objects.ViewModels;
+﻿using Incas.Objects.ViewModels;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -24,7 +23,7 @@ namespace Incas.Objects.Views.Pages
             {
                 SelectedCategory = category
             };
-            
+
             this.vm.OnClassSelected += this.OnClassSelected;
             this.DataContext = this.vm;
         }

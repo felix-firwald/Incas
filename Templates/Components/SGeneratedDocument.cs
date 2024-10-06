@@ -1,14 +1,13 @@
-﻿using Incas.Core.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Incas.CreatedDocuments.Models
+namespace Incas.Templates.Components
 {
     public struct GeneratedElement
     {
         public Guid template;
         public string filler;
-        public List<SGeneratedTag> filledTags;      
+        public List<SGeneratedTag> filledTags;
     }
     public struct SGeneratedDocument
     {

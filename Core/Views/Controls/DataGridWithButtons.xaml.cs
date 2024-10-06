@@ -1,19 +1,7 @@
 ﻿using Incas.Core.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Incas.Core.Views.Controls
 {
@@ -40,10 +28,7 @@ namespace Incas.Core.Views.Controls
         }
         public int SelectedIndex
         {
-            get
-            {
-                return this.selected;
-            }
+            get => this.selected;
             set
             {
                 this.selected = value;
@@ -54,13 +39,7 @@ namespace Incas.Core.Views.Controls
 
     public partial class DataGridWithButtons : UserControl
     {
-        public DataTable DataTable
-        {
-            get
-            {
-                return this.vm.Grid;
-            }
-        }
+        public DataTable DataTable => this.vm.Grid;
         private DGWBViewModel vm;
         public DataGridWithButtons(DataTable table)
         {
@@ -79,7 +58,7 @@ namespace Incas.Core.Views.Controls
             if (this.vm.SelectedIndex > 0)
             {
                 this.vm.Grid.Rows[this.vm.SelectedIndex].Delete();
-            }         
+            }
         }
         private void RowUpClick(object sender, MouseButtonEventArgs e)
         {

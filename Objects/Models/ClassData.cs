@@ -1,5 +1,4 @@
 ﻿using Incas.Objects.Components;
-using Incas.Templates.Components;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,10 +16,7 @@ namespace Incas.Objects.Models
         public Dictionary<int, TemplateData> Templates { get; set; }
         public void AddStatus(StatusData data)
         {
-            if (this.Statuses is null)
-            {
-                this.Statuses = new();
-            }
+            this.Statuses ??= [];
             this.Statuses.Add(this.Statuses.Count + 1, data);
         }
         public void RemoveStatus(int index)
@@ -29,10 +25,7 @@ namespace Incas.Objects.Models
         }
         public void AddTemplate(TemplateData data)
         {
-            if (this.Templates is null)
-            {
-                this.Templates = new();
-            }
+            this.Templates ??= [];
             this.Templates.Add(this.Templates.Count + 1, data);
         }
         public void EditTemplate(int index, TemplateData data)
@@ -49,7 +42,7 @@ namespace Incas.Objects.Models
         }
         public List<Field> GetFieldsForMap()
         {
-            List<Field> list = new();
+            List<Field> list = [];
             if (this.Fields is null)
             {
                 return list;
@@ -73,7 +66,7 @@ namespace Incas.Objects.Models
         }
         public List<Field> GetSavebleFields()
         {
-            List<Field> list = new();
+            List<Field> list = [];
             foreach (Field field in this.Fields)
             {
                 switch (field.Type)
@@ -105,11 +98,11 @@ namespace Incas.Objects.Models
             foreach (Field field in this.Fields)
             {
                 if (field.Type == FieldType.Relation)
-                {                   
+                {
                     BindingData bd = JsonConvert.DeserializeObject<BindingData>(field.Value);
                     if (bd.Class == reference)
                     {
-                        
+
                         return field;
                     }
                 }

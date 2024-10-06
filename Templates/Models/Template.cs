@@ -3,7 +3,6 @@ using Incas.Templates.Components;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
 
@@ -247,7 +246,7 @@ namespace Incas.Templates.Models
         }
         public List<Objects.Models.Field> GetFields(bool withoutParent = false)
         {
-            List<Objects.Models.Field> tags = new();
+            List<Objects.Models.Field> tags = [];
             tags = JsonConvert.DeserializeObject<List<Objects.Models.Field>>(this.fields);
             if (!withoutParent)
             {

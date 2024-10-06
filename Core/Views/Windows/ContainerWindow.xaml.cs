@@ -1,5 +1,4 @@
-﻿using Incas.Core.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace Incas.Core.Views.Windows

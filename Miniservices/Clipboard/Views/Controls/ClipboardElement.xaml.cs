@@ -1,7 +1,5 @@
-﻿using Incas.Core.Classes;
-using Incas.Miniservices.Clipboard.AutoUI;
+﻿using Incas.Miniservices.Clipboard.AutoUI;
 using Incas.Miniservices.Clipboard.Classes;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 

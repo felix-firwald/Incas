@@ -13,7 +13,7 @@ namespace Incas.Core.Classes
         public string Table;
         public string Result { get; private set; }
         private bool isWhereAlready = false;
-        private Dictionary<string, string> parameters = new();
+        private Dictionary<string, string> parameters = [];
         private uint recursion = 0;
         public DBConnectionType typeOfConnection { get; set; }
         public string DBPath { get; set; }
@@ -44,7 +44,7 @@ namespace Incas.Core.Classes
         }
         private List<string> RegisterParameters(List<string> values)
         {
-            List<string> result = new();
+            List<string> result = [];
             foreach (string value in values)
             {
                 result.Add(this.RegisterParameter(value));
@@ -152,7 +152,7 @@ namespace Incas.Core.Classes
         {
             this.Result += $"UPDATE [{this.Table}]\n" +
             $"SET ";
-            List<string> result = new();
+            List<string> result = [];
             foreach (KeyValuePair<string, string> kvp in dict)
             {
                 result.Add("[" + kvp.Key + "] = " + this.RegisterParameter(kvp.Value));
@@ -491,7 +491,7 @@ namespace Incas.Core.Classes
                 System.Diagnostics.Debug.WriteLine(this.Result);
                 cmd.CommandText = this.GetRequest();
                 this.ApplyParams(cmd);
-                
+
                 SQLiteDataReader sqlreader = cmd.ExecuteReader();
                 DataTable objDataTable = new();
                 objDataTable.Load(sqlreader);

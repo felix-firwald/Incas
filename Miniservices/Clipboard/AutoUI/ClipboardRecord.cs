@@ -1,6 +1,4 @@
-﻿using Incas.Core.Attributes;
-using Incas.Core.AutoUI;
-using Incas.Core.Classes;
+﻿using Incas.Core.AutoUI;
 using Incas.Miniservices.Clipboard.Classes;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;

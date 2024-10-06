@@ -1,8 +1,7 @@
-﻿using Incas.Core.Attributes;
+﻿using Incas.Core.AutoUI;
 using Incas.Core.Classes;
-using Incas.Core.AutoUI;
-using Incas.Objects.Models;
 using Incas.Objects.Components;
+using Incas.Objects.Models;
 using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
@@ -21,7 +20,7 @@ namespace Incas.Objects.AutoUI
 
         public TemplateSelection(ClassData data)
         {
-            this.Selector = new(new());
+            this.Selector = new([]);
             foreach (TemplateData item in data.Templates.Values)
             {
                 this.Selector.Pairs.Add(item.File, item.Name);

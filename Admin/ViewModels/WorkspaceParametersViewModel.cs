@@ -1,13 +1,10 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
-using Incas.Users.Models;
-using Mono.Unix;
-using System.Data;
-using System.Collections.Generic;
 using Incas.Objects.Models;
 using System;
-using Incas.Objects.Components;
+using System.Collections.Generic;
+using System.Data;
 
 namespace Incas.Admin.ViewModels
 {
@@ -22,29 +19,22 @@ namespace Incas.Admin.ViewModels
         {
             get
             {
-                using (Parameter p = new())
-                {
-                    return p.GetConstants();
-                }
+                using Parameter p = new();
+                return p.GetConstants();
             }
         }
         public DataTable Enumerations
         {
             get
             {
-                using (Parameter p = new())
-                {
-                    return p.GetEnumerators();
-                }
+                using Parameter p = new();
+                return p.GetEnumerators();
             }
         }
         private DataRow selectedConstant;
         public DataRow SelectedConstant
         {
-            get
-            {
-                return this.selectedConstant;
-            }
+            get => this.selectedConstant;
             set
             {
                 this.selectedConstant = value;
@@ -54,10 +44,7 @@ namespace Incas.Admin.ViewModels
         private DataRow selectedEnumeration;
         public DataRow SelectedEnumeration
         {
-            get
-            {
-                return this.selectedEnumeration;
-            }
+            get => this.selectedEnumeration;
             set
             {
                 this.selectedEnumeration = value;
@@ -66,17 +53,7 @@ namespace Incas.Admin.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedEnumValues));
             }
         }
-        public string SelectedEnumerationName
-        {
-            get
-            {
-                if (this.selectedEnumeration == null)
-                {
-                    return "(не выбрано)";
-                }
-                return this.SelectedEnumeration["Наименование перечисления"].ToString();
-            }
-        }
+        public string SelectedEnumerationName => this.selectedEnumeration == null ? "(не выбрано)" : this.SelectedEnumeration["Наименование перечисления"].ToString();
         private string enumvals;
         public string SelectedEnumValues
         {
@@ -108,10 +85,8 @@ namespace Incas.Admin.ViewModels
         {
             get
             {
-                using (Class cl = new())
-                {
-                    return cl.GetAllClassesAsDataTable();
-                }
+                using Class cl = new();
+                return cl.GetAllClassesAsDataTable();
             }
         }
         public void UpdateClasses()

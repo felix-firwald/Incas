@@ -15,25 +15,13 @@ namespace Incas.Objects.Views.Windows
         public bool Result = false;
         public string SelectedPath
         {
-            get
-            {
-                return this.Path.Text;
-            }
-            set
-            {
-                this.Path.Text = value;
-            }
+            get => this.Path.Text;
+            set => this.Path.Text = value;
         }
         public string SelectedName
         {
-            get
-            {
-                return this.TemplateName.Text;
-            }
-            set
-            {
-                this.TemplateName.Text = value;
-            }
+            get => this.TemplateName.Text;
+            set => this.TemplateName.Text = value;
         }
 
         public TemplateClassEditor()
@@ -81,14 +69,7 @@ namespace Incas.Objects.Views.Windows
                     if (DialogsManager.ShowQuestionDialog($"Файл с именем \"{result}\" уже существует в рабочем пространстве. Вы хотите выбрать присвоить выбранному файлу другое имя или использовать уже существующий файл?", "Файл уже существует", "Переименовать выбранный", "Использовать существующий") == DialogStatus.Yes)
                     {
                         string name = DialogsManager.ShowInputBox("Имя файла", "Введите имя файла без расширения").Replace(".xlsx", "").Replace(".docx", "");
-                        if (result.Contains(".xlsx"))
-                        {
-                            name = name += ".xlsx";
-                        }
-                        else
-                        {
-                            name = name += ".docx";
-                        }
+                        name = result.Contains(".xlsx") ? (name += ".xlsx") : (name += ".docx");
                         this.Path.Text = name;
                         File.Copy(path, ProgramState.GetFullnameOfDocumentFile(name));
                     }

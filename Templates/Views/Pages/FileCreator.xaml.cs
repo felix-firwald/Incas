@@ -1,5 +1,4 @@
 ﻿using Incas.Core.Classes;
-using Incas.CreatedDocuments.Models;
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Views.Controls;
@@ -14,7 +13,6 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace Incas.Templates.Views.Pages
 {
@@ -373,7 +371,7 @@ namespace Incas.Templates.Views.Pages
                 string fileXPS = wt.TurnToXPS();
                 DialogsManager.ShowWaitCursor(false);
                 PreviewWindow pr = new(fileXPS, !this.templateSettings.RequiresSave);
-                pr.Show();   
+                pr.Show();
             }
             catch (NotNullFailed nn)
             {
@@ -402,7 +400,7 @@ namespace Incas.Templates.Views.Pages
         private void OpenFileClick(object sender, MouseButtonEventArgs e)
         {
             try
-            {          
+            {
                 DialogsManager.ShowWaitCursor();
                 this.CreateFile(ProgramState.TemplatesRuntime, false);
                 string filename;

@@ -1,12 +1,10 @@
-﻿using Incas.Core.Classes;
-using Incas.Core.Views.Controls;
+﻿using Incas.Core.Views.Controls;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Windows;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace Incas.Templates.Views.Pages
 {
@@ -85,7 +83,7 @@ namespace Incas.Templates.Views.Pages
 
         private void SearchClick(object sender, RoutedEventArgs e)
         {
-            
+
         }
         private void CancelSearchClick(object sender, RoutedEventArgs e)
         {

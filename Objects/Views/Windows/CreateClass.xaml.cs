@@ -1,18 +1,16 @@
 ﻿using Incas.Core.Classes;
-using Incas.Objects.Models;
-using Incas.Objects.ViewModels;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Collections.Generic;
-using System;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
+using Incas.Objects.Models;
+using Incas.Objects.ViewModels;
 using Incas.Objects.Views.Controls;
 using Incas.Templates.Components;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using AvaloniaEdit.Utils;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -21,14 +19,16 @@ namespace Incas.Objects.Views.Windows
     /// </summary>
     public partial class CreateClass : Window
     {
-        ClassViewModel vm;
+        private ClassViewModel vm;
         public CreateClass(ClassTypeSettings primary)
         {
             this.InitializeComponent();
-            this.vm = new(new());
-            this.vm.CategoryOfClass = primary.Category;
-            this.vm.NameOfClass = primary.Name;
-            this.vm.Type = (ClassType)primary.Selector.SelectedObject;
+            this.vm = new(new())
+            {
+                CategoryOfClass = primary.Category,
+                NameOfClass = primary.Name,
+                Type = (ClassType)primary.Selector.SelectedObject
+            };
             if (this.vm.Type == ClassType.Document)
             {
                 this.vm.ShowCard = true;
@@ -38,7 +38,7 @@ namespace Incas.Objects.Views.Windows
             {
                 this.TemplatesArea.Visibility = Visibility.Collapsed;
             }
-            this.DataContext = this.vm;            
+            this.DataContext = this.vm;
         }
         public CreateClass(Guid id)
         {
@@ -57,14 +57,7 @@ namespace Incas.Objects.Views.Windows
             {
                 this.AddField(f);
             }
-            if (this.vm.Type == ClassType.Document)
-            {
-                this.TemplatesArea.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this.TemplatesArea.Visibility = Visibility.Collapsed;
-            }
+            this.TemplatesArea.Visibility = this.vm.Type == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
             this.UpdateStatusesList();
             this.UpdateTemplatesList();
         }
@@ -102,7 +95,7 @@ namespace Incas.Objects.Views.Windows
             {
                 position -= 1;
             }
-            
+
             this.ContentPanel.Children.Remove(t);
             this.ContentPanel.Children.Insert(position, t);
             return position;
@@ -120,19 +113,17 @@ namespace Incas.Objects.Views.Windows
                 this.ContentPanel.Children.Remove(t);
                 return true;
             }
-            using (Class cl = new())
+            using Class cl = new();
+            List<string> list = cl.FindBackReferencesNames(data);
+            if (list.Count > 0)
             {
-                List<string> list = cl.FindBackReferencesNames(data);
-                if (list.Count > 0)
-                {
-                    DialogsManager.ShowExclamationDialog($"Поле невозможно удалить, поскольку на него ссылаются следующие классы:\n{string.Join(",\n", list)}", "Удаление невозможно");
-                    return false;
-                }
-                else
-                {
-                    this.ContentPanel.Children.Remove(t);
-                }
-            }           
+                DialogsManager.ShowExclamationDialog($"Поле невозможно удалить, поскольку на него ссылаются следующие классы:\n{string.Join(",\n", list)}", "Удаление невозможно");
+                return false;
+            }
+            else
+            {
+                this.ContentPanel.Children.Remove(t);
+            }
             return true;
         }
 
@@ -166,10 +157,10 @@ namespace Incas.Objects.Views.Windows
         }
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            List<Models.Field> fields = new();
+            List<Models.Field> fields = [];
             try
             {
-                List<string> names = new();
+                List<string> names = [];
                 if (this.ContentPanel.Children.Count == 0)
                 {
                     DialogsManager.ShowExclamationDialog("Класс не может не содержать полей.", "Сохранение прервано");
@@ -375,7 +366,7 @@ namespace Incas.Objects.Views.Windows
 
         private void ShowFormClick(object sender, MouseButtonEventArgs e)
         {
-            List<Incas.Objects.Models.Field> fields = new();
+            List<Incas.Objects.Models.Field> fields = [];
             try
             {
                 foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
@@ -391,7 +382,7 @@ namespace Incas.Objects.Views.Windows
             catch (FieldDataFailed fd)
             {
                 DialogsManager.ShowExclamationDialog(fd.Message, "Предпросмотр прерван");
-            }          
+            }
         }
     }
 }

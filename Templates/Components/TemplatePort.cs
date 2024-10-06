@@ -1,6 +1,5 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using Incas.Objects.Models;
 using Incas.Templates.Models;
 using Newtonsoft.Json;
 using System;
@@ -64,21 +63,14 @@ namespace Incas.Templates.Components
             using ZipArchive zip = ZipFile.Open(file, ZipArchiveMode.Read);
             ZipArchiveEntry entry = zip.GetEntry(sourceName);
             if (entry != null)
-            {               
+            {
                 if (File.Exists(ProgramState.GetFullnameOfDocumentFile(entry.Name))) // если файл с таким именем есть в папке Sources
                 {
                     if (DialogsManager.ShowQuestionDialog($"Исходный файл шаблона с именем \"{entry.Name}\" уже существует в рабочем пространстве.\n" +
                         $"Использовать его или переименовать предлагаемый файл из импортированного шаблона?", "Использовать старый шаблон?", "Использовать старый", "Переименовать предлагаемый") == DialogStatus.No)
                     {
                         newpath = DialogsManager.ShowInputBox("Имя исходного файла", "Придумайте другое имя").Replace("\\", ""); // use new
-                        if (entry.Name.EndsWith(".docx"))
-                        {
-                            newpath = newpath.Replace(".docx", "") + ".docx";
-                        }
-                        else
-                        {
-                            newpath = newpath.Replace(".xlsx", "") + ".xlsx";
-                        }
+                        newpath = entry.Name.EndsWith(".docx") ? newpath.Replace(".docx", "") + ".docx" : newpath.Replace(".xlsx", "") + ".xlsx";
                         this.Data.SourceTemplate.path = newpath;
                         entry.ExtractToFile(ProgramState.GetFullnameOfDocumentFile(newpath));
                     }

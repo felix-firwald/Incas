@@ -63,16 +63,11 @@ namespace Incas.Core.Classes
                     return "TEXT";
             }
 
-            if (type == typeof(int))
-            {
-                return "INTEGER";
-            }
-            else
-            {
-                return type == typeof(long) || type == typeof(double)
+            return type == typeof(int)
+                ? "INTEGER"
+                : type == typeof(long) || type == typeof(double)
                     ? "DOUBLE"
                     : type == typeof(DateTime) ? "TEXT" : type == typeof(bool) ? "BOOLEAN" : "STRING";
-            }
         }
         #endregion
 

@@ -1,9 +1,6 @@
 ﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
-using Incas.Core.AutoUI;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Incas.Objects.Models;
 
 namespace Incas.Objects.AutoUI
 {

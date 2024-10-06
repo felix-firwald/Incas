@@ -1,12 +1,9 @@
-﻿using Incas.Core.Models;
-using Incas.Core.ViewModels;
+﻿using Incas.Core.ViewModels;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
-using Incas.Templates.Components;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Windows;
 
 namespace Incas.Objects.ViewModels
 {

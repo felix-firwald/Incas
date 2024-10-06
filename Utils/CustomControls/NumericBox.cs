@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Incas.Utils.CustomControls
 {
@@ -49,8 +37,8 @@ namespace Incas.Utils.CustomControls
 
         public int MinValue
         {
-            get { return (int)this.GetValue(MinValueProperty); }
-            set { this.SetValue(MinValueProperty, value); }
+            get => (int)this.GetValue(MinValueProperty);
+            set => this.SetValue(MinValueProperty, value);
         }
 
         public static readonly DependencyProperty MinValueProperty =
@@ -58,8 +46,8 @@ namespace Incas.Utils.CustomControls
 
         public int MaxValue
         {
-            get { return (int)this.GetValue(MaxValueProperty); }
-            set { this.SetValue(MaxValueProperty, value); }
+            get => (int)this.GetValue(MaxValueProperty);
+            set => this.SetValue(MaxValueProperty, value);
         }
 
         public static readonly DependencyProperty MaxValueProperty =
@@ -67,7 +55,7 @@ namespace Incas.Utils.CustomControls
 
         public int Value
         {
-            get { return (int)this.GetValue(ValueProperty); }
+            get => (int)this.GetValue(ValueProperty);
             set
             {
                 int result = value;

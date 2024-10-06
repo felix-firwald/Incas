@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Windows.ApplicationModel.Email.DataProvider;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -60,7 +59,7 @@ namespace Incas.Objects.Views.Pages
                 StatusData data = new();
                 try
                 {
-                    data = this.ClassData.Statuses[obj.Status];              
+                    data = this.ClassData.Statuses[obj.Status];
                 }
                 catch
                 {
@@ -106,7 +105,7 @@ namespace Incas.Objects.Views.Pages
         }
         public void UpdateFor(Components.Object obj)
         {
-            this.ShowStatus(obj);         
+            this.ShowStatus(obj);
             if (this.ClassData.EditByAuthorOnly == true && obj.AuthorId != ProgramState.CurrentUser.id)
             {
                 this.StatusBorder.IsEnabled = false;
@@ -118,8 +117,8 @@ namespace Incas.Objects.Views.Pages
                 this.EditIcon.Visibility = Visibility.Visible;
                 this.StatusBackButton.IsEnabled = true;
                 this.StatusForwardButton.IsEnabled = true;
-            }           
-            this.FieldsContentPanel.Children.Clear();          
+            }
+            this.FieldsContentPanel.Children.Clear();
             this.ObjectName.Text = obj.Name;
             this.id = obj.Id;
             if (this.first)
@@ -149,7 +148,7 @@ namespace Incas.Objects.Views.Pages
                         }
                     }
                 }
-            }                  
+            }
             foreach (FieldData field in obj.Fields)
             {
                 ObjectFieldViewer of = new(field, this.first);
@@ -160,7 +159,7 @@ namespace Incas.Objects.Views.Pages
             {
                 ObjectBackReferenceViewer ob = new(this.Class, this.id);
                 this.FieldsContentPanel.Children.Add(ob);
-            }         
+            }
             ((IObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
         }
 
@@ -183,8 +182,7 @@ namespace Incas.Objects.Views.Pages
                 DialogsManager.ShowExclamationDialog("Объект не выбран!", "Действие невозможно");
                 return;
             }
-            List<Components.Object> objects = new();
-            objects.Add(ObjectProcessor.GetObject(this.Class, this.id));
+            List<Components.Object> objects = [ObjectProcessor.GetObject(this.Class, this.id)];
             ObjectsEditor oe = new(this.Class, objects);
             oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
             oe.ShowDialog();
@@ -215,14 +213,7 @@ namespace Incas.Objects.Views.Pages
             Incas.Objects.Components.Object obj = ObjectProcessor.GetObject(this.Class, this.id);
             if (obj.Status < this.ClassData.Statuses.Count)
             {
-                if (obj.Status == 0)
-                {
-                    obj.Status = (byte)(obj.Status + 2);
-                }
-                else
-                {
-                    obj.Status = (byte)(obj.Status + 1);
-                }              
+                obj.Status = obj.Status == 0 ? (byte)(obj.Status + 2) : (byte)(obj.Status + 1);
                 ObjectProcessor.WriteObjects(this.Class, obj);
                 this.UpdateFor(ObjectProcessor.GetObject(this.Class, this.id));
             }

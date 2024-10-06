@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-
-namespace Incas.Core.Classes
+﻿namespace Incas.Core.Classes
 {
     public struct FieldCreator
     {
@@ -16,27 +12,27 @@ namespace Incas.Core.Classes
 
         public FieldCreator(string nam, string typeOf)
         {
-            Name = nam;
-            TypeOf = typeOf;
+            this.Name = nam;
+            this.TypeOf = typeOf;
         }
         private string GetNull()
         {
-            return NotNULL ? "NOT NULL" : "";
+            return this.NotNULL ? "NOT NULL" : "";
         }
         private string GetFK()
         {
-            return FKtable != null ? $"REFERENCES [{FKtable}] ([{FKfield}]) ON DELETE CASCADE" : "";
+            return this.FKtable != null ? $"REFERENCES [{this.FKtable}] ([{this.FKfield}]) ON DELETE CASCADE" : "";
         }
 
         private string GetUniq()
         {
-            return IsUNIQUE ? "UNIQUE ON CONFLICT ROLLBACK" : "";
+            return this.IsUNIQUE ? "UNIQUE ON CONFLICT ROLLBACK" : "";
         }
         public override string ToString()
         {
-            return IsPK
-                ? $"[{Name}] INTEGER PRIMARY KEY AUTOINCREMENT"
-                : $"[{Name}] {TypeOf} {GetNull()} {GetUniq()} {GetFK()}".Trim();
+            return this.IsPK
+                ? $"[{this.Name}] INTEGER PRIMARY KEY AUTOINCREMENT"
+                : $"[{this.Name}] {this.TypeOf} {this.GetNull()} {this.GetUniq()} {this.GetFK()}".Trim();
         }
     }
 }

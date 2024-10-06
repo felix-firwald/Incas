@@ -1,11 +1,7 @@
-﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
-using Incas.Core.AutoUI;
-using System.ComponentModel;
+﻿using Incas.Core.Classes;
 using Incas.Core.Models;
-using AvaloniaEdit.Utils;
 using System.Collections.Generic;
-using DocumentFormat.OpenXml.Bibliography;
+using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
 {
@@ -25,8 +21,8 @@ namespace Incas.Objects.AutoUI
         {
             this.Source = field;
             Parameter p = new();
-            this.Selector = new(new());
-            foreach (KeyValuePair<System.Guid,string> pair in p.GetConstantsDictionary())
+            this.Selector = new([]);
+            foreach (KeyValuePair<System.Guid, string> pair in p.GetConstantsDictionary())
             {
                 this.Selector.Pairs.Add(pair.Key, pair.Value);
             }

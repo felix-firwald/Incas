@@ -1,7 +1,5 @@
 ﻿using Incas.Core.Classes;
-using Incas.CreatedDocuments.Models;
 using Incas.Objects.Views.Controls;
-using Incas.Templates.Views.Controls;
 using Spire.Doc;
 using System;
 using System.Collections.Generic;
@@ -59,7 +57,7 @@ namespace Incas.Templates.Components
                 for (int i = 0; i < tags.Count; i++)
                 {
                     options.SearchValue = this.ConvertTag(tags[i]);
-                    options.NewValue = string.IsNullOrEmpty(values[i])? "" : values[i].Trim(); // а нахуя Trim?
+                    options.NewValue = string.IsNullOrEmpty(values[i]) ? "" : values[i].Trim(); // а нахуя Trim?
                     doc.ReplaceText(options);
                 }
                 // MakeFormatting(doc);
@@ -80,8 +78,8 @@ namespace Incas.Templates.Components
 
         public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true)
         {
-            List<string> tagsToReplace = new();
-            List<string> values = new();
+            List<string> tagsToReplace = [];
+            List<string> values = [];
             foreach (FieldTableFiller tab in tableFillers)
             {
                 this.CreateTable(tab.field.Name, tab.DataTable);

@@ -1,12 +1,8 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using Incas.CustomDatabases.Views.Windows;
 using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -18,7 +14,7 @@ namespace Incas.Core.Views.Controls
     public partial class SelectionBox : UserControl
     {
         public Objects.Components.Object SelectedObject { get; set; }
-        public string Value { get => this.Input.Text; }
+        public string Value => this.Input.Text;
         private readonly BindingData Binding;
         public delegate void ValueChanged(object sender, TextChangedEventArgs e);
         public event ValueChanged OnValueChanged;
@@ -39,7 +35,7 @@ namespace Incas.Core.Views.Controls
                     this.SetAsEditingEnabled();
                 }
             }
-            catch { } 
+            catch { }
         }
         public void SetObject(Guid id)
         {
@@ -103,7 +99,7 @@ namespace Incas.Core.Views.Controls
 
         private void HintsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-     
+
         }
         private void SetAsEditingEnabled()
         {
@@ -122,7 +118,7 @@ namespace Incas.Core.Views.Controls
             {
                 Objects.Models.Class cl = new(this.Binding.Class);
                 cl.GetClassData();
-                ObjectsEditor oe = new(cl, new List<Objects.Components.Object>() { this.SelectedObject });
+                ObjectsEditor oe = new(cl, [this.SelectedObject]);
                 oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
                 oe.ShowDialog();
             }

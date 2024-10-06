@@ -1,7 +1,5 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using Incas.Objects.AutoUI;
-using Incas.Objects.Components;
 using System;
 using System.Windows;
 
@@ -24,14 +22,14 @@ namespace Incas
                 App.Current.Shutdown();
             }
             ProgramState.CheckoutWorkspaces();
-            
+
             OpenWorkspace ow = new();
             if (ow.ShowDialog() == false)
             {
 
             }
         }
-        
+
         private void Unhandled(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             try
