@@ -14,6 +14,7 @@ namespace Incas.Objects.Models
         public bool EditByAuthorOnly { get; set; }
         public Dictionary<int, StatusData> Statuses { get; set; }
         public Dictionary<int, TemplateData> Templates { get; set; }
+        public bool InsertTemplateName { get; set; }
         public void AddStatus(StatusData data)
         {
             this.Statuses ??= [];

@@ -69,6 +69,19 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.EditByAuthorOnly));
             }
         }
+        public bool InsertTemplateName
+        {
+            get
+            {
+                return this.SourceData.InsertTemplateName;
+            }
+            set
+            {
+                this.SourceData.InsertTemplateName = value;
+                this.OnPropertyChanged(nameof(this.InsertTemplateName));
+            }
+        }
+
         public void SetData(List<Field> fields)
         {
             this.SourceData.Fields = fields;

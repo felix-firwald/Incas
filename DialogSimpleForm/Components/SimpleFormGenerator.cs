@@ -174,20 +174,6 @@ namespace Incas.DialogSimpleForm.Components
             return control;
         }
 
-        private void Mi_Click(object sender, RoutedEventArgs e)
-        {
-            string text = DialogsManager.ShowClipboardManager(true);
-            string tag = ((MenuItem)sender).Tag.ToString();
-            foreach (Control c in this.Container.Children)
-            {
-                if (c.Tag.ToString() == tag)
-                {
-                    ((TextBox)c).Text = text;
-                    break;
-                }
-            }
-        }
-
         private Control GeneratePathBox(string description, string value)
         {
             PathSelector control = new()
@@ -229,10 +215,10 @@ namespace Incas.DialogSimpleForm.Components
 
         private Control GenerateDateBox(string description, DateTime value)
         {
-            if (value == DateTime.MinValue)
-            {
-                value = DateTime.Today;
-            }
+            //if (value == DateTime.MinValue)
+            //{
+            //    value = DateTime.Today;
+            //}
             DatePicker control = new()
             {
                 Tag = description,

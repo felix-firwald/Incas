@@ -23,13 +23,13 @@ namespace Incas.Objects.AutoUI
             this.Selector = new([]);
             foreach (TemplateData item in data.Templates.Values)
             {
-                this.Selector.Pairs.Add(item.File, item.Name);
+                this.Selector.Pairs.Add(item, item.Name);
             }
             this.Selector.SetSelectionByIndex(0);
         }
-        public string GetSelectedPath()
+        public TemplateData GetSelectedPath()
         {
-            return this.Selector.SelectedObject.ToString();
+            return (TemplateData)this.Selector.SelectedObject;
         }
 
         #region Functionality

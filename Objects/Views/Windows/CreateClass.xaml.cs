@@ -1,4 +1,5 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using Field = Incas.Objects.Models.Field;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -382,6 +384,20 @@ namespace Incas.Objects.Views.Windows
             catch (FieldDataFailed fd)
             {
                 DialogsManager.ShowExclamationDialog(fd.Message, "Предпросмотр прерван");
+            }
+        }
+
+        private void InsertFieldNameClick(object sender, RoutedEventArgs e)
+        {
+            List<Field> fields = new();
+            foreach (Controls.FieldCreator item in this.ContentPanel.Children)
+            {
+                fields.Add(item.vm.Source);
+            }
+            FieldNameInsertor fn = new(fields);
+            if (fn.ShowDialog("Вставка имени", Core.Classes.Icon.Tags))
+            {
+                this.vm.NameTemplate = this.NameTemplate.Text + " " + fn.GetSelectedField();
             }
         }
     }

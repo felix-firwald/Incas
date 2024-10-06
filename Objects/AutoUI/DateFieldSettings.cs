@@ -42,7 +42,7 @@ namespace Incas.Objects.AutoUI
             }
             catch
             {
-                this.StartDate = DateTime.MinValue;
+                this.StartDate = DateTime.Today.AddYears(-1);
                 this.EndDate = DateTime.MaxValue;
             }
         }

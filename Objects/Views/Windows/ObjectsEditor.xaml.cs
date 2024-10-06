@@ -265,10 +265,10 @@ namespace Incas.Objects.Views.Windows
         private void RenderObjectsClick(object sender, RoutedEventArgs e)
         {
             List<Components.Object> objects = [];
-            string templateFile = "";
+            TemplateData templateFile = new();
             if (this.ClassData.Templates?.Count == 1)
             {
-                templateFile = this.ClassData.Templates[1].File;
+                templateFile = this.ClassData.Templates[1];
             }
             else if (this.ClassData.Templates?.Count > 1)
             {

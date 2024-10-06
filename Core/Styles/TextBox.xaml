@@ -20,6 +20,7 @@
         </Grid>
     </ControlTemplate>
     <Style TargetType="{x:Type TextBox}">
+        <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
         <Setter Property="ContextMenu">
             <Setter.Value>
                 <ContextMenu>

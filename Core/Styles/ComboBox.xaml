@@ -117,6 +117,7 @@
         <Setter Property="Margin" Value="5,5,5,5"/>
         <Setter Property="Padding" Value="10 3"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
         <Setter Property="TextElement.Foreground" Value="White"/>
         <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>

@@ -241,6 +241,17 @@ namespace Incas.Objects.Views.Pages
                 .Replace("\"", "")
                 .Trim();
         }
+        public string GetNameOfFile(string folder, string template, string extension)
+        {
+            string result = "";
+            string templatePart = "";
+            if (this.ClassData.InsertTemplateName)
+            {
+                templatePart = " (" + template + ")";
+            }
+            result = $"{folder}\\{this.RemoveUnresolvedChars(this.ObjectName.Text)}{templatePart}.{extension}";
+            return result;
+        }
         public void GenerateDocument()
         {
             string name = this.ObjectName.Text;
@@ -249,7 +260,7 @@ namespace Incas.Objects.Views.Pages
             {
                 if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
                 {
-                    this.GenerateDocument(this.ClassData.Templates[1].File, path);
+                    this.GenerateDocument(this.ClassData.Templates[1], path);
                 }
             }
             else if (this.ClassData.Templates?.Count > 1)
@@ -268,34 +279,34 @@ namespace Incas.Objects.Views.Pages
 
             }
         }
-        public string GenerateDocument(string filePath, string folder, bool async = true)
+        public string GenerateDocument(TemplateData templateData, string folder, bool async = true)
         {
             string newFile = "";
-            filePath = ProgramState.GetFullnameOfDocumentFile(filePath);
+            string oldFile = ProgramState.GetFullnameOfDocumentFile(templateData.File);
             try
             {
-                if (filePath.EndsWith(".docx"))
+                if (oldFile.EndsWith(".docx"))
                 {
-                    newFile = $"{folder}\\{this.RemoveUnresolvedChars(this.ObjectName.Text)}.docx";
+                    newFile = this.GetNameOfFile(folder, templateData.Name, "docx");
                     if (File.Exists(newFile))
                     {
                         File.Delete(newFile);
                     }
-                    File.Copy(filePath, newFile, true);
+                    File.Copy(oldFile, newFile, true);
                     WordTemplator wt = new(newFile);
                     this.Dispatcher.Invoke(() =>
                     {
                         wt.GenerateDocument(this.TagFillers, this.Tables, async);
                     });
                 }
-                else if (filePath.EndsWith(".xlsx"))
+                else if (oldFile.EndsWith(".xlsx"))
                 {
-                    newFile = $"{folder}\\{this.RemoveUnresolvedChars(this.ObjectName.Text)}.xlsx";
+                    newFile = this.GetNameOfFile(folder, templateData.Name, "xlsx");
                     if (File.Exists(newFile))
                     {
                         File.Delete(newFile);
                     }
-                    File.Copy(filePath, newFile, true);
+                    File.Copy(oldFile, newFile, true);
                     ExcelTemplator et = new(newFile);
                     this.Dispatcher.Invoke(() =>
                     {
@@ -404,7 +415,7 @@ namespace Incas.Objects.Views.Pages
                         return;
                     }
                     DialogsManager.ShowWaitCursor(true);
-                    string name = this.GenerateDocument(this.ClassData.Templates[1].File, path, false);
+                    string name = this.GenerateDocument(this.ClassData.Templates[1], path, false);
                     WordTemplator wt = new(name);
                     string fileXPS = wt.TurnToXPS();
                     DialogsManager.ShowWaitCursor(false);
@@ -416,7 +427,7 @@ namespace Incas.Objects.Views.Pages
                     TemplateSelection ts = new(this.ClassData);
                     if (ts.ShowDialog("Выбор шаблона", Icon.Magic) == true)
                     {
-                        if (ts.GetSelectedPath().EndsWith(".xlsx"))
+                        if (ts.GetSelectedPath().File.EndsWith(".xlsx"))
                         {
                             DialogsManager.ShowExclamationDialog("Предпросмотр для Excel файлов недоступен.", "Рендеринг прерван");
                             return;

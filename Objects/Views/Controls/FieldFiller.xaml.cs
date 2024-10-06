@@ -97,10 +97,6 @@ namespace Incas.Objects.Views.Controls
                         Style = this.FindResource("ComboBoxMain") as Style
                     };
                     comboBox.SelectionChanged += this.Combobox_SelectionChanged;
-                    if (!string.IsNullOrWhiteSpace(description))
-                    {
-                        comboBox.ToolTip = description;
-                    }
                     this.PlaceUIControl(comboBox);
                     break;
                 case FieldType.Number:
@@ -150,6 +146,7 @@ namespace Incas.Objects.Views.Controls
         private void PlaceUIControl(Control control)
         {
             this.control = control;
+            this.control.ToolTip = this.field.Description;
             this.Grid.Children.Add(control);
             Grid.SetRow(control, 0);
             Grid.SetColumn(control, 1);

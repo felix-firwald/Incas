@@ -13,7 +13,7 @@
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
         <Setter Property="Padding" Value="1"/>
-        <Setter Property="ToolTipService.InitialShowDelay" Value="160"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -71,6 +71,7 @@
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
         <Setter Property="Padding" Value="1"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
