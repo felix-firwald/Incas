@@ -68,7 +68,7 @@
                             </StackPanel>
                         </Button>
                     </WrapPanel>
-                    <DataGrid x:Name="ClassesTable" Style="{StaticResource DataGridMain}" AutoGeneratingColumn="ClassesTable_AutoGeneratingColumn" IsReadOnly="True" ItemsSource="{Binding Classes}" SelectedValue="{Binding SelectedClass}" Grid.Row="1">
+                    <DataGrid x:Name="ClassesTable" Style="{StaticResource DataGridMain}" ColumnWidth="*" AutoGeneratingColumn="ClassesTable_AutoGeneratingColumn" IsReadOnly="True" ItemsSource="{Binding Classes}" SelectedValue="{Binding SelectedClass}" Grid.Row="1">
                         
                     </DataGrid>
                 </Grid>
@@ -109,7 +109,7 @@
                     </Button>
                 </WrapPanel>
 
-                <DataGrid x:Name="ConstantsTable" Style="{StaticResource DataGridMain}" AutoGeneratingColumn="ConstantsTable_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1">
+                <DataGrid x:Name="ConstantsTable" Style="{StaticResource DataGridMain}" ColumnWidth="*" AutoGeneratingColumn="ConstantsTable_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1">
 
                 </DataGrid>
                 
@@ -154,7 +154,7 @@
                     </Button>
                 </WrapPanel>
 
-                <DataGrid x:Name="EnumsTable" Style="{StaticResource DataGridMain}" AutoGeneratingColumn="EnumsTable_AutoGeneratingColumn" ItemsSource="{Binding Enumerations}" SelectionChanged="EnumsTable_SelectionChanged" SelectionUnit="FullRow" IsReadOnly="True" Grid.Row="1" Margin="5,5,5,5">
+                <DataGrid x:Name="EnumsTable" Style="{StaticResource DataGridMain}" ColumnWidth="*" AutoGeneratingColumn="EnumsTable_AutoGeneratingColumn" ItemsSource="{Binding Enumerations}" SelectionChanged="EnumsTable_SelectionChanged" SelectionUnit="FullRow" IsReadOnly="True" Grid.Row="1" Margin="5,5,5,5">
 
                 </DataGrid>
                 <Border Margin="5" CornerRadius="0,0,8,0" BorderBrush="{StaticResource Element}" BorderThickness="2" Background="{StaticResource Black}" Grid.Row="1" Grid.Column="1">

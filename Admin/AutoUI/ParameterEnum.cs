@@ -1,6 +1,5 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Incas.Core.AutoUI;
-using Incas.Core.Models;
+﻿using Incas.Core.Models;
+using Incas.DialogSimpleForm.Components;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -8,6 +7,7 @@ namespace Incas.Admin.AutoUI
 {
     public class ParameterEnum : AutoUIBase
     {
+        protected override string FinishButtonText { get => "Сохранить перечисление"; }
         [Description("Наименование перечисления")]
         public string Name { get; set; }
 

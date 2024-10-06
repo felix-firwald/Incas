@@ -1,5 +1,5 @@
 ﻿using Incas.Core.Attributes;
-using Incas.Core.AutoUI;
+using Incas.DialogSimpleForm.Components;
 using Incas.Core.Classes;
 using Incas.Objects.Components;
 using System.Collections.Generic;

@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.ViewModels;
+using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -52,15 +53,11 @@ namespace Incas.Objects.Views.Controls
         private void MaximizeClick(object sender, System.Windows.RoutedEventArgs e)
         {
             this.MainBorder.Height = this.ContentPanel.Height + 40;
-            //this.TitleUp.Visibility = Visibility.Collapsed;
-            //this.TitleDown.Visibility = Visibility.Collapsed;
         }
 
         private void MinimizeClick(object sender, System.Windows.RoutedEventArgs e)
         {
             this.MainBorder.Height = 40;
-            //this.TitleUp.Visibility = Visibility.Visible;
-            //this.TitleDown.Visibility = Visibility.Visible;
         }
 
         private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -102,43 +99,49 @@ namespace Incas.Objects.Views.Controls
             {
                 case Components.FieldType.Variable:
                     TextFieldSettings tf = new(f);
-                    tf.ShowDialog(name, Icon.Sliders);
+                    tf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
                     break;
                 case Components.FieldType.Text:
                     TextBigFieldSettings tb = new(f);
-                    tb.ShowDialog(name, Icon.Sliders);
+                    tb.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
                     break;
                 case Components.FieldType.Number:
                     NumberFieldSettings n = new(f);
-                    n.ShowDialog(name, Icon.Sliders);
+                    n.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
                 case Components.FieldType.Relation:
-                    Objects.Components.BindingData db = DialogsManager.ShowBindingDialog(f.Value);
-                    f.Value = JsonConvert.SerializeObject(db);
+                    Objects.Components.BindingData db = new();
+                    DialogBinding dialog = new(f.Value);
+                    if (dialog.ShowDialog() == true)
+                    {
+                        db.Class = dialog.SelectedClass;
+                        db.Field = dialog.SelectedField;
+                        f.Value = JsonConvert.SerializeObject(db);
+                    }
                     break;
                 case Components.FieldType.LocalEnumeration:
                     LocalEnumerationFieldSettings le = new(f);
-                    le.ShowDialog(name, Icon.Sliders);
+                    le.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
                 case Components.FieldType.GlobalEnumeration:
                     GlobalEnumerationFieldSettings ge = new(f);
-                    ge.ShowDialog(name, Icon.Sliders);
+                    ge.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
                 case Components.FieldType.LocalConstant:
                     ConstantFieldSettings cf = new(f);
-                    cf.ShowDialog(name, Icon.Sliders);
+                    cf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
                     break;
                 case Components.FieldType.GlobalConstant:
                     GlobalConstantFieldSettings gc = new(f);
-                    gc.ShowDialog(name, Icon.Sliders);
+                    gc.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
                     break;
                 case Components.FieldType.HiddenField:
                     ConstantFieldSettings hf = new(f);
-                    hf.ShowDialog(name, Icon.Sliders);
+                    hf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
                     break;
                 case Components.FieldType.Date:
                     DateFieldSettings dt = new(f);
-                    dt.ShowDialog(name, Icon.Sliders);
+                    dt.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
                 case Components.FieldType.Generator:
                     break;

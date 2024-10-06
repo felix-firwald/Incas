@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Incas.DialogSimpleForm.Components;
 using System.ComponentModel;
 
 namespace Incas.Core.AutoUI

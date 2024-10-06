@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Objects.AutoUI;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -68,10 +69,12 @@ namespace Incas.Objects.Views.Windows
                 {
                     if (DialogsManager.ShowQuestionDialog($"Файл с именем \"{result}\" уже существует в рабочем пространстве. Вы хотите выбрать присвоить выбранному файлу другое имя или использовать уже существующий файл?", "Файл уже существует", "Переименовать выбранный", "Использовать существующий") == DialogStatus.Yes)
                     {
-                        string name = DialogsManager.ShowInputBox("Имя файла", "Введите имя файла без расширения").Replace(".xlsx", "").Replace(".docx", "");
-                        name = result.Contains(".xlsx") ? (name += ".xlsx") : (name += ".docx");
-                        this.Path.Text = name;
-                        File.Copy(path, ProgramState.GetFullnameOfDocumentFile(name));
+                        RenameSourceFile rs = new(result);
+                        if (rs.ShowDialog("Новое имя файла", Core.Classes.Icon.Subscript))
+                        {                        
+                            this.Path.Text = rs.Name;
+                            File.Copy(path, ProgramState.GetFullnameOfDocumentFile(rs.Name));
+                        }                      
                     }
                 }
                 else

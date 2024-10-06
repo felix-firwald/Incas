@@ -1,5 +1,5 @@
 ﻿using Incas.Core.Attributes;
-using Incas.Core.AutoUI;
+using Incas.DialogSimpleForm.Components;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,6 +12,7 @@ namespace Incas.Objects.AutoUI
     /// </summary>
     public class BaseFieldSettings : AutoUIBase
     {
+        protected override string FinishButtonText { get => "Применить настройки"; }
         #region Data
         protected Incas.Objects.Models.Field Source;
 

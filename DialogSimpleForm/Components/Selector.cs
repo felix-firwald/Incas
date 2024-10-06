@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Incas.Core.Classes
+namespace Incas.DialogSimpleForm.Components
 {
     public class Selector
     {

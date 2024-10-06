@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Objects.AutoUI;
 using Incas.Templates.Models;
 using Newtonsoft.Json;
 using System;
@@ -69,10 +70,13 @@ namespace Incas.Templates.Components
                     if (DialogsManager.ShowQuestionDialog($"Исходный файл шаблона с именем \"{entry.Name}\" уже существует в рабочем пространстве.\n" +
                         $"Использовать его или переименовать предлагаемый файл из импортированного шаблона?", "Использовать старый шаблон?", "Использовать старый", "Переименовать предлагаемый") == DialogStatus.No)
                     {
-                        newpath = DialogsManager.ShowInputBox("Имя исходного файла", "Придумайте другое имя").Replace("\\", ""); // use new
-                        newpath = entry.Name.EndsWith(".docx") ? newpath.Replace(".docx", "") + ".docx" : newpath.Replace(".xlsx", "") + ".xlsx";
-                        this.Data.SourceTemplate.path = newpath;
-                        entry.ExtractToFile(ProgramState.GetFullnameOfDocumentFile(newpath));
+                        RenameSourceFile rs = new(entry.Name);
+                        if (rs.ShowDialog("Новое имя", Icon.Subscript))
+                        {
+                            newpath = rs.Name;
+                            this.Data.SourceTemplate.path = newpath;
+                            entry.ExtractToFile(ProgramState.GetFullnameOfDocumentFile(newpath));
+                        }                      
                     }
                 }
                 else // если файла с таким именем нет в папке Sources

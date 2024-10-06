@@ -323,7 +323,7 @@ namespace Incas.Objects.Views.Controls
                     return "";
                 case FieldType.Relation:
                     Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
-                    if (this.field.NotNull == true || obj is null)
+                    if (this.field.NotNull == true && obj is null)
                     {
                         this.ThrowNotNullFailed();
                     }

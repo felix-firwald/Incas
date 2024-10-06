@@ -20,11 +20,6 @@ namespace Incas.Core.Classes
         {
             DialogsManager.ShowInfoDialog(message, title);
         }
-        public static string ShowInputBox(string title, string description)
-        {
-            return DialogsManager.ShowInputBox(title, description);
-        }
-
     }
 
     public static class ScriptManager

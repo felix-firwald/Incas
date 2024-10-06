@@ -1,4 +1,4 @@
-﻿using Incas.Core.Classes;
+﻿using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Components;
 using Newtonsoft.Json;
 using System;

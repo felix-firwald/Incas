@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Attributes;
 using Incas.Core.AutoUI;
+using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,17 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Incas.Core.Classes
+namespace Incas.DialogSimpleForm.Components
 {
     internal class SimpleFormGenerator
     {
+        /// <summary>
+        /// Container where the generated controls will be placed
+        /// </summary>
         public StackPanel Container;
+        /// <summary>
+        /// Target object
+        /// </summary>
         public AutoUIBase Result;
         public SimpleFormGenerator(AutoUIBase values, StackPanel container)
         {
@@ -27,16 +34,30 @@ namespace Incas.Core.Classes
                 this.AddField(field);
             }
         }
+        /// <summary>
+        /// Looking for DescriptionAttribute (Description) for set visible name of control
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
         private string GetFieldDescription(PropertyInfo field)
         {
             DescriptionAttribute attribute = field.GetCustomAttribute<DescriptionAttribute>(true);
             return attribute != null ? attribute.Description : "";
         }
+        /// <summary>
+        /// Looking for StringLengthAttribute (StringLength) for set max length of TextBox control
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
         private int GetFieldTextMaxLength(PropertyInfo field)
         {
             StringLengthAttribute attribute = field.GetCustomAttribute<StringLengthAttribute>(true);
             return attribute != null ? attribute.MaximumLength : 120;
         }
+        /// <summary>
+        /// Calls the method by its name if it exists in the class
+        /// </summary>
+        /// <param name="name"></param>
         private void SafetyCallMethod(string name)
         {
             MethodInfo method = this.Result.GetType().GetMethod(name);
@@ -52,6 +73,10 @@ namespace Incas.Core.Classes
                 }
             }
         }
+        /// <summary>
+        /// Gets a class field and turns it into a control
+        /// </summary>
+        /// <param name="field"></param>
         private void AddField(PropertyInfo field)
         {
             string description = this.GetFieldDescription(field);
@@ -302,6 +327,10 @@ namespace Incas.Core.Classes
                 GetEnumDescription(value);
             }
         }
+        /// <summary>
+        /// Save Form and returns boolean result of this operation (if validation failed it returns false)
+        /// </summary>
+        /// <returns></returns>
         public bool Save()
         {
             foreach (PropertyInfo field in this.Result.GetType().GetProperties())

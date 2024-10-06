@@ -234,10 +234,6 @@
   <ItemGroup>
     <Folder Include="Admin\Models\" />
     <Folder Include="Admin\Components\" />
-    <Folder Include="FileManager\Models\" />
-    <Folder Include="FileManager\ViewModels\" />
-    <Folder Include="FileManager\Views\Windows\" />
-    <Folder Include="FileManager\Views\Controls\" />
     <Folder Include="Resources\" />
     <Folder Include="Templates\AutoUI\" />
     <Folder Include="Grids\" />

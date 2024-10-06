@@ -1,4 +1,4 @@
-﻿using Incas.Core.AutoUI;
+﻿using Incas.DialogSimpleForm.Components;
 using Incas.Core.Classes;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
@@ -14,6 +14,8 @@ namespace Incas.Objects.AutoUI
     /// </summary>
     public class ClassTypeSettings : AutoUIBase
     {
+        protected override string FinishButtonText { get => "Далее"; }
+        protected override string CancelButtonText { get => "Отменить создание класса"; }
         #region Data
         [Description("Категория класса")]
         public string Category { get; set; }

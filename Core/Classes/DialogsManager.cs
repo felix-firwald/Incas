@@ -112,35 +112,6 @@ namespace Incas.Core.Classes
             Taskboard t = new();
             t.ShowDialog();
         }
-        public static string ShowComboBoxDialog(string title, List<string> elements)
-        {
-            return ShowComboBoxDialog(title, elements, "");
-        }
-        public static string ShowComboBoxDialog(string title, List<string> elements, string description)
-        {
-            switch (elements.Count)
-            {
-                case 0:
-                    return "";
-                case 1:
-                    return elements[0];
-            }
-            DialogComboBox dc = new(elements, title, description);
-            dc.ShowDialog();
-            return dc.SelectedValue;
-        }
-        public static BindingData ShowBindingDialog(string data)
-        {
-            DialogBinding db = new(data);
-            db.ShowDialog();
-            return db.Result == true
-                ? new()
-                {
-                    Class = db.SelectedClass,
-                    Field = db.SelectedField
-                }
-                : new();
-        }
         public static void ShowDatabaseErrorDialog(string message, string title = "Ошибка при выполнении запроса")
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -205,15 +176,6 @@ namespace Incas.Core.Classes
                 Dialog d = new(message.ToString(), title, Dialog.DialogIcon.Info);
                 d.ShowDialog();
             });
-        }
-        public static string ShowInputBox(string title, string description = "Введите значение")
-        {
-            DialogInput dialog = new(title, description);
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            {
-                dialog.ShowDialog();
-            });
-            return dialog.Input;
         }
         public static void ShowOpenFileDialog()
         {

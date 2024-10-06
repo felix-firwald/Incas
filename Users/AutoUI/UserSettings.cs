@@ -1,4 +1,4 @@
-﻿using Incas.Core.AutoUI;
+﻿using Incas.DialogSimpleForm.Components;
 using Incas.Core.Classes;
 using Incas.Users.Models;
 using System;

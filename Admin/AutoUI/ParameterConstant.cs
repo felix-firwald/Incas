@@ -1,6 +1,5 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Incas.Core.AutoUI;
-using Incas.Core.Models;
+﻿using Incas.Core.Models;
+using Incas.DialogSimpleForm.Components;
 using System.ComponentModel;
 
 namespace Incas.Admin.AutoUI
@@ -10,6 +9,7 @@ namespace Incas.Admin.AutoUI
     /// </summary>
     public class ParameterConstant : AutoUIBase
     {
+        protected override string FinishButtonText { get => "Сохранить константу"; }
         [Description("Наименование константы")]
         public string Name { get; set; }
 
