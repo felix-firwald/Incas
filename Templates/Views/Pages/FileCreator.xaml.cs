@@ -366,7 +366,7 @@ namespace Incas.Templates.Views.Pages
                 wt.Replace(tagsToReplace, values, false);
                 foreach (FieldTableFiller tab in this.Tables)
                 {
-                    wt.CreateTable(tab.field.Name, tab.DataTable);
+                    wt.CreateTable(tab.Field.Name, tab.GetValue());
                 }
                 string fileXPS = wt.TurnToXPS();
                 DialogsManager.ShowWaitCursor(false);

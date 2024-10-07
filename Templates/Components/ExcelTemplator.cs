@@ -60,10 +60,10 @@ namespace Incas.Templates.Components
             Formatting rowStyle = new();
             head.FontFamily = new Font("Times New Roman");
             this.worksheet.Row(cell.WorksheetRow().RowNumber() + 1).InsertRowsBelow(dt.Rows.Count);
-            IXLTable it = cell.InsertTable(dt, true);
-            it.Theme = new("Standart");
-            it.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-            it.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            //IXLTable it = cell.InsertTable(dt, true);
+            //it.Theme = new("Standart");
+            //it.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+            //it.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
             this.workbook.Save();
         }
         public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true)
@@ -72,7 +72,7 @@ namespace Incas.Templates.Components
             List<string> values = [];
             foreach (FieldTableFiller tab in tableFillers)
             {
-                this.CreateTable(tab.field.Name, tab.DataTable);
+                this.CreateTable(tab.Field.Name, tab.GetValue());
             }
             foreach (FieldFiller tf in tagFillers)
             {

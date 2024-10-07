@@ -16,7 +16,7 @@
               CornerRadius="8" BorderThickness="1" UseLayoutRounding="True"
               Background="{StaticResource Black}" />
             
-            <Border Grid.Column="2" Margin="1" BorderBrush="#444" Name="ButtonBorder" CornerRadius="6,6,6,6" BorderThickness="0"  Background="{StaticResource Black}" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border Grid.Column="2" Margin="1" BorderBrush="#444" Name="ButtonBorder" CornerRadius="8" BorderThickness="0"  Background="{StaticResource Black}" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Path Name="Arrow" Data="m -6.354 -2.354 a 0.5 0.5 0 0 1 0.708 0 l 5.646 5.647 l 5.646 -5.647 a 0.5 0.5 0 0 1 0.708 0.708 l -6 6 a 0.5 0.5 0 0 1 -0.708 0 l -6 -6 a 0.5 0.5 0 0 1 0 -0.708" HorizontalAlignment="Center" Fill="{DynamicResource Area}" VerticalAlignment="Center" Margin="0,4,0,0">
                     <Path.RenderTransform>
                         <RotateTransform Angle="0" x:Name="ArrowRotate"/>
@@ -68,7 +68,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                    <Border x:Name="Border" Padding="4,3,4,3" MinHeight="20" CornerRadius="4" BorderThickness="0" BorderBrush="{StaticResource Area}" Background="{StaticResource Black}">
+                    <Border x:Name="Border" Padding="7,3,4,3" MinHeight="20" CornerRadius="8" BorderThickness="0" BorderBrush="{StaticResource Area}" Background="{StaticResource Black}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
@@ -117,6 +117,7 @@
         <Setter Property="Margin" Value="5,5,5,5"/>
         <Setter Property="Padding" Value="10 3"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="MaxDropDownHeight" Value="250"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
         <Setter Property="TextElement.Foreground" Value="White"/>
@@ -152,9 +153,9 @@
                                 MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
                                 MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
                                 <Border Name="DropDownBorder" Background="{StaticResource Black}" Margin="0, 1, 0, 0" CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource LightBlack}">
-                                    <Border.Effect>
+                                    <!--<Border.Effect>
                                         <DropShadowEffect Color="#1d1d1f" BlurRadius="2" ShadowDepth="5" Opacity="0.5"/>
-                                    </Border.Effect>
+                                    </Border.Effect>-->
                                 </Border>
                                 <ScrollViewer Margin="6" SnapsToDevicePixels="True">
                                     <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" Cursor="Hand">

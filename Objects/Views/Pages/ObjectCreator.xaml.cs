@@ -185,7 +185,7 @@ namespace Incas.Objects.Views.Pages
                 }
                 foreach (FieldTableFiller table in this.Tables)
                 {
-                    if (table.field.Id == data.ClassField.Id)
+                    if (table.Field.Id == data.ClassField.Id)
                     {
                         table.SetData(data.Value);
                         break;
@@ -220,7 +220,7 @@ namespace Incas.Objects.Views.Pages
             {
                 Components.FieldData data = new()
                 {
-                    ClassField = table.field,
+                    ClassField = table.Field,
                     Value = table.GetData()
                 };
                 this.Object.Fields.Add(data);

@@ -1,24 +1,48 @@
-﻿using Incas.Core.ViewModels;
+﻿using Incas.Core.Classes;
+using Incas.Core.ViewModels;
+using Incas.Objects.Components;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Data;
+using System.Windows.Documents;
 
 namespace Incas.Templates.ViewModels
 {
     internal class TableFillerViewModel : BaseViewModel
     {
         private DataTable _data;
-        private bool showForm = false;
+        public TableFieldData TableDefinition;
         public TableFillerViewModel(Objects.Models.Field t)
         {
+            try
+            {
+                this.TableDefinition = JsonConvert.DeserializeObject<TableFieldData>(t.Value);
+                this.MakeColumns();
+            }
+            catch
+            {
+                DialogsManager.ShowErrorDialog("Не удалось получить определение таблицы.");
+            }
             this._data = new DataTable();
-            this.MakeColumns(t.Value.ToString());
+            this.MakeColumns();
         }
 
-        private void MakeColumns(string columns)
+        private void MakeColumns()
         {
-            foreach (string c in columns.Split(';'))
+            this.Grid = new();
+            foreach (TableFieldColumnData tf in this.TableDefinition.Columns)
             {
-                this.Grid.Columns.Add(c);
+                DataColumn dc = new(tf.Name)
+                {
+                    DefaultValue = tf.Value
+                };
+                this.Grid.Columns.Add(dc);
             }
+            this.OnPropertyChanged(nameof(this.Grid));
+        }
+        public void AddRow()
+        {
+            this.Grid.Rows.Add();
         }
         public DataTable Grid
         {
@@ -29,33 +53,5 @@ namespace Incas.Templates.ViewModels
                 this.OnPropertyChanged(nameof(this.Grid));
             }
         }
-        public bool ShowForm
-        {
-            get => this.showForm;
-            set
-            {
-                this.showForm = value;
-                this.OnPropertyChanged(nameof(this.ShowForm));
-                //this.OnPropertyChanged(nameof(this.FormVisibility));
-            }
-        }
-        //public Visibility FormVisibility
-        //{
-        //    get
-        //    {
-        //        switch(this._mode)
-        //        {
-        //            case TableFillerMode.GridOnly:
-        //            default:
-        //                return Visibility.Collapsed;
-        //            case TableFillerMode.GridAndForm:
-        //                return Visibility.Visible;
-        //        }
-        //    }
-        //    set
-        //    {
-        //        this.OnPropertyChanged(nameof(this.FormVisibility));
-        //    }
-        //}
     }
 }

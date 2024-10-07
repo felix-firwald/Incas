@@ -23,12 +23,14 @@ namespace Incas.Objects.Models
         public void RemoveStatus(int index)
         {
             this.Statuses.Remove(index);
+            this.RecalculateIndexesOfStatuses();
         }
         public void AddTemplate(TemplateData data)
         {
             this.Templates ??= [];
             this.Templates.Add(this.Templates.Count + 1, data);
         }
+
         public void EditTemplate(int index, TemplateData data)
         {
             try
@@ -40,6 +42,29 @@ namespace Incas.Objects.Models
         public void RemoveTemplate(int index)
         {
             this.Templates.Remove(index);
+            this.RecalculateIndexesOfTemplates();
+        }
+        private void RecalculateIndexesOfStatuses()
+        {
+            int index = 1;
+            Dictionary<int, StatusData> result = new();
+            foreach (KeyValuePair<int, StatusData> item in this.Statuses)
+            {
+                result.Add(index, item.Value);
+                index += 1;
+            }
+            this.Statuses = result;
+        }
+        private void RecalculateIndexesOfTemplates()
+        {
+            int index = 1;
+            Dictionary<int, TemplateData> result = new();
+            foreach (KeyValuePair<int, TemplateData> item in this.Templates)
+            {
+                result.Add(index, item.Value);
+                index += 1;
+            }
+            this.Templates = result;
         }
         public List<Field> GetFieldsForMap()
         {

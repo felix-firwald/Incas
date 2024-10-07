@@ -112,7 +112,8 @@ namespace Incas.Objects.Views.Controls
                 case Components.FieldType.Relation:
                     Objects.Components.BindingData db = new();
                     DialogBinding dialog = new(f.Value);
-                    if (dialog.ShowDialog() == true)
+                    dialog.ShowDialog();
+                    if (dialog.Result == true)
                     {
                         db.Class = dialog.SelectedClass;
                         db.Field = dialog.SelectedField;
@@ -143,7 +144,12 @@ namespace Incas.Objects.Views.Controls
                     DateFieldSettings dt = new(f);
                     dt.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
-                case Components.FieldType.Generator:
+                case Components.FieldType.Table:
+                    TableSettings ts = new(f.Value);
+                    if (ts.ShowDialog() == true)
+                    {
+                        this.vm.Source.Value = JsonConvert.SerializeObject(ts.Data);
+                    }
                     break;
             }
         }

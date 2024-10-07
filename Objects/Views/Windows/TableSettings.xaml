@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Objects.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Настройки таблицы" Style="{StaticResource WindowBase}" Height="450" Width="500">
+        Title="Настройки таблицы" Style="{StaticResource WindowBase}" Height="650" MinHeight="500" Width="700" MinWidth="680" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -16,7 +16,11 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Border Background="{StaticResource Black}" Margin="5" CornerRadius="8">
-            
+            <ScrollViewer Style="{StaticResource ScrollViewerBase}" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel x:Name="ContentPanel">
+
+                </StackPanel>
+            </ScrollViewer>
         </Border>
         <Border Grid.Row="0" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
@@ -24,7 +28,6 @@
                 <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAllClick"  />
                 <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAllClick"  />
-                <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
             </StackPanel>
         </Border>
         <Button x:Name="Yes" Style="{DynamicResource ButtonMainFinish}" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="5,0,5,0" IsDefault="True" Click="FinishClick">

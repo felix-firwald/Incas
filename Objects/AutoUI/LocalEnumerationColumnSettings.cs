@@ -1,25 +1,30 @@
-﻿using Newtonsoft.Json;
+﻿using Incas.Core.Attributes;
+using Incas.Core.Classes;
+using Incas.DialogSimpleForm.Components;
+using Incas.Objects.Components;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
 {
     /// <summary>
-    /// Класс автоматической генерации формы и сбора данных для LocalEnumerationFieldSettings.
+    /// Класс автоматической генерации формы и сбора данных для LocalEnumerationColumnSettings.
     /// Метод Load вызывается перед генерацией формы.
+    /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class LocalEnumerationFieldSettings : BaseFieldSettings
+    public class LocalEnumerationColumnSettings : AutoUIBase
     {
         #region Data
+        private TableFieldColumnData Source;
         [Description("Значения перечисления")]
         public List<string> Values { get; set; }
         #endregion
 
-        public LocalEnumerationFieldSettings(Incas.Objects.Models.Field field)
+        public LocalEnumerationColumnSettings(TableFieldColumnData field)
         {
             this.Source = field;
-            this.GetBaseData();
             try
             {
                 this.Values = JsonConvert.DeserializeObject<List<string>>(field.Value);
@@ -31,9 +36,18 @@ namespace Incas.Objects.AutoUI
         }
 
         #region Functionality
+        public override void Load()
+        {
+
+        }
+
+        public override void Validate()
+        {
+
+        }
+
         public override void Save()
         {
-            this.SaveBaseData();
             this.Source.Value = JsonConvert.SerializeObject(this.Values);
         }
         #endregion

@@ -1,9 +1,12 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.ExtendedProperties;
+using Incas.Core.Classes;
 using Incas.Objects.Views.Controls;
+using Microsoft.Scripting.Utils;
 using Spire.Doc;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text.RegularExpressions;
 using WebSupergoo.WordGlue3;
 using Xceed.Document.NET;
@@ -14,17 +17,6 @@ using Table = Xceed.Document.NET.Table;
 
 namespace Incas.Templates.Components
 {
-    public interface ITemplator
-    {
-        public void Replace(List<string> tags, List<string> values, bool async = true);
-
-        public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true);
-
-        public void CreateTable(string tag, DataTable dt);
-        public List<string> FindAllTags();
-        //public void CreateByObject(Incas.Objects.Components.Object obj);
-    }
-
     public class WordTemplator : ITemplator
     {
         public readonly string Path;
@@ -82,7 +74,7 @@ namespace Incas.Templates.Components
             List<string> values = [];
             foreach (FieldTableFiller tab in tableFillers)
             {
-                this.CreateTable(tab.field.Name, tab.DataTable);
+                this.CreateTable(tab.Field.Name, tab.GetValue());
             }
             foreach (FieldFiller tf in tagFillers)
             {
@@ -103,56 +95,73 @@ namespace Incas.Templates.Components
             this.Replace(tagsToReplace, values, async);
         }
 
-        public void CreateByObject(Objects.Components.Object obj)
-        {
-            //List<string> tags = new();
-            //List<string> values = new();
-            //foreach (Objects.Components.FieldData item in obj.Fields)
-            //{
-            //    tags.Add(item.ClassField.Name);
-            //    values.Add(item.Value);
-            //}
-        }
-
         public void CreateTable(string tag, DataTable dt)
         {
             DocX doc = this.LoadFile();
-            ObjectReplaceTextOptions options = new()
+            int table = -1;
+            int row = -1;
+            Dictionary<string, int> columns = new();
+            Formatting format = new();
+            // проходит по всем таблицам в документе
+            foreach (Table tab in doc.Tables)
             {
-                SearchValue = this.ConvertTag(tag)
-            };
-            Table tab = doc.AddTable(dt.Rows.Count + 1, dt.Columns.Count);
-            tab.Design = TableDesign.TableNormal;
-            tab.SetBorder(TableBorderType.InsideH, new Border());
-            tab.SetBorder(TableBorderType.InsideV, new Border());
-            tab.SetBorder(TableBorderType.Left, new Border());
-            tab.SetBorder(TableBorderType.Right, new Border());
-            tab.SetBorder(TableBorderType.Top, new Border());
-            tab.SetBorder(TableBorderType.Bottom, new Border());
-            Formatting head = new()
-            {
-                Bold = true,
-                FontFamily = new Font("Times New Roman"),
-            };
+                // если в таблице есть параграф с хотя бы первым тегом поиск надо прекратить
 
-            Formatting rowStyle = new();
-            head.FontFamily = new Font("Times New Roman");
-            for (int i = 0; i < dt.Columns.Count; i++) // cols
-            {
-                tab.Rows[0].Cells[i].Paragraphs[0].Append(dt.Columns[i].ColumnName, head);
-                for (int row = 0; row < dt.Rows.Count; row++) // rows
+                int indextable = tab.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}.{dt.Columns[0].ColumnName}]"));
+                if (indextable != -1)
                 {
-                    tab.Rows[row + 1].Cells[i].Paragraphs[0].Append(dt.Rows[row][i].ToString(), rowStyle);
+                    table = tab.Index;
+                    int indexrow = 0;
+                    // выясняем ряд
+                    foreach (Row r in tab.Rows)
+                    {
+                        
+                        int rowFindIndex = r.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}.{dt.Columns[0].ColumnName}]"));
+                        if (rowFindIndex != -1)
+                        {
+                            row = indexrow;
+                            foreach (DataColumn dc in dt.Columns)
+                            {
+                                int indexcell = 0;
+                                foreach (Cell cell in r.Cells)
+                                {
+                                    int cellFindIndex = cell.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}.{dc.ColumnName}]"));
+                                    if (cellFindIndex != -1)
+                                    {
+                                        cell.Paragraphs[cellFindIndex].Remove(false);
+                                        columns.Add(dc.ColumnName, indexcell);
+                                        break;
+                                    }
+                                    indexcell += 1;
+                                }
+                            }
+                            break;
+                        }
+                        indexrow += 1;
+                    }
+                    break;
                 }
             }
-            options.NewObject = tab;
-
-            doc.ReplaceTextWithObject(options);
+            if (table == -1 || row == -1)
+            {
+                return;
+            }
+            //row += 1;            
+            foreach (DataRow dr in dt.Rows)
+            {
+                doc.Tables[table].InsertRow(doc.Tables[table].Rows[row], row, true);
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    string value = dr[dc.ColumnName].ToString();
+                    doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value);           
+                }
+                row += 1;
+            }
+            //doc.Tables[table].RemoveRow();
             doc.Save();
         }
         public static void ConvertToPdf(string path)
         {
-
             Spire.Doc.Document doc = new(path);
             doc.SaveToFile(path, FileFormat.PDF);
         }

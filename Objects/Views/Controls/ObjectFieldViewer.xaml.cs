@@ -53,6 +53,12 @@ namespace Incas.Objects.Views.Controls
                     this.FilterButton.IsEnabled = false;
                 }
             }
+            else if (data.ClassField.Type == FieldType.Table)
+            {
+                this.FieldValue.Text = "(таблица)";
+                this.FilterButton.IsEnabled = false;
+                this.ColorizeField(67, 70, 80);
+            }
             else
             {
                 this.FieldValue.Text = data.Value;

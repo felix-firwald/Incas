@@ -11,12 +11,11 @@ namespace Incas
 
     public partial class App : System.Windows.Application
     {
+        public static DateTime ExpirationDate = new(2024, 12, 12);
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            //DateFieldSettings dfs = new(new());
-            //dfs.ShowDialog("sdf");
-            if (DateTime.Now > DateTime.Parse("05.12.2024"))
+            if (DateTime.Now > ExpirationDate)
             {
                 DialogsManager.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");
                 App.Current.Shutdown();

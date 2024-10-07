@@ -218,10 +218,11 @@ namespace Incas.Objects.Views.Windows
                 {
                     return;
                 }
-                foreach (TemplateData sd in cd.Templates.Values)
-                {
-                    this.vm.SourceData.AddTemplate(sd);
-                }
+                this.vm.SourceData.Templates = cd.Templates;
+                //foreach (TemplateData sd in cd.Templates.Values)
+                //{
+                //    this.vm.SourceData.AddTemplate(sd);
+                //}
             }
             this.UpdateTemplatesList();
         }
@@ -311,10 +312,11 @@ namespace Incas.Objects.Views.Windows
                 {
                     return;
                 }
-                foreach (StatusData sd in cd.Statuses.Values)
-                {
-                    this.vm.SourceData.AddStatus(sd);
-                }
+                this.vm.SourceData.Statuses = cd.Statuses;
+                //foreach (StatusData sd in cd.Statuses.Values)
+                //{
+                //    this.vm.SourceData.AddStatus(sd);
+                //}
             }
             this.UpdateStatusesList();
         }

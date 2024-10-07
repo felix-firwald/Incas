@@ -27,17 +27,17 @@
                         <Label Foreground="White" Content="Добавить"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{DynamicResource ButtonMain}" Click="ExcelClick" ToolTip="Вытянуть из Excel">
+                <Button Style="{DynamicResource ButtonMain}" ToolTip="Вытянуть из Excel">
                     <StackPanel Orientation="Horizontal" Margin="8,0,9,0">
                         <Path Fill="White" VerticalAlignment="Center" Data="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M5.884 6.68 8 9.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 10l2.233 2.68a.5.5 0 0 1-.768.64L8 10.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 10 5.116 7.32a.5.5 0 1 1 .768-.64"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{DynamicResource ButtonMain}" Click="SaveClick" ToolTip="Сохранить в файл">
+                <Button Style="{DynamicResource ButtonMain}"  ToolTip="Сохранить в файл">
                     <StackPanel Orientation="Horizontal" Margin="8,0,9,0">
                         <Path Fill="White" VerticalAlignment="Center" Data="M12 2h-2v3h2z M1.5 0A1.5 1.5 0 0 0 0 1.5v13A1.5 1.5 0 0 0 1.5 16h13a1.5 1.5 0 0 0 1.5-1.5V2.914a1.5 1.5 0 0 0-.44-1.06L14.147.439A1.5 1.5 0 0 0 13.086 0zM4 6a1 1 0 0 1-1-1V1h10v4a1 1 0 0 1-1 1zM3 9h10a1 1 0 0 1 1 1v5H2v-5a1 1 0 0 1 1-1"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{DynamicResource ButtonMain}" Click="RemoveClick" ToolTip="Удалить выбранную строку">
+                <Button Style="{DynamicResource ButtonMain}"  ToolTip="Удалить выбранную строку">
                     <StackPanel Orientation="Horizontal" Margin="8,0,9,0">
                         <Path Fill="White" VerticalAlignment="Center" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
                     </StackPanel>
@@ -51,37 +51,30 @@
             </Button>
         </Grid>
 
-        <DataGrid x:Name="Table" MinHeight="160" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" AutoGenerateColumns="True" CanUserAddRows="False" Grid.Row="1" Margin="5,5,5,5">
-
-        </DataGrid>
-        <StackPanel x:Name="Fields" MinWidth="300" Grid.Row="1" Grid.Column="1">
-            <StackPanel.Style>
-                <Style TargetType="{x:Type StackPanel}">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ShowForm}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ShowForm}" Value="False">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Style>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Style="{DynamicResource ButtonMain}" ToolTip="На строку выше">
-                    <StackPanel Orientation="Horizontal" Margin="8,0,9,3">
-                        <Path Fill="White" VerticalAlignment="Center" Data="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z"/>
-                    </StackPanel>
-                </Button>
-                <Button Style="{DynamicResource ButtonMain}" ToolTip="На строку ниже">
-                    <StackPanel Orientation="Horizontal" Margin="8,0,9,3">
-                        <Path Fill="White" VerticalAlignment="Center" Data="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
+        <DataGrid x:Name="Table" MinHeight="120" MaxHeight="300" RowHeight="40" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" AutoGenerateColumns="True" CanUserAddRows="False" Grid.Row="1" Margin="5,5,5,5" AutoGeneratingColumn="ColumnGenerating">
             
-        </StackPanel>
+            <DataGrid.Resources>
+                <!--DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the ItemsSource of type DateTime -->
+                <DataTemplate x:Key="ComboBoxTemplate">
+                    
+                </DataTemplate>
+                
+                <DataTemplate x:Key="DateTemplate" >
+                    <StackPanel Width="20" Height="30">
+                        <Border Background="LightBlue" BorderBrush="Black" BorderThickness="1">
+                            <TextBlock Text="{Binding PublishDate, StringFormat={}{0:MMM}}" FontSize="8" HorizontalAlignment="Center" />
+                        </Border>
+                        <Border Background="White" BorderBrush="Black" BorderThickness="1">
+                            <TextBlock Text="{Binding PublishDate, StringFormat={}{0:yyyy}}" FontSize="8" FontWeight="Bold" HorizontalAlignment="Center" />
+                        </Border>
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate x:Key="EditingDateTemplate">
+                    <DatePicker Style="{StaticResource DatePickerMain}" />
+                </DataTemplate>
+            </DataGrid.Resources>
+        </DataGrid>
+        
     </Grid>
 
 </UserControl>
