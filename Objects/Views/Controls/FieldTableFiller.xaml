@@ -17,10 +17,11 @@
         </Grid.RowDefinitions>
         <Grid Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="7*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" >
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" >
                 <Button Style="{DynamicResource ButtonMainFinish}" Click="AddClick" ToolTip="Добавить новую строку" >
                     <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
                         <Path Fill="White" VerticalAlignment="Center" RenderOptions.EdgeMode="Aliased" Data="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
@@ -43,7 +44,7 @@
                     </StackPanel>
                 </Button>
             </StackPanel>
-            <Button x:Name="CommandButton" Style="{DynamicResource ButtonMain}" Visibility="Collapsed" MinWidth="40" VerticalAlignment="Center" Cursor="Hand" Click="CommandClick" Margin="5,0,5,0" Grid.Column="1" Height="30">
+            <Button x:Name="CommandButton" Style="{DynamicResource ButtonMain}" Visibility="Collapsed" MinWidth="40" VerticalAlignment="Center" Cursor="Hand" Click="CommandClick" Margin="5,0,-45,0" Grid.Column="2" Height="30">
                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
                     <Path x:Name="CommandButtonIcon" Fill="White" VerticalAlignment="Center" Data="M9.5 2.672a.5.5 0 1 0 1 0V.843a.5.5 0 0 0-1 0zm4.5.035A.5.5 0 0 0 13.293 2L12 3.293a.5.5 0 1 0 .707.707zM7.293 4A.5.5 0 1 0 8 3.293L6.707 2A.5.5 0 0 0 6 2.707zm-.621 2.5a.5.5 0 1 0 0-1H4.843a.5.5 0 1 0 0 1zm8.485 0a.5.5 0 1 0 0-1h-1.829a.5.5 0 0 0 0 1zM13.293 10A.5.5 0 1 0 14 9.293L12.707 8a.5.5 0 1 0-.707.707zM9.5 11.157a.5.5 0 0 0 1 0V9.328a.5.5 0 0 0-1 0zm1.854-5.097a.5.5 0 0 0 0-.706l-.708-.708a.5.5 0 0 0-.707 0L8.646 5.94a.5.5 0 0 0 0 .707l.708.708a.5.5 0 0 0 .707 0l1.293-1.293Zm-3 3a.5.5 0 0 0 0-.706l-.708-.708a.5.5 0 0 0-.707 0L.646 13.94a.5.5 0 0 0 0 .707l.708.708a.5.5 0 0 0 .707 0z"/>
                     <Label x:Name="CommandButtonText" Foreground="White"/>
@@ -52,13 +53,13 @@
         </Grid>
 
         <DataGrid x:Name="Table" MinHeight="120" MaxHeight="300" RowHeight="40" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" AutoGenerateColumns="True" CanUserAddRows="False" Grid.Row="1" Margin="5,5,5,5" AutoGeneratingColumn="ColumnGenerating">
-            
+
             <DataGrid.Resources>
                 <!--DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the ItemsSource of type DateTime -->
                 <DataTemplate x:Key="ComboBoxTemplate">
-                    
+
                 </DataTemplate>
-                
+
                 <DataTemplate x:Key="DateTemplate" >
                     <StackPanel Width="20" Height="30">
                         <Border Background="LightBlue" BorderBrush="Black" BorderThickness="1">
@@ -74,7 +75,7 @@
                 </DataTemplate>
             </DataGrid.Resources>
         </DataGrid>
-        
+
     </Grid>
 
 </UserControl>

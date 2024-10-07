@@ -107,7 +107,7 @@ namespace Incas.Templates.Components
             {
                 // если в таблице есть параграф с хотя бы первым тегом поиск надо прекратить
 
-                int indextable = tab.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}.{dt.Columns[0].ColumnName}]"));
+                int indextable = tab.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}."));
                 if (indextable != -1)
                 {
                     table = tab.Index;
@@ -116,7 +116,7 @@ namespace Incas.Templates.Components
                     foreach (Row r in tab.Rows)
                     {
                         
-                        int rowFindIndex = r.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}.{dt.Columns[0].ColumnName}]"));
+                        int rowFindIndex = r.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}."));
                         if (rowFindIndex != -1)
                         {
                             row = indexrow;

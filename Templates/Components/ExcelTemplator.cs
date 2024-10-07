@@ -1,10 +1,12 @@
 ﻿using ClosedXML.Excel;
 using Incas.Objects.Views.Controls;
+using Microsoft.Scripting.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using WebSupergoo.WordGlue3;
 using Xceed.Document.NET;
 
 namespace Incas.Templates.Components
@@ -50,20 +52,53 @@ namespace Incas.Templates.Components
         }
         public void CreateTable(string tag, DataTable dt)
         {
-            IXLCell cell = this.worksheet.Search(this.ConvertTag(tag), System.Globalization.CompareOptions.IgnoreCase, false).FirstOrDefault();
-            Formatting head = new()
+            int rowIndex = -1;
+            int lastColumnIndex = -1;
+            int firstColumnIndex = -1;
+            Dictionary<string, IXLCell> columns = new();
+            IXLCell cell = this.worksheet.Search($"[{tag}.", System.Globalization.CompareOptions.IgnoreCase, false).FirstOrDefault();
+            if (cell is null)
             {
-                Bold = true,
-                FontFamily = new Font("Times New Roman")
-            };
-
-            Formatting rowStyle = new();
-            head.FontFamily = new Font("Times New Roman");
-            this.worksheet.Row(cell.WorksheetRow().RowNumber() + 1).InsertRowsBelow(dt.Rows.Count);
-            //IXLTable it = cell.InsertTable(dt, true);
-            //it.Theme = new("Standart");
-            //it.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
-            //it.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                return;
+            }
+            rowIndex = cell.WorksheetRow().RowNumber();
+            foreach (DataColumn dc in dt.Columns)
+            {
+                IXLCell columnCell = this.worksheet.Search($"[{tag}.{dc.ColumnName}]", System.Globalization.CompareOptions.IgnoreCase, false).FirstOrDefault();
+                if (cell is not null)
+                {
+                    int col = columnCell.WorksheetColumn().ColumnNumber();
+                    if (col > lastColumnIndex)
+                    {
+                        lastColumnIndex = col;
+                    }
+                    if (col < firstColumnIndex)
+                    {
+                        firstColumnIndex = col;
+                    }
+                    columns.Add(dc.ColumnName, columnCell);
+                }
+            }
+            if (dt.Rows.Count > 1)
+            {
+                this.worksheet.Row(rowIndex).InsertRowsBelow(dt.Rows.Count - 1);
+            }
+            foreach (DataRow dr in dt.Rows)
+            {
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    string value = dr[dc.ColumnName].ToString();
+                    int currentCol = columns[dc.ColumnName].WorksheetColumn().ColumnNumber();
+                    this.worksheet.Cell(rowIndex, currentCol).SetValue(value);
+                    this.worksheet.Cell(rowIndex, currentCol).Style = columns[dc.ColumnName].Style;
+                    IXLRangeAddress range = columns[dc.ColumnName].MergedRange().RangeAddress;
+                    if (range.ColumnSpan > 1)
+                    {
+                        this.worksheet.Range(rowIndex, currentCol, rowIndex, currentCol + range.ColumnSpan - 1).Merge();
+                    }
+                }
+                rowIndex += 1;
+            }
             this.workbook.Save();
         }
         public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true)
