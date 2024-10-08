@@ -283,11 +283,12 @@ namespace Incas.Objects.Views.Windows
                 DialogsManager.ShowExclamationDialog("Не найдены привязанные шаблоны к этому классу.", "Рендеринг невозможен");
                 return;
             }
-            string path = "";
+            string path = RegistryData.GetClassTemplatePrefferedPath(this.Class.identifier, templateFile.Name);
             if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
             {
                 try
                 {
+                    RegistryData.SetClassTemplatePrefferedPath(this.Class.identifier, templateFile.Name, path);
                     foreach (ObjectCreator c in this.ContentPanel.Children)
                     {
                         objects.Add(c.PullObject());
@@ -295,7 +296,7 @@ namespace Incas.Objects.Views.Windows
                     }
                     ObjectProcessor.WriteObjects(this.Class, objects);
                     this.OnUpdateRequested?.Invoke();
-                    ProgramState.OpenFolder(path);
+                    ProgramState.OpenFolder(path);                    
                 }
                 catch (NotNullFailed nnex)
                 {

@@ -574,12 +574,12 @@ namespace Incas.Core.Classes
             {
                 case 1:
                     DialogsManager.ShowDatabaseErrorDialog(
-                        $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}\nЗапрос: {this.Result}" +
+                        $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}\nЗапрос: {this.Result}.\nБаза: '{this.DBPath}'" +
                         $"\nINCAS попытается исправить проблему, если она связана с конфигурацией служебной базы данных.");
-                    if (this.typeOfConnection == DBConnectionType.BASE || this.typeOfConnection == DBConnectionType.SERVICE)
-                    {
-                        DatabaseManager.TryFix(ex, this.typeOfConnection);
-                    }
+                    //if (this.typeOfConnection is DBConnectionType.BASE or DBConnectionType.SERVICE)
+                    //{
+                    //    DatabaseManager.TryFix(ex, this.typeOfConnection);
+                    //}
                     break;
                 case 5: // busy
                 case 6: // locked

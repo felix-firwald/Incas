@@ -17,6 +17,7 @@ namespace Incas.Core.Classes
         public static bool ShowFolderBrowserDialog(ref string path)
         {
             FolderBrowserDialog fb = new();
+            fb.InitialDirectory = path;
             if (fb.ShowDialog() == DialogResult.OK)
             {
                 path = fb.SelectedPath;

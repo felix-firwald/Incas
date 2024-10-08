@@ -82,5 +82,36 @@ namespace Incas.Templates.ViewModels
             this.Grid.Rows.Remove(this.Grid.Rows[this.SelectedRow]);
             this.OnPropertyChanged(nameof(this.Grid));
         }
+        public void MoveUpSelectedRow()
+        {
+            if (this.selected == -1)
+            {
+                return;
+            }
+            DataRow dr = this.Grid.Rows[this.SelectedRow];
+            int position = this.SelectedRow;
+            if (position > 0)
+            {
+                this.Grid.Rows.Remove(dr);
+                this.Grid.Rows.InsertAt(dr, position - 1);
+               
+                this.OnPropertyChanged(nameof(this.Grid));
+            }          
+        }
+        public void MoveDownSelectedRow()
+        {
+            if (this.selected == -1)
+            {
+                return;
+            }
+            DataRow dr = this.Grid.Rows[this.SelectedRow];
+            int position = this.SelectedRow;
+            if (position < this.Grid.Rows.Count)
+            {
+                this.Grid.Rows.Remove(dr);
+                this.Grid.Rows.InsertAt(dr, position + 1);
+                this.OnPropertyChanged(nameof(this.Grid));
+            }
+        }
     }
 }

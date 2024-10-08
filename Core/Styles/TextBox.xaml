@@ -178,6 +178,107 @@
         <Setter Property="Margin" Value="5"/>
         <Setter Property="AcceptsReturn" Value="True"/>
     </Style>
+    <Style x:Key="TextBoxGrid" TargetType="{x:Type TextBox}">
+        <Setter Property="Cursor" Value="IBeam"/>
+        <Setter Property="Background" Value="{StaticResource Black}"/>
+        <Setter Property="Foreground" Value="{StaticResource Light}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Focus}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="Margin" Value="-3,0,0,0"/>
+        <Setter Property="Padding" Value="5 3"/>
+        <Setter Property="Opacity" Value="1"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="ContextMenu">
+            <Setter.Value>
+                <ContextMenu>
+                    <MenuItem Header="Вырезать" Command="ApplicationCommands.Cut"/>
+                    <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                    <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
+                </ContextMenu>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="Border" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="2" Background="{TemplateBinding Background}" SnapsToDevicePixels="True" UseLayoutRounding="True">
+                        <Grid>
+                            <ScrollViewer 
+                            x:Name="PART_ContentHost" 
+                            Focusable="False" 
+                            HorizontalScrollBarVisibility="Hidden" 
+                            VerticalScrollBarVisibility="Hidden" Foreground="{TemplateBinding Foreground}"  />
+                            <Label 
+                            x:Name="WaterMarkerLabel" 
+                            Content="{TemplateBinding Tag}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            Visibility="Collapsed"
+                            Foreground="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding Padding}"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HorizontalContentAlignment" Value="Center">
+                            <Setter TargetName="PART_ContentHost" Property="Margin" Value="0"/>
+                        </Trigger>
+                        <Trigger Property="ContextMenu.IsOpen" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="DodgerBlue"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Text" Value=""/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="WaterMarkerLabel" Value="Visible"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <!--#43464d-->
+                                        <ColorAnimation Duration="0:0:0.250" To="#FF3E414B" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="2" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.250" To="#FF3E414B" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+
+                        <Trigger Property="Validation.HasError" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Error}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="TextBoxTransparent" TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="MinHeight" Value="40"/>

@@ -1,7 +1,10 @@
 ﻿using Incas.Core.ViewModels;
-using System.Data;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace Incas.Core.Views.Controls
 {
@@ -67,6 +70,21 @@ namespace Incas.Core.Views.Controls
         private void RowDownClick(object sender, MouseButtonEventArgs e)
         {
 
+        }
+
+        private void Grid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            foreach (DataColumn dc in this.vm.Grid.Columns)
+            {
+                if (dc.ColumnName == e.Column.Header.ToString())
+                {
+                    DataGridTextColumn dgt1 = new();
+                    dgt1.Header = dc.ColumnName;
+                    dgt1.Binding = new System.Windows.Data.Binding(dc.ColumnName);
+                    dgt1.EditingElementStyle = this.FindResource("TextBoxGrid") as Style;
+                    e.Column = dgt1;
+                }
+            }          
         }
     }
 }

@@ -111,18 +111,12 @@ namespace Incas.Objects.Views.Controls
                     switch (col.FieldType)
                     {
                         case FieldType.Variable:
+                        case FieldType.Text:
                             DataGridTextColumn dgt1 = new();
                             dgt1.Header = col.VisibleName;
                             dgt1.Binding = new Binding(e.Column.Header.ToString());
-                            dgt1.EditingElementStyle = this.FindResource("TextBoxMain") as Style;
+                            dgt1.EditingElementStyle = this.FindResource("TextBoxGrid") as Style;
                             e.Column = dgt1;
-                            break;
-                        case FieldType.Text:
-                            DataGridTextColumn dgt2 = new();
-                            dgt2.Header = col.VisibleName;
-                            dgt2.Binding = new Binding(e.Column.Header.ToString());
-                            dgt2.EditingElementStyle = this.FindResource("TextBoxBig") as Style;
-                            e.Column = dgt2;
                             break;
                         case FieldType.LocalEnumeration:
                         case FieldType.GlobalEnumeration:
@@ -130,7 +124,7 @@ namespace Incas.Objects.Views.Controls
                             dgc.Header = col.VisibleName;
                             dgc.TextBinding = new Binding(e.Column.Header.ToString());
                             
-                            dgc.EditingElementStyle = this.FindResource("ComboBoxMain") as Style;
+                            dgc.EditingElementStyle = this.FindResource("ComboBoxGrid") as Style;
                             if (col.FieldType == FieldType.LocalEnumeration)
                             {
                                 dgc.ItemsSource = JsonConvert.DeserializeObject<List<string>>(col.Value);
@@ -219,6 +213,16 @@ namespace Incas.Objects.Views.Controls
                         "\nЗакройте его и попробуйте снова", "Сохранение прервано");
                 }
             }
+        }
+
+        private void MoveUpClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.MoveUpSelectedRow();
+        }
+
+        private void MoveDownClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.MoveDownSelectedRow();
         }
     }
 }

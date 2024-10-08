@@ -11,8 +11,9 @@ namespace Incas.Core.ViewModels
         private List<string> _workspaces = RegistryData.GetWorkspaces();
         public OpenWorkspaceViewModel()
         {
-            this.UpdateUsers();
-            this.UpdateSelectedUser();
+            //this.UpdateUsers();
+            //this.UpdateSelectedUser();
+            this.SelectedWorkspace = RegistryData.GetSelectedWorkspace();
         }
 
         private void UpdateUsers()
@@ -23,10 +24,6 @@ namespace Incas.Core.ViewModels
                 {
                     this._users.Clear();
                     this._users = user.GetAllUsers();
-                    //if (this._users.Count == 0)
-                    //{
-                    //    DialogsManager.ShowErrorDialog("В рабочем пространстве не найдено ни одного пользователя, что означает его неисправность.", "Ошибка загрузки");
-                    //}
                 }
                 this.UpdateSelectedUser();
             }
@@ -38,6 +35,7 @@ namespace Incas.Core.ViewModels
             this.OnPropertyChanged(nameof(this.Workspaces));
             this.OnPropertyChanged(nameof(this.SelectedWorkspace));
             this.OnPropertyChanged(nameof(this.Path));
+            this.UpdateUsers();
             this.OnPropertyChanged(nameof(this.Password));
         }
 

@@ -14,9 +14,9 @@
         <StackPanel Orientation="Horizontal">
             <fa:FontAwesome Style="{StaticResource IconButton}" Icon="PlusCircle" ToolTip="Добавить строку" MouseDown="AddRowClick"/>
             <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Remove" ToolTip="Удалить выбранную строку" MouseDown="RemoveRowClick"/>
-            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="ArrowUp" ToolTip="Переместить строку вверх" MouseDown="RowUpClick"/>
-            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="ArrowDown" ToolTip="Переместить строку вниз" MouseDown="RowDownClick"/>
+            <fa:FontAwesome Visibility="Collapsed" Style="{StaticResource IconButton}" Icon="ArrowUp" ToolTip="Переместить строку вверх" MouseDown="RowUpClick"/>
+            <fa:FontAwesome Visibility="Collapsed" Style="{StaticResource IconButton}" Icon="ArrowDown" ToolTip="Переместить строку вниз" MouseDown="RowDownClick"/>
         </StackPanel>
-        <DataGrid x:Name="Grid" MinHeight="60" MaxHeight="180" Style="{StaticResource DataGridMain}" ItemsSource="{Binding Grid}" SelectedIndex="{Binding SelectedIndex}" CanUserAddRows="False" Grid.Row="1"/>
+        <DataGrid x:Name="Grid" MinHeight="60" MaxHeight="180" Style="{StaticResource DataGridMain}" ItemsSource="{Binding Grid}" RowHeight="30" AutoGeneratingColumn="Grid_AutoGeneratingColumn" SelectedIndex="{Binding SelectedIndex}" CanUserAddRows="False" Grid.Row="1"/>
     </Grid>
 </UserControl>

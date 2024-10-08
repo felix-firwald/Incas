@@ -141,7 +141,25 @@ namespace Incas.Core.Classes
             GetTemplate(template).SetValue("preferred_postfix", postfix);
         }
         #endregion
-
+        #region Classes
+        private static RegistryKey GetClassKey(Guid id)
+        {
+            return GetWorkspaceByName(GetSelectedWorkspace()).CreateSubKey("Classes", true).CreateSubKey(id.ToString("N"), true);
+        }
+        public static string GetClassTemplatePrefferedPath(Guid id, string templateName)
+        {
+            object obj = GetClassKey(id).GetValue($"TemplatePath '{templateName}'");
+            if (obj is null)
+            {
+                return ProgramState.Root;
+            }
+            return obj.ToString();
+        }
+        public static void SetClassTemplatePrefferedPath(Guid id, string templateName, string path)
+        {
+            GetClassKey(id).SetValue($"TemplatePath '{templateName}'", path);
+        }
+        #endregion
         private static RegistryKey GetTools()
         {
             return GetRoot().CreateSubKey("Tools", true);
