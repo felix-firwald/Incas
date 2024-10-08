@@ -65,27 +65,6 @@
             <Label x:Name="TableName" Style="{StaticResource LabelElement}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0"/>
         </Border>
         <DataGrid x:Name="Table" MinHeight="120" MaxHeight="300" RowHeight="30" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" SelectedIndex="{Binding SelectedRow}" AutoGenerateColumns="True" CanUserAddRows="False" Grid.Row="1" Margin="5,5,5,5" AutoGeneratingColumn="ColumnGenerating">
-
-            <DataGrid.Resources>
-                <!--DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the ItemsSource of type DateTime -->
-                <DataTemplate x:Key="ComboBoxTemplate">
-
-                </DataTemplate>
-
-                <DataTemplate x:Key="DateTemplate" >
-                    <StackPanel Width="20" Height="30">
-                        <Border Background="LightBlue" BorderBrush="Black" BorderThickness="1">
-                            <TextBlock Text="{Binding PublishDate, StringFormat={}{0:MMM}}" FontSize="8" HorizontalAlignment="Center" />
-                        </Border>
-                        <Border Background="White" BorderBrush="Black" BorderThickness="1">
-                            <TextBlock Text="{Binding PublishDate, StringFormat={}{0:yyyy}}" FontSize="8" FontWeight="Bold" HorizontalAlignment="Center" />
-                        </Border>
-                    </StackPanel>
-                </DataTemplate>
-                <DataTemplate x:Key="EditingDateTemplate">
-                    <DatePicker Style="{StaticResource DatePickerMain}" />
-                </DataTemplate>
-            </DataGrid.Resources>
         </DataGrid>
 
     </Grid>

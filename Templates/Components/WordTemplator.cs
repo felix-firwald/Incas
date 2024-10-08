@@ -103,6 +103,7 @@ namespace Incas.Templates.Components
             Dictionary<string, int> columns = new();
             Formatting rowStyle = new();
             rowStyle.FontFamily = new Font("Times New Roman");
+            rowStyle.Size = 9;
             // проходит по всем таблицам в документе
             foreach (Table tab in doc.Tables)
             {
@@ -147,13 +148,14 @@ namespace Incas.Templates.Components
             {
                 return;
             }
-          
             foreach (DataRow dr in dt.Rows)
             {
                 doc.Tables[table].InsertRow(doc.Tables[table].Rows[row], row, true);
+    
                 foreach (DataColumn dc in dt.Columns)
                 {
                     string value = dr[dc.ColumnName].ToString();
+                    //doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].InsertParagraph(value, rowStyle);
                     doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value, rowStyle);
                 }
                 row += 1;
