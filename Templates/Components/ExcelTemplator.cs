@@ -33,7 +33,7 @@ namespace Incas.Templates.Components
                     IXLCells c = this.worksheet.Search(this.ConvertTag(tags[i]));
                     foreach (IXLCell item in c)
                     {
-                        item.Value = values[i];
+                        item.Value = item.Value.GetText().Replace(this.ConvertTag(tags[i]), values[i]);
                     }
                 }
             }

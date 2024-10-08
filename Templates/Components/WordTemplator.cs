@@ -101,13 +101,14 @@ namespace Incas.Templates.Components
             int table = -1;
             int row = -1;
             Dictionary<string, int> columns = new();
-            Formatting format = new();
+            Formatting rowStyle = new();
+            rowStyle.FontFamily = new Font("Times New Roman");
             // проходит по всем таблицам в документе
             foreach (Table tab in doc.Tables)
             {
                 // если в таблице есть параграф с хотя бы первым тегом поиск надо прекратить
-
                 int indextable = tab.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}."));
+                
                 if (indextable != -1)
                 {
                     table = tab.Index;
@@ -146,18 +147,17 @@ namespace Incas.Templates.Components
             {
                 return;
             }
-            //row += 1;            
+          
             foreach (DataRow dr in dt.Rows)
             {
                 doc.Tables[table].InsertRow(doc.Tables[table].Rows[row], row, true);
                 foreach (DataColumn dc in dt.Columns)
                 {
                     string value = dr[dc.ColumnName].ToString();
-                    doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value);           
+                    doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value, rowStyle);
                 }
                 row += 1;
             }
-            //doc.Tables[table].RemoveRow();
             doc.Save();
         }
         public static void ConvertToPdf(string path)

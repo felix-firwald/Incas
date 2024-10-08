@@ -39,7 +39,41 @@ namespace Incas.Objects.Views.Windows
         private void AddColumnCreator(TableFieldColumnData col)
         {
             TableColumnCreator creator = new(col);
+            creator.OnRemove += this.Creator_OnRemove;
+            creator.OnMoveDownRequested += this.Creator_OnMoveDownRequested;
+            creator.OnMoveUpRequested += this.Creator_OnMoveUpRequested;
             this.ContentPanel.Children.Add(creator);
+        }
+
+        private int Creator_OnMoveUpRequested(TableColumnCreator t)
+        {
+            int position = this.ContentPanel.Children.IndexOf(t);
+            if (position < this.ContentPanel.Children.Count - 1)
+            {
+                position += 1;
+            }
+            this.ContentPanel.Children.Remove(t);
+            this.ContentPanel.Children.Insert(position, t);
+            return position;
+        }
+
+        private int Creator_OnMoveDownRequested(TableColumnCreator t)
+        {
+            int position = this.ContentPanel.Children.IndexOf(t);
+            if (position > 0)
+            {
+                position -= 1;
+            }
+
+            this.ContentPanel.Children.Remove(t);
+            this.ContentPanel.Children.Insert(position, t);
+            return position;
+        }
+
+        private bool Creator_OnRemove(TableColumnCreator t)
+        {
+            this.ContentPanel.Children.Remove(t);
+            return true;
         }
 
         private void FinishClick(object sender, RoutedEventArgs e)
@@ -60,12 +94,18 @@ namespace Incas.Objects.Views.Windows
 
         private void MinimizeAllClick(object sender, MouseButtonEventArgs e)
         {
-
+            foreach (TableColumnCreator tcc in this.ContentPanel.Children)
+            {
+                tcc.Minimize();
+            }
         }
 
         private void MaximizeAllClick(object sender, MouseButtonEventArgs e)
         {
-
+            foreach (TableColumnCreator tcc in this.ContentPanel.Children)
+            {
+                tcc.Maximize();
+            }
         }
     }
 }

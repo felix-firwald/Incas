@@ -47,7 +47,7 @@
                 </TextBox>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="240"/>
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding TypeOfFieldValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxDropDownHeight="240" Grid.Column="1">

@@ -4,6 +4,9 @@ using Incas.Objects.Components;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Documents;
 
 namespace Incas.Templates.ViewModels
@@ -40,6 +43,14 @@ namespace Incas.Templates.ViewModels
             }
             this.OnPropertyChanged(nameof(this.Grid));
         }
+        public void ApplyData(DataTable data)
+        {
+            this.Grid.Clear();
+            foreach (DataRow dc in data.Rows)
+            {
+                this.Grid.ImportRow(dc);
+            }
+        }
         public void AddRow()
         {
             this.Grid.Rows.Add();
@@ -52,6 +63,24 @@ namespace Incas.Templates.ViewModels
                 this._data = value;
                 this.OnPropertyChanged(nameof(this.Grid));
             }
+        }
+        private int selected;
+        public int SelectedRow
+        {
+            get
+            {
+                return this.selected;
+            }
+            set
+            {
+                this.selected = value;
+                this.OnPropertyChanged(nameof(this.SelectedRow));
+            }
+        }
+        public void RemoveSelectedRow()
+        {
+            this.Grid.Rows.Remove(this.Grid.Rows[this.SelectedRow]);
+            this.OnPropertyChanged(nameof(this.Grid));
         }
     }
 }
