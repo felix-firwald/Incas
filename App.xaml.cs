@@ -11,7 +11,7 @@ namespace Incas
 
     public partial class App : System.Windows.Application
     {
-        public static DateTime ExpirationDate = new(2024, 12, 12);
+        public static DateTime ExpirationDate = new(2024, 12, 15);
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);

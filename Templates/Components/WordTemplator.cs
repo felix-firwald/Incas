@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using WebSupergoo.WordGlue3;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
@@ -115,6 +116,8 @@ namespace Incas.Templates.Components
             int table = -1;
             int row = -1;
             Dictionary<string, int> columns = new();
+            Dictionary<string, Formatting> columnsFormatting = new();
+            Dictionary<string, Alignment> columnsAlignments = new();
             Formatting rowStyle = new();
             rowStyle.FontFamily = new Font("Times New Roman");
             rowStyle.Size = 9;
@@ -134,7 +137,7 @@ namespace Incas.Templates.Components
                         int rowFindIndex = r.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}."));
                         if (rowFindIndex != -1) // если найден ряд
                         {
-                            row = indexrow; // здесь?
+                            row = indexrow;
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 int indexcell = 0;
@@ -143,8 +146,12 @@ namespace Incas.Templates.Components
                                     int cellFindIndex = cell.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}.{dc.ColumnName}]"));
                                     if (cellFindIndex != -1)
                                     {
+                                        Formatting format = cell.Paragraphs[0].MagicText[0].formatting;
+                                        Alignment align = cell.Paragraphs[0].Alignment;
                                         cell.Paragraphs[cellFindIndex].Remove(false);
                                         columns.Add(dc.ColumnName, indexcell);
+                                        columnsFormatting.Add(dc.ColumnName, format);
+                                        columnsAlignments.Add(dc.ColumnName, align);
                                         break;
                                     }
                                     indexcell += 1;
@@ -165,16 +172,30 @@ namespace Incas.Templates.Components
             }
             foreach (DataRow dr in dt.Rows)
             {
-                doc.Tables[table].InsertRow(doc.Tables[table].Rows[row], row, true);
+                doc.Tables[table].InsertRow(doc.Tables[table].Rows[row], row, true);             
                 foreach (DataColumn dc in dt.Columns)
                 {
                     string value = dr[dc.ColumnName].ToString();
-   
-                    doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value, rowStyle);
+                    doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value, columnsFormatting[dc.ColumnName]);
+                    doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Alignment = columnsAlignments[dc.ColumnName];
                 }
                 row += 1;
             }
+            doc.Tables[table].RemoveRow(row);
             doc.Save();
+        }
+        private Formatting GetFormatting(XElement rPr)
+        {
+            Formatting formatting = Formatting.Parse(rPr);
+            if (formatting.FontFamily == null)
+            {
+                formatting.FontFamily = new Font("Times New Roman");
+            }
+            if (formatting.Size == null)
+            {
+                formatting.Size = 9d;
+            }
+            return formatting;
         }
         public static void ConvertToPdf(string path)
         {

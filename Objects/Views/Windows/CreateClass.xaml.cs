@@ -162,6 +162,12 @@ namespace Incas.Objects.Views.Windows
             List<Models.Field> fields = [];
             try
             {
+                if (string.IsNullOrWhiteSpace(this.vm.NameOfClass))
+                {
+                    DialogsManager.ShowExclamationDialog("Классу не присвоено наименование!", "Сохранение прервано");
+                    return;
+                }
+                
                 List<string> names = [];
                 if (this.ContentPanel.Children.Count == 0)
                 {
@@ -181,6 +187,18 @@ namespace Incas.Objects.Views.Windows
                     }
                     f.SetId();
                     fields.Add(f);
+                }
+                if (string.IsNullOrWhiteSpace(this.vm.NameTemplate))
+                {
+                    FieldNameInsertor fn = new(fields);
+                    if (fn.ShowDialog("Поле для наименования объектов", Core.Classes.Icon.Subscript))
+                    {
+                        this.vm.NameTemplate = $"{this.vm.NameOfClass} {fn.GetSelectedField()}";
+                    }
+                    else
+                    {
+                        this.vm.NameTemplate = $"{this.vm.NameOfClass} [{fields[0].Name}]";
+                    }
                 }
                 this.vm.SetData(fields);
                 this.vm.Source.Save();

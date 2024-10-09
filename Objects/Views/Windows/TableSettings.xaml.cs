@@ -151,7 +151,7 @@ namespace Incas.Objects.Views.Windows
             {
                 TableFieldColumnData tf = new();
                 tf.Name = column;
-                tf.VisibleName = column.Replace("_", "");
+                tf.VisibleName = column.Replace("_", " ");
                 this.AddColumnCreator(tf);
             }
         }

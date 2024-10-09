@@ -26,7 +26,15 @@ namespace Incas.Objects.AutoUI
             this.Selector = new(new());
             foreach (Field field in fields)
             {
-                this.Selector.Pairs.Add(field, field.Name);
+                switch (field.Type)
+                {
+                    case Components.FieldType.Variable:
+                    case Components.FieldType.Text:
+                    case Components.FieldType.Number:
+                    case Components.FieldType.Date:
+                        this.Selector.Pairs.Add(field, field.Name);
+                        break;
+                }               
             }
         }
 
