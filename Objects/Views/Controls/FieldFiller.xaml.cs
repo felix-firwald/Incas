@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static Incas.Objects.Views.Controls.IFiller;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -26,30 +27,26 @@ namespace Incas.Objects.Views.Controls
     /// <summary>
     /// Логика взаимодействия для FieldFiller.xaml
     /// </summary>
-    public partial class FieldFiller : UserControl
+    public partial class FieldFiller : UserControl, IFiller
     {
         //public static Dictionary<TagType, >
-        public readonly Objects.Models.Field field;
+        public Objects.Models.Field Field { get; set; }
         private bool validated = true;
         private Control control;
         private CommandSettings command;
-        public delegate void StringAction(Guid tag, string text);
         public delegate void CommandScript(string script);
-        public delegate void StringActionRecalculate(string tag);
-        public delegate void FieldFillerAction(FieldFiller sender);
         public event StringAction OnInsert;
         public event CommandScript OnScriptRequested;
-        public event StringActionRecalculate OnRename;
-        public event FieldFillerAction OnFieldUpdate;
-        public event FieldFillerAction OnDatabaseObjectCopyRequested;
+        public event FillerUpdate OnFillerUpdate;
+        public event FillerUpdate OnDatabaseObjectCopyRequested;
         public FieldFiller(Objects.Models.Field f)
         {
             this.InitializeComponent();
-            this.field = f;
-            this.MainLabel.Text = string.IsNullOrWhiteSpace(this.field.VisibleName) ? this.field.Name + ":" : this.field.VisibleName + ":";
+            this.Field = f;
+            this.MainLabel.Text = string.IsNullOrWhiteSpace(this.Field.VisibleName) ? this.Field.Name + ":" : this.Field.VisibleName + ":";
             try
             {
-                this.GenerateUIControl(this.field.Type);
+                this.GenerateUIControl(this.Field.Type);
                 //this.MakeButton();
             }
             catch (Exception ex)
@@ -57,14 +54,24 @@ namespace Incas.Objects.Views.Controls
                 DialogsManager.ShowErrorDialog(ex);
             }
         }
+        public void MarkAsNotValidated()
+        {
+            this.validated = false;
+            this.Grid.Background = new SolidColorBrush(Color.FromRgb(68, 40, 45));
+        }
+        public void MarkAsValidated()
+        {
+            this.validated = true;
+            this.Grid.Background = null;
+        }
         private FieldType GetFillerType()
         {
-            return this.field.Type;
+            return this.Field.Type;
         }
         private void GenerateUIControl(FieldType type)
         {
-            string value = this.field.Value;
-            string description = this.field.Description;
+            string value = this.Field.Value;
+            string description = this.Field.Description;
             switch (type)
             {
                 case FieldType.Variable:
@@ -113,7 +120,7 @@ namespace Incas.Objects.Views.Controls
                     this.Visibility = Visibility.Collapsed;
                     Guid id;
                     Guid.TryParse(value.ToString(), out id);
-                    this.field.Value = ProgramState.GetConstant(id);
+                    this.Field.Value = ProgramState.GetConstant(id);
                     break;
                 case FieldType.Relation:
                     SelectionBox selectionBox = new(JsonConvert.DeserializeObject<BindingData>(value));
@@ -146,7 +153,7 @@ namespace Incas.Objects.Views.Controls
         private void PlaceUIControl(Control control)
         {
             this.control = control;
-            this.control.ToolTip = this.field.Description;
+            this.control.ToolTip = this.Field.Description;
             this.Grid.Children.Add(control);
             Grid.SetRow(control, 0);
             Grid.SetColumn(control, 1);
@@ -154,7 +161,7 @@ namespace Incas.Objects.Views.Controls
 
         private void MakeButton()
         {
-            this.command = this.field.GetCommand();
+            this.command = this.Field.GetCommand();
             if (this.command.ScriptType != ScriptType.Button)
             {
                 return;
@@ -162,11 +169,6 @@ namespace Incas.Objects.Views.Controls
             this.CommandButtonIcon.Data = this.FindResource(this.command.Icon.ToString()) as PathGeometry;
             this.CommandButton.Visibility = Visibility.Visible;
             this.CommandButtonText.Content = this.command.Name;
-        }
-        public void MarkAsNotValidated()
-        {
-            this.validated = false;
-            this.MainLabel.Foreground = this.FindResource("Error") as SolidColorBrush;
         }
 
         public void SetValue(string value)
@@ -192,7 +194,7 @@ namespace Incas.Objects.Views.Controls
                 case FieldType.GlobalConstant:
                     return;
                 case FieldType.HiddenField:
-                    this.field.Value = value;
+                    this.Field.Value = value;
                     break;
                 case FieldType.LocalEnumeration:
                 case FieldType.GlobalEnumeration:
@@ -235,7 +237,7 @@ namespace Incas.Objects.Views.Controls
 
         public string GetTagName()
         {
-            return this.field.Name;
+            return this.Field.Name;
         }
 
         private string GetDateInFormat()
@@ -243,13 +245,13 @@ namespace Incas.Objects.Views.Controls
             DatePicker picker = ((DatePicker)this.control);
             if (picker.SelectedDate is null)
             {
-                if (this.field.NotNull == true)
+                if (this.Field.NotNull == true)
                 {
                     this.ThrowNotNullFailed();
                 }
                 return "";
             }
-            DateFieldData df = JsonConvert.DeserializeObject<DateFieldData>(this.field.Value);
+            DateFieldData df = JsonConvert.DeserializeObject<DateFieldData>(this.Field.Value);
             string format = "dd.MM.yyyy";
             switch (df.Format)
             {
@@ -273,7 +275,7 @@ namespace Incas.Objects.Views.Controls
                 case FieldType.Variable:
                 default:
                     string value = ((System.Windows.Controls.TextBox)this.control).Text;
-                    if (this.field.NotNull == true && string.IsNullOrEmpty(value))
+                    if (this.Field.NotNull == true && string.IsNullOrEmpty(value))
                     {
                         this.ThrowNotNullFailed();
                     }
@@ -283,7 +285,7 @@ namespace Incas.Objects.Views.Controls
                 case FieldType.LocalConstant:
                 case FieldType.HiddenField:
                 case FieldType.GlobalConstant:
-                    return this.field.Value?.ToString();
+                    return this.Field.Value?.ToString();
                 case FieldType.Relation:
                     return ((SelectionBox)this.control).Value;
                 case FieldType.LocalEnumeration:
@@ -301,6 +303,10 @@ namespace Incas.Objects.Views.Controls
                     return ((Generator)this.control).GetText();
             }
         }
+        /// <summary>
+        /// Get an internal value of field
+        /// </summary>
+        /// <returns></returns>
         public string GetData()
         {
             switch (this.GetFillerType())
@@ -313,14 +319,14 @@ namespace Incas.Objects.Views.Controls
                     {
                         return ((DateTime)((DatePicker)this.control).SelectedDate).ToString("dd.MM.yyyy");
                     }
-                    else if (this.field.NotNull == true)
+                    else if (this.Field.NotNull == true)
                     {
                         this.ThrowNotNullFailed();
                     }
                     return "";
                 case FieldType.Relation:
                     Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
-                    if (this.field.NotNull == true && obj is null)
+                    if (this.Field.NotNull == true && obj is null)
                     {
                         this.ThrowNotNullFailed();
                     }
@@ -336,12 +342,13 @@ namespace Incas.Objects.Views.Controls
         }
         public void ThrowNotNullFailed()
         {
-            throw new NotNullFailed($"Поле \"{this.field.VisibleName}\" является обязательным, однако не заполнено.");
+            this.MarkAsNotValidated();
+            throw new NotNullFailed($"Поле \"{this.Field.VisibleName}\" является обязательным, однако не заполнено.");
         }
 
         public Guid GetId()
         {
-            return this.field.Id;
+            return this.Field.Id;
         }
 
         private void CopyAllClick(object sender, RoutedEventArgs e)
@@ -353,16 +360,12 @@ namespace Incas.Objects.Views.Controls
         {
             try
             {
-                OnInsert?.Invoke(this.field.Id, this.GetData());
+                OnInsert?.Invoke(this.Field.Id, this.GetData());
             }
             catch (NotNullFailed)
             {
                 DialogsManager.ShowExclamationDialog("Поле является обязательным, необходимо сначала присвоить ему значение.", "Переназначение прервано");
             }
-        }
-        private void RecalculateNamesClick(object sender, RoutedEventArgs e)
-        {
-            OnRename?.Invoke(this.field.Name);
         }
 
         private void TextRequest(object sender, RoutedEventArgs e)
@@ -409,7 +412,8 @@ namespace Incas.Objects.Views.Controls
         }
         private void RunUpdateEvent()
         {
-            this.OnFieldUpdate?.Invoke(this);
+            this.MarkAsValidated();
+            this.OnFillerUpdate?.Invoke(this);
         }
 
         private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)

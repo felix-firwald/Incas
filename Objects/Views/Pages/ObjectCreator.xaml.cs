@@ -26,7 +26,7 @@ namespace Incas.Objects.Views.Pages
         public ClassData ClassData { get; set; }
         public List<FieldFiller> TagFillers = [];
         public List<FieldTableFiller> Tables = [];
-        public delegate void ObjectCreatorData(ObjectCreator creator);
+        public delegate bool ObjectCreatorData(ObjectCreator creator);
         public delegate void FieldCopyAction(Guid id, string text);
         public event FieldCopyAction OnInsertRequested;
         public event ObjectCreatorData OnSaveRequested;
@@ -111,10 +111,8 @@ namespace Incas.Objects.Views.Pages
                         Uid = f.Id.ToString()
                     };
                     tf.OnInsert += this.Tf_OnInsert;
-                    tf.OnRename += this.Tf_OnRename;
-                    tf.OnFieldUpdate += this.Tf_OnFieldUpdate;
+                    tf.OnFillerUpdate += this.Tf_OnFieldUpdate;
                     tf.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
-                    //tf.OnScriptRequested += this.OnScriptRequested;
                     this.ContentPanel.Children.Add(tf);
                     this.TagFillers.Add(tf);
                 }
@@ -124,35 +122,37 @@ namespace Incas.Objects.Views.Pages
                     {
                         Uid = f.Id.ToString()
                     };
+                    tf.OnInsert += this.Tf_OnInsert;
+                    tf.OnFillerUpdate += this.Tf_OnFieldUpdate;
+                    tf.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
                     this.ContentPanel.Children.Add(tf);
                     this.Tables.Add(tf);
                 }
             }
         }
 
-        private void Tf_OnDatabaseObjectCopyRequested(FieldFiller sender)
+        private void Tf_OnDatabaseObjectCopyRequested(IFiller sender)
         {
             BindingData bd = new()
             {
                 Class = this.Class.identifier,
-                Field = sender.field.Id
+                Field = sender.Field.Id
             };
             DatabaseSelection ds = new(bd);
             ds.ShowDialog();
             foreach (Components.FieldData field in ds.SelectedObject?.Fields)
             {
-                if (field.ClassField.Id == sender.field.Id)
+                if (field.ClassField.Id == sender.Field.Id)
                 {
-
                     sender.SetValue(field.Value);
                     return;
                 }
             }
         }
 
-        private void Tf_OnFieldUpdate(FieldFiller sender)
+        private void Tf_OnFieldUpdate(IFiller sender)
         {
-
+            
         }
         public void ApplyFromExcel(Dictionary<string, string> pairs)
         {
@@ -160,7 +160,7 @@ namespace Incas.Objects.Views.Pages
             {
                 foreach (FieldFiller tf in this.ContentPanel.Children)
                 {
-                    if (tf.field.Name == pair.Key)
+                    if (tf.Field.Name == pair.Key)
                     {
                         tf.SetValue(pair.Value);
                         break;
@@ -177,7 +177,7 @@ namespace Incas.Objects.Views.Pages
                 foreach (FieldFiller tagfiller in this.TagFillers)
                 {
                     //DialogsManager.ShowInfoDialog(tagfiller);
-                    if (tagfiller.field.Id == data.ClassField.Id)
+                    if (tagfiller.Field.Id == data.ClassField.Id)
                     {
                         tagfiller.SetValue(data.Value);
                         break;
@@ -187,7 +187,7 @@ namespace Incas.Objects.Views.Pages
                 {
                     if (table.Field.Id == data.ClassField.Id)
                     {
-                        table.SetData(data.Value);
+                        table.SetValue(data.Value);
                         break;
                     }
                 }
@@ -210,7 +210,7 @@ namespace Incas.Objects.Views.Pages
             {
                 Components.FieldData data = new()
                 {
-                    ClassField = tf.field,
+                    ClassField = tf.Field,
                     Value = tf.GetData()
                 };
                 this.Object.Fields.Add(data);
@@ -283,6 +283,7 @@ namespace Incas.Objects.Views.Pages
         {
             string newFile = "";
             string oldFile = ProgramState.GetFullnameOfDocumentFile(templateData.File);
+            ITemplator templ = null;
             try
             {
                 if (oldFile.EndsWith(".docx"))
@@ -294,6 +295,7 @@ namespace Incas.Objects.Views.Pages
                     }
                     File.Copy(oldFile, newFile, true);
                     WordTemplator wt = new(newFile);
+                    templ = wt;
                     this.Dispatcher.Invoke(() =>
                     {
                         wt.GenerateDocument(this.TagFillers, this.Tables, async);
@@ -308,6 +310,7 @@ namespace Incas.Objects.Views.Pages
                     }
                     File.Copy(oldFile, newFile, true);
                     ExcelTemplator et = new(newFile);
+                    templ = et;
                     this.Dispatcher.Invoke(() =>
                     {
                         et.GenerateDocument(this.TagFillers, this.Tables, async);
@@ -329,7 +332,7 @@ namespace Incas.Objects.Views.Pages
             }
             catch (Exception e)
             {
-                DialogsManager.ShowErrorDialog(e.Message);
+                DialogsManager.ShowErrorDialog($"При рендеринге документа возникла неизвестная ошибка: {e.Message}.");
                 return "";
             }
         }
@@ -358,20 +361,15 @@ namespace Incas.Objects.Views.Pages
             return name;
         }
 
-        private void Tf_OnRename(string tag)
-        {
-
-        }
-
         private void Tf_OnInsert(Guid tag, string text)
         {
             this.OnInsertRequested?.Invoke(tag, text);
         }
         public void InsertToField(Guid id, string data)
         {
-            foreach (FieldFiller tf in this.TagFillers)
+            foreach (IFiller tf in this.ContentPanel.Children)
             {
-                if (tf.field.Id == id)
+                if (tf.Field.Id == id)
                 {
                     tf.SetValue(data);
                     return;
@@ -405,7 +403,10 @@ namespace Incas.Objects.Views.Pages
         {
             try
             {
-                this.OnSaveRequested?.Invoke(this);
+                if (this.OnSaveRequested?.Invoke(this) == false)
+                {
+                    return;
+                }
                 string path = ProgramState.TemplatesRuntime;
                 if (this.ClassData.Templates?.Count == 1)
                 {

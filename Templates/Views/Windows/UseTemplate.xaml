@@ -55,7 +55,7 @@
                     <StackPanel x:Name="ContentPanel" ScrollViewer.CanContentScroll="True"/>
                 </ScrollViewer>
             </Border>
-            <Button x:Name="GenerateButton" Style="{StaticResource ButtonMainFinish}" Grid.Row="2" Content="Создать файлы по шаблону" Click="CreateFilesClick" Margin="5,5,5,5" />
+            <Button x:Name="GenerateButton" Style="{StaticResource ButtonMainFinish}" Grid.Row="2" Content="Отправить в очередь рендеринга" Click="CreateFilesClick" Margin="5,5,5,5" />
             <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Background="{StaticResource Black}" VerticalAlignment="Center">
                 <ProgressBar x:Name="ProgressCreation" Background="{StaticResource Black}" BorderBrush="{x:Null}" />
             </StackPanel>

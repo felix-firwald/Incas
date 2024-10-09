@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Incas.Objects.Views.Pages" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border x:Name="MainBorder" Margin="5" CornerRadius="8" Background="{DynamicResource Dark}" Cursor="">
+    <Border x:Name="MainBorder" Margin="5" CornerRadius="8" Background="{DynamicResource Dark}" Cursor="" Padding="0,0,0,5">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>

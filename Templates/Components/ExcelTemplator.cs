@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using Incas.Core.Classes;
 using Incas.Objects.Views.Controls;
 using Microsoft.Scripting.Utils;
 using System;
@@ -8,17 +9,27 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using WebSupergoo.WordGlue3;
 using Xceed.Document.NET;
+using Xceed.Words.NET;
 
 namespace Incas.Templates.Components
 {
     public class ExcelTemplator : ITemplator
     {
+        private string Log = "";
         public XLWorkbook workbook;
         public IXLWorksheet worksheet;
         public ExcelTemplator(string path)
         {
             this.workbook = new XLWorkbook(path);
             this.worksheet = this.workbook.Worksheet(1);
+        }
+        private void WriteLog(string log)
+        {
+            this.Log = this.Log + "\n" + log;
+        }
+        public string GetLogData()
+        {
+            return this.Log;
         }
         private string ConvertTag(string tag)
         {
@@ -55,6 +66,11 @@ namespace Incas.Templates.Components
             int rowIndex = -1;
             int lastColumnIndex = -1;
             int firstColumnIndex = -1;
+            if (dt is null)
+            {
+                DialogsManager.ShowErrorDialog($"Таблица '{tag}' не содержит заполненной информации.");
+                return;
+            }
             Dictionary<string, IXLCell> columns = new();
             IXLCell cell = this.worksheet.Search($"[{tag}.", System.Globalization.CompareOptions.IgnoreCase, false).FirstOrDefault();
             if (cell is null)
@@ -91,11 +107,14 @@ namespace Incas.Templates.Components
                     int currentCol = columns[dc.ColumnName].WorksheetColumn().ColumnNumber();
                     this.worksheet.Cell(rowIndex, currentCol).SetValue(value);
                     this.worksheet.Cell(rowIndex, currentCol).Style = columns[dc.ColumnName].Style;
-                    IXLRangeAddress range = columns[dc.ColumnName].MergedRange().RangeAddress;
-                    if (range.ColumnSpan > 1)
+                    if (columns[dc.ColumnName].IsMerged())
                     {
-                        this.worksheet.Range(rowIndex, currentCol, rowIndex, currentCol + range.ColumnSpan - 1).Merge();
-                    }
+                        IXLRangeAddress range = columns[dc.ColumnName].MergedRange().RangeAddress;
+                        if (range.ColumnSpan > 1)
+                        {
+                            this.worksheet.Range(rowIndex, currentCol, rowIndex, currentCol + range.ColumnSpan - 1).Merge();
+                        }                  
+                    }                 
                 }
                 rowIndex += 1;
             }
@@ -116,7 +135,7 @@ namespace Incas.Templates.Components
                 string value = tf.GetValue();
                 tagsToReplace.Add(name);
                 values.Add(value);
-                if (tf.field.Type == Objects.Components.FieldType.Relation)
+                if (tf.Field.Type == Objects.Components.FieldType.Relation)
                 {
                     foreach (Objects.Components.FieldData fd in tf.GetDataFromObjectRelation())
                     {
@@ -145,6 +164,30 @@ namespace Incas.Templates.Components
             foreach (Match match in matches)
             {
                 result.Add(match.Value.TrimStart('[').TrimEnd(']'));
+            }
+            return result;
+        }
+        public List<string> FindTableTags(string tableName)
+        {
+            string source = "";
+            List<string> result = [];
+            Regex regex = new(@"\[[A-Za-zА-Яа-я0-9_]*\.+[A-Za-zА-Яа-я0-9_]*\]");
+            foreach (IXLCell cell in this.worksheet.CellsUsed())
+            {
+                string value = cell.Value.ToString();
+                if (value.Contains('['))
+                {
+                    source = source + "\n" + value;
+                }
+            }
+            MatchCollection matches = regex.Matches(source);
+            string patternTable = $"[{tableName}.";
+            foreach (Match match in matches)
+            {
+                if (match.Value.Contains(patternTable))
+                {
+                    result.Add(match.Value.Replace(patternTable, "").TrimEnd(']'));
+                }
             }
             return result;
         }

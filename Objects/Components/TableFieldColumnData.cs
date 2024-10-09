@@ -6,5 +6,6 @@
         public string VisibleName { get; set; }
         public FieldType FieldType { get; set; }
         public string Value { get; set; }
+        public bool NotNull { get; set; }
     }
 }

@@ -20,6 +20,7 @@ namespace Incas.Templates.Components
     public class WordTemplator : ITemplator
     {
         public readonly string Path;
+        private string Log = "";
 
         public WordTemplator(string path)
         {
@@ -29,7 +30,14 @@ namespace Incas.Templates.Components
         public WordTemplator()
         {
         }
-
+        private void WriteLog(string log)
+        {
+            this.Log = this.Log + "\n" + log;
+        }
+        public string GetLogData()
+        {
+            return this.Log; 
+        }
         private string ConvertTag(string tag)
         {
             return $"[{tag}]";
@@ -72,10 +80,6 @@ namespace Incas.Templates.Components
         {
             List<string> tagsToReplace = [];
             List<string> values = [];
-            foreach (FieldTableFiller tab in tableFillers)
-            {
-                this.CreateTable(tab.Field.Name, tab.GetValue());
-            }
             foreach (FieldFiller tf in tagFillers)
             {
                 Guid id = tf.GetId();
@@ -83,7 +87,7 @@ namespace Incas.Templates.Components
                 string value = tf.GetValue();
                 tagsToReplace.Add(name);
                 values.Add(value);
-                if (tf.field.Type == Objects.Components.FieldType.Relation)
+                if (tf.Field.Type == Objects.Components.FieldType.Relation)
                 {
                     foreach (Objects.Components.FieldData fd in tf.GetDataFromObjectRelation())
                     {
@@ -93,11 +97,21 @@ namespace Incas.Templates.Components
                 }
             }
             this.Replace(tagsToReplace, values, async);
+            foreach (FieldTableFiller tab in tableFillers)
+            {
+                this.CreateTable(tab.Field.Name, tab.GetValue());
+            }          
         }
 
         public void CreateTable(string tag, DataTable dt)
         {
             DocX doc = this.LoadFile();
+            if (dt is null || dt.Rows.Count == 0)
+            {
+                DialogsManager.ShowErrorDialog($"Таблица '{tag}' не содержит заполненной информации. Она будет пропущена при рендеринге.");
+                return;
+            }
+            
             int table = -1;
             int row = -1;
             Dictionary<string, int> columns = new();
@@ -105,23 +119,22 @@ namespace Incas.Templates.Components
             rowStyle.FontFamily = new Font("Times New Roman");
             rowStyle.Size = 9;
             // проходит по всем таблицам в документе
+            int indextable = 0;
             foreach (Table tab in doc.Tables)
             {
                 // если в таблице есть параграф с хотя бы первым тегом поиск надо прекратить
-                int indextable = tab.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}."));
-                
-                if (indextable != -1)
+                int tableFindIndex = tab.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}."));
+                if (tableFindIndex != -1)
                 {
-                    table = tab.Index;
+                    table = indextable;
                     int indexrow = 0;
                     // выясняем ряд
                     foreach (Row r in tab.Rows)
-                    {
-                        
+                    {                       
                         int rowFindIndex = r.Paragraphs.FindIndex(p => p.Text.Contains($"[{tag}."));
-                        if (rowFindIndex != -1)
+                        if (rowFindIndex != -1) // если найден ряд
                         {
-                            row = indexrow;
+                            row = indexrow; // здесь?
                             foreach (DataColumn dc in dt.Columns)
                             {
                                 int indexcell = 0;
@@ -137,13 +150,15 @@ namespace Incas.Templates.Components
                                     indexcell += 1;
                                 }
                             }
-                            break;
+                            break; // прервать поиск рядов
                         }
                         indexrow += 1;
                     }
                     break;
                 }
+                indextable += 1;
             }
+            // все что выше - ок
             if (table == -1 || row == -1)
             {
                 return;
@@ -151,11 +166,10 @@ namespace Incas.Templates.Components
             foreach (DataRow dr in dt.Rows)
             {
                 doc.Tables[table].InsertRow(doc.Tables[table].Rows[row], row, true);
-    
                 foreach (DataColumn dc in dt.Columns)
                 {
                     string value = dr[dc.ColumnName].ToString();
-                    //doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].InsertParagraph(value, rowStyle);
+   
                     doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value, rowStyle);
                 }
                 row += 1;
@@ -179,12 +193,28 @@ namespace Incas.Templates.Components
         {
             List<string> result = [];
             DocX doc = DocX.Load(this.Path);
-            Regex regex = new(@"\[[A-Za-zА-Яа-я0-9_]*\]"); // @"\[(\w*)\]"   @"\[(\.*)\]"
+            Regex regex = new(@"\[[A-Za-zА-Яа-я0-9_]*\]");
             MatchCollection matches = regex.Matches(doc.Text);
 
             foreach (Match match in matches)
             {
                 result.Add(match.Value.TrimStart('[').TrimEnd(']'));
+            }
+            return result;
+        }
+        public List<string> FindTableTags(string tableName) 
+        {
+            List<string> result = [];
+            DocX doc = DocX.Load(this.Path);
+            Regex regex = new(@"\[[A-Za-zА-Яа-я0-9_]*\.+[A-Za-zА-Яа-я0-9_]*\]");
+            MatchCollection matches = regex.Matches(doc.Text);
+            string patternTable = $"[{tableName}.";
+            foreach (Match match in matches)
+            {
+                if (match.Value.Contains(patternTable))
+                {
+                    result.Add(match.Value.Replace(patternTable, "").TrimEnd(']'));
+                }
             }
             return result;
         }

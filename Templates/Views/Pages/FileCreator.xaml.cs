@@ -31,8 +31,6 @@ namespace Incas.Templates.Views.Pages
         public event TagAction OnInsertRequested;
         public delegate void FileCreatorAction(FileCreator creator);
         public event FileCreatorAction OnCreatorDestroy;
-        public delegate void TagActionRecalculate(string tag);
-        public event TagActionRecalculate OnRenameRequested;
         public bool SelectorChecked => (bool)this.Selector.IsChecked;
         public FileCreator(Template templ, ref TemplateSettings settings, List<Objects.Models.Field> tagsList)
         {
@@ -68,7 +66,6 @@ namespace Incas.Templates.Views.Pages
                 {
                     FieldFiller tf = new(t);
                     tf.OnInsert += this.OnInsert;
-                    tf.OnRename += this.OnRename;
                     tf.OnScriptRequested += this.OnScriptRequested;
                     this.ContentPanel.Children.Add(tf);
                     this.TagFillers.Add(tf);
@@ -89,14 +86,14 @@ namespace Incas.Templates.Views.Pages
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                 foreach (FieldFiller tf in this.TagFillers)
                 {
-                    scope.SetVariable(tf.field.Name.Replace(" ", "_"), tf.GetData());
+                    scope.SetVariable(tf.Field.Name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
                 foreach (FieldFiller tf in this.TagFillers)
                 {
-                    if (tf.field.Type != FieldType.Generator)
+                    if (tf.Field.Type != FieldType.Generator)
                     {
-                        tf.SetValue(scope.GetVariable(tf.field.Name.Replace(" ", "_")));
+                        tf.SetValue(scope.GetVariable(tf.Field.Name.Replace(" ", "_")));
                     }
                 }
             }
@@ -110,17 +107,13 @@ namespace Incas.Templates.Views.Pages
         {
             OnInsertRequested?.Invoke(tag, value);
         }
-        private void OnRename(string tag)
-        {
-            OnRenameRequested?.Invoke(tag);
-        }
         public async void InsertTagValue(Guid tag, string value)
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
                 foreach (FieldFiller tf in this.TagFillers)
                 {
-                    if (tf.field.Id == tag)
+                    if (tf.Field.Id == tag)
                     {
                         this.Dispatcher.Invoke(() =>
                         {
@@ -139,7 +132,7 @@ namespace Incas.Templates.Views.Pages
             {
                 foreach (FieldFiller tf in this.ContentPanel.Children)
                 {
-                    if (tf.field.Name == pair.Key)
+                    if (tf.Field.Name == pair.Key)
                     {
                         tf.SetValue(pair.Value);
                         break;
@@ -217,16 +210,16 @@ namespace Incas.Templates.Views.Pages
                     ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                     foreach (FieldFiller tf in this.TagFillers)
                     {
-                        scope.SetVariable(tf.field.Name.Replace(" ", "_"), tf.GetData());
+                        scope.SetVariable(tf.Field.Name.Replace(" ", "_"), tf.GetData());
                     }
                     scope.SetVariable("file_name", this.Filename.Text);
                     ScriptManager.Execute(this.templateSettings.OnSaving, scope);
                     this.Filename.Text = scope.GetVariable("file_name");
                     foreach (FieldFiller tf in this.TagFillers)
                     {
-                        if (tf.field.Type != FieldType.Generator)
+                        if (tf.Field.Type != FieldType.Generator)
                         {
-                            tf.SetValue(scope.GetVariable(tf.field.Name.Replace(" ", "_")));
+                            tf.SetValue(scope.GetVariable(tf.Field.Name.Replace(" ", "_")));
                         }
                     }
                 }

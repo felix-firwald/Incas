@@ -12,6 +12,8 @@ namespace Incas.Templates.Components
 
         public void CreateTable(string tag, DataTable dt);
         public List<string> FindAllTags();
+        public string GetLogData();
+        public List<string> FindTableTags(string tableName);
         //public void CreateByObject(Incas.Objects.Components.Object obj);
     }
 }

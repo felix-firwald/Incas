@@ -1,9 +1,13 @@
-﻿using Incas.Objects.Components;
+﻿using Incas.Core.Classes;
+using Incas.Objects.Components;
 using Incas.Objects.Views.Controls;
+using Incas.Templates.Components;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Incas.Objects.Views.Windows
@@ -13,10 +17,13 @@ namespace Incas.Objects.Views.Windows
     /// </summary>
     public partial class TableSettings : Window
     {
+        private string TableName { get; set; }
         public TableFieldData Data { get; set; }
-        public TableSettings(string value)
+        public TableSettings(string value, string tableName)
         {
             this.InitializeComponent();
+            this.TableName = tableName;
+            this.Title = $"Редактирование таблицы ({tableName})";
             try
             {
                 this.Data = JsonConvert.DeserializeObject<TableFieldData>(value);
@@ -105,6 +112,47 @@ namespace Incas.Objects.Views.Windows
             foreach (TableColumnCreator tcc in this.ContentPanel.Children)
             {
                 tcc.Maximize();
+            }
+        }
+
+        private void FindColumnsInFile(object sender, MouseButtonEventArgs e)
+        {
+            OpenFileDialog fd = new()
+            {
+                Filter = "Word и Excel|*.docx;*.xlsx",
+                InitialDirectory = ProgramState.TemplatesSources
+            };
+            if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    ITemplator templ;
+                    if (fd.FileName.EndsWith(".docx"))
+                    {
+                        templ = new WordTemplator(fd.FileName);
+                        this.ApplyColumnsFromTemplator(templ.FindTableTags(this.TableName));
+                    }
+                    else
+                    {
+                        templ = new ExcelTemplator(fd.FileName);
+                        this.ApplyColumnsFromTemplator(templ.FindTableTags(this.TableName));
+                    }
+                }
+                catch (IOException ioex)
+                {
+                    DialogsManager.ShowErrorDialog("При доступе к файл возникла ошибка. Описание ошибки: " + ioex.Message);
+                }
+                catch { }
+            }
+        }
+        private void ApplyColumnsFromTemplator(List<string> columns)
+        {
+            foreach (string column in columns)
+            {
+                TableFieldColumnData tf = new();
+                tf.Name = column;
+                tf.VisibleName = column.Replace("_", "");
+                this.AddColumnCreator(tf);
             }
         }
     }

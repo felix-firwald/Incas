@@ -145,7 +145,7 @@ namespace Incas.Objects.Views.Controls
                     dt.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
                 case Components.FieldType.Table:
-                    TableSettings ts = new(f.Value);
+                    TableSettings ts = new(f.Value, f.Name);
                     if (ts.ShowDialog() == true)
                     {
                         this.vm.Source.Value = JsonConvert.SerializeObject(ts.Data);

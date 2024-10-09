@@ -65,7 +65,7 @@ namespace Incas.Templates.Views.Windows
         {
             FileCreator fc = new(this.template, ref this.templateSettings, this.tags);
             fc.OnInsertRequested += this.InsertValuesByTag;
-            fc.OnRenameRequested += this.SimpleRecalculateNames;
+            //fc.OnRenameRequested += this.SimpleRecalculateNames;
             fc.OnCreatorDestroy += this.OnCreatorDestroy;
             this.ContentPanel.Children.Add(fc);
             this.creators.Add(fc);
@@ -75,7 +75,7 @@ namespace Incas.Templates.Views.Windows
         {
             FileCreator fc = new(this.tags);
             fc.OnInsertRequested += this.InsertValuesByTag;
-            fc.OnRenameRequested += this.SimpleRecalculateNames;
+            //fc.OnRenameRequested += this.SimpleRecalculateNames;
             fc.OnCreatorDestroy += this.OnCreatorDestroy;
             this.ContentPanel.Children.Add(fc);
             this.creators.Add(fc);

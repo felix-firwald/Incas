@@ -68,12 +68,13 @@ namespace Incas.Objects.Views.Controls
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
             TableFieldColumnData f = this.vm.FieldData;
-            string name = $"Настройки поля [{f.Name}]";
+            string name = $"Настройки колонки [{f.Name}]";
             switch (f.FieldType)
             {
                 case FieldType.Variable:
                 case FieldType.Text:
-                    DialogsManager.ShowExclamationDialog("Данный тип колонки не предполагает настройки!", "Действие невозможно");
+                    TextColumnSettings tc = new(f);
+                    tc.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
                     break;
                 case Components.FieldType.LocalEnumeration:
                     LocalEnumerationColumnSettings le = new(f);

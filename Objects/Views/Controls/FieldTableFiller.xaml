@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Incas.Objects.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="800">
-    <Grid MinHeight="80">
+    <Grid x:Name="Main" MinHeight="80">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="auto" MaxWidth="350"/>
@@ -62,9 +62,17 @@
             </Button>
         </Grid>
         <Border MinWidth="80" Background="{DynamicResource Black}" CornerRadius="8,8,0,0" HorizontalAlignment="Right" Margin="0,5,12,-8">
-            <Label x:Name="TableName" Style="{StaticResource LabelElement}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0"/>
+            <Label Style="{StaticResource LabelElement}" Cursor="Hand" Content="{Binding TableName}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0">
+                <Label.ContextMenu>
+                    <ContextMenu FontFamily="Segoe UI" FontWeight="Normal">
+                        <MenuItem Header="Скопировать значение в остальные редактируемые объекты" Click="InsertToOther" Tag="Значение этого поля будет скопировано в поля других объектов" />
+                        <Separator Background="{DynamicResource LightBlack}"/>
+                        <MenuItem Header="Вставить значение из существующего объекта" Click="ObjectCopyRequestClick"/>
+                    </ContextMenu>
+                </Label.ContextMenu>
+            </Label>
         </Border>
-        <DataGrid x:Name="Table" MinHeight="120" MaxHeight="300" RowHeight="30" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" SelectedIndex="{Binding SelectedRow}" AutoGenerateColumns="True" CanUserAddRows="False" Grid.Row="1" Margin="5,5,5,5" AutoGeneratingColumn="ColumnGenerating">
+        <DataGrid x:Name="Table" MinHeight="120" MaxHeight="300" RowHeight="30" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" SelectedIndex="{Binding SelectedRow}" CellEditEnding="Table_CellEditEnding" AutoGenerateColumns="True" CanUserAddRows="False" Grid.Row="1" Margin="5,5,5,5" AutoGeneratingColumn="ColumnGenerating">
         </DataGrid>
 
     </Grid>

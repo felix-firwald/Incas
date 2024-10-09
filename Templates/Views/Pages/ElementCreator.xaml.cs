@@ -52,7 +52,7 @@ namespace Incas.Templates.Views.Pages
                 {
                     foreach (FieldFiller tagfiller in this.ContentPanel.Children)
                     {
-                        if (tagfiller.field.Id == tag.tag)
+                        if (tagfiller.Field.Id == tag.tag)
                         {
                             tagfiller.SetValue(tag.value);
                             break;
@@ -72,8 +72,8 @@ namespace Incas.Templates.Views.Pages
             {
                 SGeneratedTag gt = new()
                 {
-                    tag = tf.field.Id,
-                    value = tf.field.Type == Objects.Components.FieldType.Generator ? tf.GetData() : tf.GetValue()
+                    tag = tf.Field.Id,
+                    value = tf.Field.Type == Objects.Components.FieldType.Generator ? tf.GetData() : tf.GetValue()
                 };
                 tags.Add(gt);
             }
@@ -85,7 +85,7 @@ namespace Incas.Templates.Views.Pages
             string result = this.template.path;
             foreach (FieldFiller tf in this.ContentPanel.Children)
             {
-                result = result.Replace($"[{tf.field.Name}]", tf.GetValue());
+                result = result.Replace($"[{tf.Field.Name}]", tf.GetValue());
             }
             return result;
         }
@@ -97,12 +97,12 @@ namespace Incas.Templates.Views.Pages
                 ScriptScope scope = ScriptManager.GetEngine().CreateScope();
                 foreach (FieldFiller tf in this.ContentPanel.Children)
                 {
-                    scope.SetVariable(tf.field.Name.Replace(" ", "_"), tf.GetData());
+                    scope.SetVariable(tf.Field.Name.Replace(" ", "_"), tf.GetData());
                 }
                 ScriptManager.Execute(script, scope);
                 foreach (FieldFiller tf in this.ContentPanel.Children)
                 {
-                    tf.SetValue(scope.GetVariable(tf.field.Name.Replace(" ", "_")));
+                    tf.SetValue(scope.GetVariable(tf.Field.Name.Replace(" ", "_")));
                 }
             }
             catch (Exception ex)
@@ -116,7 +116,7 @@ namespace Incas.Templates.Views.Pages
             {
                 if (string.IsNullOrEmpty(tf.GetData()))
                 {
-                    DialogsManager.ShowExclamationDialog($"Тег \"{tf.field.Name}\" не заполнен!", "Сохранение отклонено");
+                    DialogsManager.ShowExclamationDialog($"Тег \"{tf.Field.Name}\" не заполнен!", "Сохранение отклонено");
                     return false;
                 }
             }

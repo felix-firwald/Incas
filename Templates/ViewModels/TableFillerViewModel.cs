@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.Objects.Components;
+using Incas.Objects.Exceptions;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Data;
@@ -17,6 +18,7 @@ namespace Incas.Templates.ViewModels
         public TableFieldData TableDefinition;
         public TableFillerViewModel(Objects.Models.Field t)
         {
+            this.TableName = t.VisibleName;
             try
             {
                 this.TableDefinition = JsonConvert.DeserializeObject<TableFieldData>(t.Value);
@@ -35,10 +37,11 @@ namespace Incas.Templates.ViewModels
             this.Grid = new();
             foreach (TableFieldColumnData tf in this.TableDefinition.Columns)
             {
-                DataColumn dc = new(tf.Name)
+                DataColumn dc = new(tf.Name);
+                if (tf.FieldType == FieldType.Variable)
                 {
-                    DefaultValue = tf.Value
-                };
+                    dc.DefaultValue = tf.Value;
+                }
                 this.Grid.Columns.Add(dc);
             }
             this.OnPropertyChanged(nameof(this.Grid));
@@ -51,6 +54,7 @@ namespace Incas.Templates.ViewModels
                 this.Grid.ImportRow(dc);
             }
         }
+        
         public void AddRow()
         {
             this.Grid.Rows.Add();
@@ -62,6 +66,19 @@ namespace Incas.Templates.ViewModels
             {
                 this._data = value;
                 this.OnPropertyChanged(nameof(this.Grid));
+            }
+        }
+        private string tableName;
+        public string TableName
+        {
+            get
+            {
+                return this.tableName;
+            }
+            set
+            {
+                this.tableName = value;
+                this.OnPropertyChanged(nameof(this.TableName));
             }
         }
         private int selected;

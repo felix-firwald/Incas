@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
 using Incas.Objects.Components;
+using Incas.Objects.Exceptions;
 using Incas.Templates.Components;
 using Incas.Templates.ViewModels;
 using Microsoft.Scripting.Hosting;
@@ -14,24 +15,28 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
+using static Incas.Objects.Views.Controls.IFiller;
 
 namespace Incas.Objects.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для FieldTableFiller.xaml
     /// </summary>
-    public partial class FieldTableFiller : UserControl
+    public partial class FieldTableFiller : UserControl, IFiller
     {
         private TableFillerViewModel vm;
-        public Objects.Models.Field Field;
-
+        public Objects.Models.Field Field { get; set; }
+        public event FillerUpdate OnFillerUpdate;
+        public event StringAction OnInsert;
+        public event FillerUpdate OnDatabaseObjectCopyRequested;
         public FieldTableFiller(Objects.Models.Field f)
         {
             this.InitializeComponent();
             this.Field = f;
             this.vm = new TableFillerViewModel(f);
+
             this.vm.AddRow();
-            this.TableName.Content = f.VisibleName;
             this.DataContext = this.vm;
         }
         public void SetData(DataTable dt)
@@ -42,18 +47,55 @@ namespace Incas.Objects.Views.Controls
             }
             this.vm.ApplyData(dt);
         }
-        public void SetData(string data)
+        public void SetValue(string data)
         {
             this.SetData(JsonConvert.DeserializeObject<DataTable>(data));
         }
+        /// <summary>
+        /// Internal using
+        /// </summary>
+        /// <returns></returns>
         public string GetData()
         {
+            this.CheckData();
             return JsonConvert.SerializeObject(this.vm.Grid);
         }
-        public DataTable GetValue()
+        public void MarkAsNotValidated()
         {
+            this.Main.Background = new SolidColorBrush(Color.FromRgb(68, 40, 45));
+        }
+        public void MarkAsValidated()
+        {
+            this.Main.Background = null;
+        }
+        public void CheckData()
+        {
+            foreach (TableFieldColumnData tf in this.vm.TableDefinition.Columns)
+            {
+                if (tf.NotNull == true)
+                {
+                    int row = 1;
+                    foreach (DataRow dr in this.vm.Grid.Rows)
+                    {
+                        if (string.IsNullOrWhiteSpace(dr[tf.Name].ToString()))
+                        {
+                            this.MarkAsNotValidated();
+                            throw new NotNullFailed($"Колонка \"{tf.VisibleName}\" у таблицы \"{this.vm.TableName}\" является обязательной, однако в ряду под номером {row} значение отсутствует.");
+                        }
+                        row++;
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// Template & forms using
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetValue()
+        {         
             return this.vm.Grid;
         }
+
         public SGeneratedTag GetAsGeneratedTag()
         {
             SGeneratedTag result = new()
@@ -95,11 +137,6 @@ namespace Incas.Objects.Views.Controls
         private void RemoveClick(object sender, RoutedEventArgs e)
         {
             this.vm.RemoveSelectedRow();
-            //try
-            //{
-            //    this.Data.Rows.RemoveAt(this.Table.SelectedIndex);
-            //}
-            //catch { }
         }
 
         private void ColumnGenerating(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -223,6 +260,27 @@ namespace Incas.Objects.Views.Controls
         private void MoveDownClick(object sender, RoutedEventArgs e)
         {
             this.vm.MoveDownSelectedRow();
+        }
+
+        private void Table_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            this.MarkAsValidated();
+            this.OnFillerUpdate?.Invoke(this);
+        }
+        private void ObjectCopyRequestClick(object sender, RoutedEventArgs e)
+        {
+            this.OnDatabaseObjectCopyRequested?.Invoke(this);
+        }
+        private void InsertToOther(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OnInsert?.Invoke(this.Field.Id, this.GetData());
+            }
+            catch (NotNullFailed)
+            {
+                DialogsManager.ShowExclamationDialog("Поле является обязательным, необходимо сначала присвоить ему значение.", "Переназначение прервано");
+            }
         }
     }
 }

@@ -83,30 +83,35 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void Creator_OnRemoveRequested(ObjectCreator creator)
+        private bool Creator_OnRemoveRequested(ObjectCreator creator)
         {
             this.ContentPanel.Children.Remove(creator);
+            return true;
         }
 
-        private void Creator_OnSaveRequested(ObjectCreator creator)
+        private bool Creator_OnSaveRequested(ObjectCreator creator)
         {
             try
             {
                 ObjectProcessor.WriteObjects(this.Class, creator.PullObject());
                 this.OnUpdateRequested?.Invoke();
                 this.OnSetNewObjectRequested?.Invoke(creator.Object.Id);
+                return true;
             }
             catch (NotNullFailed nnex)
             {
                 DialogsManager.ShowExclamationDialog(nnex.Message, "Сохранение прервано");
+                return false;
             }
             catch (AuthorFailed af)
             {
                 DialogsManager.ShowAccessErrorDialog(af.Message);
+                return false;
             }
             catch (Exception ex)
             {
                 DialogsManager.ShowErrorDialog(ex);
+                return false;
             }
         }
 

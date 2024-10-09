@@ -20,11 +20,15 @@ namespace Incas.Objects.AutoUI
         private TableFieldColumnData Source;
         [Description("Значения перечисления")]
         public List<string> Values { get; set; }
+
+        [Description("Обязательно для заполнения")]
+        public bool NotNull { get; set; }
         #endregion
 
         public LocalEnumerationColumnSettings(TableFieldColumnData field)
         {
             this.Source = field;
+            this.NotNull = field.NotNull;
             try
             {
                 this.Values = JsonConvert.DeserializeObject<List<string>>(field.Value);
@@ -49,6 +53,7 @@ namespace Incas.Objects.AutoUI
         public override void Save()
         {
             this.Source.Value = JsonConvert.SerializeObject(this.Values);
+            this.Source.NotNull = this.NotNull;
         }
         #endregion
     }
