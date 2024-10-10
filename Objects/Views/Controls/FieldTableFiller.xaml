@@ -28,29 +28,22 @@
                         <Label Foreground="White" Content="Добавить"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{DynamicResource ButtonMain}" Click="ExcelClick" ToolTip="Вытянуть из Excel">
-                    <StackPanel Orientation="Horizontal" Margin="8,0,9,0">
-                        <Path Fill="White" VerticalAlignment="Center" Data="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M5.884 6.68 8 9.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 10l2.233 2.68a.5.5 0 0 1-.768.64L8 10.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 10 5.116 7.32a.5.5 0 1 1 .768-.64"/>
-                    </StackPanel>
-                </Button>
-                <Button Style="{DynamicResource ButtonMain}" Click="SaveClick" ToolTip="Сохранить в файл">
-                    <StackPanel Orientation="Horizontal" Margin="8,0,9,0">
-                        <Path Fill="White" VerticalAlignment="Center" Data="M12 2h-2v3h2z M1.5 0A1.5 1.5 0 0 0 0 1.5v13A1.5 1.5 0 0 0 1.5 16h13a1.5 1.5 0 0 0 1.5-1.5V2.914a1.5 1.5 0 0 0-.44-1.06L14.147.439A1.5 1.5 0 0 0 13.086 0zM4 6a1 1 0 0 1-1-1V1h10v4a1 1 0 0 1-1 1zM3 9h10a1 1 0 0 1 1 1v5H2v-5a1 1 0 0 1 1-1"/>
-                    </StackPanel>
-                </Button>
-                <Button Style="{DynamicResource ButtonMain}" Visibility="Collapsed" ToolTip="Переместить вверх" Click="MoveUpClick">
+                <Button Style="{DynamicResource ButtonMain}" ToolTip="Переместить вверх" Click="MoveUpClick">
                     <StackPanel Orientation="Horizontal" Margin="8,0,9,0">
                         <Path Fill="White" VerticalAlignment="Center" HorizontalAlignment="Center" Data="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
+                        <Label Foreground="White" Content="Переместить"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{DynamicResource ButtonMain}" Visibility="Collapsed" ToolTip="Переместить вниз" Click="MoveDownClick">
+                <Button Style="{DynamicResource ButtonMain}" ToolTip="Переместить вниз" Click="MoveDownClick">
                     <StackPanel Orientation="Horizontal" Margin="8,0,9,0">
                         <Path Fill="White" VerticalAlignment="Center" HorizontalAlignment="Center" Data="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
+                        <Label Foreground="White" Content="Переместить"/>
                     </StackPanel>
                 </Button>
                 <Button Style="{DynamicResource ButtonMain}" Click="RemoveClick" ToolTip="Удалить выбранную строку">
                     <StackPanel Orientation="Horizontal" Margin="8,0,9,0">
                         <Path Fill="White" VerticalAlignment="Center" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                        <Label Foreground="White" Content="Удалить"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -62,17 +55,34 @@
             </Button>
         </Grid>
         <Border MinWidth="80" Background="{DynamicResource Black}" CornerRadius="8,8,0,0" HorizontalAlignment="Right" Margin="0,5,12,-8">
-            <Label Style="{StaticResource LabelElement}" Cursor="Hand" Content="{Binding TableName}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0">
+            <Label Style="{StaticResource LabelElement}" Cursor="Hand" Content="{Binding TableName}" ToolTip="Нажать правой кнопкой мышки для дополнительных функций" ToolTipService.InitialShowDelay="160" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0">
                 <Label.ContextMenu>
                     <ContextMenu FontFamily="Segoe UI" FontWeight="Normal">
+                        <MenuItem Header="Вытянуть в Excel" Click="SaveClick"/>
+                        <MenuItem Header="Вытянуть из Excel" Click="ExcelClick"/>
+                        <Separator Background="{DynamicResource LightBlack}" />
                         <MenuItem Header="Скопировать значение в остальные редактируемые объекты" Click="InsertToOther" Tag="Значение этого поля будет скопировано в поля других объектов" />
+                        <Separator Background="{DynamicResource LightBlack}"/>
+                        <MenuItem Header="Скопировать значения колонки в другую колонку" Click="CopyColumnClick"/>
+                        <MenuItem Header="Скопировать значение ячейки в остальные ряды" Click="CopyValueToAllRowsClick"/>
                         <Separator Background="{DynamicResource LightBlack}"/>
                         <MenuItem Header="Вставить значение из существующего объекта" Click="ObjectCopyRequestClick"/>
                     </ContextMenu>
                 </Label.ContextMenu>
             </Label>
         </Border>
-        <DataGrid x:Name="Table" MinHeight="120" MaxHeight="300" RowHeight="30" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" SelectedIndex="{Binding SelectedRow}" CellEditEnding="Table_CellEditEnding" AutoGenerateColumns="True" CanUserAddRows="False" Grid.Row="1" Margin="5,5,5,5" AutoGeneratingColumn="ColumnGenerating">
+        <DataGrid x:Name="Table" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" SelectedIndex="{Binding SelectedRow}" MinHeight="120" MaxHeight="300" RowHeight="30" CellEditEnding="Table_CellEditEnding" CanUserSortColumns="False" AutoGenerateColumns="True" CanUserAddRows="False" Grid.Row="1" Margin="5,5,5,5" AutoGeneratingColumn="ColumnGenerating">
+            <!--<DataGrid.InputBindings>
+                <KeyBinding Key="W" Modifiers="Shift" Command="{Binding InsertToTop}"/>
+                <KeyBinding Key="A" Modifiers="Shift" Command="{Binding InsertToLeft}"/>
+                <KeyBinding Key="S" Modifiers="Shift" Command="{Binding InsertToBottom}"/>
+                <KeyBinding Key="D" Modifiers="Shift" Command="{Binding InsertToRight}"/>
+            </DataGrid.InputBindings>-->
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource ColumnHeaderMain}">
+                    <EventSetter Event="Click" Handler="ColumnHeaderClick" />
+                </Style>
+            </DataGrid.Resources>
         </DataGrid>
 
     </Grid>

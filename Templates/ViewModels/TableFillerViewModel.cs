@@ -3,12 +3,15 @@ using Incas.Core.ViewModels;
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Asn1.X509;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Documents;
+using System.Windows.Input;
 
 namespace Incas.Templates.ViewModels
 {
@@ -30,8 +33,42 @@ namespace Incas.Templates.ViewModels
             }
             this._data = new DataTable();
             this.MakeColumns();
+            this.SetCommands();
         }
+        #region Commands
+        private void SetCommands()
+        {
+            this.InsertToRight = new Command(this.DoInsertToRight);
+            this.InsertToLeft = new Command(this.DoInsertToLeft);
+            this.InsertToTop = new Command(this.DoInsertToTop);
+            this.InsertToBottom = new Command(this.DoInsertToBottom);
+        }
+        public ICommand InsertToRight { get; private set; }
+        public ICommand InsertToLeft { get; private set; }
+        public ICommand InsertToTop { get; private set; }
+        public ICommand InsertToBottom { get; private set; }
 
+        public void DoInsertToRight(object parameter)
+        {
+            
+        }
+        public void DoInsertToLeft(object parameter)
+        {
+            
+        }
+        public void DoInsertToTop(object parameter)
+        {
+            DialogsManager.ShowInfoDialog(this.SelectedItem);
+            foreach (DataRow dr in this.Grid.Rows)
+            {
+
+            }            
+        }
+        public void DoInsertToBottom(object parameter)
+        {
+            
+        }
+        #endregion
         private void MakeColumns()
         {
             this.Grid = new();
@@ -94,26 +131,43 @@ namespace Incas.Templates.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedRow));
             }
         }
+        private object selectedItem;
+        public object SelectedItem
+        {
+            get
+            {
+                return this.selectedItem;
+            }
+            set
+            {
+                this.selectedItem = value;
+                this.OnPropertyChanged(nameof(this.SelectedItem));
+            }
+        }
         public void RemoveSelectedRow()
         {
-            this.Grid.Rows.Remove(this.Grid.Rows[this.SelectedRow]);
+            int counter = this.SelectedRow;
+            this.Grid.Rows.Remove(this.Grid.Rows[counter]);
             this.OnPropertyChanged(nameof(this.Grid));
+            if (counter > 0)
+            {
+                counter--;
+                this.SelectedRow = counter;
+            }      
         }
         public void MoveUpSelectedRow()
         {
-            if (this.selected == -1)
+            if (this.selected < 1)
             {
                 return;
             }
-            DataRow dr = this.Grid.Rows[this.SelectedRow];
-            int position = this.SelectedRow;
-            if (position > 0)
-            {
-                this.Grid.Rows.Remove(dr);
-                this.Grid.Rows.InsertAt(dr, position - 1);
-               
-                this.OnPropertyChanged(nameof(this.Grid));
-            }          
+            int position = this.SelectedRow - 1;
+            DataRow newdata = this.Grid.NewRow();
+            newdata.ItemArray = this.Grid.Rows[this.SelectedRow].ItemArray;
+            this.Grid.Rows.RemoveAt(this.SelectedRow);
+            this.Grid.Rows.InsertAt(newdata, position);
+            this.Grid.AcceptChanges();
+            this.SelectedRow = position;
         }
         public void MoveDownSelectedRow()
         {
@@ -121,14 +175,98 @@ namespace Incas.Templates.ViewModels
             {
                 return;
             }
-            DataRow dr = this.Grid.Rows[this.SelectedRow];
-            int position = this.SelectedRow;
+
+            int position = this.SelectedRow + 1;           
             if (position < this.Grid.Rows.Count)
             {
-                this.Grid.Rows.Remove(dr);
-                this.Grid.Rows.InsertAt(dr, position + 1);
-                this.OnPropertyChanged(nameof(this.Grid));
+                DataRow newdata = this.Grid.NewRow();
+                newdata.ItemArray = this.Grid.Rows[this.SelectedRow].ItemArray;
+                this.Grid.Rows.RemoveAt(this.SelectedRow);
+                this.Grid.Rows.InsertAt(newdata, position);
+                this.Grid.AcceptChanges();
+                this.SelectedRow = position;
             }
+        }
+        public void CopyColumnValuesToAnother(string souceColumn, string targetColumn)
+        {
+            TableFieldColumnData target = null;
+            foreach (TableFieldColumnData tf in this.TableDefinition.Columns)
+            {
+                if (tf.Name == targetColumn)
+                {
+                    target = tf;
+                    break;
+                }
+            }
+            List<string> values = new();
+            switch (target.FieldType)
+            {
+                case FieldType.Variable:
+                    foreach (DataRow row in this.Grid.Rows)
+                    {
+                        row[targetColumn] = row[souceColumn];
+                    }
+                    return;
+                case FieldType.LocalEnumeration:
+                    values = JsonConvert.DeserializeObject<List<string>>(target.Value);
+                    break;
+                case FieldType.GlobalEnumeration:
+                    values = ProgramState.GetEnumeration(Guid.Parse(target.Value));
+                    break;
+            }
+            foreach (DataRow row in this.Grid.Rows)
+            {
+                if (values.Contains(row[souceColumn]))
+                {
+                    row[targetColumn] = row[souceColumn];
+                }             
+            }
+        }
+        private string LastSort = "";
+        public void SortByColumn(string visiblename)
+        {
+            string name = "";
+            foreach (TableFieldColumnData tf in this.TableDefinition.Columns)
+            {
+                if (tf.VisibleName == visiblename)
+                {
+                    name = tf.Name;
+                    break;
+                }
+            }
+            DataView dv = this.Grid.DefaultView;
+            if (this.LastSort == $"[{name}] ASC")
+            {
+                this.LastSort = $"[{name}] DESC";
+            }
+            else
+            {
+                this.LastSort = $"[{name}] ASC";
+            }           
+            dv.Sort = this.LastSort;
+            this.Grid = dv.ToTable();
+            this.Grid.AcceptChanges();
+        }
+        public void CopyValueToAllRows(string column, bool onlyEmptyOnes)
+        {
+            string value = this.Grid.Rows[this.SelectedRow][column].ToString();
+            if (onlyEmptyOnes)
+            {
+                foreach (DataRow row in this.Grid.Rows)
+                {
+                    if (string.IsNullOrWhiteSpace(row[column].ToString()))
+                    {
+                        row[column] = value;
+                    }                  
+                }
+            }
+            else
+            {
+                foreach (DataRow row in this.Grid.Rows)
+                {
+                    row[column] = value;
+                }
+            }          
         }
     }
 }

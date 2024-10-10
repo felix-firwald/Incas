@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.Components;
+using Incas.Objects.Exceptions;
 using Incas.Objects.Views.Controls;
 using Incas.Templates.Components;
 using Newtonsoft.Json;
@@ -85,13 +86,20 @@ namespace Incas.Objects.Views.Windows
 
         private void FinishClick(object sender, RoutedEventArgs e)
         {
-            List<TableFieldColumnData> list = new();
-            foreach (TableColumnCreator creator in this.ContentPanel.Children)
+            try
             {
-                list.Add(creator.GetField());
+                List<TableFieldColumnData> list = new();
+                foreach (TableColumnCreator creator in this.ContentPanel.Children)
+                {
+                    list.Add(creator.GetField());
+                }
+                this.Data.Columns = list;
+                this.DialogResult = true;
             }
-            this.Data.Columns = list;
-            this.DialogResult = true;
+            catch (FieldDataFailed fail)
+            {
+                DialogsManager.ShowExclamationDialog(fail.Message, "Сохранение прервано");
+            }
         }
 
         private void AddFieldClick(object sender, MouseButtonEventArgs e)

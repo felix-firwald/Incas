@@ -21,7 +21,7 @@ namespace Incas.Admin.AutoUI
             {
                 if (name == this.Name)
                 {
-                    throw new Core.Exceptions.SimpleFormFailed("Глобальное перечисление с таким наименованием уже есть в рабочем пространстве.");
+                    throw new DialogSimpleForm.Exceptions.SimpleFormFailed("Глобальное перечисление с таким наименованием уже есть в рабочем пространстве.");
                 }
             }
         }

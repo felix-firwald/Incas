@@ -2,9 +2,12 @@
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.ViewModels;
+using Newtonsoft.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Collections.Generic;
+using System;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -28,6 +31,29 @@ namespace Incas.Objects.Views.Controls
         }
         public TableFieldColumnData GetField()
         {
+            switch (this.vm.FieldData.FieldType)
+            {
+                case FieldType.LocalEnumeration:
+                    try
+                    {
+                        List<string> values = JsonConvert.DeserializeObject<List<string>>(this.vm.FieldData.Value);
+                    }
+                    catch
+                    {
+                        throw new Objects.Exceptions.FieldDataFailed($"Колонка [{this.vm.FieldData.Name}] (\"{this.vm.FieldData.VisibleName}\") не настроена.");
+                    }
+                    break;
+                case FieldType.GlobalEnumeration:
+                    try
+                    {
+                        Guid id = Guid.Parse(this.vm.FieldData.Value);
+                    }
+                    catch
+                    {
+                        throw new Objects.Exceptions.FieldDataFailed($"Колонка [{this.vm.FieldData.Name}] (\"{this.vm.FieldData.VisibleName}\") не настроена.");
+                    }
+                    break;
+            }
             return this.vm.FieldData;
         }
 

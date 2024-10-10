@@ -43,7 +43,7 @@ namespace Incas.Objects.AutoUI
             {
                 if (c.name == this.Name)
                 {
-                    throw new Core.Exceptions.SimpleFormFailed("Класс с таким именем уже существует.");
+                    throw new DialogSimpleForm.Exceptions.SimpleFormFailed("Класс с таким именем уже существует.");
                 }
             }
         }

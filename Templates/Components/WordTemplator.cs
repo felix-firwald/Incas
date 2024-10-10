@@ -107,7 +107,7 @@ namespace Incas.Templates.Components
         public void CreateTable(string tag, DataTable dt)
         {
             DocX doc = this.LoadFile();
-            if (dt is null || dt.Rows.Count == 0)
+            if (dt is null)
             {
                 DialogsManager.ShowErrorDialog($"Таблица '{tag}' не содержит заполненной информации. Она будет пропущена при рендеринге.");
                 return;
@@ -118,9 +118,6 @@ namespace Incas.Templates.Components
             Dictionary<string, int> columns = new();
             Dictionary<string, Formatting> columnsFormatting = new();
             Dictionary<string, Alignment> columnsAlignments = new();
-            Formatting rowStyle = new();
-            rowStyle.FontFamily = new Font("Times New Roman");
-            rowStyle.Size = 9;
             // проходит по всем таблицам в документе
             int indextable = 0;
             foreach (Table tab in doc.Tables)
@@ -170,19 +167,26 @@ namespace Incas.Templates.Components
             {
                 return;
             }
-            foreach (DataRow dr in dt.Rows)
+            try
             {
-                doc.Tables[table].InsertRow(doc.Tables[table].Rows[row], row, true);             
-                foreach (DataColumn dc in dt.Columns)
+                foreach (DataRow dr in dt.Rows)
                 {
-                    string value = dr[dc.ColumnName].ToString();
-                    doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value, columnsFormatting[dc.ColumnName]);
-                    doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Alignment = columnsAlignments[dc.ColumnName];
+                    doc.Tables[table].InsertRow(doc.Tables[table].Rows[row], row, true);
+                    foreach (DataColumn dc in dt.Columns)
+                    {
+                        string value = dr[dc.ColumnName].ToString();
+                        doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value, columnsFormatting[dc.ColumnName]);
+                        doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Alignment = columnsAlignments[dc.ColumnName];
+                    }
+                    row += 1;
                 }
-                row += 1;
+                doc.Tables[table].RemoveRow(row);
+                doc.Save();
             }
-            doc.Tables[table].RemoveRow(row);
-            doc.Save();
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog($"При рендеринге таблицы [{tag}] возникла ошибка:\n" + ex);
+            }          
         }
         private Formatting GetFormatting(XElement rPr)
         {

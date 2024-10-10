@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Incas.Core.Exceptions
+namespace Incas.DialogSimpleForm.Exceptions
 {
     public class SimpleFormFailed : Exception
     {

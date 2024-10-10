@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
+using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
 using Incas.Templates.Components;
@@ -15,6 +16,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Forms;
 using System.Windows.Media;
 using static Incas.Objects.Views.Controls.IFiller;
 
@@ -23,7 +25,7 @@ namespace Incas.Objects.Views.Controls
     /// <summary>
     /// Логика взаимодействия для FieldTableFiller.xaml
     /// </summary>
-    public partial class FieldTableFiller : UserControl, IFiller
+    public partial class FieldTableFiller : System.Windows.Controls.UserControl, IFiller
     {
         private TableFillerViewModel vm;
         public Objects.Models.Field Field { get; set; }
@@ -151,7 +153,7 @@ namespace Incas.Objects.Views.Controls
                         case FieldType.Text:
                             DataGridTextColumn dgt1 = new();
                             dgt1.Header = col.VisibleName;
-                            dgt1.Binding = new Binding(e.Column.Header.ToString());
+                            dgt1.Binding = new System.Windows.Data.Binding(e.Column.Header.ToString());
                             dgt1.EditingElementStyle = this.FindResource("TextBoxGrid") as Style;
                             e.Column = dgt1;
                             break;
@@ -159,7 +161,7 @@ namespace Incas.Objects.Views.Controls
                         case FieldType.GlobalEnumeration:
                             DataGridComboBoxColumn dgc = new();
                             dgc.Header = col.VisibleName;
-                            dgc.TextBinding = new Binding(e.Column.Header.ToString());
+                            dgc.TextBinding = new System.Windows.Data.Binding(e.Column.Header.ToString());
                             
                             dgc.EditingElementStyle = this.FindResource("ComboBoxGrid") as Style;
                             if (col.FieldType == FieldType.LocalEnumeration)
@@ -176,6 +178,12 @@ namespace Incas.Objects.Views.Controls
                     break;
                 }
             }
+        }
+        private MenuItem AddMenuItem(string header)
+        {
+            MenuItem mi = new();
+            mi.Header = header;
+            return mi;
         }
 
         private void ExcelClick(object sender, RoutedEventArgs e)
@@ -281,6 +289,29 @@ namespace Incas.Objects.Views.Controls
             {
                 DialogsManager.ShowExclamationDialog("Поле является обязательным, необходимо сначала присвоить ему значение.", "Переназначение прервано");
             }
+        }
+        private void ColumnHeaderClick(object sender, RoutedEventArgs e)
+        {
+            string columnname = ((System.Windows.Controls.Primitives.DataGridColumnHeader)sender).Content.ToString();
+            this.vm.SortByColumn(columnname);
+        }
+
+        private void CopyColumnClick(object sender, RoutedEventArgs e)
+        {
+            TableCopyingToColumn tc = new(this.vm.TableDefinition.Columns);
+            if (tc.ShowDialog("Копирование колонки"))
+            {
+                this.vm.CopyColumnValuesToAnother(tc.GetSourceColumnName(), tc.GetTargetColumnName());
+            }
+        }
+
+        private void CopyValueToAllRowsClick(object sender, RoutedEventArgs e)
+        {
+            ColumnSelector selector = new(this.vm.TableDefinition.Columns);
+            if (selector.ShowDialog("Копирование значений"))
+            {
+                this.vm.CopyValueToAllRows(selector.GetTargetColumnName(), selector.OnlyEmptyOnes);
+            }           
         }
     }
 }
