@@ -45,6 +45,7 @@ namespace Incas.Objects.Views.Windows
             {
                 this.AddObjectCreator();
             }
+            DialogsManager.ShowWaitCursor(false);
         }
         public ObjectsEditor(Class source, ClassData data) // dev
         {
@@ -58,6 +59,7 @@ namespace Incas.Objects.Views.Windows
             ObjectCreator creator = new(this.ClassData);
             this.ContentPanel.Children.Add(creator);
             this.RenderButton.Visibility = this.ClassData.ClassType == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
+            DialogsManager.ShowWaitCursor(false);
         }
         public void SetSingleObjectMode()
         {

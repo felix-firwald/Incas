@@ -10,6 +10,7 @@ using Incas.Templates.Views.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -282,39 +283,37 @@ namespace Incas.Objects.Views.Pages
         public string GenerateDocument(TemplateData templateData, string folder, bool async = true)
         {
             string newFile = "";
-            string oldFile = ProgramState.GetFullnameOfDocumentFile(templateData.File);
+            string oldFile = templateData.File;
             ITemplator templ = null;
+            List<IFiller> fillers = new();
+            foreach (IFiller filler in this.ContentPanel.Children)
+            {
+                fillers.Add(filler);
+            }
             try
             {
                 if (oldFile.EndsWith(".docx"))
                 {
                     newFile = this.GetNameOfFile(folder, templateData.Name, "docx");
-                    if (File.Exists(newFile))
-                    {
-                        File.Delete(newFile);
-                    }
-                    File.Copy(oldFile, newFile, true);
-                    WordTemplator wt = new(newFile);
-                    templ = wt;
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        wt.GenerateDocument(this.TagFillers, this.Tables, async);
-                    });
+                    WordTemplator wt = new(oldFile, newFile);
+                    templ = wt;                
                 }
                 else if (oldFile.EndsWith(".xlsx"))
                 {
                     newFile = this.GetNameOfFile(folder, templateData.Name, "xlsx");
-                    if (File.Exists(newFile))
-                    {
-                        File.Delete(newFile);
-                    }
-                    File.Copy(oldFile, newFile, true);
-                    ExcelTemplator et = new(newFile);
-                    templ = et;
+                    ExcelTemplator et = new(oldFile, newFile);
+                    templ = et;                  
+                }
+                if (async)
+                {
                     this.Dispatcher.Invoke(() =>
                     {
-                        et.GenerateDocument(this.TagFillers, this.Tables, async);
-                    });
+                        templ.GenerateDocumentAsync(fillers);
+                    });               
+                }
+                else
+                {
+                    templ.GenerateDocument(fillers);
                 }
                 return newFile;
             }

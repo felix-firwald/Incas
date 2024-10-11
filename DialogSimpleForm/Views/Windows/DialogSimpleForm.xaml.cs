@@ -33,6 +33,7 @@ namespace Incas.DialogSimpleForm.Views.Windows
             this.No.Content = values.GetCancelButtonText();
             this.TitleText.Content = title;
             this.Title = title;
+            DialogsManager.ShowWaitCursor(false);
         }
         /// <summary>
         /// Initialize Window with the default icon and color

@@ -5,6 +5,7 @@ using Microsoft.Scripting.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WebSupergoo.WordGlue3;
@@ -16,11 +17,25 @@ namespace Incas.Templates.Components
     public class ExcelTemplator : ITemplator
     {
         private string Log = "";
+        private List<string> tagsToReplace = [];
+        private List<string> values = [];
+        private Dictionary<string, DataTable> tables = new();
         public XLWorkbook workbook;
         public IXLWorksheet worksheet;
-        public ExcelTemplator(string path)
+        public ExcelTemplator(string templatePath, string newPath)
         {
-            this.workbook = new XLWorkbook(path);
+            string oldpath = ProgramState.GetFullnameOfDocumentFile(templatePath);
+            if (File.Exists(newPath))
+            {
+                File.Delete(newPath);
+            }
+            System.IO.File.Copy(oldpath, newPath, true);
+            this.workbook = new XLWorkbook(newPath);
+            this.worksheet = this.workbook.Worksheet(1);
+        }
+        public ExcelTemplator(string newPath)
+        {
+            this.workbook = new XLWorkbook(newPath);
             this.worksheet = this.workbook.Worksheet(1);
         }
         private void WriteLog(string log)
@@ -35,7 +50,7 @@ namespace Incas.Templates.Components
         {
             return $"[{tag}]";
         }
-        public async void Replace(List<string> tags, List<string> values, bool async = true)
+        public void Replace(List<string> tags, List<string> values)
         {
             void MakeReplace()
             {
@@ -48,17 +63,7 @@ namespace Incas.Templates.Components
                     }
                 }
             }
-            if (async)
-            {
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    MakeReplace();
-                });
-            }
-            else
-            {
-                MakeReplace();
-            }
+            MakeReplace();
             this.workbook.Save();
         }
         public void CreateTable(string tag, DataTable dt)
@@ -66,6 +71,10 @@ namespace Incas.Templates.Components
             int rowIndex = -1;
             int lastColumnIndex = -1;
             int firstColumnIndex = -1;
+            if (this.worksheet is null)
+            {
+                return;
+            }
             if (dt is null)
             {
                 DialogsManager.ShowErrorDialog($"Таблица '{tag}' не содержит заполненной информации.");
@@ -80,20 +89,24 @@ namespace Incas.Templates.Components
             rowIndex = cell.WorksheetRow().RowNumber();
             foreach (DataColumn dc in dt.Columns)
             {
-                IXLCell columnCell = this.worksheet.Search($"[{tag}.{dc.ColumnName}]", System.Globalization.CompareOptions.IgnoreCase, false).FirstOrDefault();
-                if (cell is not null)
+                try
                 {
-                    int col = columnCell.WorksheetColumn().ColumnNumber();
-                    if (col > lastColumnIndex)
+                    IXLCell columnCell = this.worksheet.Search($"[{tag}.{dc.ColumnName}]", System.Globalization.CompareOptions.IgnoreCase, false)?.FirstOrDefault();
+                    if (columnCell is not null)
                     {
-                        lastColumnIndex = col;
+                        int col = columnCell.WorksheetColumn().ColumnNumber();
+                        if (col > lastColumnIndex)
+                        {
+                            lastColumnIndex = col;
+                        }
+                        if (col < firstColumnIndex)
+                        {
+                            firstColumnIndex = col;
+                        }
+                        columns.Add(dc.ColumnName, columnCell);
                     }
-                    if (col < firstColumnIndex)
-                    {
-                        firstColumnIndex = col;
-                    }
-                    columns.Add(dc.ColumnName, columnCell);
                 }
+                catch { }
             }
             if (dt.Rows.Count > 1)
             {
@@ -103,48 +116,74 @@ namespace Incas.Templates.Components
             {
                 foreach (DataColumn dc in dt.Columns)
                 {
-                    string value = dr[dc.ColumnName].ToString();
-                    int currentCol = columns[dc.ColumnName].WorksheetColumn().ColumnNumber();
-                    this.worksheet.Cell(rowIndex, currentCol).SetValue(value);
-                    this.worksheet.Cell(rowIndex, currentCol).Style = columns[dc.ColumnName].Style;
-                    if (columns[dc.ColumnName].IsMerged())
+                    try
                     {
-                        IXLRangeAddress range = columns[dc.ColumnName].MergedRange().RangeAddress;
-                        if (range.ColumnSpan > 1)
+                        string value = dr[dc.ColumnName].ToString();
+                        int currentCol = columns[dc.ColumnName].WorksheetColumn().ColumnNumber();
+                        this.worksheet.Cell(rowIndex, currentCol).SetValue(value);
+                        this.worksheet.Cell(rowIndex, currentCol).Style = columns[dc.ColumnName].Style;
+                        if (columns[dc.ColumnName].IsMerged())
                         {
-                            this.worksheet.Range(rowIndex, currentCol, rowIndex, currentCol + range.ColumnSpan - 1).Merge();
-                        }                  
-                    }                 
+                            IXLRangeAddress range = columns[dc.ColumnName].MergedRange().RangeAddress;
+                            if (range.ColumnSpan > 1)
+                            {
+                                this.worksheet.Range(rowIndex, currentCol, rowIndex, currentCol + range.ColumnSpan - 1).Merge();
+                            }
+                        }
+                    }
+                    catch { }         
                 }
                 rowIndex += 1;
             }
             this.workbook.Save();
         }
-        public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true)
+        
+        private void GetDataFromFillers(List<IFiller> fillers)
         {
-            List<string> tagsToReplace = [];
-            List<string> values = [];
-            foreach (FieldTableFiller tab in tableFillers)
+            foreach (IFiller filler in fillers)
             {
-                this.CreateTable(tab.Field.Name, tab.GetValue());
-            }
-            foreach (FieldFiller tf in tagFillers)
-            {
-                Guid id = tf.GetId();
-                string name = tf.GetTagName();
-                string value = tf.GetValue();
-                tagsToReplace.Add(name);
-                values.Add(value);
-                if (tf.Field.Type == Objects.Components.FieldType.Relation)
+                switch (filler.Field.Type)
                 {
-                    foreach (Objects.Components.FieldData fd in tf.GetDataFromObjectRelation())
-                    {
-                        tagsToReplace.Add($"{name}.{fd.ClassField.Name}");
-                        values.Add(fd.Value);
-                    }
+                    default:
+                        FieldFiller ff = (FieldFiller)filler;
+                        string value = ff.GetValue();
+                        this.tagsToReplace.Add(filler.Field.Name);
+                        this.values.Add(value);
+                        if (ff.Field.Type == Objects.Components.FieldType.Relation)
+                        {
+                            foreach (KeyValuePair<string, string> fd in ff.GetDataFromObjectRelation())
+                            {
+                                this.tagsToReplace.Add(fd.Key);
+                                this.values.Add(fd.Value);
+                            }
+                        }
+                        break;
+                    case Objects.Components.FieldType.Table:
+                        this.tables.Add(filler.Field.Name, ((FieldTableFiller)filler).GetValue());
+                        break;
                 }
             }
-            this.Replace(tagsToReplace, values, async);
+        }
+        public void GenerateDocument(List<IFiller> fillers)
+        {
+            this.GetDataFromFillers(fillers);
+            foreach (KeyValuePair<string, DataTable> pair in this.tables)
+            {
+                this.CreateTable(pair.Key, pair.Value);
+            }
+            this.Replace(this.tagsToReplace, this.values);
+        }
+        public async void GenerateDocumentAsync(List<IFiller> fillers)
+        {
+            this.GetDataFromFillers(fillers);
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                foreach (KeyValuePair<string, DataTable> pair in this.tables)
+                {
+                    this.CreateTable(pair.Key, pair.Value);
+                }
+                this.Replace(this.tagsToReplace, this.values);
+            });
         }
 
         public List<string> FindAllTags()

@@ -87,7 +87,7 @@
                                 <Label Content="Выбор даты" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
                         </ComboBoxItem>
-                        <ComboBoxItem Visibility="Collapsed">
+                        <ComboBoxItem>
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
                                 <Label Content="Число" Style="{DynamicResource LabelElement}" FontSize="11"/>

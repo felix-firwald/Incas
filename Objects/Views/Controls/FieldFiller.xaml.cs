@@ -335,10 +335,35 @@ namespace Incas.Objects.Views.Controls
 
             }
         }
-        public List<FieldData> GetDataFromObjectRelation()
+        public Dictionary<string, string> GetDataFromObjectRelation()
         {
+            Dictionary<string, string> result = new();
             Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
-            return obj is null ? ([]) : obj.Fields;
+            if (obj is null)
+            {
+                return result;
+            }
+            foreach (FieldData data in obj.Fields)
+            {
+                if (data.ClassField.Type == FieldType.Relation)
+                {
+                    BindingData bd = data.ClassField.GetBindingData();
+                    Objects.Components.Object recurObj = ObjectProcessor.GetObject(new(bd.Class), Guid.Parse(data.Value));
+                    foreach (FieldData recdata in recurObj.Fields)
+                    {
+                        if (recdata.ClassField.Id == bd.Field)
+                        {
+                            result.Add($"{this.Field.Name}.{data.ClassField.Name}", recdata.Value);
+                        }
+                        result.Add($"{this.Field.Name}.{data.ClassField.Name}.{recdata.ClassField.Name}", recdata.Value);
+                    }
+                }
+                else
+                {
+                    result.Add($"{this.Field.Name}.{data.ClassField.Name}", data.Value);
+                }              
+            }
+            return result;
         }
         public void ThrowNotNullFailed()
         {

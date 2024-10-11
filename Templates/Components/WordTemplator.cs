@@ -6,6 +6,7 @@ using Spire.Doc;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -22,10 +23,22 @@ namespace Incas.Templates.Components
     {
         public readonly string Path;
         private string Log = "";
-
-        public WordTemplator(string path)
+        private List<string> tagsToReplace = [];
+        private List<string> values = [];
+        private Dictionary<string, DataTable> tables = new();
+        public WordTemplator(string templatePath, string newPath)
         {
-            this.Path = path;
+            string oldpath = ProgramState.GetFullnameOfDocumentFile(templatePath);
+            if (File.Exists(newPath))
+            {
+                File.Delete(newPath);
+            }
+            System.IO.File.Copy(oldpath, newPath, true);
+            this.Path = newPath;
+        }
+        public WordTemplator(string newPath)
+        {
+            this.Path = newPath;
         }
 
         public WordTemplator()
@@ -49,7 +62,7 @@ namespace Incas.Templates.Components
             return DocX.Load(this.Path);
         }
 
-        public async void Replace(List<string> tags, List<string> values, bool async = true) // не Dictionary потому что важен порядок замены
+        public void Replace(List<string> tags, List<string> values) // не Dictionary потому что важен порядок замены
         {
             DocX doc = this.LoadFile();
             void MakeReplace()
@@ -58,50 +71,68 @@ namespace Incas.Templates.Components
                 for (int i = 0; i < tags.Count; i++)
                 {
                     options.SearchValue = this.ConvertTag(tags[i]);
-                    options.NewValue = string.IsNullOrEmpty(values[i]) ? "" : values[i].Trim(); // а нахуя Trim?
+                    options.NewValue = string.IsNullOrEmpty(values[i]) ? "" : values[i].Trim();
                     doc.ReplaceText(options);
                 }
-                // MakeFormatting(doc);
             }
-            if (async)
-            {
-                await System.Threading.Tasks.Task.Run(() =>
-                {
-                    MakeReplace();
-                });
-            }
-            else
-            {
-                MakeReplace();
-            }
+            MakeReplace();
             doc.Save();
         }
-
-        public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true)
+        private void GetDataFromFillers(List<IFiller> fillers)
         {
-            List<string> tagsToReplace = [];
-            List<string> values = [];
-            foreach (FieldFiller tf in tagFillers)
+            foreach (IFiller filler in fillers)
             {
-                Guid id = tf.GetId();
-                string name = tf.GetTagName();
-                string value = tf.GetValue();
-                tagsToReplace.Add(name);
-                values.Add(value);
-                if (tf.Field.Type == Objects.Components.FieldType.Relation)
+                switch (filler.Field.Type)
                 {
-                    foreach (Objects.Components.FieldData fd in tf.GetDataFromObjectRelation())
-                    {
-                        tagsToReplace.Add($"{name}.{fd.ClassField.Name}");
-                        values.Add(fd.Value);
-                    }
+                    default:
+                        FieldFiller ff = (FieldFiller)filler;
+                        string value = ff.GetValue();
+                        this.tagsToReplace.Add(filler.Field.Name);
+                        this.values.Add(value);
+                        if (filler.Field.Type == Objects.Components.FieldType.Relation)
+                        {
+                            foreach (KeyValuePair<string,string> fd in ff.GetDataFromObjectRelation())
+                            {
+                                this.tagsToReplace.Add(fd.Key);
+                                this.values.Add(fd.Value);
+                            }
+                        }
+                        break;
+                    case Objects.Components.FieldType.Table:
+                        this.tables.Add(filler.Field.Name, ((FieldTableFiller)filler).GetValue());
+                        break;
                 }
             }
-            this.Replace(tagsToReplace, values, async);
-            foreach (FieldTableFiller tab in tableFillers)
+        }
+        private void ClearData()
+        {
+            this.tagsToReplace.Clear();
+            this.values.Clear();
+            this.tables.Clear();
+        }
+        public void GenerateDocument(List<IFiller> fillers)
+        {
+            this.GetDataFromFillers(fillers);
+            foreach (KeyValuePair<string, DataTable> pair in this.tables)
             {
-                this.CreateTable(tab.Field.Name, tab.GetValue());
-            }          
+                this.CreateTable(pair.Key, pair.Value);
+            }
+            this.Replace(this.tagsToReplace, this.values);
+            //this.ClearData();
+        }
+        public async void GenerateDocumentAsync(List<IFiller> fillers)
+        {
+            this.GetDataFromFillers(fillers);
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                foreach (KeyValuePair<string, DataTable> pair in this.tables)
+                {
+                    this.CreateTable(pair.Key, pair.Value);
+                }
+                this.Replace(this.tagsToReplace, this.values);
+                //this.ClearData();
+            });
+            
         }
 
         public void CreateTable(string tag, DataTable dt)
@@ -246,12 +277,9 @@ namespace Incas.Templates.Components
 
         public string TurnToXPS()
         {
-            //Spire.Doc.Document doc = new(this.Path);
             Doc doc = new(this.Path);
             string outputName = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.xps";
             doc.SaveAs(outputName);
-            //doc.SaveToFile(outputName, FileFormat.XPS);
-            //File.Delete(this.Path);
             return outputName;
         }
 

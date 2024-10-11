@@ -313,7 +313,15 @@ namespace Incas.Objects.Components
             }
             return obj;
         }
-
+        public static List<Object> GetObjects(Class cl, List<Guid> ids)
+        {
+            List<Object> obj = new();
+            foreach (Guid id in ids)
+            {
+                obj.Add(GetObject(cl, id));
+            }
+            return obj;
+        }
         public static void RemoveObject(Class cl, Guid id)
         {
             Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));

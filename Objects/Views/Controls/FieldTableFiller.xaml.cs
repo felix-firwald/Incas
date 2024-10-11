@@ -174,6 +174,13 @@ namespace Incas.Objects.Views.Controls
                             }
                             e.Column = dgc;
                             break;
+                        case FieldType.Number:
+                            DataGridNumericColumn nc = new();
+                            nc.Header = col.VisibleName;
+                            nc.Binding = new System.Windows.Data.Binding(e.Column.Header.ToString());
+                            nc.EditingElementStyle = this.FindResource("TextBoxGrid") as Style;
+                            e.Column = nc;
+                            break;
                     }
                     break;
                 }

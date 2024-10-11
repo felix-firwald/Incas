@@ -6,14 +6,13 @@ namespace Incas.Templates.Components
 {
     public interface ITemplator
     {
-        public void Replace(List<string> tags, List<string> values, bool async = true);
+        public void Replace(List<string> tags, List<string> values);
 
-        public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true);
-
+        public void GenerateDocument(List<IFiller> fillers);
+        public void GenerateDocumentAsync(List<IFiller> fillers);
         public void CreateTable(string tag, DataTable dt);
         public List<string> FindAllTags();
         public string GetLogData();
         public List<string> FindTableTags(string tableName);
-        //public void CreateByObject(Incas.Objects.Components.Object obj);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Incas.Core.Classes;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Incas.Core.Views.Windows
@@ -16,6 +17,7 @@ namespace Incas.Core.Views.Windows
             this.Description.Text = text;
             this.Yes.Content = yesText;
             this.No.Content = noText;
+            DialogsManager.ShowWaitCursor(false);
         }
 
         private void Yes_Click(object sender, RoutedEventArgs e)

@@ -10,9 +10,13 @@ namespace Incas.Templates.Components
         {
             this.templator = name.EndsWith(".docx") ? new WordTemplator(name) : new ExcelTemplator(name);
         }
-        public void GenerateDocument(List<FieldFiller> tagFillers, List<FieldTableFiller> tableFillers, bool async = true)
+        public FileTemplator(string template, string name)
         {
-            this.templator.GenerateDocument(tagFillers, tableFillers, async);
+            this.templator = name.EndsWith(".docx") ? new WordTemplator(template, name) : new ExcelTemplator(template, name);
+        }
+        public void GenerateDocument(List<IFiller> fillers)
+        {
+            this.templator.GenerateDocument(fillers);
         }
         public List<string> FindAllTags()
         {

@@ -13,17 +13,6 @@ using System.Windows.Media;
 
 namespace Incas.Objects.Views.Pages
 {
-    //class StatusToColorConverter : System.Windows.Data.IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        return new SolidColorBrush(Colors.OrangeRed);
-    //    }
-    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        throw new Exception("The method or operation is not implemented.");
-    //    }
-    //}
     /// <summary>
     /// Логика взаимодействия для ObjectsList.xaml
     /// </summary>
@@ -194,8 +183,22 @@ namespace Incas.Objects.Views.Pages
             string source = ((DataRowView)this.Data.SelectedItems[0]).Row[ObjectProcessor.IdField].ToString();
             return Guid.Parse(source);
         }
+        private List<Guid> GetSelectedObjectsGuids()
+        {
+            if (this.Data.SelectedItems.Count == 0)
+            {
+                return new();
+            }
+            List<Guid> guids = new();
+            foreach (DataRowView obj in this.Data.SelectedItems)
+            {
+                guids.Add(Guid.Parse(obj.Row[ObjectProcessor.IdField].ToString()));
+            }
+            return guids;
+        }
         private void OpenSelectedObject()
         {
+            DialogsManager.ShowWaitCursor(true);
             Guid id = this.GetSelectedObjectGuid();
             if (id == Guid.Empty)
             {
@@ -203,6 +206,14 @@ namespace Incas.Objects.Views.Pages
             }
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
             ObjectsEditor oc = new(this.sourceClass, [obj]);
+            oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+            oc.Show();
+        }
+        private void OpenSelectedObjects()
+        {
+            DialogsManager.ShowWaitCursor(true);
+            List<Guid> guids = this.GetSelectedObjectsGuids();
+            ObjectsEditor oc = new(this.sourceClass, ObjectProcessor.GetObjects(this.sourceClass, guids));
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -256,7 +267,14 @@ namespace Incas.Objects.Views.Pages
             switch (e.Key)
             {
                 case System.Windows.Input.Key.Enter:
-                    this.OpenSelectedObject();
+                    if (this.Data.SelectedItems.Count < 2)
+                    {
+                        this.OpenSelectedObject();
+                    }
+                    else
+                    {
+                        this.OpenSelectedObjects();
+                    }
                     break;
                 case System.Windows.Input.Key.C:
                 case System.Windows.Input.Key.RightShift:
@@ -296,7 +314,5 @@ namespace Incas.Objects.Views.Pages
             ContainerWindow cw = new(this, this.sourceClass.name);
             cw.Show();
         }
-
-
     }
 }

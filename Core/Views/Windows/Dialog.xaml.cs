@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Incas.Core.Classes;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Incas.Core.Views.Windows
@@ -18,6 +19,7 @@ namespace Incas.Core.Views.Windows
         }
         public Dialog(string text, string title = "Неизвестная ошибка", DialogIcon ic = DialogIcon.Error)
         {
+
             this.InitializeComponent();
             this.TitleText.Content = title;
             this.Description.Text = text;
@@ -39,6 +41,7 @@ namespace Incas.Core.Views.Windows
                     this.IconInfo.Visibility = Visibility.Visible;
                     break;
             }
+            DialogsManager.ShowWaitCursor(false);
         }
 
         private void Yes_Click(object sender, RoutedEventArgs e)

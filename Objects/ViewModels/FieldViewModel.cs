@@ -174,6 +174,9 @@ namespace Incas.Objects.ViewModels
                     case FieldType.Date:
                         JsonConvert.DeserializeObject<DateFieldData>(this.Source.Value);
                         break;
+                    case FieldType.Table:
+                        JsonConvert.DeserializeObject<TableFieldData>(this.Source.Value);
+                        break;
                 }
             }
             catch

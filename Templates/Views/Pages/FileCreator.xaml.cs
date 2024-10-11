@@ -248,34 +248,36 @@ namespace Incas.Templates.Views.Pages
                 this.ApplyNameByTemplate();
                 this.PlaySavingScript();
                 string newFile;
-                List<SGeneratedTag> filledTags = [];
+                List<IFiller> fillers = [];
+                foreach (IFiller filler in this.ContentPanel.Children)
+                {
+                    fillers.Add(filler);
+                }
                 switch (this.template.type)
                 {
                     case TemplateType.Word:
                         newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.docx";
-                        if (File.Exists(newFile))
+                        WordTemplator wt = new(this.template.path, newFile);
+                        if (async)
                         {
-                            File.Delete(newFile);
+                            wt.GenerateDocumentAsync(fillers);
                         }
-                        File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
-                        WordTemplator wt = new(newFile);
-                        this.Dispatcher.Invoke(() =>
+                        else
                         {
-                            wt.GenerateDocument(this.TagFillers, this.Tables);
-                        });
+                            wt.GenerateDocument(fillers);
+                        }                      
                         break;
                     case TemplateType.Excel:
                         newFile = $"{newPath}\\{this.RemoveUnresolvedChars(this.Filename.Text)}.xlsx";
-                        if (File.Exists(newFile))
+                        ExcelTemplator et = new(this.template.path, newFile);
+                        if (async)
                         {
-                            File.Delete(newFile);
+                            et.GenerateDocumentAsync(fillers);
                         }
-                        File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
-                        ExcelTemplator et = new(newFile);
-                        this.Dispatcher.Invoke(() =>
+                        else
                         {
-                            et.GenerateDocument(this.TagFillers, this.Tables);
-                        });
+                            et.GenerateDocument(fillers);
+                        }
                         break;
                 }
                 return true;
@@ -344,23 +346,15 @@ namespace Incas.Templates.Views.Pages
             {
                 DialogsManager.ShowWaitCursor();
                 string newFile = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.docx";
-                System.IO.File.Copy(ProgramState.GetFullnameOfDocumentFile(this.template.path), newFile, true);
-                WordTemplator wt = new(newFile);
+                
+                WordTemplator wt = new(this.template.path, newFile);
 
-                List<string> tagsToReplace = [];
-                List<string> values = [];
-                foreach (FieldFiller tf in this.TagFillers)
+                List<IFiller> fillers = [];
+                foreach (IFiller tf in this.ContentPanel.Children)
                 {
-                    string nameOf = tf.GetTagName();
-                    string value = tf.GetValue();
-                    tagsToReplace.Add(nameOf);
-                    values.Add(value);
+                    fillers.Add(tf);
                 }
-                wt.Replace(tagsToReplace, values, false);
-                foreach (FieldTableFiller tab in this.Tables)
-                {
-                    wt.CreateTable(tab.Field.Name, tab.GetValue());
-                }
+                wt.GenerateDocument(fillers);
                 string fileXPS = wt.TurnToXPS();
                 DialogsManager.ShowWaitCursor(false);
                 PreviewWindow pr = new(fileXPS, !this.templateSettings.RequiresSave);
