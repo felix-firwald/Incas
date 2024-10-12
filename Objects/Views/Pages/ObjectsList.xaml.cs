@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Incas.Objects.Views.Pages
@@ -26,6 +27,11 @@ namespace Incas.Objects.Views.Pages
             this.InitializeComponent();
             this.sourceClass = source;
             this.ClassData = source.GetClassData();
+            if (this.ClassData.ClassType == ClassType.Generator)
+            {
+                this.AddButton.Visibility = Visibility.Collapsed;
+                this.CopyButton.Visibility = Visibility.Collapsed;
+            }
             //this.InitStyle();
             this.UpdateView();
             if (this.ClassData.ShowCard)
@@ -84,19 +90,50 @@ namespace Incas.Objects.Views.Pages
         {
             DataTable dt = ObjectProcessor.GetObjectsList(this.sourceClass);
             this.Data.Columns.Clear();
-            this.Data.ItemsSource = dt.AsDataView();
+            //CollectionViewSource col = new();
+            //col.Source = dt;
+            //col.GroupDescriptions.Add(new PropertyGroupDescription(ObjectProcessor.NameField));
+            if (this.ClassData.ClassType == ClassType.Model)
+            {
+                DataView dv = dt.AsDataView();
+                dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
+                this.Data.ItemsSource = dv;
+            }
+            else
+            {
+                this.Data.ItemsSource = dt.AsDataView();
+            }
+            //this.Data.ItemsSource = col.View;
         }
         private void UpdateViewWithSearch(FieldData data)
         {
             DataTable dt = ObjectProcessor.GetObjectsListWhereLike(this.sourceClass, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
-            this.Data.ItemsSource = dt.AsDataView();
+            if (this.ClassData.ClassType == ClassType.Model)
+            {
+                DataView dv = dt.AsDataView();
+                dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
+                this.Data.ItemsSource = dv;
+            }
+            else
+            {
+                this.Data.ItemsSource = dt.AsDataView();
+            }
         }
         private void UpdateViewWithFilter(FieldData data)
         {
             DataTable dt = ObjectProcessor.GetObjectsListWhereEqual(this.sourceClass, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
-            this.Data.ItemsSource = dt.AsDataView();
+            if (this.ClassData.ClassType == ClassType.Model)
+            {
+                DataView dv = dt.AsDataView();
+                dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
+                this.Data.ItemsSource = dv;
+            }
+            else
+            {
+                this.Data.ItemsSource = dt.AsDataView();
+            }
         }
         private void Data_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {

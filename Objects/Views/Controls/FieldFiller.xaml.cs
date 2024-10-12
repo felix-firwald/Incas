@@ -13,7 +13,8 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using static Incas.Objects.Views.Controls.IFiller;
+using Incas.Objects.Interfaces;
+using static Incas.Objects.Interfaces.IFiller;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -29,7 +30,6 @@ namespace Incas.Objects.Views.Controls
     /// </summary>
     public partial class FieldFiller : UserControl, IFiller
     {
-        //public static Dictionary<TagType, >
         public Objects.Models.Field Field { get; set; }
         private bool validated = true;
         private Control control;
@@ -47,7 +47,6 @@ namespace Incas.Objects.Views.Controls
             try
             {
                 this.GenerateUIControl(this.Field.Type);
-                //this.MakeButton();
             }
             catch (Exception ex)
             {
@@ -137,7 +136,6 @@ namespace Incas.Objects.Views.Controls
                     this.PlaceUIControl(picker);
                     break;
                 case FieldType.Generator:
-                case FieldType.Macrogenerator:
                     Guid num = Guid.Empty;
                     Guid.TryParse(value.ToString(), out num);
                     Generator generator = new(type)
@@ -204,7 +202,6 @@ namespace Incas.Objects.Views.Controls
                     this.SetDateTimeValue(value);
                     break;
                 case FieldType.Generator:
-                case FieldType.Macrogenerator:
                     ((Generator)this.control).SetData(value);
                     break;
             }
@@ -299,7 +296,6 @@ namespace Incas.Objects.Views.Controls
                 case FieldType.Date:
                     return this.GetDateInFormat();
                 case FieldType.Generator:
-                case FieldType.Macrogenerator:
                     return ((Generator)this.control).GetText();
             }
         }
@@ -312,7 +308,6 @@ namespace Incas.Objects.Views.Controls
             switch (this.GetFillerType())
             {
                 case FieldType.Generator:
-                case FieldType.Macrogenerator:
                     return ((Generator)this.control).GetData();
                 case FieldType.Date:
                     if (((DatePicker)this.control).SelectedDate.HasValue)

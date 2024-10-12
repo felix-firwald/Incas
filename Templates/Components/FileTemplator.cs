@@ -1,4 +1,5 @@
-﻿using Incas.Objects.Views.Controls;
+﻿using Incas.Objects.Interfaces;
+using Incas.Objects.Views.Controls;
 using System.Collections.Generic;
 
 namespace Incas.Templates.Components

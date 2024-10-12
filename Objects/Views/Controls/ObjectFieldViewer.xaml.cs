@@ -1,6 +1,7 @@
 ﻿using Incas.Objects.Components;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
+using Incas.Objects.Interfaces;
 using Incas.Users.Models;
 using System;
 using System.Windows;

@@ -80,6 +80,11 @@ namespace Incas.Objects.Models
             }
             return result;
         }
+        public List<Class> GetGenerators()
+        {
+            string value = $"\"ClassType\":{(int)ClassType.Generator}";
+            return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.data), value).Execute());
+        }
         public List<Class> GetClassesByCategory(string category)
         {
             return this.FromDataTable(this.StartCommand().Select().WhereEqual(nameof(category), category).OrderByASC(nameof(this.name)).Execute());

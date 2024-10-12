@@ -15,10 +15,9 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Forms;
 using System.Windows.Media;
-using static Incas.Objects.Views.Controls.IFiller;
+using Incas.Objects.Interfaces;
+using static Incas.Objects.Interfaces.IFiller;
 
 namespace Incas.Objects.Views.Controls
 {

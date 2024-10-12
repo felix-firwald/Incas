@@ -18,6 +18,8 @@ namespace Incas.Objects.Components
         public string Name { get; set; }
         public bool Terminated { get; set; }
         public DateTime TerminatedDate { get; set; }
+        public Guid TargetClass { get; set; }
+        public Guid TargetObject { get; set; }
         public object Meta { get; set; }
         public List<FieldData> Fields { get; set; }
         public Object Copy()

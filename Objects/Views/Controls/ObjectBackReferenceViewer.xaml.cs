@@ -1,5 +1,6 @@
 ﻿using Incas.Objects.Components;
 using Incas.Objects.Models;
+using Incas.Objects.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;

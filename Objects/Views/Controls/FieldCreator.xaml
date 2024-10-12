@@ -53,7 +53,7 @@
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding TypeOfFieldValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxDropDownHeight="240" Grid.Column="1">
+                    <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding TypeOfFieldValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1">
                         <ComboBoxItem >
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Success}" Width="5" Height="5"/>
@@ -68,7 +68,6 @@
                                 <Label Content="Ручной ввод" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
                         </ComboBoxItem>
-
                         <ComboBoxItem >
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
@@ -81,13 +80,6 @@
                                 <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
                                 <Label Content="Глобальное перечисление" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Выпадающий список" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
-                            </StackPanel>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <StackPanel Orientation="Horizontal">
-                                <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
-                                <Label Content="Объект" Style="{DynamicResource LabelElement}" FontSize="11"/>
-                                <Label Content="Выбор объекта" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
                         </ComboBoxItem>
                         <ComboBoxItem>
@@ -125,18 +117,18 @@
                                 <Label Content="Поле с автозаполнением" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
                         </ComboBoxItem>
-                        <ComboBoxItem Visibility="Collapsed" IsEnabled="False">
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Fill="{DynamicResource Purple}" Width="5" Height="5"/>
+                                <Label Content="Объект" Style="{DynamicResource LabelElement}" FontSize="11"/>
+                                <Label Content="Выбор объекта" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Purple}" Width="5" Height="5"/>
                                 <Label Content="Генератор" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Заполнение выделенной формы" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10" Cursor=""/>
-                            </StackPanel>
-                        </ComboBoxItem>
-                        <ComboBoxItem Visibility="Collapsed" IsEnabled="False">
-                            <StackPanel Orientation="Horizontal">
-                                <Ellipse Fill="{DynamicResource Purple}" Width="5" Height="5"/>
-                                <Label Content="Макрогенератор" Style="{DynamicResource LabelElement}" FontSize="11"/>
-                                <Label Content="Заполнение выделенных форм" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10" Cursor=""/>
                             </StackPanel>
                         </ComboBoxItem>
                         <ComboBoxItem>

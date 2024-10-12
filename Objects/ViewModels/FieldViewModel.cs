@@ -99,22 +99,20 @@ namespace Incas.Objects.ViewModels
                 case "3":
                     return FieldType.GlobalEnumeration;
                 case "4":
-                    return FieldType.Relation;
-                case "5":
                     return FieldType.Date;
-                case "6":
+                case "5":
                     return FieldType.Number;
-                case "7":
+                case "6":
                     return FieldType.LocalConstant;
-                case "8":
+                case "7":
                     return FieldType.GlobalConstant;
-                case "9":
+                case "8":
                     return FieldType.HiddenField;
+                case "9":
+                    return FieldType.Relation;
                 case "10":
                     return FieldType.Generator;
                 case "11":
-                    return FieldType.Macrogenerator;
-                case "12":
                     return FieldType.Table;
             }
         }
@@ -125,15 +123,14 @@ namespace Incas.Objects.ViewModels
                 FieldType.Text => "1",
                 FieldType.LocalEnumeration => "2",
                 FieldType.GlobalEnumeration => "3",
-                FieldType.Relation => "4",
-                FieldType.Date => "5",
-                FieldType.Number => "6",
-                FieldType.LocalConstant => "7",
-                FieldType.GlobalConstant => "8",
-                FieldType.HiddenField => "9",
+                FieldType.Date => "4",
+                FieldType.Number => "5",
+                FieldType.LocalConstant => "6",
+                FieldType.GlobalConstant => "7",
+                FieldType.HiddenField => "8",
+                FieldType.Relation => "9",
                 FieldType.Generator => "10",
-                FieldType.Macrogenerator => "11",
-                FieldType.Table => "12",
+                FieldType.Table => "11",
                 _ => "0",
             };
         }

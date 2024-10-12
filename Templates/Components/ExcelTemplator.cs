@@ -1,16 +1,12 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
+using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
-using Microsoft.Scripting.Utils;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using WebSupergoo.WordGlue3;
-using Xceed.Document.NET;
-using Xceed.Words.NET;
 
 namespace Incas.Templates.Components
 {

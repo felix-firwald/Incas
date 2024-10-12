@@ -1,6 +1,8 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Interfaces;
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
+using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
 using Incas.Templates.Components;
 using Incas.Templates.Models;
@@ -19,7 +21,7 @@ namespace Incas.Templates.Views.Pages
     /// <summary>
     /// Логика взаимодействия для FileCreator.xaml
     /// </summary>
-    public partial class FileCreator : UserControl
+    public partial class FileCreator : UserControl, ICollapsible
     {
         private Template template;
         private List<Objects.Models.Field> fields;

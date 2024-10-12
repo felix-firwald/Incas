@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
+using Incas.Core.Interfaces;
 using Incas.Objects.ViewModels;
 using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
@@ -11,7 +12,7 @@ namespace Incas.Objects.Views.Controls
     /// <summary>
     /// Логика взаимодействия для FieldCreator.xaml
     /// </summary>
-    public partial class FieldCreator : UserControl
+    public partial class FieldCreator : UserControl, ICollapsible
     {
         public delegate bool FieldAction(FieldCreator t);
         public delegate int FieldMoving(FieldCreator t);

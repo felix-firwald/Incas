@@ -1,6 +1,8 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Interfaces;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
+using Incas.Objects.Interfaces;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
@@ -20,7 +22,7 @@ namespace Incas.Objects.Views.Pages
     /// <summary>
     /// Логика взаимодействия для ObjectCreator.xaml
     /// </summary>
-    public partial class ObjectCreator : System.Windows.Controls.UserControl
+    public partial class ObjectCreator : System.Windows.Controls.UserControl, ICollapsible
     {
         public Components.Object Object { get; set; }
         public Class Class { get; set; }

@@ -3,6 +3,7 @@
     public enum ClassType
     {
         Model,
-        Document
+        Document,
+        Generator
     }
 }

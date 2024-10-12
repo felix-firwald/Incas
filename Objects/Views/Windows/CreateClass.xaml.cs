@@ -36,6 +36,12 @@ namespace Incas.Objects.Views.Windows
                 this.vm.ShowCard = true;
                 this.TemplatesArea.Visibility = Visibility.Visible;
             }
+            else if (this.vm.Type == ClassType.Generator)
+            {
+                this.CardArea.Visibility = Visibility.Collapsed;
+                this.AccessArea.Visibility = Visibility.Collapsed;
+                this.TemplatesArea.Visibility = Visibility.Visible;
+            }
             else
             {
                 this.TemplatesArea.Visibility = Visibility.Collapsed;

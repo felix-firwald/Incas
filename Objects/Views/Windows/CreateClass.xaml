@@ -90,7 +90,7 @@
                                 </TextBox>
                             </StackPanel>
                         </Border>
-                        <Border Background="{StaticResource Dark}" MinWidth="300" CornerRadius="8" Margin="5">
+                        <Border x:Name="CardArea" Background="{StaticResource Dark}" MinWidth="300" CornerRadius="8" Margin="5">
                             <StackPanel>
                                 <Grid Margin="5,5,0,0">
                                     <Grid.ColumnDefinitions>
@@ -104,7 +104,7 @@
                                 <CheckBox Style="{StaticResource Toggle}" Content="Показывать карточку объекта" IsChecked="{Binding ShowCard}"/>
                             </StackPanel>
                         </Border>
-                        <Border Background="{StaticResource Dark}" MinWidth="300" CornerRadius="8" Margin="5">
+                        <Border x:Name="AccessArea" Background="{StaticResource Dark}" MinWidth="300" CornerRadius="8" Margin="5">
                             <StackPanel>
                                 <Grid Margin="5,5,0,0">
                                     <Grid.ColumnDefinitions>

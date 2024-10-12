@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using Incas.Objects.Components;
+using Incas.Objects.Interfaces;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;

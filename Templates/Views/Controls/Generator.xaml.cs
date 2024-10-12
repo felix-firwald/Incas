@@ -21,22 +21,11 @@ namespace Incas.Templates.Views.Controls
 
         }
     }
-    public enum GeneratorMode
-    {
-        OneForm,
-        ManyForms
-    }
     public enum GeneratorStatus
     {
         NotContented,
         Contented,
-        Warning,
-        InProcess
-    }
-    public class NotReadyException : Exception
-    {
-        public NotReadyException(string message)
-        : base(message) { }
+        Warning
     }
 
     /// <summary>
@@ -107,10 +96,6 @@ namespace Incas.Templates.Views.Controls
             }
             switch (this.Status)
             {
-                case GeneratorStatus.InProcess:
-                    DialogsManager.ShowExclamationDialog("Генератор ожидает получение ввода от другого пользователя. " +
-                        "В документе будет пустая строка.");
-                    return "";
                 case GeneratorStatus.Warning:
                     using (Template t = new())
                     {
@@ -142,10 +127,8 @@ namespace Incas.Templates.Views.Controls
         private void SetContented()
         {
             this.Status = GeneratorStatus.Contented;
-            this.IconUser.ToolTip = "Делегировать другому пользователю";
             this.NotContented.Visibility = Visibility.Collapsed;
             this.Warning.Visibility = Visibility.Collapsed;
-            this.InProcess.Visibility = Visibility.Collapsed;
             this.Contented.Visibility = Visibility.Visible;
             this.OpenButton.IsEnabled = true;
             OnValueChanged?.Invoke(this);
@@ -153,67 +136,26 @@ namespace Incas.Templates.Views.Controls
         private void SetNotContented()
         {
             this.Status = GeneratorStatus.NotContented;
-            this.IconUser.ToolTip = "Делегировать другому пользователю";
             this.Contented.Visibility = Visibility.Collapsed;
             this.Warning.Visibility = Visibility.Collapsed;
-            this.InProcess.Visibility = Visibility.Collapsed;
             this.NotContented.Visibility = Visibility.Visible;
             this.OpenButton.IsEnabled = true;
         }
         private void SetWarning(string text)
         {
             this.Status = GeneratorStatus.Warning;
-            this.IconUser.ToolTip = "Делегировать другому пользователю";
             this.NotContented.Visibility = Visibility.Collapsed;
             this.Contented.Visibility = Visibility.Collapsed;
             this.WarningText.Text = text;
-            this.InProcess.Visibility = Visibility.Collapsed;
             this.Warning.Visibility = Visibility.Visible;
             this.OpenButton.IsEnabled = true;
-        }
-        private void SetInProcess(string text)
-        {
-            this.Status = GeneratorStatus.InProcess;
-            this.NotContented.Visibility = Visibility.Collapsed;
-            this.Contented.Visibility = Visibility.Collapsed;
-            this.Warning.Visibility = Visibility.Collapsed;
-            this.ProcessText.Text = text;
-            this.InProcess.Visibility = Visibility.Visible;
-            this.OpenButton.IsEnabled = false;
-            this.IconUser.ToolTip = "Отозвать делегацию";
-        }
-        private void SendToUserClick(object sender, MouseButtonEventArgs e)
-        {
-            if (this.TemplateId == Guid.Empty)
-            {
-                DialogsManager.ShowExclamationDialog("Шаблон не определен", "Действие прервано");
-                return;
-            }
-            switch (this.Status)
-            {
-                case GeneratorStatus.InProcess:
-                    WaitControls.RemoveGenerator(this);
-                    this.SetNotContented();
-                    break;
-                default:
-                    Session session;
-                    if (DialogsManager.ShowActiveUserSelector(out session, "Выберите пользователя для заполнения этой части документа."))
-                    {
-                        GeneratedElement ge = this.Result[0];
-                        ge.template = this.TemplateId;
-                        this.Result[0] = ge;
-                        ServerProcessor.SendOpenGeneratorProcess(this.Result, this, session.slug);
-                        this.SetInProcess($"Делегировано: {session.user}");
-                    }
-                    break;
-            }
         }
 
         private void OpenClick(object sender, MouseButtonEventArgs e)
         {
             if (this.TemplateId == Guid.Empty)
             {
-                DialogsManager.ShowExclamationDialog("Шаблон не определен", "Действие прервано");
+                DialogsManager.ShowExclamationDialog("Генератор не определен", "Действие прервано");
                 return;
             }
             if (this.Result.Count == 0)
@@ -241,7 +183,6 @@ namespace Incas.Templates.Views.Controls
                     }
                     break;
             }
-
         }
 
         private void ShowTextClick(object sender, MouseButtonEventArgs e)

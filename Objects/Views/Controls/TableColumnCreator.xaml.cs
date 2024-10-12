@@ -8,13 +8,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System;
+using Incas.Core.Interfaces;
 
 namespace Incas.Objects.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для TableColumnCreator.xaml
     /// </summary>
-    public partial class TableColumnCreator : UserControl
+    public partial class TableColumnCreator : UserControl, ICollapsible
     {
         public delegate bool FieldAction(TableColumnCreator t);
         public delegate int FieldMoving(TableColumnCreator t);

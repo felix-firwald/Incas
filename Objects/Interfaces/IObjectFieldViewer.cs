@@ -1,4 +1,4 @@
-﻿namespace Incas.Objects.Views.Controls
+﻿namespace Incas.Objects.Interfaces
 {
     public interface IObjectFieldViewer
     {

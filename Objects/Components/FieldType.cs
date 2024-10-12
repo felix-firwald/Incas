@@ -13,7 +13,6 @@
         HiddenField,
         Date,
         Generator,
-        Table,
-        Macrogenerator
+        Table
     }
 }

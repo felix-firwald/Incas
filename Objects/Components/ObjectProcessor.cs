@@ -12,25 +12,95 @@ namespace Incas.Objects.Components
     public static class ObjectProcessor
     {
         #region Tables
+        /// <summary>
+        /// Base table in .objinc, all types of classes must have this table
+        /// </summary>
         public const string MainTable = "OBJECTS_MAP";
+
+        /// <summary>
+        /// Table in .objinc storing all edits of objects, typical only for documents
+        /// </summary>
         public const string EditsTable = "EDITS_MAP";
+
+        /// <summary>
+        /// Table in .objinc storing references to attached files to documents storing in <see cref="MainTable"/>, typical only for documents
+        /// </summary>
         public const string AttachmentsTable = "ATTACHMENTS_MAP";
+
+        /// <summary>
+        /// Table in .objinc storing user comments for documents storing in <see cref="MainTable"/>, typical only for documents
+        /// </summary>
         public const string CommentsTable = "COMMENTS_MAP";
         #endregion
         #region Fields
+        /// <summary>
+        /// Service guid for <see cref="MainTable"/>, 
+        /// <see cref="EditsTable"/>, 
+        /// <see cref="AttachmentsTable"/>, 
+        /// <see cref="CommentsTable"/>, all objects of all types of classes must have it
+        /// </summary>
         public const string IdField = "SERVICE_ID";
+
+        /// <summary>
+        /// Service name for <see cref="MainTable"/>, all objects of all types of classes must have it
+        /// </summary>
         public const string NameField = "OBJECT_NAME";
-        public const string DateCreatedField = "CREATED_DATE"; // only docs
+
+        /// <summary>
+        /// Date created for <see cref="MainTable"/>, 
+        /// <see cref="EditsTable"/>, 
+        /// <see cref="AttachmentsTable"/>, 
+        /// <see cref="CommentsTable"/>, typical only for docs
+        /// </summary>
+        public const string DateCreatedField = "CREATED_DATE";
+
+        /// <summary>
+        /// The user (guid) who created the object, typical for focs and models, but not for generators
+        /// </summary>
         public const string AuthorField = "AUTHOR_ID";
+
+        /// <summary>
+        /// Custom status metafield (stored in bytes), for <see cref="MainTable"/>, default value is 0
+        /// </summary>
         public const string StatusField = "STATUS_ID";
+
+        /// <summary>
+        /// Now is useless
+        /// </summary>
         public const string MetaField = "META_INFORMATION";
-        public const string DateTerminatedField = "TERMINATED_DATE"; // only docs
-        public const string TerminatedField = "TERMINATED"; // only docs
-        public const string ObjectLinkField = "TARGET_OBJECT_ID"; // only docs
-        public const string TypeField = "TYPE"; // only docs
-        public const string DataField = "DATA"; // only docs
+
+        /// <summary>
+        /// Date when the document is marked by user as <see cref="TerminatedField"/>
+        /// </summary>
+        public const string DateTerminatedField = "TERMINATED_DATE";
+
+        /// <summary>
+        /// Service status of document, default values is 0 (means document is still in working progress), 1 means document is marked by user as completed
+        /// </summary>
+        public const string TerminatedField = "TERMINATED";
+
+        /// <summary>
+        /// A link to source document that the edit or generator belongs to, for <see cref="EditsTable"/>
+        /// </summary>
+        public const string TargetObjectField = "TARGET_OBJECT_ID";
+
+        /// <summary>
+        /// A reference to source class of document that the generator belongs to, for <see cref="MainTable"/>
+        /// </summary>
+        public const string TargetClassField = "TARGET_CLASS_ID";
+
+        /// <summary>
+        /// Type of comment, for <see cref="CommentsTable"/>
+        /// </summary>
+        public const string TypeField = "TYPE";
+
+        /// <summary>
+        /// Data, for <see cref="EditsTable"/> and <see cref="CommentsTable"/>
+        /// </summary>
+        public const string DataField = "DATA";
+
+        
         #endregion
-        public const int MaxObjectCompareCount = 5;
         public static string GetPathToObjectsMap(Class cl)
         {
             return cl == null ? "" : $"{ProgramState.ObjectsPath}\\{cl.identifier}.objinc";
@@ -52,8 +122,12 @@ namespace Incas.Objects.Components
             if (data.ClassType == ClassType.Document)
             {
                 request.Append($"[{DateCreatedField}] TEXT, [{DateTerminatedField}] TEXT, [{TerminatedField}] TEXT, ");
-                adding += $"CREATE TABLE [{EditsTable}] ([{IdField}] TEXT UNIQUE, [{ObjectLinkField}] TEXT, [{StatusField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);\n";
-                adding += $"CREATE TABLE [{CommentsTable}] ([{IdField}] TEXT UNIQUE, [{ObjectLinkField}] TEXT, [{TypeField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
+                adding += $"CREATE TABLE [{EditsTable}] ([{IdField}] TEXT UNIQUE, [{TargetObjectField}] TEXT, [{StatusField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);\n";
+                adding += $"CREATE TABLE [{CommentsTable}] ([{IdField}] TEXT UNIQUE, [{TargetObjectField}] TEXT, [{TypeField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
+            }
+            else if (data.ClassType == ClassType.Generator)
+            {
+                request.Append($"[{TargetClassField}] TEXT, [{TargetObjectField}] TEXT, ");
             }
             List<string> customFields = [];
             foreach (Incas.Objects.Models.Field f in cl.GetClassData().GetSavebleFields())
@@ -82,6 +156,8 @@ namespace Incas.Objects.Components
                 AuthorField,
                 StatusField,
                 DateTerminatedField,
+                TargetObjectField,
+                TargetClassField,
                 TerminatedField
             ];
             string path = GetPathToObjectsMap(cl);
@@ -162,7 +238,11 @@ namespace Incas.Objects.Components
                     values.Add(DateCreatedField, obj.CreationDate.ToString());
                     values.Add(TerminatedField, "0");
                 }
-                //values.Add(StatusField, obj.Status.ToString());
+                else if (data.ClassType == ClassType.Generator)
+                {
+                    values.Add(TargetClassField, obj.TargetClass.ToString());
+                    values.Add(TargetObjectField, obj.TargetObject.ToString());
+                }
                 obj.AuthorId = ProgramState.CurrentUser.id;
                 obj.CreationDate = DateTime.Now;
 
@@ -197,6 +277,11 @@ namespace Incas.Objects.Components
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{DateCreatedField}]");
             }
+            else if (data.ClassType == ClassType.Generator)
+            {
+                fieldsRequest.Add($"[OBJECTS_MAP].[{TargetClassField}]");
+                fieldsRequest.Add($"[OBJECTS_MAP].[{TargetObjectField}]");
+            }
             fieldsRequest.Add($"[OBJECTS_MAP].[{NameField}]");
             foreach (Models.Field f in fields)
             {
@@ -220,7 +305,11 @@ namespace Incas.Objects.Components
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{DateCreatedField}]");
             }
-            //fieldsRequest.Add($"[OBJECTS_MAP].[{StatusField}]");
+            else if (data.ClassType == ClassType.Generator)
+            {
+                fieldsRequest.Add($"[OBJECTS_MAP].[{TargetClassField}]");
+                fieldsRequest.Add($"[OBJECTS_MAP].[{TargetObjectField}]");
+            }
             fieldsRequest.Add($"[OBJECTS_MAP].[{NameField}]");
             List<string> innerJoins = [];
             foreach (Models.Field f in fields)
