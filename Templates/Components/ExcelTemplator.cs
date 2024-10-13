@@ -134,14 +134,14 @@ namespace Incas.Templates.Components
             this.workbook.Save();
         }
         
-        private void GetDataFromFillers(List<IFiller> fillers)
+        private void GetDataFromFillers(List<IFillerBase> fillers)
         {
-            foreach (IFiller filler in fillers)
+            foreach (IFillerBase filler in fillers)
             {
                 switch (filler.Field.Type)
                 {
                     default:
-                        FieldFiller ff = (FieldFiller)filler;
+                        ISimpleFiller ff = (ISimpleFiller)filler;
                         string value = ff.GetValue();
                         this.tagsToReplace.Add(filler.Field.Name);
                         this.values.Add(value);
@@ -155,12 +155,14 @@ namespace Incas.Templates.Components
                         }
                         break;
                     case Objects.Components.FieldType.Table:
-                        this.tables.Add(filler.Field.Name, ((FieldTableFiller)filler).GetValue());
+                        this.tables.Add(filler.Field.Name, ((ITableFiller)filler).GetValue());
+                        break;
+                    case Objects.Components.FieldType.Generator:
                         break;
                 }
             }
         }
-        public void GenerateDocument(List<IFiller> fillers)
+        public void GenerateDocument(List<IFillerBase> fillers)
         {
             this.GetDataFromFillers(fillers);
             foreach (KeyValuePair<string, DataTable> pair in this.tables)
@@ -169,7 +171,7 @@ namespace Incas.Templates.Components
             }
             this.Replace(this.tagsToReplace, this.values);
         }
-        public async void GenerateDocumentAsync(List<IFiller> fillers)
+        public async void GenerateDocumentAsync(List<IFillerBase> fillers)
         {
             this.GetDataFromFillers(fillers);
             await System.Threading.Tasks.Task.Run(() =>

@@ -1,11 +1,15 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Incas.Core.Classes;
 using Incas.Objects.Models;
+using Newtonsoft.Json;
+using Spire.Xls;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Incas.Objects.Components
 {
@@ -201,7 +205,7 @@ namespace Incas.Objects.Components
             q.BeginTransaction();
             foreach (Object obj in objects)
             {
-                ObjectProcessor.GetRequestForWritingObject(q, cl.GetClassData(), obj);
+                ObjectProcessor.GetRequestForWritingObject(q, cl, cl.GetClassData(), obj);
             }
             q.EndTransaction();
             q.ExecuteVoid();
@@ -211,18 +215,26 @@ namespace Incas.Objects.Components
             List<Object> objects = [obj];
             ObjectProcessor.WriteObjects(cl, objects);
         }
-        private static void GetRequestForWritingObject(Query q, ClassData data, Object obj)
+        private static async void GetRequestForWritingObject(Query q, Class cl, ClassData data, Object obj)
         {
             Dictionary<string, string> values = new()
             {
                 { NameField, obj.Name.ToString() },
                 { StatusField, obj.Status.ToString() }
             };
+            Dictionary<Guid, string> generators = new();
             foreach (FieldData fd in obj.Fields)
             {
                 if (fd.ClassField.Type is not FieldType.GlobalConstant and not FieldType.LocalConstant)
                 {
-                    values.Add(fd.ClassField.Id.ToString(), fd.Value);
+                    if (fd.ClassField.Type == FieldType.Generator)
+                    {
+                        generators.Add(Guid.Parse(fd.ClassField.Value), fd.Value);
+                    }
+                    else
+                    {
+                        values.Add(fd.ClassField.Id.ToString(), fd.Value);
+                    }                  
                 }
             }
             if (obj.Id == Guid.Empty) // if NEW
@@ -260,6 +272,19 @@ namespace Incas.Objects.Components
                 q.WhereEqual(IdField, obj.Id.ToString());
                 q.SeparateCommand();
             }
+            await Task.Run(() =>
+            {
+                foreach (KeyValuePair<Guid, string> gen in generators)
+                {
+                    List<Components.Object> list = JsonConvert.DeserializeObject<List<Components.Object>>(gen.Value);
+                    foreach (Components.Object o in list)
+                    {
+                        o.TargetClass = cl.identifier;
+                        o.TargetObject = obj.Id;
+                    }
+                    ObjectProcessor.WriteObjects(new Class(gen.Key), list);
+                }
+            });
         }
         public static void SetObjectAsTerminated(Class cl, Object obj)
         {
@@ -410,6 +435,44 @@ namespace Incas.Objects.Components
                 obj.Add(GetObject(cl, id));
             }
             return obj;
+        }
+        /// <summary>
+        /// Only for generators, 
+        /// 1 class is the generator objects map,
+        /// 2 class is the target relation class of parent object
+        /// </summary>
+        /// <returns></returns>
+        public static List<Object> GetRelatedObjects(Class source, Class parentClass, Guid parentObject)
+        {
+            List<Object> objs = new();
+            List<Models.Field> Fields = source.GetClassData().GetSavebleFields();
+
+            Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(source));
+            DataTable dt = q.Select()
+                .WhereEqual(TargetClassField, parentClass.identifier.ToString())
+                .WhereEqual(TargetObjectField, parentObject.ToString()).Execute();
+            foreach (DataRow dr in dt.Rows)
+            {
+                Object obj = new();
+                obj.Fields = new();
+                if (dr != null)
+                {
+                    obj.Id = Guid.Parse(dr[ObjectProcessor.IdField].ToString());
+                    obj.Name = dr[ObjectProcessor.NameField].ToString();
+                    foreach (Models.Field f in Fields)
+                    {
+                        FieldData fd = new()
+                        {
+                            ClassField = f,
+                            Value = dr[f.Id.ToString()].ToString()
+                        };
+                        obj.Fields.Add(fd);
+                    }
+                    objs.Add(obj);
+                }
+            }
+            
+            return objs;
         }
         public static void RemoveObject(Class cl, Guid id)
         {

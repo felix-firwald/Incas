@@ -62,6 +62,7 @@
                     <CommandBinding Command="ApplicationCommands.Print" Executed="CommandBinding_Executed" />
                 </DocumentViewer.CommandBindings>
             </DocumentViewer>
+            
         </ScrollViewer>
     </Grid>
 </Window>

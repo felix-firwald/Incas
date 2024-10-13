@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Attributes;
 using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
+using Incas.Objects.Models;
 using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
@@ -14,6 +15,7 @@ namespace Incas.Objects.AutoUI
     public class GeneratorFieldSettings : AutoUIBase
     {
         #region Data
+        private Objects.Models.Field Source;
         [Description("Выбор генератора")]
         public Selector Selector { get; set; }
 
@@ -21,9 +23,26 @@ namespace Incas.Objects.AutoUI
         public bool NotNull { get; set; }
         #endregion
 
-        public GeneratorFieldSettings()
+        public GeneratorFieldSettings(Objects.Models.Field f)
         {
-            
+            this.Source = f;
+            this.Selector = new(new());
+            using (Class cl = new())
+            {
+                foreach (Class generator in cl.GetGenerators())
+                {
+                    this.Selector.Pairs.Add(generator.identifier, generator.name);
+                }
+            }
+            try
+            {
+                this.Selector.SetSelection(System.Guid.Parse(f.Value));
+            }
+            catch
+            {
+
+            }
+            this.NotNull = f.NotNull;
         }
 
         #region Functionality
@@ -39,7 +58,8 @@ namespace Incas.Objects.AutoUI
 
         public override void Save()
         {
-            
+            this.Source.NotNull = this.NotNull;
+            this.Source.Value = this.Selector.SelectedObject.ToString();
         }
         #endregion
     }

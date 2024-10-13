@@ -152,6 +152,10 @@ namespace Incas.Objects.Views.Controls
                         this.vm.Source.Value = JsonConvert.SerializeObject(ts.Data);
                     }
                     break;
+                case Components.FieldType.Generator:
+                    GeneratorFieldSettings gf = new(f);
+                    gf.ShowDialog(name, Icon.Sliders);
+                    break;
             }
         }
     }

@@ -7,6 +7,7 @@ using Incas.Objects.Views.Windows;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -32,7 +33,6 @@ namespace Incas.Objects.Views.Pages
                 this.AddButton.Visibility = Visibility.Collapsed;
                 this.CopyButton.Visibility = Visibility.Collapsed;
             }
-            //this.InitStyle();
             this.UpdateView();
             if (this.ClassData.ShowCard)
             {
@@ -72,8 +72,15 @@ namespace Incas.Objects.Views.Pages
 
         private void PlaceCard()
         {
-            this.ObjectCard = new(this.sourceClass);
-            this.ObjectCard.OnFilterRequested += this.ObjectCard_OnFilterRequested;
+            if (this.ClassData.ClassType == ClassType.Generator)
+            {
+                this.ObjectCard = new();
+            }
+            else
+            {
+                this.ObjectCard = new(this.sourceClass);
+                this.ObjectCard.OnFilterRequested += this.ObjectCard_OnFilterRequested;
+            }           
             this.MainGrid.Children.Add(this.ObjectCard);
             Grid.SetRow(this.ObjectCard, 0);
             Grid.SetRowSpan(this.ObjectCard, 2);
@@ -90,9 +97,6 @@ namespace Incas.Objects.Views.Pages
         {
             DataTable dt = ObjectProcessor.GetObjectsList(this.sourceClass);
             this.Data.Columns.Clear();
-            //CollectionViewSource col = new();
-            //col.Source = dt;
-            //col.GroupDescriptions.Add(new PropertyGroupDescription(ObjectProcessor.NameField));
             if (this.ClassData.ClassType == ClassType.Model)
             {
                 DataView dv = dt.AsDataView();
@@ -103,7 +107,6 @@ namespace Incas.Objects.Views.Pages
             {
                 this.Data.ItemsSource = dt.AsDataView();
             }
-            //this.Data.ItemsSource = col.View;
         }
         private void UpdateViewWithSearch(FieldData data)
         {
@@ -138,49 +141,63 @@ namespace Incas.Objects.Views.Pages
         private void Data_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             Style style = this.FindResource("ColumnHeaderSpecial") as Style;
-            if (e.Column.Header.ToString() == ObjectProcessor.IdField)
+            switch (e.Column.Header.ToString())
             {
-                e.Column.Visibility = Visibility.Hidden;
-            }
-            else if (e.Column.Header.ToString() is ObjectProcessor.NameField)
-            {
-                e.Column.Header = "Наименование";
-                e.Column.HeaderStyle = style;
-                e.Column.MinWidth = 100;
-                e.Column.MaxWidth = 180;
-                e.Column.CanUserReorder = false;
-            }
-            else if (e.Column.Header.ToString() is ObjectProcessor.DateCreatedField)
-            {
-                e.Column.Header = "Дата создания";
-                e.Column.HeaderStyle = style;
-                e.Column.MinWidth = 100;
-                e.Column.MaxWidth = 120;
-                e.Column.CanUserReorder = false;
-            }
-            else if (e.Column.Header.ToString() is ObjectProcessor.StatusField)
-            {
-                //e.Column.Header = "Статус";
-                e.Column.HeaderStyle = style;
-                e.Column.MinWidth = 100;
-                e.Column.MaxWidth = 180;
-                e.Column.CanUserReorder = false;
+                case ObjectProcessor.IdField:
+                    e.Column.Visibility = Visibility.Hidden;
+                    break;
+                case ObjectProcessor.NameField:
+                    e.Column.Header = "Наименование";
+                    e.Column.HeaderStyle = style;
+                    e.Column.MinWidth = 100;
+                    e.Column.MaxWidth = 180;
+                    e.Column.CanUserReorder = false;
+                    break;
+                case ObjectProcessor.DateCreatedField:
+                    e.Column.Header = "Дата создания";
+                    e.Column.HeaderStyle = style;
+                    e.Column.MinWidth = 100;
+                    e.Column.MaxWidth = 120;
+                    e.Column.CanUserReorder = false;
+                    break;
+                case ObjectProcessor.StatusField:
+                    e.Column.HeaderStyle = style;
+                    e.Column.MinWidth = 100;
+                    e.Column.MaxWidth = 180;
+                    e.Column.CanUserReorder = false;
+                    break;
+                case ObjectProcessor.TargetClassField:
+                case ObjectProcessor.TargetObjectField:
+                    e.Column.Visibility = Visibility.Hidden;
+                    break;
             }
         }
 
         private void AddClick(object sender, RoutedEventArgs e)
         {
+            this.OpenNewObject();
+        }
+        private void OpenNewObject()
+        {
+            if (this.ClassData.ClassType == ClassType.Generator)
+            {
+                DialogsManager.ShowExclamationDialog("Действие по созданию новых объектов недоступно в этой области.", "Действие невозможно");
+                return;
+            }
             ObjectsEditor oc = new(this.sourceClass);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
-
         private void CopyClick(object sender, RoutedEventArgs e)
         {
             this.OpenCopyOfSelectedObject();
         }
 
         private void SearchClick(object sender, RoutedEventArgs e)
+        {
+            this.OpenSearchDialog();
+        }
+        private void OpenSearchDialog()
         {
             DataSearch ds = new(this.ClassData);
             if (ds.ShowDialog("Поиск", Icon.Search))
@@ -194,11 +211,6 @@ namespace Incas.Objects.Views.Pages
                     this.UpdateViewWithSearch(ds.GetData());
                 }
             }
-        }
-
-        private void FindBySelectionClick(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void CancelSearchClick(object sender, RoutedEventArgs e)
@@ -244,6 +256,10 @@ namespace Incas.Objects.Views.Pages
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
             ObjectsEditor oc = new(this.sourceClass, [obj]);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+            if (this.ClassData.ClassType == ClassType.Generator)
+            {
+                oc.SetSingleObjectMode();
+            }
             oc.Show();
         }
         private void OpenSelectedObjects()
@@ -252,11 +268,20 @@ namespace Incas.Objects.Views.Pages
             List<Guid> guids = this.GetSelectedObjectsGuids();
             ObjectsEditor oc = new(this.sourceClass, ObjectProcessor.GetObjects(this.sourceClass, guids));
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+            if (this.ClassData.ClassType == ClassType.Generator)
+            {
+                oc.SetSingleObjectMode();
+            }
             oc.Show();
         }
 
         private void OpenCopyOfSelectedObject()
         {
+            if (this.ClassData.ClassType == ClassType.Generator)
+            {
+                DialogsManager.ShowExclamationDialog("Действие по созданию новых объектов недоступно в этой области.", "Действие невозможно");
+                return;
+            }
             Guid id = this.GetSelectedObjectGuid();
             if (id == Guid.Empty)
             {
@@ -295,7 +320,6 @@ namespace Incas.Objects.Views.Pages
         }
         private void OnMouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            //DialogsManager.ShowInfoDialog("click");
             this.OpenSelectedObject();
         }
 
@@ -303,6 +327,10 @@ namespace Incas.Objects.Views.Pages
         {
             switch (e.Key)
             {
+                case System.Windows.Input.Key.A:
+                case System.Windows.Input.Key.N:
+                    this.OpenNewObject();
+                    break;
                 case System.Windows.Input.Key.Enter:
                     if (this.Data.SelectedItems.Count < 2)
                     {
@@ -317,6 +345,9 @@ namespace Incas.Objects.Views.Pages
                 case System.Windows.Input.Key.RightShift:
                     this.OpenCopyOfSelectedObject();
                     break;
+                case System.Windows.Input.Key.F:
+                    this.OpenSearchDialog();
+                    break;
                 case System.Windows.Input.Key.R:
                 case System.Windows.Input.Key.Delete:
                     this.RemoveSelectedObject();
@@ -330,20 +361,35 @@ namespace Incas.Objects.Views.Pages
             }
         }
 
-        private void Data_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void Data_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (this.ClassData.ShowCard)
             {
                 Guid id = this.GetSelectedObjectGuid();
-                if (id == Guid.Empty)
+                DataRowView dg = (DataRowView)this.Data.SelectedItems[0];
+                await Task.Run(() =>
                 {
-                    this.ObjectCard.SetEmpty();
-                }
-                else
-                {
-                    this.ObjectCard.UpdateFor(ObjectProcessor.GetObject(this.sourceClass, id));
-                }
-            }
+                    if (id == Guid.Empty)
+                    {
+                        this.ObjectCard.SetEmpty();                
+                    }
+                    else
+                    {
+                        if (this.ClassData.ClassType == ClassType.Generator)
+                        {
+                            Guid targetclass = Guid.Parse(dg.Row[ObjectProcessor.TargetClassField].ToString());
+                            Guid targetobject = Guid.Parse(dg.Row[ObjectProcessor.TargetObjectField].ToString());
+                            Class cl = new(targetclass);
+                            this.ObjectCard.SetClass(cl);
+                            this.ObjectCard.UpdateFor(ObjectProcessor.GetObject(cl, targetobject));
+                        }
+                        else
+                        {
+                            this.ObjectCard.UpdateFor(ObjectProcessor.GetObject(this.sourceClass, id));
+                        }                      
+                    }
+                });
+            }        
         }
 
         private void OpenInAnotherWindowClick(object sender, RoutedEventArgs e)

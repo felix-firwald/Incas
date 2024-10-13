@@ -42,6 +42,26 @@ namespace Incas.Objects.Views.Pages
             this.Class = source;
             this.ClassData = source.GetClassData();
         }
+        public ObjectCard(bool first = true)
+        {
+            this.InitializeComponent();
+            this.first = first;
+            if (!first)
+            {
+                this.MainBorder.BorderThickness = new Thickness(1);
+                this.MainBorder.CornerRadius = new CornerRadius(0);
+                this.ObjectName.FontSize = 12;
+            }
+            else
+            {
+                this.TitleBorder.MinHeight = 100;
+            }
+        }
+        public void SetClass(Class source)
+        {
+            this.Class = source;
+            this.ClassData = source.GetClassData();
+        }
         private SolidColorBrush GetColor(Color color, byte a = 255)
         {
             return new SolidColorBrush(Color.FromArgb(a, color.R, color.G, color.B));
@@ -96,72 +116,78 @@ namespace Incas.Objects.Views.Pages
         }
         public void SetEmpty()
         {
-            this.StatusBorder.Visibility = Visibility.Collapsed;
-            this.FieldsContentPanel.Children.Clear();
-            this.ObjectName.Text = "(не выбран)";
-            this.EditIcon.Visibility = Visibility.Collapsed;
-            this.id = Guid.Empty;
-            NoContent nc = new();
-            this.FieldsContentPanel.Children.Add(nc);
+            this.Dispatcher.Invoke(() =>
+            {
+                this.StatusBorder.Visibility = Visibility.Collapsed;
+                this.FieldsContentPanel.Children.Clear();
+                this.ObjectName.Text = "(не выбран)";
+                this.EditIcon.Visibility = Visibility.Collapsed;
+                this.id = Guid.Empty;
+                NoContent nc = new();
+                this.FieldsContentPanel.Children.Add(nc);
+            });           
         }
         public void UpdateFor(Components.Object obj)
         {
-            this.ShowStatus(obj);
-            if (this.ClassData.EditByAuthorOnly == true && obj.AuthorId != ProgramState.CurrentUser.id)
+            this.Dispatcher.Invoke(() =>
             {
-                this.StatusBorder.IsEnabled = false;
-                this.EditIcon.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                this.StatusBorder.IsEnabled = true;
-                this.EditIcon.Visibility = Visibility.Visible;
-                this.StatusBackButton.IsEnabled = true;
-                this.StatusForwardButton.IsEnabled = true;
-            }
-            this.FieldsContentPanel.Children.Clear();
-            this.ObjectName.Text = obj.Name;
-            this.id = obj.Id;
-            if (this.first)
-            {
-                ObjectFieldViewer ofAuthor = new(obj.AuthorId);
-                this.FieldsContentPanel.Children.Add(ofAuthor);
-                if (this.ClassData.ClassType == ClassType.Document)
+                this.ShowStatus(obj);
+                if (this.ClassData.EditByAuthorOnly == true && obj.AuthorId != ProgramState.CurrentUser.id)
                 {
-                    ObjectFieldViewer ofDate = new(obj.CreationDate, "Дата создания");
-                    this.FieldsContentPanel.Children.Add(ofDate);
-                    if (obj.Terminated)
+                    this.StatusBorder.IsEnabled = false;
+                    this.EditIcon.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    this.StatusBorder.IsEnabled = true;
+                    this.EditIcon.Visibility = Visibility.Visible;
+                    this.StatusBackButton.IsEnabled = true;
+                    this.StatusForwardButton.IsEnabled = true;
+                }
+                this.FieldsContentPanel.Children.Clear();
+                this.ObjectName.Text = obj.Name;
+                this.id = obj.Id;
+                if (this.first)
+                {
+                    ObjectFieldViewer ofAuthor = new(obj.AuthorId);
+                    this.FieldsContentPanel.Children.Add(ofAuthor);
+                    if (this.ClassData.ClassType == ClassType.Document)
                     {
-                        this.StatusBorder.IsEnabled = false;
-                        this.EditIcon.Visibility = Visibility.Collapsed;
-                        ObjectFieldViewer terminatedCheck = new("Процесс был завершен.", 52, 201, 36);
-                        this.FieldsContentPanel.Children.Insert(0, terminatedCheck);
-                        ObjectFieldViewer ofTerminatedDate = new(obj.TerminatedDate, "Дата завершения процесса");
-                        this.FieldsContentPanel.Children.Add(ofTerminatedDate);
-                    }
-                    else
-                    {
-                        if (this.ClassData.Statuses?.Count == obj.Status)
+                        ObjectFieldViewer ofDate = new(obj.CreationDate, "Дата создания");
+                        this.FieldsContentPanel.Children.Add(ofDate);
+                        if (obj.Terminated)
                         {
-                            TerminateObjectProcessMessage box = new();
-                            box.OnTerminateRequested += this.Box_OnTerminateRequested;
-                            this.FieldsContentPanel.Children.Insert(0, box);
+                            this.StatusBorder.IsEnabled = false;
+                            this.EditIcon.Visibility = Visibility.Collapsed;
+                            ObjectFieldViewer terminatedCheck = new("Процесс был завершен.", 52, 201, 36);
+                            this.FieldsContentPanel.Children.Insert(0, terminatedCheck);
+                            ObjectFieldViewer ofTerminatedDate = new(obj.TerminatedDate, "Дата завершения процесса");
+                            this.FieldsContentPanel.Children.Add(ofTerminatedDate);
+                        }
+                        else
+                        {
+                            if (this.ClassData.Statuses?.Count == obj.Status)
+                            {
+                                TerminateObjectProcessMessage box = new();
+                                box.OnTerminateRequested += this.Box_OnTerminateRequested;
+                                this.FieldsContentPanel.Children.Insert(0, box);
+                            }
                         }
                     }
                 }
-            }
-            foreach (FieldData field in obj.Fields)
-            {
-                ObjectFieldViewer of = new(field, this.first);
-                of.OnFilterRequested += this.Of_OnFilterRequested;
-                this.FieldsContentPanel.Children.Add(of);
-            }
-            if (this.first)
-            {
-                ObjectBackReferenceViewer ob = new(this.Class, this.id);
-                this.FieldsContentPanel.Children.Add(ob);
-            }
-            ((IObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
+                foreach (FieldData field in obj.Fields)
+                {
+                    ObjectFieldViewer of = new(field, this.first);
+                    of.OnFilterRequested += this.Of_OnFilterRequested;
+                    this.FieldsContentPanel.Children.Add(of);
+                }
+                if (this.first)
+                {
+                    ObjectBackReferenceViewer ob = new(this.Class, this.id);
+                    this.FieldsContentPanel.Children.Add(ob);
+                }
+                ((IObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
+            });         
         }
 
         private void Box_OnTerminateRequested()

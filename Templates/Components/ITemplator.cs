@@ -8,9 +8,8 @@ namespace Incas.Templates.Components
     public interface ITemplator
     {
         public void Replace(List<string> tags, List<string> values);
-
-        public void GenerateDocument(List<IFiller> fillers);
-        public void GenerateDocumentAsync(List<IFiller> fillers);
+        public void GenerateDocument(List<IFillerBase> fillers);
+        public void GenerateDocumentAsync(List<IFillerBase> fillers);
         public void CreateTable(string tag, DataTable dt);
         public List<string> FindAllTags();
         public string GetLogData();

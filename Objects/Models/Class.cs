@@ -13,6 +13,7 @@ namespace Incas.Objects.Models
         public string category { get; set; }
         public string name { get; set; }
         public string data { get; set; }
+        //public ClassType type { get; set; }
         public Class()
         {
             this.tableName = "Classes";
@@ -29,7 +30,7 @@ namespace Incas.Objects.Models
             {
                 Class c = new();
                 c.Serialize(dr);
-
+                //c.type = (ClassType)Enum.Parse(typeof(Class), dr["type"].ToString());
                 resulting.Add(c);
             }
             return resulting;
@@ -82,7 +83,11 @@ namespace Incas.Objects.Models
         }
         public List<Class> GetGenerators()
         {
-            string value = $"\"ClassType\":{(int)ClassType.Generator}";
+            return this.GetClassByType(ClassType.Generator);
+        }
+        private List<Class> GetClassByType(ClassType type)
+        {
+            string value = $"\"ClassType\":{(int)type}";
             return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.data), value).Execute());
         }
         public List<Class> GetClassesByCategory(string category)
@@ -155,7 +160,7 @@ namespace Incas.Objects.Models
                         {nameof(this.identifier), this.identifier.ToString()},
                         {nameof(this.category), this.category},
                         {nameof(this.name), this.name},
-                        {nameof(this.data), this.data}
+                        {nameof(this.data), this.data},
                     }
                 ).ExecuteVoid();
             ObjectProcessor.InitializeObjectMap(this);
@@ -165,10 +170,18 @@ namespace Incas.Objects.Models
             this.StartCommand().Delete().WhereEqual(nameof(this.identifier), id.ToString()).ExecuteVoid();
             ObjectProcessor.DropObjectMap(this);
         }
+        /// <summary>
+        /// Unpack class data (fields, properties)
+        /// </summary>
+        /// <returns></returns>
         public ClassData GetClassData()
         {
             return string.IsNullOrEmpty(this.data) ? new() : JsonConvert.DeserializeObject<ClassData>(this.data);
         }
+        /// <summary>
+        /// Pack class data (fields, etc)
+        /// </summary>
+        /// <param name="data"></param>
         public void SetClassData(ClassData data)
         {
             this.data = JsonConvert.SerializeObject(data);

@@ -15,7 +15,7 @@ namespace Incas.Templates.Components
         {
             this.templator = name.EndsWith(".docx") ? new WordTemplator(template, name) : new ExcelTemplator(template, name);
         }
-        public void GenerateDocument(List<IFiller> fillers)
+        public void GenerateDocument(List<IFillerBase> fillers)
         {
             this.templator.GenerateDocument(fillers);
         }

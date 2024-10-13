@@ -12,6 +12,7 @@ namespace Incas.Objects.AutoUI
     /// </summary>
     public class DataSearch : AutoUIBase
     {
+        protected override string FinishButtonText { get => "Найти"; }
         #region Data
         [Description("Поле для поиска")]
         public Selector ComboSelector { get; set; }

@@ -7,12 +7,10 @@ using Incas.Objects.Models;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Templates.Components;
-using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -27,11 +25,10 @@ namespace Incas.Objects.Views.Pages
         public Components.Object Object { get; set; }
         public Class Class { get; set; }
         public ClassData ClassData { get; set; }
-        public List<FieldFiller> TagFillers = [];
-        public List<FieldTableFiller> Tables = [];
         public delegate bool ObjectCreatorData(ObjectCreator creator);
         public delegate void FieldCopyAction(Guid id, string text);
         public event FieldCopyAction OnInsertRequested;
+        public event ObjectCreatorData OnUpdated;
         public event ObjectCreatorData OnSaveRequested;
         public event ObjectCreatorData OnRemoveRequested;
         private bool Locked = false;
@@ -52,7 +49,11 @@ namespace Incas.Objects.Views.Pages
             if (data.ClassType != ClassType.Document)
             {
                 this.RenderArea.Visibility = Visibility.Collapsed;
-            }
+                if (data.ClassType == ClassType.Generator)
+                {
+                    this.SaveArea.Visibility = Visibility.Collapsed;
+                }
+            }           
             else
             {
                 this.ApplyTerminated();
@@ -79,13 +80,13 @@ namespace Incas.Objects.Views.Pages
                 this.ContentPanel.IsEnabled = false;
                 SolidColorBrush color = new(System.Windows.Media.Color.FromRgb(52, 201, 36));
                 this.Separator.Fill = color;
-                System.Windows.Controls.Label label = new()
-                {
-                    Content = "Процесс завершен.",
-                    Margin = new Thickness(5),
-                    Foreground = color
-                };
-                this.ContentPanel.Children.Insert(0, label);
+                //System.Windows.Controls.Label label = new()
+                //{
+                //    Content = "Процесс завершен.",
+                //    Margin = new Thickness(5),
+                //    Foreground = color
+                //};
+                //this.ContentPanel.Children.Insert(0, label);
             }
         }
         private void ApplyAuthorConstraint()
@@ -107,34 +108,43 @@ namespace Incas.Objects.Views.Pages
         {
             foreach (Objects.Models.Field f in this.ClassData.Fields)
             {
-                if (f.Type != FieldType.Table)
+                switch (f.Type)
                 {
-                    FieldFiller tf = new(f)
-                    {
-                        Uid = f.Id.ToString()
-                    };
-                    tf.OnInsert += this.Tf_OnInsert;
-                    tf.OnFillerUpdate += this.Tf_OnFieldUpdate;
-                    tf.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
-                    this.ContentPanel.Children.Add(tf);
-                    this.TagFillers.Add(tf);
-                }
-                else
-                {
-                    FieldTableFiller tf = new(f)
-                    {
-                        Uid = f.Id.ToString()
-                    };
-                    tf.OnInsert += this.Tf_OnInsert;
-                    tf.OnFillerUpdate += this.Tf_OnFieldUpdate;
-                    tf.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
-                    this.ContentPanel.Children.Add(tf);
-                    this.Tables.Add(tf);
+                    default:
+                        FieldFiller ff = new(f)
+                        {
+                            Uid = f.Id.ToString()
+                        };
+                        ff.OnInsert += this.Tf_OnInsert;
+                        ff.OnFillerUpdate += this.Tf_OnFieldUpdate;
+                        ff.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
+                        this.ContentPanel.Children.Add(ff);
+                        break;
+                    case FieldType.Table:
+                        FieldTableFiller ft = new(f)
+                        {
+                            Uid = f.Id.ToString()
+                        };
+                        ft.OnInsert += this.Tf_OnInsert;
+                        ft.OnFillerUpdate += this.Tf_OnFieldUpdate;
+                        ft.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
+                        this.ContentPanel.Children.Add(ft);
+                        break;
+                    case FieldType.Generator:
+                        FieldGeneratorFiller fg = new(f)
+                        {
+                            Uid = f.Id.ToString()
+                        };
+                        fg.OnInsert += this.Tf_OnInsert;
+                        fg.OnFillerUpdate += this.Tf_OnFieldUpdate;
+                        fg.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
+                        this.ContentPanel.Children.Add(fg);
+                        break;
                 }
             }
         }
 
-        private void Tf_OnDatabaseObjectCopyRequested(IFiller sender)
+        private void Tf_OnDatabaseObjectCopyRequested(IFillerBase sender)
         {
             BindingData bd = new()
             {
@@ -153,15 +163,15 @@ namespace Incas.Objects.Views.Pages
             }
         }
 
-        private void Tf_OnFieldUpdate(IFiller sender)
+        private void Tf_OnFieldUpdate(IFillerBase sender)
         {
-            
+            this.OnUpdated?.Invoke(this);
         }
         public void ApplyFromExcel(Dictionary<string, string> pairs)
         {
             foreach (KeyValuePair<string, string> pair in pairs)
             {
-                foreach (FieldFiller tf in this.ContentPanel.Children)
+                foreach (IFillerBase tf in this.ContentPanel.Children)
                 {
                     if (tf.Field.Name == pair.Key)
                     {
@@ -177,22 +187,20 @@ namespace Incas.Objects.Views.Pages
             this.ObjectName.Text = obj.Name;
             foreach (Components.FieldData data in obj.Fields)
             {
-                foreach (FieldFiller tagfiller in this.TagFillers)
+                foreach (IFillerBase filler in this.ContentPanel.Children)
                 {
-                    //DialogsManager.ShowInfoDialog(tagfiller);
-                    if (tagfiller.Field.Id == data.ClassField.Id)
-                    {
-                        tagfiller.SetValue(data.Value);
+                    if (filler.Field.Id == data.ClassField.Id)
+                    {                     
+                        filler.SetValue(data.Value);         
                         break;
                     }
                 }
-                foreach (FieldTableFiller table in this.Tables)
+            }
+            foreach (IFillerBase filler in this.ContentPanel.Children)
+            {
+                if (filler.Field.Type == FieldType.Generator)
                 {
-                    if (table.Field.Id == data.ClassField.Id)
-                    {
-                        table.SetValue(data.Value);
-                        break;
-                    }
+                    ((IGeneratorFiller)filler).ApplyObjectsBy(this.Class, obj.Id);
                 }
             }
         }
@@ -209,22 +217,12 @@ namespace Incas.Objects.Views.Pages
                 this.Object.Fields = [];
             }
             this.Object.Fields.Clear();
-            foreach (FieldFiller tf in this.TagFillers)
+            foreach (IFillerBase tf in this.ContentPanel.Children)
             {
                 Components.FieldData data = new()
                 {
                     ClassField = tf.Field,
                     Value = tf.GetData()
-                };
-                this.Object.Fields.Add(data);
-
-            }
-            foreach (FieldTableFiller table in this.Tables)
-            {
-                Components.FieldData data = new()
-                {
-                    ClassField = table.Field,
-                    Value = table.GetData()
                 };
                 this.Object.Fields.Add(data);
             }
@@ -287,8 +285,8 @@ namespace Incas.Objects.Views.Pages
             string newFile = "";
             string oldFile = templateData.File;
             ITemplator templ = null;
-            List<IFiller> fillers = new();
-            foreach (IFiller filler in this.ContentPanel.Children)
+            List<IFillerBase> fillers = new();
+            foreach (IFillerBase filler in this.ContentPanel.Children)
             {
                 fillers.Add(filler);
             }
@@ -319,11 +317,6 @@ namespace Incas.Objects.Views.Pages
                 }
                 return newFile;
             }
-            catch (GeneratorUndefinedStateException ex)
-            {
-                DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
-                return "";
-            }
             catch (IOException ioex)
             {
                 DialogsManager.ShowErrorDialog($"При доступе к файлу \"{this.ObjectName.Text}\" или его папке возникла ошибка.\n" +
@@ -350,13 +343,22 @@ namespace Incas.Objects.Views.Pages
                 this.ObjectName.Text = name;
                 return name;
             }
-            foreach (FieldFiller tf in this.TagFillers)
+            foreach (IFillerBase tf in this.ContentPanel.Children)
             {
-                string val = tf.GetValue();
-                if (val != null)
+                switch (tf.Field.Type)
                 {
-                    name = name.Replace("[" + tf.GetTagName() + "]", val);
-                }
+                    case FieldType.Table:
+                    case FieldType.Generator:
+                        break;
+                    default:
+                        ISimpleFiller simple = (ISimpleFiller)tf;
+                        string val = simple.GetValue();
+                        if (val != null)
+                        {
+                            name = name.Replace("[" + simple.GetTagName() + "]", val);
+                        }
+                        break;
+                }             
             }
             this.ObjectName.Text = name;
             return name;
@@ -368,7 +370,7 @@ namespace Incas.Objects.Views.Pages
         }
         public void InsertToField(Guid id, string data)
         {
-            foreach (IFiller tf in this.ContentPanel.Children)
+            foreach (IFillerBase tf in this.ContentPanel.Children)
             {
                 if (tf.Field.Id == id)
                 {
@@ -451,9 +453,17 @@ namespace Incas.Objects.Views.Pages
         public List<string> GetExcelRow()
         {
             List<string> output = [];
-            foreach (FieldFiller tf in this.TagFillers)
+            foreach (IFillerBase tf in this.ContentPanel.Children)
             {
-                output.Add(tf.GetValue());
+                switch (tf.Field.Type)
+                {
+                    case FieldType.Generator:
+                    case FieldType.Table:
+                        break;
+                    default:
+                        output.Add(((ISimpleFiller)tf).GetValue());
+                        break;                   
+                }             
             }
             return output;
         }

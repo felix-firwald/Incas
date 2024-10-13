@@ -25,8 +25,8 @@ namespace Incas.Templates.Views.Pages
     {
         private Template template;
         private List<Objects.Models.Field> fields;
-        private List<FieldFiller> TagFillers = [];
-        private List<FieldTableFiller> Tables = [];
+        private List<Objects.Views.Controls.FieldFiller> TagFillers = [];
+        private List<Objects.Views.Controls.FieldTableFiller> Tables = [];
         private TemplateSettings templateSettings;
 
         public delegate void TagAction(Guid tag, string value);
@@ -250,8 +250,8 @@ namespace Incas.Templates.Views.Pages
                 this.ApplyNameByTemplate();
                 this.PlaySavingScript();
                 string newFile;
-                List<IFiller> fillers = [];
-                foreach (IFiller filler in this.ContentPanel.Children)
+                List<IFillerBase> fillers = [];
+                foreach (IFillerBase filler in this.ContentPanel.Children)
                 {
                     fillers.Add(filler);
                 }
@@ -292,11 +292,6 @@ namespace Incas.Templates.Views.Pages
             catch (FieldDataFailed fd)
             {
                 DialogsManager.ShowExclamationDialog(fd.Message, "Рендеринг прерван");
-                return false;
-            }
-            catch (GeneratorUndefinedStateException ex)
-            {
-                DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
                 return false;
             }
             catch (IOException)
@@ -351,8 +346,8 @@ namespace Incas.Templates.Views.Pages
                 
                 WordTemplator wt = new(this.template.path, newFile);
 
-                List<IFiller> fillers = [];
-                foreach (IFiller tf in this.ContentPanel.Children)
+                List<IFillerBase> fillers = [];
+                foreach (IFillerBase tf in this.ContentPanel.Children)
                 {
                     fillers.Add(tf);
                 }

@@ -103,6 +103,7 @@ namespace Incas.Objects.Models
                     case FieldType.LocalConstant:
                     case FieldType.GlobalConstant:
                     case FieldType.HiddenField:
+                    case FieldType.Generator:
                         break;
                 }
             }

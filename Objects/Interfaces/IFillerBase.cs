@@ -2,13 +2,13 @@
 
 namespace Incas.Objects.Interfaces
 {
-    public interface IFiller
+    public interface IFillerBase
     {
         /// <summary>
         /// Delegate for all actions 
         /// </summary>
         /// <param name="filler"></param>
-        public delegate void FillerUpdate(IFiller filler);
+        public delegate void FillerUpdate(IFillerBase filler);
 
         /// <summary>
         /// For the inserting

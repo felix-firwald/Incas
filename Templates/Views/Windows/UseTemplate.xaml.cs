@@ -279,29 +279,5 @@ namespace Incas.Templates.Views.Windows
                 }
             }
         }
-
-        private void SendToUserClick(object sender, MouseButtonEventArgs e)
-        {
-            List<SGeneratedDocument> documents = [];
-            foreach (FileCreator fc in this.ContentPanel.Children)
-            {
-                if (fc.SelectorChecked == true)
-                {
-                    documents.Add(fc.GetGeneratedDocument());
-                }
-            }
-            if (documents.Count == 0)
-            {
-                DialogsManager.ShowExclamationDialog("Не выбрано ни одного элемента для отправки! (используйте селекторы)", "Действие прервано");
-            }
-            else
-            {
-                Session session;
-                if (DialogsManager.ShowActiveUserSelector(out session, "Выберите пользователя для отправки формы."))
-                {
-                    ServerProcessor.SendOpenSequencerProcess(documents, session.slug);
-                }
-            }
-        }
     }
 }

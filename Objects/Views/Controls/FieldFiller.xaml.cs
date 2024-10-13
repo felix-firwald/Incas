@@ -14,7 +14,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Incas.Objects.Interfaces;
-using static Incas.Objects.Interfaces.IFiller;
+using static Incas.Objects.Interfaces.IFillerBase;
+using Xceed.Wpf.Toolkit;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -28,7 +29,7 @@ namespace Incas.Objects.Views.Controls
     /// <summary>
     /// Логика взаимодействия для FieldFiller.xaml
     /// </summary>
-    public partial class FieldFiller : UserControl, IFiller
+    public partial class FieldFiller : UserControl, ISimpleFiller
     {
         public Objects.Models.Field Field { get; set; }
         private bool validated = true;
@@ -136,14 +137,14 @@ namespace Incas.Objects.Views.Controls
                     this.PlaceUIControl(picker);
                     break;
                 case FieldType.Generator:
-                    Guid num = Guid.Empty;
-                    Guid.TryParse(value.ToString(), out num);
-                    Generator generator = new(type)
-                    {
-                        TemplateId = num
-                    };
-                    generator.OnValueChanged += this.Generator_OnValueChanged;
-                    this.PlaceUIControl(generator);
+                    //Guid num = Guid.Empty;
+                    //Guid.TryParse(value.ToString(), out num);
+                    //GeneratorFiller generator = new(type)
+                    //{
+                    //    TemplateId = num
+                    //};
+                    //generator.OnValueChanged += this.Generator_OnValueChanged;
+                    //this.PlaceUIControl(generator);
                     break;
             }
         }
@@ -202,7 +203,7 @@ namespace Incas.Objects.Views.Controls
                     this.SetDateTimeValue(value);
                     break;
                 case FieldType.Generator:
-                    ((Generator)this.control).SetData(value);
+                    //((GeneratorFiller)this.control).SetData(value);
                     break;
             }
         }
@@ -295,8 +296,8 @@ namespace Incas.Objects.Views.Controls
                     return "";
                 case FieldType.Date:
                     return this.GetDateInFormat();
-                case FieldType.Generator:
-                    return ((Generator)this.control).GetText();
+                //case FieldType.Generator:
+                //    return ((GeneratorFiller)this.control).GetText();
             }
         }
         /// <summary>
@@ -307,8 +308,8 @@ namespace Incas.Objects.Views.Controls
         {
             switch (this.GetFillerType())
             {
-                case FieldType.Generator:
-                    return ((Generator)this.control).GetData();
+                //case FieldType.Generator:
+                //    return ((GeneratorFiller)this.control).GetData();
                 case FieldType.Date:
                     if (((DatePicker)this.control).SelectedDate.HasValue)
                     {

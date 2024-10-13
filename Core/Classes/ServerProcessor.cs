@@ -31,9 +31,6 @@ namespace Incas.Core.Classes
         EXPLICIT = 103,
         GET_USER = 105,
         // ALL USERS
-        OPEN_SEQUENCER = 201,
-        OPEN_GENERATOR = 202,
-        REQUEST_TEXT = 213,
         COPY_TEXT = 214,
         COPY_FILE = 215,
         OPEN_FILE = 216,
@@ -69,35 +66,6 @@ namespace Incas.Core.Classes
         public ProcessType type;
         public ProcessTarget target;
         public string content;
-    }
-
-    internal static class WaitControls
-    {
-        public static List<FieldFiller> TagFillers = [];
-        public static Dictionary<string, Generator> Generators = [];
-        public static Generator GetGenerator(string process)
-        {
-            Generator g = Generators[process];
-            Generators.Remove(process);
-            return g;
-        }
-        public static void RemoveGenerator(Generator g)
-        {
-            string key = "";
-            foreach (KeyValuePair<string, Generator> pair in Generators)
-            {
-                if (pair.Value == g)
-                {
-                    key = pair.Key;
-                    break;
-                }
-            }
-            try
-            {
-                Generators.Remove(key);
-            }
-            catch { }
-        }
     }
 
     internal static class ServerProcessor
@@ -229,9 +197,6 @@ namespace Incas.Core.Classes
                         case ProcessTarget.EXPLICIT: // admin process
                             ShowExplicitMessageProcessHandle(process.content, process);
                             break;
-                        case ProcessTarget.OPEN_GENERATOR:
-                            OpenGeneratorProcessHandle(process);
-                            break;
                         case ProcessTarget.COPY_TEXT:
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
@@ -259,34 +224,6 @@ namespace Incas.Core.Classes
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
                                 DialogsManager.ShowInfoDialog($"Пользователь ответил: {process.content}", "Ответ на запрос");
-                            });
-                            break;
-                        case ProcessTarget.REQUEST_TEXT:
-                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                string uid = process.content.Split("|||")[0];
-                                string value = process.content.Split("|||")[1];
-                                for (int i = 0; i <= WaitControls.TagFillers.Count; i++)
-                                {
-                                    if (WaitControls.TagFillers[i].GetId() == Guid.Parse(uid))
-                                    {
-                                        WaitControls.TagFillers[i].SetValue(value);
-                                        WaitControls.TagFillers.Remove(WaitControls.TagFillers[i]);
-                                        break;
-                                    }
-                                }
-                            });
-                            break;
-                        case ProcessTarget.OPEN_GENERATOR:
-                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                try
-                                {
-                                    WaitControls
-                                        .GetGenerator(process.back_id)
-                                        .SetData(JsonConvert.DeserializeObject<GeneratedElement>(process.content), "Требуется подтверждение");
-                                }
-                                catch { }
                             });
                             break;
                     }
@@ -516,21 +453,6 @@ namespace Incas.Core.Classes
             Process process = CreateQueryProcess(recipient);
             process.target = ProcessTarget.OPEN_WEB;
             process.content = url;
-            SendToPort(process);
-        }
-        public static void SendOpenSequencerProcess(List<SGeneratedDocument> documents, string recipient)
-        {
-            Process process = CreateQueryProcess(recipient);
-            process.target = ProcessTarget.OPEN_SEQUENCER;
-            process.content = JsonConvert.SerializeObject(documents);
-            SendToPort(process);
-        }
-        public static void SendOpenGeneratorProcess(List<GeneratedElement> part, Generator tagfiller, string recipient)
-        {
-            Process process = CreateQueryProcess(recipient);
-            process.target = ProcessTarget.OPEN_GENERATOR;
-            process.content = JsonConvert.SerializeObject(part);
-            WaitControls.Generators.Add(process.id, tagfiller);
             SendToPort(process);
         }
 

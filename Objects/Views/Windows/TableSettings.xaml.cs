@@ -46,14 +46,14 @@ namespace Incas.Objects.Views.Windows
         }
         private void AddColumnCreator(TableFieldColumnData col)
         {
-            TableColumnCreator creator = new(col);
+            Views.Controls.TableColumnCreator creator = new(col);
             creator.OnRemove += this.Creator_OnRemove;
             creator.OnMoveDownRequested += this.Creator_OnMoveDownRequested;
             creator.OnMoveUpRequested += this.Creator_OnMoveUpRequested;
             this.ContentPanel.Children.Add(creator);
         }
 
-        private int Creator_OnMoveUpRequested(TableColumnCreator t)
+        private int Creator_OnMoveUpRequested(Views.Controls.TableColumnCreator t)
         {
             int position = this.ContentPanel.Children.IndexOf(t);
             if (position < this.ContentPanel.Children.Count - 1)
@@ -65,7 +65,7 @@ namespace Incas.Objects.Views.Windows
             return position;
         }
 
-        private int Creator_OnMoveDownRequested(TableColumnCreator t)
+        private int Creator_OnMoveDownRequested(Views.Controls.TableColumnCreator t)
         {
             int position = this.ContentPanel.Children.IndexOf(t);
             if (position > 0)
@@ -78,7 +78,7 @@ namespace Incas.Objects.Views.Windows
             return position;
         }
 
-        private bool Creator_OnRemove(TableColumnCreator t)
+        private bool Creator_OnRemove(Views.Controls.TableColumnCreator t)
         {
             this.ContentPanel.Children.Remove(t);
             return true;
@@ -89,7 +89,7 @@ namespace Incas.Objects.Views.Windows
             try
             {
                 List<TableFieldColumnData> list = new();
-                foreach (TableColumnCreator creator in this.ContentPanel.Children)
+                foreach (Views.Controls.TableColumnCreator creator in this.ContentPanel.Children)
                 {
                     list.Add(creator.GetField());
                 }

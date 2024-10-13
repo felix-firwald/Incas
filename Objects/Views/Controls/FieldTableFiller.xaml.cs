@@ -17,14 +17,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Incas.Objects.Interfaces;
-using static Incas.Objects.Interfaces.IFiller;
+using static Incas.Objects.Interfaces.IFillerBase;
 
 namespace Incas.Objects.Views.Controls
 {
     /// <summary>
     /// Логика взаимодействия для FieldTableFiller.xaml
     /// </summary>
-    public partial class FieldTableFiller : System.Windows.Controls.UserControl, IFiller
+    public partial class FieldTableFiller : System.Windows.Controls.UserControl, ITableFiller
     {
         private TableFillerViewModel vm;
         public Objects.Models.Field Field { get; set; }
@@ -179,6 +179,11 @@ namespace Incas.Objects.Views.Controls
                             nc.Binding = new System.Windows.Data.Binding(e.Column.Header.ToString());
                             nc.EditingElementStyle = this.FindResource("TextBoxGrid") as Style;
                             e.Column = nc;
+                            //DataGridTemplateColumn dt = new();
+                            //dt.Header = col.VisibleName;
+                            //dt.CellTemplate = this.FindResource("EditingNumberTemplate") as DataTemplate;
+                            //dt.CellEditingTemplate = this.FindResource("EditingNumberTemplate") as DataTemplate;
+                            //e.Column = dt;
                             break;
                     }
                     break;
