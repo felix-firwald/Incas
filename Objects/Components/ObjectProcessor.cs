@@ -9,6 +9,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Incas.Objects.Components
@@ -197,7 +198,117 @@ namespace Incas.Objects.Components
             q.Clear();
             q.AddCustomRequest(updateRequest.ToString());
             q.ExecuteVoid();
+            ObjectProcessor.CheckComplianceWithConstraints(cl);
         }
+        delegate bool Check(string value, Models.Field field);
+        private async static void CheckComplianceWithConstraints(Class cl)
+        {
+            static List<Guid> CheckRows(Check func, Models.Field f, DataRowCollection collection)
+            {
+                List<Guid> errors = new();
+                foreach (DataRow row in collection)
+                {
+                    if (!func(row[f.Id.ToString()].ToString(), f))
+                    {
+                        errors.Add(Guid.Parse(row[ObjectProcessor.IdField].ToString()));
+                    }
+                }
+                return errors;
+            }
+            static List<Guid> CheckRowsEnumeration(Models.Field f, DataRowCollection collection)
+            {
+                List<Guid> errors = new();
+                List<string> values = new();
+                if (f.Type == FieldType.GlobalEnumeration)
+                {
+                    values = ProgramState.GetEnumeration(Guid.Parse(f.Value));
+                    foreach (DataRow row in collection)
+                    {
+                        if (!CheckEnumeration(row[f.Id.ToString()].ToString(), f, values))
+                        {
+                            errors.Add(Guid.Parse(row[ObjectProcessor.IdField].ToString()));
+                        }
+                    }
+                }
+                else
+                {
+                    values = JsonConvert.DeserializeObject<List<string>>(f.Value);
+                    foreach (DataRow row in collection)
+                    {
+                        if (!CheckEnumeration(row[f.Id.ToString()].ToString(), f, values))
+                        {
+                            errors.Add(Guid.Parse(row[ObjectProcessor.IdField].ToString()));
+                        }
+                    }
+                }
+                return errors;
+            }
+            await Task.Run(() =>
+            {              
+                DataTable dt = new();
+                Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+                dt = q.Select().Execute();
+                List<Models.Field> fields = cl.GetClassData().GetSavebleFields();
+                foreach (Models.Field f in fields)
+                {
+                    ProgramStatusBar.SetText($"Проверка соответствия ограничениям поля [{f.Name}] для класса [{cl.name}]...");
+                    switch (f.Type)
+                    {
+                        case FieldType.Variable:
+                        case FieldType.Text:
+                            if (f.NotNull == true)
+                            {
+                                CheckRows(CheckText, f, dt.Rows);
+                            }                    
+                            break;
+                        case FieldType.Number:
+                            CheckRows(CheckNumber, f, dt.Rows);
+                            break;
+                        case FieldType.Date:
+                            CheckRows(CheckDate, f, dt.Rows);
+                            break;
+                        case FieldType.LocalEnumeration:
+                            CheckRowsEnumeration(f, dt.Rows);
+                            break;
+                        case FieldType.GlobalEnumeration:
+                            CheckRowsEnumeration(f, dt.Rows);
+                            break;                      
+                    }                   
+                }
+                ProgramStatusBar.Hide();
+            });
+        }
+        private static bool CheckText(string value, Models.Field field)
+        {
+            return !string.IsNullOrWhiteSpace(value);
+        }
+        private static bool CheckNumber(string value, Models.Field field)
+        {
+            if (string.IsNullOrEmpty(value) && field.NotNull == false)
+            {
+                return true;
+            }
+            int result = 0;
+            return int.TryParse(value, out result);
+        }
+        private static bool CheckDate(string value, Models.Field field)
+        {
+            if (string.IsNullOrEmpty(value) && field.NotNull == false)
+            {
+                return true;
+            }
+            DateTime dt = new();
+            return DateTime.TryParse(value.ToString(), out dt);
+        }
+        private static bool CheckEnumeration(string value, Models.Field field, List<string> values)
+        {
+            if (string.IsNullOrEmpty(value) && field.NotNull == false)
+            {
+                return true;
+            }
+            return values.Contains(value);
+        }
+
         public static void WriteObjects(Class cl, List<Object> objects)
         {
             string path = GetPathToObjectsMap(cl);

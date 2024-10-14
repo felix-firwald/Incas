@@ -1,6 +1,7 @@
 ﻿using Incas.Core.AutoUI;
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
+using Incas.Core.Views.Windows;
 using Incas.Objects.ViewModels;
 using Incas.Users.Models;
 using Microsoft.Win32;
@@ -53,7 +54,8 @@ namespace Incas.Core.Classes
         public static UserParameters CurrentUserParameters { get; set; }
         public static Session CurrentSession { get; private set; }
         #endregion
-        public static MainWindowViewModel MainWindow { get; set; }
+        public static MainWindowViewModel MainWindowViewModel { get; set; }
+        public static MainWindow MainWindow { get; set; }
         public static CustomDatabaseViewModel DatabasePage { get; set; }
 
         public static void CheckoutWorkspaces()

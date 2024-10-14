@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Incas.Objects.Models
 {
@@ -122,8 +123,8 @@ namespace Incas.Objects.Models
         {
             return this.StartCommandToService().Select("[identifier] AS [Идентификатор], [category] AS [Категория], [name] AS [Наименование]").OrderByASC("Категория ASC, Наименование").Execute();
         }
-        private void Update()
-        {
+        private async void Update()
+        {          
             Dictionary<string, string> dict = new()
             {
                 {
@@ -140,7 +141,11 @@ namespace Incas.Objects.Models
                 .Update(dict)
                 .WhereEqual(nameof(this.identifier), this.identifier.ToString())
                 .ExecuteVoid();
-            ObjectProcessor.UpdateObjectMap(this);
+            await Task.Run(() =>
+            {
+                ProgramStatusBar.SetText("Обновление полей в карте объектов...");
+                ObjectProcessor.UpdateObjectMap(this);
+            });           
         }
         public void Save()
         {

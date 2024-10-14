@@ -166,7 +166,7 @@ namespace Incas.Core.Classes
                         {
                             foreach (string content in process.GetNewProcesses())
                             {
-                                ProgramState.MainWindow.ProcessHandled = true;
+                                ProgramState.MainWindowViewModel.ProcessHandled = true;
                                 Switcher(Parse(content));
                             }
                         }
@@ -229,7 +229,7 @@ namespace Incas.Core.Classes
                     }
                 }
                 Thread.Sleep(500);
-                ProgramState.MainWindow.ProcessHandled = false;
+                ProgramState.MainWindowViewModel.ProcessHandled = false;
             });
 
         }

@@ -57,6 +57,23 @@ namespace Incas.Core.Classes
             }
             return false;
         }
+        public static void ShowWebViewer(string path, bool autoremove = true)
+        {
+            DialogsManager.ShowWebViewer("Просмотр", path, autoremove);
+        }
+        public static void ShowWebViewer(string name, string path, bool autoremove)
+        {
+            try
+            {
+                DialogsManager.ShowWaitCursor(false);
+                WebPreviewWindow wp = new(name, path, autoremove);
+                wp.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex, "При попытке открытия документа возникла ошибка");
+            }
+        }
         public static bool ShowFolderDialog(ref string selectedPath)
         {
             return ShowFolderDialog(ref selectedPath, selectedPath);
@@ -135,6 +152,7 @@ namespace Incas.Core.Classes
         }
         public static void ShowErrorDialog(string message, string title = "Возникла неизвестная ошибка")
         {
+            ProgramStatusBar.Hide();
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 if (message == null)
@@ -149,6 +167,7 @@ namespace Incas.Core.Classes
         }
         public static void ShowExclamationDialog(string message, string title = "Обратите внимание")
         {
+            ProgramStatusBar.Hide();
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 ProgramState.PlaySound("UI-Attention");

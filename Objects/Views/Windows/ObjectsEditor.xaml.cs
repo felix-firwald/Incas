@@ -97,7 +97,10 @@ namespace Incas.Objects.Views.Windows
             {
                 ObjectProcessor.WriteObjects(this.Class, creator.PullObject());
                 this.OnUpdateRequested?.Invoke();
-                this.OnSetNewObjectRequested?.Invoke(creator.Object.Id);
+                if (this.OnSetNewObjectRequested != null)
+                {
+                    this.OnSetNewObjectRequested?.Invoke(creator.Object.Id);
+                }            
                 return true;
             }
             catch (NotNullFailed nnex)

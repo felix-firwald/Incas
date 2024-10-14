@@ -1,5 +1,6 @@
 ﻿using Incas.Core.AutoUI;
 using Incas.Core.Classes;
+using Incas.Core.Interfaces;
 using Incas.Core.ViewModels;
 using Incas.Objects.Models;
 using System;
@@ -25,8 +26,9 @@ namespace Incas.Core.Views.Windows
             {
                 System.Windows.Application.Current.Shutdown();
             }
+            ProgramState.MainWindow = this;
             this.vm = new MainWindowViewModel();
-            ProgramState.MainWindow = this.vm;
+            ProgramState.MainWindowViewModel = this.vm;
             this.DataContext = this.vm;
             if (string.IsNullOrEmpty(ProgramState.CurrentUserParameters.password))
             {
@@ -37,8 +39,22 @@ namespace Incas.Core.Views.Windows
                     sp.ShowDialog("Установление нового пароля", Classes.Icon.UserGears);
                 }
             }
-            //this.UpdateTabs();
             this.PlayEasterEgg();
+        }
+        public void PlaceStatusBar(IStatusBar bar)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                
+                this.StatusBarContainer.Child = (Control)bar;
+            });         
+        }
+        public void NullifyStatusBar()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.StatusBarContainer.Child = null;
+            });
         }
         private void PlayEasterEgg(string name = "Chicken")
         {

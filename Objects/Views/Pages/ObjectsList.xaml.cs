@@ -1,4 +1,5 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Office2021.DocumentTasks;
+using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
@@ -6,6 +7,7 @@ using Incas.Objects.Models;
 using Incas.Objects.Views.Windows;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Threading.Tasks;
 using System.Windows;
@@ -101,7 +103,11 @@ namespace Incas.Objects.Views.Pages
             {
                 DataView dv = dt.AsDataView();
                 dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
-                this.Data.ItemsSource = dv;
+                CollectionViewSource cv = new();
+                cv.Source = dv;
+                cv.GroupDescriptions.Add(new PropertyGroupDescription(ObjectProcessor.NameField));
+                cv.GroupDescriptions.Add(new PropertyGroupDescription("Наименование"));
+                this.Data.ItemsSource = cv.View;
             }
             else
             {
@@ -365,28 +371,20 @@ namespace Incas.Objects.Views.Pages
         {
             if (this.ClassData.ShowCard)
             {
+                if (this.sourceClass is null)
+                {
+                    return;
+                }
                 Guid id = this.GetSelectedObjectGuid();
-                DataRowView dg = (DataRowView)this.Data.SelectedItems[0];
-                await Task.Run(() =>
+                await System.Threading.Tasks.Task.Run(() =>
                 {
                     if (id == Guid.Empty)
                     {
-                        this.ObjectCard.SetEmpty();                
+                        this.ObjectCard?.SetEmpty();                
                     }
                     else
                     {
-                        if (this.ClassData.ClassType == ClassType.Generator)
-                        {
-                            Guid targetclass = Guid.Parse(dg.Row[ObjectProcessor.TargetClassField].ToString());
-                            Guid targetobject = Guid.Parse(dg.Row[ObjectProcessor.TargetObjectField].ToString());
-                            Class cl = new(targetclass);
-                            this.ObjectCard.SetClass(cl);
-                            this.ObjectCard.UpdateFor(ObjectProcessor.GetObject(cl, targetobject));
-                        }
-                        else
-                        {
-                            this.ObjectCard.UpdateFor(ObjectProcessor.GetObject(this.sourceClass, id));
-                        }                      
+                        this.ObjectCard?.UpdateFor(ObjectProcessor.GetObject(this.sourceClass, id));                  
                     }
                 });
             }        

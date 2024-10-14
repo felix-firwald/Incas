@@ -56,7 +56,7 @@ namespace Incas.Admin.Views.Pages
                     return;
                 }
                 Guid id = Guid.Parse(((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Идентификатор"].ToString());
-                ParameterConstant c = new();
+                ParameterConstant c = new(true);
                 using (Parameter p = new())
                 {
                     Parameter par = p.GetParameter(id);
@@ -167,7 +167,7 @@ namespace Incas.Admin.Views.Pages
                     return;
                 }
                 Guid id = Guid.Parse(((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"].ToString());
-                ParameterEnum en = new();
+                ParameterEnum en = new(true);
                 using (Parameter p = new())
                 {
                     Parameter par = p.GetParameter(id);

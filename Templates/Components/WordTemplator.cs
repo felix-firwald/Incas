@@ -285,6 +285,31 @@ namespace Incas.Templates.Components
             doc.SaveAs(outputName);
             return outputName;
         }
+        public static string TurnToPDF(string file)
+        {
+            Doc doc = new(file);
+            string outputName = file.Replace(".docx", ".pdf");
+            doc.SaveAs(outputName);
+            return outputName;
+        }
+        public static string ReplaceToPDF(string file)
+        {
+            Doc doc = new(file);
+            string outputName = file.Replace(".docx", ".pdf");
+            doc.SaveAs(outputName);
+            if (File.Exists(file))
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch
+                {
+
+                }
+            }
+            return outputName;
+        }
 
         public void GetTextOfFile()
         {

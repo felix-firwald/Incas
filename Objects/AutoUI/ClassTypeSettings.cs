@@ -31,7 +31,7 @@ namespace Incas.Objects.AutoUI
             {
                 { ClassType.Model, "Модель данных" },
                 { ClassType.Document, "Документ (процесс)" },
-                { ClassType.Generator, "Генератор" }
+                //{ ClassType.Generator, "Генератор" }
             };
             this.Selector = new(pairs);
         }

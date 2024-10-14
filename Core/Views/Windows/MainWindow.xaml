@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-         xmlns:pages="clr-namespace:Incas.Templates.Views.Pages" xmlns:pages1="clr-namespace:Incas.Objects.Views.Pages" xmlns:pages2="clr-namespace:Incas.Admin.Views.Pages" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
+         xmlns:pages="clr-namespace:Incas.Templates.Views.Pages" xmlns:pages1="clr-namespace:Incas.Objects.Views.Pages" xmlns:pages2="clr-namespace:Incas.Admin.Views.Pages" xmlns:controls="clr-namespace:Incas.Core.Views.Controls" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
         mc:Ignorable="d"
         Height="900"
         Width="1300"
@@ -34,7 +34,7 @@
             <TextBlock x:Name="LFullname" Foreground="White" Text="{Binding SecondName}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
             <TextBlock x:Name="LPost" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
             <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
-            
+
             <RadioButton x:Name="DocumentsRadio" Style="{StaticResource MenuButton}" GroupName="Tabs" Cursor="Hand" >
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -116,18 +116,28 @@
             </TabControl>
         </Border>
         <Border Background="{StaticResource Dark}" Grid.Row="1" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
-                <Label Style="{StaticResource LabelElement}" Content="© INCAS 2024" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" VerticalContentAlignment="Center"/>
-                <Image Height="30" Width="30" Source="/Core/Views/Windows/Logo.png" UseLayoutRounding="False" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" MouseDown="Logo_MouseDown" Margin="12,0,12,0"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                    <Label Style="{StaticResource LabelElement}" Content="© INCAS 2024" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" VerticalContentAlignment="Center"/>
+                    <Image Height="30" Width="30" Source="/Core/Views/Windows/Logo.png" UseLayoutRounding="False" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" MouseDown="Logo_MouseDown" Margin="12,0,12,0"/>
 
-                <Label Style="{StaticResource LabelElement}" Content="{Binding Version}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                <Rectangle Fill="{DynamicResource Element}" Width="1" Margin="6"/>
-                <Label Style="{StaticResource LabelElement}" Content="Все права защищены" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" Foreground="{DynamicResource Icon}" VerticalContentAlignment="Center">
-                </Label>
-            </StackPanel>
+                    <Label Style="{StaticResource LabelElement}" Content="{Binding Version}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                    <Rectangle Fill="{DynamicResource Element}" Width="1" Margin="6"/>
+                    <Label Style="{StaticResource LabelElement}" Content="Все права защищены" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" Foreground="{DynamicResource Icon}" VerticalContentAlignment="Center">
+                    </Label>
+                </StackPanel>
+                <Border x:Name="StatusBarContainer" Grid.Column="1">
+
+                </Border>
+            </Grid>
+
         </Border>
         <StackPanel Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="2" Background="{StaticResource LightBlack}">
-            
+
             <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenClipBoard}" CommandParameter="Clipboard" ToolTip="(F1) Открыть постоянный буфер обмена">
                 <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M10 1.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5zm-2 0h1v1A2.5 2.5 0 0 0 6.5 5h3A2.5 2.5 0 0 0 12 2.5v-1h1a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2"/>
             </Button>

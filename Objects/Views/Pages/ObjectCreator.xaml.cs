@@ -1,4 +1,5 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
@@ -11,6 +12,8 @@ using Incas.Templates.Views.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -32,6 +35,7 @@ namespace Incas.Objects.Views.Pages
         public event ObjectCreatorData OnSaveRequested;
         public event ObjectCreatorData OnRemoveRequested;
         private bool Locked = false;
+        private List<IFillerBase> fillers;
         public ObjectCreator(Class source, ClassData data, Components.Object obj = null)
         {
             this.InitializeComponent();
@@ -80,13 +84,6 @@ namespace Incas.Objects.Views.Pages
                 this.ContentPanel.IsEnabled = false;
                 SolidColorBrush color = new(System.Windows.Media.Color.FromRgb(52, 201, 36));
                 this.Separator.Fill = color;
-                //System.Windows.Controls.Label label = new()
-                //{
-                //    Content = "Процесс завершен.",
-                //    Margin = new Thickness(5),
-                //    Foreground = color
-                //};
-                //this.ContentPanel.Children.Insert(0, label);
             }
         }
         private void ApplyAuthorConstraint()
@@ -106,6 +103,7 @@ namespace Incas.Objects.Views.Pages
         }
         private void FillContentPanel()
         {
+            this.fillers = new();
             foreach (Objects.Models.Field f in this.ClassData.Fields)
             {
                 switch (f.Type)
@@ -119,6 +117,7 @@ namespace Incas.Objects.Views.Pages
                         ff.OnFillerUpdate += this.Tf_OnFieldUpdate;
                         ff.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
                         this.ContentPanel.Children.Add(ff);
+                        this.fillers.Add(ff);
                         break;
                     case FieldType.Table:
                         FieldTableFiller ft = new(f)
@@ -129,6 +128,7 @@ namespace Incas.Objects.Views.Pages
                         ft.OnFillerUpdate += this.Tf_OnFieldUpdate;
                         ft.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
                         this.ContentPanel.Children.Add(ft);
+                        this.fillers.Add(ft);
                         break;
                     case FieldType.Generator:
                         FieldGeneratorFiller fg = new(f)
@@ -139,6 +139,7 @@ namespace Incas.Objects.Views.Pages
                         fg.OnFillerUpdate += this.Tf_OnFieldUpdate;
                         fg.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
                         this.ContentPanel.Children.Add(fg);
+                        this.fillers.Add(fg);
                         break;
                 }
             }
@@ -282,6 +283,7 @@ namespace Incas.Objects.Views.Pages
         }
         public string GenerateDocument(TemplateData templateData, string folder, bool async = true)
         {
+            ProgramStatusBar.SetText("Рендеринг документа...");
             string newFile = "";
             string oldFile = templateData.File;
             ITemplator templ = null;
@@ -315,6 +317,7 @@ namespace Incas.Objects.Views.Pages
                 {
                     templ.GenerateDocument(fillers);
                 }
+                ProgramStatusBar.Hide();
                 return newFile;
             }
             catch (IOException ioex)
@@ -404,6 +407,8 @@ namespace Incas.Objects.Views.Pages
 
         private void PreviewCLick(object sender, MouseButtonEventArgs e)
         {
+            ProgramStatusBar.SetText("Рендеринг документа...");
+            Thread.Sleep(10);
             try
             {
                 if (this.OnSaveRequested?.Invoke(this) == false)
@@ -420,11 +425,8 @@ namespace Incas.Objects.Views.Pages
                     }
                     DialogsManager.ShowWaitCursor(true);
                     string name = this.GenerateDocument(this.ClassData.Templates[1], path, false);
-                    WordTemplator wt = new(name);
-                    string fileXPS = wt.TurnToXPS();
-                    DialogsManager.ShowWaitCursor(false);
-                    PreviewWindow pr = new(fileXPS, true);
-                    pr.Show();
+                    DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.name})", WordTemplator.ReplaceToPDF(name), true);
+
                 }
                 else if (this.ClassData.Templates?.Count > 1)
                 {
@@ -437,11 +439,7 @@ namespace Incas.Objects.Views.Pages
                             return;
                         }
                         string name = this.GenerateDocument(ts.GetSelectedPath(), path, false);
-                        WordTemplator wt = new(name);
-                        string fileXPS = wt.TurnToXPS();
-                        DialogsManager.ShowWaitCursor(false);
-                        PreviewWindow pr = new(fileXPS, true);
-                        pr.Show();
+                        DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.name})", WordTemplator.ReplaceToPDF(name), true);
                     }
                 }
             }
