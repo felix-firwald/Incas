@@ -31,11 +31,6 @@ namespace Incas.Core.Classes
                 ProgramStatusBar.LoadingBox.SetText(text);
             }));
             Thread.Sleep(10);
-            //if (LoadingBox is null)
-            //{
-            //    InitializeLoadingBox();
-            //}
-            //ProgramStatusBar.LoadingBox.SetText(text);
         }
         public static void Hide()
         {

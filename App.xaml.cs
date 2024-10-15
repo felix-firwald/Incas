@@ -16,9 +16,6 @@ namespace Incas
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            //WordTemplator.TurnToPDF("C:\\Users\\1\\Documents\\1 потом удалить\\Ведомость академической разницы Бударагина Оксана Алексеевна.docx");
-            //Incas.Core.Views.Windows.WebPreviewWindow wp = new("C:\\Users\\1\\Documents\\1 потом удалить\\Ведомость академической разницы Бударагина Оксана Алексеевна.pdf");
-            //wp.ShowDialog();
             if (DateTime.Now > ExpirationDate)
             {
                 DialogsManager.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");

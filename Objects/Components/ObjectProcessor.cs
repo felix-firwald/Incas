@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Office2010.Excel;
 using Incas.Core.Classes;
 using Incas.Objects.Models;
+using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
 using Spire.Xls;
 using System;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Incas.Objects.Components
 {
@@ -104,17 +106,34 @@ namespace Incas.Objects.Components
         /// </summary>
         public const string DataField = "DATA";
 
-        
         #endregion
+        /// <summary>
+        /// Get path to .objinc file by id of class
+        /// </summary>
+        /// <returns>Full path to a database</returns>
         public static string GetPathToObjectsMap(Class cl)
         {
             return cl == null ? "" : $"{ProgramState.ObjectsPath}\\{cl.identifier}.objinc";
         }
+
+        /// <summary>
+        /// Get path to .objinc file by guid
+        /// </summary>
+        /// <returns>Full path to a database</returns>
         private static string GetPathToObjectsMap(Guid id)
         {
             return $"{ProgramState.ObjectsPath}\\{id}.objinc";
         }
+        public static string GetPathToAttachmentsFolder(Guid classId, Guid objectId)
+        {
+            string result = $"{ProgramState.ObjectsPath}\\{classId}\\{objectId}\\";
+            Directory.CreateDirectory(result);
+            return result;
+        }
 
+        /// <summary>
+        /// Initializes .objinc file
+        /// </summary>
         public static void InitializeObjectMap(Class cl)
         {
             ClassData data = cl.GetClassData();
@@ -146,11 +165,34 @@ namespace Incas.Objects.Components
             q.AddCustomRequest(request.ToString());
             q.ExecuteVoid();
         }
-        public static void DropObjectMap(Class cl)
+
+        /// <summary>
+        /// Removes .objinc file
+        /// </summary>
+        /// <param name="cl"></param>
+        public async static void DropObjectMap(Class cl)
         {
-            string path = GetPathToObjectsMap(cl);
-            File.Delete(path);
+            await Task.Run(() =>
+            {
+                string path = GetPathToObjectsMap(cl);
+                Query q = new("", path);
+                q.BeginTransaction();
+                q.AddCustomRequest($"DROP TABLE IF EXISTS [{MainTable}]; " +
+                    $"DROP TABLE IF EXISTS [{EditsTable}]; " +
+                    $"DROP TABLE IF EXISTS [{CommentsTable}]; ");
+                q.EndTransaction();
+                q.ExecuteVoid();
+                try
+                {
+                    File.Delete(path);
+                }
+                catch { }
+            });
         }
+        /// <summary>
+        /// Updates objects map [<see cref="MainTable"/>] in .objinc by a class
+        /// </summary>
+        /// <param name="cl"></param>
         public static void UpdateObjectMap(Class cl)
         {
             List<string> serviceColumns =
@@ -200,7 +242,16 @@ namespace Incas.Objects.Components
             q.ExecuteVoid();
             ObjectProcessor.CheckComplianceWithConstraints(cl);
         }
+        /// <summary>
+        /// For checking compliance
+        /// </summary>
+        /// <returns>false if check is failed</returns>
         delegate bool Check(string value, Models.Field field);
+
+        /// <summary>
+        /// Check objects map after an update
+        /// </summary>
+        /// <param name="cl"></param>
         private async static void CheckComplianceWithConstraints(Class cl)
         {
             static List<Guid> CheckRows(Check func, Models.Field f, DataRowCollection collection)
@@ -243,6 +294,14 @@ namespace Incas.Objects.Components
                 }
                 return errors;
             }
+            static void ShowWindow(Models.Class cl, List<Guid> list, Models.Field field)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ObjectsCorrector oc = new(cl, list, field);
+                    oc.ShowDialog();
+                });             
+            }
             await Task.Run(() =>
             {              
                 DataTable dt = new();
@@ -252,36 +311,65 @@ namespace Incas.Objects.Components
                 foreach (Models.Field f in fields)
                 {
                     ProgramStatusBar.SetText($"Проверка соответствия ограничениям поля [{f.Name}] для класса [{cl.name}]...");
+                    List<Guid> guids;
                     switch (f.Type)
                     {
                         case FieldType.Variable:
                         case FieldType.Text:
                             if (f.NotNull == true)
                             {
-                                CheckRows(CheckText, f, dt.Rows);
+                                guids = CheckRows(CheckText, f, dt.Rows);
+                                if (guids.Count > 0)
+                                {
+                                    ShowWindow(cl, guids, f);
+                                }                                
                             }                    
                             break;
                         case FieldType.Number:
-                            CheckRows(CheckNumber, f, dt.Rows);
+                            guids = CheckRows(CheckNumber, f, dt.Rows);
+                            if (guids.Count > 0)
+                            {
+                                ShowWindow(cl, guids, f);
+                            }                              
                             break;
                         case FieldType.Date:
-                            CheckRows(CheckDate, f, dt.Rows);
+                            guids = CheckRows(CheckDate, f, dt.Rows);
+                            if (guids.Count > 0)
+                            {
+                                ShowWindow(cl, guids, f);
+                            }                               
                             break;
                         case FieldType.LocalEnumeration:
-                            CheckRowsEnumeration(f, dt.Rows);
+                            guids = CheckRowsEnumeration(f, dt.Rows);
+                            if (guids.Count > 0)
+                            {
+                                ShowWindow(cl, guids, f);
+                            }                                
                             break;
                         case FieldType.GlobalEnumeration:
-                            CheckRowsEnumeration(f, dt.Rows);
+                            guids = CheckRowsEnumeration(f, dt.Rows);
+                            if (guids.Count > 0)
+                            {
+                                ShowWindow(cl, guids, f);
+                            }                           
                             break;                      
                     }                   
                 }
                 ProgramStatusBar.Hide();
             });
         }
+        /// <summary>
+        /// Checks <see cref="FieldType.Text"/> and <see cref="FieldType.Variable"/>
+        /// </summary>
+        /// <returns>false if check is failed</returns>
         private static bool CheckText(string value, Models.Field field)
         {
             return !string.IsNullOrWhiteSpace(value);
         }
+        /// <summary>
+        /// Checks <see cref="FieldType.Number"/>
+        /// </summary>
+        /// <returns>false if check is failed</returns>
         private static bool CheckNumber(string value, Models.Field field)
         {
             if (string.IsNullOrEmpty(value) && field.NotNull == false)
@@ -291,6 +379,10 @@ namespace Incas.Objects.Components
             int result = 0;
             return int.TryParse(value, out result);
         }
+        /// <summary>
+        /// Checks <see cref="FieldType.Date"/>
+        /// </summary>
+        /// <returns>false if check is failed</returns>
         private static bool CheckDate(string value, Models.Field field)
         {
             if (string.IsNullOrEmpty(value) && field.NotNull == false)
@@ -300,6 +392,10 @@ namespace Incas.Objects.Components
             DateTime dt = new();
             return DateTime.TryParse(value.ToString(), out dt);
         }
+        /// <summary>
+        /// Checks <see cref="FieldType.GlobalEnumeration"/> and <see cref="FieldType.LocalEnumeration"/>
+        /// </summary>
+        /// <returns>false if check is failed</returns>
         private static bool CheckEnumeration(string value, Models.Field field, List<string> values)
         {
             if (string.IsNullOrEmpty(value) && field.NotNull == false)
@@ -309,17 +405,20 @@ namespace Incas.Objects.Components
             return values.Contains(value);
         }
 
-        public static void WriteObjects(Class cl, List<Object> objects)
+        public async static void WriteObjects(Class cl, List<Object> objects)
         {
-            string path = GetPathToObjectsMap(cl);
-            Query q = new(ObjectProcessor.MainTable, path);
-            q.BeginTransaction();
-            foreach (Object obj in objects)
+            await Task.Run(() =>
             {
-                ObjectProcessor.GetRequestForWritingObject(q, cl, cl.GetClassData(), obj);
-            }
-            q.EndTransaction();
-            q.ExecuteVoid();
+                string path = GetPathToObjectsMap(cl);
+                Query q = new(ObjectProcessor.MainTable, path);
+                q.BeginTransaction();
+                foreach (Object obj in objects)
+                {
+                    ObjectProcessor.GetRequestForWritingObject(q, cl, cl.GetClassData(), obj);
+                }
+                q.EndTransaction();
+                q.ExecuteVoid();
+            });           
         }
         public static void WriteObjects(Class cl, Object obj)
         {
@@ -431,6 +530,35 @@ namespace Incas.Objects.Components
             }
             return q.Execute();
         }
+        #region Update For Correction
+        public static DataTable GetSimpleObjectsWhereIdForCorrection(Class cl, List<Guid> list, Models.Field f)
+        {
+            Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+            List<string> ids = new();
+            foreach (Guid id in list)
+            {
+                ids.Add(id.ToString());
+            }
+            return q.Select($"[{IdField}], [{NameField}] AS [Наименование объекта], [{f.Id}] AS [Значение]").WhereIn(ObjectProcessor.IdField, ids).Execute();
+        }
+        public async static void UpdateFieldsByIdForCorrection(Class cl, Dictionary<string, string> fields, Models.Field f)
+        {
+            await Task.Run(() =>
+            {
+                Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+                q.BeginTransaction();
+                foreach (KeyValuePair<string, string> kvp in fields)
+                {
+                    Dictionary<string, string> dict = new();
+                    dict.Add(f.Id.ToString(), kvp.Value);
+                    q.Update(dict).WhereEqual(ObjectProcessor.IdField, kvp.Key.ToString());
+                    q.SeparateCommand();
+                }
+                q.EndTransaction();
+                q.ExecuteVoid();
+            });           
+        }
+        #endregion
         public static DataTable GetObjectsList(Class cl, string WhereCondition = null)
         {
             Query q = new("", GetPathToObjectsMap(cl));
@@ -591,5 +719,66 @@ namespace Incas.Objects.Components
             q.Delete();
             q.WhereEqual(IdField, id.ToString()).Execute();
         }
+        #region Attachments & Comments
+        public static void WriteComment(Class cl, Object target, ObjectComment comment)
+        {
+            comment.CreationDate = DateTime.Now;
+            comment.Type = CommentType.File;
+            comment.AuthorId = ProgramState.CurrentUser.id;
+            comment.TargetObject = target.Id;
+            Dictionary<string, string> values = new()
+            {
+                { IdField, comment.Id.ToString() },
+                { DateCreatedField, comment.CreationDate.ToString() },
+                { AuthorField, comment.AuthorId.ToString() },
+                { TypeField, comment.Type.ToString() },
+                { TargetObjectField, comment.TargetObject.ToString() },
+                { DataField, comment.Data }
+            };
+
+            Query q = new(ObjectProcessor.CommentsTable, GetPathToObjectsMap(cl));
+            if (comment.Id == Guid.Empty) // if NEW
+            {
+                comment.Id = Guid.NewGuid();
+                values[IdField] = comment.Id.ToString();
+                q.Insert(values);
+                q.ExecuteVoid();
+            }
+            else // if EDIT
+            {
+                values.Remove(IdField);
+                q.Update(values)
+                    .WhereEqual(IdField, comment.Id.ToString())
+                    .ExecuteVoid();
+            }
+        }
+        public static List<ObjectComment> GetObjectComments(Class cl, Object target)
+        {
+            List<ObjectComment> result = new();
+            Query q = new(CommentsTable, GetPathToObjectsMap(cl));
+            DataTable dt = q.Select()
+                .WhereEqual(TargetObjectField, target.Id.ToString())
+                .Execute();
+            foreach (DataRow row in dt.Rows)
+            {
+                ObjectComment oc = new()
+                {
+                    Id = Guid.Parse(row[IdField].ToString()),
+                    Class = cl.identifier,
+                    CreationDate = DateTime.Parse(row[DateCreatedField].ToString()),
+                    TargetObject = target.Id,
+                    AuthorId = Guid.Parse(row[AuthorField].ToString()),
+                    Data = row[DataField].ToString()
+                };
+                result.Add(oc);
+            }
+            return result;
+        }
+        public static void RemoveObjectComment(Class cl, ObjectComment comment)
+        {
+            Query q = new(CommentsTable, GetPathToObjectsMap(cl));
+            q.Delete().WhereEqual(IdField, comment.Id.ToString()).ExecuteVoid();
+        }
+        #endregion
     }
 }

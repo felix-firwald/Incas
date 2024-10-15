@@ -95,24 +95,31 @@ namespace Incas.Objects.Views.Pages
             this.UpdateViewWithFilter(data);
         }
 
-        private void UpdateView()
+        private async void UpdateView()
         {
-            DataTable dt = ObjectProcessor.GetObjectsList(this.sourceClass);
-            this.Data.Columns.Clear();
-            if (this.ClassData.ClassType == ClassType.Model)
+            await System.Threading.Tasks.Task.Run(() =>
             {
-                DataView dv = dt.AsDataView();
-                dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
-                CollectionViewSource cv = new();
-                cv.Source = dv;
-                cv.GroupDescriptions.Add(new PropertyGroupDescription(ObjectProcessor.NameField));
-                cv.GroupDescriptions.Add(new PropertyGroupDescription("Наименование"));
-                this.Data.ItemsSource = cv.View;
-            }
-            else
-            {
-                this.Data.ItemsSource = dt.AsDataView();
-            }
+                DataTable dt = ObjectProcessor.GetObjectsList(this.sourceClass);
+                
+                if (this.ClassData.ClassType == ClassType.Model)
+                {
+                    DataView dv = dt.AsDataView();
+                    dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        this.Data.Columns.Clear();
+                        this.Data.ItemsSource = dv;
+                    });                   
+                }
+                else
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        this.Data.Columns.Clear();
+                        this.Data.ItemsSource = dt.AsDataView();
+                    });                   
+                }
+            });          
         }
         private void UpdateViewWithSearch(FieldData data)
         {

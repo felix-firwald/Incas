@@ -38,7 +38,29 @@
                     <TextBox x:Name="StatusDescription" Margin="5" IsReadOnly="True" FontFamily="JetBrains Mono" Style="{StaticResource TextBoxEmpty}" Foreground="{StaticResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" />
                 </StackPanel>
             </Border>
-            <ScrollViewer Grid.Row="2" Margin="0,5,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ScrollViewer AllowDrop="True" Grid.Row="2" Margin="0,5,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Drop="OnFilesDrop">
+                <!--<ScrollViewer.Style>
+                    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource ScrollViewerBase}">
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="DragEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="#2D3B50" Storyboard.TargetProperty="Background.Color"/>
+                                        <ThicknessAnimation Duration="0:0:0.05" To="2" Storyboard.TargetProperty="BorderThickness"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="DragLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF2F323C" Storyboard.TargetProperty="Background.Color"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetProperty="BorderThickness"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ScrollViewer.Style>-->
                 <StackPanel x:Name="FieldsContentPanel" >
 
                 </StackPanel>

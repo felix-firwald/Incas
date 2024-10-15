@@ -1,4 +1,5 @@
-﻿using Incas.Objects.Models;
+﻿using Incas.Objects.Interfaces;
+using Incas.Objects.Models;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ namespace Incas.Objects.Components
         public Field ClassField { get; set; }
         public string Value { get; set; }
     }
-    public class Object
+    public class Object : IObject
     {
         public Guid Id { get; set; }
         public DateTime CreationDate { get; set; }

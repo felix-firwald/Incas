@@ -7,6 +7,7 @@ using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -187,6 +188,13 @@ namespace Incas.Objects.Views.Pages
                     this.FieldsContentPanel.Children.Add(ob);
                 }
                 ((IObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
+                if (this.ClassData.ClassType == ClassType.Document)
+                {
+                    foreach (ObjectComment oc in ObjectProcessor.GetObjectComments(this.Class, obj))
+                    {
+                        this.FieldsContentPanel.Children.Add(new ObjectAttachment(oc));
+                    }
+                }
             });         
         }
 
@@ -247,6 +255,43 @@ namespace Incas.Objects.Views.Pages
             else
             {
                 DialogsManager.ShowExclamationDialog("Повышение статуса невозможно.", "Действие прервано");
+            }
+        }
+
+        private void OnFilesDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                if (this.ClassData.ClassType != ClassType.Document)
+                {
+                    DialogsManager.ShowExclamationDialog("Прикрепление файлов доступно только для документов.", "Действие невозможно");
+                    return;
+                }
+                DialogsManager.ShowWaitCursor();
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                Components.Object obj = new();
+                obj.Id = this.id;
+                foreach (string file in files)
+                {
+                    try
+                    {
+                        ObjectComment comment = new();
+                        string filename = System.IO.Path.GetFileName(file);
+                        comment.Data = filename;
+                        File.Copy(file, ObjectProcessor.GetPathToAttachmentsFolder(this.Class.identifier, obj.Id) + filename);
+                        ObjectProcessor.WriteComment(this.Class, obj, comment);
+                    }
+                    catch (IOException ex)
+                    {
+                        DialogsManager.ShowErrorDialog("Похоже, что файл с таким именем уже существует: " + ex.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        DialogsManager.ShowErrorDialog(ex);
+                    }
+                }
+                DialogsManager.ShowWaitCursor(false);
+                this.UpdateFor(ObjectProcessor.GetObject(this.Class, this.id));
             }
         }
     }
