@@ -30,11 +30,6 @@ namespace Incas.Objects.Components
         public const string EditsTable = "EDITS_MAP";
 
         /// <summary>
-        /// Table in .objinc storing references to attached files to documents storing in <see cref="MainTable"/>, typical only for documents
-        /// </summary>
-        public const string AttachmentsTable = "ATTACHMENTS_MAP";
-
-        /// <summary>
         /// Table in .objinc storing user comments for documents storing in <see cref="MainTable"/>, typical only for documents
         /// </summary>
         public const string CommentsTable = "COMMENTS_MAP";
@@ -182,9 +177,16 @@ namespace Incas.Objects.Components
                     $"DROP TABLE IF EXISTS [{CommentsTable}]; ");
                 q.EndTransaction();
                 q.ExecuteVoid();
+                Task.Delay(1000);
                 try
                 {
                     File.Delete(path);
+                }
+                catch { }
+                try
+                {
+                    string folder = $"{ProgramState.ObjectsPath}\\{cl.identifier}";
+                    Directory.Delete(folder, true);
                 }
                 catch { }
             });
@@ -565,6 +567,7 @@ namespace Incas.Objects.Components
             ClassData data = cl.GetClassData();
             List<Objects.Models.Field> fields = data.GetFieldsForMap();
             List<string> fieldsRequest = [$"[OBJECTS_MAP].[{IdField}]"];
+            fieldsRequest.Add($"[OBJECTS_MAP].[{StatusField}]");
             if (data.ClassType == ClassType.Document)
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{DateCreatedField}]");

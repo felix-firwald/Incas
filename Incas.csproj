@@ -203,6 +203,7 @@
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2792.45" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="PDFsharp" Version="6.1.1" />
     <PackageReference Include="SixLabors.Fonts" Version="1.0.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
@@ -237,7 +238,6 @@
     <Folder Include="Admin\Models\" />
     <Folder Include="Admin\Components\" />
     <Folder Include="Resources\" />
-    <Folder Include="Templates\AutoUI\" />
     <Folder Include="Grids\" />
   </ItemGroup>
   <ItemGroup>

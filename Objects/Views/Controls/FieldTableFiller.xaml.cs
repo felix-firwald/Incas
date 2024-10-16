@@ -50,7 +50,14 @@ namespace Incas.Objects.Views.Controls
         }
         public void SetValue(string data)
         {
-            this.SetData(JsonConvert.DeserializeObject<DataTable>(data));
+            try
+            {
+                this.SetData(JsonConvert.DeserializeObject<DataTable>(data));
+            }
+            catch (Exception)
+            {
+
+            }
         }
         /// <summary>
         /// Internal using

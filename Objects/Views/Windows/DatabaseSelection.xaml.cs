@@ -47,7 +47,7 @@ namespace Incas.Objects.Views.Windows
                 this.IsEnabled = false;
                 return;
             }
-            this.Title = $"Выбор записи ({this.Class.name})";
+            this.Title = $"Выбор объекта ({this.Class.name})";
             this.SetFields();
             this.FillList();
         }
@@ -55,7 +55,12 @@ namespace Incas.Objects.Views.Windows
         {
             DataTable dt = ObjectProcessor.GetObjectsList(this.Class);
             this.UpdateItemsSource(dt.Columns);
-            this.Grid.ItemsSource = dt.DefaultView;
+            DataView dv = dt.AsDataView();
+            if (this.ClassData.ClassType == ClassType.Model)
+            {
+                dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
+            }    
+            this.Grid.ItemsSource = dv;
         }
         private void FillList(string field, string value)
         {
@@ -89,32 +94,31 @@ namespace Incas.Objects.Views.Windows
         private void Grid_AutoGeneratingColumn(object sender, System.Windows.Controls.DataGridAutoGeneratingColumnEventArgs e)
         {
             Style style = this.FindResource("ColumnHeaderSpecial") as Style;
-            if (e.Column.Header.ToString() == ObjectProcessor.IdField)
+            switch (e.Column.Header.ToString())
             {
-                e.Column.Visibility = Visibility.Hidden;
-            }
-            else if (e.Column.Header.ToString() is ObjectProcessor.NameField)
-            {
-                e.Column.Header = "Наименование";
-                e.Column.HeaderStyle = style;
-                e.Column.MinWidth = 100;
-                e.Column.CanUserReorder = false;
-            }
-            else if (e.Column.Header.ToString() is ObjectProcessor.DateCreatedField)
-            {
-                e.Column.Header = "Дата создания";
-                e.Column.HeaderStyle = style;
-                e.Column.MinWidth = 100;
-                e.Column.MaxWidth = 120;
-                e.Column.CanUserReorder = false;
-            }
-            else if (e.Column.Header.ToString() is ObjectProcessor.StatusField)
-            {
-                e.Column.Header = "Статус";
-                e.Column.HeaderStyle = style;
-                e.Column.MinWidth = 100;
-                e.Column.MaxWidth = 180;
-                e.Column.CanUserReorder = false;
+                case ObjectProcessor.IdField:
+                    e.Column.Visibility = Visibility.Hidden;
+                    break;
+                case ObjectProcessor.NameField:
+                    e.Column.Header = "Наименование";
+                    e.Column.HeaderStyle = style;
+                    e.Column.MinWidth = 100;
+                    e.Column.CanUserReorder = false;
+                    break;
+                case ObjectProcessor.DateCreatedField:
+                    e.Column.Header = "Дата создания";
+                    e.Column.HeaderStyle = style;
+                    e.Column.MinWidth = 100;
+                    e.Column.MaxWidth = 120;
+                    e.Column.CanUserReorder = false;
+                    break;
+                case ObjectProcessor.StatusField:
+                    e.Column.Visibility = Visibility.Hidden;
+                    break;
+                case ObjectProcessor.TargetClassField:
+                case ObjectProcessor.TargetObjectField:
+                    e.Column.Visibility = Visibility.Hidden;
+                    break;
             }
         }
         private void SelectClick(object sender, RoutedEventArgs e)

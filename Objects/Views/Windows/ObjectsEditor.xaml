@@ -23,7 +23,7 @@
             <Border x:Name="ToolBar" Grid.Row="0" Grid.Column="2" Margin="5,5,5,5" Background="{StaticResource Black}" CornerRadius="8" Grid.RowSpan="2">
                 <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" >
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" MouseDown="AddClick" ToolTip="Добавить ещё один объект" />
-                    <fa:FontAwesome Style="{StaticResource IconButton}" Icon="ArrowLeft" Grid.Column="1" Grid.Row="1" MouseDown="GetFromExcel" ToolTip="Вытянуть из Excel" />
+                    <fa:FontAwesome Style="{StaticResource IconButton}" Icon="SearchPlus" Grid.Column="1" Grid.Row="1" MouseDown="GetFromExcel" ToolTip="Вытянуть из Excel" />
                     <Rectangle Fill="{StaticResource LightBlack}" Height="1" Margin="4,2,4,2"/>
                     <fa:FontAwesome Style="{StaticResource IconButton}" Icon="ArrowRight" Grid.Column="1" Grid.Row="1" MouseDown="SendToExcel" ToolTip="Вытянуть в Excel" />
                     <Rectangle Fill="{StaticResource LightBlack}" Height="1" Margin="4,2,4,2"/>

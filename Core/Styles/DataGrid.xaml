@@ -28,6 +28,7 @@
     <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF9FC7B2"/>
     <Style x:Key="RowMain" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="{StaticResource Black}"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="MinHeight" Value="20"/>
@@ -53,7 +54,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </SelectiveScrollingGrid.RowDefinitions>
-                            <DataGridCellsPresenter Grid.Column="1" ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Foreground="White"/>
+                            <DataGridCellsPresenter Grid.Column="1" ItemsPanel="{TemplateBinding ItemsPanel}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Foreground="{TemplateBinding Foreground}"/>
                             <DataGridDetailsPresenter Grid.Column="1" Grid.Row="1" SelectiveScrollingGrid.SelectiveScrollingOrientation="{Binding AreRowDetailsFrozen, ConverterParameter={x:Static SelectiveScrollingOrientation.Vertical}, Converter={x:Static DataGrid.RowDetailsScrollingConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Visibility="{TemplateBinding DetailsVisibility}"/>
                             <DataGridRowHeader Grid.RowSpan="2" SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Row}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" Foreground="White"/>
                         </SelectiveScrollingGrid>
@@ -65,10 +66,27 @@
             <Trigger Property="IsNewItem" Value="True">
                 <Setter Property="Margin" Value="{Binding NewItemMargin, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
             </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <!--<Setter Property="Background" Value="{StaticResource Area}"/>-->
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:0.100" To="#FF2F323C" Storyboard.TargetProperty="Background.Color"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:0.200" To="#1d1d1f" Storyboard.TargetProperty="Background.Color"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>  
+            </Trigger>
         </Style.Triggers>
     </Style>
     <Style x:Key="CellMain" TargetType="{x:Type DataGridCell}">
-        <Setter Property="Background" Value="{DynamicResource Black}"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{DynamicResource Light}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>
         <Setter Property="BorderThickness" Value="0,0,1,0"/>
@@ -99,7 +117,7 @@
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
                 <!--<Setter Property="Background" Value="{StaticResource Area}"/>-->
-                <Trigger.EnterActions>
+                <!--<Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
                             <ColorAnimation Duration="0:0:0.100" To="#FF393C46" Storyboard.TargetProperty="Background.Color"/>
@@ -112,7 +130,7 @@
                             <ColorAnimation Duration="0:0:0.200" To="#1d1d1f" Storyboard.TargetProperty="Background.Color"/>
                         </Storyboard>
                     </BeginStoryboard>
-                </Trigger.ExitActions>
+                </Trigger.ExitActions>-->
             </Trigger>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
                 <Setter Property="BorderBrush" Value="{DynamicResource Element}"/>

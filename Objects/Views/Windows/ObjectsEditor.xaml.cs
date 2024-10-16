@@ -5,6 +5,8 @@ using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
+using Incas.Templates.AutoUI;
+using Incas.Templates.Components;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -134,50 +136,18 @@ namespace Incas.Objects.Views.Windows
 
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                DialogsManager.ShowWaitCursor();
-                List<Dictionary<string, string>> pairs = [];    // список "файлов", где каждый элемент в списке - это список тегов и значений относящихся к файлу
-                IXLWorksheet ws;
-                try
+                DialogsManager.ShowWaitCursor();               
+                ExcelImporterSettings ei = new(this.ClassData.Fields);
+                if (ei.ShowDialog("Настройка импорта", Core.Classes.Icon.Table))
                 {
-                    XLWorkbook wb = new(fd.FileName);
-                    ws = wb.Worksheet(1);
-                }
-                catch (IOException)
-                {
-                    DialogsManager.ShowErrorDialog("Файл занят другим процессом. Его использование невозможно.");
-                    return;
-                }
-                this.ContentPanel.Children.Clear();
-                foreach (Objects.Models.Field tag in this.ClassData.Fields)
-                {
-                    IXLCell colCell;
-                    try
+                    this.ContentPanel.Children.Clear();
+                    List<Dictionary<string, string>> pairs = ExcelTemplator.GetFromFile(fd.FileName, ei.GetMap());
+                    foreach (Dictionary<string, string> item in pairs)
                     {
-                        colCell = ws.Search(tag.Name, CompareOptions.IgnoreCase).First();   // ищем заголовок столбца с именем аналогичным тегу
-                        int columnNumber = colCell.WorksheetColumn().ColumnNumber();    // номер столбца в листе Excel
-                        int rowNumber = colCell.WorksheetRow().RowNumber() + 1; // номер строки в листе Excel
-                        int fileIndex = 0; // индекс в List
-                        for (int i = rowNumber; i <= ws.LastRowUsed().RowNumber(); i++)
-                        {
-                            if (pairs.Count < fileIndex + 1) // +1 поскольку счет индексов идет с нуля
-                            {
-                                pairs.Add([]);
-                            }
-                            string value = ws.Cell(i, columnNumber).Value.ToString();
-                            pairs[fileIndex].Add(tag.Name, value);
-                            fileIndex++;
-                        }
+                        ObjectCreator fc = this.AddObjectCreator();
+                        fc.ApplyFromExcel(item);
                     }
-                    catch (Exception)
-                    {
-                        continue;
-                    }
-                }
-                foreach (Dictionary<string, string> item in pairs)
-                {
-                    ObjectCreator fc = this.AddObjectCreator();
-                    fc.ApplyFromExcel(item);
-                }
+                }               
                 DialogsManager.ShowWaitCursor(false);
             }
         }

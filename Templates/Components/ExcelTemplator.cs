@@ -2,11 +2,14 @@
 using Incas.Core.Classes;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
+using Incas.Objects.Views.Pages;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Windows.Devices.Geolocation;
 
 namespace Incas.Templates.Components
 {
@@ -224,6 +227,46 @@ namespace Incas.Templates.Components
                 if (match.Value.Contains(patternTable))
                 {
                     result.Add(match.Value.Replace(patternTable, "").TrimEnd(']'));
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// Input dictionary description: key is real name of <see cref="Objects.Models.Field"/>,
+        /// value is searching name for <see cref="Objects.Models.Field"/>.
+        /// Output dictionary description: key is real name of field, 
+        /// value is value.
+        /// </summary>
+        /// <param name="map"></param>
+        /// <returns></returns>
+        public static List<Dictionary<string,string>> GetFromFile(string file, Dictionary<string,string> map)
+        {
+            List<Dictionary<string, string>> result = new();
+            XLWorkbook workbook = new(file);
+            IXLWorksheet worksheet = workbook.Worksheet(1);
+            foreach (KeyValuePair<string, string> pair in map)
+            {
+                IXLCell colCell;
+                try
+                {
+                    colCell = worksheet.Search(pair.Value, CompareOptions.IgnoreCase).First();   // ищем заголовок столбца с именем аналогичным тегу
+                    int columnNumber = colCell.WorksheetColumn().ColumnNumber();    // номер столбца в листе Excel
+                    int rowNumber = colCell.WorksheetRow().RowNumber() + 1; // номер строки в листе Excel
+                    int fileIndex = 0; // индекс в List
+                    for (int i = rowNumber; i <= worksheet.LastRowUsed().RowNumber(); i++)
+                    {
+                        if (result.Count < fileIndex + 1) // +1 поскольку счет индексов идет с нуля
+                        {
+                            result.Add([]);
+                        }
+                        string value = worksheet.Cell(i, columnNumber).Value.ToString();
+                        result[fileIndex].Add(pair.Key, value);
+                        fileIndex++;
+                    }
+                }
+                catch (System.Exception)
+                {
+                    continue;
                 }
             }
             return result;

@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Office2021.DocumentTasks;
 using Incas.Core.Classes;
+using Incas.Core.Views.Controls;
 using Incas.Core.Views.Windows;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
@@ -22,6 +23,7 @@ namespace Incas.Objects.Views.Pages
     /// </summary>
     public partial class ObjectsList : UserControl
     {
+        private const string ColorColumn = "__COLOR_COLUMN__";
         public Class sourceClass;
         public ClassData ClassData;
         private ObjectCard ObjectCard;
@@ -35,11 +37,26 @@ namespace Incas.Objects.Views.Pages
                 this.AddButton.Visibility = Visibility.Collapsed;
                 this.CopyButton.Visibility = Visibility.Collapsed;
             }
+            //this.InitStyle();
             this.UpdateView();
             if (this.ClassData.ShowCard)
             {
                 this.PlaceCard();
+            }           
+        }
+        private DataTable WrapWithStyle(DataTable dt)
+        {
+            if (dt == null || dt.Rows == null)
+            {
+                return dt;
             }
+            dt.Columns.Add(ColorColumn);
+            foreach (DataRow row in dt.Rows)
+            {
+                int n = int.Parse(row[ObjectProcessor.StatusField].ToString());
+                row[ColorColumn] = this.ClassData.Statuses[n].Color;
+            }
+            return dt;
         }
         private void InitStyle()
         {
@@ -62,7 +79,7 @@ namespace Incas.Objects.Views.Pages
                 };
                 Setter setter = new()
                 {
-                    Property = DataGridRow.BackgroundProperty,
+                    Property = DataGridRow.ForegroundProperty,
                     Value = new SolidColorBrush(status.Value.Color)
                 };
                 trigger.Setters.Add(setter);
@@ -174,16 +191,19 @@ namespace Incas.Objects.Views.Pages
                     e.Column.CanUserReorder = false;
                     break;
                 case ObjectProcessor.StatusField:
-                    e.Column.HeaderStyle = style;
-                    e.Column.MinWidth = 100;
-                    e.Column.MaxWidth = 180;
-                    e.Column.CanUserReorder = false;
+                    e.Column.Visibility = Visibility.Hidden;
                     break;
                 case ObjectProcessor.TargetClassField:
                 case ObjectProcessor.TargetObjectField:
                     e.Column.Visibility = Visibility.Hidden;
                     break;
             }
+        }
+
+        private void Data_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            //int n = int.Parse(((DataTable)e.Row.DataContext)[ObjectProcessor.StatusField].ToString());
+            //e.Row.Background = new SolidColorBrush(this.ClassData.Statuses[n].Color);
         }
 
         private void AddClick(object sender, RoutedEventArgs e)

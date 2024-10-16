@@ -8,7 +8,7 @@
              d:DesignHeight="40" d:DesignWidth="400" MinHeight="40">
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="180"/>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
@@ -16,8 +16,8 @@
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="FieldName" Style="{StaticResource TextBlockMain}" Text="Наименование поля" VerticalAlignment="Center" Foreground="{DynamicResource GrayLight}" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>
-        <TextBlock x:Name="FieldValue" Style="{StaticResource TextBlockMain}" ToolTipService.InitialShowDelay="180" Text="(пусто)" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource Light}" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow" Margin="0,5,0,5"/>
+        <TextBlock x:Name="FieldName" Style="{StaticResource TextBlockMain}" FontSize="11" Text="Наименование поля" VerticalAlignment="Center" Foreground="{DynamicResource GrayLight}" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow" Margin="5,0,5,0"/>
+        <TextBlock x:Name="FieldValue" Style="{StaticResource TextBlockMain}" FontSize="11" ToolTipService.InitialShowDelay="180" Text="(пусто)" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource Light}" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow" Margin="0,5,0,5"/>
         <fa:FontAwesome x:Name="FilterButton" Style="{StaticResource IconButton}" Icon="Filter" MouseDown="FilterClick" ToolTip="Показать список объектов с идентичным значением" Grid.Column="2"/>
         <Rectangle x:Name="Separator" Height="1" VerticalAlignment="Bottom" Fill="{DynamicResource Basic}" Grid.ColumnSpan="3" Grid.Row="1"/>
     </Grid>

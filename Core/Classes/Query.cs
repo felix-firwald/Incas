@@ -487,8 +487,6 @@ namespace Incas.Core.Classes
                 using SQLiteConnection conn = this.GetConnection();
                 conn.Open();
                 SQLiteCommand cmd = conn.CreateCommand();
-                System.Diagnostics.Debug.WriteLine(this.DBPath);
-                System.Diagnostics.Debug.WriteLine(this.Result);
                 cmd.CommandText = this.GetRequest();
                 this.ApplyParams(cmd);
 

@@ -106,7 +106,7 @@ namespace Incas.DialogSimpleForm.Components
                     control = this.GenerateDateBox(description, (DateTime)field.GetValue(this.Result));
                     this.Container.Children.Add(label);
                     break;
-                case "DataTable":
+                case "DataTable":                   
                     control = this.GenerateDataGrid(description, (DataTable)field.GetValue(this.Result));
                     this.Container.Children.Add(label);
                     break;
