@@ -109,6 +109,10 @@ namespace Incas.Objects.Models
             DataTable dt = this.StartCommandToService().Select().OrderByASC("name").Execute();
             return this.FromDataTable(dt);
         }
+        public DataTable GetAllClassesGuids()
+        {
+            return this.StartCommandToService().Select(nameof(this.identifier)).Execute();
+        }
         public List<string> GetAllClassesNames()
         {
             DataTable dt = this.StartCommandToService().Select("name").Execute();

@@ -2,6 +2,7 @@
 using Incas.Objects.Views.Controls;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace Incas.Templates.Components
 {
@@ -9,7 +10,7 @@ namespace Incas.Templates.Components
     {
         public void Replace(List<string> tags, List<string> values);
         public void GenerateDocument(List<IFillerBase> fillers);
-        public void GenerateDocumentAsync(List<IFillerBase> fillers);
+        public Task<bool> GenerateDocumentAsync(List<IFillerBase> fillers);
         public void CreateTable(string tag, DataTable dt);
         public List<string> FindAllTags();
         public string GetLogData();

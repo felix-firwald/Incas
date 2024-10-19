@@ -27,18 +27,19 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.VisibleName));
             }
         }
-        public int OrderNumber
-        {
-            get => this.Source.OrderNumber;
-            set
-            {
-                if (value is >= 0 and <= 50)
-                {
-                    this.Source.OrderNumber = value;
-                    this.OnPropertyChanged(nameof(this.OrderNumber));
-                }
-            }
-        }
+        //private int order;
+        //public int OrderNumber
+        //{
+        //    get => this.order;
+        //    set
+        //    {
+        //        if (value is >= 0 and <= 50)
+        //        {
+        //            this.order = value;
+        //            this.OnPropertyChanged(nameof(this.OrderNumber));
+        //        }
+        //    }
+        //}
         public string SelectedValue
         {
             get => this.Source.Value;
@@ -47,14 +48,6 @@ namespace Incas.Objects.ViewModels
                 this.Source.Value = value;
                 this.OnPropertyChanged(nameof(this.SelectedValue));
             }
-        }
-        public void IncrementOrder()
-        {
-            this.OrderNumber++;
-        }
-        public void DecrementOrder()
-        {
-            this.OrderNumber--;
         }
 
         public string NameOfField

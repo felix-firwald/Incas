@@ -39,7 +39,8 @@ namespace Incas.Objects.Views.Controls
         private void ShowCard()
         {
             ObjectCard oc = new(this.Class, false);
-            oc.UpdateFor(ObjectProcessor.GetObject(this.Class, Guid.Parse(this.Id)));
+            Components.Object obj = ObjectProcessor.GetObject(this.Class, Guid.Parse(this.Id));
+            oc.UpdateFor(obj);
             this.Border.Child = oc;
         }
         private void HideCard()

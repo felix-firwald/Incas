@@ -190,12 +190,17 @@ namespace Incas.Objects.Views.Pages
                 ((IObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
                 if (this.ClassData.ClassType == ClassType.Document)
                 {
-                    foreach (ObjectComment oc in ObjectProcessor.GetObjectComments(this.Class, obj))
-                    {
-                        this.FieldsContentPanel.Children.Add(new ObjectAttachment(oc));
-                    }
+                    this.ApplyObjectComments(obj);
                 }
             });         
+        }
+        private async void ApplyObjectComments(Components.Object obj)
+        {
+            List<ObjectComment> comments = await ObjectProcessor.GetObjectComments(this.Class, obj);
+            foreach (ObjectComment oc in comments)
+            {
+                this.FieldsContentPanel.Children.Add(new ObjectAttachment(oc));
+            }
         }
 
         private void Box_OnTerminateRequested()

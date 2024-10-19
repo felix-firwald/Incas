@@ -154,7 +154,12 @@ namespace Incas.Objects.Views.Pages
             };
             DatabaseSelection ds = new(bd);
             ds.ShowDialog();
-            foreach (Components.FieldData field in ds.SelectedObject?.Fields)
+            Components.Object obj = ds.GetSelectedObject();
+            if (obj is null)
+            {
+                return;
+            }
+            foreach (Components.FieldData field in obj.Fields)
             {
                 if (field.ClassField.Id == sender.Field.Id)
                 {
@@ -254,7 +259,7 @@ namespace Incas.Objects.Views.Pages
             result = $"{folder}\\{this.RemoveUnresolvedChars(this.ObjectName.Text)}{templatePart}.{extension}";
             return result;
         }
-        public void GenerateDocument()
+        public async void GenerateDocument()
         {
             string name = this.ObjectName.Text;
             string path = "";
@@ -262,7 +267,7 @@ namespace Incas.Objects.Views.Pages
             {
                 if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
                 {
-                    this.GenerateDocument(this.ClassData.Templates[1], path);
+                    await this.GenerateDocument(this.ClassData.Templates[1], path);
                 }
             }
             else if (this.ClassData.Templates?.Count > 1)
@@ -272,7 +277,7 @@ namespace Incas.Objects.Views.Pages
                 {
                     if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
                     {
-                        this.GenerateDocument(ts.GetSelectedPath(), path);
+                        await this.GenerateDocument(ts.GetSelectedPath(), path);
                     }
                 }
             }
@@ -281,7 +286,7 @@ namespace Incas.Objects.Views.Pages
 
             }
         }
-        public string GenerateDocument(TemplateData templateData, string folder, bool async = true)
+        public async Task<string> GenerateDocument(TemplateData templateData, string folder)
         {
             ProgramStatusBar.SetText("Рендеринг документа...");
             string newFile = "";
@@ -306,17 +311,11 @@ namespace Incas.Objects.Views.Pages
                     ExcelTemplator et = new(oldFile, newFile);
                     templ = et;                  
                 }
-                if (async)
+                this.Dispatcher.Invoke(() =>
                 {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        templ.GenerateDocumentAsync(fillers);
-                    });               
-                }
-                else
-                {
-                    templ.GenerateDocument(fillers);
-                }
+                    
+                });
+                bool result = await templ.GenerateDocumentAsync(fillers);
                 ProgramStatusBar.Hide();
                 return newFile;
             }
@@ -405,10 +404,8 @@ namespace Incas.Objects.Views.Pages
             this.OnSaveRequested?.Invoke(this);
         }
 
-        private void PreviewCLick(object sender, MouseButtonEventArgs e)
+        private async void PreviewCLick(object sender, MouseButtonEventArgs e)
         {
-            ProgramStatusBar.SetText("Рендеринг документа...");
-            Thread.Sleep(10);
             try
             {
                 if (this.OnSaveRequested?.Invoke(this) == false)
@@ -423,8 +420,9 @@ namespace Incas.Objects.Views.Pages
                         DialogsManager.ShowExclamationDialog("Предпросмотр для Excel файлов недоступен.", "Рендеринг прерван");
                         return;
                     }
+                    ProgramStatusBar.SetText("Рендеринг документа...");
                     DialogsManager.ShowWaitCursor(true);
-                    string name = this.GenerateDocument(this.ClassData.Templates[1], path, false);
+                    string name = await this.GenerateDocument(this.ClassData.Templates[1], path);
                     DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.name})", WordTemplator.ReplaceToPDF(name), true);
 
                 }
@@ -438,7 +436,8 @@ namespace Incas.Objects.Views.Pages
                             DialogsManager.ShowExclamationDialog("Предпросмотр для Excel файлов недоступен.", "Рендеринг прерван");
                             return;
                         }
-                        string name = this.GenerateDocument(ts.GetSelectedPath(), path, false);
+                        ProgramStatusBar.SetText("Рендеринг документа...");
+                        string name = await this.GenerateDocument(ts.GetSelectedPath(), path);
                         DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.name})", WordTemplator.ReplaceToPDF(name), true);
                     }
                 }

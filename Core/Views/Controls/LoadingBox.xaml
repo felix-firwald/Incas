@@ -11,8 +11,7 @@
             <RowDefinition Height="8"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <ProgressBar IsIndeterminate="{Binding IsIndeterminate}" BorderThickness="10" Foreground="{DynamicResource PrimaryMain}" BorderBrush="{DynamicResource Element}">
-        </ProgressBar>
+        <ProgressBar IsIndeterminate="{Binding IsIndeterminate}" BorderThickness="10" Foreground="{DynamicResource PrimaryMain}" BorderBrush="{DynamicResource Element}"/>
         <TextBlock Style="{StaticResource TextBlockMain}" Text="{Binding Text}" Grid.Row="1" Foreground="{DynamicResource GrayLight}" VerticalAlignment="Center" TextTrimming="WordEllipsis" TextWrapping="WrapWithOverflow" FontSize="10"/>
     </Grid>
 </UserControl>

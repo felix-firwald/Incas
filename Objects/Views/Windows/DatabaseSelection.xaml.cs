@@ -5,6 +5,7 @@ using Incas.Objects.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Incas.Objects.Views.Windows
@@ -18,7 +19,6 @@ namespace Incas.Objects.Views.Windows
         public readonly BindingData Binding;
         public readonly Class Class;
         public readonly ClassData ClassData;
-        public Objects.Components.Object SelectedObject => ObjectProcessor.GetObject(this.Class, this.SelectedId);
         private Guid SelectedId
         {
             get
@@ -32,6 +32,10 @@ namespace Incas.Objects.Views.Windows
                     return Guid.Empty;
                 }
             }
+        }
+        public Components.Object GetSelectedObject()
+        {
+            return ObjectProcessor.GetObject(this.Class, this.SelectedId);
         }
 
         public string SelectedValue => ((DataRowView)this.Grid.SelectedItems[0]).Row[ObjectProcessor.IdField].ToString();

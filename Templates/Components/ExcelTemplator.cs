@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 
 namespace Incas.Templates.Components
@@ -174,7 +175,7 @@ namespace Incas.Templates.Components
             }
             this.Replace(this.tagsToReplace, this.values);
         }
-        public async void GenerateDocumentAsync(List<IFillerBase> fillers)
+        public async Task<bool> GenerateDocumentAsync(List<IFillerBase> fillers)
         {
             this.GetDataFromFillers(fillers);
             await System.Threading.Tasks.Task.Run(() =>
@@ -185,6 +186,7 @@ namespace Incas.Templates.Components
                 }
                 this.Replace(this.tagsToReplace, this.values);
             });
+            return true;
         }
 
         public List<string> FindAllTags()
@@ -239,36 +241,44 @@ namespace Incas.Templates.Components
         /// </summary>
         /// <param name="map"></param>
         /// <returns></returns>
-        public static List<Dictionary<string,string>> GetFromFile(string file, Dictionary<string,string> map)
+        public async static Task<List<Dictionary<string,string>>> GetFromFile(string file, Dictionary<string,string> map)
         {
             List<Dictionary<string, string>> result = new();
-            XLWorkbook workbook = new(file);
-            IXLWorksheet worksheet = workbook.Worksheet(1);
-            foreach (KeyValuePair<string, string> pair in map)
+            await Task.Run(() =>
             {
-                IXLCell colCell;
-                try
+                ProgramStatusBar.SetText("Загрузка файла...");
+                XLWorkbook workbook = new(file);
+                IXLWorksheet worksheet = workbook.Worksheet(1);
+                
+                foreach (KeyValuePair<string, string> pair in map)
                 {
-                    colCell = worksheet.Search(pair.Value, CompareOptions.IgnoreCase).First();   // ищем заголовок столбца с именем аналогичным тегу
-                    int columnNumber = colCell.WorksheetColumn().ColumnNumber();    // номер столбца в листе Excel
-                    int rowNumber = colCell.WorksheetRow().RowNumber() + 1; // номер строки в листе Excel
-                    int fileIndex = 0; // индекс в List
-                    for (int i = rowNumber; i <= worksheet.LastRowUsed().RowNumber(); i++)
+                    IXLCell colCell;
+                    try
                     {
-                        if (result.Count < fileIndex + 1) // +1 поскольку счет индексов идет с нуля
+                        ProgramStatusBar.SetText($"Выполняется анализ для [{pair.Key}] ({pair.Value})...");
+                        colCell = worksheet.Search(pair.Value, CompareOptions.IgnoreCase).First();   // ищем заголовок столбца с именем аналогичным тегу
+                        int columnNumber = colCell.WorksheetColumn().ColumnNumber();    // номер столбца в листе Excel
+                        int rowNumber = colCell.WorksheetRow().RowNumber() + 1; // номер строки в листе Excel
+                        int fileIndex = 0; // индекс в List
+                        for (int i = rowNumber; i <= worksheet.LastRowUsed().RowNumber(); i++)
                         {
-                            result.Add([]);
+                            if (result.Count < fileIndex + 1) // +1 поскольку счет индексов идет с нуля
+                            {
+                                result.Add([]);
+                            }
+                            string value = worksheet.Cell(i, columnNumber).Value.ToString();
+                            result[fileIndex].Add(pair.Key, value);
+                            fileIndex++;
                         }
-                        string value = worksheet.Cell(i, columnNumber).Value.ToString();
-                        result[fileIndex].Add(pair.Key, value);
-                        fileIndex++;
+                    }
+                    catch (System.Exception)
+                    {
+                        continue;
                     }
                 }
-                catch (System.Exception)
-                {
-                    continue;
-                }
-            }
+                ProgramStatusBar.Hide();
+            });
+            
             return result;
         }
     }

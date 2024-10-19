@@ -295,11 +295,11 @@ namespace Incas.Objects.Views.Pages
             }
             oc.Show();
         }
-        private void OpenSelectedObjects()
+        private async void OpenSelectedObjects()
         {
             DialogsManager.ShowWaitCursor(true);
-            List<Guid> guids = this.GetSelectedObjectsGuids();
-            ObjectsEditor oc = new(this.sourceClass, ObjectProcessor.GetObjects(this.sourceClass, guids));
+            List<Components.Object> objects = await ObjectProcessor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
+            ObjectsEditor oc = new(this.sourceClass, objects);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             if (this.ClassData.ClassType == ClassType.Generator)
             {
@@ -394,7 +394,7 @@ namespace Incas.Objects.Views.Pages
             }
         }
 
-        private async void Data_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Data_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (this.ClassData.ShowCard)
             {
@@ -403,17 +403,15 @@ namespace Incas.Objects.Views.Pages
                     return;
                 }
                 Guid id = this.GetSelectedObjectGuid();
-                await System.Threading.Tasks.Task.Run(() =>
+                if (id == Guid.Empty)
                 {
-                    if (id == Guid.Empty)
-                    {
-                        this.ObjectCard?.SetEmpty();                
-                    }
-                    else
-                    {
-                        this.ObjectCard?.UpdateFor(ObjectProcessor.GetObject(this.sourceClass, id));                  
-                    }
-                });
+                    this.ObjectCard?.SetEmpty();                
+                }
+                else
+                {
+                    Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
+                    this.ObjectCard?.UpdateFor(obj);                  
+                }
             }        
         }
 

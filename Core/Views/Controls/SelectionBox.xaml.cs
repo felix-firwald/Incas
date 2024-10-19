@@ -23,7 +23,7 @@ namespace Incas.Core.Views.Controls
             this.InitializeComponent();
             this.Binding = bd;
         }
-        public void SetObject(string guid)
+        public async void SetObject(string guid)
         {
             try
             {
@@ -31,27 +31,27 @@ namespace Incas.Core.Views.Controls
                 if (id != Guid.Empty)
                 {
                     this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);
-                    this.Input.Text = this.SelectedObject.GetFieldValue(this.Binding.Field);
+                    this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
                     this.SetAsEditingEnabled();
                 }
             }
             catch { }
         }
-        public void SetObject(Guid id)
+        public async void SetObject(Guid id)
         {
             try
             {
                 if (id != Guid.Empty)
                 {
                     this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);
-                    this.Input.Text = this.SelectedObject.GetFieldValue(this.Binding.Field);
+                    this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
                     this.SetAsEditingEnabled();
                 }
             }
             catch { }
         }
 
-        private void ButtonClick(object sender, MouseButtonEventArgs e)
+        private async void ButtonClick(object sender, MouseButtonEventArgs e)
         {
             if (this.Binding.Class == Guid.Empty || this.Binding.Field == Guid.Empty)
             {
@@ -64,8 +64,8 @@ namespace Incas.Core.Views.Controls
             {
                 try
                 {
-                    this.SelectedObject = s.SelectedObject;
-                    this.Input.Text = this.SelectedObject.GetFieldValue(this.Binding.Field);
+                    this.SelectedObject = s.GetSelectedObject();
+                    this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
                     this.SetAsEditingEnabled();
                 }
                 catch (Exception ex)

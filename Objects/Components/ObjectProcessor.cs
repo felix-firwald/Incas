@@ -1,16 +1,13 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
-using Spire.Xls;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -119,11 +116,52 @@ namespace Incas.Objects.Components
         {
             return $"{ProgramState.ObjectsPath}\\{id}.objinc";
         }
+        /// <summary>
+        /// Get path to folder named by guid of class where placed an attached files
+        /// </summary>
+        /// <returns></returns>
         public static string GetPathToAttachmentsFolder(Guid classId, Guid objectId)
         {
             string result = $"{ProgramState.ObjectsPath}\\{classId}\\{objectId}\\";
             Directory.CreateDirectory(result);
             return result;
+        }
+        /// <summary>
+        /// Cleans up the Root/Objects folder if it contains useless files and folders
+        /// </summary>
+        public static void CleanGarbage()
+        {
+            using (Class cl = new())
+            {
+                DataTable dt = cl.GetAllClassesGuids();
+                List<string> ids = new();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ids.Add(dr[nameof(cl.identifier)].ToString());
+                }
+                foreach (string file in Directory.GetFiles(ProgramState.ObjectsPath))
+                {
+                    if (!ids.Contains(Path.GetFileNameWithoutExtension(file)))
+                    {
+                        try
+                        {
+                            File.Delete(file);
+                        }
+                        catch { }
+                    }
+                }
+                foreach (string dir in Directory.GetDirectories(ProgramState.ObjectsPath))
+                {
+                    if (!ids.Contains(new DirectoryInfo(dir).Name))
+                    {
+                        try
+                        {
+                            Directory.Delete(dir, true);
+                        }
+                        catch { }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -378,8 +416,15 @@ namespace Incas.Objects.Components
             {
                 return true;
             }
-            int result = 0;
-            return int.TryParse(value, out result);
+            int num = 0;
+            bool result = true;
+            result = int.TryParse(value, out num);
+            NumberFieldData nf = field.GetNumberFieldData();
+            if (num < nf.MinValue || num > nf.MaxValue)
+            {
+                result = false;
+            }
+            return result;
         }
         /// <summary>
         /// Checks <see cref="FieldType.Date"/>
@@ -391,8 +436,15 @@ namespace Incas.Objects.Components
             {
                 return true;
             }
+            bool result = true;
             DateTime dt = new();
-            return DateTime.TryParse(value.ToString(), out dt);
+            result = DateTime.TryParse(value.ToString(), out dt);
+            DateFieldData df = field.GetDateFieldData();
+            if (dt < df.StartDate || dt > df.EndDate)
+            {
+                result = false;
+            }
+            return result;
         }
         /// <summary>
         /// Checks <see cref="FieldType.GlobalEnumeration"/> and <see cref="FieldType.LocalEnumeration"/>
@@ -407,10 +459,28 @@ namespace Incas.Objects.Components
             return values.Contains(value);
         }
 
-        public async static void WriteObjects(Class cl, List<Object> objects)
+        public async static Task<bool> IsUnique(Class cl, Models.Field field, string value)
+        {
+            bool result = true;
+            await Task.Run(() =>
+            {
+                Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+                DataRow dr = q.AddCustomRequest($"SELECT COUNT([{field.Id}]) AS COUNTER FROM [{MainTable}]")
+                .WhereEqual(field.Id.ToString(), value)
+                .ExecuteOne();
+                if (int.Parse(dr["COUNTER"].ToString()) > 0)
+                {
+                    result = false;
+                }
+            });
+            return result;
+        }
+
+        public async static Task<bool> WriteObjects(Class cl, List<Object> objects)
         {
             await Task.Run(() =>
             {
+                ProgramStatusBar.SetText("Выполняется сохранение объектов...");
                 string path = GetPathToObjectsMap(cl);
                 Query q = new(ObjectProcessor.MainTable, path);
                 q.BeginTransaction();
@@ -420,14 +490,16 @@ namespace Incas.Objects.Components
                 }
                 q.EndTransaction();
                 q.ExecuteVoid();
-            });           
+                ProgramStatusBar.Hide();              
+            });
+            return true;
         }
-        public static void WriteObjects(Class cl, Object obj)
+        public async static void WriteObjects(Class cl, Object obj)
         {
             List<Object> objects = [obj];
-            ObjectProcessor.WriteObjects(cl, objects);
+            await ObjectProcessor.WriteObjects(cl, objects);
         }
-        private static async void GetRequestForWritingObject(Query q, Class cl, ClassData data, Object obj)
+        private static void GetRequestForWritingObject(Query q, Class cl, ClassData data, Object obj)
         {
             Dictionary<string, string> values = new()
             {
@@ -484,19 +556,6 @@ namespace Incas.Objects.Components
                 q.WhereEqual(IdField, obj.Id.ToString());
                 q.SeparateCommand();
             }
-            await Task.Run(() =>
-            {
-                foreach (KeyValuePair<Guid, string> gen in generators)
-                {
-                    List<Components.Object> list = JsonConvert.DeserializeObject<List<Components.Object>>(gen.Value);
-                    foreach (Components.Object o in list)
-                    {
-                        o.TargetClass = cl.identifier;
-                        o.TargetObject = obj.Id;
-                    }
-                    ObjectProcessor.WriteObjects(new Class(gen.Key), list);
-                }
-            });
         }
         public static void SetObjectAsTerminated(Class cl, Object obj)
         {
@@ -666,16 +725,21 @@ namespace Incas.Objects.Components
                     };
                     obj.Fields.Add(fd);
                 }
-            }
+            }       
             return obj;
         }
-        public static List<Object> GetObjects(Class cl, List<Guid> ids)
+        public async static Task<List<Object>> GetObjects(Class cl, List<Guid> ids)
         {
             List<Object> obj = new();
-            foreach (Guid id in ids)
+            await Task.Run(() =>
             {
-                obj.Add(GetObject(cl, id));
-            }
+                ProgramStatusBar.SetText("Загрузка объектов...");
+                foreach (Guid id in ids)
+                {
+                    obj.Add(GetObject(cl, id));
+                }
+                ProgramStatusBar.Hide();
+            });                   
             return obj;
         }
         /// <summary>
@@ -755,26 +819,29 @@ namespace Incas.Objects.Components
                     .ExecuteVoid();
             }
         }
-        public static List<ObjectComment> GetObjectComments(Class cl, Object target)
+        public static async Task<List<ObjectComment>> GetObjectComments(Class cl, Object target)
         {
             List<ObjectComment> result = new();
-            Query q = new(CommentsTable, GetPathToObjectsMap(cl));
-            DataTable dt = q.Select()
-                .WhereEqual(TargetObjectField, target.Id.ToString())
-                .Execute();
-            foreach (DataRow row in dt.Rows)
+            await Task.Run(() =>
             {
-                ObjectComment oc = new()
+                Query q = new(CommentsTable, GetPathToObjectsMap(cl));
+                DataTable dt = q.Select()
+                    .WhereEqual(TargetObjectField, target.Id.ToString())
+                    .Execute();
+                foreach (DataRow row in dt.Rows)
                 {
-                    Id = Guid.Parse(row[IdField].ToString()),
-                    Class = cl.identifier,
-                    CreationDate = DateTime.Parse(row[DateCreatedField].ToString()),
-                    TargetObject = target.Id,
-                    AuthorId = Guid.Parse(row[AuthorField].ToString()),
-                    Data = row[DataField].ToString()
-                };
-                result.Add(oc);
-            }
+                    ObjectComment oc = new()
+                    {
+                        Id = Guid.Parse(row[IdField].ToString()),
+                        Class = cl.identifier,
+                        CreationDate = DateTime.Parse(row[DateCreatedField].ToString()),
+                        TargetObject = target.Id,
+                        AuthorId = Guid.Parse(row[AuthorField].ToString()),
+                        Data = row[DataField].ToString()
+                    };
+                    result.Add(oc);
+                }
+            });           
             return result;
         }
         public static void RemoveObjectComment(Class cl, ObjectComment comment)

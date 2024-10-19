@@ -2,6 +2,7 @@
 using Incas.Objects.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Incas.Objects.Components
 {
@@ -31,16 +32,22 @@ namespace Incas.Objects.Components
             };
             return obj;
         }
-        public string GetFieldValue(Guid id)
+        public async Task<string> GetFieldValue(Guid id)
         {
-            foreach (FieldData field in this.Fields)
+            string result = "";
+            await Task.Run(() =>
             {
-                if (field.ClassField.Id == id)
+                foreach (FieldData field in this.Fields)
                 {
-                    return field.Value;
+                    if (field.ClassField.Id == id)
+                    {
+                        result = field.Value;
+                        break;
+                    }
                 }
-            }
-            return "";
+            });
+            
+            return result;
         }
     }
 }

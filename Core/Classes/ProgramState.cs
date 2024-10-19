@@ -2,6 +2,7 @@
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
+using Incas.Objects.Components;
 using Incas.Objects.ViewModels;
 using Incas.Users.Models;
 using Microsoft.Win32;
@@ -12,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Incas.Core.Classes
 {
@@ -342,16 +344,23 @@ namespace Incas.Core.Classes
                 }
             });
         }
-        public static void CollectGarbage()
+        public async static void CollectGarbage()
         {
-            if (LastGarbageCollect < DateTime.Now.AddMinutes(-5))
-            {
-                RemoveFilesOlderThan(ServerProcesses, DateTime.Now.AddHours(-8));
-                RemoveFilesOlderThan(Exchanges, DateTime.Now.AddHours(-1));
-                RemoveFilesOlderThan(TemplatesRuntime, DateTime.Now.AddHours(-1));
-                RemoveFilesOlderThan(LogData, DateTime.Now.AddHours(-8));
-                LastGarbageCollect = DateTime.Now;
-            }
+            await Task.Run(() =>
+            {               
+                if (LastGarbageCollect < DateTime.Now.AddMinutes(-5))
+                {
+                    ProgramStatusBar.SetText("Выполняется сборка мусора...");
+                    RemoveFilesOlderThan(ServerProcesses, DateTime.Now.AddHours(-8));
+                    RemoveFilesOlderThan(Exchanges, DateTime.Now.AddHours(-1));
+                    RemoveFilesOlderThan(TemplatesRuntime, DateTime.Now.AddHours(-1));
+                    RemoveFilesOlderThan(LogData, DateTime.Now.AddHours(-8));
+                    ObjectProcessor.CleanGarbage();
+                    LastGarbageCollect = DateTime.Now;
+                    ProgramStatusBar.Hide();
+                }               
+            });
+            
         }
         public static string GetConstant(string name)
         {

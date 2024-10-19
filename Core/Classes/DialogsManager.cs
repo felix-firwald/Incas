@@ -66,6 +66,7 @@ namespace Incas.Core.Classes
             try
             {
                 DialogsManager.ShowWaitCursor(false);
+                ProgramStatusBar.Hide();
                 WebPreviewWindow wp = new(name, path, autoremove);
                 wp.ShowDialog();
             }

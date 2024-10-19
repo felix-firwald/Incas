@@ -176,7 +176,7 @@ namespace Incas.Core.Classes
                     {
                         continue;
                     }
-                    Thread.Sleep(200);
+                    Thread.Sleep(1000);
                 }
             });
         }

@@ -127,7 +127,7 @@ namespace Incas.Objects.Views.Windows
             this.AddObjectCreator();
         }
 
-        private void GetFromExcel(object sender, MouseButtonEventArgs e)
+        private async void GetFromExcel(object sender, MouseButtonEventArgs e)
         {
             OpenFileDialog fd = new()
             {
@@ -141,7 +141,7 @@ namespace Incas.Objects.Views.Windows
                 if (ei.ShowDialog("Настройка импорта", Core.Classes.Icon.Table))
                 {
                     this.ContentPanel.Children.Clear();
-                    List<Dictionary<string, string>> pairs = ExcelTemplator.GetFromFile(fd.FileName, ei.GetMap());
+                    List<Dictionary<string, string>> pairs = await ExcelTemplator.GetFromFile(fd.FileName, ei.GetMap());
                     foreach (Dictionary<string, string> item in pairs)
                     {
                         ObjectCreator fc = this.AddObjectCreator();
@@ -215,7 +215,7 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void CreateObjectsClick(object sender, RoutedEventArgs e)
+        private async void CreateObjectsClick(object sender, RoutedEventArgs e)
         {
             List<Components.Object> objects = [];
             try
@@ -224,9 +224,12 @@ namespace Incas.Objects.Views.Windows
                 {
                     objects.Add(c.PullObject());
                 }
-                ObjectProcessor.WriteObjects(this.Class, objects);
                 this.Close();
-                this.OnUpdateRequested?.Invoke();
+                bool result = await ObjectProcessor.WriteObjects(this.Class, objects);
+                if (result)
+                {
+                    this.OnUpdateRequested?.Invoke();
+                }                            
             }
             catch (NotNullFailed nnex)
             {
@@ -242,7 +245,7 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void RenderObjectsClick(object sender, RoutedEventArgs e)
+        private async void RenderObjectsClick(object sender, RoutedEventArgs e)
         {
             List<Components.Object> objects = [];
             TemplateData templateFile = new();
@@ -272,10 +275,13 @@ namespace Incas.Objects.Views.Windows
                     foreach (ObjectCreator c in this.ContentPanel.Children)
                     {
                         objects.Add(c.PullObject());
-                        c.GenerateDocument(templateFile, path);
+                        await c.GenerateDocument(templateFile, path);
                     }
-                    ObjectProcessor.WriteObjects(this.Class, objects);
-                    this.OnUpdateRequested?.Invoke();
+                    bool result = await ObjectProcessor.WriteObjects(this.Class, objects);
+                    if (result)
+                    {
+                        this.OnUpdateRequested?.Invoke();
+                    }              
                     ProgramState.OpenFolder(path);                    
                 }
                 catch (NotNullFailed nnex)

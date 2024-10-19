@@ -6,6 +6,7 @@ using Incas.Users.Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Threading.Tasks;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -38,13 +39,7 @@ namespace Incas.Objects.Views.Controls
                     if (id != Guid.Empty)
                     {
                         BindingData bd = data.ClassField.GetBindingData();
-                        this.relationClass = new(bd.Class);
-                        this.relationObject = ObjectProcessor.GetObject(this.relationClass, id);
-                        this.FieldValue.Text = this.relationObject.GetFieldValue(bd.Field);
-                        this.ColorizeField(130, 113, 239);
-                        this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
-                        this.FieldValue.MouseDown += this.FieldValue_MouseDown;
-                        this.FieldValue.ToolTip = "Кликнуть для просмотра объекта";
+                        this.GenerateRelatedField(id, bd);
                     }
                 }
                 catch
@@ -64,6 +59,17 @@ namespace Incas.Objects.Views.Controls
             {
                 this.FieldValue.Text = data.Value;
             }
+        }
+
+        private async void GenerateRelatedField(Guid id, BindingData bd)
+        {
+            this.relationClass = new(bd.Class);
+            this.relationObject = ObjectProcessor.GetObject(this.relationClass, id);
+            this.FieldValue.Text = await this.relationObject.GetFieldValue(bd.Field);
+            this.ColorizeField(130, 113, 239);
+            this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
+            this.FieldValue.MouseDown += this.FieldValue_MouseDown;
+            this.FieldValue.ToolTip = "Кликнуть для просмотра объекта";
         }
 
         private void FieldValue_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -133,6 +139,26 @@ namespace Incas.Objects.Views.Controls
                 ClassField = this.Data.ClassField
             };
             this.OnFilterRequested?.Invoke(data);
+        }
+
+        private void CopyClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                switch (this.Data.ClassField.Type)
+                {
+                    default:
+                        Clipboard.SetText(this.Data.Value);
+                        break;
+                    case FieldType.Table:
+                        break;
+                    case FieldType.Relation:
+                        Clipboard.SetText(this.FieldValue.Text);
+                        break;
+                }
+                
+            }
+            catch { }
         }
     }
 }

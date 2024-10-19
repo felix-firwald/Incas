@@ -93,7 +93,7 @@ namespace Incas.Core.Classes
         /// <returns></returns>
         public Query Count(string selection = "*")
         {
-            this.Select($"Count({selection}) AS count");
+            this.Select($"COUNT({selection}) AS count");
             return this;
         }
         #endregion

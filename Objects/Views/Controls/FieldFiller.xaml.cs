@@ -16,6 +16,7 @@ using System.Windows.Media;
 using Incas.Objects.Interfaces;
 using static Incas.Objects.Interfaces.IFillerBase;
 using Xceed.Wpf.Toolkit;
+using System.Threading.Tasks;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -33,6 +34,7 @@ namespace Incas.Objects.Views.Controls
     {
         public Objects.Models.Field Field { get; set; }
         private bool validated = true;
+        private bool unique = true;
         private Control control;
         private CommandSettings command;
         public delegate void CommandScript(string script);
@@ -133,6 +135,9 @@ namespace Incas.Objects.Views.Controls
                         ToolTip = description,
                         Style = this.FindResource("DatePickerMain") as Style
                     };
+                    DateFieldData df = this.Field.GetDateFieldData();
+                    picker.DisplayDateStart = df.StartDate;
+                    picker.DisplayDateEnd = df.EndDate;
                     picker.SelectedDateChanged += this.DatePicker_SelectedDateChanged;
                     this.PlaceUIControl(picker);
                     break;
@@ -277,6 +282,10 @@ namespace Incas.Objects.Views.Controls
                     {
                         this.ThrowNotNullFailed();
                     }
+                    if (this.Field.IsUnique && this.unique == false)
+                    {
+                        this.ThrowUniqueFailed();
+                    }
                     return value;
                 case FieldType.Number:
                     return ((NumericBox)this.control).Value.ToString();
@@ -365,6 +374,11 @@ namespace Incas.Objects.Views.Controls
         {
             this.MarkAsNotValidated();
             throw new NotNullFailed($"Поле \"{this.Field.VisibleName}\" является обязательным, однако не заполнено.");
+        }
+        public void ThrowUniqueFailed()
+        {
+            this.MarkAsNotValidated();
+            throw new NotNullFailed($"Поле \"{this.Field.VisibleName}\" объявлено уникальным, однако такое значение уже встречается в базе данных.");
         }
 
         public Guid GetId()

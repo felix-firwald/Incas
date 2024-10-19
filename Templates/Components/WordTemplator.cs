@@ -10,6 +10,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using WebSupergoo.WordGlue3;
 using Xceed.Document.NET;
@@ -123,7 +124,7 @@ namespace Incas.Templates.Components
             this.Replace(this.tagsToReplace, this.values);
             //this.ClearData();
         }
-        public async void GenerateDocumentAsync(List<IFillerBase> fillers)
+        public async Task<bool> GenerateDocumentAsync(List<IFillerBase> fillers)
         {
             this.GetDataFromFillers(fillers);
             await System.Threading.Tasks.Task.Run(() =>
@@ -135,7 +136,7 @@ namespace Incas.Templates.Components
                 this.Replace(this.tagsToReplace, this.values);
                 //this.ClearData();
             });
-            
+            return true;
         }
 
         public void CreateTable(string tag, DataTable dt)

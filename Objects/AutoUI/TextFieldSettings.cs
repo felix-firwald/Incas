@@ -12,6 +12,9 @@ namespace Incas.Objects.AutoUI
     public class TextFieldSettings : BaseFieldSettings
     {
         #region Data
+        [Description("Должно быть уникальным")]
+        public bool Unique { get; set; }
+
         [Description("Значение по умолчанию")]
         [MaxLength(80)]
         [CanBeNull]
@@ -23,12 +26,21 @@ namespace Incas.Objects.AutoUI
             this.Source = field;
             this.GetBaseData();
             this.Text = field.Value;
+            this.Unique = field.IsUnique;
         }
         #region Functionality
+        public override void Validate()
+        {
+            if (this.Unique && this.NotNull == false)
+            {
+                throw new DialogSimpleForm.Exceptions.SimpleFormFailed("Поле не может быть пустым, если требуется уникальность.");
+            }
+        }
         public override void Save()
         {
             this.SaveBaseData();
             this.Source.Value = this.Text;
+            this.Source.IsUnique = this.Unique;
         }
         #endregion
     }

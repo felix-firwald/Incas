@@ -118,14 +118,15 @@ namespace Incas.Templates.Views.Windows
             this.ProgressCreation.Value = e.ProgressPercentage;
         }
 
-        private void CreateFiles()
+        private async void CreateFiles()
         {
             try
             {
                 Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
                 foreach (FileCreator fc in this.ContentPanel.Children)
                 {
-                    if (!fc.CreateFile(this.dir.Text, true))
+                    bool result = await fc.CreateFile(this.dir.Text, true);
+                    if (!result)
                     {
                         Mouse.OverrideCursor = null;
                         DatabaseManager.NullifyBackground();

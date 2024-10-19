@@ -22,7 +22,7 @@ namespace Incas.Core.Classes
         public static void SetText(string text)
         {
             
-            ProgramState.MainWindow.Dispatcher.Invoke(new Action(() =>
+            ProgramState.MainWindow?.Dispatcher.Invoke(new Action(() =>
             {
                 if (LoadingBox is null)
                 {

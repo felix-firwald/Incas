@@ -12,6 +12,7 @@ using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -243,7 +244,7 @@ namespace Incas.Templates.Views.Pages
                 this.Filename.Text = result;
             }
         }
-        public bool CreateFile(string newPath, bool async = true)
+        public async Task<bool> CreateFile(string newPath, bool async = true)
         {
             try
             {
@@ -262,7 +263,7 @@ namespace Incas.Templates.Views.Pages
                         WordTemplator wt = new(this.template.path, newFile);
                         if (async)
                         {
-                            wt.GenerateDocumentAsync(fillers);
+                            await wt.GenerateDocumentAsync(fillers);
                         }
                         else
                         {
@@ -274,7 +275,7 @@ namespace Incas.Templates.Views.Pages
                         ExcelTemplator et = new(this.template.path, newFile);
                         if (async)
                         {
-                            et.GenerateDocumentAsync(fillers);
+                            await et.GenerateDocumentAsync(fillers);
                         }
                         else
                         {
@@ -381,12 +382,12 @@ namespace Incas.Templates.Views.Pages
 
         }
 
-        private void OpenFileClick(object sender, MouseButtonEventArgs e)
+        private async void OpenFileClick(object sender, MouseButtonEventArgs e)
         {
             try
             {
                 DialogsManager.ShowWaitCursor();
-                this.CreateFile(ProgramState.TemplatesRuntime, false);
+                await this.CreateFile(ProgramState.TemplatesRuntime, false);
                 string filename;
                 switch (this.template.type)
                 {

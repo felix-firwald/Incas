@@ -29,7 +29,6 @@ namespace Incas.Objects.Views.Controls
                     NameOfField = "Новое_поле"
                 }
                 : new(data);
-            this.vm.OrderNumber = index;
             this.DataContext = this.vm;
             this.ExpanderButton.IsChecked = true;
         }
@@ -74,12 +73,12 @@ namespace Incas.Objects.Views.Controls
 
         private void UpClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.vm.OrderNumber = (int)this.OnMoveDownRequested?.Invoke(this);
+            this.OnMoveDownRequested?.Invoke(this);
         }
 
         private void DownClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.vm.OrderNumber = (int)this.OnMoveUpRequested?.Invoke(this);
+            this.OnMoveUpRequested?.Invoke(this);
         }
 
         private void EditScriptClick(object sender, RoutedEventArgs e)
