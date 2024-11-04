@@ -30,6 +30,7 @@ namespace Incas.Objects.Views.Pages
         public ObjectsList(Class source)
         {
             this.InitializeComponent();
+            DialogsManager.ShowWaitCursor();
             this.sourceClass = source;
             this.ClassData = source.GetClassData();
             if (this.ClassData.ClassType == ClassType.Generator)
@@ -37,12 +38,12 @@ namespace Incas.Objects.Views.Pages
                 this.AddButton.Visibility = Visibility.Collapsed;
                 this.CopyButton.Visibility = Visibility.Collapsed;
             }
-            //this.InitStyle();
             this.UpdateView();
             if (this.ClassData.ShowCard)
             {
                 this.PlaceCard();
-            }           
+            }
+            DialogsManager.ShowWaitCursor(false);
         }
         private DataTable WrapWithStyle(DataTable dt)
         {
@@ -99,7 +100,8 @@ namespace Incas.Objects.Views.Pages
             {
                 this.ObjectCard = new(this.sourceClass);
                 this.ObjectCard.OnFilterRequested += this.ObjectCard_OnFilterRequested;
-            }           
+            }
+            this.ObjectCard.MinWidth = 410;
             this.MainGrid.Children.Add(this.ObjectCard);
             Grid.SetRow(this.ObjectCard, 0);
             Grid.SetRowSpan(this.ObjectCard, 2);

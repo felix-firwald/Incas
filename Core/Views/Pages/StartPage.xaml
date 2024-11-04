@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="Incas.Core.Views.Pages.StartPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.Core.Views.Pages"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <GroupBox Header="НАЧАЛО РАБОТЫ">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="27*"/>
+                <RowDefinition Height="98*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="119*"/>
+                <ColumnDefinition Width="659*"/>
+            </Grid.ColumnDefinitions>
+            <Path Fill="{DynamicResource LightPurple}" 
+                  Data="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h5.243c.122-.326.295-.668.526-1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v7.81c.353.23.656.496.91.783Q16 12.312 16 12V4a2 2 0 0 0-2-2z M14 9.5a2 2 0 1 1-4 0 2 2 0 0 1 4 0m-6 5.7c0 .8.8.8.8.8h6.4s.8 0 .8-.8-.8-3.2-4-3.2-4 2.4-4 3.2" 
+                  Stretch="Uniform" MaxWidth="50" MaxHeight="50"/>
+            <Label x:Name="MainText" Style="{StaticResource LabelElement}" Content="????" FontSize="20" FontFamily="JetBrains Mono Thin" Foreground="{DynamicResource Light}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" />
+        </Grid>
+    </GroupBox>
+</UserControl>

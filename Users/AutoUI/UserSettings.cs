@@ -58,8 +58,8 @@ namespace Incas.Users.AutoUI
         [Description("Первоначальный пароль")]
         public string Password
         {
-            get => this._userParameters.startup_password;
-            set => this._userParameters.startup_password = value;
+            get => this._userParameters.Startup_password;
+            set => this._userParameters.Startup_password = value;
         }
         #endregion
 
@@ -80,50 +80,14 @@ namespace Incas.Users.AutoUI
             {
                 this._userParameters = this._user.GetParametersContext();
             }
-            this.Status.SetSelection(this._userParameters.permission_group);
+            this.Status.SetSelection(this._userParameters.Permission_group);
         }
         public override void Save()
         {
-            this._userParameters.permission_group = (PermissionGroup)this.Status.SelectedObject;
+            this._userParameters.Permission_group = (PermissionGroup)this.Status.SelectedObject;
             this._user.SaveParametersContext(this._userParameters);
             this._user.SaveUser();
         }
         #endregion
-    }
-
-    internal class UserSuperAdminSettings : AutoUIBase
-    {
-        private User _user;
-        private UserParameters _userParameters = new();
-
-        [Description("Фамилия")]
-        public string Surname
-        {
-            get => this._user.surname;
-            set => this._user.surname = value;
-        }
-
-        [Description("Имя и отчество")]
-        public string SecondName
-        {
-            get => this._user.secondName;
-            set => this._user.secondName = value;
-        }
-
-        [Description("Должность")]
-        public string Post
-        {
-            get => this._user.post;
-            set => this._user.post = value;
-        }
-
-        public UserSuperAdminSettings(User user)
-        {
-            this._user = user;
-        }
-        public override void Save()
-        {
-            this._user.SaveUser();
-        }
     }
 }

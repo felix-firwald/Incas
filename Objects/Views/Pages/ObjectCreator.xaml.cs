@@ -15,6 +15,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -90,6 +91,10 @@ namespace Incas.Objects.Views.Pages
         {
             if (this.Object.Id != Guid.Empty && this.ClassData.EditByAuthorOnly == true && this.Object.AuthorId != ProgramState.CurrentUser.id)
             {
+                if (ProgramState.CurrentUserParameters.Permission_group == PermissionGroup.Admin)
+                {
+                    return;
+                }
                 this.Locked = true;
                 this.ContentPanel.IsEnabled = false;
                 System.Windows.Controls.Label label = new()
@@ -142,7 +147,7 @@ namespace Incas.Objects.Views.Pages
                         this.fillers.Add(fg);
                         break;
                 }
-            }
+            }         
         }
 
         private void Tf_OnDatabaseObjectCopyRequested(IFillerBase sender)
@@ -288,7 +293,6 @@ namespace Incas.Objects.Views.Pages
         }
         public async Task<string> GenerateDocument(TemplateData templateData, string folder)
         {
-            ProgramStatusBar.SetText("Рендеринг документа...");
             string newFile = "";
             string oldFile = templateData.File;
             ITemplator templ = null;
@@ -316,7 +320,6 @@ namespace Incas.Objects.Views.Pages
                     
                 });
                 bool result = await templ.GenerateDocumentAsync(fillers);
-                ProgramStatusBar.Hide();
                 return newFile;
             }
             catch (IOException ioex)

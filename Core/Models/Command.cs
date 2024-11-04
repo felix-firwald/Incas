@@ -38,11 +38,9 @@ namespace Incas.Core.Models
             {
                 id = this.id,
                 database = this.database,
-                table = this.table,
                 name = this.name,
                 query = this.query,
                 type = this.type,
-                restrictions = this.restrictions
             };
             return cmd;
         }
@@ -52,11 +50,9 @@ namespace Incas.Core.Models
     {
         public int id { get; set; }
         public string database { get; set; }
-        public string table { get; set; }
         public string name { get; set; }
         public string query { get; set; }
         public CommandType type { get; set; }
-        public string restrictions { get; set; }
         public Command()
         {
             this.tableName = "Commands";
@@ -67,11 +63,9 @@ namespace Incas.Core.Models
             {
                 id = this.id,
                 database = this.database,
-                table = this.table,
                 name = this.name,
                 query = this.query,
                 type = this.type,
-                restrictions = this.restrictions
             };
             return result;
         }
@@ -116,11 +110,9 @@ namespace Incas.Core.Models
                 .Insert(new()
                 {
                     { nameof(this.database), this.database },
-                    { nameof(this.table), this.table },
                     { nameof(this.name), this.name },
                     { nameof(this.query), this.EncryptQuery() },
-                    { nameof(this.type), this.type.ToString() },
-                    { nameof(this.restrictions), this.restrictions },
+                    { nameof(this.type), this.type.ToString() }
                 })
                 .ExecuteVoid();
         }
@@ -131,7 +123,6 @@ namespace Incas.Core.Models
                 {nameof(this.name), this.name },
                 {nameof(this.query), this.EncryptQuery() },
                 {nameof(this.type), this.type.ToString() },
-                {nameof(this.restrictions), this.restrictions }
             };
             this.StartCommandToService()
                 .Update(dict)
@@ -140,11 +131,11 @@ namespace Incas.Core.Models
         }
         public string EncryptQuery()
         {
-            return Cryptographer.EncryptString(Cryptographer.GenerateKey(this.database + this.table), this.query);
+            return Cryptographer.EncryptString(Cryptographer.GenerateKey(this.database), this.query);
         }
         public void DecryptQuery()
         {
-            this.query = Cryptographer.DecryptString(Cryptographer.GenerateKey(this.database + this.table), this.query);
+            this.query = Cryptographer.DecryptString(Cryptographer.GenerateKey(this.database), this.query);
         }
         public void DeleteCommand()
         {

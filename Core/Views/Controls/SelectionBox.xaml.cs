@@ -3,6 +3,7 @@ using Incas.Core.Views.Windows;
 using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -30,7 +31,10 @@ namespace Incas.Core.Views.Controls
                 Guid id = Guid.Parse(guid);
                 if (id != Guid.Empty)
                 {
-                    this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);
+                    await Task.Run(() =>
+                    {
+                        this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);                       
+                    });
                     this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
                     this.SetAsEditingEnabled();
                 }
@@ -43,7 +47,10 @@ namespace Incas.Core.Views.Controls
             {
                 if (id != Guid.Empty)
                 {
-                    this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);
+                    await Task.Run(() =>
+                    {
+                        this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);
+                    });
                     this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
                     this.SetAsEditingEnabled();
                 }

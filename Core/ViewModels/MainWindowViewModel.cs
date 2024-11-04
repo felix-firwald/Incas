@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Miniservices.TextEditor.Views.Pages;
 using Incas.Users.Models;
 using System.Collections.Generic;
 using System.Windows;
@@ -22,16 +23,18 @@ namespace Incas.Core.ViewModels
         {
             this.OpenClipBoard = new Command(this.DoOpenClipBoard);
             this.OpenTasks = new Command(this.DoOpenTasks);
+            this.OpenTextEditor = new Command(this.DoOpenTextEditor);
             this.CopyFile = new Command(this.DoCopyFile);
-            this.OpenFile = new Command(this.DoOpenFile);
+            this.OpenFileManager = new Command(this.DoOpenFileManager);
             this.OpenWeb = new Command(this.DoOpenWeb);
         }
 
         #region ICommands
         public ICommand OpenClipBoard { get; private set; }
         public ICommand OpenTasks { get; private set; }
+        public ICommand OpenTextEditor { get; private set; }
         public ICommand CopyFile { get; private set; }
-        public ICommand OpenFile { get; private set; }
+        public ICommand OpenFileManager { get; private set; }
         public ICommand OpenWeb { get; private set; }
         public static RoutedCommand CopyToClipBoard2 = new("CopyToClipBoard", typeof(MainWindow), [new KeyGesture(Key.F2)]);
         #endregion
@@ -40,6 +43,11 @@ namespace Incas.Core.ViewModels
         public void DoOpenClipBoard(object parameter)
         {
             DialogsManager.ShowClipboardManager();
+        }
+        public void DoOpenTextEditor(object parameter)
+        {
+            TextEditorPage tep = new();
+            DialogsManager.ShowPageWithGroupBox(tep, "Редактор текста", "$TextEditor", TabType.Tool);
         }
         public void DoOpenTasks(object parameter)
         {
@@ -57,26 +65,10 @@ namespace Incas.Core.ViewModels
                 }
             }
         }
-        public void DoOpenFile(object parameter)
+        public void DoOpenFileManager(object parameter)
         {
-            Dictionary<string, string> filters = new()
-            {
-                { "Excel", "Файлы Excel|*.xls;*.xlsx;*.xlsm" },
-                { "Word", "Файлы Word|*.doc;*.docx" },
-                { "Pdf", "Файлы PDF|*.pdf" }
-            };
-            Session target;
-            if (DialogsManager.ShowActiveUserSelector(out target, "Выберите пользователя для открытия файла."))
-            {
-                OpenFileDialog of2 = new()
-                {
-                    Filter = filters[parameter.ToString()]
-                };
-                if (of2.ShowDialog() == DialogResult.OK)
-                {
-                    ServerProcessor.SendOpenFileProcess(of2.SafeFileName, of2.FileName, target.slug);
-                }
-            }
+            Miniservices.FileManager.Views.Pages.FileManagerPage fmp = new();
+            DialogsManager.ShowPageWithGroupBox(fmp, "Обработчик файлов и каталогов", "$FileManager", TabType.Tool);
         }
         public void DoOpenWeb(object parameter)
         {
@@ -159,16 +151,6 @@ namespace Incas.Core.ViewModels
                     return Visibility.Collapsed;
             }
         }
-
-        //public Visibility TasksVisibility => this.VisibilityConverter(ProgramState.CurrentUserParameters.tasks_visibility);
-        //public Visibility CommunicationVisibility => this.VisibilityConverter(ProgramState.CurrentUserParameters.communication_visibility);
-        //public Visibility DatabaseVisibility => this.VisibilityConverter(ProgramState.CurrentUserParameters.database_visibility);
-
-        //public event PropertyChangedEventHandler PropertyChanged;
-        //protected virtual void OnPropertyChanged(string propertyName)
-        //{
-        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        //}
 
         public void LoadInfo()
         {

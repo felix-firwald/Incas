@@ -20,7 +20,7 @@ namespace Incas.Core.AutoUI
         public override void Save()
         {
             UserParameters parameters = ProgramState.CurrentUser.GetParametersContext();
-            parameters.password = this.Password;
+            parameters.Password = this.Password;
             ProgramState.CurrentUserParameters = parameters;
             ProgramState.CurrentUser.SaveParametersContext(parameters);
             ProgramState.CurrentUser.SaveUser();

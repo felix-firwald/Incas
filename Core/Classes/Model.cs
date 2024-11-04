@@ -81,14 +81,27 @@ namespace Incas.Core.Classes
             }
             return result;
         }
+        /// <summary>
+        /// Initialize Query with TableName and SERVICE connection
+        /// </summary>
+        /// <returns></returns>
         protected Query StartCommand()
         {
             return new Query(this.tableName, DBConnectionType.SERVICE);
         }
+        /// <summary>
+        /// Initialize Query with TableName and SERVICE connection
+        /// </summary>
+        /// <returns></returns>
         protected Query StartCommandToService()
         {
             return new Query(this.tableName, DBConnectionType.SERVICE);
         }
+        /// <summary>
+        /// Initialize Query with connection to other incport (server processor)
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
         protected Query StartCommandToOtherPort(string port)
         {
             return new Query(this.tableName, DBConnectionType.OTHER)
@@ -96,6 +109,10 @@ namespace Incas.Core.Classes
                 DBPath = $"{ProgramState.ServerProcesses}\\{port}.incport"
             };
         }
+        /// <summary>
+        /// Initialize Query with connection to owning incport (server processor)
+        /// </summary>
+        /// <returns></returns>
         protected Query StartCommandToMyPort()
         {
             return new Query(this.tableName, DBConnectionType.OTHER)

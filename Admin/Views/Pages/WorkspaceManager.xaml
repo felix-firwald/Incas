@@ -21,7 +21,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <GroupBox Style="{DynamicResource MainGroupBox}" Header="ПЕРВИЧНЫЕ НАСТРОЙКИ" MaxHeight="200" Margin="5,5,5,5" >
+            <GroupBox Header="ПЕРВИЧНЫЕ НАСТРОЙКИ" MaxHeight="200" Margin="5,5,5,5" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" MaxWidth="140"/>
@@ -42,7 +42,7 @@
                 </Grid>
                 
             </GroupBox>
-            <GroupBox Style="{StaticResource MainGroupBox}" Header="КЛАССЫ ОБЪЕКТОВ" Grid.Row="1">
+            <GroupBox Header="КЛАССЫ ОБЪЕКТОВ" Grid.Row="1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
@@ -76,7 +76,7 @@
             </GroupBox>
         </Grid>
         
-        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ГЛОБАЛЬНЫЕ КОНСТАНТЫ" Grid.Column="1" Margin="5,5,5,5">
+        <GroupBox Header="ГЛОБАЛЬНЫЕ КОНСТАНТЫ" Grid.Column="1" Margin="5,5,5,5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
@@ -91,7 +91,7 @@
                     </Button>
                     <Button Style="{StaticResource ButtonMain}" Click="EditConstantClick">
                         <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                            <Path Fill="White" Data="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" VerticalAlignment="Center"/>
+                            <Path Fill="White" VerticalAlignment="Center" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                             <Label Foreground="White" Content="Редактировать"/>
                         </StackPanel>
                     </Button>
@@ -117,7 +117,7 @@
         </GroupBox>
         <GridSplitter Grid.RowSpan="2"/>
         <GridSplitter Style="{StaticResource SplitterHorizontal}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="1"/>
-        <GroupBox Style="{DynamicResource MainGroupBox}" Header="ГЛОБАЛЬНЫЕ ПЕРЕЧИСЛЕНИЯ" Grid.Column="1" Margin="5,5,5,5" Grid.Row="1">
+        <GroupBox Header="ГЛОБАЛЬНЫЕ ПЕРЕЧИСЛЕНИЯ" Grid.Column="1" Margin="5,5,5,5" Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"/>
@@ -136,7 +136,7 @@
                     </Button>
                     <Button Style="{StaticResource ButtonMain}" Click="EditEnumerationClick">
                         <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                            <Path Fill="White" Data="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" VerticalAlignment="Center"/>
+                            <Path Fill="White" VerticalAlignment="Center" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                             <Label Foreground="White" Content="Редактировать"/>
                         </StackPanel>
                     </Button>

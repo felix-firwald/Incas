@@ -26,7 +26,7 @@ namespace Incas.Core.Classes
             foreach (PropertyInfo prop in this.modelClass.GetProperties())
             {
                 FieldCreator fc = new(prop.Name, SwitchOnType(prop.PropertyType));
-                if (prop.Name == "id")
+                if (prop.Name is "id" or "Id")
                 {
                     fc.IsUNIQUE = true;
                 }

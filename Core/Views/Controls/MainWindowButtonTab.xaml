@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="Incas.Core.Views.Controls.MainWindowButtonTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.Core.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" MinHeight="40" d:DesignWidth="200" Cursor="">
+    <Border x:Name="bbb" CornerRadius="8" Margin="5" Cursor="Hand" MouseDown="Border_MouseDown" MouseUp="bbb_MouseUp">
+        <Border.Style>
+            <Style TargetType="{x:Type Border}">
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource Element}"/>
+                        <Setter Property="BorderBrush" Value="{StaticResource PrimaryMain}"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="BorderBrush" Value="{StaticResource GrayLight}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Path x:Name="Icon" Fill="{Binding BorderBrush, ElementName=bbb}" VerticalAlignment="Center" HorizontalAlignment="Center">
+            </Path>
+            <TextBlock x:Name="Text" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=bbb}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" FontFamily="JetBrains Mono Thin" FontSize="11">
+            </TextBlock>
+        </Grid>
+    </Border>
+</UserControl>

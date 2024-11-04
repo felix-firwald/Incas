@@ -1,4 +1,5 @@
-﻿using Incas.Core.Views.Controls;
+﻿using Incas.Core.Classes;
+using Incas.Core.Views.Controls;
 using Incas.Templates.Models;
 using Incas.Templates.Views.Controls;
 using Incas.Templates.Views.Windows;
@@ -120,9 +121,10 @@ namespace Incas.Templates.Views.Pages
 
         private void AddClick(object sender, RoutedEventArgs e)
         {
-            CreateDocumentTemplate ctw = new();
-            ctw.OnCreated += this.Refresh;
-            ctw.Show();
+            DialogsManager.ShowAccessErrorDialog("Поддержка функции создания шаблонов недоступна начиная с версии 1.2.34.0. Используйте классы.", "Прекращение поддержки");
+            //CreateDocumentTemplate ctw = new();
+            //ctw.OnCreated += this.Refresh;
+            //ctw.Show();
         }
     }
 }

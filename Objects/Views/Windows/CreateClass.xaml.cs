@@ -209,7 +209,7 @@ namespace Incas.Objects.Views.Windows
                 this.vm.SetData(fields);
                 this.vm.Source.Save();
                 this.Close();
-                ProgramState.DatabasePage.UpdateAll();
+                //ProgramState.DatabasePage.UpdateAll();
             }
             catch (FieldDataFailed fd)
             {

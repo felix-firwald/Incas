@@ -21,7 +21,7 @@ namespace Incas.Users.ViewModels
         {
             get
             {
-                switch (this._user.GetParametersContext().permission_group)
+                switch (this._user.GetParametersContext().Permission_group)
                 {
                     case PermissionGroup.Admin:
                         return "Администратор";

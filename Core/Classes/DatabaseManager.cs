@@ -41,9 +41,12 @@ namespace Incas.Core.Classes
             q.AddCustomRequest(GetProcessDefinition(atc));
             q.ExecuteVoid();
         }
-        public static bool InitializeService()
+        public static bool InitializeService(bool createFile = true)
         {
-            SQLiteConnection.CreateFile(ProgramState.ServiceDatabasePath);
+            if (createFile)
+            {
+                SQLiteConnection.CreateFile(ProgramState.ServiceDatabasePath);
+            }           
             AutoTableCreator atc = new();
             Query q = new("")
             {
@@ -52,6 +55,7 @@ namespace Incas.Core.Classes
             q
              .AddCustomRequest(GetParameterDefinition(atc))
              .AddCustomRequest(GetUserDefinition(atc))
+             .AddCustomRequest(GetGroupDefinition(atc))
              .AddCustomRequest(GetSessionDefinition(atc))
              .AddCustomRequest(GetCommandDefinition(atc))
              .AddCustomRequest(GetClassesDefinition(atc))
@@ -62,19 +66,23 @@ namespace Incas.Core.Classes
 
         public static void ActualizeTables()
         {
+            if (RegistryData.GetSelectedWorkspace() == "")
+            {
+                return;
+            }
+            InitializeService(false);
             CheckFieldsInTable(typeof(Parameter), "Parameters");
             CheckFieldsInTable(typeof(User), "Users");
+            CheckFieldsInTable(typeof(Group), "Groups");
             CheckFieldsInTable(typeof(Session), "Sessions");
             CheckFieldsInTable(typeof(Command), "Commands");
             CheckFieldsInTable(typeof(Template), "Templates");
             CheckFieldsInTable(typeof(Class), "Classes");
         }
+
         private static void CheckFieldsInTable(Type model, string tableName)
         {
-            if (RegistryData.GetSelectedWorkspace() == "")
-            {
-                return;
-            }
+            
             Query q = new(tableName, DBConnectionType.SERVICE);
             q.AddCustomRequest($"PRAGMA table_info([{tableName}]);");
             DataTable dt = q.Execute();
@@ -96,7 +104,7 @@ namespace Incas.Core.Classes
             result = result += "COMMIT";
             if (needAlter)
             {
-                DialogsManager.ShowDatabaseErrorDialog($"В базе данных не было найдено поле для таблицы {tableName}. Таблица будет обновлена.", "Актуализация базы данных");
+                DialogsManager.ShowDatabaseErrorDialog($"В служебной базе данных не было найдено поле для таблицы {tableName}. Таблица будет обновлена.", "Актуализация базы данных");
                 q.Clear();
                 q.AddCustomRequest(result + ";");
                 q.ExecuteVoid();
@@ -129,6 +137,12 @@ namespace Incas.Core.Classes
             atc.SetAsUnique("fullname");
             return atc.GetQueryText();
         }
+        private static string GetGroupDefinition(AutoTableCreator atc)
+        {
+            atc.Initialize(typeof(Group), "Groups");
+            atc.SetAsUnique("Id");
+            return atc.GetQueryText();
+        }
         private static string GetSessionDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Session), "Sessions");
@@ -146,7 +160,6 @@ namespace Incas.Core.Classes
             atc.SetFK("database", "Databases", "path");
             atc.SetNotNull("database", true);
             atc.SetTextType("query");
-            atc.SetTextType("restrictions");
             return atc.GetQueryText();
         }
         #endregion
@@ -189,6 +202,9 @@ namespace Incas.Core.Classes
                 {
                     case "Processes":
                         q.AddCustomRequest(GetProcessDefinition(atc));
+                        break;
+                    case "Groups":
+                        q.AddCustomRequest(GetGroupDefinition(atc));
                         break;
                     case "Parameters":
                         q.AddCustomRequest(GetParameterDefinition(atc));

@@ -1,19 +1,19 @@
-﻿using Incas.Objects.Components;
+﻿using Incas.Core.Classes;
+using Incas.Objects.Components;
+using Incas.Objects.Exceptions;
 using Incas.Objects.Views.Controls;
 using System;
-using System.Data;
 using System.Collections.Generic;
+using System.Data;
 using System.Windows;
-using Incas.Objects.Exceptions;
-using Incas.Core.Classes;
-using DocumentFormat.OpenXml.Bibliography;
+using System.Windows.Controls;
 
-namespace Incas.Objects.Views.Windows
+namespace Incas.Objects.Views.Pages
 {
     /// <summary>
     /// Логика взаимодействия для ObjectsCorrector.xaml
     /// </summary>
-    public partial class ObjectsCorrector : Window
+    public partial class ObjectsCorrector : UserControl
     {
         private const string EditedColumn = "edited";
         public Models.Field Field { get; set; }
@@ -79,7 +79,6 @@ namespace Incas.Objects.Views.Windows
                 }
             }
             ObjectProcessor.UpdateFieldsByIdForCorrection(this.Class, list, this.Field);
-            this.Close();
         }
 
         private void Grid_AutoGeneratingColumn(object sender, System.Windows.Controls.DataGridAutoGeneratingColumnEventArgs e)

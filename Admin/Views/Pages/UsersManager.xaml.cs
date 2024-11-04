@@ -36,16 +36,16 @@ namespace Incas.Admin.Views.Pages
             this.UsersList.Children.Remove(element);
         }
 
-        private void RefreshClick(object sender, MouseButtonEventArgs e)
-        {
-            this.FillUsersList();
-        }
-
-        private void AddClick(object sender, MouseButtonEventArgs e)
+        private void AddClick(object sender, System.Windows.RoutedEventArgs e)
         {
             User user = new();
             UserSettings us = new(user);
             us.ShowDialog("Создание пользователя", Icon.UserPlus);
+            this.FillUsersList();
+        }
+
+        private void UpdateClick(object sender, System.Windows.RoutedEventArgs e)
+        {
             this.FillUsersList();
         }
     }

@@ -142,25 +142,21 @@ namespace Incas.Objects.Views.Controls
                     this.PlaceUIControl(picker);
                     break;
                 case FieldType.Generator:
-                    //Guid num = Guid.Empty;
-                    //Guid.TryParse(value.ToString(), out num);
-                    //GeneratorFiller generator = new(type)
-                    //{
-                    //    TemplateId = num
-                    //};
-                    //generator.OnValueChanged += this.Generator_OnValueChanged;
-                    //this.PlaceUIControl(generator);
+
                     break;
             }
         }
 
         private void PlaceUIControl(Control control)
         {
-            this.control = control;
-            this.control.ToolTip = this.Field.Description;
-            this.Grid.Children.Add(control);
-            Grid.SetRow(control, 0);
-            Grid.SetColumn(control, 1);
+            this.Dispatcher.Invoke(() =>
+            {
+                this.control = control;
+                this.control.ToolTip = this.Field.Description;
+                this.Grid.Children.Add(control);
+                Grid.SetRow(control, 0);
+                Grid.SetColumn(control, 1);
+            });            
         }
 
         private void MakeButton()
@@ -208,12 +204,12 @@ namespace Incas.Objects.Views.Controls
                     this.SetDateTimeValue(value);
                     break;
                 case FieldType.Generator:
-                    //((GeneratorFiller)this.control).SetData(value);
+                        
                     break;
-            }
+            }     
         }
 
-        private void SetDateTimeValue(string value)
+        private async void SetDateTimeValue(string value)
         {
             List<string> formats =
             [
@@ -225,17 +221,23 @@ namespace Incas.Objects.Views.Controls
                 bool success = DateTime.TryParseExact(value, format, CultureInfo.CurrentCulture, DateTimeStyles.None, out parsedDate);
                 if (success)
                 {
-                    ((DatePicker)this.control).SelectedDate = parsedDate;
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        ((DatePicker)this.control).SelectedDate = parsedDate;
+                    });                    
                 }
                 return success;
             }
-            foreach (string format in formats)
+            await Task.Run(() =>
             {
-                if (tryApply(format))
+                foreach (string format in formats)
                 {
-                    return;
+                    if (tryApply(format))
+                    {
+                        return;
+                    }
                 }
-            }
+            });         
         }
 
         public string GetTagName()

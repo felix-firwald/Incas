@@ -1,4 +1,6 @@
-﻿using Incas.Objects.ViewModels;
+﻿using Incas.Core.Classes;
+using Incas.Objects.ViewModels;
+using System.Windows.Controls;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -23,7 +25,8 @@ namespace Incas.Objects.Views.Pages
             {
                 SelectedCategory = category
             };
-
+            this.CategoriesList.IsEnabled = false;
+            this.CategoriesList.Visibility = System.Windows.Visibility.Collapsed;
             this.vm.OnClassSelected += this.OnClassSelected;
             this.DataContext = this.vm;
         }
@@ -41,6 +44,20 @@ namespace Incas.Objects.Views.Pages
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             this.vm.UpdateAll();
+        }
+
+        private void MenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (this.vm.SelectedClass == null)
+            {
+                return;
+            }
+            GroupBox gb = new()
+            {
+                Header = this.vm.SelectedCategory + ": " + this.vm.SelectedClass.name,
+                Content = new ObjectsList(this.vm.SelectedClass)
+            };
+            DialogsManager.ShowPage(gb, this.vm.SelectedClass.name, this.vm.SelectedClass.identifier.ToString());
         }
     }
 }

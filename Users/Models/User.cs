@@ -63,7 +63,7 @@ namespace Incas.Users.Models
                 .Execute();
             foreach (DataRow dr in dt.Rows)
             {
-                User mu = new User();
+                User mu = new();
                 mu.Serialize(dr);
                 output.Add(mu);
             }

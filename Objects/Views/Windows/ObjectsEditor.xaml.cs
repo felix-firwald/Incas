@@ -272,11 +272,13 @@ namespace Incas.Objects.Views.Windows
                 try
                 {
                     RegistryData.SetClassTemplatePrefferedPath(this.Class.identifier, templateFile.Name, path);
+                    ProgramStatusBar.SetText("Выполняется рендеринг объектов...");
                     foreach (ObjectCreator c in this.ContentPanel.Children)
-                    {
+                    {                      
                         objects.Add(c.PullObject());
                         await c.GenerateDocument(templateFile, path);
                     }
+                    ProgramStatusBar.Hide();
                     bool result = await ObjectProcessor.WriteObjects(this.Class, objects);
                     if (result)
                     {

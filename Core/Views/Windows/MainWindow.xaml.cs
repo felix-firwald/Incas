@@ -1,15 +1,19 @@
-﻿using Incas.Core.AutoUI;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.ViewModels;
+using Incas.Core.Views.Pages;
 using Incas.Objects.Models;
 using System;
 using System.IO;
 using System.Media;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Incas.Core.Views.Windows
 {
@@ -30,7 +34,7 @@ namespace Incas.Core.Views.Windows
             this.vm = new MainWindowViewModel();
             ProgramState.MainWindowViewModel = this.vm;
             this.DataContext = this.vm;
-            if (string.IsNullOrEmpty(ProgramState.CurrentUserParameters.password))
+            if (string.IsNullOrEmpty(ProgramState.CurrentUserParameters.Password))
             {
                 if (DialogsManager.ShowQuestionDialog("Текущий пароль, использованный вами для входа, " +
                     "является временным, потому известен администратору и может быть им изменен.\nРекомендуем вам придумать свой пароль. Его не сможет увидеть и изменить никто, кроме вас.", "Завершение активации", "Установить пароль", "Не сейчас") == DialogStatus.Yes)
@@ -39,7 +43,8 @@ namespace Incas.Core.Views.Windows
                     sp.ShowDialog("Установление нового пароля", Classes.Icon.UserGears);
                 }
             }
-            this.PlayEasterEgg();
+            this.UpdateTabs();
+            this.AddTabItem(new StartPage(), "$START", "Начало", TabType.General);
         }
         public void PlaceStatusBar(IStatusBar bar)
         {
@@ -111,50 +116,93 @@ namespace Incas.Core.Views.Windows
                     this.vm.DoOpenTasks("");
                     break;
                 case Key.F3:
-                    this.vm.DoOpenFile("Pdf");
+                    this.vm.DoOpenTextEditor("");
                     break;
                 case Key.F4:
-                    this.vm.DoOpenFile("Word");
+                    this.vm.DoOpenFileManager("");
                     break;
                 case Key.F5:
-                    this.vm.DoOpenFile("Excel");
+                    //this.vm.DoOpenFile("Word");
                     break;
                 case Key.F6:
+                    //this.vm.DoOpenFile("Excel");
+                    break;
+                case Key.F7:
                     this.vm.DoOpenWeb("");
                     break;
             }
         }
         public void UpdateTabs()
-        {
-            using Class cl = new();
-            foreach (string category in cl.GetCategories())
+        {                    
+            this.AddPageButton("Простые документы", Classes.Icon.FileRichText, Controls.MainWindowButtonTab.Templates);
+            //this.AddPageButton("База данных", Classes.Icon.Database, Controls.MainWindowButtonTab.CustomDatabase);
+            using (Class cl = new())
             {
-                this.AddPage(category, new Objects.Views.Pages.CustomDatabaseMain(category));
+                foreach (string category in cl.GetCategories())
+                {
+                    this.AddPageButton(category, Classes.Icon.Database, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
+                }
+            }
+            if (ProgramState.CurrentUserParameters.Permission_group == PermissionGroup.Admin)
+            {
+                this.AddAdminPageButton("Рабочее пространство", Classes.Icon.GearWide, Controls.MainWindowButtonTab.WorkspaceSettings);
+                this.AddAdminPageButton("Пользователи", Classes.Icon.UserGears, Controls.MainWindowButtonTab.UsersSettings);
             }
         }
-        private void AddPage(string name, UserControl control)
+        private void AddPageButton(string name, Icon icon, string path)
         {
-            RadioButton rb = new()
+            Controls.MainWindowButtonTab bt = new(path, icon, name);
+            bt.OnNewTabRequested += this.Bt_OnNewTabRequested;
+            this.CustomTabs.Children.Add(bt);
+        }
+        private void AddAdminPageButton(string name, Icon icon, string path)
+        {
+            Controls.MainWindowButtonTab bt = new(path, icon, name);
+            bt.OnNewTabRequested += this.Bt_OnNewTabRequested;
+            this.CustomTabs.Children.Add(bt);
+        }
+
+        private void Bt_OnNewTabRequested(Control item, string id, string name)
+        {         
+            this.AddTabItem(item, id, name, TabType.Usual);
+        }
+        public void AddTabItem(Control item, string id, string name, TabType tabType)
+        {
+            foreach (Control c in this.TabMain.Items)
             {
-                Style = this.FindResource("MenuButton") as Style,
-                Content = name,
-                GroupName = "Tabs",
-                Name = name
-            };
-            this.CustomTabs.Children.Add(rb);
-            Binding binding = new()
+                if (c.Uid == id)
+                {
+                    ((TabItem)c).IsSelected = true;
+                    return;
+                }
+            }
+            TabItem ti = new()
             {
-                ElementName = name,
-                Path = new("IsChecked")
+                Header = name,
+                Uid = id,
+                Content = item,
+                IsSelected = true
             };
-            TabItem tabItem = new()
+            switch (tabType)
             {
-                Content = control,
-                Background = null,
-                BorderBrush = null
-            };
-            BindingOperations.SetBinding(tabItem, TabItem.IsSelectedProperty, binding);
-            this.TabMain.Items.Add(tabItem);
+                case TabType.General:
+                    ti.BorderBrush = new SolidColorBrush(System.Windows.Media.Colors.DodgerBlue);
+                    break;
+                case TabType.Tool:
+                    ti.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(52, 201, 36));
+                    break;
+            }
+            ti.IsEnabledChanged += this.TabItem_IsEnabledChanged;
+            this.TabMain.Items.Add(ti);
+        }
+
+        private void TabItem_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            this.TabMain.Items.Remove(sender);
+            if (this.TabMain.Items.Count == 0)
+            {
+                this.Close();
+            }
         }
     }
 }

@@ -11,7 +11,7 @@
             <ColumnDefinition Width="auto" MaxWidth="350"/>
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
-        <GroupBox Style="{StaticResource MainGroupBox}" Header="{Binding CategoryName}" Margin="5,5,5,5">
+        <GroupBox Header="{Binding CategoryName}" Margin="5,5,5,5">
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.RowSpan="3">
                 <StackPanel MaxWidth="340">
                     <Button Style="{StaticResource ButtonMain}" Click="Button_Click">
@@ -20,12 +20,12 @@
                             <Label Content="Обновить список" Foreground="White"/>
                         </StackPanel>
                     </Button>
-                    <Expander Style="{DynamicResource ExpanderMain}" Header="Категории" IsExpanded="True">
+                    <Expander x:Name="CategoriesList" Style="{DynamicResource ExpanderMain}" Header="Категории" IsExpanded="True">
                         <StackPanel MaxWidth="320">
                             <ListBox 
-                    Style="{DynamicResource ListBoxMain}"
-                    ItemContainerStyle="{DynamicResource ListBoxItemPurple}"
-                    ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                Style="{DynamicResource ListBoxMain}"
+                                ItemContainerStyle="{DynamicResource ListBoxItemPurple}"
+                                ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2" ScrollViewer.VerticalScrollBarVisibility="Auto">
                             </ListBox>
                         </StackPanel>
                     </Expander>
@@ -42,6 +42,12 @@
             </ScrollViewer>
         </GroupBox>
         <GridSplitter/>
-        <GroupBox x:Name="ContentPanel" Style="{StaticResource MainGroupBox}" Grid.Column="1" Header="{Binding SelectedClassName}" Margin="5,5,5,5"/>
+        <GroupBox x:Name="ContentPanel" Grid.Column="1" Header="{Binding SelectedClassName}" Margin="5,5,5,5">
+            <GroupBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Открыть в новой вкладке" Click="MenuItem_Click"/>
+                </ContextMenu>
+            </GroupBox.ContextMenu>
+        </GroupBox>
     </Grid>
 </UserControl>

@@ -41,6 +41,7 @@ namespace Incas.Core.Views.Windows
                     this.IconInfo.Visibility = Visibility.Visible;
                     break;
             }
+            ProgramStatusBar.Hide();
             DialogsManager.ShowWaitCursor(false);
         }
 

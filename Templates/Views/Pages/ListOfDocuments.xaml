@@ -6,7 +6,7 @@
             xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="630" Background="Transparent">
-    <GroupBox Style="{DynamicResource MainGroupBox}" Header="ШАБЛОНЫ ДОКУМЕНТОВ">
+    <GroupBox Header="ШАБЛОНЫ ДОКУМЕНТОВ">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>

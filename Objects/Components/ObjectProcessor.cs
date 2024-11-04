@@ -1,4 +1,5 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Incas.Core.Classes;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
@@ -337,9 +338,9 @@ namespace Incas.Objects.Components
             static void ShowWindow(Models.Class cl, List<Guid> list, Models.Field field)
             {
                 Application.Current.Dispatcher.Invoke(() =>
-                {
-                    ObjectsCorrector oc = new(cl, list, field);
-                    oc.ShowDialog();
+                {                   
+                    Objects.Views.Pages.ObjectsCorrector oc = new(cl, list, field);
+                    DialogsManager.ShowPage(oc, "Исправление данных", "FIXING" + cl.identifier.ToString());
                 });             
             }
             await Task.Run(() =>
@@ -486,6 +487,7 @@ namespace Incas.Objects.Components
                 q.BeginTransaction();
                 foreach (Object obj in objects)
                 {
+                    ProgramStatusBar.SetText($"Выполняется сохранение объектов ({obj.Name})...");
                     ObjectProcessor.GetRequestForWritingObject(q, cl, cl.GetClassData(), obj);
                 }
                 q.EndTransaction();
@@ -736,10 +738,12 @@ namespace Incas.Objects.Components
                 ProgramStatusBar.SetText("Загрузка объектов...");
                 foreach (Guid id in ids)
                 {
+                    ProgramStatusBar.SetText($"Загрузка объектов ({id})...");
                     obj.Add(GetObject(cl, id));
                 }
+                ProgramStatusBar.SetText($"Загрузка формы...");
                 ProgramStatusBar.Hide();
-            });                   
+            });
             return obj;
         }
         /// <summary>

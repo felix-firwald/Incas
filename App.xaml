@@ -23,6 +23,7 @@
                 <ResourceDictionary Source="Core/Styles/Label.xaml" />
                 <ResourceDictionary Source="Core/Styles/Scroll.xaml" />
                 <ResourceDictionary Source="Core/Styles/DataGrid.xaml" />
+                <ResourceDictionary Source="Core/Styles/TabControl.xaml" />
                 <ResourceDictionary Source="Core/Styles/DatePicker.xaml" />
                 <ResourceDictionary Source="Core/Styles/ContextMenu.xaml" />
                 <ResourceDictionary Source="Core/Styles/Icons.xaml" />

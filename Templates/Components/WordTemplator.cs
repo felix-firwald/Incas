@@ -122,7 +122,6 @@ namespace Incas.Templates.Components
                 this.CreateTable(pair.Key, pair.Value);
             }
             this.Replace(this.tagsToReplace, this.values);
-            //this.ClearData();
         }
         public async Task<bool> GenerateDocumentAsync(List<IFillerBase> fillers)
         {
@@ -134,7 +133,6 @@ namespace Incas.Templates.Components
                     this.CreateTable(pair.Key, pair.Value);
                 }
                 this.Replace(this.tagsToReplace, this.values);
-                //this.ClearData();
             });
             return true;
         }

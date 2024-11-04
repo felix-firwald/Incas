@@ -39,6 +39,19 @@ namespace Incas.Core.Classes
             file = "";
             return false;
         }
+        public static void ShowPage(System.Windows.Controls.Control control, string name, string id, TabType tt = TabType.Usual)
+        {
+            ProgramState.MainWindow.AddTabItem(control, id, name, tt);
+        }
+        public static void ShowPageWithGroupBox(System.Windows.Controls.Control control, string name, string id, TabType tt = TabType.Usual)
+        {
+            System.Windows.Controls.GroupBox result = new()
+            {
+                Header = name,
+                Content = control
+            };
+            ProgramState.MainWindow.AddTabItem(result, id, name, tt);
+        }
         public static bool ShowOpenFileDialog(ref string file, string filter)
         {
             return ShowOpenFileDialog(ref file, filter, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));

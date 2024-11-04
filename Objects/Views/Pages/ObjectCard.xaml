@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incas.Objects.Views.Pages" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="350" MinWidth="350" MaxWidth="430" Margin="5">
+             d:DesignHeight="450" d:DesignWidth="350" MinWidth="350" MaxWidth="450" Margin="5">
     <Border x:Name="MainBorder" BorderBrush="{StaticResource Element}" Padding="5" Background="{StaticResource Black}" CornerRadius="0,0,6,0" BorderThickness="2">
         <Grid>
             <Grid.RowDefinitions>

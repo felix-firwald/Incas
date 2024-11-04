@@ -198,8 +198,8 @@ namespace Incas.Core.Classes
                     user.fullname = "Администратор";
                     UserParameters up = new()
                     {
-                        permission_group = PermissionGroup.Admin,
-                        password = data.Password,
+                        Permission_group = PermissionGroup.Admin,
+                        Password = data.Password,
                     };
                     user.SaveParametersContext(up);
                     user.AddUser();
@@ -231,7 +231,14 @@ namespace Incas.Core.Classes
         private static WorkspacePrimarySettings GetWorkspaceSettings()
         {
             using Parameter par = GetParameter(ParameterType.WORKSPACE, "ws_data", "Рабочая область");
-            return JsonConvert.DeserializeObject<WorkspacePrimarySettings>(par.value);
+            try
+            {
+                return JsonConvert.DeserializeObject<WorkspacePrimarySettings>(par.value);
+            }
+            catch
+            {
+                return new();
+            }
         }
         public static string GetWorkspaceName()
         {

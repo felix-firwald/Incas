@@ -47,7 +47,7 @@ namespace Incas.Core.Views.Windows
                 ProgramState.CurrentUserParameters = ProgramState.CurrentUser.GetParametersContext();
                 if (ProgramState.CurrentUserParameters.IsRightPassword(this.pwd.Text))
                 {
-                    Permission.CurrentUserPermission = ProgramState.CurrentUserParameters.permission_group;
+                    Permission.CurrentUserPermission = ProgramState.CurrentUserParameters.Permission_group;
                     if (Permission.CurrentUserPermission != PermissionGroup.Admin && ProgramState.IsWorkspaceLocked())
                     {
                         Locked l = new();
