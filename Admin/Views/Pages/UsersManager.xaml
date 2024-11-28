@@ -11,7 +11,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <GroupBox Header="ПОЛЬЗОВАТЕЛИ" Margin="5,5,5,5">
+        <GroupBox Header="Пользователи" Margin="5,5,5,5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
@@ -36,7 +36,7 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <GroupBox Header="ГРУППЫ ПОЛЬЗОВАТЕЛЕЙ" Grid.Column="1">
+        <GroupBox Header="Группы пользователей" Grid.Column="1">
             
         </GroupBox>
     </Grid>

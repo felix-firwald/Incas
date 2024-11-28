@@ -1,8 +1,8 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Miniservices.TextEditor.Views.Pages;
+using Incas.Server.AutoUI;
 using Incas.Users.Models;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -51,7 +51,9 @@ namespace Incas.Core.ViewModels
         }
         public void DoOpenTasks(object parameter)
         {
-            DialogsManager.ShowTasksManager();
+            TestSignal ts = new();
+            ts.ShowDialog("345", Classes.Icon.Pin);
+            //DialogsManager.ShowTasksManager();
         }
         public void DoCopyFile(object parameter)
         {

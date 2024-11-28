@@ -145,18 +145,20 @@ namespace Incas.Objects.Views.Controls
         {
             try
             {
-                switch (this.Data.ClassField.Type)
+                if (this.Data.ClassField is not null)
                 {
-                    default:
-                        Clipboard.SetText(this.Data.Value);
-                        break;
-                    case FieldType.Table:
-                        break;
-                    case FieldType.Relation:
-                        Clipboard.SetText(this.FieldValue.Text);
-                        break;
-                }
-                
+                    switch (this.Data.ClassField.Type)
+                    {
+                        default:
+                            Clipboard.SetText(this.Data.Value);
+                            break;
+                        case FieldType.Table:
+                            break;
+                        case FieldType.Relation:
+                            Clipboard.SetText(this.FieldValue.Text);
+                            break;
+                    }
+                }              
             }
             catch { }
         }

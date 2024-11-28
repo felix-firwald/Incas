@@ -27,12 +27,14 @@
 
         <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize" Cursor="">
             <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,25" Text="{Binding WorkspaceName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
-            <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" Visibility="{Binding ModeratorFunctionVisibility}" />
+            <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="1" Margin="5,0,5,0" Visibility="{Binding ModeratorFunctionVisibility}" />
+            
             <Path x:Name="Logo" Fill="{StaticResource Element}" MaxHeight="50" MaxWidth="50" Width="auto" Height="auto" Data="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0 M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" HorizontalAlignment="Center" Stretch="UniformToFill" Margin="0,15,0,6"/>
             <TextBlock x:Name="LSurname" Foreground="White" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis"/>
             <TextBlock x:Name="LFullname" Foreground="White" Text="{Binding SecondName}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
             <TextBlock x:Name="LPost" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
-            <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="8" />
+            
+            <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="1" Margin="5,0,5,0" />
             <StackPanel x:Name="CustomTabs">
                 
             </StackPanel>
@@ -72,7 +74,7 @@
             <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenClipBoard}" CommandParameter="Clipboard" ToolTip="(F1) Открыть постоянный буфер обмена">
                 <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M10 1.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5zm-2 0h1v1A2.5 2.5 0 0 0 6.5 5h3A2.5 2.5 0 0 0 12 2.5v-1h1a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2"/>
             </Button>
-            <Button IsEnabled="False" Style="{DynamicResource DashboardButton}" Command="{Binding OpenTasks}" CommandParameter="Tasks" ToolTip="(F2) Открыть окно пользовательских задач">
+            <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenTasks}" CommandParameter="Tasks" ToolTip="(F2) Открыть окно пользовательских задач">
                 <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
             </Button>
             <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="6"/>

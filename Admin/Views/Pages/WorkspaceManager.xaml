@@ -21,7 +21,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <GroupBox Header="ПЕРВИЧНЫЕ НАСТРОЙКИ" MaxHeight="200" Margin="5,5,5,5" >
+            <GroupBox Header="Первичные настройки" MaxHeight="200" Margin="5,5,5,5" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*" MaxWidth="140"/>
@@ -42,7 +42,7 @@
                 </Grid>
                 
             </GroupBox>
-            <GroupBox Header="КЛАССЫ ОБЪЕКТОВ" Grid.Row="1">
+            <GroupBox Header="Классы объектов" Grid.Row="1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
@@ -76,7 +76,7 @@
             </GroupBox>
         </Grid>
         
-        <GroupBox Header="ГЛОБАЛЬНЫЕ КОНСТАНТЫ" Grid.Column="1" Margin="5,5,5,5">
+        <GroupBox Header="Глобальные константы" Grid.Column="1" Margin="5,5,5,5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
@@ -117,7 +117,7 @@
         </GroupBox>
         <GridSplitter Grid.RowSpan="2"/>
         <GridSplitter Style="{StaticResource SplitterHorizontal}" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="1"/>
-        <GroupBox Header="ГЛОБАЛЬНЫЕ ПЕРЕЧИСЛЕНИЯ" Grid.Column="1" Margin="5,5,5,5" Grid.Row="1">
+        <GroupBox Header="Глобальные перечисления" Grid.Column="1" Margin="5,5,5,5" Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"/>

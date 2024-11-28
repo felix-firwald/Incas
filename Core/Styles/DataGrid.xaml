@@ -25,6 +25,15 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="FocusVisualGrid">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle Margin="0" StrokeDashArray="2 2" Stroke="{StaticResource DarkLight}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="#FF9FC7B2"/>
     <Style x:Key="RowMain" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="{StaticResource Black}"/>
@@ -92,6 +101,7 @@
         <Setter Property="BorderThickness" Value="0,0,1,0"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Padding" Value="2,0,0,0"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualGrid}"/>
         <Setter Property="ContextMenu">
             <Setter.Value>
                 <ContextMenu>

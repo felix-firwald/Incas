@@ -12,8 +12,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Net.Sockets;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Net.Http;
 
 namespace Incas.Core.Classes
 {
@@ -32,18 +36,21 @@ namespace Incas.Core.Classes
 
     internal static class ProgramState
     {
-        public static string CommonPath { get; private set; }
-        public static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incas";
-        public static string ObjectsPath => Root + @"\Objects";
-        public static string ServiceDatabasePath => CommonPath + @"\service.incas";
-        public static string Root => CommonPath + @"\Root";
-        public static string ServerProcesses => Root + @"\ServerProcesses";  // ...\Root\ServerProccesses
-        public static string Exchanges => Root + @"\Exchanges";  // ...\Root\Exchanges
-        public static string Messages => Root + @"\Messages";  // папка еще не создана
+        internal static string CommonPath { get; private set; }
+        internal static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incas";
+        internal static string ObjectsPath => Root + @"\Objects";
+        internal static string ServiceDatabasePath => CommonPath + @"\service.incas";
+        internal static string Root => CommonPath + @"\Root";
+        internal static string ServerProcesses => Root + @"\ServerProcesses";  // ...\Root\ServerProccesses
+        internal static string Exchanges => Root + @"\Exchanges";  // ...\Root\Exchanges
+        internal static string Messages => Root + @"\Messages";  // папка еще не создана
 
-        public static string Scripts => Root + @"\Scripts";
-        public static string LogData => Root + @"\LogData";  // ...\Root\LogData
-
+        internal static string Scripts => Root + @"\Scripts";
+        internal static string LogData => Root + @"\LogData";  // ...\Root\LogData
+        #region Server
+        internal const int DefaultPort = 6890;
+        internal const string EndMarker = "$[ENDMARKER]$";
+        #endregion
         #region Templates
 
         private static string Templates => Root + @"\Templates";     // ...\Root\Templates
@@ -52,15 +59,47 @@ namespace Incas.Core.Classes
         #endregion
 
         #region User
-        public static User CurrentUser { get; set; }
-        public static UserParameters CurrentUserParameters { get; set; }
-        public static Session CurrentSession { get; private set; }
+        internal static User CurrentUser { get; set; }
+        internal static UserParameters CurrentUserParameters { get; set; }
+        internal static Session CurrentSession { get; private set; }
         #endregion
-        public static MainWindowViewModel MainWindowViewModel { get; set; }
-        public static MainWindow MainWindow { get; set; }
-        public static CustomDatabaseViewModel DatabasePage { get; set; }
+        internal static MainWindowViewModel MainWindowViewModel { get; set; }
+        internal static MainWindow MainWindow { get; set; }
+        internal static CustomDatabaseViewModel DatabasePage { get; set; }
 
-        public static void CheckoutWorkspaces()
+        internal static IPAddress GetLocalIPAddress()
+        {
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip;
+                }
+            }
+            return IPAddress.None;
+        }
+        internal static IPAddress GetGlobalIPAddress()
+        {
+            IPAddress ipAddress;
+            const string url = "https://api.ipify.org";
+            try
+            {
+                using (HttpClient client = new())
+                {
+                    string stringIp = client.GetStringAsync(url).GetAwaiter().GetResult();
+                    DialogsManager.ShowInfoDialog("!");
+                    ipAddress = IPAddress.Parse(stringIp);
+                }        
+            }
+            catch
+            {
+                return IPAddress.None;
+            }          
+            return ipAddress;
+        }
+
+        internal static void CheckoutWorkspaces()
         {
             List<string> workspaces = RegistryData.GetWorkspaces();
             if (!workspaces.Contains(RegistryData.GetSelectedWorkspace()))
@@ -85,7 +124,7 @@ namespace Incas.Core.Classes
 
         private static DateTime LastGarbageCollect = DateTime.Now;
         #region Path and init
-        public static void SetCommonPath(string path, bool checkout = true)
+        internal static void SetCommonPath(string path, bool checkout = true)
         {
             CommonPath = path;
             Directory.CreateDirectory(Templates);
@@ -103,29 +142,29 @@ namespace Incas.Core.Classes
             }
             CollectGarbage();
         }
-        public static string GetFullPathOfCustomDb(string path)
+        internal static string GetFullPathOfCustomDb(string path)
         {
             return $"{ObjectsPath}\\{path}.db";
         }
-        public static void ClearDataForRestart()
+        internal static void ClearDataForRestart()
         {
             CurrentUser = null;
             CurrentSession = null;
             CommonPath = null;
             Permission.CurrentUserPermission = PermissionGroup.Operator;
         }
-        public static bool CheckSensitive()
+        internal static bool CheckSensitive()
         {
             return CurrentUser != null && CurrentSession != null;
         }
-        public static bool IsCommonPathExists()
+        internal static bool IsCommonPathExists()
         {
             return Directory.Exists(CommonPath);
         }
         #endregion
 
         #region ComputerId
-        public static string GenerateSlug(int len, string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+        internal static string GenerateSlug(int len, string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
         {
             Random random = new();
             return new string(Enumerable.Repeat(chars, len)
@@ -139,7 +178,7 @@ namespace Incas.Core.Classes
         #endregion
 
         #region UserData
-        public static bool LoadUserData()
+        internal static bool LoadUserData()
         {
             if (IsRegistryContainsData())
             {
@@ -151,7 +190,7 @@ namespace Incas.Core.Classes
         #endregion
 
         #region WorkspaceFiles
-        public static string GetFullnameOfDocumentFile(string name)
+        internal static string GetFullnameOfDocumentFile(string name)
         {
             return TemplatesSources + "\\" + name;
         }
@@ -160,7 +199,7 @@ namespace Incas.Core.Classes
         {
             return DatabaseManager.InitializeService();
         }
-        public static Parameter GetParameter(ParameterType type, string name, string defaultValue = "0", bool createIfNot = true)
+        internal static Parameter GetParameter(ParameterType type, string name, string defaultValue = "0", bool createIfNot = true)
         {
             Parameter par = new();
             par.GetParameter(type, name, defaultValue, createIfNot);
@@ -168,7 +207,7 @@ namespace Incas.Core.Classes
         }
 
         #region Incubator
-        public static void InitWorkspace(CreateWorkspace data)
+        internal static void InitWorkspace(CreateWorkspace data)
         {
             int recursion = 0;
             void Create()
@@ -230,27 +269,28 @@ namespace Incas.Core.Classes
         }
         private static WorkspacePrimarySettings GetWorkspaceSettings()
         {
-            using Parameter par = GetParameter(ParameterType.WORKSPACE, "ws_data", "Рабочая область");
+            using Parameter par = GetParameter(ParameterType.WORKSPACE, "ws_data", "", false);
             try
             {
                 return JsonConvert.DeserializeObject<WorkspacePrimarySettings>(par.value);
             }
             catch
             {
+                DialogsManager.ShowErrorDialog("Первичные данные о рабочем пространстве повреждены.", "Критическая ошибка");
                 return new();
             }
         }
-        public static string GetWorkspaceName()
+        internal static string GetWorkspaceName()
         {
             return GetWorkspaceSettings().Name;
         }
-        public static bool IsWorkspaceLocked()
+        internal static bool IsWorkspaceLocked()
         {
             return GetWorkspaceSettings().IsLocked;
         }
 
         #endregion
-        public static void CheckLocked()
+        internal static void CheckLocked()
         {
             if (IsWorkspaceLocked() && Permission.CurrentUserPermission != PermissionGroup.Admin)
             {
@@ -260,24 +300,23 @@ namespace Incas.Core.Classes
 
         #region Session
 
-        public static void BrokeSession()
+        internal static void BrokeSession()
         {
             throw new SessionBrokenException();
         }
-        public static void OpenSession()
+        internal static void OpenSession()
         {
             using Session ms = new();
             ms.AddSession();
             CurrentSession = ms;
             ms.ClearOldestSessions();
-            //Directory.CreateDirectory(ServerProcessor.Port);
         }
-        public static List<Session> GetActiveSessions()
+        internal static List<Session> GetActiveSessions()
         {
             using Session ms = new();
             return ms.GetOpenedSessions();
         }
-        public static void CloseSession()
+        internal static void CloseSession()
         {
             if (CurrentSession != null && CurrentSession.active)
             {
@@ -286,7 +325,7 @@ namespace Incas.Core.Classes
             ServerProcessor.StopPort();
         }
         #endregion
-        public static void PlaySound(string path)
+        internal static void PlaySound(string path)
         {
             try
             {
@@ -298,7 +337,7 @@ namespace Incas.Core.Classes
             }
             catch { }
         }
-        public static void OpenWebPage(string url)
+        internal static void OpenWebPage(string url)
         {
             try
             {
@@ -313,7 +352,7 @@ namespace Incas.Core.Classes
             }
         }
 
-        public static async void ClearRuntimeFiles()
+        internal static async void ClearRuntimeFiles()
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
@@ -330,7 +369,7 @@ namespace Incas.Core.Classes
                 }
             });
         }
-        public static void OpenFolder(string path)
+        internal static void OpenFolder(string path)
         {
             System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", path);
         }
@@ -351,7 +390,7 @@ namespace Incas.Core.Classes
                 }
             });
         }
-        public async static void CollectGarbage()
+        internal async static void CollectGarbage()
         {
             await Task.Run(() =>
             {               
@@ -369,17 +408,17 @@ namespace Incas.Core.Classes
             });
             
         }
-        public static string GetConstant(string name)
+        internal static string GetConstant(string name)
         {
             using Parameter p = new();
             return p.GetConstantValue(name);
         }
-        public static string GetConstant(Guid id)
+        internal static string GetConstant(Guid id)
         {
             using Parameter p = new();
             return p.GetConstantValue(id);
         }
-        public static List<string> GetEnumeration(Guid id)
+        internal static List<string> GetEnumeration(Guid id)
         {
             using Parameter p = new();
             return p.GetEnumerationValue(id);

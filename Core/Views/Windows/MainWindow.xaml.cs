@@ -1,17 +1,15 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Incas.Core.AutoUI;
+﻿using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Pages;
 using Incas.Objects.Models;
+using Incas.Server.AutoUI;
 using System;
 using System.IO;
 using System.Media;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -129,6 +127,10 @@ namespace Incas.Core.Views.Windows
                     break;
                 case Key.F7:
                     this.vm.DoOpenWeb("");
+                    break;
+                case Key.F12:
+                    TestSignal ts = new();
+                    ts.ShowDialog("345", Classes.Icon.Pin);
                     break;
             }
         }

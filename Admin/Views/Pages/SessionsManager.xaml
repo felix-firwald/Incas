@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Incas.Admin.Views.Pages" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <GroupBox Style="{DynamicResource MainGroupBox}" Header="СЕССИИ">
+    <GroupBox Header="Сессии">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>

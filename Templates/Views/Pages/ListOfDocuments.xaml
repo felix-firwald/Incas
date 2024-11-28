@@ -6,40 +6,42 @@
             xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="630" Background="Transparent">
-    <GroupBox Header="ШАБЛОНЫ ДОКУМЕНТОВ">
+    <GroupBox Header="Шаблоны документов (ограниченная поддержка)">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="294*"/>
+                <RowDefinition Height="0"/>
+                <RowDefinition Height="38*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="240" MaxWidth="300"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
-                <Button Style="{StaticResource ButtonMainFinish}" Click="AddClick" ToolTip="Добавить новый экземпляр объекта">
+                <Button Style="{StaticResource ButtonMainFinish}" Visibility="Collapsed" Click="AddClick" ToolTip="Добавить новый экземпляр объекта">
                     <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
                         <Path Fill="White" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
                         <Label Content="Добавить шаблон" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
                     </StackPanel>
                 </Button>
-                <Button Style="{StaticResource ButtonMain}" Click="RefreshClick">
+                <Button Style="{StaticResource ButtonMain}" Visibility="Collapsed" Click="RefreshClick">
                     <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
                         <Path Fill="White" Data="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9 M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" VerticalAlignment="Center"/>
                         <Label Foreground="White" Content="Обновить"/>
                     </StackPanel>
                 </Button>
             </WrapPanel>
-            <ScrollViewer Style="{StaticResource ScrollViewerBase}" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5" Grid.RowSpan="2">
+            <ScrollViewer Style="{StaticResource ScrollViewerBase}" Grid.Row="1" Grid.Column="0" Margin="0,0,0,5">
                 <StackPanel x:Name="Categories" >
                     <RadioButton Style="{StaticResource CategoryButton}" Content="Без категории" Click="SelectCategory" FontStyle="Italic" IsChecked="True"/>
                 </StackPanel>
             </ScrollViewer>
-            <ScrollViewer Style="{StaticResource ScrollViewerBase}" Margin="5,0,0,5" Grid.Column="1" Grid.Row="1" Cursor="" Grid.RowSpan="2">
+            <ScrollViewer Style="{StaticResource ScrollViewerBase}" Margin="5,0,0,5" Grid.Column="1" Grid.Row="1" Cursor="" >
                 <StackPanel x:Name="TemplatesArea" Grid.Row="0" ScrollViewer.CanContentScroll="True">
                 </StackPanel>
             </ScrollViewer>
-            <GridSplitter Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="233,0,0,0" Grid.RowSpan="2"/>
+            <GridSplitter Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="233,0,0,0" Grid.RowSpan="3"/>
+            <Label Style="{StaticResource WarningText}" Content="Функционал шаблонов начиная с этой версии признан устаревшим, рекомендуется использовать систему классов. Вы по-прежнему можете использовать шаблоны и редактировать уже имеющиеся." Grid.Row="5" Grid.ColumnSpan="2"/>
         </Grid>
     </GroupBox>
 </UserControl>

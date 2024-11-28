@@ -44,7 +44,7 @@ namespace Incas.Core.Models
                         .Select()
                         .WhereEqual("type", typeOf.ToString())
                         .WhereEqual("name", nameOf)
-                        .OrderByASC("id")
+                        .Limit(1)
                         .ExecuteOne();
             if (dr == null)
             {
