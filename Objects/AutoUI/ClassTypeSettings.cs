@@ -30,7 +30,8 @@ namespace Incas.Objects.AutoUI
             Dictionary<object, string> pairs = new()
             {
                 { ClassType.Model, "Модель данных" },
-                { ClassType.Document, "Документ (процесс)" },
+                { ClassType.Document, "Документ" },
+                { ClassType.Process, "Процесс" },
                 //{ ClassType.Generator, "Генератор" }
             };
             this.Selector = new(pairs);

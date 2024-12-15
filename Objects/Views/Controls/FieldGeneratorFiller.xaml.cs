@@ -45,6 +45,10 @@ namespace Incas.Objects.Views.Controls
         {
             return JsonConvert.SerializeObject(this.GetObjects());
         }
+        public object GetDataForScript()
+        {
+            return this.GetObjects();
+        }
         public List<Components.Object> GetObjects()
         {
             List<Incas.Objects.Components.Object> objs = new();

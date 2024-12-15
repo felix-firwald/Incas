@@ -27,19 +27,6 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.VisibleName));
             }
         }
-        //private int order;
-        //public int OrderNumber
-        //{
-        //    get => this.order;
-        //    set
-        //    {
-        //        if (value is >= 0 and <= 50)
-        //        {
-        //            this.order = value;
-        //            this.OnPropertyChanged(nameof(this.OrderNumber));
-        //        }
-        //    }
-        //}
         public string SelectedValue
         {
             get => this.Source.Value;
@@ -73,9 +60,39 @@ namespace Incas.Objects.ViewModels
             {
                 this.Source.Type = this.SerializeFromInput(value);
                 this.OnPropertyChanged(nameof(this.TypeOfFieldValue));
+                this.OnPropertyChanged(nameof(this.ActionBindingEnabled));
+                this.OnPropertyChanged(nameof(this.EventBindingEnabled));
             }
         }
-
+        public bool ActionBindingEnabled
+        {
+            get
+            {
+                switch (this.Source.Type)
+                {
+                    case FieldType.LocalConstant:
+                    case FieldType.GlobalConstant:
+                    case FieldType.HiddenField:
+                        return false;
+                    default:
+                        return true;
+                }
+            }
+        }
+        public bool EventBindingEnabled
+        {
+            get
+            {
+                switch (this.Source.Type)
+                {
+                    case FieldType.LocalConstant:
+                    case FieldType.GlobalConstant:
+                        return false;
+                    default:
+                        return true;
+                }
+            }
+        }
         // может лучше по selected index?
         #region Not Standart Properties
         public FieldType SerializeFromInput(string val)
@@ -127,6 +144,7 @@ namespace Incas.Objects.ViewModels
                 _ => "0",
             };
         }
+
         public void CheckField()
         {
             if (string.IsNullOrWhiteSpace(this.NameOfField))

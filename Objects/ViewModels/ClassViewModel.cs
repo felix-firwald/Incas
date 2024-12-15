@@ -1,4 +1,5 @@
-﻿using Incas.Core.ViewModels;
+﻿using ICSharpCode.AvalonEdit.Document;
+using Incas.Core.ViewModels;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
 using System.Collections.Generic;
@@ -14,7 +15,18 @@ namespace Incas.Objects.ViewModels
         {
             this.Source = source;
             this.SourceData = this.Source.GetClassData();
+            this.textDocument = new()
+            {
+                Text = this.SourceData.Script ?? ""
+            };
+            this.textDocument.TextChanged += this.TextDocument_TextChanged;
         }
+
+        private void TextDocument_TextChanged(object sender, System.EventArgs e)
+        {
+            this.SourceData.Script = this.textDocument.Text;
+        }
+
         public ClassType Type
         {
             get => this.SourceData.ClassType;
@@ -29,7 +41,13 @@ namespace Incas.Objects.ViewModels
             get => this.Source.name;
             set
             {
-                this.Source.name = value;
+                this.Source.name = value
+                    .Replace(":", "")
+                    .Replace("#", "")
+                    .Replace("$", "")
+                    .Replace("\\", "")
+                    .Replace("/", "")
+                    .Replace("!", "");
                 this.OnPropertyChanged(nameof(this.NameOfClass));
             }
         }
@@ -60,6 +78,24 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.ShowCard));
             }
         }
+        public bool PresetsEnabled
+        {
+            get => this.SourceData.PresetsEnabled;
+            set
+            {
+                this.SourceData.PresetsEnabled = value;
+                this.OnPropertyChanged(nameof(this.PresetsEnabled));
+            }
+        }
+        public bool Encrypt
+        {
+            get => this.SourceData.Encrypt;
+            set
+            {
+                this.SourceData.Encrypt = value;
+                this.OnPropertyChanged(nameof(this.Encrypt));
+            }
+        }
         public bool EditByAuthorOnly
         {
             get => this.SourceData.EditByAuthorOnly;
@@ -69,16 +105,33 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.EditByAuthorOnly));
             }
         }
+        public bool AuthorOverrideEnabled
+        {
+            get => this.SourceData.AuthorOverrideEnabled;
+            set
+            {
+                this.SourceData.AuthorOverrideEnabled = value;
+                this.OnPropertyChanged(nameof(this.AuthorOverrideEnabled));
+            }
+        }
         public bool InsertTemplateName
         {
-            get
-            {
-                return this.SourceData.InsertTemplateName;
-            }
+            get => this.SourceData.InsertTemplateName;
             set
             {
                 this.SourceData.InsertTemplateName = value;
                 this.OnPropertyChanged(nameof(this.InsertTemplateName));
+            }
+        }
+        private TextDocument textDocument;
+        public TextDocument CodeModule
+        {
+            get => this.textDocument;
+            set
+            {
+                this.textDocument = value;
+                this.SourceData.Script = value.Text;
+                this.OnPropertyChanged(nameof(this.CodeModule));
             }
         }
 

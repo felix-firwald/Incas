@@ -15,8 +15,10 @@ namespace Incas.Objects.Models
         public string Value { get; set; }
         public bool NotNull { get; set; }
         public bool IsUnique { get; set; }
+        public bool PresettingEnabled { get; set; }
         public string Description { get; set; }
-        public string Command { get; set; }      
+        public string Action { get; set; }
+        public string ChangedEvent { get; set; }
         public void SetId()
         {
             if (this.Id == Guid.Empty)
@@ -39,21 +41,6 @@ namespace Incas.Objects.Models
         public NumberFieldData GetNumberFieldData()
         {
             return JsonConvert.DeserializeObject<NumberFieldData>(this.Value);
-        }
-        public CommandSettings GetCommand()
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<CommandSettings>(Cryptographer.DecryptString(this.Command));
-            }
-            catch (Exception)
-            {
-                return new();
-            }
-        }
-        public void SaveCommand(CommandSettings cs)
-        {
-            this.Command = Cryptographer.EncryptString(JsonConvert.SerializeObject(cs));
         }
     }
 }

@@ -74,7 +74,7 @@ namespace Incas.Core.ViewModels
         }
         public bool SetPath()
         {
-            ProgramState.SetCommonPath(this.Path);
+            WorkspacePaths.SetCommonPath(this.Path);
             return true;
         }
         public string Path
@@ -141,6 +141,7 @@ namespace Incas.Core.ViewModels
                 catch (Exception) { }
             }
         }
+        //private string pwd = "";
         public string Password
         {
             get => RegistryData.GetWorkspacePassword(this.SelectedWorkspace);

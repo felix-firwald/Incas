@@ -1,8 +1,10 @@
 ﻿using Incas.Admin.AutoUI;
 using Incas.Admin.ViewModels;
 using Incas.Core.Classes;
+using Incas.Core.Interfaces;
 using Incas.Core.Models;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
 using System;
@@ -10,12 +12,16 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
+using static Incas.Core.Interfaces.ITabItem;
 
 namespace Incas.Admin.Views.Pages
 {
-    public partial class WorkspaceManager : UserControl
+    public partial class WorkspaceManager : System.Windows.Controls.UserControl, ITabItem
     {
         private WorkspaceParametersViewModel vm;
+        public event TabAction OnClose;
+        public string Id { get; set; }
         public WorkspaceManager()
         {
             this.InitializeComponent();
@@ -204,6 +210,7 @@ namespace Incas.Admin.Views.Pages
             {
                 CreateClass cc = new(ct);
                 cc.ShowDialog();
+                //DialogsManager.ShowPageWithGroupBox(cc, "CLASS_EDITOR", "Создание класса", TabType.Usual);
                 this.vm.UpdateClasses();
             }
         }

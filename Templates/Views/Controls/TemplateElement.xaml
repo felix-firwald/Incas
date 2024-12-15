@@ -1,4 +1,4 @@
-﻿<UserControl xmlns:fa="http://schemas.fontawesome.io/icons/"  x:Class="Incas.Templates.Views.Controls.TemplateElement"
+﻿<UserControl xmlns:fa="http://schemas.fontawesome.io/icons/" x:Class="Incas.Templates.Views.Controls.TemplateElement"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -20,9 +20,7 @@
                 <RowDefinition Height="35"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <fa:FontAwesome x:Name="UseButton" Style="{StaticResource IconButton}" Icon="PlusCircle" FontSize="18" Cursor="Hand" Text="&#xF055;" MouseDown="AddClick" ToolTip="Начать создание файлов по шаблону"/>
             <Label x:Name="MainLabel" Style="{StaticResource LabelElement}" Grid.Column="1" Content="Название не определено" VerticalAlignment="Center" FontSize="11"/>
-            <fa:FontAwesome x:Name="CreateChild" Style="{StaticResource IconButton}" Grid.Column="2" Icon="CodeFork" FontSize="16" Cursor="Hand" MouseDown="CreateChildClick" ToolTip="Создать наследника от этого шаблона" Tag="Да"/>
             <fa:FontAwesome Style="{StaticResource IconButton}" Grid.Column="3" Icon="Pencil" FontSize="16" Cursor="Hand" MouseDown="EditClick" ToolTip="Редактировать шаблон" Tag="Да"/>
             <fa:FontAwesome Style="{StaticResource IconButton}" Grid.Column="4" Icon="Remove" FontSize="18" Cursor="Hand" MouseDown="RemoveClick" ToolTip="Удалить шаблон"/>
 

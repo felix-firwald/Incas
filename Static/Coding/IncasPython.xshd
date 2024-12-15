@@ -1,0 +1,141 @@
+﻿
+<SyntaxDefinition name="IncasPython"
+    xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Comment" foreground="#3e735c" />
+	<Color name="String" foreground="#ffa4e7" />
+	<Color name="FString" foreground="#ffa3bf" />
+	<Color name="Keyword" foreground="#9c4cff" />
+	<Color name="Type" foreground="#fff41f" />
+	<Color name="Class" foreground="#bfff4c" />
+	<Color name="Self" foreground="#4cfff8" />
+	<Color name="Condition" foreground="#4ca2ff" />
+	<Color name="True" foreground="#3dff43" />
+	<Color name="False" foreground="#ff3d3d" />
+	<Color name="Punctuation" foreground="#7a7a8f" />
+	<RuleSet>
+		<Span color="Comment" begin="#">
+			<RuleSet>
+				<Span color="False">
+					<Begin>\[INCAS PRAGMA</Begin>
+					<End>\]</End>
+				</Span>
+				<Keywords foreground="#ff3d3d">
+					<Word>[INCAS PRAGMA]</Word>
+				</Keywords>
+				<Keywords foreground="#fffb00">
+					<Word>events</Word>
+					<Word>actions</Word>
+					<Word>methods</Word>
+				</Keywords>
+			</RuleSet>
+		</Span>
+		<Span color="String"> <!-- usually string -->
+			<Begin>"</Begin>
+			<End>"</End>
+			<RuleSet>
+				<!-- nested span for escape sequences -->
+				<Span begin="\\" end="." />
+			</RuleSet>
+		</Span>
+		<Span color="String"> <!-- usually string -->
+			<Begin>'</Begin>
+			<End>'</End>
+			<RuleSet>
+				<!-- nested span for escape sequences -->
+				<Span begin="\\" end="." />
+			</RuleSet>
+		</Span>
+		<Span color="FString"> <!-- f string -->
+			<Begin>f"</Begin>
+			<End>"</End>
+			<RuleSet>
+				<!-- nested span for escape sequences -->
+				<Span begin="\\" end="." />
+				<Span color="Self">
+					<Begin>{</Begin>
+					<End>}</End>
+				</Span>
+			</RuleSet>
+		</Span>
+		<Span color="FString"> <!-- f string -->
+			<Begin>f'</Begin>
+			<End>'</End>
+			<RuleSet>
+				<!-- nested span for escape sequences -->
+				<Span begin="\\" end="." />
+				<Span color="Self">
+					<Begin>{</Begin>
+					<End>}</End>
+				</Span>
+			</RuleSet>
+		</Span>
+		<Keywords foreground="#4ca2ff">
+			<Word>if</Word>
+			<Word>elif</Word>
+			<Word>else</Word>
+			<Word>while</Word>
+			<Word>for</Word>
+			<Word>in</Word>
+			<Word>or</Word>
+			<Word>and</Word>
+			<Word>from</Word>
+			<Word>import</Word>
+			<Word>with</Word>
+		</Keywords>
+		<Keywords fontWeight="bold" foreground="#3dff43">
+			<Word>True</Word>
+			<Word>__init__</Word>
+		</Keywords>
+		<Keywords fontWeight="bold" foreground="#ff3d3d">
+			<Word>False</Word>
+			<Word>None</Word>
+			<Word>not</Word>
+			<Word>raise</Word>
+		</Keywords>
+		<Keywords foreground="#bfff4c" background="">
+			<Word>class</Word>
+			<Word>def</Word>
+		</Keywords>
+		<Keywords foreground="#d761ff">
+			<Word>try</Word>
+			<Word>except</Word>
+			<Word>finally</Word>
+			<Word>return</Word>
+			<Word>yield</Word>
+			<Word>int</Word>
+			<Word>str</Word>
+			<Word>bool</Word>
+			<Word>list</Word>
+			<Word>dict</Word>
+			<Word>datetime</Word>
+			<Word>tuple</Word>
+			<Word>min</Word>
+			<Word>max</Word>
+			<Word>len</Word>
+			<Word>range</Word>
+		</Keywords>
+		<Keywords foreground="#4cfff8">
+			<Word>self</Word>
+		</Keywords>
+		<Keywords foreground="#7a7a8f">
+			<Word>=</Word>
+			<Word>-</Word>
+			<Word>+</Word>
+			<Word>.</Word>
+			<Word>,</Word>
+			<Word>(</Word>
+			<Word>)</Word>
+			<Word>:</Word>
+			<Word>!</Word>
+			<Word>pass</Word>
+		</Keywords>
+		<Rule foreground="#b9abff">
+			\b0[xX][0-9a-fA-F]+  # hex number
+			|    \b
+			(    \d+(\.[0-9]+)?   #number with optional floating point
+			|    \.[0-9]+         #or just starting with floating point
+			)
+			([eE][+-]?[0-9]+)? # optional exponent
+		</Rule>
+	</RuleSet>
+</SyntaxDefinition>

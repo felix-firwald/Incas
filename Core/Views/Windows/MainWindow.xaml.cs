@@ -1,4 +1,5 @@
-﻿using Incas.Core.AutoUI;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.ViewModels;
@@ -76,7 +77,6 @@ namespace Incas.Core.Views.Windows
 
         private void OnClosed(object sender, EventArgs e)
         {
-            ProgramState.CloseSession();
             System.Windows.Application.Current.Shutdown();
         }
 
@@ -135,7 +135,8 @@ namespace Incas.Core.Views.Windows
             }
         }
         public void UpdateTabs()
-        {                    
+        {
+            this.CustomTabs.Children.Clear();
             this.AddPageButton("Простые документы", Classes.Icon.FileRichText, Controls.MainWindowButtonTab.Templates);
             //this.AddPageButton("База данных", Classes.Icon.Database, Controls.MainWindowButtonTab.CustomDatabase);
             using (Class cl = new())
@@ -166,7 +167,7 @@ namespace Incas.Core.Views.Windows
 
         private void Bt_OnNewTabRequested(Control item, string id, string name)
         {         
-            this.AddTabItem(item, id, name, TabType.Usual);
+            this.AddTabItem((ITabItem)item, id, name, TabType.Usual);
         }
         public void AddTabItem(Control item, string id, string name, TabType tabType)
         {
@@ -197,6 +198,24 @@ namespace Incas.Core.Views.Windows
             ti.IsEnabledChanged += this.TabItem_IsEnabledChanged;
             this.TabMain.Items.Add(ti);
         }
+        public void AddTabItem(ITabItem item, string id, string name, TabType tabType)
+        {
+            item.OnClose += this.Item_OnClose;
+            item.Id = id;
+            this.AddTabItem((Control)item, id, name, tabType);
+        }
+
+        private void Item_OnClose(ITabItem item)
+        {
+            foreach (Control c in this.TabMain.Items)
+            {
+                if (c.Uid == item.Id)
+                { 
+                    this.TabMain.Items.Remove((TabItem)c);
+                    return;
+                }
+            }
+        }
 
         private void TabItem_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -205,6 +224,19 @@ namespace Incas.Core.Views.Windows
             {
                 this.Close();
             }
+        }
+
+        private void ShowLicenseClick(object sender, RoutedEventArgs e)
+        {
+            License.License lic = License.License.ReadLicense(RegistryData.GetPathToLicense());
+            DialogsManager.ShowInfoDialog($"Поставщик:    {lic.LicenseAuthorComputer}\n" +
+                $"Дата выдачи:  {lic.LicenseDate.ToString("dd.MM.yyyy HH:mm")}\n" +
+                $"Область:      {lic.LicenseNamespace}\n" +
+                $"Наименование: {lic.LicenseName}\n" +
+                $"Почта:        {lic.Email}\n" +
+                $"Тип (пакет):  {lic.LicenseType}\n" +
+                $"Истекает:     {lic.ExpirationDate.ToString("dd.MM.yyyy HH:mm")}\n" +
+                $"Комментарий:  {lic.Commentary}", "Информация о лицензии");
         }
     }
 }

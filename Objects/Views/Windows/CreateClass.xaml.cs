@@ -1,4 +1,8 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using AvaloniaEdit.Document;
+using AvaloniaEdit.Editing;
+using DocumentFormat.OpenXml.Bibliography;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
@@ -12,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Xml;
 using Field = Incas.Objects.Models.Field;
 
 namespace Incas.Objects.Views.Windows
@@ -36,12 +41,6 @@ namespace Incas.Objects.Views.Windows
                 this.vm.ShowCard = true;
                 this.TemplatesArea.Visibility = Visibility.Visible;
             }
-            else if (this.vm.Type == ClassType.Generator)
-            {
-                this.CardArea.Visibility = Visibility.Collapsed;
-                this.AccessArea.Visibility = Visibility.Collapsed;
-                this.TemplatesArea.Visibility = Visibility.Visible;
-            }
             else
             {
                 this.TemplatesArea.Visibility = Visibility.Collapsed;
@@ -50,7 +49,9 @@ namespace Incas.Objects.Views.Windows
         }
         public CreateClass(Guid id)
         {
+            XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");        
             this.InitializeComponent();
+            this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             if (id == Guid.Empty)
             {
                 this.Title = "(класс не выбран)";
@@ -77,11 +78,55 @@ namespace Incas.Objects.Views.Windows
 
         private void AddField(Incas.Objects.Models.Field data = null)
         {
-            Incas.Objects.Views.Controls.FieldCreator fc = new(this.ContentPanel.Children.Count, data);
+            Controls.FieldCreator fc = new(this.ContentPanel.Children.Count, data);
             fc.OnRemove += this.Fc_OnRemove;
             fc.OnMoveDownRequested += this.Fc_OnMoveDownRequested;
             fc.OnMoveUpRequested += this.Fc_OnMoveUpRequested;
             this.ContentPanel.Children.Add(fc);
+            Controls.FieldScriptViewer fsv = new(fc.vm);
+            fsv.OnBindingActionRequested += this.Fsv_OnBindingActionRequested;
+            fsv.OnBindingEventRequested += this.Fsv_OnBindingEventRequested;
+            fsv.OnLinkInsertingRequested += this.Fsv_OnLinkInsertingRequested;
+            this.ScriptFieldsPanel.Children.Add(fsv);
+        }
+
+        private void Fsv_OnLinkInsertingRequested(Field field)
+        {
+            this.CodeModule.SelectedText = $"self.{field.Name}";
+        }
+
+        private void Fsv_OnBindingEventRequested(Field field)
+        {
+            try
+            {
+                string searchText = ObjectiveScripting.GetPragmaStartEventsRegion();
+                int position = this.CodeModule.Document.Text.IndexOf(searchText, 1);
+                if (position == -1)
+                {
+                    DialogsManager.ShowExclamationDialog("Невозможно вставить метод в пустой модуль.", "Действие прервано");
+                }
+                string result = $"\n\tdef {field.Name}_changed(self):\n\t\tpass\n";
+                this.CodeModule.Document.Insert(position + searchText.Length, result);
+                this.CodeModule.SelectionStart = position + searchText.Length + result.Length;
+            }
+            catch { }
+        }
+
+        private void Fsv_OnBindingActionRequested(Field field)
+        {
+            try
+            {
+                string searchText = ObjectiveScripting.GetPragmaStartActionsRegion();
+                int position = this.CodeModule.Document.Text.IndexOf(searchText, 1);
+                if (position == -1)
+                {
+                    DialogsManager.ShowExclamationDialog("Невозможно вставить метод в пустой модуль.", "Действие прервано");
+                }
+                string result = $"\n\tdef {field.Name}_action(self):\n\t\tpass\n";
+                this.CodeModule.Document.Insert(position + searchText.Length, result);
+                this.CodeModule.SelectionStart = position + searchText.Length + result.Length;
+            }
+            catch { }
         }
 
         private int Fc_OnMoveUpRequested(Controls.FieldCreator t)
@@ -131,6 +176,14 @@ namespace Incas.Objects.Views.Windows
             else
             {
                 this.ContentPanel.Children.Remove(t);
+                foreach (FieldScriptViewer viewer in this.ScriptFieldsPanel.Children)
+                {
+                    if (viewer.vm == t.vm)
+                    {
+                        this.ScriptFieldsPanel.Children.Remove(viewer);
+                        break;
+                    }
+                }
             }
             return true;
         }
@@ -163,9 +216,28 @@ namespace Incas.Objects.Views.Windows
                 }
             }
         }
-        private void SaveClick(object sender, RoutedEventArgs e)
+        private List<Models.Field> GetActualFields()
         {
             List<Models.Field> fields = [];
+            List<string> names = [];
+            foreach (Controls.FieldCreator item in this.ContentPanel.Children)
+            {
+                Models.Field f = item.GetField();
+                if (names.Contains(f.Name))
+                {
+                    throw new FieldDataFailed($"Поле [{f.Name}] встречается более одного раза. Имена полей должны быть уникальными.");
+                }
+                else
+                {
+                    names.Add(f.Name);
+                }
+                f.SetId();
+                fields.Add(f);
+            }
+            return fields;
+        }
+        private void SaveClick(object sender, RoutedEventArgs e)
+        {
             try
             {
                 if (string.IsNullOrWhiteSpace(this.vm.NameOfClass))
@@ -174,26 +246,13 @@ namespace Incas.Objects.Views.Windows
                     return;
                 }
                 
-                List<string> names = [];
+                
                 if (this.ContentPanel.Children.Count == 0)
                 {
                     DialogsManager.ShowExclamationDialog("Класс не может не содержать полей.", "Сохранение прервано");
                     return;
                 }
-                foreach (Controls.FieldCreator item in this.ContentPanel.Children)
-                {
-                    Models.Field f = item.GetField();
-                    if (names.Contains(f.Name))
-                    {
-                        throw new FieldDataFailed($"Поле [{f.Name}] встречается более одного раза. Имена полей должны быть уникальными.");
-                    }
-                    else
-                    {
-                        names.Add(f.Name);
-                    }
-                    f.SetId();
-                    fields.Add(f);
-                }
+                List<Models.Field> fields = this.GetActualFields();
                 if (string.IsNullOrWhiteSpace(this.vm.NameTemplate))
                 {
                     FieldNameInsertor fn = new(fields);
@@ -425,6 +484,54 @@ namespace Incas.Objects.Views.Windows
             {
                 this.vm.NameTemplate = this.NameTemplate.Text + " " + fn.GetSelectedField();
             }
+        }
+
+        private void GenerateBaseScriptClick(object sender, RoutedEventArgs e)
+        {
+            string result = $"class {this.vm.Source.name.Replace(' ', '_')}:\n\tdef __init__(self, ";
+            List<string> fieldsNames = new();
+            string imports = "";
+            string fieldsAllocation = "";
+            List<Models.Field> fields = new();
+            try
+            {
+                fields = this.GetActualFields();
+                foreach (Models.Field field in fields)
+                {                 
+                    switch (field.Type)
+                    {
+                        case FieldType.Number:
+                            fieldsNames.Add($"{field.Name}=0");
+                            fieldsAllocation += $"\t\tself.{field.Name} = {field.Name} # {field.VisibleName}\n";
+                            break;
+                        case FieldType.Date:
+                            fieldsNames.Add($"{field.Name}=None");
+                            if (!imports.Contains("import datetime"))
+                            {
+                                imports += "import datetime\n";
+                            }
+                            fieldsAllocation += $"\t\tself.{field.Name} = {field.Name} # {field.VisibleName}\n";
+                            //fieldsAllocation += $"\t\tself.{field.Name} = datetime.datetime.strptime({field.Name}, \"%d.%m.%Y %H:%M:%S\") # {field.VisibleName}\n";
+                            break;
+                        default:
+                            fieldsNames.Add($"{field.Name}=None");
+                            fieldsAllocation += $"\t\tself.{field.Name} = {field.Name} # {field.VisibleName}\n";
+                            break;
+                    }                   
+                }
+                result = imports + result;
+                result += string.Join(", ", fieldsNames) + "):\n";
+                result += fieldsAllocation;
+                result += $"\n\n\t{ObjectiveScripting.GetPragmaStartMethodsRegion()}\n\t{ObjectiveScripting.GetPragmaEndMethodsRegion()}";
+                result += $"\n\n\t{ObjectiveScripting.GetPragmaStartEventsRegion()}\n\t{ObjectiveScripting.GetPragmaEndEventsRegion()}";
+                result += $"\n\n\t{ObjectiveScripting.GetPragmaStartActionsRegion()}\n\t{ObjectiveScripting.GetPragmaEndActionsRegion()}";
+            }
+            catch (FieldDataFailed fd)
+            {
+                DialogsManager.ShowExclamationDialog(fd.Message, "Генерация прервана");
+                return;
+            }
+            this.CodeModule.Text = result;         
         }
     }
 }

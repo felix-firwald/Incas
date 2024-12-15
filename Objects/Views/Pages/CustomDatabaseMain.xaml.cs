@@ -1,15 +1,19 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Interfaces;
 using Incas.Objects.ViewModels;
 using System.Windows.Controls;
+using static Incas.Core.Interfaces.ITabItem;
 
 namespace Incas.Objects.Views.Pages
 {
     /// <summary>
     /// Логика взаимодействия для CustomDatabaseMain.xaml
     /// </summary>
-    public partial class CustomDatabaseMain : System.Windows.Controls.UserControl
+    public partial class CustomDatabaseMain : System.Windows.Controls.UserControl, ITabItem
     {
         public CustomDatabaseViewModel vm;
+        public event TabAction OnClose;
+        public string Id { get; set; }
         public CustomDatabaseMain()
         {
             this.InitializeComponent();

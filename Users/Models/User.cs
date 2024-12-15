@@ -14,7 +14,6 @@ namespace Incas.Users.Models
         public string secondName { get; set; }
         public string fullname { get; set; }
         public string post { get; set; }
-        public string sector { get; set; }
         public string context { get; set; }
 
         public User AsModel()

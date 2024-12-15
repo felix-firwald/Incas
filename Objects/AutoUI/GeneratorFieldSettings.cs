@@ -29,10 +29,10 @@ namespace Incas.Objects.AutoUI
             this.Selector = new(new());
             using (Class cl = new())
             {
-                foreach (Class generator in cl.GetGenerators())
-                {
-                    this.Selector.Pairs.Add(generator.identifier, generator.name);
-                }
+                //foreach (Class generator in cl.GetGenerators())
+                //{
+                //    this.Selector.Pairs.Add(generator.identifier, generator.name);
+                //}
             }
             try
             {

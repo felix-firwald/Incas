@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="Incas.Core.Views.Controls.NoPermission"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.Core.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="80"/>
+            <RowDefinition MinHeight="80"/>
+        </Grid.RowDefinitions>
+        <!--<fa:FontAwesome Icon="LocationArrow" Grid.Row="0" Grid.Column="0" Foreground="{DynamicResource Icon}" FontSize="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15"/>-->
+
+
+        <Path VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15" MinWidth="40" MinHeight="40" Stretch="Uniform" MaxWidth="40" MaxHeight="40" Fill="{DynamicResource Icon}" Data="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5v-1a2 2 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693Q8.844 9.002 8 9c-5 0-6 3-6 4m7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
+        <Label Style="{DynamicResource LabelPrimary}" Grid.Row="1" Content="Нет доступа" Foreground="{DynamicResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+    </Grid>
+</UserControl>

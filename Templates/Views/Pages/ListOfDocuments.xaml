@@ -41,7 +41,9 @@
                 </StackPanel>
             </ScrollViewer>
             <GridSplitter Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" Margin="233,0,0,0" Grid.RowSpan="3"/>
-            <Label Style="{StaticResource WarningText}" Content="Функционал шаблонов начиная с этой версии признан устаревшим, рекомендуется использовать систему классов. Вы по-прежнему можете использовать шаблоны и редактировать уже имеющиеся." Grid.Row="5" Grid.ColumnSpan="2"/>
+            <ContentControl Style="{StaticResource BoxError}" Grid.Row="5" Grid.ColumnSpan="2">
+                <TextBlock Text="Функционал шаблонов признан устаревшим, рекомендуется использовать систему классов. Вы по-прежнему можете использовать шаблоны и редактировать уже имеющиеся." />
+            </ContentControl>
         </Grid>
     </GroupBox>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Objects.AutoUI;
@@ -9,6 +10,8 @@ using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Templates.Components;
 using Incas.Templates.Views.Windows;
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -54,10 +57,6 @@ namespace Incas.Objects.Views.Pages
             if (data.ClassType != ClassType.Document)
             {
                 this.RenderArea.Visibility = Visibility.Collapsed;
-                if (data.ClassType == ClassType.Generator)
-                {
-                    this.SaveArea.Visibility = Visibility.Collapsed;
-                }
             }           
             else
             {
@@ -120,6 +119,7 @@ namespace Incas.Objects.Views.Pages
                         };
                         ff.OnInsert += this.Tf_OnInsert;
                         ff.OnFillerUpdate += this.Tf_OnFieldUpdate;
+                        ff.OnScriptRequested += this.Ff_OnScriptRequested;
                         ff.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
                         this.ContentPanel.Children.Add(ff);
                         this.fillers.Add(ff);
@@ -148,6 +148,58 @@ namespace Incas.Objects.Views.Pages
                         break;
                 }
             }         
+        }
+
+        private async void Ff_OnScriptRequested(string script)
+        {
+            try
+            {
+                Dictionary<Models.Field, object> dict = this.PullObjectForScript();
+                await Task.Run(() =>
+                {
+                    string scriptResult = this.ClassData.Script;
+                    ScriptEngine engine = Python.CreateEngine();
+                    ScriptScope scope = engine.CreateScope();
+                    scriptResult += $"\nmain = {this.Class.name.Replace(" ", "_")}(";
+                    List<string> args = new();
+                    foreach (KeyValuePair<Models.Field, object> fd in dict)
+                    {
+                        switch (fd.Key.Type)
+                        {
+                            case FieldType.Number:
+                                args.Add($"{fd.Key.Name}={fd.Value}");
+                                break;
+                            case FieldType.Date:
+                                DateTime dt = (DateTime)fd.Value;
+                                args.Add($"{fd.Key.Name}=datetime.date({dt.Year}, {dt.Month}, {dt.Day})");
+                                break;
+                            default:
+                                args.Add($"{fd.Key.Name}='''{fd.Value}'''");
+                                break;
+                        }                       
+                    }
+                    scriptResult += string.Join(", ", args);
+                    scriptResult += $")\nmain.{script}()";
+                    engine.Execute(scriptResult, scope);
+
+                    List<Incas.Objects.Components.FieldData> fields = new();
+                    dynamic target = scope.GetVariable("main");
+                    foreach (KeyValuePair<Models.Field, object> fd in dict)
+                    {
+                        fields.Add(new()
+                        {
+                            ClassField = fd.Key,
+                            Value = engine.Operations.GetMember(target, fd.Key.Name).ToString()
+                        });
+                    }
+                    this.Object.Fields = fields;
+                });
+                this.ApplyObject(this.Object);
+            }
+            catch(Exception ex)
+            {
+                DialogsManager.ShowErrorDialog("При обработке скрипта возникла ошибка:\n" + ex.Message, "Ошибка скрипта");
+            }
         }
 
         private void Tf_OnDatabaseObjectCopyRequested(IFillerBase sender)
@@ -214,6 +266,20 @@ namespace Incas.Objects.Views.Pages
                     ((IGeneratorFiller)filler).ApplyObjectsBy(this.Class, obj.Id);
                 }
             }
+        }
+        public Dictionary<Models.Field, object> PullObjectForScript()
+        {
+            if (this.Object.Fields == null)
+            {
+                this.Object.Fields = [];
+            }
+            this.Object.Fields.Clear();
+            Dictionary<Models.Field, object> pairs = new();
+            foreach (IFillerBase tf in this.ContentPanel.Children)
+            {
+                pairs.Add(tf.Field, tf.GetDataForScript());
+            }
+            return pairs;
         }
         public Components.Object PullObject()
         {
@@ -415,7 +481,7 @@ namespace Incas.Objects.Views.Pages
                 {
                     return;
                 }
-                string path = ProgramState.TemplatesRuntime;
+                string path = ProgramState.CurrentWorkspace.GetRuntimesTemplatesFolder();
                 if (this.ClassData.Templates?.Count == 1)
                 {
                     if (this.ClassData.Templates[1].File.EndsWith(".xlsx"))

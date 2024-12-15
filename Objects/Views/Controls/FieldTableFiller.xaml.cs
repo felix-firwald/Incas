@@ -68,6 +68,10 @@ namespace Incas.Objects.Views.Controls
             this.CheckData();
             return JsonConvert.SerializeObject(this.vm.Grid);
         }
+        public object GetDataForScript()
+        {
+            return this.vm.Grid;
+        }
         public void MarkAsNotValidated()
         {
             this.Main.Background = new SolidColorBrush(Color.FromRgb(68, 40, 45));

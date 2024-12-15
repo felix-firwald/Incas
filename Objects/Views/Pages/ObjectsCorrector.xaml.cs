@@ -78,7 +78,9 @@ namespace Incas.Objects.Views.Pages
                     return;
                 }
             }
+            this.IsEnabled = false;
             ObjectProcessor.UpdateFieldsByIdForCorrection(this.Class, list, this.Field);
+            DialogsManager.ShowInfoDialog("Исправления успешно применены. Вкладку можно закрыть.");           
         }
 
         private void Grid_AutoGeneratingColumn(object sender, System.Windows.Controls.DataGridAutoGeneratingColumnEventArgs e)

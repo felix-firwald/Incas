@@ -50,39 +50,13 @@ namespace Incas.Templates.Views.Controls
                         if (this.ChildPanel.Children.Count > 0)
                         {
                             this.MainLabel.Style = this.FindResource("LabelElementSuccess") as Style;
-                            this.UseButton.Visibility = Visibility.Hidden;
                             this.ParentIcon.Visibility = Visibility.Visible;
                             this.Line.Visibility = Visibility.Visible;
                             this.ParentIconBottom.Visibility = Visibility.Visible;
                         }
                     });
                 }
-
             });
-        }
-
-        private void AddClick(object sender, MouseButtonEventArgs e)
-        {
-            DialogsManager.ShowWaitCursor();
-            switch (this.template.type)
-            {
-                case TemplateType.Word:
-                case TemplateType.Excel:
-                    if (this.IsFileExists())
-                    {
-                        UseTemplate ut = new(this.template.AsModel());
-                        ut.Show();
-                    }
-                    else
-                    {
-                        DialogsManager.ShowErrorDialog($"Файл шаблона \"{this.template.name}\" ({this.template.path}) не найден.\nОтредактируйте шаблон, указав правильный путь к файлу, чтобы его использование стало возможным.", "Использование шаблона невозможно");
-                    }
-                    break;
-            }
-        }
-        private bool IsFileExists()
-        {
-            return File.Exists(ProgramState.GetFullnameOfDocumentFile(this.template.path));
         }
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)

@@ -29,23 +29,11 @@ namespace Incas.Core.Classes
                 connection.Close();
             }
         }
-        public static void InitializePort()
-        {
-            AutoTableCreator atc = new();
-            SQLiteConnection.CreateFile(ServerProcessor.Port);
-            Query q = new("")
-            {
-                typeOfConnection = DBConnectionType.CUSTOM,
-                DBPath = ServerProcessor.Port
-            };
-            q.AddCustomRequest(GetProcessDefinition(atc));
-            q.ExecuteVoid();
-        }
         public static bool InitializeService(bool createFile = true)
         {
             if (createFile)
             {
-                SQLiteConnection.CreateFile(ProgramState.ServiceDatabasePath);
+                SQLiteConnection.CreateFile(ProgramState.CurrentWorkspace.ServiceDatabasePath);
             }           
             AutoTableCreator atc = new();
             Query q = new("")
@@ -56,7 +44,6 @@ namespace Incas.Core.Classes
              .AddCustomRequest(GetParameterDefinition(atc))
              .AddCustomRequest(GetUserDefinition(atc))
              .AddCustomRequest(GetGroupDefinition(atc))
-             .AddCustomRequest(GetSessionDefinition(atc))
              .AddCustomRequest(GetCommandDefinition(atc))
              .AddCustomRequest(GetClassesDefinition(atc))
              .AddCustomRequest(GetTemplateDefinition(atc))
@@ -74,7 +61,6 @@ namespace Incas.Core.Classes
             CheckFieldsInTable(typeof(Parameter), "Parameters");
             CheckFieldsInTable(typeof(User), "Users");
             CheckFieldsInTable(typeof(Group), "Groups");
-            CheckFieldsInTable(typeof(Session), "Sessions");
             CheckFieldsInTable(typeof(Command), "Commands");
             CheckFieldsInTable(typeof(Template), "Templates");
             CheckFieldsInTable(typeof(Class), "Classes");
@@ -112,12 +98,6 @@ namespace Incas.Core.Classes
         }
 
         #region Definitions
-        private static string GetProcessDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Models.Process), "Processes");
-            atc.SetAsUnique("identifier");
-            return atc.GetQueryText();
-        }
         private static string GetParameterDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Parameter), "Parameters");
@@ -141,11 +121,6 @@ namespace Incas.Core.Classes
         {
             atc.Initialize(typeof(Group), "Groups");
             atc.SetAsUnique("Id");
-            return atc.GetQueryText();
-        }
-        private static string GetSessionDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Session), "Sessions");
             return atc.GetQueryText();
         }
         private static string GetTemplateDefinition(AutoTableCreator atc)
@@ -200,9 +175,6 @@ namespace Incas.Core.Classes
                 };
                 switch (result[result.Length - 1].Trim())
                 {
-                    case "Processes":
-                        q.AddCustomRequest(GetProcessDefinition(atc));
-                        break;
                     case "Groups":
                         q.AddCustomRequest(GetGroupDefinition(atc));
                         break;
@@ -211,9 +183,6 @@ namespace Incas.Core.Classes
                         break;
                     case "Users":
                         q.AddCustomRequest(GetParameterDefinition(atc));
-                        break;
-                    case "Sessions":
-                        q.AddCustomRequest(GetSessionDefinition(atc));
                         break;
                     case "Templates":
                         q.AddCustomRequest(GetTemplateDefinition(atc));
@@ -229,7 +198,6 @@ namespace Incas.Core.Classes
                 }
                 q.ExecuteVoid();
                 DialogsManager.ShowInfoDialog("INCAS исправил ошибку. Программа будет закрыта.");
-                ServerProcessor.TerminateProcessHandle();
             }
         }
     }

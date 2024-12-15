@@ -48,7 +48,7 @@ namespace Incas.Objects.Views.Controls
 
         private void ViewFileClick(object sender, MouseButtonEventArgs e)
         {
-            string pathFile = ProgramState.GetFullnameOfDocumentFile(this.data.File);
+            string pathFile = ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(this.data.File);
 
             if (!File.Exists(pathFile))
             {
@@ -70,7 +70,7 @@ namespace Incas.Objects.Views.Controls
 
         private void SearchFields(object sender, MouseButtonEventArgs e)
         {
-            string pathFile = ProgramState.GetFullnameOfDocumentFile(this.data.File);
+            string pathFile = ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(this.data.File);
 
             if (!File.Exists(pathFile))
             {

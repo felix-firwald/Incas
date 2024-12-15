@@ -52,7 +52,7 @@ namespace Incas.Objects.Views.Windows
             OpenFileDialog fd = new()
             {
                 Filter = "Word и Excel|*.docx;*.xlsx",
-                InitialDirectory = ProgramState.TemplatesSources
+                InitialDirectory = ProgramState.CurrentWorkspace.GetSourcesTemplatesFolder(),
             };
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -63,9 +63,10 @@ namespace Incas.Objects.Views.Windows
         {
             string result = System.IO.Path.GetFileName(path);
             this.Path.Text = result;
-            if (!path.StartsWith(ProgramState.TemplatesSources)) // если файл еще не в каталоге рабочего пространства
+            
+            if (!ProgramState.CurrentWorkspace.IsTemplatePathContainsWorkspacePath(path)) // если файл еще не в каталоге рабочего пространства
             {
-                if (File.Exists(ProgramState.GetFullnameOfDocumentFile(result))) // если в каталоге рабочего пространства есть файл с таким же именем
+                if (ProgramState.CurrentWorkspace.HasTemplateWithSuchName(result)) // если в каталоге рабочего пространства есть файл с таким же именем
                 {
                     if (DialogsManager.ShowQuestionDialog($"Файл с именем \"{result}\" уже существует в рабочем пространстве. Вы хотите выбрать присвоить выбранному файлу другое имя или использовать уже существующий файл?", "Файл уже существует", "Переименовать выбранный", "Использовать существующий") == DialogStatus.Yes)
                     {
@@ -73,13 +74,13 @@ namespace Incas.Objects.Views.Windows
                         if (rs.ShowDialog("Новое имя файла", Core.Classes.Icon.Subscript))
                         {                        
                             this.Path.Text = rs.Name;
-                            File.Copy(path, ProgramState.GetFullnameOfDocumentFile(rs.Name));
-                        }                      
+                            File.Copy(path, ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(rs.Name));
+                        }
                     }
                 }
                 else
                 {
-                    File.Copy(path, ProgramState.GetFullnameOfDocumentFile(result));
+                    File.Copy(path, ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(result));
                 }
             }
         }

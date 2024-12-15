@@ -7,7 +7,6 @@ namespace Incas.Core.Classes
     public class Service
     {
         public Service() { }
-        public static string CurrentSessionId = ProgramState.CurrentSession.slug;
         public static string GetUserUsername()
         {
             return ProgramState.CurrentUser.username;
@@ -33,10 +32,6 @@ namespace Incas.Core.Classes
         public static ScriptEngine GetEngine()
         {
             return engine;
-        }
-        public static string GetFullPathOfScript(string name)
-        {
-            return $"{ProgramState.Scripts}\\{name}";
         }
         public static void Execute(string script, ScriptScope scope)
         {

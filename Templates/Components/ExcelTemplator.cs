@@ -24,7 +24,7 @@ namespace Incas.Templates.Components
         public IXLWorksheet worksheet;
         public ExcelTemplator(string templatePath, string newPath)
         {
-            string oldpath = ProgramState.GetFullnameOfDocumentFile(templatePath);
+            string oldpath = ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(templatePath);
             if (File.Exists(newPath))
             {
                 File.Delete(newPath);

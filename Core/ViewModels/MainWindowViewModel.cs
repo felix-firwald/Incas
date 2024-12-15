@@ -51,21 +51,12 @@ namespace Incas.Core.ViewModels
         }
         public void DoOpenTasks(object parameter)
         {
-            TestSignal ts = new();
-            ts.ShowDialog("345", Classes.Icon.Pin);
-            //DialogsManager.ShowTasksManager();
+            //TestSignal ts = new();
+            //ts.ShowDialog("345", Classes.Icon.Pin);
         }
         public void DoCopyFile(object parameter)
         {
-            Session target;
-            if (DialogsManager.ShowActiveUserSelector(out target, "Выберите пользователя для копирования файла."))
-            {
-                OpenFileDialog of = new();
-                if (of.ShowDialog() == DialogResult.OK)
-                {
-                    ServerProcessor.SendCopyFileProcess(of.SafeFileName, of.FileName, target.slug);
-                }
-            }
+            
         }
         public void DoOpenFileManager(object parameter)
         {

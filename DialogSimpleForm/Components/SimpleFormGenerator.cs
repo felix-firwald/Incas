@@ -2,6 +2,7 @@
 using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
+using Incas.DialogSimpleForm.Views.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -116,6 +117,9 @@ namespace Incas.DialogSimpleForm.Components
                     break;
                 case "Color":
                     control = this.GenerateColorBox(description, (Color)field.GetValue(this.Result));
+                    break;
+                case "CheckedList":
+                    control = this.GenerateCheckedListBox(description, (CheckedList)field.GetValue(this.Result));
                     break;
                 default:
                     if (field.PropertyType.Name.Contains("List"))
@@ -296,6 +300,14 @@ namespace Incas.DialogSimpleForm.Components
             };
             return control;
         }
+        private Control GenerateCheckedListBox(string description, CheckedList value)
+        {
+            CheckedListBox control = new(value)
+            {
+                Tag = description
+            };
+            return control;
+        }
         #endregion
         private void GetEnumDescriptions(FieldInfo f)
         {
@@ -361,6 +373,9 @@ namespace Incas.DialogSimpleForm.Components
                                 break;
                             case "Color":
                                 field.SetValue(this.Result, ((ColorBox)control).SelectedColor);
+                                break;
+                            case "CheckedList":
+                                field.SetValue(this.Result, ((CheckedListBox)control).GetResult());
                                 break;
                             default:
                                 if (field.PropertyType.Name.Contains("List"))

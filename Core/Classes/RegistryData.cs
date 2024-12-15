@@ -13,6 +13,32 @@ namespace Incas.Core.Classes
         {
             return Registry.CurrentUser.CreateSubKey("SOFTWARE\\Incas", true);
         }
+        #region License
+        public static string GetPathToLicense()
+        {
+            return GetRoot().GetValue("license", "").ToString();           
+        }
+        public static void SetPathToLicense(string path)
+        {
+            GetRoot().SetValue("license", path);
+        }
+        /// <summary>
+        /// Gets an Unique Machine Identifier
+        /// </summary>
+        /// <returns></returns>
+        public static string GetUMI()
+        {
+            return GetRoot().GetValue("umi", "").ToString();
+        }
+        /// <summary>
+        /// Setting up the Unique Machine Identifier
+        /// </summary>
+        /// <param name="umi"></param>
+        public static void SetUMI(string umi)
+        {
+            GetRoot().SetValue("umi", umi);
+        }
+        #endregion
         #region workspaces
 
         public static RegistryKey GetWorkspaceData()
@@ -151,7 +177,7 @@ namespace Incas.Core.Classes
             object obj = GetClassKey(id).GetValue($"TemplatePath '{templateName}'");
             if (obj is null)
             {
-                return ProgramState.Root;
+                return "";
             }
             return obj.ToString();
         }

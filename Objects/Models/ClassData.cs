@@ -11,10 +11,14 @@ namespace Incas.Objects.Models
         public string NameTemplate { get; set; }
         public ClassType ClassType { get; set; }
         public bool ShowCard { get; set; }
+        public bool PresetsEnabled { get; set; }
+        public bool Encrypt { get; set; }
         public bool EditByAuthorOnly { get; set; }
+        public bool AuthorOverrideEnabled { get; set; }
         public Dictionary<int, StatusData> Statuses { get; set; }
         public Dictionary<int, TemplateData> Templates { get; set; }
         public bool InsertTemplateName { get; set; }
+        public string Script { get; set; }
         public void AddStatus(StatusData data)
         {
             this.Statuses ??= [];

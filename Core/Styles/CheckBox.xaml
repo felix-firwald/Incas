@@ -15,7 +15,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
-                        <ContentPresenter TextElement.Foreground="{DynamicResource GrayLight}" TextElement.FontFamily="/Fonts/#JetBrains Mono" Grid.Column="0" TextElement.FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        <ContentPresenter TextElement.Foreground="{DynamicResource GrayLight}" TextElement.FontFamily="/Fonts/#JetBrains Mono" Grid.Column="0" TextElement.FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0"/>
                         <Border x:Name="Bord" Background="{StaticResource Black}" BorderBrush="{StaticResource Element}" BorderThickness="1" CornerRadius="6" MinHeight="15" MaxHeight="15" MinWidth="40" MaxWidth="40" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
                         <Ellipse x:Name="Ellipse" Fill="{StaticResource Error}" Stroke="{StaticResource Element}" StrokeThickness="0" Width="18" Height="18" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="6,0,0,0"/>
                         <fa:FontAwesome x:Name="Fa" Foreground="White" Icon="Check" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0" Grid.Column="1"/>
@@ -52,33 +52,62 @@
         </Setter>
     </Style>
     <Style TargetType="{x:Type CheckBox}">
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="#19FF0033"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
-        <Setter Property="Margin" Value="5,5,5,5"/>
+        <Setter Property="Margin" Value="5"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Opacity" Value="1.0"/>
+        <Setter Property="Foreground" Value="{StaticResource Error}"/>
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CheckBox}">
-                    <Grid x:Name="Root" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30"/>
-                            <ColumnDefinition Width="1*"/>
-                        </Grid.ColumnDefinitions>
-                        <Border x:Name="Bord" Opacity="1" Grid.Column="0" Margin="4" CornerRadius="6" MinWidth="18" MaxWidth="18" MinHeight="18" MaxHeight="18" BorderBrush="{StaticResource Element}" BorderThickness="1" Background="{StaticResource Black}" >
-                            <fa:FontAwesome x:Name="Fa" Foreground="White" Icon="Check" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2,0,0,0" Visibility="Hidden"/>
-                        </Border>
-                        <ContentPresenter x:Name="contentPresenter" TextElement.Foreground="{DynamicResource Light}" Grid.Column="1" TextElement.FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Center" OpacityMask="{x:Null}" />
-                    </Grid>
+                    <Border Background="{TemplateBinding Background}" CornerRadius="8" MinHeight="25">
+                        <Grid x:Name="Root" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <!--<Ellipse x:Name="Ellipse" Fill="Transparent" StrokeThickness="1" Stroke="{TemplateBinding Foreground}" Width="15" Height="15" />-->
+                            <Path x:Name="Ellipse" Fill="{TemplateBinding Foreground}" Panel.ZIndex="1" Width="16" Height="16" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Path.RenderTransform>
+                                    <RotateTransform Angle="0" CenterX="8" CenterY="8" x:Name="ArrowRotate"/>
+                                </Path.RenderTransform>
+                            </Path>
+                            <ContentPresenter x:Name="contentPresenter" TextElement.Foreground="{TemplateBinding Foreground}" Grid.Column="1" TextElement.FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Center" OpacityMask="{x:Null}" />
+                        </Grid>
+                    </Border>
+                    
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Fa" Property="Visibility" Value="Visible"/>
-                            <Setter TargetName="Bord" Property="Background" Value="DodgerBlue"/>
+                            <Setter Property="Foreground" Value="{StaticResource PrimaryMain}"/>
+                            <Setter Property="Background" Value="#191E90FF"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.150" To="-45"
+                                             Storyboard.TargetName="ArrowRotate"
+                                             Storyboard.TargetProperty="Angle"/>
 
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.200" To="0"
+                                            Storyboard.TargetName="ArrowRotate"
+                                            Storyboard.TargetProperty="Angle"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="White"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Bord" Property="Opacity" Value="0.5"/>
+                            <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

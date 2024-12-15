@@ -82,10 +82,10 @@ namespace Incas.Objects.Models
             }
             return result;
         }
-        public List<Class> GetGenerators()
-        {
-            return this.GetClassByType(ClassType.Generator);
-        }
+        //public List<Class> GetGenerators()
+        //{
+        //    return this.GetClassByType(ClassType.Generator);
+        //}
         private List<Class> GetClassByType(ClassType type)
         {
             string value = $"\"ClassType\":{(int)type}";
@@ -149,7 +149,8 @@ namespace Incas.Objects.Models
             {
                 ProgramStatusBar.SetText("Обновление полей в карте объектов...");
                 ObjectProcessor.UpdateObjectMap(this);
-            });           
+            });
+            ProgramState.UpdateWindowTabs();
         }
         public void Save()
         {
@@ -173,11 +174,13 @@ namespace Incas.Objects.Models
                     }
                 ).ExecuteVoid();
             ObjectProcessor.InitializeObjectMap(this);
+            ProgramState.UpdateWindowTabs();
         }
         public void Remove(Guid id)
         {
             this.StartCommand().Delete().WhereEqual(nameof(this.identifier), id.ToString()).ExecuteVoid();
             ObjectProcessor.DropObjectMap(this);
+            ProgramState.UpdateWindowTabs();
         }
         /// <summary>
         /// Unpack class data (fields, properties)

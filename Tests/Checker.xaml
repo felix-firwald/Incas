@@ -5,8 +5,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incas.Tests"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#7F34C924">
-        <Label Content="Проверка цвета" Foreground="{DynamicResource Success}"/>
+             d:DesignHeight="450" d:DesignWidth="600">
+    <Grid >
+        <StackPanel>
+            <Label Content="Проверка цвета" Background="#7F34C924" Foreground="{DynamicResource Success}"/>
+            <ContentControl Style="{StaticResource BoxWarning}">
+                <TextBlock Text="Этот элемент содержит предупреждения"/>
+            </ContentControl>
+            <ContentControl Style="{StaticResource BoxError}">
+                <TextBlock Text="Этот элемент содержит информацию об ошибке или иную критерически важную информацию"/>
+            </ContentControl>
+            <ContentControl Style="{StaticResource BoxInfo}">
+                <TextBlock Text="Этот элемент содержит полезную информацию"/>
+            </ContentControl>
+            <Button Style="{StaticResource ButtonMainFinish}" Content="Да"/>
+            <Border Margin="5" CornerRadius="8" MinHeight="30" Background="#BF34C924">
+                <Label Content="Проверка слизней" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#1A6512"/>
+            </Border>
+            <Border Margin="5" CornerRadius="8" MinHeight="30" Background="#4C34C924">
+                <Label Content="Проверка слизней" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#1A6512"/>
+            </Border>
+            <Border Margin="5" CornerRadius="8" MinHeight="30" Background="#3334C924">
+                <Label Content="Проверка слизней" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource Success}"/>
+            </Border>
+        </StackPanel>
+        
     </Grid>
 </UserControl>

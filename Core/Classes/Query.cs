@@ -436,7 +436,7 @@ namespace Incas.Core.Classes
             {
                 default:
                 case DBConnectionType.SERVICE:
-                    path = ProgramState.ServiceDatabasePath;
+                    path = ProgramState.CurrentWorkspace.ServiceDatabasePath;
                     break;
                 case DBConnectionType.CUSTOM:
                     path = this.DBPath;

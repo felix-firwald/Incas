@@ -31,6 +31,11 @@ namespace Incas.Objects.Components
         /// Table in .objinc storing user comments for documents storing in <see cref="MainTable"/>, typical only for documents
         /// </summary>
         public const string CommentsTable = "COMMENTS_MAP";
+
+        /// <summary>
+        /// Table in .objinc storing presets definitions
+        /// </summary>
+        public const string PresetsTable = "PRESETS_MAP";
         #endregion
         #region Fields
         /// <summary>
@@ -106,7 +111,7 @@ namespace Incas.Objects.Components
         /// <returns>Full path to a database</returns>
         public static string GetPathToObjectsMap(Class cl)
         {
-            return cl == null ? "" : $"{ProgramState.ObjectsPath}\\{cl.identifier}.objinc";
+            return cl == null ? "" : $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{cl.identifier}.objinc";
         }
 
         /// <summary>
@@ -115,7 +120,7 @@ namespace Incas.Objects.Components
         /// <returns>Full path to a database</returns>
         private static string GetPathToObjectsMap(Guid id)
         {
-            return $"{ProgramState.ObjectsPath}\\{id}.objinc";
+            return $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{id}.objinc";
         }
         /// <summary>
         /// Get path to folder named by guid of class where placed an attached files
@@ -123,7 +128,7 @@ namespace Incas.Objects.Components
         /// <returns></returns>
         public static string GetPathToAttachmentsFolder(Guid classId, Guid objectId)
         {
-            string result = $"{ProgramState.ObjectsPath}\\{classId}\\{objectId}\\";
+            string result = $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{classId}\\{objectId}\\";
             Directory.CreateDirectory(result);
             return result;
         }
@@ -140,7 +145,7 @@ namespace Incas.Objects.Components
                 {
                     ids.Add(dr[nameof(cl.identifier)].ToString());
                 }
-                foreach (string file in Directory.GetFiles(ProgramState.ObjectsPath))
+                foreach (string file in Directory.GetFiles(ProgramState.CurrentWorkspace.ObjectsPath))
                 {
                     if (!ids.Contains(Path.GetFileNameWithoutExtension(file)))
                     {
@@ -151,7 +156,7 @@ namespace Incas.Objects.Components
                         catch { }
                     }
                 }
-                foreach (string dir in Directory.GetDirectories(ProgramState.ObjectsPath))
+                foreach (string dir in Directory.GetDirectories(ProgramState.CurrentWorkspace.ObjectsPath))
                 {
                     if (!ids.Contains(new DirectoryInfo(dir).Name))
                     {
@@ -162,6 +167,19 @@ namespace Incas.Objects.Components
                         catch { }
                     }
                 }
+            }
+        }
+        /// <summary>
+        /// Fixes .objinc file bugs
+        /// </summary>
+        /// <param name="cl"></param>
+        public static void FixObjectMap(Class cl)
+        {
+            ClassData data = cl.GetClassData();
+            if (data.PresetsEnabled)
+            {
+                string path = GetPathToObjectsMap(cl);
+
             }
         }
 
@@ -175,18 +193,15 @@ namespace Incas.Objects.Components
             string adding = "";
             Query q = new("", path);
 
-            StringBuilder request = new($"BEGIN TRANSACTION; CREATE TABLE [{MainTable}] (\n");
+            StringBuilder request = new($"BEGIN TRANSACTION; CREATE TABLE IF NOT EXISTS [{MainTable}] (\n");
             request.Append($" [{IdField}] TEXT UNIQUE, [{NameField}] TEXT, [{StatusField}] TEXT, [{AuthorField}] TEXT, ");
             if (data.ClassType == ClassType.Document)
             {
                 request.Append($"[{DateCreatedField}] TEXT, [{DateTerminatedField}] TEXT, [{TerminatedField}] TEXT, ");
-                adding += $"CREATE TABLE [{EditsTable}] ([{IdField}] TEXT UNIQUE, [{TargetObjectField}] TEXT, [{StatusField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);\n";
-                adding += $"CREATE TABLE [{CommentsTable}] ([{IdField}] TEXT UNIQUE, [{TargetObjectField}] TEXT, [{TypeField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
+                adding += $"CREATE TABLE IF NOT EXISTS [{EditsTable}] ([{IdField}] TEXT UNIQUE, [{TargetObjectField}] TEXT, [{StatusField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);\n";
+                adding += $"CREATE TABLE IF NOT EXISTS [{CommentsTable}] ([{IdField}] TEXT UNIQUE, [{TargetObjectField}] TEXT, [{TypeField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
             }
-            else if (data.ClassType == ClassType.Generator)
-            {
-                request.Append($"[{TargetClassField}] TEXT, [{TargetObjectField}] TEXT, ");
-            }
+            adding += $"CREATE TABLE IF NOT EXISTS [{PresetsTable}] ([{IdField}] TEXT UNIQUE, [{TargetObjectField}] TEXT, [{TypeField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
             List<string> customFields = [];
             foreach (Incas.Objects.Models.Field f in cl.GetClassData().GetSavebleFields())
             {
@@ -224,7 +239,7 @@ namespace Incas.Objects.Components
                 catch { }
                 try
                 {
-                    string folder = $"{ProgramState.ObjectsPath}\\{cl.identifier}";
+                    string folder = $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{cl.identifier}";
                     Directory.Delete(folder, true);
                 }
                 catch { }
@@ -340,7 +355,7 @@ namespace Incas.Objects.Components
                 Application.Current.Dispatcher.Invoke(() =>
                 {                   
                     Objects.Views.Pages.ObjectsCorrector oc = new(cl, list, field);
-                    DialogsManager.ShowPage(oc, "Исправление данных", "FIXING" + cl.identifier.ToString());
+                    DialogsManager.ShowPageWithGroupBox(oc, $"Исправление данных ({field.Name})", "FIX" + field.Id.ToString());
                 });             
             }
             await Task.Run(() =>
@@ -536,11 +551,6 @@ namespace Incas.Objects.Components
                     values.Add(DateCreatedField, obj.CreationDate.ToString());
                     values.Add(TerminatedField, "0");
                 }
-                else if (data.ClassType == ClassType.Generator)
-                {
-                    values.Add(TargetClassField, obj.TargetClass.ToString());
-                    values.Add(TargetObjectField, obj.TargetObject.ToString());
-                }
                 obj.AuthorId = ProgramState.CurrentUser.id;
                 obj.CreationDate = DateTime.Now;
 
@@ -574,11 +584,6 @@ namespace Incas.Objects.Components
             if (data.ClassType == ClassType.Document)
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{DateCreatedField}]");
-            }
-            else if (data.ClassType == ClassType.Generator)
-            {
-                fieldsRequest.Add($"[OBJECTS_MAP].[{TargetClassField}]");
-                fieldsRequest.Add($"[OBJECTS_MAP].[{TargetObjectField}]");
             }
             fieldsRequest.Add($"[OBJECTS_MAP].[{NameField}]");
             foreach (Models.Field f in fields)
@@ -632,11 +637,6 @@ namespace Incas.Objects.Components
             if (data.ClassType == ClassType.Document)
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{DateCreatedField}]");
-            }
-            else if (data.ClassType == ClassType.Generator)
-            {
-                fieldsRequest.Add($"[OBJECTS_MAP].[{TargetClassField}]");
-                fieldsRequest.Add($"[OBJECTS_MAP].[{TargetObjectField}]");
             }
             fieldsRequest.Add($"[OBJECTS_MAP].[{NameField}]");
             List<string> innerJoins = [];

@@ -118,21 +118,6 @@ namespace Incas.Core.Classes
                 d.ShowDialog();
             });
         }
-        public static bool ShowActiveUserSelector(out Session session, string helpText)
-        {
-            ActiveUserSelector au = new(helpText);
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            {
-                au.ShowDialog();
-            });
-            if (au.SelectedSession != null)
-            {
-                session = au.SelectedSession;
-                return true;
-            }
-            session = null;
-            return false;
-        }
         public static string ShowClipboardManager(bool autoclose = false)
         {
             Miniservices.Clipboard.Views.Windows.Clipboard c = new(autoclose);

@@ -24,7 +24,6 @@ namespace Incas.Objects.AutoUI
         [Description("Обязательно для заполнения")]
         public bool NotNull { get; set; }
 
-
         #endregion
 
         #region Functionality

@@ -31,7 +31,7 @@ namespace Incas.Core.Views.Windows
             }
             else
             {
-                ProgramState.SetCommonPath(this.cpath.Text);
+                WorkspacePaths.SetCommonPath(this.cpath.Text);
                 if (Directory.Exists(this.cpath.Text))
                 {
                     this.TryAuthenticate();
@@ -56,8 +56,6 @@ namespace Incas.Core.Views.Windows
                     }
                     else
                     {
-                        ProgramState.OpenSession();
-                        ServerProcessor.Listen();
                         DialogsManager.ShowWaitCursor(false);
                         this.DialogResult = true;
                         this.Close();

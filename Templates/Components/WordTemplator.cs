@@ -30,7 +30,7 @@ namespace Incas.Templates.Components
         private Dictionary<string, DataTable> tables = new();
         public WordTemplator(string templatePath, string newPath)
         {
-            string oldpath = ProgramState.GetFullnameOfDocumentFile(templatePath);
+            string oldpath = ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(templatePath);
             if (File.Exists(newPath))
             {
                 File.Delete(newPath);
@@ -277,13 +277,13 @@ namespace Incas.Templates.Components
             return result;
         }
 
-        public string TurnToXPS()
-        {
-            Doc doc = new(this.Path);
-            string outputName = $"{ProgramState.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.xps";
-            doc.SaveAs(outputName);
-            return outputName;
-        }
+        //public string TurnToXPS()
+        //{
+        //    Doc doc = new(this.Path);
+        //    string outputName = $"{WorkspacePaths.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.xps";
+        //    doc.SaveAs(outputName);
+        //    return outputName;
+        //}
         public static string TurnToPDF(string file)
         {
             Doc doc = new(file);

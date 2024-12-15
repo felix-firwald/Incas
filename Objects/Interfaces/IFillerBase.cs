@@ -44,6 +44,12 @@ namespace Incas.Objects.Interfaces
         public string GetData();
 
         /// <summary>
+        /// Get an internal value
+        /// </summary>
+        /// <returns></returns>
+        public object GetDataForScript();
+
+        /// <summary>
         /// Set a value
         /// </summary>
         /// <returns></returns>

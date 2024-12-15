@@ -50,8 +50,6 @@ namespace Incas.Core.Views.Controls
                     return new WorkspaceManager();
                 case UsersSettings:
                     return new UsersManager();
-                case SessionsSettings:
-                    return new SessionsManager();
                 default:
                     if (this.internalPath.Contains(MainWindowButtonTab.ClassCategoryPrefix))
                     {

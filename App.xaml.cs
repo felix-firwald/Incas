@@ -4,6 +4,7 @@ using Incas.Templates.Components;
 using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Windows;
 
 namespace Incas
@@ -19,14 +20,16 @@ namespace Incas
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            //this.ShowCI();
-            //Server.Components.Client.IpAdress = ProgramState.GetLocalIPAddress();
-            //Server.Components.Server.IsRunning = true;
-            //if (DateTime.Now > ExpirationDate)
-            //{
-            //    DialogsManager.ShowErrorDialog("Истек предельный срок использования этой демонстрационной версии. Обновите программу.", "Лицензия истекла");
-            //    App.Current.Shutdown();
-            //}
+            ProgramState.CheckUMIExists();
+            ProgramState.InitDocumentsFolder();
+            if (!ProgramState.CheckLicense())
+            {
+                License.Views.Windows.LicenseDialog ld = new();
+                if (ld.ShowDialog() != true)
+                {
+                    System.Windows.Application.Current.Shutdown();
+                }
+            }
             ProgramState.CheckoutWorkspaces();
 
             OpenWorkspace ow = new();
@@ -46,14 +49,6 @@ namespace Incas
 
         private void Unhandled(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            try
-            {
-                ProgramState.CloseSession();
-            }
-            catch (Exception)
-            {
-
-            }
             ProgramState.OpenWebPage(FormError + "?version=" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "&description=" + e.Exception.Message);
             DialogsManager.ShowErrorDialog($"Возникла ошибка, не позволяющая приложению продолжать свою работу.\n" +
                 $"Описание: {e.Exception.Message}\nПриложение будет немедленно закрыто.", "Критическая ошибка");
@@ -61,7 +56,7 @@ namespace Incas
 
         private void OnExit(object sender, ExitEventArgs e)
         {
-            ProgramState.CloseSession();
+            
         }
     }
 }

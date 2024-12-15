@@ -128,7 +128,7 @@ namespace Incas.Objects.Views.Windows
             OpenFileDialog fd = new()
             {
                 Filter = "Word и Excel|*.docx;*.xlsx",
-                InitialDirectory = ProgramState.TemplatesSources
+                InitialDirectory = ProgramState.CurrentWorkspace.GetSourcesTemplatesFolder(),
             };
             if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {

@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2021.DocumentTasks;
-using Incas.Core.Classes;
-using Incas.Core.Views.Controls;
+﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
@@ -8,12 +6,9 @@ using Incas.Objects.Models;
 using Incas.Objects.Views.Windows;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Incas.Objects.Views.Pages
@@ -33,11 +28,6 @@ namespace Incas.Objects.Views.Pages
             DialogsManager.ShowWaitCursor();
             this.sourceClass = source;
             this.ClassData = source.GetClassData();
-            if (this.ClassData.ClassType == ClassType.Generator)
-            {
-                this.AddButton.Visibility = Visibility.Collapsed;
-                this.CopyButton.Visibility = Visibility.Collapsed;
-            }
             this.UpdateView();
             if (this.ClassData.ShowCard)
             {
@@ -92,15 +82,8 @@ namespace Incas.Objects.Views.Pages
 
         private void PlaceCard()
         {
-            if (this.ClassData.ClassType == ClassType.Generator)
-            {
-                this.ObjectCard = new();
-            }
-            else
-            {
-                this.ObjectCard = new(this.sourceClass);
-                this.ObjectCard.OnFilterRequested += this.ObjectCard_OnFilterRequested;
-            }
+            this.ObjectCard = new(this.sourceClass);
+            this.ObjectCard.OnFilterRequested += this.ObjectCard_OnFilterRequested;
             this.ObjectCard.MinWidth = 410;
             this.MainGrid.Children.Add(this.ObjectCard);
             Grid.SetRow(this.ObjectCard, 0);
@@ -214,11 +197,6 @@ namespace Incas.Objects.Views.Pages
         }
         private void OpenNewObject()
         {
-            if (this.ClassData.ClassType == ClassType.Generator)
-            {
-                DialogsManager.ShowExclamationDialog("Действие по созданию новых объектов недоступно в этой области.", "Действие невозможно");
-                return;
-            }
             ObjectsEditor oc = new(this.sourceClass);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
@@ -291,10 +269,6 @@ namespace Incas.Objects.Views.Pages
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
             ObjectsEditor oc = new(this.sourceClass, [obj]);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-            if (this.ClassData.ClassType == ClassType.Generator)
-            {
-                oc.SetSingleObjectMode();
-            }
             oc.Show();
         }
         private async void OpenSelectedObjects()
@@ -303,20 +277,11 @@ namespace Incas.Objects.Views.Pages
             List<Components.Object> objects = await ObjectProcessor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
             ObjectsEditor oc = new(this.sourceClass, objects);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-            if (this.ClassData.ClassType == ClassType.Generator)
-            {
-                oc.SetSingleObjectMode();
-            }
             oc.Show();
         }
 
         private void OpenCopyOfSelectedObject()
         {
-            if (this.ClassData.ClassType == ClassType.Generator)
-            {
-                DialogsManager.ShowExclamationDialog("Действие по созданию новых объектов недоступно в этой области.", "Действие невозможно");
-                return;
-            }
             Guid id = this.GetSelectedObjectGuid();
             if (id == Guid.Empty)
             {

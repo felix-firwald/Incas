@@ -2,21 +2,17 @@
 using Incas.Core.Views.Controls;
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
-using Incas.Templates.Components;
-using Incas.Templates.Views.Controls;
-using Microsoft.Scripting.Hosting;
+using Incas.Objects.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Incas.Objects.Interfaces;
 using static Incas.Objects.Interfaces.IFillerBase;
-using Xceed.Wpf.Toolkit;
-using System.Threading.Tasks;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -33,10 +29,10 @@ namespace Incas.Objects.Views.Controls
     public partial class FieldFiller : UserControl, ISimpleFiller
     {
         public Objects.Models.Field Field { get; set; }
-        private bool validated = true;
+        //private bool validated = true;
         private bool unique = true;
+        private bool eventChangedEnabled = true;
         private Control control;
-        private CommandSettings command;
         public delegate void CommandScript(string script);
         public event StringAction OnInsert;
         public event CommandScript OnScriptRequested;
@@ -58,12 +54,10 @@ namespace Incas.Objects.Views.Controls
         }
         public void MarkAsNotValidated()
         {
-            this.validated = false;
             this.Grid.Background = new SolidColorBrush(Color.FromRgb(68, 40, 45));
         }
         public void MarkAsValidated()
         {
-            this.validated = true;
             this.Grid.Background = null;
         }
         private FieldType GetFillerType()
@@ -161,18 +155,19 @@ namespace Incas.Objects.Views.Controls
 
         private void MakeButton()
         {
-            this.command = this.Field.GetCommand();
-            if (this.command.ScriptType != ScriptType.Button)
-            {
-                return;
-            }
-            this.CommandButtonIcon.Data = this.FindResource(this.command.Icon.ToString()) as PathGeometry;
-            this.CommandButton.Visibility = Visibility.Visible;
-            this.CommandButtonText.Content = this.command.Name;
+            //this.command = this.Field.GetCommand();
+            //if (this.command.ScriptType != ScriptType.Button)
+            //{
+            //    return;
+            //}
+            //this.CommandButtonIcon.Data = this.FindResource(this.command.Icon.ToString()) as PathGeometry;
+            //this.CommandButton.Visibility = Visibility.Visible;
+            //this.CommandButtonText.Content = this.command.Name;
         }
 
         public void SetValue(string value)
         {
+            this.eventChangedEnabled = false;
             switch (this.GetFillerType())
             {
                 case FieldType.Variable:
@@ -339,7 +334,42 @@ namespace Incas.Objects.Views.Controls
                     }
                     return obj?.Id.ToString();
                 default: return this.GetValue();
-
+            }
+        }
+        public object GetDataForScript()
+        {
+            switch (this.GetFillerType())
+            {
+                case FieldType.Date:
+                    if (((DatePicker)this.control).SelectedDate.HasValue)
+                    {
+                        return (DateTime)((DatePicker)this.control).SelectedDate;
+                    }
+                    return DateTime.MinValue;
+                case FieldType.Relation:
+                    Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
+                    if (obj is null)
+                    {
+                        return new List<FieldData>();
+                    }
+                    return obj?.Fields;
+                case FieldType.Variable:
+                default:
+                    return ((System.Windows.Controls.TextBox)this.control).Text;
+                case FieldType.Number:
+                    return ((NumericBox)this.control).Value;
+                case FieldType.LocalConstant:
+                case FieldType.HiddenField:
+                case FieldType.GlobalConstant:
+                    return this.Field.Value?.ToString();
+                case FieldType.LocalEnumeration:
+                case FieldType.GlobalEnumeration:
+                    ComboBox cb = (ComboBox)this.control;
+                    if (cb.SelectedIndex != -1)
+                    {
+                        return cb.Items.GetItemAt(cb.SelectedIndex).ToString();
+                    }
+                    return "";
             }
         }
         public Dictionary<string, string> GetDataFromObjectRelation()
@@ -409,43 +439,27 @@ namespace Incas.Objects.Views.Controls
         {
 
         }
-        private void PlayScript()
+        private void PlayScript(string command)
         {
-            try
+            if (this.eventChangedEnabled)
             {
-                if (this.command.Script.Contains("# [affects other]"))
+                if (!string.IsNullOrEmpty(command))
                 {
-                    OnScriptRequested?.Invoke(this.command.Script);
-                }
-                else
-                {
-                    ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                    scope.SetVariable("input_data", this.GetValue());
-                    ScriptManager.Execute(this.command.Script, scope);
-
-                    this.SetValue((string)scope.GetVariable("output"));
+                    OnScriptRequested?.Invoke(command);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                DialogsManager.ShowErrorDialog("При обработке скрипта произошла ошибка:\n" + ex.Message);
+                this.eventChangedEnabled = true;
             }
         }
         private void CommandClick(object sender, RoutedEventArgs e)
         {
-            this.PlayScript();
+            //this.PlayScript();
         }
         private void CheckForScriptOnUpdate()
         {
-            if (this.command.ScriptType == ScriptType.ValueChanged)
-            {
-                this.PlayScript();
-            }
-            if (!this.validated)
-            {
-                this.validated = true;
-                this.MainLabel.Foreground = this.FindResource("GrayLight") as SolidColorBrush;
-            }
+            this.PlayScript(this.Field.ChangedEvent);
         }
         private void RunUpdateEvent()
         {

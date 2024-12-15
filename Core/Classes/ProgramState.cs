@@ -2,7 +2,6 @@
 using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
-using Incas.Objects.Components;
 using Incas.Objects.ViewModels;
 using Incas.Users.Models;
 using Microsoft.Win32;
@@ -12,12 +11,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Media;
-using System.Net.Sockets;
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Diagnostics;
 using System.Net.Http;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 
 namespace Incas.Core.Classes
 {
@@ -36,36 +34,27 @@ namespace Incas.Core.Classes
 
     internal static class ProgramState
     {
-        internal static string CommonPath { get; private set; }
-        internal static string UserPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Incas";
-        internal static string ObjectsPath => Root + @"\Objects";
-        internal static string ServiceDatabasePath => CommonPath + @"\service.incas";
-        internal static string Root => CommonPath + @"\Root";
-        internal static string ServerProcesses => Root + @"\ServerProcesses";  // ...\Root\ServerProccesses
-        internal static string Exchanges => Root + @"\Exchanges";  // ...\Root\Exchanges
-        internal static string Messages => Root + @"\Messages";  // папка еще не создана
 
-        internal static string Scripts => Root + @"\Scripts";
-        internal static string LogData => Root + @"\LogData";  // ...\Root\LogData
         #region Server
         internal const int DefaultPort = 6890;
         internal const string EndMarker = "$[ENDMARKER]$";
-        #endregion
-        #region Templates
 
-        private static string Templates => Root + @"\Templates";     // ...\Root\Templates
-        public static string TemplatesSources => Templates + @"\Sources";
-        public static string TemplatesRuntime => Templates + @"\Runtime";     // ...\Root\Templates\Runtime
         #endregion
 
         #region User
         internal static User CurrentUser { get; set; }
         internal static UserParameters CurrentUserParameters { get; set; }
-        internal static Session CurrentSession { get; private set; }
         #endregion
         internal static MainWindowViewModel MainWindowViewModel { get; set; }
         internal static MainWindow MainWindow { get; set; }
         internal static CustomDatabaseViewModel DatabasePage { get; set; }
+        internal static Workspace CurrentWorkspace { get; set; }
+
+        internal static void InitDocumentsFolder()
+        {
+            Directory.CreateDirectory(WorkspacePaths.UserPathLicense);
+            Directory.CreateDirectory(WorkspacePaths.UserPathLogs);
+        }
 
         internal static IPAddress GetLocalIPAddress()
         {
@@ -123,43 +112,20 @@ namespace Incas.Core.Classes
         }
 
         private static DateTime LastGarbageCollect = DateTime.Now;
+
         #region Path and init
-        internal static void SetCommonPath(string path, bool checkout = true)
-        {
-            CommonPath = path;
-            Directory.CreateDirectory(Templates);
-            Directory.CreateDirectory(ServerProcesses);
-            Directory.CreateDirectory(Scripts);
-            Directory.CreateDirectory(Exchanges);
-            Directory.CreateDirectory(ObjectsPath);
-            Directory.CreateDirectory(Messages);
-            Directory.CreateDirectory(LogData);
-            Directory.CreateDirectory(TemplatesRuntime);
-            Directory.CreateDirectory(TemplatesSources);
-            if (checkout)
-            {
-                DatabaseManager.ActualizeTables();
-            }
-            CollectGarbage();
-        }
         internal static string GetFullPathOfCustomDb(string path)
         {
-            return $"{ObjectsPath}\\{path}.db";
+            return $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{path}.db";
         }
         internal static void ClearDataForRestart()
         {
             CurrentUser = null;
-            CurrentSession = null;
-            CommonPath = null;
             Permission.CurrentUserPermission = PermissionGroup.Operator;
         }
         internal static bool CheckSensitive()
         {
-            return CurrentUser != null && CurrentSession != null;
-        }
-        internal static bool IsCommonPathExists()
-        {
-            return Directory.Exists(CommonPath);
+            return CurrentUser != null;
         }
         #endregion
 
@@ -182,19 +148,13 @@ namespace Incas.Core.Classes
         {
             if (IsRegistryContainsData())
             {
-                SetCommonPath(RegistryData.GetSelectedWorkspacePath());
+                WorkspacePaths.SetCommonPath(RegistryData.GetSelectedWorkspacePath());
                 return true;
             }
             return false;
         }
         #endregion
 
-        #region WorkspaceFiles
-        internal static string GetFullnameOfDocumentFile(string name)
-        {
-            return TemplatesSources + "\\" + name;
-        }
-        #endregion
         private static bool CreateTablesInDatabase()
         {
             return DatabaseManager.InitializeService();
@@ -259,7 +219,7 @@ namespace Incas.Core.Classes
 
             DialogsManager.ShowWaitCursor();
             Permission.CurrentUserPermission = PermissionGroup.Admin;
-            SetCommonPath(data.Path, false);
+            WorkspacePaths.SetCommonPath(data.Path, false);
             if (CreateTablesInDatabase())
             {
                 DialogsManager.ShowWaitCursor(false);
@@ -297,34 +257,6 @@ namespace Incas.Core.Classes
                 throw new LockedException();
             }
         }
-
-        #region Session
-
-        internal static void BrokeSession()
-        {
-            throw new SessionBrokenException();
-        }
-        internal static void OpenSession()
-        {
-            using Session ms = new();
-            ms.AddSession();
-            CurrentSession = ms;
-            ms.ClearOldestSessions();
-        }
-        internal static List<Session> GetActiveSessions()
-        {
-            using Session ms = new();
-            return ms.GetOpenedSessions();
-        }
-        internal static void CloseSession()
-        {
-            if (CurrentSession != null && CurrentSession.active)
-            {
-                CurrentSession.CloseSession();
-            }
-            ServerProcessor.StopPort();
-        }
-        #endregion
         internal static void PlaySound(string path)
         {
             try
@@ -352,22 +284,9 @@ namespace Incas.Core.Classes
             }
         }
 
-        internal static async void ClearRuntimeFiles()
+        internal static void ClearRuntimeFiles()
         {
-            await System.Threading.Tasks.Task.Run(() =>
-            {
-                foreach (string item in Directory.GetFiles(TemplatesRuntime))
-                {
-                    try
-                    {
-                        File.Delete(item);
-                    }
-                    catch (Exception)
-                    {
-                        continue;
-                    }
-                }
-            });
+            ProgramState.CurrentWorkspace.ClearRuntimeFiles();
         }
         internal static void OpenFolder(string path)
         {
@@ -390,23 +309,9 @@ namespace Incas.Core.Classes
                 }
             });
         }
-        internal async static void CollectGarbage()
+        internal static void CollectGarbage()
         {
-            await Task.Run(() =>
-            {               
-                if (LastGarbageCollect < DateTime.Now.AddMinutes(-5))
-                {
-                    ProgramStatusBar.SetText("Выполняется сборка мусора...");
-                    RemoveFilesOlderThan(ServerProcesses, DateTime.Now.AddHours(-8));
-                    RemoveFilesOlderThan(Exchanges, DateTime.Now.AddHours(-1));
-                    RemoveFilesOlderThan(TemplatesRuntime, DateTime.Now.AddHours(-1));
-                    RemoveFilesOlderThan(LogData, DateTime.Now.AddHours(-8));
-                    ObjectProcessor.CleanGarbage();
-                    LastGarbageCollect = DateTime.Now;
-                    ProgramStatusBar.Hide();
-                }               
-            });
-            
+            ProgramState.CurrentWorkspace.CollectGarbage();
         }
         internal static string GetConstant(string name)
         {
@@ -422,6 +327,88 @@ namespace Incas.Core.Classes
         {
             using Parameter p = new();
             return p.GetEnumerationValue(id);
+        }
+        public static string ToHexString(string text)
+        {
+            byte[] b = Encoding.UTF8.GetBytes(text);
+            return Convert.ToHexString(b);
+        }
+        public static string FromHexString(string hexString)
+        {
+            byte[] b = Convert.FromHexString(hexString);
+            return System.Text.Encoding.UTF8.GetString(b);
+        }
+        internal static void UpdateWindowTabs()
+        {
+            MainWindow.UpdateTabs();
+        }
+        private static string GenerateUMI()
+        {
+            string key = Cryptographer.GenerateKey(Environment.MachineName);
+            Guid id = Guid.NewGuid();
+            return Cryptographer.EncryptString(key, id.ToString());
+        }
+        internal static void InitializeUMI()
+        {
+            RegistryData.SetUMI(ProgramState.GenerateUMI());
+        }
+        internal static string GetUMI()
+        {
+            string source = RegistryData.GetUMI();
+            string key = Cryptographer.GenerateKey(Environment.MachineName);
+            return Cryptographer.DecryptString(key, source);
+        }
+        internal static void CheckUMIExists()
+        {
+            if (string.IsNullOrEmpty(RegistryData.GetUMI()))
+            {
+                ProgramState.InitializeUMI();
+            }
+        }
+        internal static bool CheckLicense()
+        {
+            string path = RegistryData.GetPathToLicense();
+            if (string.IsNullOrEmpty(path))
+            {
+                return false;
+            }
+            else
+            {
+                if (File.Exists(path))
+                {
+                    License.License l = License.License.ReadLicense(path);
+                    if (!l.CheckVerificationSignatures())
+                    {
+                        DialogsManager.ShowAccessErrorDialog($"Лицензия на данное ПО скомпрометирована и не является подлинной. Пожалуйста, укажите правильную лицензию в следующем окне.", "Лицензия невалидна");
+                        return false;
+                    }
+                    else
+                    {
+                        if (l.IsActual())
+                        {
+                            if (l.IsItForMe())
+                            {                               
+                                return true;
+                            }
+                            else
+                            {
+                                DialogsManager.ShowAccessErrorDialog($"Данная лицензия не подходит к данному устройству.", "Лицензия невалидна");
+                                return false;
+                            } 
+                        }
+                        else
+                        {
+                            DialogsManager.ShowAccessErrorDialog($"Предельный срок действия лицензии истек. Дальнейшее использование программы станет возможным только после прикрепления новой лицензии.", "Лицензия истекла");
+                            return false;
+                        }                       
+                    }
+                }
+                else
+                {
+                    DialogsManager.ShowAccessErrorDialog($"По указанному пути ({path}) лицензия не найдена.", "Лицензия не найдена");
+                    return false;
+                }
+            }
         }
     }
 }

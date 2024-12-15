@@ -9,6 +9,12 @@
     <Border x:Name="bbb" CornerRadius="8" Margin="5" Cursor="Hand" MouseDown="Border_MouseDown" MouseUp="bbb_MouseUp">
         <Border.Style>
             <Style TargetType="{x:Type Border}">
+                <Setter Property="RenderTransformOrigin" Value="1,1" />
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform />
+                    </Setter.Value>
+                </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{StaticResource Element}"/>

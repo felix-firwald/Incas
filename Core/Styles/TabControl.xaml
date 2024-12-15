@@ -31,10 +31,6 @@
                     <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Cursor="Hand">
                         <Border x:Name="mainBorder" MinWidth="100" Background="{x:Null}" BorderBrush="{TemplateBinding BorderBrush}" Margin="2">
                             <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition MinWidth="25" Width="25"/>
-                                    </Grid.ColumnDefinitions>
                                 <Border x:Name="internalBorder" CornerRadius="8" Background="{x:Null}" Margin="5">
                                     <ContentPresenter x:Name="contentPresenter" 
                                           ContentSource="Header" 
@@ -48,39 +44,127 @@
                                           VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                           />
                                 </Border>
-                                <ToggleButton x:Name="Button" Grid.Column="1" Content="x" Width="25" Height="25" HorizontalAlignment="Right" ToolTip="Закрыть вкладку" ToolTipService.InitialShowDelay="160">
-                                        <ToggleButton.Style>
-                                            <Style TargetType="{x:Type ToggleButton}">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                                            <Border x:Name="Border" Background="Transparent" CornerRadius="8">
-                                                                <Path x:Name="Icon" Fill="{StaticResource Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" Height="8" Width="8" Stretch="UniformToFill" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                                                            </Border>
-                                                            <ControlTemplate.Triggers>
-                                                                <Trigger Property="IsMouseOver" Value="True">
-                                                                    <Setter TargetName="Border" Property="Background" Value="{StaticResource Element}"/>
-                                                                    <Setter TargetName="Icon" Property="Fill" Value="{StaticResource Error}"/>
-                                                                </Trigger>
-                                                            </ControlTemplate.Triggers>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </ToggleButton.Style>
-                                    </ToggleButton>
-                                </Grid>
-                                
-                            
-
+                            </Grid>
                         </Border>
-                        
                     </Grid>
                     <ControlTemplate.Triggers>
                         <EventTrigger RoutedEvent="Loaded">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <!--<DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX" From="0.0" To="1.0" Duration="0:0:0.250" />-->
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" From="0.0" To="1.0" Duration="0:0:0.250" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <Trigger SourceName="templateRoot" Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" TargetName="internalBorder" Value="{StaticResource Element}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Opacity" TargetName="contentPresenter" Value="0.5"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="BorderThickness" Storyboard.TargetName="mainBorder" BeginTime="00:00:00">
+                                            <SplineThicknessKeyFrame KeyTime="00:00:00" Value="0,0,0,0" />
+                                            <SplineThicknessKeyFrame KeyTime="00:00:00.15" Value="0,0,0,2" />
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="BorderThickness" Storyboard.TargetName="mainBorder" BeginTime="00:00:00">
+                                            <SplineThicknessKeyFrame KeyTime="00:00:00" Value="0,0,0,2" />
+                                            <SplineThicknessKeyFrame KeyTime="00:00:00.30" Value="0,0,0,0" />
+                                        </ThicknessAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=Self}}" Value="true"/>
+                                <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" Value="Top"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Panel.ZIndex" Value="1"/>
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="TabItemRemovable" TargetType="{x:Type TabItem}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Foreground" Value="{StaticResource Light}"/>
+        <Setter Property="Background" Value="{StaticResource Area}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Success}"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="MinHeight" Value="40"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="RenderTransformOrigin" Value="1,1" />
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <ScaleTransform />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid x:Name="templateRoot" SnapsToDevicePixels="true" Cursor="Hand">
+                        <Border x:Name="mainBorder" MinWidth="100" Background="{x:Null}" BorderBrush="{TemplateBinding BorderBrush}" Margin="2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition MinWidth="25" Width="25"/>
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="internalBorder" CornerRadius="8" Background="{x:Null}" Margin="5">
+                                    <ContentPresenter x:Name="contentPresenter" 
+                                      ContentSource="Header" 
+                                      Focusable="False" 
+                                      TextElement.FontFamily="/Static/Fonts/#JetBrains Mono"
+                                      TextElement.FontSize="11"
+                                      HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" 
+                                      Margin="{TemplateBinding Padding}" 
+                                      RecognizesAccessKey="True" 
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                      VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                      />
+                                </Border>
+                                <ToggleButton x:Name="Button" Grid.Column="1" Content="x" Width="25" Height="25" HorizontalAlignment="Right" ToolTip="Закрыть вкладку" ToolTipService.InitialShowDelay="160">
+                                    <ToggleButton.Style>
+                                        <Style TargetType="{x:Type ToggleButton}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                        <Border x:Name="Border" Background="Transparent" CornerRadius="8">
+                                                            <Path x:Name="Icon" Fill="{StaticResource Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" Height="8" Width="8" Stretch="UniformToFill" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="Border" Property="Background" Value="{StaticResource Element}"/>
+                                                                <Setter TargetName="Icon" Property="Fill" Value="{StaticResource Error}"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
+                            </Grid>
+
+
+
+                        </Border>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
                                     <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY" From="0.0" To="1.0" Duration="0:0:0.250" />
                                 </Storyboard>
                             </BeginStoryboard>
@@ -133,7 +217,7 @@
         <Setter Property="Padding" Value="2"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="ItemContainerStyle" Value="{StaticResource TabItemMain}"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource TabItemRemovable}"/>
         <Setter Property="Background" Value="{StaticResource Basic}"/>
         <Setter Property="BorderBrush" Value="{x:Null}"/>
         <Setter Property="BorderThickness" Value="0"/>

@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="Incas.DialogSimpleForm.Views.Controls.CheckedListBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.DialogSimpleForm.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="250" d:DesignWidth="400">
+    <Border Background="{StaticResource Black}" Margin="5" CornerRadius="8">
+        <StackPanel x:Name="ContentPanel">
+            
+        </StackPanel>
+    </Border>
+    
+</UserControl>
