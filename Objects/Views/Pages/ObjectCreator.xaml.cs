@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Wordprocessing;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
@@ -9,16 +7,13 @@ using Incas.Objects.Models;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Templates.Components;
-using Incas.Templates.Views.Windows;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -32,6 +27,7 @@ namespace Incas.Objects.Views.Pages
         public Components.Object Object { get; set; }
         public Class Class { get; set; }
         public ClassData ClassData { get; set; }
+        public Preset Preset { get; set; }
         public delegate bool ObjectCreatorData(ObjectCreator creator);
         public delegate void FieldCopyAction(Guid id, string text);
         public event FieldCopyAction OnInsertRequested;
@@ -40,11 +36,12 @@ namespace Incas.Objects.Views.Pages
         public event ObjectCreatorData OnRemoveRequested;
         private bool Locked = false;
         private List<IFillerBase> fillers;
-        public ObjectCreator(Class source, ClassData data, Components.Object obj = null)
+        public ObjectCreator(Class source, ClassData data, Preset preset, Components.Object obj = null)
         {
             this.InitializeComponent();
             this.Class = source;
             this.ClassData = data;
+            this.Preset = preset;
             this.FillContentPanel();
             if (obj != null)
             {
@@ -108,8 +105,16 @@ namespace Incas.Objects.Views.Pages
         private void FillContentPanel()
         {
             this.fillers = new();
+            bool presetInUse = this.Preset is null? false: true;
             foreach (Objects.Models.Field f in this.ClassData.Fields)
             {
+                if (presetInUse)
+                {
+                    if (this.Preset.Data.ContainsKey(f.Id))
+                    {
+                        continue; // if preset data contains field not draw it
+                    }
+                }
                 switch (f.Type)
                 {
                     default:
@@ -294,6 +299,7 @@ namespace Incas.Objects.Views.Pages
                 this.Object.Fields = [];
             }
             this.Object.Fields.Clear();
+            this.Object.Fields.AddRange(this.Preset.GetPresettingData());
             foreach (IFillerBase tf in this.ContentPanel.Children)
             {
                 Components.FieldData data = new()

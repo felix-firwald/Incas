@@ -1,11 +1,8 @@
 ﻿using Incas.Admin.Views.Pages;
 using Incas.Core.Classes;
 using Incas.Objects.Views.Pages;
-using Incas.Templates.Views.Pages;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Incas.Core.Views.Controls
 {
@@ -14,7 +11,6 @@ namespace Incas.Core.Views.Controls
     /// </summary>
     public partial class MainWindowButtonTab : UserControl
     {
-        public const string Templates = "$TEMPLATES";
         public const string CustomDatabase = "$DATABASE";
         public const string WorkspaceSettings = "$WORKSPACE";
         public const string UsersSettings = "$USERS";
@@ -42,8 +38,6 @@ namespace Incas.Core.Views.Controls
         {
             switch (this.internalPath)
             {
-                case Templates:
-                    return new UC_Templator();
                 case CustomDatabase:
                     return new CustomDatabaseMain();
                 case WorkspaceSettings:

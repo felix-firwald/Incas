@@ -1,6 +1,8 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
+using Incas.Objects.Components;
 using Incas.Objects.ViewModels;
+using Incas.Objects.Views.Windows;
 using System.Windows.Controls;
 using static Incas.Core.Interfaces.ITabItem;
 
@@ -32,7 +34,18 @@ namespace Incas.Objects.Views.Pages
             this.CategoriesList.IsEnabled = false;
             this.CategoriesList.Visibility = System.Windows.Visibility.Collapsed;
             this.vm.OnClassSelected += this.OnClassSelected;
+            this.vm.OnPresetSelected += this.OnPresetSelected;
             this.DataContext = this.vm;
+        }
+
+        private void OnPresetSelected(Models.Class selectedClass, Components.PresetReference preset)
+        {
+            if (selectedClass == null)
+            {
+                this.ContentPanel.Content = new Core.Views.Controls.NoContent();
+                return;
+            }
+            this.ContentPanel.Content = new ObjectsList(selectedClass, ObjectProcessor.GetPreset(selectedClass, preset));
         }
 
         private void OnClassSelected(Models.Class selectedClass)
@@ -62,6 +75,12 @@ namespace Incas.Objects.Views.Pages
                 Content = new ObjectsList(this.vm.SelectedClass)
             };
             DialogsManager.ShowPage(gb, this.vm.SelectedClass.name, this.vm.SelectedClass.identifier.ToString());
+        }
+
+        private void AddPresetClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            AddPreset ap = new(this.vm.SelectedClass);
+            ap.ShowDialog();
         }
     }
 }

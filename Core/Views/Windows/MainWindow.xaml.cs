@@ -137,8 +137,6 @@ namespace Incas.Core.Views.Windows
         public void UpdateTabs()
         {
             this.CustomTabs.Children.Clear();
-            this.AddPageButton("Простые документы", Classes.Icon.FileRichText, Controls.MainWindowButtonTab.Templates);
-            //this.AddPageButton("База данных", Classes.Icon.Database, Controls.MainWindowButtonTab.CustomDatabase);
             using (Class cl = new())
             {
                 foreach (string category in cl.GetCategories())

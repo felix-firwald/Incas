@@ -16,7 +16,7 @@
                                     <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
 
-                                <ContentPresenter TextElement.FontFamily="/Static/Fonts/#JetBrains Mono" TextElement.FontSize="10" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Column="0"></ContentPresenter>
+                                <ContentPresenter TextElement.FontFamily="#JetBrains Mono" TextElement.FontSize="10" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Column="0"></ContentPresenter>
                                 <Polygon x:Name="PolygonMain" Points="20, 10, 20, 30, 10, 20" Fill="{StaticResource Basic}" VerticalAlignment="Top" Grid.Column="1" HorizontalAlignment="Right"  Margin="0,0,-10,0"/>
                             </Grid>
 
@@ -82,7 +82,7 @@
                     <Border Name="bor" Grid.Column="1" Background="{StaticResource Area}" CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource Element}" Margin="0,0,0,0">
                         <StackPanel Orientation="Horizontal">
                             <Polygon x:Name="PolygonMain" Points="10, 20, 10, 0, 20, 10" Fill="{StaticResource LightPurple}" Visibility="Collapsed" VerticalAlignment="Center" Margin="-10,0,0,0" Width="NaN" Height="NaN" Panel.ZIndex="-9"/>
-                            <ContentPresenter TextElement.FontFamily="/Static/Fonts/#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
+                            <ContentPresenter TextElement.FontFamily="#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
                         </StackPanel>
                         
                     </Border>
@@ -146,7 +146,7 @@
                     <Border>
                         <Grid MinHeight="30" MinWidth="30">
                             <Path x:Name="Icon" Fill="{StaticResource Element}" Data="M5 2V0H0v5h2v6H0v5h5v-2h6v2h5v-5h-2V5h2V0h-5v2zm6 1v2h2v6h-2v2H5v-2H3V5h2V3zm1-2h3v3h-3zm3 11v3h-3v-3zM4 15H1v-3h3zM1 4V1h3v3z" Stretch="Uniform"/>
-                            <ContentPresenter TextElement.FontFamily="/Static/Fonts/#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"></ContentPresenter>
+                            <ContentPresenter TextElement.FontFamily="#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"></ContentPresenter>
                         </Grid>
                         
                     </Border>

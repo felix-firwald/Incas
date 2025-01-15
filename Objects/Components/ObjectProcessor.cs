@@ -3,6 +3,7 @@ using Incas.Core.Classes;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Xceed.Document.NET;
 
 namespace Incas.Objects.Components
 {
@@ -201,7 +203,7 @@ namespace Incas.Objects.Components
                 adding += $"CREATE TABLE IF NOT EXISTS [{EditsTable}] ([{IdField}] TEXT UNIQUE, [{TargetObjectField}] TEXT, [{StatusField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);\n";
                 adding += $"CREATE TABLE IF NOT EXISTS [{CommentsTable}] ([{IdField}] TEXT UNIQUE, [{TargetObjectField}] TEXT, [{TypeField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
             }
-            adding += $"CREATE TABLE IF NOT EXISTS [{PresetsTable}] ([{IdField}] TEXT UNIQUE, [{TargetObjectField}] TEXT, [{TypeField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
+            adding += $"CREATE TABLE IF NOT EXISTS [{PresetsTable}] ([{IdField}] TEXT UNIQUE, [{NameField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);";
             List<string> customFields = [];
             foreach (Incas.Objects.Models.Field f in cl.GetClassData().GetSavebleFields())
             {
@@ -261,7 +263,8 @@ namespace Incas.Objects.Components
                 DateTerminatedField,
                 TargetObjectField,
                 TargetClassField,
-                TerminatedField
+                TerminatedField,
+                DataField,
             ];
             string path = GetPathToObjectsMap(cl);
             Query q = new("", path);
@@ -281,9 +284,15 @@ namespace Incas.Objects.Components
             {
                 classFields.Add(f.Id.ToString());
             }
+            foreach (PresetReference pr in ObjectProcessor.GetPresetsReferences(cl))
+            {
+                classFields.Add("PRESET_" + pr.Id.ToString());
+            }
             List<string> missingFields = classFields.Except(mapFields).ToList(); // отсутствующие поля
             List<string> excessFields = mapFields.Except(classFields).ToList(); // лишние поля
+            
             StringBuilder updateRequest = new("BEGIN TRANSACTION;");
+            updateRequest.Append($"CREATE TABLE IF NOT EXISTS [{PresetsTable}] ([{IdField}] TEXT UNIQUE, [{NameField}] TEXT, [{DateCreatedField}] TEXT, [{AuthorField}] TEXT, [{DataField}] TEXT);");
             foreach (string misf in missingFields)
             {
                 updateRequest.Append($"ALTER TABLE [{MainTable}] ADD COLUMN [{misf}] TEXT;");
@@ -291,7 +300,7 @@ namespace Incas.Objects.Components
             foreach (string excf in excessFields)
             {
                 updateRequest.Append($"ALTER TABLE [{MainTable}] DROP COLUMN [{excf}];");
-            }
+            }           
             updateRequest.Append("COMMIT");
             q.Clear();
             q.AddCustomRequest(updateRequest.ToString());
@@ -304,6 +313,7 @@ namespace Incas.Objects.Components
         /// <returns>false if check is failed</returns>
         delegate bool Check(string value, Models.Field field);
 
+        #region Compliance
         /// <summary>
         /// Check objects map after an update
         /// </summary>
@@ -474,7 +484,7 @@ namespace Incas.Objects.Components
             }
             return values.Contains(value);
         }
-
+        #endregion
         public async static Task<bool> IsUnique(Class cl, Models.Field field, string value)
         {
             bool result = true;
@@ -491,7 +501,100 @@ namespace Incas.Objects.Components
             });
             return result;
         }
-
+        public async static Task<bool> WritePreset(Class cl, Preset preset)
+        {
+            await Task.Run(() =>
+            {
+                ProgramStatusBar.SetText("Выполняется сохранение пресета...");
+                string path = GetPathToObjectsMap(cl);
+                Query q = new(ObjectProcessor.PresetsTable, path);
+                q.BeginTransaction();
+                if (preset.Id == Guid.Empty)
+                {
+                    preset.Id = Guid.NewGuid();
+                    preset.CreatedDate = DateTime.Now;
+                    preset.AuthorId = ProgramState.CurrentUser.id;
+                    q.Insert(new Dictionary<string, string>()
+                    {
+                        { IdField, preset.Id.ToString()},
+                        { NameField, preset.Name},
+                        { DateCreatedField, preset.CreatedDate.ToString()},
+                        { AuthorField, preset.AuthorId.ToString()},
+                        { DataField, preset.GetData()},
+                    });
+                    q.SeparateCommand();
+                    q.AddCustomRequest($"ALTER TABLE [{MainTable}] ADD COLUMN [PRESET_{preset.Id.ToString("N")}] TEXT;");
+                }
+                else
+                {
+                    q.Update(new Dictionary<string, string>()
+                    {
+                        { NameField, preset.Name},
+                        { DataField, preset.GetData()},
+                    });
+                    q.WhereEqual(IdField, preset.Id.ToString());
+                }              
+                q.EndTransaction();
+                q.ExecuteVoid();
+                ProgramStatusBar.Hide();
+            });
+            return true;
+        }
+        public static List<PresetReference> GetPresetsReferences(Class cl)
+        {
+            List<PresetReference> presets = new();
+            string path = GetPathToObjectsMap(cl);
+            Query q = new(ObjectProcessor.PresetsTable, path);
+            q.Select();
+            DataTable dt = q.Execute();
+            foreach (DataRow dr in dt.Rows)
+            {
+                PresetReference preset = new()
+                {
+                    Id = Guid.Parse(dr[IdField].ToString()),
+                    Name = dr[NameField].ToString()
+                };
+                presets.Add(preset);
+            }
+            return presets;
+        }
+        public static Preset GetPreset(Class cl, PresetReference ps)
+        {
+            string path = GetPathToObjectsMap(cl);
+            Query q = new(ObjectProcessor.PresetsTable, path);
+            DataRow dr = q.Select().WhereEqual(IdField, ps.Id.ToString()).ExecuteOne();
+            if (dr is null)
+            {
+                return new();
+            }
+            Preset preset = new()
+            {
+                Id = ps.Id,
+                CreatedDate = DateTime.Parse(dr[DateCreatedField].ToString()),
+                AuthorId = Guid.Parse(dr[AuthorField].ToString()),
+                Name = dr[NameField].ToString()
+            };
+            preset.SetData(dr[DataField].ToString());
+            return preset;
+        }
+        public async static Task<bool> RemovePreset(Class cl, Preset preset)
+        {
+            await Task.Run(() =>
+            {
+                ProgramStatusBar.SetText("Выполняется удаление пресета...");
+                string path = GetPathToObjectsMap(cl);
+                Query q = new(ObjectProcessor.PresetsTable, path);
+                q.BeginTransaction();
+                q.Delete();
+                q.WhereEqual(IdField, preset.Id.ToString());
+                q.SeparateCommand();
+                q.AddCustomRequest($"ALTER TABLE [{MainTable}] DROP COLUMN [PRESET_{preset.Id.ToString("N")}];");
+                q.EndTransaction();
+                q.ExecuteVoid();
+                ProgramStatusBar.Hide();
+            });
+            return true;
+        }
         public async static Task<bool> WriteObjects(Class cl, List<Object> objects)
         {
             await Task.Run(() =>

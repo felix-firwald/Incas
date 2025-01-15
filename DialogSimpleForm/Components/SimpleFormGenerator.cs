@@ -120,6 +120,7 @@ namespace Incas.DialogSimpleForm.Components
                     break;
                 case "CheckedList":
                     control = this.GenerateCheckedListBox(description, (CheckedList)field.GetValue(this.Result));
+                    this.Container.Children.Add(label);
                     break;
                 default:
                     if (field.PropertyType.Name.Contains("List"))

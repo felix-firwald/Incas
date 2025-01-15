@@ -12,6 +12,7 @@ namespace Incas.Objects.Models
         public ClassType ClassType { get; set; }
         public bool ShowCard { get; set; }
         public bool PresetsEnabled { get; set; }
+        public bool RestrictFullView { get; set; }
         public bool Encrypt { get; set; }
         public bool EditByAuthorOnly { get; set; }
         public bool AuthorOverrideEnabled { get; set; }
@@ -91,6 +92,22 @@ namespace Incas.Objects.Models
                         list.Add(field);
                         break;
                 }
+            }
+            return list;
+        }
+        public List<Field> GetPresettingFields()
+        {
+            List<Field> list = [];
+            if (this.Fields is null)
+            {
+                return list;
+            }
+            foreach (Field field in this.Fields)
+            {
+                if (field.PresettingEnabled)
+                {
+                    list.Add(field);
+                }              
             }
             return list;
         }

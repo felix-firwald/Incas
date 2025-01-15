@@ -125,7 +125,7 @@ namespace Incas.Core.Views.Controls
             {
                 Objects.Models.Class cl = new(this.Binding.Class);
                 cl.GetClassData();
-                ObjectsEditor oe = new(cl, [this.SelectedObject]);
+                ObjectsEditor oe = new(cl, null, [this.SelectedObject]);
                 oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
                 oe.ShowDialog();
             }
@@ -139,7 +139,7 @@ namespace Incas.Core.Views.Controls
 
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
-            ObjectsEditor oe = new(new(this.Binding.Class));
+            ObjectsEditor oe = new(new(this.Binding.Class), null);
             oe.SetSingleObjectMode();
             oe.OnSetNewObjectRequested += this.Oe_OnSetNewObjectRequested;
             oe.ShowDialog();

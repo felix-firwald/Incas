@@ -69,6 +69,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Core\Views\Windows\Logo.png" />
+    <None Remove="Static\Coding\IncasPython.xshd" />
     <None Remove="Static\Fonts\RobotoMono-Bold.ttf" />
     <None Remove="Static\Fonts\RobotoMono-BoldItalic.ttf" />
     <None Remove="Static\Fonts\RobotoMono-ExtraLight.ttf" />
@@ -98,57 +99,162 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Core\Views\Windows\Logo.png" />
-    <Resource Include="Static\Fonts\JetBrainsMono-Bold.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-BoldItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-ExtraBold.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-ExtraBoldItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-ExtraLight.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-ExtraLightItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-Italic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-Light.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-LightItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-Medium.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-MediumItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-Regular.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-SemiBold.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-SemiBoldItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-Thin.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMono-ThinItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-Bold.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-BoldItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-ExtraBold.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-ExtraBoldItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-ExtraLight.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-ExtraLightItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-Italic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-Light.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-LightItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-Medium.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-MediumItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-Regular.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-SemiBold.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-SemiBoldItalic.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-Thin.ttf" />
-    <Resource Include="Static\Fonts\JetBrainsMonoNL-ThinItalic.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-Bold.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-BoldItalic.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-ExtraLight.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-ExtraLightItalic.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-Italic.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-Medium.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-MediumItalic.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-Regular.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-SemiBold.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-SemiBoldItalic.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-Thin.ttf" />
-    <Resource Include="Static\Fonts\RobotoMono-ThinItalic.ttf" />
-    <Resource Include="Static\Fonts\VelaSans-Bold.ttf" />
-    <Resource Include="Static\Fonts\VelaSans-ExtraBold.ttf" />
-    <Resource Include="Static\Fonts\VelaSans-ExtraLight.ttf" />
-    <Resource Include="Static\Fonts\VelaSans-Light.ttf" />
-    <Resource Include="Static\Fonts\VelaSans-Medium.ttf" />
-    <Resource Include="Static\Fonts\VelaSans-Regular.ttf" />
-    <Resource Include="Static\Fonts\VelaSans-SemiBold.ttf" />
+    <EmbeddedResource Include="Static\Coding\IncasPython.xshd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-BoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-ExtraBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-ExtraBoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-ExtraLight.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-ExtraLightItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-Italic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-Light.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-LightItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-Medium.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-MediumItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-SemiBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-SemiBoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-Thin.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMono-ThinItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-BoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-ExtraBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-ExtraBoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-ExtraLight.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-ExtraLightItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-Italic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-Light.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-LightItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-Medium.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-MediumItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-SemiBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-SemiBoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-Thin.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-ThinItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Resource Include="Static\Fonts\RobotoMono-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-BoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-ExtraLight.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-ExtraLightItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-Italic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-Medium.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-MediumItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-SemiBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-SemiBoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-Thin.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\RobotoMono-ThinItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\VelaSans-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\VelaSans-ExtraBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\VelaSans-ExtraLight.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\VelaSans-Light.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\VelaSans-Medium.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\VelaSans-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\VelaSans-SemiBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Core\Styles\Tile.png" />
   </ItemGroup>
   <ItemGroup>
@@ -230,9 +336,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Update="Static\Coding\IncasPython.xshd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Static\Logo.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -244,6 +347,9 @@
     <Folder Include="Admin\Views\Controls\" />
     <Folder Include="License\Views\Controls\" />
     <Folder Include="Resources\" />
+    <Folder Include="Templates\Models\" />
+    <Folder Include="Templates\Views\Controls\" />
+    <Folder Include="Templates\Views\Pages\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="WordGlue3.NET8">

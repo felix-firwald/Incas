@@ -22,6 +22,7 @@ namespace Incas.Objects.Views.Pages
         public Class sourceClass;
         public ClassData ClassData;
         private ObjectCard ObjectCard;
+        public Preset SourcePreset;
         public ObjectsList(Class source)
         {
             this.InitializeComponent();
@@ -35,6 +36,21 @@ namespace Incas.Objects.Views.Pages
             }
             DialogsManager.ShowWaitCursor(false);
         }
+        public ObjectsList(Class source, Preset preset)
+        {
+            this.InitializeComponent();
+            DialogsManager.ShowWaitCursor();
+            this.sourceClass = source;
+            this.ClassData = source.GetClassData();
+            this.UpdateView();
+            if (this.ClassData.ShowCard)
+            {
+                this.PlaceCard();
+            }
+            this.SourcePreset = preset;
+            DialogsManager.ShowWaitCursor(false);
+        }
+
         private DataTable WrapWithStyle(DataTable dt)
         {
             if (dt == null || dt.Rows == null)
@@ -197,9 +213,18 @@ namespace Incas.Objects.Views.Pages
         }
         private void OpenNewObject()
         {
-            ObjectsEditor oc = new(this.sourceClass);
-            oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-            oc.Show();
+            if (this.SourcePreset == null)
+            {
+                ObjectsEditor oc = new(this.sourceClass, this.SourcePreset);
+                oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+                oc.Show();
+            }
+            else
+            {
+                ObjectsEditor oc = new(this.sourceClass, this.SourcePreset);
+                oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+                oc.Show();
+            }
         }
         private void CopyClick(object sender, RoutedEventArgs e)
         {
@@ -267,7 +292,7 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-            ObjectsEditor oc = new(this.sourceClass, [obj]);
+            ObjectsEditor oc = new(this.sourceClass, this.SourcePreset, [obj]);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -275,7 +300,7 @@ namespace Incas.Objects.Views.Pages
         {
             DialogsManager.ShowWaitCursor(true);
             List<Components.Object> objects = await ObjectProcessor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
-            ObjectsEditor oc = new(this.sourceClass, objects);
+            ObjectsEditor oc = new(this.sourceClass, this.SourcePreset, objects);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -288,7 +313,7 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-            ObjectsEditor oc = new(this.sourceClass, [obj.Copy()]);
+            ObjectsEditor oc = new(this.sourceClass, this.SourcePreset, [obj.Copy()]);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }

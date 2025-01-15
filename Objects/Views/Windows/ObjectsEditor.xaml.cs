@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -25,17 +26,20 @@ namespace Incas.Objects.Views.Windows
     {
         public readonly Class Class;
         public readonly ClassData ClassData;
+        public readonly Preset Preset;
         public delegate void UpdateRequested();
         public delegate void CreateRequested(Guid id);
         public event UpdateRequested OnUpdateRequested;
         public event CreateRequested OnSetNewObjectRequested;
-        public ObjectsEditor(Class source, List<Components.Object> objects = null)
+        public ObjectsEditor(Class source, Preset preset, List<Components.Object> objects = null)
         {
             this.InitializeComponent();
-            this.Title = source.name;
-            this.Class = source;
+            this.Title = preset is null ? source.name : $"{source.name} — {preset.Name}";
+            this.Class = source;         
             this.ClassData = source.GetClassData();
             this.RenderButton.Visibility = this.ClassData.ClassType == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
+            this.Preset = preset;
+            this.FillPresettingData();
             if (objects != null)
             {
                 foreach (Components.Object obj in objects)
@@ -68,10 +72,23 @@ namespace Incas.Objects.Views.Windows
             this.GenerateButton.IsEnabled = false;
             this.ToolBar.IsEnabled = false;
         }
-
+        public void FillPresettingData()
+        {
+            if (this.Preset is not null)
+            {
+                foreach (Models.Field f in this.ClassData.Fields)
+                {
+                    string value;
+                    if (this.Preset.Data.TryGetValue(f.Id, out value))
+                    {
+                        this.Preset.RegisterPresettingField(f, value);
+                    }
+                }
+            }
+        }
         private ObjectCreator AddObjectCreator(Components.Object obj = null)
         {
-            ObjectCreator creator = new(this.Class, this.ClassData, obj);
+            ObjectCreator creator = new(this.Class, this.ClassData, this.Preset, obj);
             creator.OnSaveRequested += this.Creator_OnSaveRequested;
             creator.OnRemoveRequested += this.Creator_OnRemoveRequested;
             creator.OnInsertRequested += this.Creator_OnInsertRequested;
@@ -141,11 +158,18 @@ namespace Incas.Objects.Views.Windows
                 if (ei.ShowDialog("Настройка импорта", Core.Classes.Icon.Table))
                 {
                     this.ContentPanel.Children.Clear();
-                    List<Dictionary<string, string>> pairs = await ExcelTemplator.GetFromFile(fd.FileName, ei.GetMap());
-                    foreach (Dictionary<string, string> item in pairs)
+                    try
                     {
-                        ObjectCreator fc = this.AddObjectCreator();
-                        fc.ApplyFromExcel(item);
+                        List<Dictionary<string, string>> pairs = await ExcelTemplator.GetFromFile(fd.FileName, ei.GetMap());
+                        foreach (Dictionary<string, string> item in pairs)
+                        {
+                            ObjectCreator fc = this.AddObjectCreator();
+                            fc.ApplyFromExcel(item);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DialogsManager.ShowErrorDialog(ex);
                     }
                 }               
                 DialogsManager.ShowWaitCursor(false);

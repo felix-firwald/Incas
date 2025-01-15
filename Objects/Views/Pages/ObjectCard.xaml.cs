@@ -223,7 +223,7 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             List<Components.Object> objects = [ObjectProcessor.GetObject(this.Class, this.id)];
-            ObjectsEditor oe = new(this.Class, objects);
+            ObjectsEditor oe = new(this.Class, null, objects);
             oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
             oe.ShowDialog();
         }

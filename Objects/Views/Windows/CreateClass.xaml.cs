@@ -1,7 +1,4 @@
-﻿using AvaloniaEdit.Document;
-using AvaloniaEdit.Editing;
-using DocumentFormat.OpenXml.Bibliography;
-using ICSharpCode.AvalonEdit.Highlighting;
+﻿using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
@@ -532,6 +529,23 @@ namespace Incas.Objects.Views.Windows
                 return;
             }
             this.CodeModule.Text = result;         
+        }
+
+        private void SetPresettingFieldsClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ClassFieldsPresetting cfp = new(this.GetActualFields(), this.vm.SourceData.RestrictFullView);
+                if (cfp.ShowDialog("Настройка пресетов", Core.Classes.Icon.Puzzle))
+                {
+                    this.vm.SourceData.RestrictFullView = cfp.Constraint;
+                }
+            }
+            catch (FieldDataFailed fd)
+            {
+                DialogsManager.ShowExclamationDialog(fd.Message, "Действие прервано");
+                return;
+            }
         }
     }
 }

@@ -15,7 +15,7 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
-                        <ContentPresenter TextElement.Foreground="{DynamicResource GrayLight}" TextElement.FontFamily="/Fonts/#JetBrains Mono" Grid.Column="0" TextElement.FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <ContentPresenter TextElement.Foreground="{DynamicResource GrayLight}" TextElement.FontFamily="#JetBrains Mono" TextElement.FontWeight="ExtraLight" Grid.Column="0" TextElement.FontSize="11" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0"/>
                         <Border x:Name="Bord" Background="{StaticResource Black}" BorderBrush="{StaticResource Element}" BorderThickness="1" CornerRadius="6" MinHeight="15" MaxHeight="15" MinWidth="40" MaxWidth="40" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
                         <Ellipse x:Name="Ellipse" Fill="{StaticResource Error}" Stroke="{StaticResource Element}" StrokeThickness="0" Width="18" Height="18" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="6,0,0,0"/>
                         <fa:FontAwesome x:Name="Fa" Foreground="White" Icon="Check" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0" Grid.Column="1"/>
@@ -75,7 +75,7 @@
                                     <RotateTransform Angle="0" CenterX="8" CenterY="8" x:Name="ArrowRotate"/>
                                 </Path.RenderTransform>
                             </Path>
-                            <ContentPresenter x:Name="contentPresenter" TextElement.Foreground="{TemplateBinding Foreground}" Grid.Column="1" TextElement.FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Center" OpacityMask="{x:Null}" />
+                            <ContentPresenter x:Name="contentPresenter" TextElement.Foreground="{TemplateBinding Foreground}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" OpacityMask="{x:Null}" />
                         </Grid>
                     </Border>
                     

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:pages="clr-namespace:Incas.Templates.Views.Pages" xmlns:pages1="clr-namespace:Incas.Objects.Views.Pages" xmlns:pages2="clr-namespace:Incas.Admin.Views.Pages" xmlns:controls="clr-namespace:Incas.Core.Views.Controls" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
+        xmlns:pages1="clr-namespace:Incas.Objects.Views.Pages" xmlns:pages2="clr-namespace:Incas.Admin.Views.Pages" xmlns:controls="clr-namespace:Incas.Core.Views.Controls" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
         mc:Ignorable="d"
         Height="900"
         Width="1300"

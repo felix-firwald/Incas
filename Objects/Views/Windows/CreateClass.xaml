@@ -130,7 +130,7 @@
                                             
                                         </Grid>
                                         <CheckBox x:Name="ButtonPresetsEnabled" Style="{StaticResource Toggle}" Content="Включить поддержку пресетов" IsChecked="{Binding PresetsEnabled}"/>
-                                        <Button >
+                                        <Button Click="SetPresettingFieldsClick" >
                                             <Button.Style>
                                                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonMainFinish}">
                                                     <Style.Triggers>
@@ -300,7 +300,7 @@
                             </StackPanel>
                         </ScrollViewer>
                     </Border>
-                    <avalonEdit:TextEditor x:Name="CodeModule" Grid.Column="1" HorizontalScrollBarVisibility="Disabled" Background="{x:Null}" ShowLineNumbers="True" BorderThickness="0" Document="{Binding CodeModule}" BorderBrush="{DynamicResource Dark}" FontSize="13" FontFamily="JetBrains Mono" Foreground="White" Margin="10,0,0,0">
+                    <avalonEdit:TextEditor x:Name="CodeModule" Grid.Column="1" HorizontalScrollBarVisibility="Disabled" Background="{x:Null}" ShowLineNumbers="True" BorderThickness="0" Document="{Binding CodeModule}" BorderBrush="{DynamicResource Dark}" FontSize="13" FontFamily="#JetBrains Mono" Foreground="White" Margin="10,0,0,0">
                     </avalonEdit:TextEditor>
                 </Grid>
             </TabItem>
