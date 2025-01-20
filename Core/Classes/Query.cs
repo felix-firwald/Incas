@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace Incas.Core.Classes
@@ -17,6 +18,8 @@ namespace Incas.Core.Classes
         private uint recursion = 0;
         public DBConnectionType typeOfConnection { get; set; }
         public string DBPath { get; set; }
+        public delegate void SQLErrorAction(string table, ExecuteType type, int errorCode, string description);
+        public event SQLErrorAction OnSQLErrorDetected;
         public Query(string table, DBConnectionType type = DBConnectionType.BASE)
         {
             this.Table = table;
@@ -132,25 +135,33 @@ namespace Incas.Core.Classes
         }
         public Query EndTransaction()
         {
-            this.Result += "\nEND TRANSACTION;";
+            this.Result += "\nCOMMIT";
             return this;
         }
         #endregion
         #region Insert Update Delete
         public Query Insert(Dictionary<string, string> dict, bool replace = false)
         {
+            return this.Insert(this.Table, dict, replace);
+        }
+        public Query Insert(string table, Dictionary<string, string> dict, bool replace = false)
+        {
             string start = "INSERT INTO";
             if (replace)
             {
                 start = "INSERT OR REPLACE INTO";
             }
-            this.Result += $"{start} [{this.Table}] (\"{string.Join("\", \"", dict.Keys)}\")\nVALUES ({string.Join(", ", this.RegisterParameters(dict.Values.ToList()))})";
+            this.Result += $"{start} [{table}] (\"{string.Join("\", \"", dict.Keys)}\")\nVALUES ({string.Join(", ", this.RegisterParameters(dict.Values.ToList()))})";
             this.ReplaceNull();
             return this;
         }
         public Query Update(Dictionary<string, string> dict)
         {
-            this.Result += $"UPDATE [{this.Table}]\n" +
+            return this.Update(this.Table, dict);
+        }
+        public Query Update(string table, Dictionary<string, string> dict)
+        {
+            this.Result += $"UPDATE '{table}'\n" +
             $"SET ";
             List<string> result = [];
             foreach (KeyValuePair<string, string> kvp in dict)
@@ -182,6 +193,18 @@ namespace Incas.Core.Classes
         {
             AND,
             OR
+        }
+        public Query Where(Dictionary<string,string> conditions)
+        {
+            string resulting;
+            List<string> strings = new();
+            foreach (KeyValuePair<string,string> kvp in conditions)
+            {
+                strings.Add($"'{kvp.Key}' = {this.RegisterParameter(kvp.Value)}");
+            }
+            resulting = "\nWHERE " + string.Join(" AND ", strings);
+            this.Result += resulting;
+            return this;
         }
         private Query Where(string cell, string comparator, string value, bool isStr, WhereType wt)
         {
@@ -572,7 +595,7 @@ namespace Incas.Core.Classes
             {
                 case 1:
                     DialogsManager.ShowDatabaseErrorDialog(
-                        $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}\nЗапрос: {this.Result}.\nБаза: '{this.DBPath}'" +
+                        $"При выполнении запроса к базе данных возникла ошибка:\n{ex.Message}\nЗапрос: {this.Result}\nБаза: '{this.DBPath}'" +
                         $"\nINCAS попытается исправить проблему, если она связана с конфигурацией служебной базы данных.");
                     //if (this.typeOfConnection is DBConnectionType.BASE or DBConnectionType.SERVICE)
                     //{
@@ -616,6 +639,7 @@ namespace Incas.Core.Classes
                         $"\nПроверьте правильность данных.");
                     break;
             }
+            this.OnSQLErrorDetected?.Invoke(this.Table, executeType, ex.ErrorCode, ex.Message);
         }
         public void Accumulate()
         {

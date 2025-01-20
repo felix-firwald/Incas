@@ -67,6 +67,7 @@ namespace Incas.Objects.Views.Controls
             };
             DataTable dt = ObjectProcessor.GetSimpleObjectsListWhereEqual(
                 back,
+                null,
                 back.GetClassData().FindFieldByBackReference(this.Class.identifier).VisibleName, // не находит
                 this.TargetObject.ToString());
             foreach (DataRow dr in dt.Rows)

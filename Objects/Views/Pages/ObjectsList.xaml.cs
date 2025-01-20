@@ -23,6 +23,8 @@ namespace Incas.Objects.Views.Pages
         public ClassData ClassData;
         private ObjectCard ObjectCard;
         public Preset SourcePreset;
+        public delegate void ObjectsListAction(Class source);
+        public event ObjectsListAction OnPresetsViewRequested;
         public ObjectsList(Class source)
         {
             this.InitializeComponent();
@@ -34,6 +36,10 @@ namespace Incas.Objects.Views.Pages
             {
                 this.PlaceCard();
             }
+            if (this.ClassData.PresetsEnabled)
+            {
+                this.PresetsButton.Visibility = Visibility.Visible;
+            }
             DialogsManager.ShowWaitCursor(false);
         }
         public ObjectsList(Class source, Preset preset)
@@ -42,12 +48,16 @@ namespace Incas.Objects.Views.Pages
             DialogsManager.ShowWaitCursor();
             this.sourceClass = source;
             this.ClassData = source.GetClassData();
+            this.SourcePreset = preset;
             this.UpdateView();
+            if (this.ClassData.PresetsEnabled)
+            {
+                this.PresetsButton.Visibility = Visibility.Visible;
+            }
             if (this.ClassData.ShowCard)
             {
                 this.PlaceCard();
-            }
-            this.SourcePreset = preset;
+            }          
             DialogsManager.ShowWaitCursor(false);
         }
 
@@ -102,7 +112,7 @@ namespace Incas.Objects.Views.Pages
             this.ObjectCard.OnFilterRequested += this.ObjectCard_OnFilterRequested;
             this.ObjectCard.MinWidth = 410;
             this.MainGrid.Children.Add(this.ObjectCard);
-            Grid.SetRow(this.ObjectCard, 0);
+            Grid.SetRow(this.ObjectCard, 1);
             Grid.SetRowSpan(this.ObjectCard, 2);
             Grid.SetColumn(this.ObjectCard, 1);
             this.ObjectCard.SetEmpty();
@@ -117,7 +127,7 @@ namespace Incas.Objects.Views.Pages
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                DataTable dt = ObjectProcessor.GetObjectsList(this.sourceClass);
+                DataTable dt = ObjectProcessor.GetObjectsList(this.sourceClass, this.SourcePreset);
                 
                 if (this.ClassData.ClassType == ClassType.Model)
                 {
@@ -141,8 +151,9 @@ namespace Incas.Objects.Views.Pages
         }
         private void UpdateViewWithSearch(FieldData data)
         {
-            DataTable dt = ObjectProcessor.GetObjectsListWhereLike(this.sourceClass, data.ClassField.VisibleName, data.Value);
+            DataTable dt = ObjectProcessor.GetObjectsListWhereLike(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
+            this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.ClassData.ClassType == ClassType.Model)
             {
                 DataView dv = dt.AsDataView();
@@ -156,8 +167,9 @@ namespace Incas.Objects.Views.Pages
         }
         private void UpdateViewWithFilter(FieldData data)
         {
-            DataTable dt = ObjectProcessor.GetObjectsListWhereEqual(this.sourceClass, data.ClassField.VisibleName, data.Value);
+            DataTable dt = ObjectProcessor.GetObjectsListWhereEqual(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
+            this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.ClassData.ClassType == ClassType.Model)
             {
                 DataView dv = dt.AsDataView();
@@ -253,6 +265,7 @@ namespace Incas.Objects.Views.Pages
 
         private void CancelSearchClick(object sender, RoutedEventArgs e)
         {
+            this.CancelSearchButton.Visibility = Visibility.Collapsed;
             this.UpdateView();
         }
 
@@ -292,7 +305,7 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-            ObjectsEditor oc = new(this.sourceClass, this.SourcePreset, [obj]);
+            ObjectsEditor oc = new(this.sourceClass, ObjectProcessor.GetPreset(this.sourceClass, obj.Preset), [obj]);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -300,7 +313,7 @@ namespace Incas.Objects.Views.Pages
         {
             DialogsManager.ShowWaitCursor(true);
             List<Components.Object> objects = await ObjectProcessor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
-            ObjectsEditor oc = new(this.sourceClass, this.SourcePreset, objects);
+            ObjectsEditor oc = new(this.sourceClass, ObjectProcessor.GetPreset(this.sourceClass, objects[0].Preset), objects);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -411,6 +424,11 @@ namespace Incas.Objects.Views.Pages
         {
             ContainerWindow cw = new(this, this.sourceClass.name);
             cw.Show();
+        }
+
+        private void OpenPresetsListClick(object sender, RoutedEventArgs e)
+        {
+            this.OnPresetsViewRequested?.Invoke(this.sourceClass);
         }
     }
 }

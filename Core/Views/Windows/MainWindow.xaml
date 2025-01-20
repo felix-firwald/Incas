@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:pages1="clr-namespace:Incas.Objects.Views.Pages" xmlns:pages2="clr-namespace:Incas.Admin.Views.Pages" xmlns:controls="clr-namespace:Incas.Core.Views.Controls" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
+        xmlns:pages1="clr-namespace:Incas.Objects.Views.Pages" xmlns:pages2="clr-namespace:Incas.Admin.Views.Pages" xmlns:controls="clr-namespace:Incas.Core.Views.Controls" xmlns:fa="http://schemas.fontawesome.io/icons/" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
         mc:Ignorable="d"
         Height="900"
         Width="1300"
@@ -62,7 +62,10 @@
 
 
         <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="{StaticResource Area}" SizeChanged="OnResize" Cursor="">
-            <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,15,25" Text="{Binding WorkspaceName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,5,25" Text="{Binding WorkspaceName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
+                <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Refresh" ToolTip="Обновить окно" MouseDown="RefreshClick"/>
+            </StackPanel>
             <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="1" Margin="5,0,5,0" Visibility="{Binding ModeratorFunctionVisibility}" />
             
             <Path x:Name="Logo" Fill="{StaticResource Element}" MaxHeight="50" MaxWidth="50" Width="auto" Height="auto" Data="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0 M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" HorizontalAlignment="Center" Stretch="UniformToFill" Margin="0,15,0,6"/>

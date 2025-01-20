@@ -36,11 +36,11 @@ namespace Incas.Objects.Views.Pages
         public event ObjectCreatorData OnRemoveRequested;
         private bool Locked = false;
         private List<IFillerBase> fillers;
-        public ObjectCreator(Class source, ClassData data, Preset preset, Components.Object obj = null)
+        public ObjectCreator(Class source, Preset preset, Components.Object obj = null)
         {
             this.InitializeComponent();
             this.Class = source;
-            this.ClassData = data;
+            this.ClassData = source.GetClassData();
             this.Preset = preset;
             this.FillContentPanel();
             if (obj != null)
@@ -50,8 +50,12 @@ namespace Incas.Objects.Views.Pages
             else
             {
                 this.Object = new();
+                if (preset is not null)
+                {
+                    this.Object.Preset = preset.Id;
+                }               
             }
-            if (data.ClassType != ClassType.Document)
+            if (this.ClassData.ClassType != ClassType.Document)
             {
                 this.RenderArea.Visibility = Visibility.Collapsed;
             }           
@@ -79,7 +83,7 @@ namespace Incas.Objects.Views.Pages
                 this.SaveArea.Visibility = Visibility.Collapsed;
                 this.TerminatedIcon.Visibility = Visibility.Visible;
                 this.ContentPanel.IsEnabled = false;
-                SolidColorBrush color = new(System.Windows.Media.Color.FromRgb(52, 201, 36));
+                SolidColorBrush color = new(Color.FromRgb(52, 201, 36));
                 this.Separator.Fill = color;
             }
         }
@@ -299,7 +303,10 @@ namespace Incas.Objects.Views.Pages
                 this.Object.Fields = [];
             }
             this.Object.Fields.Clear();
-            this.Object.Fields.AddRange(this.Preset.GetPresettingData());
+            if (this.Preset is not null)
+            {
+                this.Object.Fields.AddRange(this.Preset.GetPresettingData());
+            }            
             foreach (IFillerBase tf in this.ContentPanel.Children)
             {
                 Components.FieldData data = new()

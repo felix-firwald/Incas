@@ -14,6 +14,7 @@ namespace Incas.Objects.Models
         public string category { get; set; }
         public string name { get; set; }
         public string data { get; set; }
+        private ClassData packedCache { get; set; }
         //public ClassType type { get; set; }
         public Class()
         {
@@ -31,7 +32,6 @@ namespace Incas.Objects.Models
             {
                 Class c = new();
                 c.Serialize(dr);
-                //c.type = (ClassType)Enum.Parse(typeof(Class), dr["type"].ToString());
                 resulting.Add(c);
             }
             return resulting;
@@ -42,6 +42,22 @@ namespace Incas.Objects.Models
                 .SelectUnique("category")
                 .OrderByASC("category")
                 .Execute();
+            List<string> categories = [];
+            foreach (DataRow dr in dt.Rows)
+            {
+                categories.Add(dr["category"].ToString());
+            }
+            return categories;
+
+        }
+        public List<string> GetCategoriesOfClassType(ClassType type)
+        {
+            string value = $"\"ClassType\":{(int)type}";
+            DataTable dt = this.StartCommand()
+                .SelectUnique("category")
+                .WhereLike(nameof(this.data), value)
+                .OrderByASC("category")
+                .Execute();           
             List<string> categories = [];
             foreach (DataRow dr in dt.Rows)
             {
@@ -82,10 +98,6 @@ namespace Incas.Objects.Models
             }
             return result;
         }
-        //public List<Class> GetGenerators()
-        //{
-        //    return this.GetClassByType(ClassType.Generator);
-        //}
         private List<Class> GetClassByType(ClassType type)
         {
             string value = $"\"ClassType\":{(int)type}";
@@ -183,12 +195,28 @@ namespace Incas.Objects.Models
             ProgramState.UpdateWindowTabs();
         }
         /// <summary>
-        /// Unpack class data (fields, properties)
+        /// Unpacks class data (fields, properties) if it is not unpacked earlier, otherwise just sends data stored in cache
         /// </summary>
         /// <returns></returns>
         public ClassData GetClassData()
         {
-            return string.IsNullOrEmpty(this.data) ? new() : JsonConvert.DeserializeObject<ClassData>(this.data);
+            try
+            {
+                if (this.packedCache is null)
+                {
+                    if (this.data is null)
+                    {
+                        return new();
+                    }
+                    this.packedCache = JsonConvert.DeserializeObject<ClassData>(this.data);
+                }
+                return this.packedCache;
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog($"При распаковке класса [{this.name}] возникла ошибка: " + ex.Message);
+                return new();
+            }
         }
         /// <summary>
         /// Pack class data (fields, etc)

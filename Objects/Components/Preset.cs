@@ -1,10 +1,8 @@
-﻿using Incas.Objects.Models;
+﻿using Incas.Core.Classes;
+using Incas.Objects.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incas.Objects.Components
 {
@@ -32,7 +30,7 @@ namespace Incas.Objects.Components
         {
             return this.PresettingFields;
         }
-        public void RegisterPresettingField(Field field, string value)
+        public void RegisterPresettingField(Incas.Objects.Models.Field field, string value)
         {
             FieldData fd = new()
             {
@@ -40,6 +38,23 @@ namespace Incas.Objects.Components
                 Value = value
             };
             this.PresettingFields.Add(fd);
+        }
+        public PresetReference GetAsReference()
+        {
+            return new()
+            {
+                Id = this.Id,
+                Name = this.Name
+            };
+        }
+        public Dictionary<string,string> GetValues()
+        {
+            Dictionary<string, string> values = new();
+            foreach (KeyValuePair<Guid, string> field in this.Data)
+            {
+                values.Add(field.Key.ToString(), field.Value);
+            }
+            return values;
         }
     }
 }

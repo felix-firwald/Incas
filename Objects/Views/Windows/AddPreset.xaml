@@ -16,7 +16,7 @@
             <RowDefinition Height="175*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="PresetName" Style="{StaticResource TextBoxMain}" Tag="Наименование пресета" Grid.Column="1" Panel.ZIndex="1"/>
+        <TextBox x:Name="PresetName" Style="{StaticResource TextBoxMain}" MaxLength="75" Tag="Наименование пресета" Grid.Column="1" Panel.ZIndex="1"/>
         <Rectangle Fill="{StaticResource Black}" Grid.Row="1" Grid.ColumnSpan="2"/>
         <TabControl Style="{StaticResource TabControlMain}" ItemContainerStyle="{StaticResource TabItemMain}" Grid.RowSpan="2" Grid.ColumnSpan="2">
             <TabItem Header="Поля">
@@ -39,6 +39,6 @@
                 <Label Content="Сохранить пресет" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
             </StackPanel>
         </Button>
-        <CheckBox Style="{StaticResource Toggle}" Content="Применить изменения к срезу данных" Grid.Row="2" Grid.Column="1"/>
+        <!--<CheckBox x:Name="ApplyCheckBox" Style="{StaticResource Toggle}" IsChecked="True" Content="Применить к существующим данным" Grid.Row="2" Grid.Column="1"/>-->
     </Grid>
 </Window>

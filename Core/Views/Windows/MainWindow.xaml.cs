@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Incas.Core.AutoUI;
+﻿using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.ViewModels;
@@ -139,7 +138,15 @@ namespace Incas.Core.Views.Windows
             this.CustomTabs.Children.Clear();
             using (Class cl = new())
             {
-                foreach (string category in cl.GetCategories())
+                foreach (string category in cl.GetCategoriesOfClassType(Objects.Components.ClassType.Process))
+                {
+                    this.AddPageButton(category, Classes.Icon.Graph, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
+                }
+                foreach (string category in cl.GetCategoriesOfClassType(Objects.Components.ClassType.Document))
+                {
+                    this.AddPageButton(category, Classes.Icon.FileRichText, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
+                }
+                foreach (string category in cl.GetCategoriesOfClassType(Objects.Components.ClassType.Model))
                 {
                     this.AddPageButton(category, Classes.Icon.Database, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
                 }
@@ -235,6 +242,12 @@ namespace Incas.Core.Views.Windows
                 $"Тип (пакет):  {lic.LicenseType}\n" +
                 $"Истекает:     {lic.ExpirationDate.ToString("dd.MM.yyyy HH:mm")}\n" +
                 $"Комментарий:  {lic.Commentary}", "Информация о лицензии");
+        }
+
+        private void RefreshClick(object sender, MouseButtonEventArgs e)
+        {
+            this.vm.LoadInfo();
+            this.UpdateTabs();
         }
     }
 }

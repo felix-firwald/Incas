@@ -57,7 +57,7 @@ namespace Incas.Objects.Views.Windows
         }
         private void FillList()
         {
-            DataTable dt = ObjectProcessor.GetObjectsList(this.Class);
+            DataTable dt = ObjectProcessor.GetObjectsList(this.Class, null);
             this.UpdateItemsSource(dt.Columns);
             DataView dv = dt.AsDataView();
             if (this.ClassData.ClassType == ClassType.Model)
@@ -68,7 +68,7 @@ namespace Incas.Objects.Views.Windows
         }
         private void FillList(string field, string value)
         {
-            DataTable dt = ObjectProcessor.GetObjectsListWhereLike(this.Class, field, value);
+            DataTable dt = ObjectProcessor.GetObjectsListWhereLike(this.Class, null, field, value);
             this.UpdateItemsSource(dt.Columns);
             this.Grid.ItemsSource = dt.DefaultView;
         }

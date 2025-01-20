@@ -24,11 +24,14 @@ namespace Incas.Objects.Components
         public Guid TargetObject { get; set; }
         public object Meta { get; set; }
         public List<FieldData> Fields { get; set; }
+        public Guid Preset { get; set; }
+
         public Object Copy()
         {
             Object obj = new()
             {
-                Fields = this.Fields
+                Fields = this.Fields,
+                Preset = this.Preset
             };
             return obj;
         }

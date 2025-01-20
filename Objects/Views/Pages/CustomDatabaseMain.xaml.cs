@@ -45,9 +45,18 @@ namespace Incas.Objects.Views.Pages
                 this.ContentPanel.Content = new Core.Views.Controls.NoContent();
                 return;
             }
-            this.ContentPanel.Content = new ObjectsList(selectedClass, ObjectProcessor.GetPreset(selectedClass, preset));
+            ObjectsList ol = new(selectedClass, ObjectProcessor.GetPreset(selectedClass, preset));
+            ol.OnPresetsViewRequested += this.OnPresetsViewRequested;
+            this.ContentPanel.Content = ol;
         }
-
+        private void PlacePresetsListPage(Models.Class selectedClass)
+        {
+            PresetsListPage pl = new(selectedClass, this.vm.Presets);
+            pl.OnViewRequested += this.Pl_OnViewRequested;
+            this.vm.UpdatePresets();
+            this.vm.SelectedPreset = new();
+            this.ContentPanel.Content = pl;
+        }
         private void OnClassSelected(Models.Class selectedClass)
         {
             if (selectedClass == null)
@@ -55,12 +64,33 @@ namespace Incas.Objects.Views.Pages
                 this.ContentPanel.Content = new Core.Views.Controls.NoContent();
                 return;
             }
-            this.ContentPanel.Content = new ObjectsList(selectedClass);
+            Models.ClassData data = selectedClass.GetClassData();
+            if (data.PresetsEnabled && data.RestrictFullView)
+            {
+                this.PlacePresetsListPage(selectedClass);
+            }
+            else
+            {
+                ObjectsList ol = new(selectedClass);
+                ol.OnPresetsViewRequested += this.OnPresetsViewRequested;
+                this.ContentPanel.Content = ol;
+            }            
+        }
+
+        private void OnPresetsViewRequested(Models.Class source)
+        {
+            this.PlacePresetsListPage(source);
+        }
+
+        private void Pl_OnViewRequested(Models.Class sourceClass, Preset preset)
+        {
+            this.vm.SelectedPreset = preset.GetAsReference();
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             this.vm.UpdateAll();
+            this.ContentPanel.Content = new Core.Views.Controls.NoContent();
         }
 
         private void MenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -77,10 +107,9 @@ namespace Incas.Objects.Views.Pages
             DialogsManager.ShowPage(gb, this.vm.SelectedClass.name, this.vm.SelectedClass.identifier.ToString());
         }
 
-        private void AddPresetClick(object sender, System.Windows.RoutedEventArgs e)
+        private void Ap_OnUpdateRequested()
         {
-            AddPreset ap = new(this.vm.SelectedClass);
-            ap.ShowDialog();
+            this.vm.UpdatePresets();
         }
     }
 }

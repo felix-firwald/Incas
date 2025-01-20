@@ -4,6 +4,7 @@
     {
         Model,
         Document,
-        Process
+        Process,
+        StaticModel
     }
 }

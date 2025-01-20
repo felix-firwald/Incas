@@ -9,10 +9,7 @@ namespace Incas.Admin.AutoUI
     public class WorkspaceSettings : AutoUIBase
     {
         private WorkspacePrimarySettings data;
-        public override void Load()
-        {
-            this.data = JsonConvert.DeserializeObject<WorkspacePrimarySettings>(ProgramState.GetParameter(ParameterType.WORKSPACE, "ws_data").value);
-        }
+        private Parameter param; 
         [Description("Имя рабочего пространства")]
         public string Name
         {
@@ -25,6 +22,21 @@ namespace Incas.Admin.AutoUI
         {
             get => this.data.IsLocked;
             set => this.data.IsLocked = value;
+        }
+        public override void Load()
+        {
+            this.param = ProgramState.GetParameter(ParameterType.WORKSPACE, "ws_data");
+            this.data = JsonConvert.DeserializeObject<WorkspacePrimarySettings>(this.param.value);
+        }
+        public override void Save()
+        {
+            WorkspacePrimarySettings wps = new()
+            {
+                Name = this.Name,
+                IsLocked = this.WorkspaceLocked
+            };
+            this.param.value = JsonConvert.SerializeObject(wps);
+            this.param.UpdateValue();
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -75,6 +76,11 @@ namespace Incas.Objects.Components
         /// Now is useless
         /// </summary>
         public const string MetaField = "META_INFORMATION";
+
+        /// <summary>
+        /// Stores the Preset <see cref="Guid" (if preset in use, else <see cref="Guid.Empty")
+        /// </summary>
+        public const string PresetField = "PRESET_ID";
 
         /// <summary>
         /// Date when the document is marked by user as <see cref="TerminatedField"/>
@@ -194,7 +200,7 @@ namespace Incas.Objects.Components
             string path = GetPathToObjectsMap(cl);
             string adding = "";
             Query q = new("", path);
-
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             StringBuilder request = new($"BEGIN TRANSACTION; CREATE TABLE IF NOT EXISTS [{MainTable}] (\n");
             request.Append($" [{IdField}] TEXT UNIQUE, [{NameField}] TEXT, [{StatusField}] TEXT, [{AuthorField}] TEXT, ");
             if (data.ClassType == ClassType.Document)
@@ -227,6 +233,7 @@ namespace Incas.Objects.Components
             {
                 string path = GetPathToObjectsMap(cl);
                 Query q = new("", path);
+                q.OnSQLErrorDetected += OnSQLErrorDetected;
                 q.BeginTransaction();
                 q.AddCustomRequest($"DROP TABLE IF EXISTS [{MainTable}]; " +
                     $"DROP TABLE IF EXISTS [{EditsTable}]; " +
@@ -265,28 +272,32 @@ namespace Incas.Objects.Components
                 TargetClassField,
                 TerminatedField,
                 DataField,
+                PresetField
             ];
             string path = GetPathToObjectsMap(cl);
             Query q = new("", path);
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             q.AddCustomRequest($"PRAGMA table_info([{MainTable}])");
-            List<string> mapFields = [];
+            List<string> mapFields = []; // columns in map
+            List<string> mapServiceFields = []; // columns in map
             DataTable dt = q.Execute();
             foreach (DataRow row in dt.Rows)
             {
                 string name = row["name"].ToString();
-                if (!serviceColumns.Contains(name))
+                if (!serviceColumns.Contains(name)) // if column not in service columns
                 {
                     mapFields.Add(name);
                 }
+                else
+                {
+                    mapServiceFields.Add(name);
+                }
             }
             List<string> classFields = [];
-            foreach (Models.Field f in cl.GetClassData().GetSavebleFields())
+            ClassData classData = cl.GetClassData();
+            foreach (Models.Field f in classData.GetSavebleFields())
             {
                 classFields.Add(f.Id.ToString());
-            }
-            foreach (PresetReference pr in ObjectProcessor.GetPresetsReferences(cl))
-            {
-                classFields.Add("PRESET_" + pr.Id.ToString());
             }
             List<string> missingFields = classFields.Except(mapFields).ToList(); // отсутствующие поля
             List<string> excessFields = mapFields.Except(classFields).ToList(); // лишние поля
@@ -300,7 +311,11 @@ namespace Incas.Objects.Components
             foreach (string excf in excessFields)
             {
                 updateRequest.Append($"ALTER TABLE [{MainTable}] DROP COLUMN [{excf}];");
-            }           
+            }     
+            if (classData.ClassType != ClassType.StaticModel && !mapServiceFields.Contains(PresetField)) // if preset column must be placed but not found
+            {
+                updateRequest.Append($"ALTER TABLE [{MainTable}] ADD COLUMN [{PresetField}] TEXT;");
+            }
             updateRequest.Append("COMMIT");
             q.Clear();
             q.AddCustomRequest(updateRequest.ToString());
@@ -491,6 +506,7 @@ namespace Incas.Objects.Components
             await Task.Run(() =>
             {
                 Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+                q.OnSQLErrorDetected += OnSQLErrorDetected;
                 DataRow dr = q.AddCustomRequest($"SELECT COUNT([{field.Id}]) AS COUNTER FROM [{MainTable}]")
                 .WhereEqual(field.Id.ToString(), value)
                 .ExecuteOne();
@@ -508,13 +524,14 @@ namespace Incas.Objects.Components
                 ProgramStatusBar.SetText("Выполняется сохранение пресета...");
                 string path = GetPathToObjectsMap(cl);
                 Query q = new(ObjectProcessor.PresetsTable, path);
+                q.OnSQLErrorDetected += OnSQLErrorDetected;
                 q.BeginTransaction();
                 if (preset.Id == Guid.Empty)
                 {
                     preset.Id = Guid.NewGuid();
                     preset.CreatedDate = DateTime.Now;
                     preset.AuthorId = ProgramState.CurrentUser.id;
-                    q.Insert(new Dictionary<string, string>()
+                    q.Insert(new()
                     {
                         { IdField, preset.Id.ToString()},
                         { NameField, preset.Name},
@@ -523,20 +540,62 @@ namespace Incas.Objects.Components
                         { DataField, preset.GetData()},
                     });
                     q.SeparateCommand();
-                    q.AddCustomRequest($"ALTER TABLE [{MainTable}] ADD COLUMN [PRESET_{preset.Id.ToString("N")}] TEXT;");
                 }
                 else
                 {
-                    q.Update(new Dictionary<string, string>()
+                    q.Update(new()
                     {
                         { NameField, preset.Name},
                         { DataField, preset.GetData()},
                     });
                     q.WhereEqual(IdField, preset.Id.ToString());
+                    q.SeparateCommand();
+                    q.Update(MainTable, preset.GetValues());
+                    q.WhereEqual(PresetField, preset.Id.ToString());
+                    q.SeparateCommand();
                 }              
                 q.EndTransaction();
                 q.ExecuteVoid();
                 ProgramStatusBar.Hide();
+            });
+            return true;
+        }
+        public async static Task<bool> ApplyPresetToRelevant(Class cl, Preset preset)
+        {
+            await Task.Run(() =>
+            {
+                string path = GetPathToObjectsMap(cl);
+                Query q = new(ObjectProcessor.MainTable, path);
+                q.OnSQLErrorDetected += OnSQLErrorDetected;
+                q.BeginTransaction();
+                q.Update(MainTable, new() { { PresetField, preset.Id.ToString() } });
+                q.Where(preset.GetValues());              
+                q.SeparateCommand();
+                q.EndTransaction();
+                q.ShowRequest();
+                q.ExecuteVoid();
+            });
+            return true;
+        }
+        public async static Task<bool> RemovePreset(Class cl, PresetReference preset)
+        {
+            await Task.Run(() =>
+            {
+                string path = GetPathToObjectsMap(cl);
+                Query q = new(ObjectProcessor.PresetsTable, path);
+                q.OnSQLErrorDetected += OnSQLErrorDetected;
+                q.BeginTransaction();
+                q.Delete();
+                q.WhereEqual(IdField, preset.Id.ToString());
+                q.SeparateCommand();
+                q.Update(MainTable, new()
+                    {
+                        { PresetField, Guid.Empty.ToString() }
+                    });
+                q.WhereEqual(PresetField, preset.Id.ToString());
+                q.SeparateCommand();
+                q.EndTransaction();
+                q.ExecuteVoid();
             });
             return true;
         }
@@ -545,6 +604,7 @@ namespace Incas.Objects.Components
             List<PresetReference> presets = new();
             string path = GetPathToObjectsMap(cl);
             Query q = new(ObjectProcessor.PresetsTable, path);
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             q.Select();
             DataTable dt = q.Execute();
             foreach (DataRow dr in dt.Rows)
@@ -562,10 +622,11 @@ namespace Incas.Objects.Components
         {
             string path = GetPathToObjectsMap(cl);
             Query q = new(ObjectProcessor.PresetsTable, path);
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             DataRow dr = q.Select().WhereEqual(IdField, ps.Id.ToString()).ExecuteOne();
             if (dr is null)
             {
-                return new();
+                return null;
             }
             Preset preset = new()
             {
@@ -577,6 +638,14 @@ namespace Incas.Objects.Components
             preset.SetData(dr[DataField].ToString());
             return preset;
         }
+        public static Preset GetPreset(Class cl, Guid id)
+        {
+            PresetReference pr = new()
+            {
+                Id = id
+            };
+            return GetPreset(cl, pr);
+        }
         public async static Task<bool> RemovePreset(Class cl, Preset preset)
         {
             await Task.Run(() =>
@@ -584,11 +653,10 @@ namespace Incas.Objects.Components
                 ProgramStatusBar.SetText("Выполняется удаление пресета...");
                 string path = GetPathToObjectsMap(cl);
                 Query q = new(ObjectProcessor.PresetsTable, path);
+                q.OnSQLErrorDetected += OnSQLErrorDetected;
                 q.BeginTransaction();
                 q.Delete();
                 q.WhereEqual(IdField, preset.Id.ToString());
-                q.SeparateCommand();
-                q.AddCustomRequest($"ALTER TABLE [{MainTable}] DROP COLUMN [PRESET_{preset.Id.ToString("N")}];");
                 q.EndTransaction();
                 q.ExecuteVoid();
                 ProgramStatusBar.Hide();
@@ -602,6 +670,7 @@ namespace Incas.Objects.Components
                 ProgramStatusBar.SetText("Выполняется сохранение объектов...");
                 string path = GetPathToObjectsMap(cl);
                 Query q = new(ObjectProcessor.MainTable, path);
+                q.OnSQLErrorDetected += OnSQLErrorDetected;
                 q.BeginTransaction();
                 foreach (Object obj in objects)
                 {
@@ -644,7 +713,6 @@ namespace Incas.Objects.Components
             if (obj.Id == Guid.Empty) // if NEW
             {
                 obj.Id = Guid.NewGuid();
-
                 obj.AuthorId = ProgramState.CurrentUser.id;
                 obj.CreationDate = DateTime.Now;
                 values.Add(IdField, obj.Id.ToString());
@@ -653,6 +721,10 @@ namespace Incas.Objects.Components
                 {
                     values.Add(DateCreatedField, obj.CreationDate.ToString());
                     values.Add(TerminatedField, "0");
+                }
+                if (data.ClassType != ClassType.StaticModel)
+                {
+                    values.Add(PresetField, obj.Preset.ToString());
                 }
                 obj.AuthorId = ProgramState.CurrentUser.id;
                 obj.CreationDate = DateTime.Now;
@@ -666,6 +738,10 @@ namespace Incas.Objects.Components
                 {
                     values.Add(DateTerminatedField, obj.TerminatedDate.ToString());
                     values.Add(TerminatedField, obj.Terminated ? "1" : "0");
+                }
+                if (data.ClassType != ClassType.StaticModel)
+                {
+                    values.Add(PresetField, obj.Preset.ToString());
                 }
                 q.Update(values);
                 q.WhereEqual(IdField, obj.Id.ToString());
@@ -681,6 +757,7 @@ namespace Incas.Objects.Components
         public static DataTable GetSimpleObjectsList(Class cl, string WhereCondition = null)
         {
             Query q = new("", GetPathToObjectsMap(cl));
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             ClassData data = cl.GetClassData();
             List<Objects.Models.Field> fields = data.GetFieldsForMap();
             List<string> fieldsRequest = [$"[OBJECTS_MAP].[{IdField}]"];
@@ -705,6 +782,7 @@ namespace Incas.Objects.Components
         public static DataTable GetSimpleObjectsWhereIdForCorrection(Class cl, List<Guid> list, Models.Field f)
         {
             Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             List<string> ids = new();
             foreach (Guid id in list)
             {
@@ -717,6 +795,7 @@ namespace Incas.Objects.Components
             await Task.Run(() =>
             {
                 Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+                q.OnSQLErrorDetected += OnSQLErrorDetected;
                 q.BeginTransaction();
                 foreach (KeyValuePair<string, string> kvp in fields)
                 {
@@ -730,9 +809,10 @@ namespace Incas.Objects.Components
             });           
         }
         #endregion
-        public static DataTable GetObjectsList(Class cl, string WhereCondition = null)
+        private static DataTable GetObjectsListBasic(Class cl, string WhereCondition = null)
         {
             Query q = new("", GetPathToObjectsMap(cl));
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             ClassData data = cl.GetClassData();
             List<Objects.Models.Field> fields = data.GetFieldsForMap();
             List<string> fieldsRequest = [$"[OBJECTS_MAP].[{IdField}]"];
@@ -772,26 +852,73 @@ namespace Incas.Objects.Components
             }
             return q.Execute();
         }
-        public static DataTable GetObjectsListWhereLike(Class cl, string field, string value)
+        #region Objects List Get
+        public static DataTable GetObjectsList(Class cl, Preset preset)
         {
-            string request = $"WHERE [{field}] LIKE '%{value}%'";
-            return GetObjectsList(cl, request);
+            string request;
+            if (preset == null)
+            {
+                request = "";
+            }
+            else
+            {
+                request = $"WHERE [{MainTable}].[{PresetField}] = '{preset.Id}'";
+            }
+            return GetObjectsListBasic(cl, request);
         }
-        public static DataTable GetSimpleObjectsListWhereLike(Class cl, string field, string value)
+        public static DataTable GetObjectsListWhereLike(Class cl, Preset preset, string field, string value)
         {
-            string request = $"WHERE [{field}] LIKE '%{value}%'";
-            return GetSimpleObjectsList(cl, request);
+            string request;
+            if (preset == null)
+            {
+                request = $"WHERE [{field}] LIKE '%{value}%'";
+            }
+            else
+            {
+                request = $"WHERE [{MainTable}].[{PresetField}] = '{preset.Id}' AND [{field}] LIKE '%{value}%'";
+            }            
+            return GetObjectsListBasic(cl, request);
         }
-        public static DataTable GetObjectsListWhereEqual(Class cl, string field, string value)
+        public static DataTable GetSimpleObjectsListWhereLike(Class cl, Preset preset, string field, string value)
         {
-            string request = $"WHERE [{field}] = '{value}'";
-            return GetObjectsList(cl, request);
+            string request;
+            if (preset == null)
+            {
+                request = $"WHERE [{field}] LIKE '%{value}%'";
+            }
+            else
+            {
+                request = $"WHERE [{MainTable}].[{PresetField}] = '{preset.Id}' AND [{field}] LIKE '%{value}%'";
+            }            
+            return GetObjectsListBasic(cl, request);
         }
-        public static DataTable GetSimpleObjectsListWhereEqual(Class cl, string field, string value)
+        public static DataTable GetObjectsListWhereEqual(Class cl, Preset preset, string field, string value)
         {
-            string request = $"WHERE [{field}] = '{value}'";
-            return GetSimpleObjectsList(cl, request);
+            string request;
+            if (preset == null)
+            {
+                request = $"WHERE [{field}] = '{value}'";
+            }
+            else
+            {
+                request = $"WHERE [{MainTable}].[{PresetField}] = '{preset.Id}' AND [{field}] = '{value}'";
+            }           
+            return GetObjectsListBasic(cl, request);
         }
+        public static DataTable GetSimpleObjectsListWhereEqual(Class cl, Preset preset, string field, string value)
+        {
+            string request;
+            if (preset == null)
+            {
+                request = $"WHERE [{field}] = '{value}'";
+            }
+            else
+            {
+                request = $"WHERE [{MainTable}].[{PresetField}] = '{preset.Id}' AND [{field}] = '{value}'";
+            }            
+            return GetObjectsListBasic(cl, request);
+        }
+        #endregion
         public static Object GetObject(Class cl, Guid id)
         {
             Object obj = new()
@@ -799,12 +926,14 @@ namespace Incas.Objects.Components
                 Fields = []
             };
             Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
+            ClassData classData = cl.GetClassData();
             DataRow dr = q.Select().WhereEqual(IdField, id.ToString()).ExecuteOne();
             if (dr != null)
             {
                 obj.Id = id;
                 obj.AuthorId = Guid.Parse(dr[ObjectProcessor.AuthorField].ToString());
-                if (cl.GetClassData().ClassType == ClassType.Document)
+                if (classData.ClassType == ClassType.Document)
                 {
                     if (dr[ObjectProcessor.DateCreatedField] is not null)
                     {
@@ -821,7 +950,15 @@ namespace Incas.Objects.Components
                 byte.TryParse(dr[ObjectProcessor.StatusField].ToString(), out status);
                 obj.Status = status;
                 obj.Name = dr[ObjectProcessor.NameField].ToString();
-                foreach (Models.Field f in cl.GetClassData().GetSavebleFields())
+                if (classData.ClassType != ClassType.StaticModel)
+                {
+                    Guid guid = new();
+                    if (Guid.TryParse(dr[ObjectProcessor.PresetField].ToString(), out guid))
+                    {
+                        obj.Preset = guid;
+                    }
+                }
+                foreach (Models.Field f in classData.GetSavebleFields())
                 {
                     FieldData fd = new()
                     {
@@ -861,6 +998,7 @@ namespace Incas.Objects.Components
             List<Models.Field> Fields = source.GetClassData().GetSavebleFields();
 
             Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(source));
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             DataTable dt = q.Select()
                 .WhereEqual(TargetClassField, parentClass.identifier.ToString())
                 .WhereEqual(TargetObjectField, parentObject.ToString()).Execute();
@@ -890,6 +1028,7 @@ namespace Incas.Objects.Components
         public static void RemoveObject(Class cl, Guid id)
         {
             Query q = new(ObjectProcessor.MainTable, GetPathToObjectsMap(cl));
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             q.Delete();
             q.WhereEqual(IdField, id.ToString()).Execute();
         }
@@ -911,6 +1050,7 @@ namespace Incas.Objects.Components
             };
 
             Query q = new(ObjectProcessor.CommentsTable, GetPathToObjectsMap(cl));
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             if (comment.Id == Guid.Empty) // if NEW
             {
                 comment.Id = Guid.NewGuid();
@@ -932,6 +1072,7 @@ namespace Incas.Objects.Components
             await Task.Run(() =>
             {
                 Query q = new(CommentsTable, GetPathToObjectsMap(cl));
+                q.OnSQLErrorDetected += OnSQLErrorDetected;
                 DataTable dt = q.Select()
                     .WhereEqual(TargetObjectField, target.Id.ToString())
                     .Execute();
@@ -954,7 +1095,15 @@ namespace Incas.Objects.Components
         public static void RemoveObjectComment(Class cl, ObjectComment comment)
         {
             Query q = new(CommentsTable, GetPathToObjectsMap(cl));
+            q.OnSQLErrorDetected += OnSQLErrorDetected;
             q.Delete().WhereEqual(IdField, comment.Id.ToString()).ExecuteVoid();
+        }
+
+        #endregion
+        #region Fixing
+        private static void OnSQLErrorDetected(string table, ExecuteType type, int errorCode, string description)
+        {
+            
         }
         #endregion
     }

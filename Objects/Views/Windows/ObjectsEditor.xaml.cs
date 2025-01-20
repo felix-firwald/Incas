@@ -88,7 +88,17 @@ namespace Incas.Objects.Views.Windows
         }
         private ObjectCreator AddObjectCreator(Components.Object obj = null)
         {
-            ObjectCreator creator = new(this.Class, this.ClassData, this.Preset, obj);
+            if (obj is not null)
+            {
+                if ((this.Preset is null && obj.Preset != Guid.Empty) // в едиторе нет пресета а у объекта есть
+                    || (this.Preset is not null && obj.Preset == Guid.Empty) // в едиторе есть пресет а у объекта нет
+                    || (this.Preset is not null && obj.Preset != this.Preset.Id )) // в едиторе есть пресет и он отличается от того что в объекте
+                {
+                    DialogsManager.ShowExclamationDialog($"Объект с наименованием \"{obj.Name}\" не будет добавлен в коллекцию редактирования, поскольку пресет, к которому он привязан, отличается от пресета первого объекта в списке.", "Редактирование ограничено");
+                    return null;
+                }             
+            }
+            ObjectCreator creator = new(this.Class, this.Preset, obj);
             creator.OnSaveRequested += this.Creator_OnSaveRequested;
             creator.OnRemoveRequested += this.Creator_OnRemoveRequested;
             creator.OnInsertRequested += this.Creator_OnInsertRequested;

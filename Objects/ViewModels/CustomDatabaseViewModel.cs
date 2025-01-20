@@ -68,6 +68,7 @@ namespace Incas.Objects.ViewModels
                     this.OnPropertyChanged(nameof(this.ClassData));
                     this.OnPropertyChanged(nameof(this.PresetsVisibility));
                     this.OnPropertyChanged(nameof(this.Presets));
+                    this.SelectedPreset = new();
                     this.OnClassSelected?.Invoke(value);
                 }              
             }
@@ -119,10 +120,28 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedPreset));
                 if (this.selectedPreset.Id != Guid.Empty)
                 {
-                    this.OnPresetSelected?.Invoke(this.selectedClass, this.selectedPreset);
-                }               
+                    this.OnPresetSelected?.Invoke(this.selectedClass, this.selectedPreset);                   
+                }
+                this.OnPropertyChanged(nameof(this.SelectedClassName));
             }
         }
-        public string SelectedClassName => this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.name;
+        public string SelectedClassName 
+        {
+            get
+            {
+                if (this.selectedPreset.Id == Guid.Empty)
+                {
+                    return this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.name;
+                }
+                else
+                {
+                    return this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.name + ": " + this.selectedPreset.Name;
+                }
+            }
+        }
+        public void UpdatePresets()
+        {
+            this.OnPropertyChanged(nameof(this.Presets));
+        }
     }
 }

@@ -139,7 +139,7 @@ namespace Incas.Core.Views.Controls
 
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
-            ObjectsEditor oe = new(new(this.Binding.Class), null);
+            ObjectsEditor oe = new(new(this.Binding.Class), null, null);
             oe.SetSingleObjectMode();
             oe.OnSetNewObjectRequested += this.Oe_OnSetNewObjectRequested;
             oe.ShowDialog();

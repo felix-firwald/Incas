@@ -147,7 +147,7 @@
                                         </Button>
                                     </StackPanel>
                                 </Border>
-                                <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5" Grid.Column="1">
+                                <Border Background="{StaticResource Dark}" IsEnabled="False" CornerRadius="8" Margin="5" Grid.Column="1">
                                     <StackPanel>
                                         <Grid Margin="5,5,0,0">
                                             <Grid.ColumnDefinitions>
@@ -161,7 +161,7 @@
                                         <CheckBox Style="{StaticResource Toggle}" Content="Включить шифрование (только при первоначальной настройке, временно)" IsChecked="{Binding Encrypt}"/>
                                     </StackPanel>
                                 </Border>
-                                <Border x:Name="AccessArea" Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                                <Border x:Name="AccessArea" IsEnabled="False" Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
                                     <StackPanel>
                                         <Grid Margin="5,5,0,0">
                                             <Grid.ColumnDefinitions>
