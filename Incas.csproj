@@ -84,6 +84,8 @@
     <None Remove="Static\Fonts\RobotoMono-SemiBoldItalic.ttf" />
     <None Remove="Static\Fonts\RobotoMono-Thin.ttf" />
     <None Remove="Static\Fonts\RobotoMono-ThinItalic.ttf" />
+    <None Remove="Static\Fonts\Rubik-Italic.ttf" />
+    <None Remove="Static\Fonts\Rubik.ttf" />
     <None Remove="Static\Fonts\VelaSans-Bold.ttf" />
     <None Remove="Static\Fonts\VelaSans-ExtraBold.ttf" />
     <None Remove="Static\Fonts\VelaSans-ExtraLight.ttf" />
@@ -232,6 +234,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-ThinItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\Rubik-Italic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Static\Fonts\Rubik.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\VelaSans-Bold.ttf">
