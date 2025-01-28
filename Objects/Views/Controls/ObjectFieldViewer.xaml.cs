@@ -7,6 +7,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Threading.Tasks;
+using Incas.Objects.Engine;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -16,7 +17,7 @@ namespace Incas.Objects.Views.Controls
     public partial class ObjectFieldViewer : UserControl, IObjectFieldViewer
     {
         private Class relationClass;
-        private Components.Object relationObject;
+        private IObject relationObject;
         private bool isNestedObjectShowed = false;
         private ObjectCard card;
         public delegate void FieldDataAction(FieldData data);
@@ -31,40 +32,49 @@ namespace Incas.Objects.Views.Controls
             {
                 this.FilterButton.Visibility = Visibility.Collapsed;
             }
-            if (data.ClassField.Type == FieldType.Relation)
+            if (data.ClassField.Confidential)
             {
-                try
-                {
-                    Guid id = Guid.Parse(data.Value);
-                    if (id != Guid.Empty)
-                    {
-                        BindingData bd = data.ClassField.GetBindingData();
-                        this.GenerateRelatedField(id, bd);
-                    }
-                }
-                catch
-                {
-                    this.FieldValue.Text = "(объект не выбран)";
-                    this.ColorizeField(200, 0, 90);
-                    this.FilterButton.IsEnabled = false;
-                }
-            }
-            else if (data.ClassField.Type == FieldType.Table)
-            {
-                this.FieldValue.Text = "(таблица)";
+                this.ConfidentialButton.Visibility = Visibility.Visible;
+                this.FieldValue.Visibility = Visibility.Collapsed;
                 this.FilterButton.IsEnabled = false;
-                this.ColorizeField(67, 70, 80);
             }
             else
             {
-                this.FieldValue.Text = data.Value;
-            }
+                if (data.ClassField.Type == FieldType.Relation)
+                {
+                    try
+                    {
+                        Guid id = Guid.Parse(data.Value);
+                        if (id != Guid.Empty)
+                        {
+                            BindingData bd = data.ClassField.GetBindingData();
+                            this.GenerateRelatedField(id, bd);
+                        }
+                    }
+                    catch
+                    {
+                        this.FieldValue.Text = "(объект не выбран)";
+                        this.ColorizeField(200, 0, 90);
+                        this.FilterButton.IsEnabled = false;
+                    }
+                }
+                else if (data.ClassField.Type == FieldType.Table)
+                {
+                    this.FieldValue.Text = "(таблица)";
+                    this.FilterButton.IsEnabled = false;
+                    this.ColorizeField(67, 70, 80);
+                }
+                else
+                {
+                    this.FieldValue.Text = data.Value;
+                }
+            }           
         }
 
         private async void GenerateRelatedField(Guid id, BindingData bd)
         {
             this.relationClass = new(bd.Class);
-            this.relationObject = ObjectProcessor.GetObject(this.relationClass, id);
+            this.relationObject = Processor.GetObject(this.relationClass, id);
             this.FieldValue.Text = await this.relationObject.GetFieldValue(bd.Field);
             this.ColorizeField(130, 113, 239);
             this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
@@ -161,6 +171,11 @@ namespace Incas.Objects.Views.Controls
                 }              
             }
             catch { }
+        }
+
+        private void ConfidentialButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

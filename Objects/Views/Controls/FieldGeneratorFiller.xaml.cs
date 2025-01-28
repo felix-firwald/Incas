@@ -1,5 +1,5 @@
 ﻿using Incas.Core.Classes;
-using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Models;
@@ -49,29 +49,29 @@ namespace Incas.Objects.Views.Controls
         {
             return this.GetObjects();
         }
-        public List<Components.Object> GetObjects()
+        public List<IObject> GetObjects()
         {
-            List<Incas.Objects.Components.Object> objs = new();
+            List<IObject> objs = new();
             foreach (ObjectCreator oc in this.ContentPanel.Children)
             {
                 objs.Add(oc.PullObject());
             }
             return objs;
         }
-        public void SetObjects(List<Components.Object> objs)
+        public void SetObjects(List<IObject> objs)
         {
-            foreach (Components.Object obj in objs)
+            foreach (IObject obj in objs)
             {
                 this.AddObjectCreator(obj);
             }
         }
         public void ApplyObjectsBy(Class cl, Guid obj)
         {
-            this.SetObjects(ObjectProcessor.GetRelatedObjects(this.TargetClass, cl, obj));
+            //this.SetObjects(Processor.GetRelatedObjects(this.TargetClass, cl, obj));
         }
         public void SetValue(string value)
         {
-            this.SetObjects(JsonConvert.DeserializeObject<List<Components.Object>>(value));
+            this.SetObjects(JsonConvert.DeserializeObject<List<IObject>>(value));
         }
         public void MarkAsNotValidated()
         {
@@ -82,7 +82,7 @@ namespace Incas.Objects.Views.Controls
 
         }
         
-        private void AddObjectCreator(Components.Object obj = null)
+        private void AddObjectCreator(IObject obj = null)
         {
             ObjectCreator creator = new(this.TargetClass, null, obj);
             creator.OnUpdated += this.Creator_OnUpdated;
@@ -94,7 +94,7 @@ namespace Incas.Objects.Views.Controls
         {
             if (DialogsManager.ShowQuestionDialog("Объект будет безвозвратно удален. Вы уверены, что хотите удалить его?", "Удалить объект?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
             {
-                ObjectProcessor.RemoveObject(this.TargetClass, creator.Object.Id);
+                Processor.RemoveObject(this.TargetClass, creator.Object.Id);
                 this.ContentPanel.Children.Remove(creator);
                 return true;
             }

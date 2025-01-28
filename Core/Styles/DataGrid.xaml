@@ -38,7 +38,7 @@
     <Style x:Key="RowMain" TargetType="{x:Type DataGridRow}">
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Dark}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="MinHeight" Value="20"/>
         <Setter Property="SnapsToDevicePixels" Value="true"/>
@@ -225,7 +225,7 @@
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
-        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
         <Setter Property="GridLinesVisibility" Value="Horizontal"/>
         <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource Element}"/>

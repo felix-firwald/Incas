@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Models;
 using System;
 using System.Collections.Generic;
@@ -102,7 +103,7 @@ namespace Incas.Objects.ViewModels
                 }
                 if (this.classData.PresetsEnabled)
                 {
-                    return ObjectProcessor.GetPresetsReferences(this.selectedClass);
+                    return Processor.GetPresetsReferences(this.selectedClass);
                 }
                 return new();
             }

@@ -1,5 +1,5 @@
 ﻿using Incas.Core.Classes;
-using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Views.Controls;
 using System;
@@ -35,7 +35,7 @@ namespace Incas.Objects.Views.Pages
         }
         public void ApplyGrid(List<Guid> list)
         {
-            DataTable dt = ObjectProcessor.GetSimpleObjectsWhereIdForCorrection(this.Class, list, this.Field);
+            DataTable dt = Processor.GetSimpleObjectsWhereIdForCorrection(this.Class, list, this.Field);
             dt.Columns.Add(EditedColumn, typeof(bool));
             this.Grid.ItemsSource = dt.AsDataView();
         }
@@ -70,7 +70,7 @@ namespace Incas.Objects.Views.Pages
                 bool.TryParse(dr.Row[EditedColumn].ToString(), out edited);
                 if (edited)
                 {
-                    list.Add(dr.Row[ObjectProcessor.IdField].ToString(), dr.Row["Значение"].ToString());
+                    list.Add(dr.Row[Helpers.IdField].ToString(), dr.Row["Значение"].ToString());
                 }
                 else
                 {
@@ -79,13 +79,13 @@ namespace Incas.Objects.Views.Pages
                 }
             }
             this.IsEnabled = false;
-            ObjectProcessor.UpdateFieldsByIdForCorrection(this.Class, list, this.Field);
+            Processor.UpdateFieldsByIdForCorrection(this.Class, list, this.Field);
             DialogsManager.ShowInfoDialog("Исправления успешно применены. Вкладку можно закрыть.");           
         }
 
         private void Grid_AutoGeneratingColumn(object sender, System.Windows.Controls.DataGridAutoGeneratingColumnEventArgs e)
         {
-            if (e.Column.Header.ToString() == ObjectProcessor.IdField)
+            if (e.Column.Header.ToString() == Helpers.IdField)
             {
                 e.Column.Visibility = Visibility.Hidden;
             }

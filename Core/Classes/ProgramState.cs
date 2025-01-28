@@ -125,7 +125,7 @@ namespace Incas.Core.Classes
         }
         internal static bool CheckSensitive()
         {
-            return CurrentUser != null;
+            return CurrentUser != null && CurrentUserParameters != null;
         }
         #endregion
 

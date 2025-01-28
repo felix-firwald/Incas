@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using System;
 using System.IO;
 using System.Windows.Controls;
@@ -52,7 +53,7 @@ namespace Incas.Objects.Views.Controls
             {
                 WebPreviewWindow wp = new(
                 this.Comment.Data,
-                ObjectProcessor.GetPathToAttachmentsFolder(this.Comment.Class, this.Comment.TargetObject) + this.Comment.Data, false);
+                Processor.GetPathToAttachmentsFolder(this.Comment.Class, this.Comment.TargetObject) + this.Comment.Data, false);
                 wp.Show();
             }
             catch (System.Exception ex)
@@ -65,8 +66,8 @@ namespace Incas.Objects.Views.Controls
         {
             try
             {
-                ObjectProcessor.RemoveObjectComment(new(this.Comment.Class), this.Comment);
-                File.Delete(ObjectProcessor.GetPathToAttachmentsFolder(this.Comment.Class, this.Comment.TargetObject) + this.Comment.Data);
+                Processor.RemoveObjectComment(new(this.Comment.Class), this.Comment);
+                File.Delete(Processor.GetPathToAttachmentsFolder(this.Comment.Class, this.Comment.TargetObject) + this.Comment.Data);
                 this.Visibility = System.Windows.Visibility.Collapsed;
             }
             catch (Exception ex)

@@ -1,4 +1,5 @@
 ﻿using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
@@ -35,11 +36,11 @@ namespace Incas.Objects.Views.Pages
 
         private void Pe_OnViewRequested(PresetReference preset)
         {
-            this.OnViewRequested?.Invoke(this.SourceClass, ObjectProcessor.GetPreset(this.SourceClass, preset));
+            this.OnViewRequested?.Invoke(this.SourceClass, Processor.GetPreset(this.SourceClass, preset));
         }
         private void UpdatePresets()
         {
-            List<PresetReference> presets = ObjectProcessor.GetPresetsReferences(this.SourceClass);
+            List<PresetReference> presets = Processor.GetPresetsReferences(this.SourceClass);
             this.FillContentPanel(presets);
         }
         private void Pe_OnUpdateRequested(PresetReference preset)

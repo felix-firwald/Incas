@@ -27,6 +27,7 @@ namespace Incas.Core.Views.Windows
             if (!ProgramState.CheckSensitive())
             {
                 System.Windows.Application.Current.Shutdown();
+                return;
             }
             ProgramState.MainWindow = this;
             this.vm = new MainWindowViewModel();

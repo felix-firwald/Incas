@@ -1,6 +1,4 @@
-﻿using Incas.Core.Classes;
-using Incas.Objects.Components;
-using Incas.Templates.Components;
+﻿using Incas.Objects.Components;
 using Newtonsoft.Json;
 using System;
 
@@ -16,6 +14,7 @@ namespace Incas.Objects.Models
         public bool NotNull { get; set; }
         public bool IsUnique { get; set; }
         public bool PresettingEnabled { get; set; }
+        public bool Confidential { get; set; }
         public string Description { get; set; }
         public string Action { get; set; }
         public string ChangedEvent { get; set; }

@@ -2,11 +2,12 @@
 using Incas.Core.Interfaces;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
-using Incas.Templates.Components;
+using Incas.Rendering.Components;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using System;
@@ -24,7 +25,7 @@ namespace Incas.Objects.Views.Pages
     /// </summary>
     public partial class ObjectCreator : System.Windows.Controls.UserControl, ICollapsible
     {
-        public Components.Object Object { get; set; }
+        public IObject Object { get; set; }
         public Class Class { get; set; }
         public ClassData ClassData { get; set; }
         public Preset Preset { get; set; }
@@ -36,7 +37,7 @@ namespace Incas.Objects.Views.Pages
         public event ObjectCreatorData OnRemoveRequested;
         private bool Locked = false;
         private List<IFillerBase> fillers;
-        public ObjectCreator(Class source, Preset preset, Components.Object obj = null)
+        public ObjectCreator(Class source, Preset preset, IObject obj = null)
         {
             this.InitializeComponent();
             this.Class = source;
@@ -49,10 +50,14 @@ namespace Incas.Objects.Views.Pages
             }
             else
             {
-                this.Object = new();
+                this.Object = Helpers.CreateObjectByType(this.ClassData);
                 if (preset is not null)
                 {
-                    this.Object.Preset = preset.Id;
+                    IHasPreset objWithPreset = this.Object as IHasPreset;
+                    if (objWithPreset != null)
+                    {
+                        objWithPreset.Preset = preset.Id;
+                    }
                 }               
             }
             if (this.ClassData.ClassType != ClassType.Document)
@@ -71,13 +76,13 @@ namespace Incas.Objects.Views.Pages
             this.InitializeComponent();
             this.ClassData = data;
             this.FillContentPanel();
-            this.Object = new();
+            this.Object = Helpers.CreateObjectByType(data);
             this.DocumentTools.Visibility = Visibility.Collapsed;
             this.RemoveButton.Visibility = Visibility.Collapsed;
         }
         private void ApplyTerminated()
         {
-            if (this.Object.Terminated == true)
+            if (Helpers.IsObjectTerminated(this.Object))
             {
                 this.RenderArea.Visibility = Visibility.Collapsed;
                 this.SaveArea.Visibility = Visibility.Collapsed;
@@ -89,7 +94,7 @@ namespace Incas.Objects.Views.Pages
         }
         private void ApplyAuthorConstraint()
         {
-            if (this.Object.Id != Guid.Empty && this.ClassData.EditByAuthorOnly == true && this.Object.AuthorId != ProgramState.CurrentUser.id)
+            if (this.Object.Id != Guid.Empty && this.ClassData.EditByAuthorOnly == true && !Helpers.CheckAuthor(this.Object))
             {
                 if (ProgramState.CurrentUserParameters.Permission_group == PermissionGroup.Admin)
                 {
@@ -101,7 +106,7 @@ namespace Incas.Objects.Views.Pages
                 {
                     Content = "Вы не можете редактировать этот объект, поскольку не являетесь его автором.",
                     Margin = new Thickness(5),
-                    Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 0, 0))
+                    Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 0, 0))
                 };
                 this.ContentPanel.Children.Insert(0, label);
             }
@@ -220,7 +225,7 @@ namespace Incas.Objects.Views.Pages
             };
             DatabaseSelection ds = new(bd);
             ds.ShowDialog();
-            Components.Object obj = ds.GetSelectedObject();
+            IObject obj = ds.GetSelectedObject();
             if (obj is null)
             {
                 return;
@@ -253,7 +258,7 @@ namespace Incas.Objects.Views.Pages
                 }
             }
         }
-        public void ApplyObject(Components.Object obj)
+        public void ApplyObject(IObject obj)
         {
             this.Object = obj;
             this.ObjectName.Text = obj.Name;
@@ -290,7 +295,7 @@ namespace Incas.Objects.Views.Pages
             }
             return pairs;
         }
-        public Components.Object PullObject()
+        public IObject PullObject()
         {
             if (this.Locked == true)
             {

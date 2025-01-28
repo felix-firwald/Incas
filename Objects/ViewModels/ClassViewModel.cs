@@ -3,6 +3,7 @@ using Incas.Core.ViewModels;
 using Incas.Objects.Components;
 using Incas.Objects.Models;
 using System.Collections.Generic;
+using System.Windows;
 using Field = Incas.Objects.Models.Field;
 
 namespace Incas.Objects.ViewModels
@@ -132,6 +133,32 @@ namespace Incas.Objects.ViewModels
                 this.textDocument = value;
                 this.SourceData.Script = value.Text;
                 this.OnPropertyChanged(nameof(this.CodeModule));
+            }
+        }
+        public Visibility DocumentClassVisibility
+        {
+            get
+            {
+                switch (this.SourceData.ClassType)
+                {
+                    case ClassType.Document:
+                        return Visibility.Visible;
+                    default:
+                        return Visibility.Collapsed;
+                }
+            }
+        }
+        public Visibility ProcessClassVisibility
+        {
+            get
+            {
+                switch (this.SourceData.ClassType)
+                {
+                    case ClassType.Process:
+                        return Visibility.Visible;
+                    default:
+                        return Visibility.Collapsed;
+                }
             }
         }
 

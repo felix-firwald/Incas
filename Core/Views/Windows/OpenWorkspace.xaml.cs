@@ -134,5 +134,13 @@ namespace Incas.Core.Views.Windows
                 catch { }
             }
         }
+
+        private void OnClosed(object sender, System.EventArgs e)
+        {
+            if (this.DialogResult != true)
+            {
+                System.Windows.Application.Current.Shutdown();
+            }
+        }
     }
 }

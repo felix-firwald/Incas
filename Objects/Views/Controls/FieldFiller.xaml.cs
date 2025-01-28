@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Interfaces;
 using Newtonsoft.Json;
@@ -327,7 +328,7 @@ namespace Incas.Objects.Views.Controls
                     }
                     return "";
                 case FieldType.Relation:
-                    Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
+                    IObject obj = ((SelectionBox)this.control).SelectedObject;
                     if (this.Field.NotNull == true && obj is null)
                     {
                         this.ThrowNotNullFailed();
@@ -347,7 +348,7 @@ namespace Incas.Objects.Views.Controls
                     }
                     return DateTime.MinValue;
                 case FieldType.Relation:
-                    Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
+                    IObject obj = ((SelectionBox)this.control).SelectedObject;
                     if (obj is null)
                     {
                         return new List<FieldData>();
@@ -375,7 +376,7 @@ namespace Incas.Objects.Views.Controls
         public Dictionary<string, string> GetDataFromObjectRelation()
         {
             Dictionary<string, string> result = new();
-            Objects.Components.Object obj = ((SelectionBox)this.control).SelectedObject;
+            IObject obj = ((SelectionBox)this.control).SelectedObject;
             if (obj is null)
             {
                 return result;
@@ -385,7 +386,7 @@ namespace Incas.Objects.Views.Controls
                 if (data.ClassField.Type == FieldType.Relation)
                 {
                     BindingData bd = data.ClassField.GetBindingData();
-                    Objects.Components.Object recurObj = ObjectProcessor.GetObject(new(bd.Class), Guid.Parse(data.Value));
+                    IObject recurObj = Processor.GetObject(new(bd.Class), Guid.Parse(data.Value));
                     foreach (FieldData recdata in recurObj.Fields)
                     {
                         if (recdata.ClassField.Id == bd.Field)

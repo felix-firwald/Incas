@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows" MouseDown="Window_MouseDown"
         mc:Ignorable="d" Style="{DynamicResource Dialog}" Background="{StaticResource Black}"
-        Title="Выбор рабочего пространства" Height="400" Width="400" WindowStartupLocation="CenterScreen">
+        Title="Выбор рабочего пространства" Height="400" Width="400" WindowStartupLocation="CenterScreen" Closed="OnClosed">
     <Grid FocusManager.FocusedElement="{Binding ElementName=pwd}">
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>

@@ -50,6 +50,7 @@
 
     <SolidColorBrush x:Key="Error" Color="#FF0033"/>
     <SolidColorBrush x:Key="Success" Color="#34C924"/>
+    <SolidColorBrush x:Key="SuccessSecond" Color="#7FC04D"/>
     <SolidColorBrush x:Key="Turquoise" Color="#FF5BFFC7"/>
     <SolidColorBrush x:Key="Purple" Color="#8B00FF"/>
     <SolidColorBrush x:Key="LightPurple" Color="#B255FF"/>

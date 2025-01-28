@@ -1,32 +1,26 @@
-﻿using Incas.Objects.Interfaces;
-using Incas.Objects.Models;
+﻿using Incas.Objects.Engine;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Incas.Objects.Components
 {
-    public struct FieldData
-    {
-        public Field ClassField { get; set; }
-        public string Value { get; set; }
-    }
-    public class Object : IObject
+    public sealed class Object : IObject, IHasAuthor, IHasPreset // only for data models (simple objects)
     {
         public Guid Id { get; set; }
-        public DateTime CreationDate { get; set; }
         public Guid AuthorId { get; set; }
-        public byte Status { get; set; }
         public string Name { get; set; }
+        public List<FieldData> Fields { get; set; }
+        public byte Status { get; set; }
         public bool Terminated { get; set; }
         public DateTime TerminatedDate { get; set; }
         public Guid TargetClass { get; set; }
         public Guid TargetObject { get; set; }
-        public object Meta { get; set; }
-        public List<FieldData> Fields { get; set; }
+        public object Data { get; set; }
         public Guid Preset { get; set; }
 
-        public Object Copy()
+        public IObject Copy()
         {
             Object obj = new()
             {
@@ -35,22 +29,23 @@ namespace Incas.Objects.Components
             };
             return obj;
         }
-        public async Task<string> GetFieldValue(Guid id)
+
+        public Dictionary<string, string> AddServiceFields(Dictionary<string, string> result)
         {
-            string result = "";
-            await Task.Run(() =>
-            {
-                foreach (FieldData field in this.Fields)
-                {
-                    if (field.ClassField.Id == id)
-                    {
-                        result = field.Value;
-                        break;
-                    }
-                }
-            });
-            
+            Helpers.AppendAuthorServiceField(this, result);
+            Helpers.AppendPresetServiceField(this, result);
             return result;
+        }
+
+        public void Initialize()
+        {
+            
+        }
+
+        public void ParseServiceFields(DataRow dr)
+        {
+            Helpers.ParseAuthorServiceField(this, dr);
+            Helpers.ParsePresetServiceField(this, dr);
         }
     }
 }

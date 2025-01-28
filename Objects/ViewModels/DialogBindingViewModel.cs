@@ -25,7 +25,7 @@ namespace Incas.Objects.ViewModels
         }
 
         public List<Class> Classes => this.classes;
-        public List<Objects.Models.Field> Fields => this.SelectedClass == null ? ([]) : this.SelectedClass.GetClassData().Fields;
+        public List<Objects.Models.Field> Fields => this.SelectedClass == null ? ([]) : this.SelectedClass.GetClassData().GetBindableFields();
         public Class SelectedClass
         {
             get

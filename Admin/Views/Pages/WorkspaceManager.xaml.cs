@@ -4,6 +4,8 @@ using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.Models;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Engine;
+using Incas.Objects.Models;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
@@ -285,6 +287,14 @@ namespace Incas.Admin.Views.Pages
                 List<string> names = ProgramState.GetEnumeration(Guid.Parse(source));
                 this.vm.SelectedEnumValues = string.Join(",\n", names);
             }
+        }
+
+        private void FixClassClick(object sender, RoutedEventArgs e)
+        {
+            using (Class cl = new(this.GetSelectedClass()))
+            {
+                Processor.UpdateObjectMap(cl);
+            }           
         }
     }
 }

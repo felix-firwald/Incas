@@ -3,6 +3,7 @@ using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
 using Incas.DialogSimpleForm.Views.Controls;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Controls;
 using IronPython.Compiler.Ast;
@@ -122,7 +123,7 @@ namespace Incas.Objects.Views.Windows
             }
             this.Preset.Name = this.PresetName.Text;
             this.Preset.Data = values;
-            await ObjectProcessor.WritePreset(this.TargetClass, this.Preset);
+            await Processor.WritePreset(this.TargetClass, this.Preset);
             this.Close();
             this.OnUpdateRequested?.Invoke();
         }

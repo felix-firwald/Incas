@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -160,7 +161,7 @@ namespace Incas.Objects.Models
             await Task.Run(() =>
             {
                 ProgramStatusBar.SetText("Обновление полей в карте объектов...");
-                ObjectProcessor.UpdateObjectMap(this);
+                Processor.UpdateObjectMap(this);
             });
             ProgramState.UpdateWindowTabs();
         }
@@ -185,13 +186,13 @@ namespace Incas.Objects.Models
                         {nameof(this.data), this.data},
                     }
                 ).ExecuteVoid();
-            ObjectProcessor.InitializeObjectMap(this);
+            Processor.InitializeObjectMap(this);
             ProgramState.UpdateWindowTabs();
         }
         public void Remove(Guid id)
         {
             this.StartCommand().Delete().WhereEqual(nameof(this.identifier), id.ToString()).ExecuteVoid();
-            ObjectProcessor.DropObjectMap(this);
+            Processor.DropObjectMap(this);
             ProgramState.UpdateWindowTabs();
         }
         /// <summary>

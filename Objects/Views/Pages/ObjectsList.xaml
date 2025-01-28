@@ -59,14 +59,22 @@
             </Button>
         </WrapPanel>
         <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" VirtualizingStackPanel.VirtualizationMode="Recycling"  VirtualizingStackPanel.IsVirtualizing="true" SelectionChanged="Data_SelectionChanged" PreviewKeyDown="Data_PreviewKeyDown" LoadingRow="Data_LoadingRow" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1" >
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RowMain}">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RowMain}">
                     <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"/>
+                    <!--<Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Header="Открыть объект" Click="CMOpenObjectClick" />
+                                <MenuItem Header="Скопировать объект" Click="CopyClick"/>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>-->
                 </Style>
-                </DataGrid.RowStyle>
-            </DataGrid>
+            </DataGrid.RowStyle>
+        </DataGrid>
 
-            <StackPanel x:Name="RightPanel" Grid.Row="1" Grid.Column="1">
+        <StackPanel x:Name="RightPanel" Grid.Row="1" Grid.Column="1">
 
         </StackPanel>
         <WrapPanel x:Name="DownPanel" Grid.Row="2" Grid.ColumnSpan="2">

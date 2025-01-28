@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.ViewModels;
 using Incas.Objects.Views.Windows;
 using System.Windows.Controls;
@@ -45,7 +46,7 @@ namespace Incas.Objects.Views.Pages
                 this.ContentPanel.Content = new Core.Views.Controls.NoContent();
                 return;
             }
-            ObjectsList ol = new(selectedClass, ObjectProcessor.GetPreset(selectedClass, preset));
+            ObjectsList ol = new(selectedClass, Processor.GetPreset(selectedClass, preset));
             ol.OnPresetsViewRequested += this.OnPresetsViewRequested;
             this.ContentPanel.Content = ol;
         }

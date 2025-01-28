@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Controls;
@@ -23,7 +24,7 @@ namespace Incas.Objects.Views.Pages
         private ClassData ClassData { get; set; }
         private bool first;
         private Guid id;
-        private byte status;
+        //private byte status;
         public delegate void FieldDataAction(FieldData data);
         public event FieldDataAction OnFilterRequested;
         public ObjectCard(Class source, bool first = true)
@@ -67,54 +68,54 @@ namespace Incas.Objects.Views.Pages
         {
             return new SolidColorBrush(Color.FromArgb(a, color.R, color.G, color.B));
         }
-        private void ShowStatus(Components.Object obj)
-        {
-            if (this.ClassData?.Statuses?.Count > 0)
-            {
-                if (obj.Status == 0)
-                {
-                    obj.Status = 1;
-                }
-                this.status = obj.Status;
-                int count = this.ClassData.Statuses.Count;
-                this.StatusBorder.Visibility = Visibility.Visible;
-                StatusData data = new();
-                try
-                {
-                    data = this.ClassData.Statuses[obj.Status];
-                }
-                catch
-                {
-                    data = this.ClassData.Statuses[count];
-                }
-                this.StatusText.Text = data.Name;
-                this.StatusDescription.Text = data.Description;
-                this.StatusBackground.Background = this.GetColor(data.Color, 50);
-                this.StatusText.Foreground = this.GetColor(data.Color);
-                this.Progress.Maximum = count;
-                this.Progress.Value = obj.Status;
-                if (obj.Status >= count)
-                {
-                    this.StatusForwardButton.Visibility = Visibility.Hidden;
-                    this.StatusBackButton.Visibility = Visibility.Visible;
-                }
-                else if (obj.Status == 1)
-                {
-                    this.StatusBackButton.Visibility = Visibility.Hidden;
-                    this.StatusForwardButton.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    this.StatusBackButton.Visibility = Visibility.Visible;
-                    this.StatusForwardButton.Visibility = Visibility.Visible;
-                }
-                this.Progress.Foreground = this.GetColor(data.Color);
-            }
-            else
-            {
-                this.StatusBorder.Visibility = Visibility.Collapsed;
-            }
-        }
+        //private void ShowStatus(Components.ObjectBase obj)
+        //{
+        //    if (this.ClassData?.Statuses?.Count > 0)
+        //    {
+        //        if (obj.Status == 0)
+        //        {
+        //            obj.Status = 1;
+        //        }
+        //        this.status = obj.Status;
+        //        int count = this.ClassData.Statuses.Count;
+        //        this.StatusBorder.Visibility = Visibility.Visible;
+        //        StatusData data = new();
+        //        try
+        //        {
+        //            data = this.ClassData.Statuses[obj.Status];
+        //        }
+        //        catch
+        //        {
+        //            data = this.ClassData.Statuses[count];
+        //        }
+        //        this.StatusText.Text = data.Name;
+        //        this.StatusDescription.Text = data.Description;
+        //        this.StatusBackground.Background = this.GetColor(data.Color, 50);
+        //        this.StatusText.Foreground = this.GetColor(data.Color);
+        //        this.Progress.Maximum = count;
+        //        this.Progress.Value = obj.Status;
+        //        if (obj.Status >= count)
+        //        {
+        //            this.StatusForwardButton.Visibility = Visibility.Hidden;
+        //            this.StatusBackButton.Visibility = Visibility.Visible;
+        //        }
+        //        else if (obj.Status == 1)
+        //        {
+        //            this.StatusBackButton.Visibility = Visibility.Hidden;
+        //            this.StatusForwardButton.Visibility = Visibility.Visible;
+        //        }
+        //        else
+        //        {
+        //            this.StatusBackButton.Visibility = Visibility.Visible;
+        //            this.StatusForwardButton.Visibility = Visibility.Visible;
+        //        }
+        //        this.Progress.Foreground = this.GetColor(data.Color);
+        //    }
+        //    else
+        //    {
+        //        this.StatusBorder.Visibility = Visibility.Collapsed;
+        //    }
+        //}
         public void SetEmpty()
         {
             this.Dispatcher.Invoke(() =>
@@ -128,12 +129,21 @@ namespace Incas.Objects.Views.Pages
                 this.FieldsContentPanel.Children.Add(nc);
             });           
         }
-        public void UpdateFor(Components.Object obj)
+        private bool CheckAuthor(IObject obj)
+        {
+            IHasAuthor objWithAuthor = obj as IHasAuthor;
+            if (objWithAuthor != null)
+            {
+                return objWithAuthor.AuthorId == ProgramState.CurrentUser.id;
+            }
+            return true;
+        }
+        public void UpdateFor(IObject obj)
         {
             this.Dispatcher.Invoke(() =>
             {
-                this.ShowStatus(obj);
-                if (this.ClassData.EditByAuthorOnly == true && obj.AuthorId != ProgramState.CurrentUser.id)
+                //this.ShowStatus(obj);
+                if (this.ClassData.EditByAuthorOnly == true && this.CheckAuthor(obj))
                 {
                     this.StatusBorder.IsEnabled = false;
                     this.EditIcon.Visibility = Visibility.Collapsed;
@@ -148,34 +158,38 @@ namespace Incas.Objects.Views.Pages
                 this.FieldsContentPanel.Children.Clear();
                 this.ObjectName.Text = obj.Name;
                 this.id = obj.Id;
-                if (this.first)
+                IHasAuthor objWithAuthor = obj as IHasAuthor;
+                if (objWithAuthor is not null)
                 {
-                    ObjectFieldViewer ofAuthor = new(obj.AuthorId);
+                    ObjectFieldViewer ofAuthor = new(objWithAuthor.AuthorId);
                     this.FieldsContentPanel.Children.Add(ofAuthor);
-                    if (this.ClassData.ClassType == ClassType.Document)
-                    {
-                        ObjectFieldViewer ofDate = new(obj.CreationDate, "Дата создания");
-                        this.FieldsContentPanel.Children.Add(ofDate);
-                        if (obj.Terminated)
-                        {
-                            this.StatusBorder.IsEnabled = false;
-                            this.EditIcon.Visibility = Visibility.Collapsed;
-                            ObjectFieldViewer terminatedCheck = new("Процесс был завершен.", 52, 201, 36);
-                            this.FieldsContentPanel.Children.Insert(0, terminatedCheck);
-                            ObjectFieldViewer ofTerminatedDate = new(obj.TerminatedDate, "Дата завершения процесса");
-                            this.FieldsContentPanel.Children.Add(ofTerminatedDate);
-                        }
-                        else
-                        {
-                            if (this.ClassData.Statuses?.Count == obj.Status)
-                            {
-                                TerminateObjectProcessMessage box = new();
-                                box.OnTerminateRequested += this.Box_OnTerminateRequested;
-                                this.FieldsContentPanel.Children.Insert(0, box);
-                            }
-                        }
-                    }
                 }
+                IHasCreationDate objWithCreationDate = obj as IHasCreationDate;
+                if (objWithCreationDate is not null)
+                {
+                    ObjectFieldViewer ofDate = new(objWithCreationDate.CreationDate, "Дата создания");
+                    this.FieldsContentPanel.Children.Add(ofDate);
+                }
+                ITerminable objWithTerm = obj as ITerminable;
+                if (objWithTerm is not null && objWithTerm.Terminated)
+                {
+                    this.StatusBorder.IsEnabled = false;
+                    this.EditIcon.Visibility = Visibility.Collapsed;
+                    ObjectFieldViewer terminatedCheck = new("Процесс был завершен.", 52, 201, 36);
+                    this.FieldsContentPanel.Children.Insert(0, terminatedCheck);
+                    ObjectFieldViewer ofTerminatedDate = new(objWithTerm.TerminatedDate, "Дата завершения процесса");
+                    this.FieldsContentPanel.Children.Add(ofTerminatedDate);
+                }
+                else
+                {
+                    //if (this.ClassData.Statuses?.Count == obj.Status)
+                    //{
+                    //    TerminateObjectProcessMessage box = new();
+                    //    box.OnTerminateRequested += this.Box_OnTerminateRequested;
+                    //    this.FieldsContentPanel.Children.Insert(0, box);
+                    //}
+                }
+                
                 foreach (FieldData field in obj.Fields)
                 {
                     ObjectFieldViewer of = new(field, this.first);
@@ -194,9 +208,9 @@ namespace Incas.Objects.Views.Pages
                 }
             });         
         }
-        private async void ApplyObjectComments(Components.Object obj)
+        private async void ApplyObjectComments(IObject obj)
         {
-            List<ObjectComment> comments = await ObjectProcessor.GetObjectComments(this.Class, obj);
+            List<ObjectComment> comments = await Processor.GetObjectComments(this.Class, obj);
             foreach (ObjectComment oc in comments)
             {
                 this.FieldsContentPanel.Children.Add(new ObjectAttachment(oc));
@@ -207,7 +221,7 @@ namespace Incas.Objects.Views.Pages
         {
             this.StatusBorder.IsEnabled = false;
             this.EditIcon.Visibility = Visibility.Collapsed;
-            ObjectProcessor.SetObjectAsTerminated(this.Class, ObjectProcessor.GetObject(this.Class, this.id));
+            Processor.SetObjectAsTerminated(this.Class, (ITerminable)Processor.GetObject(this.Class, this.id));
         }
 
         private void Of_OnFilterRequested(FieldData data)
@@ -222,45 +236,45 @@ namespace Incas.Objects.Views.Pages
                 DialogsManager.ShowExclamationDialog("Объект не выбран!", "Действие невозможно");
                 return;
             }
-            List<Components.Object> objects = [ObjectProcessor.GetObject(this.Class, this.id)];
-            ObjectsEditor oe = new(this.Class, ObjectProcessor.GetPreset(this.Class, objects[0].Preset), objects);
+            List<IObject> objects = [Processor.GetObject(this.Class, this.id)];
+            ObjectsEditor oe = new(this.Class, Processor.GetPreset(this.Class, ((IHasPreset)objects[0]).Preset), objects);
             oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
             oe.ShowDialog();
         }
         private void Oe_OnUpdateRequested()
         {
-            Incas.Objects.Components.Object obj = ObjectProcessor.GetObject(this.Class, this.id);
+            IObject obj = Processor.GetObject(this.Class, this.id);
             this.UpdateFor(obj);
         }
 
         private void GoBackStatusClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Incas.Objects.Components.Object obj = ObjectProcessor.GetObject(this.Class, this.id);
-            if (obj.Status > 1)
-            {
-                obj.Status = (byte)(obj.Status - 1);
-                ObjectProcessor.WriteObjects(this.Class, obj);
-                this.UpdateFor(ObjectProcessor.GetObject(this.Class, this.id));
-            }
-            else
-            {
-                DialogsManager.ShowExclamationDialog("Понижение статуса невозможно.", "Действие прервано");
-            }
+            IObject obj = Processor.GetObject(this.Class, this.id);
+            //if (obj.Status > 1)
+            //{
+            //    obj.Status = (byte)(obj.Status - 1);
+            //    ObjectProcessor.WriteObjects(this.Class, obj);
+            //    this.UpdateFor(ObjectProcessor.GetObject(this.Class, this.id));
+            //}
+            //else
+            //{
+            //    DialogsManager.ShowExclamationDialog("Понижение статуса невозможно.", "Действие прервано");
+            //}
         }
 
         private void GoForwardStatusClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Incas.Objects.Components.Object obj = ObjectProcessor.GetObject(this.Class, this.id);
-            if (obj.Status < this.ClassData.Statuses.Count)
-            {
-                obj.Status = obj.Status == 0 ? (byte)(obj.Status + 2) : (byte)(obj.Status + 1);
-                ObjectProcessor.WriteObjects(this.Class, obj);
-                this.UpdateFor(ObjectProcessor.GetObject(this.Class, this.id));
-            }
-            else
-            {
-                DialogsManager.ShowExclamationDialog("Повышение статуса невозможно.", "Действие прервано");
-            }
+            IObject obj = Processor.GetObject(this.Class, this.id);
+            //if (obj.Status < this.ClassData.Statuses.Count)
+            //{
+            //    obj.Status = obj.Status == 0 ? (byte)(obj.Status + 2) : (byte)(obj.Status + 1);
+            //    ObjectProcessor.WriteObjects(this.Class, obj);
+            //    this.UpdateFor(ObjectProcessor.GetObject(this.Class, this.id));
+            //}
+            //else
+            //{
+            //    DialogsManager.ShowExclamationDialog("Повышение статуса невозможно.", "Действие прервано");
+            //}
         }
 
         private void OnFilesDrop(object sender, DragEventArgs e)
@@ -283,8 +297,8 @@ namespace Incas.Objects.Views.Pages
                         ObjectComment comment = new();
                         string filename = System.IO.Path.GetFileName(file);
                         comment.Data = filename;
-                        File.Copy(file, ObjectProcessor.GetPathToAttachmentsFolder(this.Class.identifier, obj.Id) + filename);
-                        ObjectProcessor.WriteComment(this.Class, obj, comment);
+                        File.Copy(file, Processor.GetPathToAttachmentsFolder(this.Class.identifier, obj.Id) + filename);
+                        Processor.WriteComment(this.Class, obj, comment);
                     }
                     catch (IOException ex)
                     {
@@ -296,7 +310,7 @@ namespace Incas.Objects.Views.Pages
                     }
                 }
                 DialogsManager.ShowWaitCursor(false);
-                this.UpdateFor(ObjectProcessor.GetObject(this.Class, this.id));
+                this.UpdateFor(Processor.GetObject(this.Class, this.id));
             }
         }
     }

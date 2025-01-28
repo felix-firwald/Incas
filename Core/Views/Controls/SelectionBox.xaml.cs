@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Views.Windows;
 using System;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace Incas.Core.Views.Controls
     /// </summary>
     public partial class SelectionBox : UserControl
     {
-        public Objects.Components.Object SelectedObject { get; set; }
+        public IObject SelectedObject { get; set; }
         public string Value => this.Input.Text;
         private readonly BindingData Binding;
         public delegate void ValueChanged(object sender, TextChangedEventArgs e);
@@ -33,7 +34,7 @@ namespace Incas.Core.Views.Controls
                 {
                     await Task.Run(() =>
                     {
-                        this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);                       
+                        this.SelectedObject = Processor.GetObject(new(this.Binding.Class), id);                       
                     });
                     this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
                     this.SetAsEditingEnabled();
@@ -49,7 +50,7 @@ namespace Incas.Core.Views.Controls
                 {
                     await Task.Run(() =>
                     {
-                        this.SelectedObject = ObjectProcessor.GetObject(new(this.Binding.Class), id);
+                        this.SelectedObject = Processor.GetObject(new(this.Binding.Class), id);
                     });
                     this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
                     this.SetAsEditingEnabled();

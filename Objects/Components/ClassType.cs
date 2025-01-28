@@ -5,6 +5,8 @@
         Model,
         Document,
         Process,
-        StaticModel
+        StaticModel,
+        ServiceClassGroup,
+        ServiceClassUser
     }
 }

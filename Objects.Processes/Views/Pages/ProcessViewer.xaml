@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="Incas.Objects.Processes.Views.Pages.ProcessViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.Objects.Processes.Views.Pages" xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="29*"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <Border x:Name="StatusBorder" BorderBrush="{StaticResource Element}" Margin="5,5,5,5" Padding="5" Background="{StaticResource Black}" BorderThickness="1" Grid.Column="1">
+            <StackPanel VerticalAlignment="Center" Grid.Column="1"  >
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5" VerticalAlignment="Center">
+                    <fa:FontAwesome x:Name="StatusBackButton" Style="{StaticResource IconButton}" Icon="ArrowLeft" ToolTip="Переместить статус на предыдущую позицию"  VerticalAlignment="Top" MouseDown="GoBackStatusClick" />
+                    <Border x:Name="StatusBackground" CornerRadius="12" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBox x:Name="StatusText" IsReadOnly="True" Margin="5" Style="{StaticResource TextBoxEmpty}" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="JetBrains Mono" />
+                    </Border>
+                    <fa:FontAwesome x:Name="StatusForwardButton" Style="{StaticResource IconButton}" Icon="ArrowRight" ToolTip="Переместить статус на следующую позицию" Grid.Column="2" VerticalAlignment="Top" MouseDown="GoForwardStatusClick" />
+                </StackPanel>
+                <ProgressBar x:Name="Progress" Minimum="0" MinWidth="250" MinHeight="3" MaxHeight="3" BorderThickness="2" Background="{DynamicResource Element}" BorderBrush="{DynamicResource Element}" Foreground="{DynamicResource PrimaryMain}" />
+                <TextBox x:Name="StatusDescription" Margin="5" IsReadOnly="True" FontFamily="JetBrains Mono" Style="{StaticResource TextBoxEmpty}" Foreground="{StaticResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" />
+            </StackPanel>
+        </Border>
+        <TabControl Grid.Row="1" Margin="5,5,5,5" Background="{StaticResource Black}" BorderBrush="{StaticResource Element}" Grid.Column="1">
+            <TabItem Style="{StaticResource TabItemMain}" Header="Описание процесса" Cursor="Hand" BorderBrush="{DynamicResource LightPurple}">
+
+            </TabItem>
+            <TabItem Style="{StaticResource TabItemMain}" BorderBrush="{DynamicResource LightPurple}" Header="Документы">
+
+            </TabItem>
+            <TabItem Style="{StaticResource TabItemMain}" BorderBrush="{DynamicResource LightPurple}" Header="Задачи">
+
+            </TabItem>
+            <TabItem Style="{StaticResource TabItemMain}" BorderBrush="{DynamicResource LightPurple}" Header="Ревью">
+
+            </TabItem>
+            <TabItem Style="{StaticResource TabItemMain}" BorderBrush="{DynamicResource LightPurple}" Header="Участники">
+
+            </TabItem>
+            <TabItem Style="{StaticResource TabItemMain}" BorderBrush="{DynamicResource LightPurple}" Header="История">
+
+            </TabItem>
+        </TabControl>
+        <Border BorderBrush="{StaticResource Element}" Margin="5" CornerRadius="0,0,8,0" Padding="5" Background="{StaticResource Black}" BorderThickness="1" Grid.Column="1" Grid.Row="2">
+            <StackPanel VerticalAlignment="Center" Grid.Column="1">
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

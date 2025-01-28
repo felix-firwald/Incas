@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Models;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Incas.Objects.Views.Windows
             {
                 try
                 {
-                    return Guid.Parse(((DataRowView)this.Grid.SelectedItems[0]).Row[ObjectProcessor.IdField].ToString());
+                    return Guid.Parse(((DataRowView)this.Grid.SelectedItems[0]).Row[Helpers.IdField].ToString());
                 }
                 catch
                 {
@@ -33,12 +34,12 @@ namespace Incas.Objects.Views.Windows
                 }
             }
         }
-        public Components.Object GetSelectedObject()
+        public IObject GetSelectedObject()
         {
-            return ObjectProcessor.GetObject(this.Class, this.SelectedId);
+            return Processor.GetObject(this.Class, this.SelectedId);
         }
 
-        public string SelectedValue => ((DataRowView)this.Grid.SelectedItems[0]).Row[ObjectProcessor.IdField].ToString();
+        public string SelectedValue => ((DataRowView)this.Grid.SelectedItems[0]).Row[Helpers.IdField].ToString();
         public DatabaseSelection(BindingData data)
         {
             this.InitializeComponent();
@@ -57,18 +58,18 @@ namespace Incas.Objects.Views.Windows
         }
         private void FillList()
         {
-            DataTable dt = ObjectProcessor.GetObjectsList(this.Class, null);
+            DataTable dt = Processor.GetObjectsList(this.Class, null);
             this.UpdateItemsSource(dt.Columns);
             DataView dv = dt.AsDataView();
             if (this.ClassData.ClassType == ClassType.Model)
             {
-                dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
+                dv.Sort = $"[{Helpers.NameField}] ASC";
             }    
             this.Grid.ItemsSource = dv;
         }
         private void FillList(string field, string value)
         {
-            DataTable dt = ObjectProcessor.GetObjectsListWhereLike(this.Class, null, field, value);
+            DataTable dt = Processor.GetObjectsListWhereLike(this.Class, null, field, value);
             this.UpdateItemsSource(dt.Columns);
             this.Grid.ItemsSource = dt.DefaultView;
         }
@@ -100,27 +101,27 @@ namespace Incas.Objects.Views.Windows
             Style style = this.FindResource("ColumnHeaderSpecial") as Style;
             switch (e.Column.Header.ToString())
             {
-                case ObjectProcessor.IdField:
+                case Helpers.IdField:
                     e.Column.Visibility = Visibility.Hidden;
                     break;
-                case ObjectProcessor.NameField:
+                case Helpers.NameField:
                     e.Column.Header = "Наименование";
                     e.Column.HeaderStyle = style;
                     e.Column.MinWidth = 100;
                     e.Column.CanUserReorder = false;
                     break;
-                case ObjectProcessor.DateCreatedField:
+                case Helpers.DateCreatedField:
                     e.Column.Header = "Дата создания";
                     e.Column.HeaderStyle = style;
                     e.Column.MinWidth = 100;
                     e.Column.MaxWidth = 120;
                     e.Column.CanUserReorder = false;
                     break;
-                case ObjectProcessor.StatusField:
+                case Helpers.StatusField:
                     e.Column.Visibility = Visibility.Hidden;
                     break;
-                case ObjectProcessor.TargetClassField:
-                case ObjectProcessor.TargetObjectField:
+                case Helpers.TargetClassField:
+                case Helpers.TargetObjectField:
                     e.Column.Visibility = Visibility.Hidden;
                     break;
             }

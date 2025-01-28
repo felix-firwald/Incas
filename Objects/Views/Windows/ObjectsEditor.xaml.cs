@@ -2,17 +2,16 @@
 using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
+using Incas.Objects.Documents.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
-using Incas.Templates.AutoUI;
-using Incas.Templates.Components;
+using Incas.Rendering.AutoUI;
+using Incas.Rendering.Components;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -31,7 +30,7 @@ namespace Incas.Objects.Views.Windows
         public delegate void CreateRequested(Guid id);
         public event UpdateRequested OnUpdateRequested;
         public event CreateRequested OnSetNewObjectRequested;
-        public ObjectsEditor(Class source, Preset preset, List<Components.Object> objects = null)
+        public ObjectsEditor(Class source, Preset preset, List<IObject> objects = null)
         {
             this.InitializeComponent();
             this.Title = preset is null ? source.name : $"{source.name} — {preset.Name}";
@@ -42,7 +41,7 @@ namespace Incas.Objects.Views.Windows
             this.FillPresettingData();
             if (objects != null)
             {
-                foreach (Components.Object obj in objects)
+                foreach (IObject obj in objects)
                 {
                     this.AddObjectCreator(obj);
                 }
@@ -86,17 +85,21 @@ namespace Incas.Objects.Views.Windows
                 }
             }
         }
-        private ObjectCreator AddObjectCreator(Components.Object obj = null)
+        private ObjectCreator AddObjectCreator(IObject obj = null)
         {
             if (obj is not null)
             {
-                if ((this.Preset is null && obj.Preset != Guid.Empty) // в едиторе нет пресета а у объекта есть
-                    || (this.Preset is not null && obj.Preset == Guid.Empty) // в едиторе есть пресет а у объекта нет
-                    || (this.Preset is not null && obj.Preset != this.Preset.Id )) // в едиторе есть пресет и он отличается от того что в объекте
+                IHasPreset objWithPreset = obj as IHasPreset;
+                if (objWithPreset != null)
                 {
-                    DialogsManager.ShowExclamationDialog($"Объект с наименованием \"{obj.Name}\" не будет добавлен в коллекцию редактирования, поскольку пресет, к которому он привязан, отличается от пресета первого объекта в списке.", "Редактирование ограничено");
-                    return null;
-                }             
+                    if ((this.Preset is null && objWithPreset.Preset != Guid.Empty) // в едиторе нет пресета а у объекта есть
+                    || (this.Preset is not null && objWithPreset.Preset == Guid.Empty) // в едиторе есть пресет а у объекта нет
+                    || (this.Preset is not null && objWithPreset.Preset != this.Preset.Id)) // в едиторе есть пресет и он отличается от того что в объекте
+                    {
+                        DialogsManager.ShowExclamationDialog($"Объект с наименованием \"{obj.Name}\" не будет добавлен в коллекцию редактирования, поскольку пресет, к которому он привязан, отличается от пресета первого объекта в списке.", "Редактирование ограничено");
+                        return null;
+                    }
+                }                        
             }
             ObjectCreator creator = new(this.Class, this.Preset, obj);
             creator.OnSaveRequested += this.Creator_OnSaveRequested;
@@ -124,7 +127,7 @@ namespace Incas.Objects.Views.Windows
         {
             try
             {
-                ObjectProcessor.WriteObjects(this.Class, creator.PullObject());
+                Processor.WriteObjects(this.Class, creator.PullObject());
                 this.OnUpdateRequested?.Invoke();
                 if (this.OnSetNewObjectRequested != null)
                 {
@@ -251,7 +254,7 @@ namespace Incas.Objects.Views.Windows
 
         private async void CreateObjectsClick(object sender, RoutedEventArgs e)
         {
-            List<Components.Object> objects = [];
+            List<IObject> objects = [];
             try
             {
                 foreach (ObjectCreator c in this.ContentPanel.Children)
@@ -259,11 +262,11 @@ namespace Incas.Objects.Views.Windows
                     objects.Add(c.PullObject());
                 }
                 this.Close();
-                bool result = await ObjectProcessor.WriteObjects(this.Class, objects);
+                bool result = await Processor.WriteObjects(this.Class, objects);
                 if (result)
                 {
                     this.OnUpdateRequested?.Invoke();
-                }                            
+                }
             }
             catch (NotNullFailed nnex)
             {
@@ -281,7 +284,7 @@ namespace Incas.Objects.Views.Windows
 
         private async void RenderObjectsClick(object sender, RoutedEventArgs e)
         {
-            List<Components.Object> objects = [];
+            List<IObject> objects = [];
             TemplateData templateFile = new();
             if (this.ClassData.Templates?.Count == 1)
             {
@@ -313,7 +316,7 @@ namespace Incas.Objects.Views.Windows
                         await c.GenerateDocument(templateFile, path);
                     }
                     ProgramStatusBar.Hide();
-                    bool result = await ObjectProcessor.WriteObjects(this.Class, objects);
+                    bool result = await Processor.WriteObjects(this.Class, objects);
                     if (result)
                     {
                         this.OnUpdateRequested?.Invoke();

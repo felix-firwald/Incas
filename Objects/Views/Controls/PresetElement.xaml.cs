@@ -1,4 +1,5 @@
 ﻿using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Windows;
 using System.Windows.Controls;
@@ -25,7 +26,7 @@ namespace Incas.Objects.Views.Controls
 
         private void CreateObjectClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ObjectsEditor oe = new(this.ClassSource, ObjectProcessor.GetPreset(this.ClassSource, this.Preset));
+            ObjectsEditor oe = new(this.ClassSource, Processor.GetPreset(this.ClassSource, this.Preset));
             oe.Show();
         }
 
@@ -36,20 +37,20 @@ namespace Incas.Objects.Views.Controls
 
         private void EditClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            AddPreset ap = new(this.ClassSource, ObjectProcessor.GetPreset(this.ClassSource, this.Preset));
+            AddPreset ap = new(this.ClassSource, Processor.GetPreset(this.ClassSource, this.Preset));
             ap.ShowDialog();
             this.OnUpdateRequested?.Invoke(this.Preset);
         }
 
         private async void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            await ObjectProcessor.RemovePreset(this.ClassSource, this.Preset);
+            await Processor.RemovePreset(this.ClassSource, this.Preset);
             this.OnUpdateRequested?.Invoke(this.Preset);
         }
 
         private async void ApplyClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            await ObjectProcessor.ApplyPresetToRelevant(this.ClassSource, ObjectProcessor.GetPreset(this.ClassSource, this.Preset));
+            await Processor.ApplyPresetToRelevant(this.ClassSource, Processor.GetPreset(this.ClassSource, this.Preset));
         }
     }
 }

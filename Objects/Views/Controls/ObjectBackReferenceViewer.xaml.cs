@@ -1,5 +1,4 @@
-﻿using Incas.Objects.Components;
-using Incas.Objects.Models;
+﻿using Incas.Objects.Models;
 using Incas.Objects.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Incas.Objects.Engine;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -65,15 +65,15 @@ namespace Incas.Objects.Views.Controls
             {
                 Margin = new(0, 5, 0, 5)
             };
-            DataTable dt = ObjectProcessor.GetSimpleObjectsListWhereEqual(
+            DataTable dt = Processor.GetSimpleObjectsListWhereEqual(
                 back,
                 null,
                 back.GetClassData().FindFieldByBackReference(this.Class.identifier).VisibleName, // не находит
                 this.TargetObject.ToString());
             foreach (DataRow dr in dt.Rows)
             {
-                string elId = dr[ObjectProcessor.IdField].ToString();
-                string elName = dr[ObjectProcessor.NameField].ToString();
+                string elId = dr[Helpers.IdField].ToString();
+                string elName = dr[Helpers.NameField].ToString();
                 panel.Children.Add(new ObjectElement(back, elId, elName));
             }
             exp.Content = panel;

@@ -95,6 +95,30 @@ namespace Incas.Objects.Models
             }
             return list;
         }
+        public List<Field> GetBindableFields()
+        {
+            List<Field> list = [];
+            if (this.Fields is null)
+            {
+                return list;
+            }
+            foreach (Field field in this.Fields)
+            {
+                switch (field.Type)
+                {
+                    case FieldType.Variable:
+                    case FieldType.Text:
+                    case FieldType.Number:
+                    case FieldType.Relation:
+                    case FieldType.LocalEnumeration:
+                    case FieldType.GlobalEnumeration:
+                    case FieldType.Date:
+                        list.Add(field);
+                        break;
+                }
+            }
+            return list;
+        }
         public List<Field> GetPresettingFields()
         {
             List<Field> list = [];

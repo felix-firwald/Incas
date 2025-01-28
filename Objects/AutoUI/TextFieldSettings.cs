@@ -20,6 +20,9 @@ namespace Incas.Objects.AutoUI
         [CanBeNull]
         public string Text { get; set; }
 
+        [Description("Конфиденциально")]
+        public bool Confidential { get; set; }
+
         #endregion
         public TextFieldSettings(Incas.Objects.Models.Field field)
         {
@@ -27,6 +30,7 @@ namespace Incas.Objects.AutoUI
             this.GetBaseData();
             this.Text = field.Value;
             this.Unique = field.IsUnique;
+            this.Confidential = field.Confidential;
         }
         #region Functionality
         public override void Validate()
@@ -41,6 +45,7 @@ namespace Incas.Objects.AutoUI
             this.SaveBaseData();
             this.Source.Value = this.Text;
             this.Source.IsUnique = this.Unique;
+            this.Source.Confidential = this.Confidential;
         }
         #endregion
     }

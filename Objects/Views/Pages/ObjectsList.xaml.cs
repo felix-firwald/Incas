@@ -2,6 +2,7 @@
 using Incas.Core.Views.Windows;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
+using Incas.Objects.Engine;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Windows;
 using System;
@@ -70,7 +71,7 @@ namespace Incas.Objects.Views.Pages
             dt.Columns.Add(ColorColumn);
             foreach (DataRow row in dt.Rows)
             {
-                int n = int.Parse(row[ObjectProcessor.StatusField].ToString());
+                int n = int.Parse(row[Helpers.StatusField].ToString());
                 row[ColorColumn] = this.ClassData.Statuses[n].Color;
             }
             return dt;
@@ -86,7 +87,7 @@ namespace Incas.Objects.Views.Pages
             {
                 System.Windows.Data.Binding bind = new()
                 {
-                    Source = ObjectProcessor.StatusField
+                    Source = Helpers.StatusField
                 };
                 DataTrigger trigger = new()
                 {
@@ -127,12 +128,12 @@ namespace Incas.Objects.Views.Pages
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                DataTable dt = ObjectProcessor.GetObjectsList(this.sourceClass, this.SourcePreset);
+                DataTable dt = Processor.GetObjectsList(this.sourceClass, this.SourcePreset);
                 
                 if (this.ClassData.ClassType == ClassType.Model)
                 {
                     DataView dv = dt.AsDataView();
-                    dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
+                    dv.Sort = $"[{Helpers.NameField}] ASC";
                     this.Dispatcher.Invoke(() =>
                     {
                         this.Data.Columns.Clear();
@@ -151,13 +152,13 @@ namespace Incas.Objects.Views.Pages
         }
         private void UpdateViewWithSearch(FieldData data)
         {
-            DataTable dt = ObjectProcessor.GetObjectsListWhereLike(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
+            DataTable dt = Processor.GetObjectsListWhereLike(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.ClassData.ClassType == ClassType.Model)
             {
                 DataView dv = dt.AsDataView();
-                dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
+                dv.Sort = $"[{Helpers.NameField}] ASC";
                 this.Data.ItemsSource = dv;
             }
             else
@@ -167,13 +168,13 @@ namespace Incas.Objects.Views.Pages
         }
         private void UpdateViewWithFilter(FieldData data)
         {
-            DataTable dt = ObjectProcessor.GetObjectsListWhereEqual(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
+            DataTable dt = Processor.GetObjectsListWhereEqual(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.ClassData.ClassType == ClassType.Model)
             {
                 DataView dv = dt.AsDataView();
-                dv.Sort = $"[{ObjectProcessor.NameField}] ASC";
+                dv.Sort = $"[{Helpers.NameField}] ASC";
                 this.Data.ItemsSource = dv;
             }
             else
@@ -186,28 +187,28 @@ namespace Incas.Objects.Views.Pages
             Style style = this.FindResource("ColumnHeaderSpecial") as Style;
             switch (e.Column.Header.ToString())
             {
-                case ObjectProcessor.IdField:
+                case Helpers.IdField:
                     e.Column.Visibility = Visibility.Hidden;
                     break;
-                case ObjectProcessor.NameField:
+                case Helpers.NameField:
                     e.Column.Header = "Наименование";
                     e.Column.HeaderStyle = style;
                     e.Column.MinWidth = 100;
                     e.Column.MaxWidth = 180;
                     e.Column.CanUserReorder = false;
                     break;
-                case ObjectProcessor.DateCreatedField:
+                case Helpers.DateCreatedField:
                     e.Column.Header = "Дата создания";
                     e.Column.HeaderStyle = style;
                     e.Column.MinWidth = 100;
                     e.Column.MaxWidth = 120;
                     e.Column.CanUserReorder = false;
                     break;
-                case ObjectProcessor.StatusField:
+                case Helpers.StatusField:
                     e.Column.Visibility = Visibility.Hidden;
                     break;
-                case ObjectProcessor.TargetClassField:
-                case ObjectProcessor.TargetObjectField:
+                case Helpers.TargetClassField:
+                case Helpers.TargetObjectField:
                     e.Column.Visibility = Visibility.Hidden;
                     break;
             }
@@ -280,7 +281,7 @@ namespace Incas.Objects.Views.Pages
             {
                 return Guid.Empty;
             }
-            string source = ((DataRowView)this.Data.SelectedItems[0]).Row[ObjectProcessor.IdField].ToString();
+            string source = ((DataRowView)this.Data.SelectedItems[0]).Row[Helpers.IdField].ToString();
             return Guid.Parse(source);
         }
         private List<Guid> GetSelectedObjectsGuids()
@@ -292,7 +293,7 @@ namespace Incas.Objects.Views.Pages
             List<Guid> guids = new();
             foreach (DataRowView obj in this.Data.SelectedItems)
             {
-                guids.Add(Guid.Parse(obj.Row[ObjectProcessor.IdField].ToString()));
+                guids.Add(Guid.Parse(obj.Row[Helpers.IdField].ToString()));
             }
             return guids;
         }
@@ -304,16 +305,16 @@ namespace Incas.Objects.Views.Pages
             {
                 return;
             }
-            Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-            ObjectsEditor oc = new(this.sourceClass, ObjectProcessor.GetPreset(this.sourceClass, obj.Preset), [obj]);
+            IObject obj = Processor.GetObject(this.sourceClass, id);
+            ObjectsEditor oc = new(this.sourceClass, Processor.GetPreset(this.sourceClass, ((IHasPreset)obj).Preset), [obj]);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
         private async void OpenSelectedObjects()
         {
             DialogsManager.ShowWaitCursor(true);
-            List<Components.Object> objects = await ObjectProcessor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
-            ObjectsEditor oc = new(this.sourceClass, ObjectProcessor.GetPreset(this.sourceClass, objects[0].Preset), objects);
+            List<IObject> objects = await Processor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
+            ObjectsEditor oc = new(this.sourceClass, Processor.GetPreset(this.sourceClass, ((IHasPreset)objects[0]).Preset), objects);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -325,8 +326,10 @@ namespace Incas.Objects.Views.Pages
             {
                 return;
             }
-            Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-            ObjectsEditor oc = new(this.sourceClass, this.SourcePreset, [obj.Copy()]);
+            IObject obj = Processor.GetObject(this.sourceClass, id);
+            List<IObject> objects = new();
+            objects.Add(obj.Copy());
+            ObjectsEditor oc = new(this.sourceClass, this.SourcePreset, objects);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -341,8 +344,8 @@ namespace Incas.Objects.Views.Pages
             {
                 return;
             }
-            Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-            if (this.ClassData.EditByAuthorOnly == true && obj.AuthorId != ProgramState.CurrentUser.id)
+            IObject obj = Processor.GetObject(this.sourceClass, id);
+            if (this.ClassData.EditByAuthorOnly == true && !Helpers.CheckAuthor(obj))
             {
                 DialogsManager.ShowAccessErrorDialog("Этот объект не может быть удален, поскольку вы не являетесь его автором.");
                 return;
@@ -353,7 +356,7 @@ namespace Incas.Objects.Views.Pages
                 "Удалить",
                 "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
             {
-                ObjectProcessor.RemoveObject(this.sourceClass, id);
+                Processor.RemoveObject(this.sourceClass, id);
             }
         }
         private void OnMouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -414,8 +417,8 @@ namespace Incas.Objects.Views.Pages
                 }
                 else
                 {
-                    Components.Object obj = ObjectProcessor.GetObject(this.sourceClass, id);
-                    this.ObjectCard?.UpdateFor(obj);                  
+                    IObject obj = Processor.GetObject(this.sourceClass, id);
+                    this.ObjectCard?.UpdateFor(obj);              
                 }
             }        
         }
@@ -429,6 +432,11 @@ namespace Incas.Objects.Views.Pages
         private void OpenPresetsListClick(object sender, RoutedEventArgs e)
         {
             this.OnPresetsViewRequested?.Invoke(this.sourceClass);
+        }
+
+        private void CMOpenObjectClick(object sender, RoutedEventArgs e)
+        {
+            this.OpenSelectedObject();
         }
     }
 }

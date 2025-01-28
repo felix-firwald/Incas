@@ -3,8 +3,9 @@ using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
-using Incas.Templates.Components;
-using Incas.Templates.ViewModels;
+using Incas.Objects.Interfaces;
+using Incas.Rendering.Components;
+using Incas.Rendering.ViewModels;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
 using System;
@@ -16,7 +17,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Incas.Objects.Interfaces;
 using static Incas.Objects.Interfaces.IFillerBase;
 
 namespace Incas.Objects.Views.Controls

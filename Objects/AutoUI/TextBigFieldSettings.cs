@@ -16,6 +16,9 @@ namespace Incas.Objects.AutoUI
         [CanBeNull]
         [StringLength(1200)]
         public string Text { get; set; }
+
+        [Description("Конфиденциально")]
+        public bool Confidential { get; set; }
         #endregion
 
         public TextBigFieldSettings(Incas.Objects.Models.Field field)
@@ -23,6 +26,7 @@ namespace Incas.Objects.AutoUI
             this.Source = field;
             this.GetBaseData();
             this.Text = field.Value;
+            this.Confidential = field.Confidential;
         }
 
         #region Functionality
@@ -30,6 +34,7 @@ namespace Incas.Objects.AutoUI
         {
             this.SaveBaseData();
             this.Source.Value = this.Text;
+            this.Source.Confidential = this.Confidential;
         }
         #endregion
     }

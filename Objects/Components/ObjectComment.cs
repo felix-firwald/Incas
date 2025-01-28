@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Incas.Objects.Components
 {
-    public class ObjectComment : IObject
+    public class ObjectComment
     {       
         public Guid Id { get; set; }
         public Guid Class { get; set; }

@@ -2,12 +2,11 @@
 using Incas.Objects.Components;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Views.Controls;
-using Incas.Templates.Components;
+using Incas.Rendering.Components;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 

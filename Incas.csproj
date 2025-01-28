@@ -354,10 +354,16 @@
     <Folder Include="Admin\Components\" />
     <Folder Include="Admin\Views\Controls\" />
     <Folder Include="License\Views\Controls\" />
+    <Folder Include="Objects.Documents\AutoUI\" />
+    <Folder Include="Objects.Documents\Views\Pages\" />
+    <Folder Include="Objects.Processes\Views\Controls\" />
+    <Folder Include="Objects.Processes\Views\Windows\" />
+    <Folder Include="Objects.Processes\AutoUI\" />
+    <Folder Include="Objects\Handlers\" />
     <Folder Include="Resources\" />
-    <Folder Include="Templates\Models\" />
-    <Folder Include="Templates\Views\Controls\" />
-    <Folder Include="Templates\Views\Pages\" />
+    <Folder Include="Rendering\Models\" />
+    <Folder Include="Rendering\Views\Controls\" />
+    <Folder Include="Rendering\Views\Pages\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="WordGlue3.NET8">

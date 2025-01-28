@@ -3,11 +3,12 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
+using Incas.Objects.Documents.Views.Controls;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Models;
 using Incas.Objects.ViewModels;
 using Incas.Objects.Views.Controls;
-using Incas.Templates.Components;
+using Incas.Rendering.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -36,11 +37,6 @@ namespace Incas.Objects.Views.Windows
             if (this.vm.Type == ClassType.Document)
             {
                 this.vm.ShowCard = true;
-                this.TemplatesArea.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this.TemplatesArea.Visibility = Visibility.Collapsed;
             }
             this.DataContext = this.vm;
         }
@@ -62,8 +58,7 @@ namespace Incas.Objects.Views.Windows
             foreach (Models.Field f in cl.GetClassData().Fields)
             {
                 this.AddField(f);
-            }
-            this.TemplatesArea.Visibility = this.vm.Type == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
+            }            
             this.UpdateStatusesList();
             this.UpdateTemplatesList();
         }

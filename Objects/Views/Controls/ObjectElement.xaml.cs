@@ -1,4 +1,4 @@
-﻿using Incas.Objects.Components;
+﻿using Incas.Objects.Engine;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
 using System;
@@ -39,7 +39,7 @@ namespace Incas.Objects.Views.Controls
         private void ShowCard()
         {
             ObjectCard oc = new(this.Class, false);
-            Components.Object obj = ObjectProcessor.GetObject(this.Class, Guid.Parse(this.Id));
+            IObject obj = Processor.GetObject(this.Class, Guid.Parse(this.Id));
             oc.UpdateFor(obj);
             this.Border.Child = oc;
         }

@@ -1,4 +1,4 @@
-﻿using Incas.Objects.Components;
+﻿using Incas.Objects.Engine;
 using Incas.Objects.Models;
 using System;
 using System.Collections.Generic;
@@ -10,8 +10,8 @@ namespace Incas.Objects.Interfaces
 {
     interface IGeneratorFiller : IFillerBase
     {
-        public List<Components.Object> GetObjects();
-        public void SetObjects(List<Components.Object> objs);
+        public List<IObject> GetObjects();
+        public void SetObjects(List<IObject> objs);
         public void ApplyObjectsBy(Class cl, Guid obj);
     }
 }
