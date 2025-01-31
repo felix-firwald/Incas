@@ -185,7 +185,7 @@ namespace Incas.Objects.Engine
             IHasAuthor objWithAuthor = obj as IHasAuthor;
             if (objWithAuthor != null)
             {
-                return objWithAuthor.AuthorId == ProgramState.CurrentUser.id;
+                return objWithAuthor.AuthorId == ProgramState.CurrentWorkspace.CurrentUser.Id;
             }
             return true;
         }
@@ -198,32 +198,70 @@ namespace Incas.Objects.Engine
             }
             return false;
         }
-        public static IObject CreateObjectByType(ClassData data)
+        public static IObject CreateObjectByType(IClass @class)
         {
-            IObject obj;
+            switch (@class.Type)
+            {
+                case ClassType.Model:
+                    return new Components.Object(@class);
+                case ClassType.Document:
+                    return new Document(@class);
+                case ClassType.Process:
+                    return new Process(@class);
+                case ClassType.StaticModel:
+                    return new StaticObject(@class);
+                case ClassType.ServiceClassGroup:
+                    return new ServiceClasses.Groups.Components.Group(@class);
+                case ClassType.ServiceClassUser:
+                    return new ServiceClasses.Users.Components.User(@class);
+                default:
+                    return new Components.Object(@class);
+            }
+        }
+        public static bool IsEditsMapRequired(ClassData data)
+        {
             switch (data.ClassType)
             {
                 case ClassType.Model:
-                default:
-                    obj = new Components.Object();
-                    break;
-                case ClassType.Document:
-                    obj = new Document();
-                    break;
-                case ClassType.Process:
-                    obj = new Process();
-                    break;
                 case ClassType.StaticModel:
-                    obj = new StaticObject();
-                    break;
                 case ClassType.ServiceClassGroup:
-                    obj = new ServiceClasses.Groups.Components.Group();
-                    break;
                 case ClassType.ServiceClassUser:
-                    obj = new ServiceClasses.Users.Components.User();
-                    break;
+                default:
+                    return false;
+                case ClassType.Document:
+                case ClassType.Process:
+                    return true;
             }
-            return obj;
         }
+        public static bool IsPresetsMapRequired(ClassData data)
+        {
+            switch (data.ClassType)
+            {
+                case ClassType.Model:
+                case ClassType.Document:
+                case ClassType.Process:
+                default:
+                    return true;
+                case ClassType.StaticModel:
+                case ClassType.ServiceClassGroup:
+                case ClassType.ServiceClassUser:
+                    return false;
+            }
+        }
+        //public static bool IsCommentsMapRequired(ClassData data)
+        //{
+        //    switch (data.ClassType)
+        //    {
+
+        //        case ClassType.Document:
+        //        case ClassType.Process:
+        //        default:
+        //            return true;
+        //        case ClassType.StaticModel:
+        //        case ClassType.ServiceClassGroup:
+        //        case ClassType.ServiceClassUser:
+        //            return false;
+        //    }
+        //}
     }
 }

@@ -13,6 +13,7 @@ namespace Incas.Core.Views.Controls
     {
         public const string CustomDatabase = "$DATABASE";
         public const string WorkspaceSettings = "$WORKSPACE";
+        public const string GroupsSettings = "$GROUPS";
         public const string UsersSettings = "$USERS";
         public const string SessionsSettings = "$SESSIONS";
         public const string ClassPrefix = "$CLASS:SOLO/";
@@ -36,14 +37,23 @@ namespace Incas.Core.Views.Controls
         }
         private Control GenerateControl()
         {
+            GroupBox gb = new();
             switch (this.internalPath)
             {
                 case CustomDatabase:
                     return new CustomDatabaseMain();
+                case GroupsSettings:
+                    ObjectsList listGroup = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceGroups);
+                    gb.Content = listGroup;
+                    gb.Header = "Управление группами";
+                    return gb;
+                case UsersSettings:
+                    ObjectsList listUser = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers);
+                    gb.Content = listUser;
+                    gb.Header = "Управление пользователями";
+                    return gb;
                 case WorkspaceSettings:
                     return new WorkspaceManager();
-                case UsersSettings:
-                    return new UsersManager();
                 default:
                     if (this.internalPath.Contains(MainWindowButtonTab.ClassCategoryPrefix))
                     {

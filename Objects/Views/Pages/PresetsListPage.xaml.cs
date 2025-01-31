@@ -13,10 +13,10 @@ namespace Incas.Objects.Views.Pages
     /// </summary>
     public partial class PresetsListPage : UserControl
     {
-        public Class SourceClass { get; set; }
-        public delegate void ViewRequest(Class sourceClass, Preset preset);
+        public IClass SourceClass { get; set; }
+        public delegate void ViewRequest(IClass sourceClass, Preset preset);
         public event ViewRequest OnViewRequested;
-        public PresetsListPage(Class source, List<PresetReference> presets)
+        public PresetsListPage(IClass source, List<PresetReference> presets)
         {
             this.InitializeComponent();
             this.SourceClass = source;

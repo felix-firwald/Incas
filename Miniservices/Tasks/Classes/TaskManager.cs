@@ -19,20 +19,20 @@ namespace Incas.Miniservices.Tasks.Classes
         private static Parameter GetByUser()
         {
             using Parameter p = new();
-            return p.GetParameter(ParameterType.USER_TASKS, ProgramState.CurrentUser.id.ToString());
+            return p.GetParameter(ParameterType.USER_TASKS, ProgramState.CurrentWorkspace.CurrentUser.Id.ToString());
         }
         private static void SetByUser(List<TaskRecord> records)
         {
             using Parameter p = new();
-            p.GetParameter(ParameterType.USER_TASKS, ProgramState.CurrentUser.id.ToString());
-            p.value = JsonConvert.SerializeObject(records);
+            p.GetParameter(ParameterType.USER_TASKS, ProgramState.CurrentWorkspace.CurrentUser.Id.ToString());
+            p.Value = JsonConvert.SerializeObject(records);
             p.UpdateValue();
         }
         public static List<TaskRecord> GetTaskboardRecords()
         {
             try
             {
-                List<TaskRecord> records = JsonConvert.DeserializeObject<List<TaskRecord>>(TaskManager.GetByUser().value);
+                List<TaskRecord> records = JsonConvert.DeserializeObject<List<TaskRecord>>(TaskManager.GetByUser().Value);
                 TaskManager.Cache = records;
                 return records;
             }

@@ -4,6 +4,7 @@ using Incas.Objects.Components;
 using Incas.Objects.Engine;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Models;
+using Incas.Objects.ServiceClasses.Groups.Components;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using System;
@@ -20,14 +21,15 @@ namespace Incas.Objects.Views.Pages
     /// </summary>
     public partial class ObjectCard : UserControl
     {
-        private Class Class { get; set; }
+        private IClass Class { get; set; }
         private ClassData ClassData { get; set; }
         private bool first;
         private Guid id;
         //private byte status;
+        private GroupClassPermissionSettings permissionSettings { get; set; }
         public delegate void FieldDataAction(FieldData data);
         public event FieldDataAction OnFilterRequested;
-        public ObjectCard(Class source, bool first = true)
+        public ObjectCard(IClass source, bool first = true)
         {
             this.InitializeComponent();
             this.first = first;
@@ -41,8 +43,7 @@ namespace Incas.Objects.Views.Pages
             {
                 this.TitleBorder.MinHeight = 100;
             }
-            this.Class = source;
-            this.ClassData = source.GetClassData();
+            this.SetClass(source);
         }
         public ObjectCard(bool first = true)
         {
@@ -59,10 +60,15 @@ namespace Incas.Objects.Views.Pages
                 this.TitleBorder.MinHeight = 100;
             }
         }
-        public void SetClass(Class source)
+        public void SetClass(IClass source)
         {
             this.Class = source;
             this.ClassData = source.GetClassData();
+            this.permissionSettings = this.GetPermissionSettings();
+        }
+        private GroupClassPermissionSettings GetPermissionSettings()
+        {
+            return ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(this.Class.Id);
         }
         private SolidColorBrush GetColor(Color color, byte a = 255)
         {
@@ -120,6 +126,7 @@ namespace Incas.Objects.Views.Pages
         {
             this.Dispatcher.Invoke(() =>
             {
+                this.LinkIcon.Visibility = Visibility.Collapsed;
                 this.StatusBorder.Visibility = Visibility.Collapsed;
                 this.FieldsContentPanel.Children.Clear();
                 this.ObjectName.Text = "(не выбран)";
@@ -129,21 +136,44 @@ namespace Incas.Objects.Views.Pages
                 this.FieldsContentPanel.Children.Add(nc);
             });           
         }
+        private void SetProtected()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.LinkIcon.Visibility = Visibility.Collapsed;
+                this.StatusBorder.Visibility = Visibility.Collapsed;
+                this.FieldsContentPanel.Children.Clear();
+                this.ObjectName.Text = "...";
+                this.EditIcon.Visibility = Visibility.Collapsed;
+                this.id = Guid.Empty;
+                NoPermission np = new();
+                this.FieldsContentPanel.Children.Add(np);
+            });
+        }
         private bool CheckAuthor(IObject obj)
         {
             IHasAuthor objWithAuthor = obj as IHasAuthor;
             if (objWithAuthor != null)
             {
-                return objWithAuthor.AuthorId == ProgramState.CurrentUser.id;
+                return objWithAuthor.AuthorId == ProgramState.CurrentWorkspace.CurrentUser.Id;
             }
             return true;
         }
         public void UpdateFor(IObject obj)
         {
+            if (obj is null)
+            {
+                return;
+            }
+            if (this.permissionSettings.ReadOperations == GroupPermissionType.Restricted)
+            {
+                this.SetProtected();
+                return;
+            }
             this.Dispatcher.Invoke(() =>
             {
-                //this.ShowStatus(obj);
-                if (this.ClassData.EditByAuthorOnly == true && this.CheckAuthor(obj))
+                this.LinkIcon.Visibility = Visibility.Visible;
+                if (this.ClassData.EditByAuthorOnly == true && !this.CheckAuthor(obj))
                 {
                     this.StatusBorder.IsEnabled = false;
                     this.EditIcon.Visibility = Visibility.Collapsed;
@@ -189,7 +219,10 @@ namespace Incas.Objects.Views.Pages
                     //    this.FieldsContentPanel.Children.Insert(0, box);
                     //}
                 }
-                
+                if (obj.Fields is null)
+                {
+                    return;
+                }
                 foreach (FieldData field in obj.Fields)
                 {
                     ObjectFieldViewer of = new(field, this.first);
@@ -237,7 +270,12 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             List<IObject> objects = [Processor.GetObject(this.Class, this.id)];
-            ObjectsEditor oe = new(this.Class, Processor.GetPreset(this.Class, ((IHasPreset)objects[0]).Preset), objects);
+            Preset preset = null;
+            if (objects[0] is IHasPreset objWithPreset)
+            {
+                preset = Processor.GetPreset(this.Class, objWithPreset.Preset);
+            }
+            ObjectsEditor oe = new(this.Class, preset, objects);
             oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
             oe.ShowDialog();
         }
@@ -279,39 +317,45 @@ namespace Incas.Objects.Views.Pages
 
         private void OnFilesDrop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                if (this.ClassData.ClassType != ClassType.Document)
-                {
-                    DialogsManager.ShowExclamationDialog("Прикрепление файлов доступно только для документов.", "Действие невозможно");
-                    return;
-                }
-                DialogsManager.ShowWaitCursor();
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                Components.Object obj = new();
-                obj.Id = this.id;
-                foreach (string file in files)
-                {
-                    try
-                    {
-                        ObjectComment comment = new();
-                        string filename = System.IO.Path.GetFileName(file);
-                        comment.Data = filename;
-                        File.Copy(file, Processor.GetPathToAttachmentsFolder(this.Class.identifier, obj.Id) + filename);
-                        Processor.WriteComment(this.Class, obj, comment);
-                    }
-                    catch (IOException ex)
-                    {
-                        DialogsManager.ShowErrorDialog("Похоже, что файл с таким именем уже существует: " + ex.Message);
-                    }
-                    catch (Exception ex)
-                    {
-                        DialogsManager.ShowErrorDialog(ex);
-                    }
-                }
-                DialogsManager.ShowWaitCursor(false);
-                this.UpdateFor(Processor.GetObject(this.Class, this.id));
-            }
+            //if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            //{
+            //    if (this.ClassData.ClassType != ClassType.Document)
+            //    {
+            //        DialogsManager.ShowExclamationDialog("Прикрепление файлов доступно только для документов.", "Действие невозможно");
+            //        return;
+            //    }
+            //    DialogsManager.ShowWaitCursor();
+            //    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            //    Components.Object obj = new();
+            //    obj.Id = this.id;
+            //    foreach (string file in files)
+            //    {
+            //        try
+            //        {
+            //            ObjectComment comment = new();
+            //            string filename = System.IO.Path.GetFileName(file);
+            //            comment.Data = filename;
+            //            File.Copy(file, Processor.GetPathToAttachmentsFolder(this.Class.Id, obj.Id) + filename);
+            //            Processor.WriteComment(this.Class, obj, comment);
+            //        }
+            //        catch (IOException ex)
+            //        {
+            //            DialogsManager.ShowErrorDialog("Похоже, что файл с таким именем уже существует: " + ex.Message);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            DialogsManager.ShowErrorDialog(ex);
+            //        }
+            //    }
+            //    DialogsManager.ShowWaitCursor(false);
+            //    this.UpdateFor(Processor.GetObject(this.Class, this.id));
+            //}
+        }
+
+        private void GetObjectReferenceClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ObjectReference reference = new(this.Class.Id, this.id);
+            Clipboard.SetText(reference.ToString());
         }
     }
 }

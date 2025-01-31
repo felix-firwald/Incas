@@ -46,9 +46,9 @@ namespace Incas.Admin.Views.Pages
             {
                 using (Parameter p = new())
                 {
-                    p.name = c.Name;
-                    p.value = c.Value;
-                    p.type = ParameterType.CONSTANT;
+                    p.Name = c.Name;
+                    p.Value = c.Value;
+                    p.Type = ParameterType.CONSTANT;
                     p.CreateParameter();
                 }
                 this.FillConstants();
@@ -68,14 +68,14 @@ namespace Incas.Admin.Views.Pages
                 using (Parameter p = new())
                 {
                     Parameter par = p.GetParameter(id);
-                    c.Name = par.name;
-                    c.Value = par.value;
+                    c.Name = par.Name;
+                    c.Value = par.Value;
                 }
                 c.ShowDialog("Редактирование константы");
                 using (Parameter p = new())
                 {
-                    p.name = c.Name;
-                    p.value = c.Value;
+                    p.Name = c.Name;
+                    p.Value = c.Value;
                     p.UpdateParameter(id);
                 }
                 this.FillConstants();
@@ -127,9 +127,9 @@ namespace Incas.Admin.Views.Pages
             {
                 using (Parameter p = new())
                 {
-                    p.name = en.Name;
+                    p.Name = en.Name;
                     p.SetValue(en.Value);
-                    p.type = ParameterType.ENUMERATION;
+                    p.Type = ParameterType.ENUMERATION;
                     p.CreateParameter();
                 }
                 this.vm.UpdateEnumerations();
@@ -179,14 +179,14 @@ namespace Incas.Admin.Views.Pages
                 using (Parameter p = new())
                 {
                     Parameter par = p.GetParameter(id);
-                    en.Name = par.name;
-                    en.Value = JsonConvert.DeserializeObject<List<string>>(par.value);
+                    en.Name = par.Name;
+                    en.Value = JsonConvert.DeserializeObject<List<string>>(par.Value);
                 }
                 if (en.ShowDialog("Редактирование перечисления", Icon.NumericList))
                 {
                     using (Parameter p = new())
                     {
-                        p.name = en.Name;
+                        p.Name = en.Name;
                         p.SetValue(en.Value);
                         p.UpdateParameter(id);
                     }

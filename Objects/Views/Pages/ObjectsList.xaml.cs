@@ -1,38 +1,49 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Incas.Core.Classes;
+using Incas.Core.Interfaces;
 using Incas.Core.Views.Windows;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Engine;
 using Incas.Objects.Models;
+using Incas.Objects.ServiceClasses.Groups.Components;
 using Incas.Objects.Views.Windows;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using static Incas.Core.Interfaces.ITabItem;
 
 namespace Incas.Objects.Views.Pages
 {
     /// <summary>
     /// Логика взаимодействия для ObjectsList.xaml
     /// </summary>
-    public partial class ObjectsList : UserControl
+    public partial class ObjectsList : UserControl, ITabItem
     {
         private const string ColorColumn = "__COLOR_COLUMN__";
-        public Class sourceClass;
+        public IClass sourceClass;
         public ClassData ClassData;
         private ObjectCard ObjectCard;
         public Preset SourcePreset;
-        public delegate void ObjectsListAction(Class source);
+        private GroupClassPermissionSettings permissionSettings;
+        public event TabAction OnClose;
+        public string Id { get; set; }
+
+        public delegate void ObjectsListAction(IClass source);
         public event ObjectsListAction OnPresetsViewRequested;
-        public ObjectsList(Class source)
+
+        public ObjectsList(IClass source)
         {
             this.InitializeComponent();
             DialogsManager.ShowWaitCursor();
             this.sourceClass = source;
             this.ClassData = source.GetClassData();
             this.UpdateView();
+            this.permissionSettings = this.GetPermissionSettings();
             if (this.ClassData.ShowCard)
             {
                 this.PlaceCard();
@@ -42,6 +53,7 @@ namespace Incas.Objects.Views.Pages
                 this.PresetsButton.Visibility = Visibility.Visible;
             }
             DialogsManager.ShowWaitCursor(false);
+            this.ApplyGroupConstraints();
         }
         public ObjectsList(Class source, Preset preset)
         {
@@ -49,6 +61,7 @@ namespace Incas.Objects.Views.Pages
             DialogsManager.ShowWaitCursor();
             this.sourceClass = source;
             this.ClassData = source.GetClassData();
+            this.permissionSettings = this.GetPermissionSettings();
             this.SourcePreset = preset;
             this.UpdateView();
             if (this.ClassData.PresetsEnabled)
@@ -60,51 +73,39 @@ namespace Incas.Objects.Views.Pages
                 this.PlaceCard();
             }          
             DialogsManager.ShowWaitCursor(false);
+            this.ApplyGroupConstraints();
+        }
+        private GroupClassPermissionSettings GetPermissionSettings()
+        {
+            return ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(this.sourceClass.Id);
         }
 
-        private DataTable WrapWithStyle(DataTable dt)
+        private void ApplyGroupConstraints()
         {
-            if (dt == null || dt.Rows == null)
+            if (this.permissionSettings.CreateOperations == GroupPermissionType.Restricted)
             {
-                return dt;
+                this.AddButton.Visibility = Visibility.Collapsed;
+                this.CopyButton.Visibility = Visibility.Collapsed;
             }
-            dt.Columns.Add(ColorColumn);
-            foreach (DataRow row in dt.Rows)
+            if (this.permissionSettings.DeleteOperations == GroupPermissionType.Restricted)
             {
-                int n = int.Parse(row[Helpers.StatusField].ToString());
-                row[ColorColumn] = this.ClassData.Statuses[n].Color;
+                this.RemoveButton.Visibility = Visibility.Collapsed;
             }
-            return dt;
         }
-        private void InitStyle()
+        public void TryFindObject(Guid objectId)
         {
-            Style style = new(typeof(DataGridRow), this.FindResource("RowMain") as Style);
-            if (this.ClassData.Statuses is null)
+            DataTable dt = Processor.GetObjectsListWhereEqual(this.sourceClass, this.SourcePreset, $"{Helpers.MainTable}].[{Helpers.IdField}", objectId.ToString());
+            this.Data.Columns.Clear();
+            if (this.ClassData.ClassType == ClassType.Model)
             {
-                return;
+                DataView dv = dt.AsDataView();
+                dv.Sort = $"[{Helpers.NameField}] ASC";
+                this.Data.ItemsSource = dv;
             }
-            foreach (KeyValuePair<int, StatusData> status in this.ClassData.Statuses)
+            else
             {
-                System.Windows.Data.Binding bind = new()
-                {
-                    Source = Helpers.StatusField
-                };
-                DataTrigger trigger = new()
-                {
-                    Binding = bind,
-
-                    Value = status.Key.ToString(),
-                };
-                Setter setter = new()
-                {
-                    Property = DataGridRow.ForegroundProperty,
-                    Value = new SolidColorBrush(status.Value.Color)
-                };
-                trigger.Setters.Add(setter);
-                style.Triggers.Add(trigger);
+                this.Data.ItemsSource = dt.AsDataView();
             }
-            this.Data.RowStyle = style;
-
         }
 
         private void PlaceCard()
@@ -226,6 +227,11 @@ namespace Incas.Objects.Views.Pages
         }
         private void OpenNewObject()
         {
+            if (this.permissionSettings.CreateOperations == GroupPermissionType.Restricted)
+            {
+                DialogsManager.ShowAccessErrorDialog("Вы не вправе создавать объекты этого класса.");
+                return;
+            }
             if (this.SourcePreset == null)
             {
                 ObjectsEditor oc = new(this.sourceClass, this.SourcePreset);
@@ -299,6 +305,11 @@ namespace Incas.Objects.Views.Pages
         }
         private void OpenSelectedObject()
         {
+            if (this.permissionSettings.ReadOperations == GroupPermissionType.Restricted)
+            {
+                DialogsManager.ShowAccessErrorDialog("Вы не можете просматривать объекты этого класса.");
+                return;
+            }
             DialogsManager.ShowWaitCursor(true);
             Guid id = this.GetSelectedObjectGuid();
             if (id == Guid.Empty)
@@ -306,12 +317,22 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             IObject obj = Processor.GetObject(this.sourceClass, id);
-            ObjectsEditor oc = new(this.sourceClass, Processor.GetPreset(this.sourceClass, ((IHasPreset)obj).Preset), [obj]);
+            Preset preset = null;
+            if (obj is IHasPreset objWithPreset)
+            {
+                preset = Processor.GetPreset(this.sourceClass, objWithPreset.Preset);
+            }          
+            ObjectsEditor oc = new(this.sourceClass, preset, [obj]);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
         private async void OpenSelectedObjects()
         {
+            if (this.permissionSettings.ReadOperations == GroupPermissionType.Restricted)
+            {
+                DialogsManager.ShowAccessErrorDialog("Вы не вправе просматривать объекты этого класса.");
+                return;
+            }
             DialogsManager.ShowWaitCursor(true);
             List<IObject> objects = await Processor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
             ObjectsEditor oc = new(this.sourceClass, Processor.GetPreset(this.sourceClass, ((IHasPreset)objects[0]).Preset), objects);
@@ -321,6 +342,11 @@ namespace Incas.Objects.Views.Pages
 
         private void OpenCopyOfSelectedObject()
         {
+            if (this.permissionSettings.CreateOperations == GroupPermissionType.Restricted)
+            {
+                DialogsManager.ShowAccessErrorDialog("Вы не вправе создавать объекты этого класса.");
+                return;
+            }
             Guid id = this.GetSelectedObjectGuid();
             if (id == Guid.Empty)
             {
@@ -339,6 +365,11 @@ namespace Incas.Objects.Views.Pages
         }
         private void RemoveSelectedObject()
         {
+            if (this.permissionSettings.DeleteOperations == GroupPermissionType.Restricted)
+            {
+                DialogsManager.ShowAccessErrorDialog("Вы не вправе удалять объекты этого класса.");
+                return;
+            }
             Guid id = this.GetSelectedObjectGuid();
             if (id == Guid.Empty)
             {
@@ -411,7 +442,7 @@ namespace Incas.Objects.Views.Pages
                     return;
                 }
                 Guid id = this.GetSelectedObjectGuid();
-                if (id == Guid.Empty)
+                if (id == Guid.Empty || this.Data.SelectedItems.Count > 1)
                 {
                     this.ObjectCard?.SetEmpty();                
                 }
@@ -425,7 +456,7 @@ namespace Incas.Objects.Views.Pages
 
         private void OpenInAnotherWindowClick(object sender, RoutedEventArgs e)
         {
-            ContainerWindow cw = new(this, this.sourceClass.name);
+            ContainerWindow cw = new(this, this.sourceClass.Name);
             cw.Show();
         }
 

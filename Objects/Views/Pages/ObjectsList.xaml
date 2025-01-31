@@ -42,7 +42,7 @@
                     <Label Content="Отменить поиск" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
                 </StackPanel>
             </Button>
-            <Button Style="{StaticResource ButtonMain}" Click="RemoveClick" ToolTip="Удалить выбранный объект (R, Delete)">
+            <Button x:Name="RemoveButton" Style="{StaticResource ButtonMain}" Click="RemoveClick" ToolTip="Удалить выбранный объект (R, Delete)">
                 <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
                     <Path Fill="White" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
                     <Label Content="Удалить" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>

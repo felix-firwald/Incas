@@ -24,9 +24,9 @@ namespace Incas.Objects.Engine
         /// Get path to .objinc file by id of class
         /// </summary>
         /// <returns>Full path to a database</returns>
-        public static string GetPathToObjectsMap(Class cl)
+        public static string GetPathToObjectsMap(IClass cl)
         {
-            return cl == null ? "" : $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{cl.identifier}.objinc";
+            return cl == null ? "" : $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{cl.Id}.objinc";
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Incas.Objects.Engine
                 List<string> ids = new();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    ids.Add(dr[nameof(cl.identifier)].ToString());
+                    ids.Add(dr[nameof(cl.Id)].ToString());
                 }
                 foreach (string file in Directory.GetFiles(ProgramState.CurrentWorkspace.ObjectsPath))
                 {
@@ -88,7 +88,7 @@ namespace Incas.Objects.Engine
         /// Fixes .objinc file bugs
         /// </summary>
         /// <param name="cl"></param>
-        public static void FixObjectMap(Class cl)
+        public static void FixObjectMap(IClass cl)
         {
             ClassData data = cl.GetClassData();
             if (data.PresetsEnabled)
@@ -101,38 +101,51 @@ namespace Incas.Objects.Engine
         /// <summary>
         /// Initializes .objinc file
         /// </summary>
-        public static void InitializeObjectMap(Class cl)
+        public static void InitializeObjectMap(IClass cl)
         {
             ClassData data = cl.GetClassData();
             string path = GetPathToObjectsMap(cl);
-            string adding = "";
             Query q = new("", path);
             q.OnSQLErrorDetected += OnSQLErrorDetected;
-            StringBuilder request = new($"BEGIN TRANSACTION; CREATE TABLE IF NOT EXISTS [{Helpers.MainTable}] (\n");
-            request.Append($" [{Helpers.IdField}] TEXT UNIQUE, [{Helpers.NameField}] TEXT, [{Helpers.StatusField}] TEXT, [{Helpers.AuthorField}] TEXT, ");
-            if (data.ClassType == ClassType.Document)
+            q.BeginTransaction();
+            IObject obj = Helpers.CreateObjectByType(cl);
+            List<string> fields = new();
+            fields.Add(Helpers.IdField);
+            fields.Add(Helpers.NameField);
+            foreach (KeyValuePair<string, string> pair in obj.AddServiceFields(new()))
             {
-                request.Append($"[{Helpers.DateCreatedField}] TEXT, [{Helpers.DateTerminatedField}] TEXT, [{Helpers.TerminatedField}] TEXT, ");
-                adding += $"CREATE TABLE IF NOT EXISTS [{Helpers.EditsTable}] ([{Helpers.IdField}] TEXT UNIQUE, [{Helpers.TargetObjectField}] TEXT, [{Helpers.StatusField}] TEXT, [{Helpers.DateCreatedField}] TEXT, [{Helpers.AuthorField}] TEXT, [{Helpers.DataField}] TEXT);\n";
-                adding += $"CREATE TABLE IF NOT EXISTS [{Helpers.CommentsTable}] ([{Helpers.IdField}] TEXT UNIQUE, [{Helpers.TargetObjectField}] TEXT, [{Helpers.TypeField}] TEXT, [{Helpers.DateCreatedField}] TEXT, [{Helpers.AuthorField}] TEXT, [{Helpers.DataField}] TEXT);";
+                fields.Add(pair.Key);
             }
-            if (data.ClassType == ClassType.Process)
+            foreach (Models.Field f in data.GetSavebleFields())
             {
-                request.Append($"[{Helpers.DateCreatedField}] TEXT, [{Helpers.DateOpenedField}] TEXT, [{Helpers.DateClosedField}] TEXT, [{Helpers.DataField}] TEXT, [{Helpers.ContributorsField}] TEXT, [{Helpers.TerminatedField}] TEXT, ");
-                adding += $"CREATE TABLE IF NOT EXISTS [{Helpers.EditsTable}] ([{Helpers.IdField}] TEXT UNIQUE, [{Helpers.TargetObjectField}] TEXT, [{Helpers.StatusField}] TEXT, [{Helpers.DateCreatedField}] TEXT, [{Helpers.AuthorField}] TEXT, [{Helpers.DataField}] TEXT);\n";
-                adding += $"CREATE TABLE IF NOT EXISTS [{Helpers.CommentsTable}] ([{Helpers.IdField}] TEXT UNIQUE, [{Helpers.TargetObjectField}] TEXT, [{Helpers.TypeField}] TEXT, [{Helpers.DateCreatedField}] TEXT, [{Helpers.AuthorField}] TEXT, [{Helpers.DataField}] TEXT);";
+                fields.Add(f.Id.ToString());
             }
-            adding += $"CREATE TABLE IF NOT EXISTS [{Helpers.PresetsTable}] ([{Helpers.IdField}] TEXT UNIQUE, [{Helpers.NameField}] TEXT, [{Helpers.DateCreatedField}] TEXT, [{Helpers.AuthorField}] TEXT, [{Helpers.DataField}] TEXT);";
-            List<string> customFields = [];
-            foreach (Models.Field f in cl.GetClassData().GetSavebleFields())
+            q.CreateTable(Helpers.MainTable, fields);
+            if (Helpers.IsEditsMapRequired(data))
             {
-                customFields.Add($"[{f.Id}] TEXT");
+                q.SeparateCommand();
+                List<DbField> editsMapFields = new();
+                q.CreateTable(Helpers.EditsTable, new List<string>() {
+                    Helpers.IdField,
+                    Helpers.TargetObjectField,
+                    Helpers.StatusField,
+                    Helpers.DateCreatedField,
+                    Helpers.AuthorField,
+                    Helpers.DataField});
             }
-            request.Append(string.Join(", ", customFields));
-            request.Append(");");
-            request.Append(adding);
-            request.Append("\nCOMMIT");
-            q.AddCustomRequest(request.ToString());
+            if (Helpers.IsPresetsMapRequired(data))
+            {
+                q.SeparateCommand();
+                List<DbField> editsMapFields = new();
+                q.CreateTable(Helpers.PresetsTable, new List<string>() {
+                    Helpers.IdField,
+                    Helpers.NameField,
+                    Helpers.DateCreatedField,
+                    Helpers.AuthorField,
+                    Helpers.DataField});
+            }
+            q.SeparateCommand();
+            q.EndTransaction();
             q.ExecuteVoid();
         }
 
@@ -140,7 +153,7 @@ namespace Incas.Objects.Engine
         /// Removes .objinc file
         /// </summary>
         /// <param name="cl"></param>
-        public async static void DropObjectMap(Class cl)
+        public async static void DropObjectMap(IClass cl)
         {
             await Task.Run(() =>
             {
@@ -161,7 +174,7 @@ namespace Incas.Objects.Engine
                 catch { }
                 try
                 {
-                    string folder = $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{cl.identifier}";
+                    string folder = $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{cl.Id}";
                     Directory.Delete(folder, true);
                 }
                 catch { }
@@ -171,7 +184,7 @@ namespace Incas.Objects.Engine
         /// Updates objects map [<see cref="MainTable"/>] in .objinc by a class
         /// </summary>
         /// <param name="cl"></param>
-        public static void UpdateObjectMap(Class cl)
+        public static void UpdateObjectMap(IClass cl)
         {
             List<string> serviceColumns =
             [
@@ -246,7 +259,7 @@ namespace Incas.Objects.Engine
         /// Check objects map after an update
         /// </summary>
         /// <param name="cl"></param>
-        private async static void CheckComplianceWithConstraints(Class cl)
+        private async static void CheckComplianceWithConstraints(IClass cl)
         {
             static List<Guid> CheckRows(Check func, Models.Field f, DataRowCollection collection)
             {
@@ -288,7 +301,7 @@ namespace Incas.Objects.Engine
                 }
                 return errors;
             }
-            static void ShowWindow(Class cl, List<Guid> list, Models.Field field)
+            static void ShowWindow(IClass cl, List<Guid> list, Models.Field field)
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -304,7 +317,7 @@ namespace Incas.Objects.Engine
                 List<Models.Field> fields = cl.GetClassData().GetSavebleFields();
                 foreach (Models.Field f in fields)
                 {
-                    ProgramStatusBar.SetText($"Проверка соответствия ограничениям поля [{f.Name}] для класса [{cl.name}]...");
+                    ProgramStatusBar.SetText($"Проверка соответствия ограничениям поля [{f.Name}] для класса [{cl.Name}]...");
                     List<Guid> guids;
                     switch (f.Type)
                     {
@@ -415,7 +428,7 @@ namespace Incas.Objects.Engine
         #endregion
 
         #region Presets
-        public async static Task<bool> IsUnique(Class cl, Models.Field field, string value)
+        public async static Task<bool> IsUnique(IClass cl, Models.Field field, string value)
         {
             bool result = true;
             await Task.Run(() =>
@@ -432,7 +445,7 @@ namespace Incas.Objects.Engine
             });
             return result;
         }
-        public async static Task<bool> WritePreset(Class cl, Preset preset)
+        public async static Task<bool> WritePreset(IClass cl, Preset preset)
         {
             await Task.Run(() =>
             {
@@ -445,7 +458,7 @@ namespace Incas.Objects.Engine
                 {
                     preset.Id = Guid.NewGuid();
                     preset.CreatedDate = DateTime.Now;
-                    preset.AuthorId = ProgramState.CurrentUser.id;
+                    preset.AuthorId = ProgramState.CurrentWorkspace.CurrentUser.Id;
                     q.Insert(new()
                     {
                         { Helpers.IdField, preset.Id.ToString()},
@@ -475,7 +488,7 @@ namespace Incas.Objects.Engine
             });
             return true;
         }
-        public async static Task<bool> ApplyPresetToRelevant(Class cl, Preset preset)
+        public async static Task<bool> ApplyPresetToRelevant(IClass cl, Preset preset)
         {
             await Task.Run(() =>
             {
@@ -492,7 +505,7 @@ namespace Incas.Objects.Engine
             });
             return true;
         }
-        public async static Task<bool> RemovePreset(Class cl, PresetReference preset)
+        public async static Task<bool> RemovePreset(IClass cl, PresetReference preset)
         {
             await Task.Run(() =>
             {
@@ -514,7 +527,7 @@ namespace Incas.Objects.Engine
             });
             return true;
         }
-        public static List<PresetReference> GetPresetsReferences(Class cl)
+        public static List<PresetReference> GetPresetsReferences(IClass cl)
         {
             List<PresetReference> presets = new();
             string path = GetPathToObjectsMap(cl);
@@ -533,7 +546,7 @@ namespace Incas.Objects.Engine
             }
             return presets;
         }
-        public static Preset GetPreset(Class cl, PresetReference ps)
+        public static Preset GetPreset(IClass cl, PresetReference ps)
         {
             string path = GetPathToObjectsMap(cl);
             Query q = new(Helpers.PresetsTable, path);
@@ -553,7 +566,7 @@ namespace Incas.Objects.Engine
             preset.SetData(dr[Helpers.DataField].ToString());
             return preset;
         }
-        public static Preset GetPreset(Class cl, Guid id)
+        public static Preset GetPreset(IClass cl, Guid id)
         {
             PresetReference pr = new()
             {
@@ -561,7 +574,7 @@ namespace Incas.Objects.Engine
             };
             return GetPreset(cl, pr);
         }
-        public async static Task<bool> RemovePreset(Class cl, Preset preset)
+        public async static Task<bool> RemovePreset(IClass cl, Preset preset)
         {
             await Task.Run(() =>
             {
@@ -580,7 +593,7 @@ namespace Incas.Objects.Engine
         }
         #endregion
 
-        public async static Task<bool> WriteObjects(Class cl, List<IObject> objects)
+        public async static Task<bool> WriteObjects(IClass cl, List<IObject> objects)
         {
             await Task.Run(() =>
             {
@@ -600,12 +613,12 @@ namespace Incas.Objects.Engine
             });
             return true;
         }
-        public async static void WriteObjects(Class cl, IObject obj)
+        public async static void WriteObjects(IClass cl, IObject obj)
         {
             List<IObject> objects = [obj];
             await WriteObjects(cl, objects);
         }
-        private static void GetRequestForWritingObject(Query q, Class cl, ClassData data, IObject obj) // переделать по принципу проверок на интерфейсы!
+        private static void GetRequestForWritingObject(Query q, IClass cl, ClassData data, IObject obj) // переделать по принципу проверок на интерфейсы!
         {
             Dictionary<string, string> values = new()
             {
@@ -635,13 +648,13 @@ namespace Incas.Objects.Engine
                 q.SeparateCommand();
             }
         }
-        public static void SetObjectAsTerminated(Class cl, ITerminable obj)
+        public static void SetObjectAsTerminated(IClass cl, ITerminable obj)
         {
             obj.TerminatedDate = DateTime.Now;
             obj.Terminated = true;
             WriteObjects(cl, (IObject)obj);
         }
-        public static DataTable GetSimpleObjectsList(Class cl, string WhereCondition = null)
+        public static DataTable GetSimpleObjectsList(IClass cl, string WhereCondition = null)
         {
             Query q = new("", GetPathToObjectsMap(cl));
             q.OnSQLErrorDetected += OnSQLErrorDetected;
@@ -666,7 +679,7 @@ namespace Incas.Objects.Engine
             return q.Execute();
         }
         #region Update For Correction
-        public static DataTable GetSimpleObjectsWhereIdForCorrection(Class cl, List<Guid> list, Models.Field f)
+        public static DataTable GetSimpleObjectsWhereIdForCorrection(IClass cl, List<Guid> list, Models.Field f)
         {
             Query q = new(Helpers.MainTable, GetPathToObjectsMap(cl));
             q.OnSQLErrorDetected += OnSQLErrorDetected;
@@ -677,7 +690,7 @@ namespace Incas.Objects.Engine
             }
             return q.Select($"[{Helpers.IdField}], [{Helpers.NameField}] AS [Наименование объекта], [{f.Id}] AS [Значение]").WhereIn(Helpers.IdField, ids).Execute();
         }
-        public async static void UpdateFieldsByIdForCorrection(Class cl, Dictionary<string, string> fields, Models.Field f)
+        public async static void UpdateFieldsByIdForCorrection(IClass cl, Dictionary<string, string> fields, Models.Field f)
         {
             await Task.Run(() =>
             {
@@ -696,14 +709,14 @@ namespace Incas.Objects.Engine
             });
         }
         #endregion
-        private static DataTable GetObjectsListBasic(Class cl, string WhereCondition = null)
+        private static DataTable GetObjectsListBasic(IClass cl, string WhereCondition = null)
         {
             Query q = new("", GetPathToObjectsMap(cl));
             q.OnSQLErrorDetected += OnSQLErrorDetected;
             ClassData data = cl.GetClassData();
             List<Models.Field> fields = data.GetFieldsForMap();
             List<string> fieldsRequest = [$"[OBJECTS_MAP].[{Helpers.IdField}]"];
-            fieldsRequest.Add($"[OBJECTS_MAP].[{Helpers.StatusField}]");
+
             if (data.ClassType == ClassType.Document)
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{Helpers.DateCreatedField}]");
@@ -740,7 +753,7 @@ namespace Incas.Objects.Engine
             return q.Execute();
         }
         #region Objects List Get
-        public static DataTable GetObjectsList(Class cl, Preset preset)
+        public static DataTable GetObjectsList(IClass cl, Preset preset)
         {
             string request;
             if (preset == null)
@@ -753,7 +766,7 @@ namespace Incas.Objects.Engine
             }
             return GetObjectsListBasic(cl, request);
         }
-        public static DataTable GetObjectsListWhereLike(Class cl, Preset preset, string field, string value)
+        public static DataTable GetObjectsListWhereLike(IClass cl, Preset preset, string field, string value)
         {
             string request;
             if (preset == null)
@@ -766,7 +779,7 @@ namespace Incas.Objects.Engine
             }
             return GetObjectsListBasic(cl, request);
         }
-        public static DataTable GetSimpleObjectsListWhereLike(Class cl, Preset preset, string field, string value)
+        public static DataTable GetSimpleObjectsListWhereLike(IClass cl, Preset preset, string field, string value)
         {
             string request;
             if (preset == null)
@@ -779,7 +792,7 @@ namespace Incas.Objects.Engine
             }
             return GetObjectsListBasic(cl, request);
         }
-        public static DataTable GetObjectsListWhereEqual(Class cl, Preset preset, string field, string value)
+        public static DataTable GetObjectsListWhereEqual(IClass cl, Preset preset, string field, string value)
         {
             string request;
             if (preset == null)
@@ -792,7 +805,7 @@ namespace Incas.Objects.Engine
             }
             return GetObjectsListBasic(cl, request);
         }
-        public static DataTable GetSimpleObjectsListWhereEqual(Class cl, Preset preset, string field, string value)
+        public static DataTable GetSimpleObjectsListWhereEqual(IClass cl, Preset preset, string field, string value)
         {
             string request;
             if (preset == null)
@@ -806,13 +819,13 @@ namespace Incas.Objects.Engine
             return GetObjectsListBasic(cl, request);
         }
         #endregion
-        public static IObject GetObject(Class cl, Guid id)
+        public static IObject GetObject(IClass cl, Guid id)
         {
             IObject obj;
             Query q = new(Helpers.MainTable, GetPathToObjectsMap(cl));
             q.OnSQLErrorDetected += OnSQLErrorDetected;
             ClassData classData = cl.GetClassData();
-            obj = Helpers.CreateObjectByType(classData);
+            obj = Helpers.CreateObjectByType(cl);
             DataRow dr = q.Select().WhereEqual(Helpers.IdField, id.ToString()).ExecuteOne();
             if (dr != null)
             {
@@ -832,7 +845,7 @@ namespace Incas.Objects.Engine
             }
             return obj;
         }
-        public async static Task<List<IObject>> GetObjects(Class cl, List<Guid> ids)
+        public async static Task<List<IObject>> GetObjects(IClass cl, List<Guid> ids)
         {
             List<IObject> obj = new();
             await Task.Run(() =>
@@ -886,7 +899,7 @@ namespace Incas.Objects.Engine
         //    }
         //    return objs;
         //}
-        public static void RemoveObject(Class cl, Guid id)
+        public static void RemoveObject(IClass cl, Guid id)
         {
             Query q = new(Helpers.MainTable, GetPathToObjectsMap(cl));
             q.OnSQLErrorDetected += OnSQLErrorDetected;
@@ -894,11 +907,11 @@ namespace Incas.Objects.Engine
             q.WhereEqual(Helpers.IdField, id.ToString()).Execute();
         }
         #region Attachments & Comments
-        public static void WriteComment(Class cl, IObject target, ObjectComment comment)
+        public static void WriteComment(IClass cl, IObject target, ObjectComment comment)
         {
             comment.CreationDate = DateTime.Now;
             comment.Type = CommentType.File;
-            comment.AuthorId = ProgramState.CurrentUser.id;
+            comment.AuthorId = ProgramState.CurrentWorkspace.CurrentUser.Id;
             comment.TargetObject = target.Id;
             Dictionary<string, string> values = new()
             {
@@ -927,7 +940,7 @@ namespace Incas.Objects.Engine
                     .ExecuteVoid();
             }
         }
-        public static async Task<List<ObjectComment>> GetObjectComments(Class cl, IObject target)
+        public static async Task<List<ObjectComment>> GetObjectComments(IClass cl, IObject target)
         {
             List<ObjectComment> result = new();
             await Task.Run(() =>
@@ -942,7 +955,7 @@ namespace Incas.Objects.Engine
                     ObjectComment oc = new()
                     {
                         Id = Guid.Parse(row[Helpers.IdField].ToString()),
-                        Class = cl.identifier,
+                        Class = cl.Id,
                         CreationDate = DateTime.Parse(row[Helpers.DateCreatedField].ToString()),
                         TargetObject = target.Id,
                         AuthorId = Guid.Parse(row[Helpers.AuthorField].ToString()),
@@ -953,7 +966,7 @@ namespace Incas.Objects.Engine
             });
             return result;
         }
-        public static void RemoveObjectComment(Class cl, ObjectComment comment)
+        public static void RemoveObjectComment(IClass cl, ObjectComment comment)
         {
             Query q = new(Helpers.CommentsTable, GetPathToObjectsMap(cl));
             q.OnSQLErrorDetected += OnSQLErrorDetected;

@@ -50,7 +50,7 @@ namespace Incas.Objects.Views.Pages
             ol.OnPresetsViewRequested += this.OnPresetsViewRequested;
             this.ContentPanel.Content = ol;
         }
-        private void PlacePresetsListPage(Models.Class selectedClass)
+        private void PlacePresetsListPage(IClass selectedClass)
         {
             PresetsListPage pl = new(selectedClass, this.vm.Presets);
             pl.OnViewRequested += this.Pl_OnViewRequested;
@@ -78,12 +78,12 @@ namespace Incas.Objects.Views.Pages
             }            
         }
 
-        private void OnPresetsViewRequested(Models.Class source)
+        private void OnPresetsViewRequested(IClass source)
         {
             this.PlacePresetsListPage(source);
         }
 
-        private void Pl_OnViewRequested(Models.Class sourceClass, Preset preset)
+        private void Pl_OnViewRequested(IClass sourceClass, Preset preset)
         {
             this.vm.SelectedPreset = preset.GetAsReference();
         }
@@ -102,10 +102,10 @@ namespace Incas.Objects.Views.Pages
             }
             GroupBox gb = new()
             {
-                Header = this.vm.SelectedCategory + ": " + this.vm.SelectedClass.name,
+                Header = this.vm.SelectedCategory + ": " + this.vm.SelectedClass.Name,
                 Content = new ObjectsList(this.vm.SelectedClass)
             };
-            DialogsManager.ShowPage(gb, this.vm.SelectedClass.name, this.vm.SelectedClass.identifier.ToString());
+            DialogsManager.ShowPage(gb, this.vm.SelectedClass.Name, this.vm.SelectedClass.Id.ToString());
         }
 
         private void Ap_OnUpdateRequested()

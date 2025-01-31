@@ -33,15 +33,6 @@ namespace Incas.Core.Views.Windows
             this.vm = new MainWindowViewModel();
             ProgramState.MainWindowViewModel = this.vm;
             this.DataContext = this.vm;
-            if (string.IsNullOrEmpty(ProgramState.CurrentUserParameters.Password))
-            {
-                if (DialogsManager.ShowQuestionDialog("Текущий пароль, использованный вами для входа, " +
-                    "является временным, потому известен администратору и может быть им изменен.\nРекомендуем вам придумать свой пароль. Его не сможет увидеть и изменить никто, кроме вас.", "Завершение активации", "Установить пароль", "Не сейчас") == DialogStatus.Yes)
-                {
-                    SetPassword sp = new();
-                    sp.ShowDialog("Установление нового пароля", Classes.Icon.UserGears);
-                }
-            }
             this.UpdateTabs();
             this.AddTabItem(new StartPage(), "$START", "Начало", TabType.General);
         }
@@ -152,10 +143,17 @@ namespace Incas.Core.Views.Windows
                     this.AddPageButton(category, Classes.Icon.Database, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
                 }
             }
-            if (ProgramState.CurrentUserParameters.Permission_group == PermissionGroup.Admin)
+            if (ProgramState.CurrentWorkspace.CurrentGroup.IsUsersSettingsVisible)
+            {
+                this.AddAdminPageButton("Пользователи", Classes.Icon.UserGears, Controls.MainWindowButtonTab.UsersSettings);
+            }
+            if (ProgramState.CurrentWorkspace.CurrentGroup.IsGroupSettingsVisible)
+            {
+                this.AddAdminPageButton("Группы", Classes.Icon.HouseGear, Controls.MainWindowButtonTab.GroupsSettings);             
+            }
+            if (ProgramState.CurrentWorkspace.CurrentGroup.IsWorkspaceSettingsVisible)
             {
                 this.AddAdminPageButton("Рабочее пространство", Classes.Icon.GearWide, Controls.MainWindowButtonTab.WorkspaceSettings);
-                this.AddAdminPageButton("Пользователи", Classes.Icon.UserGears, Controls.MainWindowButtonTab.UsersSettings);
             }
         }
         private void AddPageButton(string name, Icon icon, string path)
@@ -173,7 +171,14 @@ namespace Incas.Core.Views.Windows
 
         private void Bt_OnNewTabRequested(Control item, string id, string name)
         {         
-            this.AddTabItem((ITabItem)item, id, name, TabType.Usual);
+            if (item is ITabItem tabItem)
+            {
+                this.AddTabItem(tabItem, id, name, TabType.Usual);
+            }
+            else
+            {
+                this.AddTabItem(item, id, name, TabType.Usual);
+            }
         }
         public void AddTabItem(Control item, string id, string name, TabType tabType)
         {

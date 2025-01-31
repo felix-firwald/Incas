@@ -29,11 +29,12 @@ namespace Incas
                 }
             }
             ProgramState.CheckoutWorkspaces();
-
+            
             OpenWorkspace ow = new();
-            if (ow.ShowDialog() == false)
+            if (ow.ShowDialog() == true)
             {
-
+                //Core.Views.Windows.MainWindow mw = new Core.Views.Windows.MainWindow();
+                //mw.Show();
             }
         }
         private void ShowCI()

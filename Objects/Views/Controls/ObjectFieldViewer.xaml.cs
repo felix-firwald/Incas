@@ -1,13 +1,13 @@
-﻿using Incas.Objects.Components;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Incas.Core.Classes;
+using Incas.Objects.Components;
+using Incas.Objects.Engine;
+using Incas.Objects.Interfaces;
 using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
-using Incas.Objects.Interfaces;
-using Incas.Users.Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Threading.Tasks;
-using Incas.Objects.Engine;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -16,7 +16,7 @@ namespace Incas.Objects.Views.Controls
     /// </summary>
     public partial class ObjectFieldViewer : UserControl, IObjectFieldViewer
     {
-        private Class relationClass;
+        private IClass relationClass;
         private IObject relationObject;
         private bool isNestedObjectShowed = false;
         private ObjectCard card;
@@ -73,7 +73,7 @@ namespace Incas.Objects.Views.Controls
 
         private async void GenerateRelatedField(Guid id, BindingData bd)
         {
-            this.relationClass = new(bd.Class);
+            this.relationClass = new Class(bd.Class);
             this.relationObject = Processor.GetObject(this.relationClass, id);
             this.FieldValue.Text = await this.relationObject.GetFieldValue(bd.Field);
             this.ColorizeField(130, 113, 239);
@@ -104,10 +104,12 @@ namespace Incas.Objects.Views.Controls
         {
             this.InitializeComponent();
             this.FieldName.Text = "Автор:";
-            using (User user = new(data))
-            {
-                this.FieldValue.Text = user.fullname;
-            }
+            this.relationClass = ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers;
+            this.relationObject = Processor.GetObject(this.relationClass, data);
+            this.FieldValue.Text = this.relationObject.Name;
+            this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
+            this.FieldValue.MouseDown += this.FieldValue_MouseDown;
+            this.FieldValue.ToolTip = "Кликнуть для просмотра объекта";
             this.ColorizeField(243, 74, 147);
             this.FilterButton.IsEnabled = false;
         }

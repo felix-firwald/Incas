@@ -94,7 +94,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
-                    <Label Style="{StaticResource LabelElement}" Content="© INCAS 2024" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" VerticalContentAlignment="Center"/>
+                    <Label Style="{StaticResource LabelElement}" Content="© INCAS 2025" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" VerticalContentAlignment="Center"/>
                     <Image Height="30" Width="30" Source="/Core/Views/Windows/Logo.png" UseLayoutRounding="False" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" MouseDown="Logo_MouseDown" Margin="12,0,12,0"/>
 
                     <Label Style="{StaticResource LabelElement}" Content="{Binding Version}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
@@ -110,27 +110,29 @@
 
         </Border>
         <StackPanel Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="2" Background="{StaticResource LightBlack}">
-
-            <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenClipBoard}" CommandParameter="Clipboard" ToolTip="(F1) Открыть постоянный буфер обмена">
+            <Button Style="{DynamicResource DashboardButton}" Command="{Binding FindObject}" CommandParameter="Find" ToolTip="(F1) Найти объект по ссылке">
+                <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            </Button>
+            <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenClipBoard}" CommandParameter="Clipboard" ToolTip="(F2) Открыть постоянный буфер обмена">
                 <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M10 1.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5zm-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5v1A1.5 1.5 0 0 1 9.5 4h-3A1.5 1.5 0 0 1 5 2.5zm-2 0h1v1A2.5 2.5 0 0 0 6.5 5h3A2.5 2.5 0 0 0 12 2.5v-1h1a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2"/>
             </Button>
-            <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenTasks}" CommandParameter="Tasks" ToolTip="(F2) Открыть окно пользовательских задач">
+            <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenTasks}" CommandParameter="Tasks" ToolTip="(F3) Открыть окно пользовательских задач">
                 <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
             </Button>
             <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="6"/>
-            <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenTextEditor}" CommandParameter="TE" ToolTip="(F3) Открыть редактор текста">
+            <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenTextEditor}" CommandParameter="TE" ToolTip="(F4) Открыть редактор текста">
                 <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M2 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m4-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5"/>
             </Button>
-            <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenFileManager}" CommandParameter="Copy" ToolTip="(F4) Быстрая обработка каталогов и файлов">
+            <Button Style="{DynamicResource DashboardButton}" Command="{Binding OpenFileManager}" CommandParameter="Copy" ToolTip="(F5) Быстрая обработка каталогов и файлов">
                 <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1M.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8z"/>
             </Button>
-            <Button IsEnabled="False" Style="{DynamicResource DashboardButton}" Command="{Binding OpenFile}" CommandParameter="Pdf" ToolTip="(F5) Быстрая конвертация в PDF">
+            <Button IsEnabled="False" Style="{DynamicResource DashboardButton}" Command="{Binding OpenFile}" CommandParameter="Pdf" ToolTip="(F6) Быстрая конвертация в PDF">
                 <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z"/>
             </Button>
-            <Button IsEnabled="False" Style="{DynamicResource DashboardButton}" Command="{Binding OpenFile}" CommandParameter="Word" ToolTip="(F6) Быстрое исправление файлов Word" Cursor="Hand">
+            <Button IsEnabled="False" Style="{DynamicResource DashboardButton}" Command="{Binding OpenFile}" CommandParameter="Word" ToolTip="(F7) Быстрое исправление файлов Word" Cursor="Hand">
                 <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M5.485 6.879l1.036 4.144.997-3.655a.5.5 0 0 1 .964 0l.997 3.655 1.036-4.144a.5.5 0 0 1 .97.242l-1.5 6a.5.5 0 0 1-.967.01L8 9.402l-1.018 3.73a.5.5 0 0 1-.967-.01l-1.5-6a.5.5 0 1 1 .97-.242z"/>
             </Button>
-            <Button IsEnabled="False" Style="{DynamicResource DashboardButton}" Command="{Binding OpenFile}" CommandParameter="Excel" ToolTip="(F7) Быстрое исправление файлов Excel">
+            <Button IsEnabled="False" Style="{DynamicResource DashboardButton}" Command="{Binding OpenFile}" CommandParameter="Excel" ToolTip="(F8) Быстрое исправление файлов Excel">
                 <Path Fill="{DynamicResource DarkLight}" Height="25" Width="25" Stretch="Uniform" Data="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M5.884 6.68 8 9.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 10l2.233 2.68a.5.5 0 0 1-.768.64L8 10.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 10 5.116 7.32a.5.5 0 1 1 .768-.64"/>
             </Button>
             <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="6"/>

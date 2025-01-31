@@ -26,7 +26,7 @@
 
         <TextBox x:Name="cpath" Visibility="Collapsed" Text="{Binding Path}" Grid.Row="3" Grid.ColumnSpan="2" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" />
 
-        <ComboBox x:Name="user" Style="{StaticResource ComboBoxMain}" ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=true}" DisplayMemberPath="fullname" SelectedItem="{Binding SelectedUser, Mode=TwoWay, NotifyOnSourceUpdated=True}" Tag="Пользователь" Grid.Row="3"  Grid.ColumnSpan="2" />
+        <ComboBox x:Name="user" Style="{StaticResource ComboBoxMain}" ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=true}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedUser, Mode=TwoWay, NotifyOnSourceUpdated=True}" Tag="Пользователь" Grid.Row="3"  Grid.ColumnSpan="2" />
         <TextBox x:Name="pwd" Style="{StaticResource TextBoxMain}" Text="{Binding Password}" Tag="Пароль для входа" Grid.Row="4" MaxLength="20" Grid.ColumnSpan="2">
             <TextBox.ContextMenu>
                 <ContextMenu >

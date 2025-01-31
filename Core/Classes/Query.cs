@@ -428,9 +428,23 @@ namespace Incas.Core.Classes
         }
         #endregion
 
-        public Query CreateTable(string tab, Field[] fields)
+        public Query CreateTable(string table, List<string> fields)
         {
-            this.Result = $"CREATE TABLE {tab} (\n";
+            this.Result += $"\nCREATE TABLE IF NOT EXISTS [{table}] (\n[";
+            this.Result += string.Join("] TEXT,\n[", fields);
+            this.Result += "])";
+            return this;
+        }
+        public Query CreateTable(string table, List<DbField> fields)
+        {
+            this.Result += $"\nCREATE TABLE IF NOT EXISTS [{table}] (\n";
+            this.Result += string.Join(",\n", fields.ToString());
+            this.Result += ")";
+            return this;
+        }
+        public Query CreateTable(string table, DbField[] fields)
+        {
+            this.Result += $"\nCREATE TABLE IF NOT EXISTS [{table}] (\n";
             this.Result += string.Join(",\n", fields.ToString());
             this.Result += ")";
             return this;

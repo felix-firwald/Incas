@@ -2,6 +2,7 @@
 using Incas.Core.Views.Windows;
 using Incas.Objects.Components;
 using Incas.Objects.Engine;
+using Incas.Objects.Models;
 using Incas.Objects.Views.Windows;
 using System;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace Incas.Core.Views.Controls
                 {
                     await Task.Run(() =>
                     {
-                        this.SelectedObject = Processor.GetObject(new(this.Binding.Class), id);                       
+                        this.SelectedObject = Processor.GetObject(new Class(this.Binding.Class), id);                       
                     });
                     this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
                     this.SetAsEditingEnabled();
@@ -50,7 +51,7 @@ namespace Incas.Core.Views.Controls
                 {
                     await Task.Run(() =>
                     {
-                        this.SelectedObject = Processor.GetObject(new(this.Binding.Class), id);
+                        this.SelectedObject = Processor.GetObject(new Class(this.Binding.Class), id);
                     });
                     this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
                     this.SetAsEditingEnabled();
@@ -140,7 +141,7 @@ namespace Incas.Core.Views.Controls
 
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
-            ObjectsEditor oe = new(new(this.Binding.Class), null, null);
+            ObjectsEditor oe = new(new Class(this.Binding.Class), null, null);
             oe.SetSingleObjectMode();
             oe.OnSetNewObjectRequested += this.Oe_OnSetNewObjectRequested;
             oe.ShowDialog();

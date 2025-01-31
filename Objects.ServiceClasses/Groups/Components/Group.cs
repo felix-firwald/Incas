@@ -1,6 +1,7 @@
 ﻿using Incas.Objects.Components;
 using Incas.Objects.Engine;
 using Incas.Objects.Interfaces;
+using Incas.Objects.ServiceClasses.Users.Components;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace Incas.Objects.ServiceClasses.Groups.Components
 {
     public sealed class Group : IObject
     {
+        public IClass Class { get; set; }
         public Guid Id { get; set; }
         public string Name { get; set; }
         public List<FieldData> Fields { get; set; }
@@ -25,9 +27,15 @@ namespace Incas.Objects.ServiceClasses.Groups.Components
             return result;
         }
 
+        public Group(IClass @class)
+        {
+            this.Class = @class;
+            this.Data = new();
+        }
+
         public IObject Copy()
         {
-            Group obj = new()
+            Group obj = new(this.Class)
             {
                 Fields = this.Fields,
                 Data = this.Data
@@ -79,6 +87,29 @@ namespace Incas.Objects.ServiceClasses.Groups.Components
         public void ParseServiceFields(DataRow dr)
         {
             this.Data = JsonConvert.DeserializeObject<GroupData>(dr[Helpers.DataField].ToString());
+        }
+        public static List<GroupItem> GetItems(DataTable dt)
+        {
+            List<GroupItem> items = new();
+            foreach (DataRow dr in dt.Rows)
+            {
+                GroupItem item = new()
+                {
+                    Id = Guid.Parse(dr[Helpers.IdField].ToString()),
+                    Name = dr[Helpers.NameField].ToString()
+                };
+                items.Add(item);
+            }
+            return items;
+        }
+        public GroupItem AsItem()
+        {
+            GroupItem item = new()
+            {
+                Id = this.Id,
+                Name = this.Name
+            };
+            return item;
         }
         #endregion
     }

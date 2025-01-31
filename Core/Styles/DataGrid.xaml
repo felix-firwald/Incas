@@ -238,6 +238,7 @@
         <Setter Property="CellStyle" Value="{DynamicResource CellMain}"/>
         <Setter Property="RowStyle" Value="{DynamicResource RowMain}"/>
         <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="FontFamily" Value="{StaticResource RobotoMonoBold}"/>
         <Setter Property="Padding" Value="0"/> <!--это здесь выставлен внутренний отступ !!!!!!-->
         <Setter Property="MinColumnWidth" Value="40"/>
         <Setter Property="Template">

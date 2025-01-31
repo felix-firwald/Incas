@@ -10,8 +10,8 @@
     <Grid x:Name="Grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="160" MaxWidth="200" />
-            <ColumnDefinition />
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition MaxWidth="800"/>
+            <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

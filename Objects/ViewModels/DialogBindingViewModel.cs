@@ -32,7 +32,7 @@ namespace Incas.Objects.ViewModels
             {
                 foreach (Class cl in this.classes)
                 {
-                    if (cl.identifier == this.selectedClass)
+                    if (cl.Id == this.selectedClass)
                     {
                         return cl;
                     }
@@ -41,7 +41,7 @@ namespace Incas.Objects.ViewModels
             }
             set
             {
-                this.selectedClass = value.identifier;
+                this.selectedClass = value.Id;
                 this.OnPropertyChanged(nameof(this.SelectedClass));
                 this.OnPropertyChanged(nameof(this.Fields));
                 this.OnPropertyChanged(nameof(this.SelectedField));

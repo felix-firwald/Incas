@@ -1,4 +1,10 @@
-﻿using System;
+﻿using Incas.Core.AutoUI;
+using Incas.Core.Exceptions;
+using Incas.Core.Models;
+using Incas.Objects.ServiceClasses.Groups.Components;
+using Incas.Objects.ServiceClasses.Users.Components;
+using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -15,6 +21,7 @@ namespace Incas.Core.Classes
         private const string LogDataPostfix = @"\LogData";
         private const string TemplatesSourcesPostfix = @"\Templates\Sources";
         private const string TemplatesRuntimePostfix = @"\Templates\Runtime";
+        public const string WorkspaceDataName = "DEFINITION";
         /// <summary>
         /// Target disk location where the workspace is located if type of connection is disk-connection, overwise contains special cymbol for replacement on server-side
         /// </summary>
@@ -70,6 +77,26 @@ namespace Incas.Core.Classes
         /// </summary>
         public string WorkspaceName { get; private set; }
 
+        #region Service Classes
+        private User currentUser { get; set; }
+        internal User CurrentUser 
+        { 
+            get
+            {
+                return this.currentUser;
+            }
+            set
+            {
+                this.currentUser = value;
+                this.CurrentGroup = value.GetGroup();
+            }
+        }
+        internal Group CurrentGroup { get; private set; }  
+        #endregion
+
+        private Guid definitionId { get; set; }
+        private WorkspacePrimarySettings definitionCache { get; set; }
+
         private DateTime LastGarbageCollect {  get; set; }
 
         internal Workspace(string workspacePath)
@@ -77,6 +104,53 @@ namespace Incas.Core.Classes
             this.CommonPath = workspacePath;
             this.CalculateFoldersPaths();
             this.SetDirs();
+        }
+        internal WorkspacePrimarySettings GetDefinition()
+        {
+            if (this.definitionCache is null)
+            {                
+                try
+                {
+                    using Parameter par = ProgramState.GetParameter(ParameterType.WORKSPACE, WorkspaceDataName, "", false);
+                    this.definitionId = par.Id;
+                    return JsonConvert.DeserializeObject<WorkspacePrimarySettings>(par.Value);
+                }
+                catch (Exception ex)
+                {
+                    throw new BadWorkspaceException("Определение рабочего пространства повреждено: не удалось распаковать параметр [WORKSPACE:DEFINITION] рабочего пространства.\n" + ex.Message);
+                }
+            }
+            return this.definitionCache;
+        }
+        internal void UpdateDefinition(WorkspacePrimarySettings settings)
+        {
+            Parameter p = new(this.definitionId)
+            {
+                Value = JsonConvert.SerializeObject(settings)
+            };
+            p.UpdateValue();
+        }
+        internal async void InitializeDefinition(CreateWorkspace data)
+        {
+            await Task.Run(() =>
+            {
+                ProgramStatusBar.ShowLoadingWindow("Создание рабочего пространства", "Это займет немного времени");
+                DatabaseManager.InitializeService();
+                this.definitionCache = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = data.WorkspaceName
+                };
+                Objects.ServiceClasses.Components.InitializationManager.RunInitialization(this.definitionCache, data.Password);
+                Parameter p = new()
+                {
+                    Type = ParameterType.WORKSPACE,
+                    Name = Workspace.WorkspaceDataName,
+                    Value = JsonConvert.SerializeObject(this.definitionCache)
+                };
+                p.CreateParameter();             
+            });
+            ProgramStatusBar.HideLoadingWindow();
         }
         private void CalculateFoldersPaths()
         {

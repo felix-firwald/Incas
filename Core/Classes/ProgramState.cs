@@ -3,9 +3,7 @@ using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
 using Incas.Objects.ViewModels;
-using Incas.Users.Models;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,7 +13,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 
 namespace Incas.Core.Classes
 {
@@ -41,10 +38,7 @@ namespace Incas.Core.Classes
 
         #endregion
 
-        #region User
-        internal static User CurrentUser { get; set; }
-        internal static UserParameters CurrentUserParameters { get; set; }
-        #endregion
+        
         internal static MainWindowViewModel MainWindowViewModel { get; set; }
         internal static MainWindow MainWindow { get; set; }
         internal static CustomDatabaseViewModel DatabasePage { get; set; }
@@ -118,24 +112,13 @@ namespace Incas.Core.Classes
         {
             return $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{path}.db";
         }
-        internal static void ClearDataForRestart()
-        {
-            CurrentUser = null;
-            Permission.CurrentUserPermission = PermissionGroup.Operator;
-        }
         internal static bool CheckSensitive()
         {
-            return CurrentUser != null && CurrentUserParameters != null;
+            return CurrentWorkspace != null;
         }
         #endregion
 
         #region ComputerId
-        internal static string GenerateSlug(int len, string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-        {
-            Random random = new();
-            return new string(Enumerable.Repeat(chars, len)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
         private static bool IsRegistryContainsData()
         {
             return Registry.CurrentUser.GetSubKeyNames().Contains("Incubator");
@@ -169,94 +152,15 @@ namespace Incas.Core.Classes
         #region Incubator
         internal static void InitWorkspace(CreateWorkspace data)
         {
-            int recursion = 0;
-            void Create()
-            {
-                try
-                {
-                    recursion++;
-                    WorkspacePrimarySettings wps = new()
-                    {
-                        Name = data.WorkspaceName,
-                        IsLocked = false
-                    };
-                    using (Parameter par = new())
-                    {
-                        par.type = ParameterType.WORKSPACE;
-                        par.name = "ws_data";
-                        par.value = JsonConvert.SerializeObject(wps);
-                        par.CreateParameter();
-                    }
-
-                    DialogsManager.ShowInfoDialog("Рабочее пространство успешно создано.");
-
-                    using User user = new();
-                    user.username = "admin";
-                    user.post = "Администратор рабочего пространства";
-                    user.surname = "Администратор";
-                    user.fullname = "Администратор";
-                    UserParameters up = new()
-                    {
-                        Permission_group = PermissionGroup.Admin,
-                        Password = data.Password,
-                    };
-                    user.SaveParametersContext(up);
-                    user.AddUser();
-                }
-                catch (IOException)
-                {
-                    Thread.Sleep(50);
-                    if (recursion < 20)
-                    {
-                        Create();
-                    }
-                    else
-                    {
-                        DialogsManager.ShowErrorDialog("Нечто блокирует файл базы данных.");
-                    }
-                }
-            }
-
             DialogsManager.ShowWaitCursor();
             Permission.CurrentUserPermission = PermissionGroup.Admin;
-            WorkspacePaths.SetCommonPath(data.Path, false);
-            if (CreateTablesInDatabase())
-            {
-                DialogsManager.ShowWaitCursor(false);
-                Create();
-                RegistryData.SetWorkspacePath(data.WorkspaceName, data.Path);
-            }
-        }
-        private static WorkspacePrimarySettings GetWorkspaceSettings()
-        {
-            using Parameter par = GetParameter(ParameterType.WORKSPACE, "ws_data", "", false);
-            try
-            {
-                return JsonConvert.DeserializeObject<WorkspacePrimarySettings>(par.value);
-            }
-            catch
-            {
-                DialogsManager.ShowErrorDialog("Первичные данные о рабочем пространстве повреждены.", "Критическая ошибка");
-                return new();
-            }
-        }
-        internal static string GetWorkspaceName()
-        {
-            return GetWorkspaceSettings().Name;
-        }
-        internal static bool IsWorkspaceLocked()
-        {
-            return GetWorkspaceSettings().IsLocked;
+            ProgramState.CurrentWorkspace = new(data.Path);
+            ProgramState.CurrentWorkspace.InitializeDefinition(data);
+            RegistryData.SetWorkspacePath(data.WorkspaceName, data.Path);
+            DialogsManager.ShowWaitCursor(false);
         }
 
         #endregion
-        internal static void CheckLocked()
-        {
-            if (IsWorkspaceLocked() && Permission.CurrentUserPermission != PermissionGroup.Admin)
-            {
-                throw new LockedException();
-            }
-        }
         internal static void PlaySound(string path)
         {
             try
@@ -291,23 +195,6 @@ namespace Incas.Core.Classes
         internal static void OpenFolder(string path)
         {
             System.Diagnostics.Process.Start(Environment.GetEnvironmentVariable("WINDIR") + @"\explorer.exe", path);
-        }
-        private static async void RemoveFilesOlderThan(string folder, DateTime time)
-        {
-            await System.Threading.Tasks.Task.Run(() =>
-            {
-                foreach (string item in Directory.GetFiles(folder))
-                {
-                    if (File.GetCreationTime(item) < time)
-                    {
-                        try
-                        {
-                            File.Delete(item);
-                        }
-                        catch { }
-                    }
-                }
-            });
         }
         internal static void CollectGarbage()
         {

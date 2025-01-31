@@ -150,7 +150,7 @@ namespace Incas.Objects.Views.Windows
         {
             BindingData data = new()
             {
-                Class = this.vm.Source.identifier,
+                Class = this.vm.Source.Id,
                 Field = t.vm.Source.Id
             };
             if (data.Class == Guid.Empty || data.Field == Guid.Empty)
@@ -480,7 +480,7 @@ namespace Incas.Objects.Views.Windows
 
         private void GenerateBaseScriptClick(object sender, RoutedEventArgs e)
         {
-            string result = $"class {this.vm.Source.name.Replace(' ', '_')}:\n\tdef __init__(self, ";
+            string result = $"class {this.vm.Source.Name.Replace(' ', '_')}:\n\tdef __init__(self, ";
             List<string> fieldsNames = new();
             string imports = "";
             string fieldsAllocation = "";

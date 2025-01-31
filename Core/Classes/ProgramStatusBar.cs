@@ -1,23 +1,31 @@
 ﻿using Incas.Core.Views.Controls;
+using Incas.Core.Views.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
 
 namespace Incas.Core.Classes
 {
     public static class ProgramStatusBar
     {
+        private static DialogLoading DialogLoading { get; set; }
         private static LoadingBox LoadingBox { get; set; }
         private static void InitializeLoadingBox()
         {
             LoadingBox = new();
             ProgramState.MainWindow.PlaceStatusBar(LoadingBox);
+        }
+        private static void InitializeLoadingWindow(string name, string description)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                DialogLoading = new(name, description);
+                DialogLoading.Show();
+            });
+        }
+        public static void ShowLoadingWindow(string name, string description)
+        {
+            InitializeLoadingWindow(name, description);          
         }
         public static void SetText(string text)
         {
@@ -32,10 +40,22 @@ namespace Incas.Core.Classes
             }));
             Thread.Sleep(10);
         }
+        public static void HideLoadingWindow()
+        {
+            if (DialogLoading is null)
+            {
+                return;
+            }
+            DialogLoading.Dispatcher.Invoke(new Action(() =>
+            {
+                DialogLoading.Close();
+                DialogLoading = null;
+            }));
+        }
         public static void Hide()
         {
             if (ProgramState.MainWindow is null)
-            {
+            {                
                 return;
             }
             ProgramState.MainWindow.Dispatcher.Invoke(new Action(() =>

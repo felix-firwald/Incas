@@ -12,6 +12,6 @@ namespace Incas.Objects.Interfaces
     {
         public List<IObject> GetObjects();
         public void SetObjects(List<IObject> objs);
-        public void ApplyObjectsBy(Class cl, Guid obj);
+        public void ApplyObjectsBy(IClass cl, Guid obj);
     }
 }

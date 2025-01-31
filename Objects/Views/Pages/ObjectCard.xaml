@@ -13,19 +13,29 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="5*"/>
             </Grid.RowDefinitions>
-            <Border x:Name="TitleBorder" Background="{DynamicResource BlackInfra}" Margin="-5" CornerRadius="0,0,12,12">
-                <StackPanel Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" >
-                    <TextBox x:Name="ObjectName" Style="{StaticResource TextBoxEmpty}" Cursor="Hand" Margin="10" Text="(не выбран)" IsReadOnly="True" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource DarkYellow}" TextWrapping="WrapWithOverflow" FontSize="14" MaxWidth="250" FontFamily="JetBrains Mono">
-                        <TextBox.ContextMenu>
-                            <ContextMenu>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <Border x:Name="TitleBorder" Background="{DynamicResource BlackInfra}" Margin="-5,-5,-5,-5" CornerRadius="0,0,12,12" Grid.ColumnSpan="3">
+                    <StackPanel Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" >
+                        <TextBox x:Name="ObjectName" Style="{StaticResource TextBoxEmpty}" Cursor="Hand" Margin="10" Text="(не выбран)" IsReadOnly="True" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource DarkYellow}" TextWrapping="WrapWithOverflow" FontSize="14" MaxWidth="250" FontFamily="JetBrains Mono">
+                            <TextBox.ContextMenu>
+                                <ContextMenu>
 
-                            </ContextMenu>
-                        </TextBox.ContextMenu>
-                    </TextBox>
-                </StackPanel>
-            </Border>
-            <fa:FontAwesome x:Name="EditIcon" Style="{StaticResource IconButton}" Icon="Pencil" ToolTip="Открыть окно редактирования объекта" MouseDown="FontAwesome_MouseDown" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-            <Border x:Name="StatusBorder" Visibility="Visible" Margin="0,10,0,0" Grid.Row="1">
+                                </ContextMenu>
+                            </TextBox.ContextMenu>
+                        </TextBox>
+                    </StackPanel>
+                </Border>
+                <fa:FontAwesome x:Name="LinkIcon" Style="{StaticResource IconButton}" Icon="Link" ToolTip="Скопировать ссылку на объект"  HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseDown="GetObjectReferenceClick"/>
+
+                <fa:FontAwesome x:Name="EditIcon" Style="{StaticResource IconButton}" Icon="Pencil" ToolTip="Открыть окно редактирования объекта" MouseDown="FontAwesome_MouseDown" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="2"/>
+
+            </Grid>
+            <Border x:Name="StatusBorder" Visibility="Collapsed" Margin="0,10,0,0" Grid.Row="1">
                 <StackPanel VerticalAlignment="Center" Grid.Column="1"  >
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5" VerticalAlignment="Center">
                         <fa:FontAwesome x:Name="StatusBackButton" Style="{StaticResource IconButton}" Icon="ArrowLeft" ToolTip="Переместить статус на предыдущую позицию" MouseDown="GoBackStatusClick" VerticalAlignment="Top" />

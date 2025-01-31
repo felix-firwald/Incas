@@ -7,14 +7,6 @@ namespace Incas.Core.Classes
     public class Service
     {
         public Service() { }
-        public static string GetUserUsername()
-        {
-            return ProgramState.CurrentUser.username;
-        }
-        public static string GetUserFullname()
-        {
-            return ProgramState.CurrentUser.fullname;
-        }
         public static void ShowInfoDialog(string message, string title)
         {
             DialogsManager.ShowInfoDialog(message, title);

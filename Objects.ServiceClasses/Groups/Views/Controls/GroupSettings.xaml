@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="Incas.Objects.ServiceClasses.Groups.Views.Controls.GroupSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.Objects.ServiceClasses.Groups.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="850" d:DesignWidth="600" Background="{StaticResource Dark}">
+    <StackPanel>
+        <GroupBox Style="{StaticResource GroupBoxMini}" Header="ОБЩИЕ НАСТРОЙКИ" IsEnabled="{Binding GroupEditable}">
+            <StackPanel>
+                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GeneralSettingsEditing}" Content="ИЗМЕНЕНИЕ РАБОЧЕГО ПРОСТРАНСТВА" ToolTip="Могут ли пользователи этой группы вносить изменения в основные настройки рабочего пространства"/>
+                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding DefaultPermissionType}" Content="РАЗРЕШЕНО ВСЕ, ЧТО ЯВНО НЕ ЗАПРЕЩЕНО" ToolTip="Если да: отсутствие настройки к классу будет трактоваться INCAS как полный доступ, если нет: отсутствие настройки к классу будет трактоваться INCAS как полный запрет на доступ"/>
+                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding CreatingClasses}" Content="СОЗДАНИЕ КЛАССОВ" ToolTip="Могут ли пользователи этой группы создавать классы"/>
+                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UpdatingClasses}" Content="РЕДАКТИРОВАНИЕ КЛАССОВ" ToolTip="Могут ли пользователи этой группы редактировать существующие классы"/>
+                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding RemovingClasses}" Content="УДАЛЕНИЕ КЛАССОВ" ToolTip="Могут ли пользователи этой группы удалять существующие классы"/>
+            </StackPanel>
+        </GroupBox>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Style="{StaticResource GroupBoxMini}" Header="ГРУППЫ" IsEnabled="{Binding GroupEditable}">
+                <StackPanel>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsCreateOperations}" Content="СОЗДАНИЕ" ToolTip="Могут ли пользователи этой группы создавать новые группы"/>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsViewOperations}" Content="ПРОСМОТР" ToolTip="Могут ли пользователи этой группы просматривать список групп"/>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsReadOperations}" Content="ЧТЕНИЕ" ToolTip="Могут ли пользователи этой группы просматривать группы через интерфейс карточки и редактора"/>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsConfidentialAccess}" Content="ЧТЕНИЕ КОНФИДЕНЦИАЛЬНЫХ ПОЛЕЙ" ToolTip="Могут ли пользователи этой группы просматривать поля, обозначенные как конфиденциальные (если такие есть)"/>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsUpdateOperations}" Content="ИЗМЕНЕНИЕ" ToolTip="Могут ли пользователи этой группы изменять существующие группы"/>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsDeleteOperations}" Content="УДАЛЕНИЕ" ToolTip="Могут ли пользователи этой группы удалять существующие группы"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Style="{StaticResource GroupBoxMini}" Header="ПОЛЬЗОВАТЕЛИ" IsEnabled="{Binding GroupEditable}" Grid.Column="1">
+                <StackPanel>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersCreateOperations}" Content="СОЗДАНИЕ" ToolTip="Могут ли пользователи этой группы создавать новых пользователей"/>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersViewOperations}" Content="ПРОСМОТР" ToolTip="Могут ли пользователи этой группы просматривать список пользователей"/>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersReadOperations}" Content="ЧТЕНИЕ" ToolTip="Могут ли пользователи этой группы просматривать пользователей через интерфейс карточки и редактора"/>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersConfidentialAccess}" Content="ЧТЕНИЕ КОНФИДЕНЦИАЛЬНЫХ ПОЛЕЙ" ToolTip="Могут ли пользователи этой группы просматривать поля, обозначенные как конфиденциальные (если такие есть). Примечание: применяется также в отношении пароля."/>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersUpdateOperations}" Content="ИЗМЕНЕНИЕ" ToolTip="Могут ли пользователи этой группы изменять существующих пользователей"/>
+                    <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersDeleteOperations}" Content="УДАЛЕНИЕ" ToolTip="Могут ли пользователи этой группы удалять существующих пользователей"/>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+        <DataGrid Style="{StaticResource DataGridMain}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Наименование класса"/>
+                <DataGridCheckBoxColumn Header="Создание"/>
+                <DataGridCheckBoxColumn Header="Просмотр"/>
+                <DataGridCheckBoxColumn Header="Чтение"/>
+                <DataGridCheckBoxColumn Header="Чтение конфиденциальных полей"/>
+                <DataGridCheckBoxColumn Header="Изменение"/>
+                <DataGridCheckBoxColumn Header="Удаление"/>
+            </DataGrid.Columns>
+            
+        </DataGrid>
+    </StackPanel>
+</UserControl>

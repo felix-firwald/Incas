@@ -17,9 +17,9 @@ namespace Incas.Objects.Views.Pages
     {
         private const string EditedColumn = "edited";
         public Models.Field Field { get; set; }
-        public Models.Class Class { get; set; }
+        public IClass Class { get; set; }
         public FieldFiller Filler { get; set; }
-        public ObjectsCorrector(Models.Class cl, List<Guid> list, Models.Field field)
+        public ObjectsCorrector(IClass cl, List<Guid> list, Models.Field field)
         {
             this.InitializeComponent();
             this.Field = field;

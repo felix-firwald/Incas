@@ -2,6 +2,7 @@
 using Incas.Core.Views.Windows;
 using Incas.Objects.Components;
 using Incas.Objects.Engine;
+using Incas.Objects.Models;
 using System;
 using System.IO;
 using System.Windows.Controls;
@@ -66,7 +67,7 @@ namespace Incas.Objects.Views.Controls
         {
             try
             {
-                Processor.RemoveObjectComment(new(this.Comment.Class), this.Comment);
+                Processor.RemoveObjectComment(new Class(this.Comment.Class), this.Comment);
                 File.Delete(Processor.GetPathToAttachmentsFolder(this.Comment.Class, this.Comment.TargetObject) + this.Comment.Data);
                 this.Visibility = System.Windows.Visibility.Collapsed;
             }

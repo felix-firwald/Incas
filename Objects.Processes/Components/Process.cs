@@ -11,6 +11,7 @@ namespace Incas.Objects.Processes.Components
 {
     public sealed class Process : IObject, IHasAuthor, IHasCreationDate, IHasPreset, ITerminable
     {
+        public IClass Class { get; set; }
         public Guid Id { get; set; }
         public string Name { get; set; }
         public List<FieldData> Fields { get; set; }
@@ -25,9 +26,15 @@ namespace Incas.Objects.Processes.Components
         public List<Guid> Contributors { get; set; }
         public Guid Preset { get; set; }
 
+        public Process(IClass @class)
+        {
+            this.Class = @class;
+            this.Data = new();
+        }
+
         public IObject Copy()
         {
-            Process process = new()
+            Process process = new(this.Class)
             {
                 Fields = this.Fields,
                 OpenDate = this.OpenDate,
@@ -52,7 +59,7 @@ namespace Incas.Objects.Processes.Components
 
         public void Initialize()
         {
-            this.AuthorId = ProgramState.CurrentUser.id;
+            this.AuthorId = ProgramState.CurrentWorkspace.CurrentUser.Id;
             this.CreationDate = DateTime.Now;
         }
 

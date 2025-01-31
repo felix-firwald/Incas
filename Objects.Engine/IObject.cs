@@ -9,6 +9,11 @@ namespace Incas.Objects.Engine
     public interface IObject
     {
         /// <summary>
+        /// Class of object
+        /// </summary>
+        public IClass Class { get; set; }
+
+        /// <summary>
         /// Unique identifier of object stored in <see cref="Helpers.IdField"/> column
         /// </summary>
         public Guid Id { get; set; }

@@ -10,6 +10,7 @@ namespace Incas.Objects.Documents.Components
 {
     public sealed class Document : IObject, IHasAuthor, IHasCreationDate, IHasPreset, ITerminable
     {
+        public IClass Class { get; set; }
         public Guid Id { get; set; }
         public Guid AuthorId { get; set; }
         public DateTime CreationDate { get; set; }
@@ -21,9 +22,14 @@ namespace Incas.Objects.Documents.Components
         public object Data { get; set; }
         public Guid Preset { get; set; }
 
+        public Document(IClass @class)
+        {
+            this.Class = @class;
+        }
+
         public IObject Copy()
         {
-            Document doc = new()
+            Document doc = new(this.Class)
             {
                 Fields = this.Fields,
                 Preset = this.Preset
@@ -43,7 +49,7 @@ namespace Incas.Objects.Documents.Components
 
         public void Initialize()
         {
-            this.AuthorId = ProgramState.CurrentUser.id;
+            this.AuthorId = ProgramState.CurrentWorkspace.CurrentUser.Id;
             this.CreationDate = DateTime.Now;
         }
 

@@ -19,12 +19,12 @@ namespace Incas.Objects.Views.Windows
     /// </summary>
     public partial class AddPreset : Window
     {
-        public Class TargetClass { get; set; }
+        public IClass TargetClass { get; set; }
         public ClassData ClassData { get; set; }
         public Preset Preset { get; set; }
         public delegate void UpdateRequested();
         public event UpdateRequested OnUpdateRequested;
-        public AddPreset(Class cl)
+        public AddPreset(IClass cl)
         {
             this.InitializeComponent();
             this.TargetClass = cl;
@@ -32,7 +32,7 @@ namespace Incas.Objects.Views.Windows
             this.Preset = new();
             this.InitializeCheckBox(null);
         }
-        public AddPreset(Class cl, Preset preset)
+        public AddPreset(IClass cl, Preset preset)
         {
             this.InitializeComponent();
             this.TargetClass = cl;

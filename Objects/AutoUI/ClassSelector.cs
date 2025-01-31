@@ -24,7 +24,7 @@ namespace Incas.Objects.AutoUI
             using Class main = new();
             foreach (Class cl in main.GetAllClasses())
             {
-                this.ComboSelector.Pairs.Add(cl.identifier, cl.name);
+                this.ComboSelector.Pairs.Add(cl.Id, cl.Name);
             }
         }
 

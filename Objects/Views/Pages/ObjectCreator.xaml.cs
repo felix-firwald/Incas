@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -26,7 +27,7 @@ namespace Incas.Objects.Views.Pages
     public partial class ObjectCreator : System.Windows.Controls.UserControl, ICollapsible
     {
         public IObject Object { get; set; }
-        public Class Class { get; set; }
+        public IClass Class { get; set; }
         public ClassData ClassData { get; set; }
         public Preset Preset { get; set; }
         public delegate bool ObjectCreatorData(ObjectCreator creator);
@@ -37,20 +38,23 @@ namespace Incas.Objects.Views.Pages
         public event ObjectCreatorData OnRemoveRequested;
         private bool Locked = false;
         private List<IFillerBase> fillers;
-        public ObjectCreator(Class source, Preset preset, IObject obj = null)
+        private IServiceFieldFiller serviceFiller;
+        public ObjectCreator(IClass source, Preset preset, IObject obj = null)
         {
             this.InitializeComponent();
             this.Class = source;
             this.ClassData = source.GetClassData();
             this.Preset = preset;
-            this.FillContentPanel();
+            this.Object = obj;
             if (obj != null)
             {
+                this.FillContentPanel();
                 this.ApplyObject(obj);
             }
             else
             {
-                this.Object = Helpers.CreateObjectByType(this.ClassData);
+                this.Object = Helpers.CreateObjectByType(source);
+                this.FillContentPanel();
                 if (preset is not null)
                 {
                     IHasPreset objWithPreset = this.Object as IHasPreset;
@@ -76,7 +80,7 @@ namespace Incas.Objects.Views.Pages
             this.InitializeComponent();
             this.ClassData = data;
             this.FillContentPanel();
-            this.Object = Helpers.CreateObjectByType(data);
+            this.Object = Helpers.CreateObjectByType(new Class());
             this.DocumentTools.Visibility = Visibility.Collapsed;
             this.RemoveButton.Visibility = Visibility.Collapsed;
         }
@@ -96,10 +100,6 @@ namespace Incas.Objects.Views.Pages
         {
             if (this.Object.Id != Guid.Empty && this.ClassData.EditByAuthorOnly == true && !Helpers.CheckAuthor(this.Object))
             {
-                if (ProgramState.CurrentUserParameters.Permission_group == PermissionGroup.Admin)
-                {
-                    return;
-                }
                 this.Locked = true;
                 this.ContentPanel.IsEnabled = false;
                 System.Windows.Controls.Label label = new()
@@ -115,6 +115,11 @@ namespace Incas.Objects.Views.Pages
         {
             this.fillers = new();
             bool presetInUse = this.Preset is null? false: true;
+            this.serviceFiller = Components.ServiceExtensionFieldsManager.GetFillerByType(this.Object);
+            if (this.serviceFiller != null)
+            {
+                this.ContentPanel.Children.Add((UserControl)this.serviceFiller);
+            }
             foreach (Objects.Models.Field f in this.ClassData.Fields)
             {
                 if (presetInUse)
@@ -174,7 +179,7 @@ namespace Incas.Objects.Views.Pages
                     string scriptResult = this.ClassData.Script;
                     ScriptEngine engine = Python.CreateEngine();
                     ScriptScope scope = engine.CreateScope();
-                    scriptResult += $"\nmain = {this.Class.name.Replace(" ", "_")}(";
+                    scriptResult += $"\nmain = {this.Class.Name.Replace(" ", "_")}(";
                     List<string> args = new();
                     foreach (KeyValuePair<Models.Field, object> fd in dict)
                     {
@@ -220,7 +225,7 @@ namespace Incas.Objects.Views.Pages
         {
             BindingData bd = new()
             {
-                Class = this.Class.identifier,
+                Class = this.Class.Id,
                 Field = sender.Field.Id
             };
             DatabaseSelection ds = new(bd);
@@ -260,11 +265,10 @@ namespace Incas.Objects.Views.Pages
         }
         public void ApplyObject(IObject obj)
         {
-            this.Object = obj;
             this.ObjectName.Text = obj.Name;
             foreach (Components.FieldData data in obj.Fields)
             {
-                foreach (IFillerBase filler in this.ContentPanel.Children)
+                foreach (IFillerBase filler in this.fillers)
                 {
                     if (filler.Field.Id == data.ClassField.Id)
                     {                     
@@ -272,14 +276,7 @@ namespace Incas.Objects.Views.Pages
                         break;
                     }
                 }
-            }
-            foreach (IFillerBase filler in this.ContentPanel.Children)
-            {
-                if (filler.Field.Type == FieldType.Generator)
-                {
-                    ((IGeneratorFiller)filler).ApplyObjectsBy(this.Class, obj.Id);
-                }
-            }
+            }      
         }
         public Dictionary<Models.Field, object> PullObjectForScript()
         {
@@ -311,8 +308,12 @@ namespace Incas.Objects.Views.Pages
             if (this.Preset is not null)
             {
                 this.Object.Fields.AddRange(this.Preset.GetPresettingData());
-            }            
-            foreach (IFillerBase tf in this.ContentPanel.Children)
+            }
+            if (this.serviceFiller is not null)
+            {
+                this.Object = this.serviceFiller.GetResult();
+            }
+            foreach (IFillerBase tf in this.fillers)
             {
                 Components.FieldData data = new()
                 {
@@ -428,11 +429,11 @@ namespace Incas.Objects.Views.Pages
             }
             if (string.IsNullOrWhiteSpace(name) && string.IsNullOrEmpty(this.ObjectName.Text))
             {
-                name = "Объект от " + DateTime.Now;
+                name = "Объект от " + DateTime.Now.ToString("dd.MM.yyyy");
                 this.ObjectName.Text = name;
                 return name;
             }
-            foreach (IFillerBase tf in this.ContentPanel.Children)
+            foreach (IFillerBase tf in this.fillers)
             {
                 switch (tf.Field.Type)
                 {
@@ -510,7 +511,7 @@ namespace Incas.Objects.Views.Pages
                     ProgramStatusBar.SetText("Рендеринг документа...");
                     DialogsManager.ShowWaitCursor(true);
                     string name = await this.GenerateDocument(this.ClassData.Templates[1], path);
-                    DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.name})", WordTemplator.ReplaceToPDF(name), true);
+                    DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.Name})", WordTemplator.ReplaceToPDF(name), true);
 
                 }
                 else if (this.ClassData.Templates?.Count > 1)
@@ -525,7 +526,7 @@ namespace Incas.Objects.Views.Pages
                         }
                         ProgramStatusBar.SetText("Рендеринг документа...");
                         string name = await this.GenerateDocument(ts.GetSelectedPath(), path);
-                        DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.name})", WordTemplator.ReplaceToPDF(name), true);
+                        DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.Name})", WordTemplator.ReplaceToPDF(name), true);
                     }
                 }
             }

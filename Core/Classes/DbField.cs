@@ -1,14 +1,15 @@
 ﻿namespace Incas.Core.Classes
 {
-    public struct Field
+    public struct DbField
     {
         public string Name;
-        public string Type;
+        public string Type = "TEXT";
         public bool NotNull;
+        public bool Unique;
         public string FKTable;
         public string FKField;
         public OnDeleteUpdate Constraint;
-        public Field(string name, string type, bool notnull = false, string fkt = null, string fkf = "id", OnDeleteUpdate constraint = OnDeleteUpdate.CASCADE)
+        public DbField(string name, string type, bool notnull = false, string fkt = null, string fkf = "id", OnDeleteUpdate constraint = OnDeleteUpdate.CASCADE)
         {
             this.Name = name;
             this.Type = type;
@@ -34,9 +35,13 @@
         {
             return !string.IsNullOrEmpty(this.FKTable) ? $" REFERENCES {this.FKTable} ({this.FKField})" : "";
         }
+        private string GetUnique()
+        {
+            return this.Unique ? " UNIQUE" : "";
+        }
         public override string ToString()
         {
-            return $"{this.Name} {this.Type}{this.GetFK()}{this.GetNotNull()}";
+            return $"[{this.Name}] {this.Type} {this.GetUnique()} {this.GetFK()}{this.GetNotNull()}";
         }
     }
 }

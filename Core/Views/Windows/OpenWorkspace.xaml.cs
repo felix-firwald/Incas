@@ -31,35 +31,20 @@ namespace Incas.Core.Views.Windows
             }
             else
             {
-                WorkspacePaths.SetCommonPath(this.cpath.Text);
-                if (Directory.Exists(this.cpath.Text))
-                {
-                    this.TryAuthenticate();
-                }
+                this.TryAuthenticate();
             }
         }
 
         private void TryAuthenticate()
         {
-            if (ProgramState.CurrentUser != null)
+            if (ProgramState.CurrentWorkspace.CurrentUser != null)
             {
                 DialogsManager.ShowWaitCursor();
-                ProgramState.CurrentUserParameters = ProgramState.CurrentUser.GetParametersContext();
-                if (ProgramState.CurrentUserParameters.IsRightPassword(this.pwd.Text))
+                if (ProgramState.CurrentWorkspace.CurrentUser.IsRightPassword(this.pwd.Text))
                 {
-                    Permission.CurrentUserPermission = ProgramState.CurrentUserParameters.Permission_group;
-                    if (Permission.CurrentUserPermission != PermissionGroup.Admin && ProgramState.IsWorkspaceLocked())
-                    {
-                        Locked l = new();
-                        l.ShowDialog();
-                        this.ShowDialog();
-                    }
-                    else
-                    {
-                        DialogsManager.ShowWaitCursor(false);
-                        this.DialogResult = true;
-                        this.Close();
-                    }
+                    DialogsManager.ShowWaitCursor(false);
+                    this.DialogResult = true;
+                    this.Close();
                 }
                 else
                 {

@@ -6,13 +6,13 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется посредством следующего 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // общие сведения об этой сборке.
-[assembly: AssemblyTitle("Incas Offline")]
-[assembly: AssemblyDescription("Программа для оптимизации офисных процессов")]
-[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyTitle("Incas 2")]
+[assembly: AssemblyDescription("Программа для оптимизации бизнес-процессов")]
+[assembly: AssemblyConfiguration("Release")]
 [assembly: AssemblyCompany("Firwald Technologies")]
-[assembly: AssemblyProduct("Incas Offline")]
-[assembly: AssemblyCopyright("Copyright © 2024 Firwald Technologies")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyProduct("Incas 2")]
+[assembly: AssemblyCopyright("Copyright © Firwald Technologies 2025")]
+[assembly: AssemblyTrademark("Incas")]
 [assembly: AssemblyCulture("")]
 
 // Параметр ComVisible со значением FALSE делает типы в сборке невидимыми 
@@ -30,5 +30,5 @@ using System.Runtime.InteropServices;
 //      Номер сборки
 //      Редакция
 //
-[assembly: AssemblyVersion("1.6.1.0")]
-[assembly: AssemblyFileVersion("1.6.1.0")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]

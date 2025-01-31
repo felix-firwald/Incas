@@ -39,10 +39,10 @@ namespace Incas.Objects.ViewModels
         }
         public string NameOfClass
         {
-            get => this.Source.name;
+            get => this.Source.Name;
             set
             {
-                this.Source.name = value
+                this.Source.Name = value
                     .Replace(":", "")
                     .Replace("#", "")
                     .Replace("$", "")
@@ -54,10 +54,10 @@ namespace Incas.Objects.ViewModels
         }
         public string CategoryOfClass
         {
-            get => this.Source.category;
+            get => this.Source.Category;
             set
             {
-                this.Source.category = value;
+                this.Source.Category = value;
                 this.OnPropertyChanged(nameof(this.CategoryOfClass));
             }
         }
@@ -86,15 +86,6 @@ namespace Incas.Objects.ViewModels
             {
                 this.SourceData.PresetsEnabled = value;
                 this.OnPropertyChanged(nameof(this.PresetsEnabled));
-            }
-        }
-        public bool Encrypt
-        {
-            get => this.SourceData.Encrypt;
-            set
-            {
-                this.SourceData.Encrypt = value;
-                this.OnPropertyChanged(nameof(this.Encrypt));
             }
         }
         public bool EditByAuthorOnly

@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource TextBlockMain}" Text="Обратные ссылки" VerticalAlignment="Center" Foreground="{DynamicResource GrayLight}" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow" Margin="5,0,0,0" FontSize="11"/>
         <TextBlock x:Name="FieldValue" Style="{StaticResource TextBlockMain}" Cursor="Hand" ToolTipService.InitialShowDelay="180" Text="нажать для просмотра" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryMain}" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow" MouseDown="FieldValue_MouseDown" FontSize="11"/>
-        <TextBlock x:Name="FieldValue2" Visibility="Collapsed" Style="{StaticResource TextBlockMain}" Cursor="Hand" ToolTipService.InitialShowDelay="180" Text="нажать, чтобы скрыть" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryMain}" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow" MouseDown="FieldValue_MouseDown"/>
+        <TextBlock x:Name="FieldValue2" Visibility="Collapsed" Style="{StaticResource TextBlockMain}" Cursor="Hand" ToolTipService.InitialShowDelay="180" Text="нажать, чтобы скрыть" FontSize="11" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryMain}" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow" MouseDown="FieldValue_MouseDown"/>
         <StackPanel x:Name="ContentPanel" Grid.Row="1" Grid.ColumnSpan="2">
             
         </StackPanel>

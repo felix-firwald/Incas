@@ -7,18 +7,40 @@ namespace Incas.Objects.Models
 {
     public class ClassData
     {
+        [JsonProperty("f")]
         public List<Field> Fields { get; set; }
+
+        [JsonProperty("nt")]
         public string NameTemplate { get; set; }
+
+        [JsonProperty("t")]
         public ClassType ClassType { get; set; }
+
+        [JsonProperty("card")]
         public bool ShowCard { get; set; }
+
+        [JsonProperty("pres")]
         public bool PresetsEnabled { get; set; }
+
+        [JsonProperty("rest")]
         public bool RestrictFullView { get; set; }
-        public bool Encrypt { get; set; }
+
+        [JsonProperty("aedit")]
         public bool EditByAuthorOnly { get; set; }
+
+        [JsonProperty("aover")]
         public bool AuthorOverrideEnabled { get; set; }
+
+        [JsonProperty("st")]
         public Dictionary<int, StatusData> Statuses { get; set; }
+
+        [JsonProperty("temp")]
         public Dictionary<int, TemplateData> Templates { get; set; }
+
+        [JsonProperty("ins")]
         public bool InsertTemplateName { get; set; }
+
+        [JsonProperty("pys")]
         public string Script { get; set; }
         public void AddStatus(StatusData data)
         {

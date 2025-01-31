@@ -14,9 +14,9 @@ namespace Incas.Objects.Views.Controls
         public delegate void PresetElementAction(PresetReference preset);
         public event PresetElementAction OnUpdateRequested;
         public event PresetElementAction OnViewRequested;
-        public Class ClassSource { get; set; }
+        public IClass ClassSource { get; set; }
         public PresetReference Preset { get; set; }
-        public PresetElement(Class source, PresetReference preset)
+        public PresetElement(IClass source, PresetReference preset)
         {
             this.InitializeComponent();
             this.ClassSource = source;

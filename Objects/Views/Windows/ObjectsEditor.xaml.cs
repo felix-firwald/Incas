@@ -23,17 +23,17 @@ namespace Incas.Objects.Views.Windows
     /// </summary>
     public partial class ObjectsEditor : Window
     {
-        public readonly Class Class;
+        public readonly IClass Class;
         public readonly ClassData ClassData;
         public readonly Preset Preset;
         public delegate void UpdateRequested();
         public delegate void CreateRequested(Guid id);
         public event UpdateRequested OnUpdateRequested;
         public event CreateRequested OnSetNewObjectRequested;
-        public ObjectsEditor(Class source, Preset preset, List<IObject> objects = null)
+        public ObjectsEditor(IClass source, Preset preset, List<IObject> objects = null)
         {
             this.InitializeComponent();
-            this.Title = preset is null ? source.name : $"{source.name} — {preset.Name}";
+            this.Title = preset is null ? source.Name : $"{source.Name} — {preset.Name}";
             this.Class = source;         
             this.ClassData = source.GetClassData();
             this.RenderButton.Visibility = this.ClassData.ClassType == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
@@ -52,10 +52,10 @@ namespace Incas.Objects.Views.Windows
             }
             DialogsManager.ShowWaitCursor(false);
         }
-        public ObjectsEditor(Class source, ClassData data) // dev
+        public ObjectsEditor(IClass source, ClassData data) // dev
         {
             this.InitializeComponent();
-            this.Title = "Режим предпросмотра: " + source.name;
+            this.Title = "Режим предпросмотра: " + source.Name;
             this.Class = source;
             this.ClassData = data;
             this.GenerateButton.IsEnabled = false;
@@ -89,8 +89,7 @@ namespace Incas.Objects.Views.Windows
         {
             if (obj is not null)
             {
-                IHasPreset objWithPreset = obj as IHasPreset;
-                if (objWithPreset != null)
+                if (obj is IHasPreset objWithPreset)
                 {
                     if ((this.Preset is null && objWithPreset.Preset != Guid.Empty) // в едиторе нет пресета а у объекта есть
                     || (this.Preset is not null && objWithPreset.Preset == Guid.Empty) // в едиторе есть пресет а у объекта нет
@@ -99,7 +98,7 @@ namespace Incas.Objects.Views.Windows
                         DialogsManager.ShowExclamationDialog($"Объект с наименованием \"{obj.Name}\" не будет добавлен в коллекцию редактирования, поскольку пресет, к которому он привязан, отличается от пресета первого объекта в списке.", "Редактирование ограничено");
                         return null;
                     }
-                }                        
+                }
             }
             ObjectCreator creator = new(this.Class, this.Preset, obj);
             creator.OnSaveRequested += this.Creator_OnSaveRequested;
@@ -214,7 +213,7 @@ namespace Incas.Objects.Views.Windows
                 string path = "";
                 if (DialogsManager.ShowFolderBrowserDialog(ref path))
                 {
-                    wb.SaveAs(path + $"\\{this.Class.name} {DateTime.Now.ToString("d")}.xlsx");
+                    wb.SaveAs(path + $"\\{this.Class.Name} {DateTime.Now.ToString("d")}.xlsx");
                     ProgramState.OpenFolder(path);
                 }
             }
@@ -303,12 +302,12 @@ namespace Incas.Objects.Views.Windows
                 DialogsManager.ShowExclamationDialog("Не найдены привязанные шаблоны к этому классу.", "Рендеринг невозможен");
                 return;
             }
-            string path = RegistryData.GetClassTemplatePrefferedPath(this.Class.identifier, templateFile.Name);
+            string path = RegistryData.GetClassTemplatePrefferedPath(this.Class.Id, templateFile.Name);
             if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
             {
                 try
                 {
-                    RegistryData.SetClassTemplatePrefferedPath(this.Class.identifier, templateFile.Name, path);
+                    RegistryData.SetClassTemplatePrefferedPath(this.Class.Id, templateFile.Name, path);
                     ProgramStatusBar.SetText("Выполняется рендеринг объектов...");
                     foreach (ObjectCreator c in this.ContentPanel.Children)
                     {                      

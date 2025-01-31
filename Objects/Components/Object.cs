@@ -8,21 +8,23 @@ namespace Incas.Objects.Components
 {
     public sealed class Object : IObject, IHasAuthor, IHasPreset // only for data models (simple objects)
     {
+        public IClass Class { get; set; }
         public Guid Id { get; set; }
         public Guid AuthorId { get; set; }
         public string Name { get; set; }
         public List<FieldData> Fields { get; set; }
-        public byte Status { get; set; }
         public bool Terminated { get; set; }
         public DateTime TerminatedDate { get; set; }
-        public Guid TargetClass { get; set; }
-        public Guid TargetObject { get; set; }
         public object Data { get; set; }
         public Guid Preset { get; set; }
 
+        public Object(IClass @class)
+        {
+            this.Class = @class;
+        }
         public IObject Copy()
         {
-            Object obj = new()
+            Object obj = new(this.Class)
             {
                 Fields = this.Fields,
                 Preset = this.Preset

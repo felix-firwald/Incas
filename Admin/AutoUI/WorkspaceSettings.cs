@@ -25,18 +25,12 @@ namespace Incas.Admin.AutoUI
         }
         public override void Load()
         {
-            this.param = ProgramState.GetParameter(ParameterType.WORKSPACE, "ws_data");
-            this.data = JsonConvert.DeserializeObject<WorkspacePrimarySettings>(this.param.value);
+            this.param = ProgramState.GetParameter(ParameterType.WORKSPACE, Workspace.WorkspaceDataName);
+            this.data = JsonConvert.DeserializeObject<WorkspacePrimarySettings>(this.param.Value);
         }
         public override void Save()
         {
-            WorkspacePrimarySettings wps = new()
-            {
-                Name = this.Name,
-                IsLocked = this.WorkspaceLocked
-            };
-            this.param.value = JsonConvert.SerializeObject(wps);
-            this.param.UpdateValue();
+            
         }
     }
 }

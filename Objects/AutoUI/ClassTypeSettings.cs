@@ -43,7 +43,7 @@ namespace Incas.Objects.AutoUI
             using Class cl = new();
             foreach (Class c in cl.GetAllClasses())
             {
-                if (c.name == this.Name)
+                if (c.Name == this.Name)
                 {
                     throw new DialogSimpleForm.Exceptions.SimpleFormFailed("Класс с таким именем уже существует.");
                 }

@@ -1,6 +1,5 @@
 ﻿using Incas.Core.Models;
 using Incas.Objects.Models;
-using Incas.Users.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -41,9 +40,6 @@ namespace Incas.Core.Classes
             };
             q
              .AddCustomRequest(GetParameterDefinition(atc))
-             .AddCustomRequest(GetUserDefinition(atc))
-             .AddCustomRequest(GetGroupDefinition(atc))
-             .AddCustomRequest(GetCommandDefinition(atc))
              .AddCustomRequest(GetClassesDefinition(atc))
              .ExecuteVoid();
             return true;
@@ -57,9 +53,6 @@ namespace Incas.Core.Classes
             }
             InitializeService(false);
             CheckFieldsInTable(typeof(Parameter), "Parameters");
-            CheckFieldsInTable(typeof(User), "Users");
-            CheckFieldsInTable(typeof(Group), "Groups");
-            CheckFieldsInTable(typeof(Command), "Commands");
             CheckFieldsInTable(typeof(Class), "Classes");
         }
 
@@ -98,35 +91,11 @@ namespace Incas.Core.Classes
         private static string GetParameterDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Parameter), "Parameters");
-            atc.SetNotNull("value", false);
             return atc.GetQueryText();
         }
         private static string GetClassesDefinition(AutoTableCreator atc)
         {
             atc.Initialize(typeof(Class), "Classes");
-            return atc.GetQueryText();
-        }
-
-        private static string GetUserDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(User), "Users");
-            atc.SetAsUnique("username");
-            atc.SetAsUnique("fullname");
-            return atc.GetQueryText();
-        }
-        private static string GetGroupDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Group), "Groups");
-            atc.SetAsUnique("Id");
-            return atc.GetQueryText();
-        }
-
-        private static string GetCommandDefinition(AutoTableCreator atc)
-        {
-            atc.Initialize(typeof(Command), "Commands");
-            atc.SetFK("database", "Databases", "path");
-            atc.SetNotNull("database", true);
-            atc.SetTextType("query");
             return atc.GetQueryText();
         }
         #endregion
@@ -167,17 +136,8 @@ namespace Incas.Core.Classes
                 };
                 switch (result[result.Length - 1].Trim())
                 {
-                    case "Groups":
-                        q.AddCustomRequest(GetGroupDefinition(atc));
-                        break;
                     case "Parameters":
                         q.AddCustomRequest(GetParameterDefinition(atc));
-                        break;
-                    case "Users":
-                        q.AddCustomRequest(GetParameterDefinition(atc));
-                        break;
-                    case "Commands":
-                        q.AddCustomRequest(GetCommandDefinition(atc));
                         break;
                     case "Classes":
                         q.AddCustomRequest(GetClassesDefinition(atc));

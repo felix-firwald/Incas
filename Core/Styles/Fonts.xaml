@@ -1,0 +1,5 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <FontFamily x:Key="DroidSans">pack://application:,,,/Static/Fonts/#Droid Sans</FontFamily>
+    <FontFamily x:Key="JetBrains">pack://application:,,,/Static/Fonts/#JetBrains Mono</FontFamily>
+</ResourceDictionary>

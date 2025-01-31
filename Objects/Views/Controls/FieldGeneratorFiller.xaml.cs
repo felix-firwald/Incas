@@ -65,7 +65,7 @@ namespace Incas.Objects.Views.Controls
                 this.AddObjectCreator(obj);
             }
         }
-        public void ApplyObjectsBy(Class cl, Guid obj)
+        public void ApplyObjectsBy(IClass cl, Guid obj)
         {
             //this.SetObjects(Processor.GetRelatedObjects(this.TargetClass, cl, obj));
         }

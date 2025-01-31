@@ -32,6 +32,7 @@ namespace Incas.Objects.AutoUI
                     case Components.FieldType.Text:
                     case Components.FieldType.Number:
                     case Components.FieldType.Date:
+                    case Components.FieldType.Relation:
                         this.Selector.Pairs.Add(field, field.Name);
                         break;
                 }               

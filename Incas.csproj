@@ -70,6 +70,8 @@
   <ItemGroup>
     <None Remove="Core\Views\Windows\Logo.png" />
     <None Remove="Static\Coding\IncasPython.xshd" />
+    <None Remove="Static\Fonts\DroidSans-Bold.ttf" />
+    <None Remove="Static\Fonts\DroidSans.ttf" />
     <None Remove="Static\Fonts\RobotoMono-Bold.ttf" />
     <None Remove="Static\Fonts\RobotoMono-BoldItalic.ttf" />
     <None Remove="Static\Fonts\RobotoMono-ExtraLight.ttf" />
@@ -86,13 +88,6 @@
     <None Remove="Static\Fonts\RobotoMono-ThinItalic.ttf" />
     <None Remove="Static\Fonts\Rubik-Italic.ttf" />
     <None Remove="Static\Fonts\Rubik.ttf" />
-    <None Remove="Static\Fonts\VelaSans-Bold.ttf" />
-    <None Remove="Static\Fonts\VelaSans-ExtraBold.ttf" />
-    <None Remove="Static\Fonts\VelaSans-ExtraLight.ttf" />
-    <None Remove="Static\Fonts\VelaSans-Light.ttf" />
-    <None Remove="Static\Fonts\VelaSans-Medium.ttf" />
-    <None Remove="Static\Fonts\VelaSans-Regular.ttf" />
-    <None Remove="Static\Fonts\VelaSans-SemiBold.ttf" />
     <None Remove="Static\Chicken.wav" />
     <None Remove="Static\Rooster.wav" />
     <None Remove="Static\UI-Attention.wav" />
@@ -200,67 +195,48 @@
     <EmbeddedResource Include="Static\Fonts\JetBrainsMonoNL-ThinItalic.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <Resource Include="Static\Fonts\DroidSans-Bold.ttf" />
+    <Resource Include="Static\Fonts\DroidSans.ttf" />
     <Resource Include="Static\Fonts\RobotoMono-Bold.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-BoldItalic.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-ExtraLight.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-ExtraLightItalic.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-Italic.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-Medium.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-MediumItalic.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-Regular.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-SemiBold.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-SemiBoldItalic.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-Thin.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\RobotoMono-ThinItalic.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\Rubik-Italic.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Static\Fonts\Rubik.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Static\Fonts\VelaSans-Bold.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Static\Fonts\VelaSans-ExtraBold.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Static\Fonts\VelaSans-ExtraLight.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Static\Fonts\VelaSans-Light.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Static\Fonts\VelaSans-Medium.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Static\Fonts\VelaSans-Regular.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Static\Fonts\VelaSans-SemiBold.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Core\Styles\Tile.png" />

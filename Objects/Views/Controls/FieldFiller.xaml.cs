@@ -4,6 +4,7 @@ using Incas.Objects.Components;
 using Incas.Objects.Engine;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Interfaces;
+using Incas.Objects.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -386,7 +387,7 @@ namespace Incas.Objects.Views.Controls
                 if (data.ClassField.Type == FieldType.Relation)
                 {
                     BindingData bd = data.ClassField.GetBindingData();
-                    IObject recurObj = Processor.GetObject(new(bd.Class), Guid.Parse(data.Value));
+                    IObject recurObj = Processor.GetObject(new Class(bd.Class), Guid.Parse(data.Value));
                     foreach (FieldData recdata in recurObj.Fields)
                     {
                         if (recdata.ClassField.Id == bd.Field)

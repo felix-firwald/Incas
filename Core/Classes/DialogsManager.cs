@@ -1,11 +1,6 @@
 ﻿using Incas.Core.Views.Windows;
 using Incas.Miniservices.Tasks.Views.Windows;
-using Incas.Objects.Components;
-using Incas.Objects.Views.Windows;
-using Incas.Users.Models;
-using Incas.Users.Views.Windows;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -210,21 +205,6 @@ namespace Incas.Core.Classes
                 d.ShowDialog();
             });
             return d.status;
-        }
-        public static bool ShowUserSelector(out Users.Models.User user)
-        {
-            UserSelector us = new();
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            {
-                us.ShowDialog();
-            });
-            if (us.Result == DialogStatus.Yes)
-            {
-                user = us.SelectedUser;
-                return true;
-            }
-            user = null;
-            return false;
         }
         public static void ShowWaitCursor(bool wait = true)
         {

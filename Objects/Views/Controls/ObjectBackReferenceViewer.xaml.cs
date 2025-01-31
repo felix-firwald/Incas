@@ -16,9 +16,9 @@ namespace Incas.Objects.Views.Controls
     public partial class ObjectBackReferenceViewer : UserControl, IObjectFieldViewer
     {
         private bool visible = false;
-        public Class Class { get; set; } // our class
+        public IClass Class { get; set; } // our class
         public Guid TargetObject { get; set; } // our object
-        public ObjectBackReferenceViewer(Class cl, Guid targetObject)
+        public ObjectBackReferenceViewer(IClass cl, Guid targetObject)
         {
             this.InitializeComponent();
             this.Class = cl;
@@ -40,14 +40,14 @@ namespace Incas.Objects.Views.Controls
                 this.FieldValue2.Visibility = Visibility.Visible;
                 this.FieldValue.Visibility = Visibility.Collapsed;
                 using Class cl = new();
-                List<Class> list = cl.FindBackReferences(this.Class.identifier);
+                List<Class> list = cl.FindBackReferences(this.Class.Id);
                 foreach (Class c in list)
                 {
                     Expander exp = new()
                     {
-                        Header = c.name,
+                        Header = c.Name,
                         Style = this.FindResource("ExpanderMain") as Style,
-                        Uid = c.identifier.ToString()
+                        Uid = c.Id.ToString()
                     };
                     exp.Expanded += this.Exp_Expanded;
                     this.ContentPanel.Children.Add(exp);
@@ -68,7 +68,7 @@ namespace Incas.Objects.Views.Controls
             DataTable dt = Processor.GetSimpleObjectsListWhereEqual(
                 back,
                 null,
-                back.GetClassData().FindFieldByBackReference(this.Class.identifier).VisibleName, // не находит
+                back.GetClassData().FindFieldByBackReference(this.Class.Id).VisibleName, // не находит
                 this.TargetObject.ToString());
             foreach (DataRow dr in dt.Rows)
             {

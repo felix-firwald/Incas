@@ -1,10 +1,8 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Miniservices.TextEditor.Views.Pages;
-using Incas.Server.AutoUI;
-using Incas.Users.Models;
+using Incas.Objects.AutoUI;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Incas.Core.ViewModels
@@ -21,6 +19,7 @@ namespace Incas.Core.ViewModels
         }
         private void SetCommands()
         {
+            this.FindObject = new Command(this.DoFindObject);
             this.OpenClipBoard = new Command(this.DoOpenClipBoard);
             this.OpenTasks = new Command(this.DoOpenTasks);
             this.OpenTextEditor = new Command(this.DoOpenTextEditor);
@@ -30,6 +29,7 @@ namespace Incas.Core.ViewModels
         }
 
         #region ICommands
+        public ICommand FindObject { get; private set; }
         public ICommand OpenClipBoard { get; private set; }
         public ICommand OpenTasks { get; private set; }
         public ICommand OpenTextEditor { get; private set; }
@@ -39,7 +39,11 @@ namespace Incas.Core.ViewModels
         public static RoutedCommand CopyToClipBoard2 = new("CopyToClipBoard", typeof(MainWindow), [new KeyGesture(Key.F2)]);
         #endregion
         #region Tools
-
+        public void DoFindObject(object parameter)
+        {
+            FindObjectByReference fo = new();
+            fo.ShowDialog("Найти объект по ссылке", Icon.Search);
+        }
         public void DoOpenClipBoard(object parameter)
         {
             DialogsManager.ShowClipboardManager();
@@ -84,40 +88,16 @@ namespace Incas.Core.ViewModels
 
         public string Surname
         {
-            get => ProgramState.CurrentUser.surname;
-            set
-            {
-                if (ProgramState.CurrentUser.surname != value)
-                {
-                    ProgramState.CurrentUser.surname = value;
-                    this.OnPropertyChanged(nameof(this.Surname));
-                }
-            }
+            get => "ProgramState.CurrentUser.surname";
         }
         public string SecondName
         {
-            get => ProgramState.CurrentUser.secondName;
-            set
-            {
-                if (ProgramState.CurrentUser.secondName != value)
-                {
-                    ProgramState.CurrentUser.secondName = value;
-                    this.OnPropertyChanged(nameof(this.SecondName));
-                }
-            }
+            get => "ProgramState.CurrentUser.secondName";
         }
 
         public string Post
         {
-            get => ProgramState.CurrentUser.post;
-            set
-            {
-                if (ProgramState.CurrentUser.post != value)
-                {
-                    ProgramState.CurrentUser.post = value;
-                    this.OnPropertyChanged(nameof(this.Post));
-                }
-            }
+            get => "ProgramState.CurrentUser.post";
         }
 
         public string WorkspaceName
@@ -128,27 +108,15 @@ namespace Incas.Core.ViewModels
                 if (this._workspaceName != value)
                 {
                     this._workspaceName = value;
-                    this.OnPropertyChanged("WorkspaceName");
+                    this.OnPropertyChanged(nameof(this.WorkspaceName));
                 }
             }
         }
         public string Title => "Рабочее пространство: " + this.WorkspaceName;
 
-        private Visibility VisibilityConverter(bool b)
-        {
-            switch (b)
-            {
-                case true:
-                    return Visibility.Visible;
-                case false:
-                    return Visibility.Collapsed;
-            }
-        }
-
         public void LoadInfo()
         {
-            this.WorkspaceName = ProgramState.GetWorkspaceName();
+            this.WorkspaceName = ProgramState.CurrentWorkspace.GetDefinition().Name;
         }
-
     }
 }

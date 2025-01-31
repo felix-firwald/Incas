@@ -136,7 +136,7 @@ namespace Incas.Objects.Views.Windows
                 DialogsManager.ShowExclamationDialog("Не выбрано поле у объекта!", "Сохранение прервано");
                 return;
             }
-            this.SelectedClass = this.vm.SelectedClass.identifier;
+            this.SelectedClass = this.vm.SelectedClass.Id;
             this.SelectedField = this.vm.SelectedField.Id;
             this.Result = true;
             this.Close();

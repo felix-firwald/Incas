@@ -1,20 +1,16 @@
 ﻿using Incas.Core.Classes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Incas.Objects.Components
 {
     internal class FieldCryptographer
     {
-        internal static string EncryptFieldValue(ref Guid classId, ref Guid columnId, ref Guid objectId, string value)
+        internal static string EncryptFieldValue(Guid classId, Guid columnId, Guid objectId, string value)
         {
             string key = Cryptographer.GenerateKey(FieldCryptographer.GenerateKey(ref classId, ref columnId, ref objectId));
             return Cryptographer.EncryptString(key, value);
         }
-        internal static string DecryptFieldValue(ref Guid classId, ref Guid columnId, ref Guid objectId, string value)
+        internal static string DecryptFieldValue(Guid classId, Guid columnId, Guid objectId, string value)
         {
             string key = Cryptographer.GenerateKey(FieldCryptographer.GenerateKey(ref classId, ref columnId, ref objectId));
             return Cryptographer.DecryptString(key, value);

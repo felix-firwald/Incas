@@ -52,7 +52,7 @@ namespace Incas.Objects.Views.Windows
                 this.IsEnabled = false;
                 return;
             }
-            this.Title = $"Выбор объекта ({this.Class.name})";
+            this.Title = $"Выбор объекта ({this.Class.Name})";
             this.SetFields();
             this.FillList();
         }

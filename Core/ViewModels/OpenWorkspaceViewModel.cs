@@ -1,5 +1,7 @@
 ﻿using Incas.Core.Classes;
-using Incas.Users.Models;
+using Incas.Objects.Engine;
+using Incas.Objects.ServiceClasses.Models;
+using Incas.Objects.ServiceClasses.Users.Components;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,12 +21,10 @@ namespace Incas.Core.ViewModels
         private void UpdateUsers()
         {
             if (RegistryData.IsWorkspaceExists(this.SelectedWorkspace))
-            {
-                using (User user = new())
-                {
-                    this._users.Clear();
-                    this._users = user.GetAllUsers();
-                }
+            {                
+                this._users.Clear();
+                ServiceClass userClass = ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers;
+                this._users = User.GetItems(Processor.GetSimpleObjectsList(userClass));
                 this.UpdateSelectedUser();
             }
         }
@@ -97,13 +97,13 @@ namespace Incas.Core.ViewModels
                 }
             }
         }
-        private List<User> _users = [];
-        public ObservableCollection<User> Users
+        private List<UserItem> _users = [];
+        public ObservableCollection<UserItem> Users
         {
             get => new(this._users);
             set
             {
-                this._users = new List<User>(value);
+                this._users = new List<UserItem>(value);
                 this.OnPropertyChanged(nameof(this.Users));
             }
         }
@@ -112,11 +112,12 @@ namespace Incas.Core.ViewModels
             try
             {
                 string selected = RegistryData.GetWorkspaceSelectedUser(this.SelectedWorkspace);
-                foreach (User user in this._users)
+                foreach (UserItem user in this._users)
                 {
-                    if (user.id.ToString() == selected)
+                    if (user.Id.ToString() == selected)
                     {
-                        ProgramState.CurrentUser = user;
+
+                        this.SelectedUser = user;
                         this.OnPropertyChanged(nameof(this.SelectedUser));
                         break;
                     }
@@ -124,19 +125,23 @@ namespace Incas.Core.ViewModels
             }
             catch (Exception) { }
         }
-        public User SelectedUser
+        public UserItem SelectedUser
         {
-            get => ProgramState.CurrentUser;
+            get
+            {
+                if (ProgramState.CurrentWorkspace.CurrentUser is null)
+                {
+                    return new();
+                }
+                return ProgramState.CurrentWorkspace.CurrentUser.AsItem();
+            }
             set
             {
-                ProgramState.CurrentUser = value;
+                ProgramState.CurrentWorkspace.CurrentUser = (User)Processor.GetObject(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers, value.Id);
                 this.OnPropertyChanged(nameof(this.SelectedUser));
                 try
                 {
-                    if (value != null)
-                    {
-                        RegistryData.SetWorkspaceSelectedUser(this.SelectedWorkspace, value.id.ToString());
-                    }
+                    RegistryData.SetWorkspaceSelectedUser(this.SelectedWorkspace, value.Id.ToString());
                 }
                 catch (Exception) { }
             }

@@ -11,13 +11,18 @@ namespace Incas.Objects.StaticModels.Components
 {
     public sealed class StaticObject : IObject
     {
+        public IClass Class { get; set; }
         public Guid Id { get; set; }
         public string Name { get; set; }
         public List<FieldData> Fields { get; set; }
 
+        public StaticObject(IClass @class)
+        {
+            this.Class = @class;
+        }
         public IObject Copy()
         {
-            StaticObject staticObject = new()
+            StaticObject staticObject = new(this.Class)
             {
                 Fields = this.Fields
             };

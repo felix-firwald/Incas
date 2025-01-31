@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace Incas.Objects.Models
 {
-    public class Class : Model
+    public class Class : Model, IClass
     {
-        public Guid identifier { get; set; }
-        public string category { get; set; }
-        public string name { get; set; }
-        public string data { get; set; }
+        public Guid Id { get; set; }
+        public string Category { get; set; }
+        public ClassType Type { get; set; }
+        public string Name { get; set; }
+        public string Data { get; set; }
         private ClassData packedCache { get; set; }
         //public ClassType type { get; set; }
         public Class()
@@ -26,27 +27,32 @@ namespace Incas.Objects.Models
             this.tableName = "Classes";
             this.GetClassById(id);
         }
+        private Class FromDataRow(DataRow row)
+        {
+            Class c = new();
+            c.Type = ParseEnum(row[nameof(c.Type)], ClassType.Model);
+            c.Serialize(row);
+            return c;
+        }
         private List<Class> FromDataTable(DataTable dt)
         {
             List<Class> resulting = [];
             foreach (DataRow dr in dt.Rows)
             {
-                Class c = new();
-                c.Serialize(dr);
-                resulting.Add(c);
+                resulting.Add(this.FromDataRow(dr));
             }
             return resulting;
         }
         public List<string> GetCategories()
         {
             DataTable dt = this.StartCommand()
-                .SelectUnique("category")
-                .OrderByASC("category")
+                .SelectUnique(nameof(this.Category))
+                .OrderByASC(nameof(this.Category))
                 .Execute();
             List<string> categories = [];
             foreach (DataRow dr in dt.Rows)
             {
-                categories.Add(dr["category"].ToString());
+                categories.Add(dr[nameof(this.Category)].ToString());
             }
             return categories;
 
@@ -55,14 +61,14 @@ namespace Incas.Objects.Models
         {
             string value = $"\"ClassType\":{(int)type}";
             DataTable dt = this.StartCommand()
-                .SelectUnique("category")
-                .WhereLike(nameof(this.data), value)
-                .OrderByASC("category")
+                .SelectUnique(nameof(this.Category))
+                .WhereLike(nameof(this.Data), value)
+                .OrderByASC(nameof(this.Category))
                 .Execute();           
             List<string> categories = [];
             foreach (DataRow dr in dt.Rows)
             {
-                categories.Add(dr["category"].ToString());
+                categories.Add(dr[nameof(this.Category)].ToString());
             }
             return categories;
 
@@ -70,18 +76,18 @@ namespace Incas.Objects.Models
         public List<Class> FindBackReferences(BindingData bd)
         {
             string query = "\"Value\":\"{\\\"Class\\\":\\\"[Class]\\\",\\\"Field\\\":\\\"[Field]\\\"".Replace("[Class]", bd.Class.ToString()).Replace("[Field]", bd.Field.ToString());
-            return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.data), query).OrderByASC(nameof(this.name)).Execute());
+            return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.Data), query).OrderByASC(nameof(this.Name)).Execute());
         }
         public List<Class> FindBackReferences(Guid classId)
         {
             string query = "\"Value\":\"{\\\"Class\\\":\\\"[Class]\\\",".Replace("[Class]", classId.ToString());
-            return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.data), query).OrderByASC(nameof(this.name)).Execute());
+            return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.Data), query).OrderByASC(nameof(this.Name)).Execute());
         }
         public List<string> FindBackReferencesNames(BindingData bd)
         {
             List<string> result = [];
             string query = "\"Value\":\"{\\\"Class\\\":\\\"[Class]\\\",\\\"Field\\\":\\\"[Field]\\\"".Replace("[Class]", bd.Class.ToString()).Replace("[Field]", bd.Field.ToString());
-            DataTable dt = this.StartCommand().Select("name").WhereLike(nameof(this.data), query).OrderByASC(nameof(this.name)).Execute();
+            DataTable dt = this.StartCommand().Select("name").WhereLike(nameof(this.Data), query).OrderByASC(nameof(this.Name)).Execute();
             foreach (DataRow dr in dt.Rows)
             {
                 result.Add(dr["name"].ToString());
@@ -92,7 +98,7 @@ namespace Incas.Objects.Models
         {
             List<string> result = [];
             string query = "\"Value\":\"{\\\"Class\\\":\\\"[Class]\\\",".Replace("[Class]", classId.ToString());
-            DataTable dt = this.StartCommand().Select("name").WhereLike(nameof(this.data), query).OrderByASC(nameof(this.name)).Execute();
+            DataTable dt = this.StartCommand().Select("name").WhereLike(nameof(this.Data), query).OrderByASC(nameof(this.Name)).Execute();
             foreach (DataRow dr in dt.Rows)
             {
                 result.Add(dr["name"].ToString());
@@ -102,61 +108,61 @@ namespace Incas.Objects.Models
         private List<Class> GetClassByType(ClassType type)
         {
             string value = $"\"ClassType\":{(int)type}";
-            return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.data), value).Execute());
+            return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.Data), value).Execute());
         }
         public List<Class> GetClassesByCategory(string category)
         {
-            return this.FromDataTable(this.StartCommand().Select().WhereEqual(nameof(category), category).OrderByASC(nameof(this.name)).Execute());
+            return this.FromDataTable(this.StartCommand().Select().WhereEqual(nameof(this.Category), category).OrderByASC(nameof(this.Name)).Execute());
         }
         public Class GetClassById(Guid id)
         {
             DataRow dr = this.StartCommand()
                 .Select()
-                .WhereEqual(nameof(this.identifier), id.ToString())
+                .WhereEqual(nameof(this.Id), id.ToString())
                 .ExecuteOne();
-            this.Serialize(dr);
+            this.FromDataRow(dr);
             return this;
         }
         public List<Class> GetAllClasses()
         {
-            DataTable dt = this.StartCommandToService().Select().OrderByASC("name").Execute();
+            DataTable dt = this.StartCommandToService().Select().OrderByASC(nameof(this.Name)).Execute();
             return this.FromDataTable(dt);
         }
         public DataTable GetAllClassesGuids()
         {
-            return this.StartCommandToService().Select(nameof(this.identifier)).Execute();
+            return this.StartCommandToService().Select(nameof(this.Id)).Execute();
         }
         public List<string> GetAllClassesNames()
         {
-            DataTable dt = this.StartCommandToService().Select("name").Execute();
+            DataTable dt = this.StartCommandToService().Select(nameof(this.Name)).Execute();
             List<string> result = [];
             foreach (DataRow dr in dt.Rows)
             {
-                result.Add(dr["name"].ToString());
+                result.Add(dr[nameof(this.Name)].ToString());
             }
             return result;
         }
         public DataTable GetAllClassesAsDataTable()
         {
-            return this.StartCommandToService().Select("[identifier] AS [Идентификатор], [category] AS [Категория], [name] AS [Наименование]").OrderByASC("Категория ASC, Наименование").Execute();
+            return this.StartCommandToService().Select($"[{nameof(this.Id)}] AS [Идентификатор], [{nameof(this.Category)}] AS [Категория], [{nameof(this.Name)}] AS [Наименование]").OrderByASC("Категория ASC, Наименование").Execute();
         }
         private async void Update()
         {          
             Dictionary<string, string> dict = new()
             {
                 {
-                    nameof(this.category), this.category
+                    nameof(this.Category), this.Category
                 },
                 {
-                    nameof(this.name), this.name
+                    nameof(this.Name), this.Name
                 },
                 {
-                    nameof(this.data), this.data
+                    nameof(this.Data), this.Data
                 }
             };
             this.StartCommand()
                 .Update(dict)
-                .WhereEqual(nameof(this.identifier), this.identifier.ToString())
+                .WhereEqual(nameof(this.Id), this.Id.ToString())
                 .ExecuteVoid();
             await Task.Run(() =>
             {
@@ -167,9 +173,9 @@ namespace Incas.Objects.Models
         }
         public void Save()
         {
-            if (this.identifier == Guid.Empty)
+            if (this.Id == Guid.Empty)
             {
-                this.identifier = Guid.NewGuid();
+                this.Id = Guid.NewGuid();
             }
             else
             {
@@ -180,10 +186,10 @@ namespace Incas.Objects.Models
                 .Insert(
                 new Dictionary<string, string>()
                     {
-                        {nameof(this.identifier), this.identifier.ToString()},
-                        {nameof(this.category), this.category},
-                        {nameof(this.name), this.name},
-                        {nameof(this.data), this.data},
+                        {nameof(this.Id), this.Id.ToString()},
+                        {nameof(this.Category), this.Category},
+                        {nameof(this.Name), this.Name},
+                        {nameof(this.Data), this.Data},
                     }
                 ).ExecuteVoid();
             Processor.InitializeObjectMap(this);
@@ -191,7 +197,7 @@ namespace Incas.Objects.Models
         }
         public void Remove(Guid id)
         {
-            this.StartCommand().Delete().WhereEqual(nameof(this.identifier), id.ToString()).ExecuteVoid();
+            this.StartCommand().Delete().WhereEqual(nameof(this.Id), id.ToString()).ExecuteVoid();
             Processor.DropObjectMap(this);
             ProgramState.UpdateWindowTabs();
         }
@@ -205,17 +211,17 @@ namespace Incas.Objects.Models
             {
                 if (this.packedCache is null)
                 {
-                    if (this.data is null)
+                    if (this.Data is null)
                     {
                         return new();
                     }
-                    this.packedCache = JsonConvert.DeserializeObject<ClassData>(this.data);
+                    this.packedCache = JsonConvert.DeserializeObject<ClassData>(this.Data);
                 }
                 return this.packedCache;
             }
             catch (Exception ex)
             {
-                DialogsManager.ShowErrorDialog($"При распаковке класса [{this.name}] возникла ошибка: " + ex.Message);
+                DialogsManager.ShowErrorDialog($"При распаковке класса [{this.Name}] возникла ошибка: " + ex.Message);
                 return new();
             }
         }
@@ -225,7 +231,7 @@ namespace Incas.Objects.Models
         /// <param name="data"></param>
         public void SetClassData(ClassData data)
         {
-            this.data = JsonConvert.SerializeObject(data);
+            this.Data = JsonConvert.SerializeObject(data);
         }
     }
 }
