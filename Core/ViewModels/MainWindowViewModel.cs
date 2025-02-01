@@ -88,16 +88,16 @@ namespace Incas.Core.ViewModels
 
         public string Surname
         {
-            get => "ProgramState.CurrentUser.surname";
+            get => ProgramState.CurrentWorkspace.CurrentUser.Name;
         }
         public string SecondName
         {
-            get => "ProgramState.CurrentUser.secondName";
+            get => "-";
         }
 
         public string Post
         {
-            get => "ProgramState.CurrentUser.post";
+            get => "-";
         }
 
         public string WorkspaceName

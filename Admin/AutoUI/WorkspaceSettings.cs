@@ -9,7 +9,6 @@ namespace Incas.Admin.AutoUI
     public class WorkspaceSettings : AutoUIBase
     {
         private WorkspacePrimarySettings data;
-        private Parameter param; 
         [Description("Имя рабочего пространства")]
         public string Name
         {
@@ -23,14 +22,19 @@ namespace Incas.Admin.AutoUI
             get => this.data.IsLocked;
             set => this.data.IsLocked = value;
         }
+        [Description("Требовать пароль при существенных изменениях")]
+        public bool RequirePassword
+        {
+            get => this.data.SignificantChangesRequirePassword;
+            set => this.data.SignificantChangesRequirePassword = value;
+        }
         public override void Load()
         {
-            this.param = ProgramState.GetParameter(ParameterType.WORKSPACE, Workspace.WorkspaceDataName);
-            this.data = JsonConvert.DeserializeObject<WorkspacePrimarySettings>(this.param.Value);
+            this.data = ProgramState.CurrentWorkspace.GetDefinition(true);
         }
         public override void Save()
         {
-            
+            ProgramState.CurrentWorkspace.UpdateDefinition(this.data);
         }
     }
 }

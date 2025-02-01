@@ -6,6 +6,7 @@ using Incas.Objects.Documents.Components;
 using Incas.Objects.Engine;
 using Incas.Objects.Exceptions;
 using Incas.Objects.Models;
+using Incas.Objects.ServiceClasses.Groups.Components;
 using Incas.Objects.Views.Pages;
 using Incas.Rendering.AutoUI;
 using Incas.Rendering.Components;
@@ -29,6 +30,7 @@ namespace Incas.Objects.Views.Windows
         public delegate void UpdateRequested();
         public delegate void CreateRequested(Guid id);
         public event UpdateRequested OnUpdateRequested;
+        public GroupClassPermissionSettings PermissionSettings { get; set; }
         public event CreateRequested OnSetNewObjectRequested;
         public ObjectsEditor(IClass source, Preset preset, List<IObject> objects = null)
         {
@@ -36,7 +38,8 @@ namespace Incas.Objects.Views.Windows
             this.Title = preset is null ? source.Name : $"{source.Name} — {preset.Name}";
             this.Class = source;         
             this.ClassData = source.GetClassData();
-            this.RenderButton.Visibility = this.ClassData.ClassType == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
+            this.PermissionSettings = ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(source.Id);
+            this.RenderButton.Visibility = source.Type == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
             this.Preset = preset;
             this.FillPresettingData();
             if (objects != null)
@@ -63,7 +66,7 @@ namespace Incas.Objects.Views.Windows
             this.ToolBar.IsEnabled = false;
             ObjectCreator creator = new(this.ClassData);
             this.ContentPanel.Children.Add(creator);
-            this.RenderButton.Visibility = this.ClassData.ClassType == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
+            this.RenderButton.Visibility = source.Type == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
             DialogsManager.ShowWaitCursor(false);
         }
         public void SetSingleObjectMode()
@@ -101,6 +104,7 @@ namespace Incas.Objects.Views.Windows
                 }
             }
             ObjectCreator creator = new(this.Class, this.Preset, obj);
+            creator.PermissionSettings = this.PermissionSettings;
             creator.OnSaveRequested += this.Creator_OnSaveRequested;
             creator.OnRemoveRequested += this.Creator_OnRemoveRequested;
             creator.OnInsertRequested += this.Creator_OnInsertRequested;

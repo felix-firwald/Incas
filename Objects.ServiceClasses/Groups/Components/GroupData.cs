@@ -99,16 +99,16 @@ namespace Incas.Objects.ServiceClasses.Groups.Components
                 }
                 else
                 {
-                    result.CreateOperations = this.DefaultPermissionType;
-                    result.ReadOperations = this.DefaultPermissionType;
-                    result.ViewOperations = this.DefaultPermissionType;
-                    result.UpdateOperations = this.DefaultPermissionType;
-                    result.DeleteOperations = this.DefaultPermissionType;
-                    result.PresetOperations = this.DefaultPermissionType;
+                    bool defaultBoolean = this.DefaultPermissionType == GroupPermissionType.Allowed;
+                    result.CreateOperations = defaultBoolean;
+                    result.ReadOperations = defaultBoolean;
+                    result.ViewOperations = defaultBoolean;
+                    result.UpdateOperations = defaultBoolean;
+                    result.DeleteOperations = defaultBoolean;
+                    result.PresetOperations = defaultBoolean;
                 }               
             }
             return result;
-        }
-        
+        }       
     }
 }

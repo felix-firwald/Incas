@@ -2,6 +2,7 @@
 using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
+using Incas.DialogSimpleForm.Attributes;
 using Incas.DialogSimpleForm.Views.Controls;
 using System;
 using System.Collections.Generic;
@@ -90,11 +91,9 @@ namespace Incas.DialogSimpleForm.Components
             };
             switch (field.PropertyType.Name)
             {
-                case "String":
-                    Attribute attr = field.GetCustomAttribute(typeof(UrlRequired), false);
-                    control = attr is not null
-                        ? this.GeneratePathBox(description, (string)field.GetValue(this.Result))
-                        : this.GenerateTextBox(description, (string)field.GetValue(this.Result), this.GetFieldTextMaxLength(field));
+                case "String":    
+                    control = this.SwitchOnAttribute(field, description);
+                    this.Container.Children.Add(label);
                     break;
                 case "Int32":
                     control = this.GenerateNumericBox(description, (int)field.GetValue(this.Result));
@@ -141,6 +140,21 @@ namespace Incas.DialogSimpleForm.Components
             }
             this.Container.Children.Add(control);
         }
+
+        private Control SwitchOnAttribute(PropertyInfo field, string description)
+        {
+            Attribute attrUrl = field.GetCustomAttribute(typeof(UrlRequired), false);
+            Attribute attrPwd = field.GetCustomAttribute(typeof(PasswordAttribute), false);
+            if (attrUrl != null)
+            {
+                return this.GeneratePathBox(description, (string)field.GetValue(this.Result));
+            }
+            if (attrPwd != null)
+            {
+                return this.GeneratePasswordBox(description, (string)field.GetValue(this.Result), 16);
+            }
+            return this.GenerateTextBox(description, (string)field.GetValue(this.Result), this.GetFieldTextMaxLength(field));
+        }
         #region Updates
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -176,6 +190,16 @@ namespace Incas.DialogSimpleForm.Components
             };
 
             control.TextChanged += this.TextBox_TextChanged;
+            return control;
+        }
+        private Control GeneratePasswordBox(string description, string value, int maxlength)
+        {
+            PasswordBox control = new()
+            {
+                Tag = description,
+                Password = value,
+                MaxLength = maxlength
+            };
             return control;
         }
 
@@ -343,8 +367,21 @@ namespace Incas.DialogSimpleForm.Components
                         {
                             case "String":
                                 string resultString = "";
-                                Attribute attr = field.GetCustomAttribute(typeof(UrlRequired), false);
-                                resultString = attr is not null ? ((PathSelector)control).Value : ((TextBox)control).Text;
+                                Attribute attrUrl = field.GetCustomAttribute(typeof(UrlRequired), false);
+                                Attribute attrPwd = field.GetCustomAttribute(typeof(PasswordAttribute), false);
+                                if (attrUrl != null)
+                                {
+                                    resultString = ((PathSelector)control).Value;
+                                }
+                                else if (attrPwd != null)
+                                {
+                                    resultString = ((PasswordBox)control).Password;
+                                }
+                                else
+                                {
+                                    resultString = ((TextBox)control).Text;
+                                }
+                                
                                 if (string.IsNullOrEmpty(resultString) && field.GetCustomAttribute(typeof(CanBeNull), false) is null)
                                 {
                                     DialogsManager.ShowExclamationDialog($"Поле \"{descript}\" не заполнено!", "Сохранение прервано");

@@ -20,5 +20,8 @@ namespace Incas.Core.Classes
 
         [JsonProperty("l")]
         public bool IsLocked { get; set; }
+
+        [JsonProperty("scrp")]
+        public bool SignificantChangesRequirePassword { get; set; }
     }
 }

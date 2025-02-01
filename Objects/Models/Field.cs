@@ -6,40 +6,40 @@ namespace Incas.Objects.Models
 {
     public class Field
     {
-        [JsonProperty("i")]
+        [JsonProperty("f_i")]
         public Guid Id { get; set; }
 
-        [JsonProperty("nv")]
+        [JsonProperty("f_nv")]
         public string VisibleName { get; set; }
 
-        [JsonProperty("ni")]
+        [JsonProperty("f_ni")]
         public string Name { get; set; }
 
-        [JsonProperty("t")]
+        [JsonProperty("f_t")]
         public FieldType Type { get; set; }
 
-        [JsonProperty("v")]
+        [JsonProperty("f_v")]
         public string Value { get; set; }
 
-        [JsonProperty("nn")]
+        [JsonProperty("f_nn")]
         public bool NotNull { get; set; }
 
-        [JsonProperty("uniq")]
+        [JsonProperty("f_uni")]
         public bool IsUnique { get; set; }
 
-        [JsonProperty("pres")]
+        [JsonProperty("f_pre")]
         public bool PresettingEnabled { get; set; }
 
-        [JsonProperty("conf")]
+        [JsonProperty("f_con")]
         public bool Confidential { get; set; }
 
-        [JsonProperty("d")]
+        [JsonProperty("f_des")]
         public string Description { get; set; }
 
-        [JsonProperty("act")]
+        [JsonProperty("f_act")]
         public string Action { get; set; }
 
-        [JsonProperty("event")]
+        [JsonProperty("f_eve")]
         public string ChangedEvent { get; set; }
         public void SetId()
         {

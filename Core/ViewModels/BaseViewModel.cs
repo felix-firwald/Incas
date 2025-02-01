@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Incas.Core.ViewModels
@@ -18,6 +19,15 @@ namespace Incas.Core.ViewModels
         public void Execute(object parameter)
         {
 
+        }
+
+        public Visibility FromBool(bool b)
+        {
+            if (b)
+            {
+                return Visibility.Visible;
+            }
+            return Visibility.Collapsed;
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

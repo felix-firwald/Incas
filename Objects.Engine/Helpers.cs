@@ -218,9 +218,9 @@ namespace Incas.Objects.Engine
                     return new Components.Object(@class);
             }
         }
-        public static bool IsEditsMapRequired(ClassData data)
+        public static bool IsEditsMapRequired(IClass @class)
         {
-            switch (data.ClassType)
+            switch (@class.Type)
             {
                 case ClassType.Model:
                 case ClassType.StaticModel:
@@ -233,9 +233,9 @@ namespace Incas.Objects.Engine
                     return true;
             }
         }
-        public static bool IsPresetsMapRequired(ClassData data)
+        public static bool IsPresetsMapRequired(IClass @class)
         {
-            switch (data.ClassType)
+            switch (@class.Type)
             {
                 case ClassType.Model:
                 case ClassType.Document:

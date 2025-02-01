@@ -24,10 +24,9 @@ namespace Incas.Core.Views.Windows
 
         private void LogInClicked(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(this.cpath.Text) || string.IsNullOrEmpty(this.pwd.Text))
+            if (string.IsNullOrEmpty(this.cpath.Text) || string.IsNullOrEmpty(this.pwd.Password))
             {
-                Dialog d = new("Одно из обязательных полей не заполнено!", "Вход невозможен");
-                d.ShowDialog();
+                DialogsManager.ShowErrorDialog("Одно из обязательных полей не заполнено!", "Вход невозможен");
             }
             else
             {
@@ -40,7 +39,7 @@ namespace Incas.Core.Views.Windows
             if (ProgramState.CurrentWorkspace.CurrentUser != null)
             {
                 DialogsManager.ShowWaitCursor();
-                if (ProgramState.CurrentWorkspace.CurrentUser.IsRightPassword(this.pwd.Text))
+                if (ProgramState.CurrentWorkspace.LogIn(this.pwd.Password))
                 {
                     DialogsManager.ShowWaitCursor(false);
                     this.DialogResult = true;
@@ -49,7 +48,7 @@ namespace Incas.Core.Views.Windows
                 else
                 {
                     DialogsManager.ShowExclamationDialog("Пароль введен неверно.", "Вход невозможен");
-                    this.pwd.Text = "";
+                    this.pwd.Password = "";
                 }
             }
             else

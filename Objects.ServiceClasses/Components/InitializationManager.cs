@@ -26,7 +26,6 @@ namespace Incas.Objects.ServiceClasses.Components
             group.Name = "Группа";
             group.Type = ClassType.ServiceClassGroup;
             group.Data = new();
-            group.Data.ClassType = ClassType.ServiceClassGroup;
             group.Data.ShowCard = true;
             group.Data.Fields = new();
             group.Data.Fields.Add(new() { Id = Guid.NewGuid(), Type = FieldType.Text, Name = "Описание", VisibleName = "Описание", Description = "Общая характеристика предоставляемых полномочий" });
@@ -41,7 +40,6 @@ namespace Incas.Objects.ServiceClasses.Components
             user.Name = "Пользователь";
             user.Type = ClassType.ServiceClassUser;
             user.Data = new();
-            user.Data.ClassType = ClassType.ServiceClassUser;
             user.Data.ShowCard = true;
             user.Data.Fields = new();
             user.Data.Fields.Add(new() { Id = Guid.NewGuid(), Type = FieldType.Variable, Name = "Фамилия", VisibleName = "Фамилия", Description = "Фамилия сотрудника (обязательно)", NotNull = true });

@@ -165,7 +165,7 @@ namespace Incas.Objects.Views.Pages
             {
                 return;
             }
-            if (this.permissionSettings.ReadOperations == GroupPermissionType.Restricted)
+            if (!this.permissionSettings.ReadOperations)
             {
                 this.SetProtected();
                 return;
@@ -235,7 +235,7 @@ namespace Incas.Objects.Views.Pages
                     this.FieldsContentPanel.Children.Add(ob);
                 }
                 ((IObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
-                if (this.ClassData.ClassType == ClassType.Document)
+                if (this.Class.Type == ClassType.Document)
                 {
                     this.ApplyObjectComments(obj);
                 }

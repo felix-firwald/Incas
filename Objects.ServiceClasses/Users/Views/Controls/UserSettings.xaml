@@ -13,7 +13,13 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBox Style="{StaticResource TextBoxMain}" Tag="Пароль для входа" Text="{Binding Password}" Grid.Column="1" MaxLength="16" />
+                <Button Style="{StaticResource ButtonMain}" Grid.Column="1" Click="Button_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Path Fill="White" Data="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2" VerticalAlignment="Center"/>
+                        <Label Content="Установить пароль" Foreground="White"/>
+                    </StackPanel>
+                </Button>
+                <!--<TextBox Style="{StaticResource TextBoxMain}" Tag="Пароль для входа" Text="{Binding Password}" Grid.Column="1" MaxLength="16" />-->
                 <ComboBox Style="{StaticResource ComboBoxMain}" DisplayMemberPath="Name" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}" IsEnabled="{Binding GroupEditable}"/>
             </Grid>
         </GroupBox>

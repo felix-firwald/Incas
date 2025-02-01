@@ -30,10 +30,10 @@ namespace Incas.Objects.ViewModels
 
         public ClassType Type
         {
-            get => this.SourceData.ClassType;
+            get => this.Source.Type;
             set
             {
-                this.SourceData.ClassType = value;
+                this.Source.Type = value;
                 this.OnPropertyChanged(nameof(this.Type));
             }
         }
@@ -130,7 +130,7 @@ namespace Incas.Objects.ViewModels
         {
             get
             {
-                switch (this.SourceData.ClassType)
+                switch (this.Source.Type)
                 {
                     case ClassType.Document:
                         return Visibility.Visible;
@@ -143,7 +143,7 @@ namespace Incas.Objects.ViewModels
         {
             get
             {
-                switch (this.SourceData.ClassType)
+                switch (this.Source.Type)
                 {
                     case ClassType.Process:
                         return Visibility.Visible;

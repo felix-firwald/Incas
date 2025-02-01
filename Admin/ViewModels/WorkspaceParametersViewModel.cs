@@ -5,6 +5,7 @@ using Incas.Objects.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows;
 
 namespace Incas.Admin.ViewModels
 {
@@ -13,6 +14,34 @@ namespace Incas.Admin.ViewModels
         public WorkspaceParametersViewModel()
         {
 
+        }
+        public bool EditingWorkspaceEnabled
+        {
+            get
+            {
+                return ProgramState.CurrentWorkspace.CurrentGroup.Data.GeneralSettingsEditing;
+            }
+        }
+        public Visibility CreatingClassVisibility
+        {
+            get
+            {
+                return this.FromBool(ProgramState.CurrentWorkspace.CurrentGroup.Data.CreatingClasses);
+            }
+        }
+        public Visibility UpdatingClassVisibility
+        {
+            get
+            {
+                return this.FromBool(ProgramState.CurrentWorkspace.CurrentGroup.Data.UpdatingClasses);
+            }
+        }
+        public Visibility RemovingClassVisibility
+        {
+            get
+            {
+                return this.FromBool(ProgramState.CurrentWorkspace.CurrentGroup.Data.RemovingClasses);
+            }
         }
 
         public DataTable Constants

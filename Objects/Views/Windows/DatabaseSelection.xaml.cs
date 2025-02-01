@@ -61,7 +61,7 @@ namespace Incas.Objects.Views.Windows
             DataTable dt = Processor.GetObjectsList(this.Class, null);
             this.UpdateItemsSource(dt.Columns);
             DataView dv = dt.AsDataView();
-            if (this.ClassData.ClassType == ClassType.Model)
+            if (this.Class.Type == ClassType.Model)
             {
                 dv.Sort = $"[{Helpers.NameField}] ASC";
             }    

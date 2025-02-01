@@ -17,7 +17,7 @@ namespace Incas.Objects.Models
         public string Name { get; set; }
         public string Data { get; set; }
         private ClassData packedCache { get; set; }
-        //public ClassType type { get; set; }
+
         public Class()
         {
             this.tableName = "Classes";
@@ -27,12 +27,23 @@ namespace Incas.Objects.Models
             this.tableName = "Classes";
             this.GetClassById(id);
         }
+        private ClassType GetEnum(DataRow row)
+        {
+            byte b = byte.Parse(row[nameof(this.Type)].ToString());
+            return (ClassType)b;
+        }
         private Class FromDataRow(DataRow row)
         {
             Class c = new();
-            c.Type = ParseEnum(row[nameof(c.Type)], ClassType.Model);
+            c.Type = this.GetEnum(row);
             c.Serialize(row);
             return c;
+        }
+        private Class FromDataRowItself(DataRow row)
+        {
+            this.Type = this.GetEnum(row);
+            this.Serialize(row);
+            return this;
         }
         private List<Class> FromDataTable(DataTable dt)
         {
@@ -59,10 +70,9 @@ namespace Incas.Objects.Models
         }
         public List<string> GetCategoriesOfClassType(ClassType type)
         {
-            string value = $"\"ClassType\":{(int)type}";
             DataTable dt = this.StartCommand()
                 .SelectUnique(nameof(this.Category))
-                .WhereLike(nameof(this.Data), value)
+                .WhereEqual(nameof(this.Type), (int)type)
                 .OrderByASC(nameof(this.Category))
                 .Execute();           
             List<string> categories = [];
@@ -107,21 +117,19 @@ namespace Incas.Objects.Models
         }
         private List<Class> GetClassByType(ClassType type)
         {
-            string value = $"\"ClassType\":{(int)type}";
-            return this.FromDataTable(this.StartCommand().Select().WhereLike(nameof(this.Data), value).Execute());
+            return this.FromDataTable(this.StartCommand().Select().WhereEqual(nameof(this.Data), (int)type).Execute());
         }
         public List<Class> GetClassesByCategory(string category)
         {
             return this.FromDataTable(this.StartCommand().Select().WhereEqual(nameof(this.Category), category).OrderByASC(nameof(this.Name)).Execute());
         }
-        public Class GetClassById(Guid id)
+        public void GetClassById(Guid id)
         {
             DataRow dr = this.StartCommand()
                 .Select()
                 .WhereEqual(nameof(this.Id), id.ToString())
-                .ExecuteOne();
-            this.FromDataRow(dr);
-            return this;
+                .ExecuteOne();      
+            this.FromDataRowItself(dr);
         }
         public List<Class> GetAllClasses()
         {
@@ -131,6 +139,21 @@ namespace Incas.Objects.Models
         public DataTable GetAllClassesGuids()
         {
             return this.StartCommandToService().Select(nameof(this.Id)).Execute();
+        }
+        public List<ClassItem> GetAllClassItems()
+        {
+            List<ClassItem> result = new();
+            DataTable dt = this.StartCommandToService().Select($"[{nameof(this.Id)}], [{nameof(this.Name)}]").OrderByASC(nameof(this.Name)).Execute();
+            foreach (DataRow dr in dt.Rows)
+            {
+                ClassItem item = new()
+                {
+                    Id = Guid.Parse(dr[nameof(this.Id)].ToString()),
+                    Name = dr[nameof(this.Name)].ToString()
+                };
+                result.Add(item);
+            }
+            return result;
         }
         public List<string> GetAllClassesNames()
         {

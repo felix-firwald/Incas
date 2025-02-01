@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Incas.Core.Classes;
 using Incas.Core.Interfaces;
+using Incas.Core.Views.Controls;
 using Incas.Core.Views.Windows;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
@@ -55,7 +56,7 @@ namespace Incas.Objects.Views.Pages
             DialogsManager.ShowWaitCursor(false);
             this.ApplyGroupConstraints();
         }
-        public ObjectsList(Class source, Preset preset)
+        public ObjectsList(IClass source, Preset preset)
         {
             this.InitializeComponent();
             DialogsManager.ShowWaitCursor();
@@ -82,21 +83,32 @@ namespace Incas.Objects.Views.Pages
 
         private void ApplyGroupConstraints()
         {
-            if (this.permissionSettings.CreateOperations == GroupPermissionType.Restricted)
+            if (!this.permissionSettings.ViewOperations)
+            {
+                this.Tools.Visibility = Visibility.Collapsed;
+                this.Data.Visibility = Visibility.Collapsed;
+                NoPermission np = new();
+                this.MainGrid.Children.Add(np);
+                Grid.SetRow(np, 1);
+                Grid.SetRowSpan(np, 2);
+                Grid.SetColumn(np, 0);
+                return;
+            }
+            if (!this.permissionSettings.CreateOperations)
             {
                 this.AddButton.Visibility = Visibility.Collapsed;
                 this.CopyButton.Visibility = Visibility.Collapsed;
             }
-            if (this.permissionSettings.DeleteOperations == GroupPermissionType.Restricted)
+            if (!this.permissionSettings.DeleteOperations)
             {
                 this.RemoveButton.Visibility = Visibility.Collapsed;
-            }
+            }            
         }
         public void TryFindObject(Guid objectId)
         {
             DataTable dt = Processor.GetObjectsListWhereEqual(this.sourceClass, this.SourcePreset, $"{Helpers.MainTable}].[{Helpers.IdField}", objectId.ToString());
             this.Data.Columns.Clear();
-            if (this.ClassData.ClassType == ClassType.Model)
+            if (this.sourceClass.Type == ClassType.Model)
             {
                 DataView dv = dt.AsDataView();
                 dv.Sort = $"[{Helpers.NameField}] ASC";
@@ -110,14 +122,17 @@ namespace Incas.Objects.Views.Pages
 
         private void PlaceCard()
         {
-            this.ObjectCard = new(this.sourceClass);
-            this.ObjectCard.OnFilterRequested += this.ObjectCard_OnFilterRequested;
-            this.ObjectCard.MinWidth = 410;
-            this.MainGrid.Children.Add(this.ObjectCard);
-            Grid.SetRow(this.ObjectCard, 1);
-            Grid.SetRowSpan(this.ObjectCard, 2);
-            Grid.SetColumn(this.ObjectCard, 1);
-            this.ObjectCard.SetEmpty();
+            if (this.permissionSettings.ViewOperations)
+            {
+                this.ObjectCard = new(this.sourceClass);
+                this.ObjectCard.OnFilterRequested += this.ObjectCard_OnFilterRequested;
+                this.ObjectCard.MinWidth = 410;
+                this.MainGrid.Children.Add(this.ObjectCard);
+                Grid.SetRow(this.ObjectCard, 1);
+                Grid.SetRowSpan(this.ObjectCard, 2);
+                Grid.SetColumn(this.ObjectCard, 1);
+                this.ObjectCard.SetEmpty();
+            }
         }
 
         private void ObjectCard_OnFilterRequested(FieldData data)
@@ -131,7 +146,7 @@ namespace Incas.Objects.Views.Pages
             {
                 DataTable dt = Processor.GetObjectsList(this.sourceClass, this.SourcePreset);
                 
-                if (this.ClassData.ClassType == ClassType.Model)
+                if (this.sourceClass.Type == ClassType.Model)
                 {
                     DataView dv = dt.AsDataView();
                     dv.Sort = $"[{Helpers.NameField}] ASC";
@@ -156,7 +171,7 @@ namespace Incas.Objects.Views.Pages
             DataTable dt = Processor.GetObjectsListWhereLike(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
-            if (this.ClassData.ClassType == ClassType.Model)
+            if (this.sourceClass.Type == ClassType.Model)
             {
                 DataView dv = dt.AsDataView();
                 dv.Sort = $"[{Helpers.NameField}] ASC";
@@ -172,7 +187,7 @@ namespace Incas.Objects.Views.Pages
             DataTable dt = Processor.GetObjectsListWhereEqual(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
-            if (this.ClassData.ClassType == ClassType.Model)
+            if (this.sourceClass.Type == ClassType.Model)
             {
                 DataView dv = dt.AsDataView();
                 dv.Sort = $"[{Helpers.NameField}] ASC";
@@ -227,7 +242,7 @@ namespace Incas.Objects.Views.Pages
         }
         private void OpenNewObject()
         {
-            if (this.permissionSettings.CreateOperations == GroupPermissionType.Restricted)
+            if (!this.permissionSettings.CreateOperations)
             {
                 DialogsManager.ShowAccessErrorDialog("Вы не вправе создавать объекты этого класса.");
                 return;
@@ -305,7 +320,7 @@ namespace Incas.Objects.Views.Pages
         }
         private void OpenSelectedObject()
         {
-            if (this.permissionSettings.ReadOperations == GroupPermissionType.Restricted)
+            if (!this.permissionSettings.ReadOperations)
             {
                 DialogsManager.ShowAccessErrorDialog("Вы не можете просматривать объекты этого класса.");
                 return;
@@ -328,7 +343,7 @@ namespace Incas.Objects.Views.Pages
         }
         private async void OpenSelectedObjects()
         {
-            if (this.permissionSettings.ReadOperations == GroupPermissionType.Restricted)
+            if (!this.permissionSettings.ReadOperations)
             {
                 DialogsManager.ShowAccessErrorDialog("Вы не вправе просматривать объекты этого класса.");
                 return;
@@ -342,7 +357,7 @@ namespace Incas.Objects.Views.Pages
 
         private void OpenCopyOfSelectedObject()
         {
-            if (this.permissionSettings.CreateOperations == GroupPermissionType.Restricted)
+            if (!this.permissionSettings.CreateOperations)
             {
                 DialogsManager.ShowAccessErrorDialog("Вы не вправе создавать объекты этого класса.");
                 return;
@@ -365,7 +380,7 @@ namespace Incas.Objects.Views.Pages
         }
         private void RemoveSelectedObject()
         {
-            if (this.permissionSettings.DeleteOperations == GroupPermissionType.Restricted)
+            if (!this.permissionSettings.DeleteOperations)
             {
                 DialogsManager.ShowAccessErrorDialog("Вы не вправе удалять объекты этого класса.");
                 return;

@@ -17,7 +17,7 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+        <WrapPanel x:Name="Tools" Orientation="Horizontal" Grid.ColumnSpan="2">
             <Button x:Name="AddButton" Style="{StaticResource ButtonMainFinish}" Click="AddClick" ToolTip="Добавить новый экземпляр объекта (A, N)">
                 <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
                     <Path Fill="White" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>

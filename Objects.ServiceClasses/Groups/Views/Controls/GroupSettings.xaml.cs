@@ -31,7 +31,13 @@ namespace Incas.Objects.ServiceClasses.Groups.Views.Controls
         }
         public IObject GetResult()
         {
+            ((GroupSettingsViewModel)this.ViewModel).ApplyCustomPermissions();
             return this.TargetObject;
+        }
+
+        private void CustomPermissionSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.List.SelectedItem = null;
         }
     }
 }

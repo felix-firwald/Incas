@@ -3,6 +3,7 @@ using Incas.Core.ViewModels;
 using Incas.Objects.Engine;
 using Incas.Objects.ServiceClasses.Groups.Components;
 using Incas.Objects.ServiceClasses.Users.Components;
+using System;
 using System.Collections.Generic;
 
 namespace Incas.Objects.ServiceClasses.Users.ViewModels
@@ -14,18 +15,18 @@ namespace Incas.Objects.ServiceClasses.Users.ViewModels
         {
             this.User = user;
         }
-        public string Password
-        {
-            get
-            {
-                return this.User.Data.Password;
-            }
-            set
-            {
-                this.User.Data.Password = value;
-                this.OnPropertyChanged(nameof(this.Password));
-            }
-        }
+        //public string Password
+        //{
+        //    get
+        //    {
+        //        return this.User.Data.Password;
+        //    }
+        //    set
+        //    {
+        //        this.User.Data.Password = value;
+        //        this.OnPropertyChanged(nameof(this.Password));
+        //    }
+        //}
          
         public List<GroupItem> Groups
         {
@@ -38,7 +39,13 @@ namespace Incas.Objects.ServiceClasses.Users.ViewModels
         {
             get
             {
-                return this.User.GetGroup().AsItem();
+                GroupItem item = this.User.GetGroup().AsItem();
+                if (item.Id == Guid.Empty)
+                {
+                    this.User.Group = this.Groups[0].Id;
+                    return this.Groups[0];
+                }
+                return item;
             }
             set
             {

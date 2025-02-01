@@ -43,7 +43,63 @@
                 </StackPanel>
             </GroupBox>
         </Grid>
-        <DataGrid Style="{StaticResource DataGridMain}">
+        <Grid Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right"/>
+            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="1"/>
+            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="2"/>
+            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="3"/>
+            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="4"/>
+            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="5"/>
+            <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="КЛАСС" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
+            <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="СОЗДАНИЕ" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="1" FontSize="10" HorizontalAlignment="Center"/>
+            <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="ПРОСМОТР" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="2" FontSize="10" HorizontalAlignment="Center"/>
+            <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="ЧТЕНИЕ" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="3" FontSize="10" HorizontalAlignment="Center"/>
+            <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="ЧТЕНИЕ (КОНФ. ПОЛЕЙ)" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="4" FontSize="10" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
+            <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="ИЗМЕНЕНИЕ" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="5" FontSize="10" HorizontalAlignment="Center"/>
+            <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="УДАЛЕНИЕ" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="6" FontSize="10" HorizontalAlignment="Center"/>
+        </Grid>
+        <ListBox x:Name="List" ItemsSource="{Binding CustomPermissions}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MaxHeight="300" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" Background="{x:Null}" BorderBrush="{x:Null}" SelectionChanged="CustomPermissionSelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid MaxHeight="60">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*" MinWidth="200" MaxWidth="215"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right"/>
+                        <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="1"/>
+                        <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="2"/>
+                        <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="3"/>
+                        <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="4"/>
+                        <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="5"/>
+                        <TextBlock Style="{StaticResource TextBlockMain}" Margin="5" FontFamily="{StaticResource JetBrains}" Text="{Binding Key.Name}" TextWrapping="WrapWithOverflow"  Foreground="White" FontWeight="Bold" FontSize="10" TextTrimming="CharacterEllipsis"/>
+                        <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.CreateOperations}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="1" FontSize="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.ViewOperations}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="2" FontSize="10" HorizontalAlignment="Center"/>
+                        <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.ReadOperations}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="3" FontSize="10" HorizontalAlignment="Center"/>
+                        <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.ConfidentialAccess}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="4" FontSize="10" HorizontalAlignment="Center"/>
+                        <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.UpdateOperations}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="5" FontSize="10" HorizontalAlignment="Center"/>
+                        <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.DeleteOperations}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="6" FontSize="10" HorizontalAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <!--<DataGrid Style="{StaticResource DataGridMain}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Наименование класса"/>
                 <DataGridCheckBoxColumn Header="Создание"/>
@@ -53,7 +109,6 @@
                 <DataGridCheckBoxColumn Header="Изменение"/>
                 <DataGridCheckBoxColumn Header="Удаление"/>
             </DataGrid.Columns>
-            
-        </DataGrid>
+        </DataGrid>-->
     </StackPanel>
 </UserControl>

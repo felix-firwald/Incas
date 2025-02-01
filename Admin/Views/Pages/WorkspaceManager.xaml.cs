@@ -202,8 +202,7 @@ namespace Incas.Admin.Views.Pages
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
             WorkspaceSettings ws = new();
-            ws.ShowDialog("Редактирование настроек", Icon.GearWide);
-            
+            ws.ShowDialog("Редактирование настроек", Icon.GearWide);          
         }
 
         private void AddClassClick(object sender, RoutedEventArgs e)

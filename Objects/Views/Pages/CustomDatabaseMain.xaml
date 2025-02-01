@@ -34,7 +34,7 @@
                             <ListBox
                     Style="{DynamicResource ListBoxMain}"
                     ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
-                    ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" DisplayMemberPath="name" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" DisplayMemberPath="Name" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2" ScrollViewer.VerticalScrollBarVisibility="Auto">
                             </ListBox>
                         </StackPanel>
                     </Expander>

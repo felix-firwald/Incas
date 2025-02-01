@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.Components;
 using Incas.Objects.Documents.Components;
+using Incas.Objects.Exceptions;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Models;
 using Incas.Objects.Processes.Components;
@@ -121,7 +122,7 @@ namespace Incas.Objects.Engine
                 fields.Add(f.Id.ToString());
             }
             q.CreateTable(Helpers.MainTable, fields);
-            if (Helpers.IsEditsMapRequired(data))
+            if (Helpers.IsEditsMapRequired(cl))
             {
                 q.SeparateCommand();
                 List<DbField> editsMapFields = new();
@@ -133,7 +134,7 @@ namespace Incas.Objects.Engine
                     Helpers.AuthorField,
                     Helpers.DataField});
             }
-            if (Helpers.IsPresetsMapRequired(data))
+            if (Helpers.IsPresetsMapRequired(cl))
             {
                 q.SeparateCommand();
                 List<DbField> editsMapFields = new();
@@ -238,7 +239,7 @@ namespace Incas.Objects.Engine
             {
                 updateRequest.Append($"ALTER TABLE [{Helpers.MainTable}] DROP COLUMN [{excf}];");
             }
-            if (classData.ClassType != ClassType.StaticModel && !mapServiceFields.Contains(Helpers.PresetField)) // if preset column must be placed but not found
+            if (cl.Type != ClassType.StaticModel && !mapServiceFields.Contains(Helpers.PresetField)) // if preset column must be placed but not found
             {
                 updateRequest.Append($"ALTER TABLE [{Helpers.MainTable}] ADD COLUMN [{Helpers.PresetField}] TEXT;");
             }
@@ -618,12 +619,14 @@ namespace Incas.Objects.Engine
             List<IObject> objects = [obj];
             await WriteObjects(cl, objects);
         }
-        private static void GetRequestForWritingObject(Query q, IClass cl, ClassData data, IObject obj) // переделать по принципу проверок на интерфейсы!
+        private static void GetRequestForWritingObject(Query q, IClass cl, ClassData data, IObject obj)
         {
-            Dictionary<string, string> values = new()
+            Dictionary<string, string> values = new();
+            if (string.IsNullOrEmpty(obj.Name))
             {
-                { Helpers.NameField, obj.Name.ToString() },
-            };
+                throw new NotNullFailed("Не присвоено имя сохраняемому объекту.");
+            }
+            values.Add(Helpers.NameField, obj.Name.ToString());
             foreach (FieldData fd in obj.Fields)
             {
                 if (fd.ClassField.Type is not FieldType.GlobalConstant and not FieldType.LocalConstant)
@@ -646,7 +649,7 @@ namespace Incas.Objects.Engine
                 q.Update(values);
                 q.WhereEqual(Helpers.IdField, obj.Id.ToString());
                 q.SeparateCommand();
-            }
+            }           
         }
         public static void SetObjectAsTerminated(IClass cl, ITerminable obj)
         {
@@ -661,7 +664,7 @@ namespace Incas.Objects.Engine
             ClassData data = cl.GetClassData();
             List<Models.Field> fields = data.GetFieldsForMap();
             List<string> fieldsRequest = [$"[OBJECTS_MAP].[{Helpers.IdField}]"];
-            if (data.ClassType == ClassType.Document)
+            if (cl.Type == ClassType.Document)
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{Helpers.DateCreatedField}]");
             }
@@ -717,7 +720,7 @@ namespace Incas.Objects.Engine
             List<Models.Field> fields = data.GetFieldsForMap();
             List<string> fieldsRequest = [$"[OBJECTS_MAP].[{Helpers.IdField}]"];
 
-            if (data.ClassType == ClassType.Document)
+            if (cl.Type == ClassType.Document)
             {
                 fieldsRequest.Add($"[OBJECTS_MAP].[{Helpers.DateCreatedField}]");
             }

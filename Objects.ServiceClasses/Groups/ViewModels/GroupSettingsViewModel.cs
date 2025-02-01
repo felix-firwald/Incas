@@ -1,6 +1,9 @@
 ﻿using Incas.Core.ViewModels;
 using Incas.Objects.Engine;
+using Incas.Objects.Models;
 using Incas.Objects.ServiceClasses.Groups.Components;
+using System;
+using System.Collections.Generic;
 
 namespace Incas.Objects.ServiceClasses.Groups.ViewModels
 {
@@ -10,6 +13,28 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         public GroupSettingsViewModel(GroupData data)
         {
             this.GroupData = data;
+            this.GetAllClasses();
+        }
+        private void GetAllClasses()
+        {
+            using (Class cl = new())
+            {
+                this.customPermissions = new();
+                List<ClassItem> classes = cl.GetAllClassItems();
+                foreach (ClassItem item in classes)
+                {
+                    GroupClassPermissionSettings ps = new();
+                    if (this.GroupData.ClassesPermissions.TryGetValue(item.Id, out ps))
+                    {
+                        this.customPermissions.Add(item, ps);
+                    }
+                    else
+                    {
+                        this.customPermissions.Add(item, new());
+                    }
+                }
+            }
+            this.OnPropertyChanged(nameof(this.CustomPermissions));
         }
         public bool GeneralSettingsEditing
         {
@@ -83,11 +108,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.GroupClassPermissions.CreateOperations);
+                return this.GroupData.GroupClassPermissions.CreateOperations;
             }
             set
             {
-                this.GroupData.GroupClassPermissions.CreateOperations = this.ToPermissionType(value);
+                this.GroupData.GroupClassPermissions.CreateOperations = value;
                 this.OnPropertyChanged(nameof(this.GroupsCreateOperations));
             }
         }
@@ -95,11 +120,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.GroupClassPermissions.ViewOperations);
+                return this.GroupData.GroupClassPermissions.ViewOperations;
             }
             set
             {
-                this.GroupData.GroupClassPermissions.ViewOperations = this.ToPermissionType(value);
+                this.GroupData.GroupClassPermissions.ViewOperations = value;
                 this.OnPropertyChanged(nameof(this.GroupsViewOperations));
             }
         }
@@ -107,11 +132,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.GroupClassPermissions.ReadOperations);
+                return this.GroupData.GroupClassPermissions.ReadOperations;
             }
             set
             {
-                this.GroupData.GroupClassPermissions.ReadOperations = this.ToPermissionType(value);
+                this.GroupData.GroupClassPermissions.ReadOperations = value;
                 this.OnPropertyChanged(nameof(this.GroupsReadOperations));
             }
         }
@@ -119,11 +144,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.GroupClassPermissions.ConfidentialAccess);
+                return this.GroupData.GroupClassPermissions.ConfidentialAccess;
             }
             set
             {
-                this.GroupData.GroupClassPermissions.ConfidentialAccess = this.ToPermissionType(value);
+                this.GroupData.GroupClassPermissions.ConfidentialAccess = value;
                 this.OnPropertyChanged(nameof(this.GroupsConfidentialAccess));
             }
         }
@@ -131,11 +156,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.GroupClassPermissions.UpdateOperations);
+                return this.GroupData.GroupClassPermissions.UpdateOperations;
             }
             set
             {
-                this.GroupData.GroupClassPermissions.UpdateOperations = this.ToPermissionType(value);
+                this.GroupData.GroupClassPermissions.UpdateOperations = value;
                 this.OnPropertyChanged(nameof(this.GroupsUpdateOperations));
             }
         }
@@ -143,11 +168,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.GroupClassPermissions.DeleteOperations);
+                return this.GroupData.GroupClassPermissions.DeleteOperations;
             }
             set
             {
-                this.GroupData.GroupClassPermissions.DeleteOperations = this.ToPermissionType(value);
+                this.GroupData.GroupClassPermissions.DeleteOperations = value;
                 this.OnPropertyChanged(nameof(this.GroupsDeleteOperations));
             }
         }
@@ -157,11 +182,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.UserClassPermissions.CreateOperations);
+                return this.GroupData.UserClassPermissions.CreateOperations;
             }
             set
             {
-                this.GroupData.UserClassPermissions.CreateOperations = this.ToPermissionType(value);
+                this.GroupData.UserClassPermissions.CreateOperations = value;
                 this.OnPropertyChanged(nameof(this.UsersCreateOperations));
             }
         }
@@ -169,11 +194,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.UserClassPermissions.ViewOperations);
+                return this.GroupData.UserClassPermissions.ViewOperations;
             }
             set
             {
-                this.GroupData.UserClassPermissions.ViewOperations = this.ToPermissionType(value);
+                this.GroupData.UserClassPermissions.ViewOperations = value;
                 this.OnPropertyChanged(nameof(this.UsersDeleteOperations));
             }
         }
@@ -181,11 +206,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.UserClassPermissions.ReadOperations);
+                return this.GroupData.UserClassPermissions.ReadOperations;
             }
             set
             {
-                this.GroupData.UserClassPermissions.ReadOperations = this.ToPermissionType(value);
+                this.GroupData.UserClassPermissions.ReadOperations = value;
                 this.OnPropertyChanged(nameof(this.UsersDeleteOperations));
             }
         }
@@ -193,11 +218,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.UserClassPermissions.ConfidentialAccess);
+                return this.GroupData.UserClassPermissions.ConfidentialAccess;
             }
             set
             {
-                this.GroupData.UserClassPermissions.ConfidentialAccess = this.ToPermissionType(value);
+                this.GroupData.UserClassPermissions.ConfidentialAccess = value;
                 this.OnPropertyChanged(nameof(this.UsersDeleteOperations));
             }
         }
@@ -205,11 +230,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.UserClassPermissions.UpdateOperations);
+                return this.GroupData.UserClassPermissions.UpdateOperations;
             }
             set
             {
-                this.GroupData.UserClassPermissions.UpdateOperations = this.ToPermissionType(value);
+                this.GroupData.UserClassPermissions.UpdateOperations = value;
                 this.OnPropertyChanged(nameof(this.UsersDeleteOperations));
             }
         }
@@ -217,11 +242,11 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             get
             {
-                return this.FromPermissionType(this.GroupData.UserClassPermissions.DeleteOperations);
+                return this.GroupData.UserClassPermissions.DeleteOperations;
             }
             set
             {
-                this.GroupData.UserClassPermissions.DeleteOperations = this.ToPermissionType(value);
+                this.GroupData.UserClassPermissions.DeleteOperations = value;
                 this.OnPropertyChanged(nameof(this.UsersDeleteOperations));
             }
         }
@@ -245,6 +270,27 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
                 return GroupPermissionType.Allowed;
             }
             return GroupPermissionType.Restricted;
+        }
+        private Dictionary<ClassItem, GroupClassPermissionSettings> customPermissions;
+        public Dictionary<ClassItem, GroupClassPermissionSettings> CustomPermissions
+        {
+            get
+            {
+                return this.customPermissions;
+            }
+            set
+            {
+                this.customPermissions = value;
+                this.OnPropertyChanged(nameof(this.CustomPermissions));
+            }
+        }
+        public void ApplyCustomPermissions()
+        {
+            this.GroupData.ClassesPermissions = new();
+            foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> pair in this.CustomPermissions)
+            {
+                this.GroupData.ClassesPermissions.Add(pair.Key.Id, pair.Value);
+            }
         }
     }
 }

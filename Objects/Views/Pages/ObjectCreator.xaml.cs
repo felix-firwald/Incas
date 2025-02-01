@@ -5,6 +5,7 @@ using Incas.Objects.Components;
 using Incas.Objects.Engine;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Models;
+using Incas.Objects.ServiceClasses.Groups.Components;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.Components;
@@ -32,6 +33,7 @@ namespace Incas.Objects.Views.Pages
         public Preset Preset { get; set; }
         public delegate bool ObjectCreatorData(ObjectCreator creator);
         public delegate void FieldCopyAction(Guid id, string text);
+        public GroupClassPermissionSettings PermissionSettings { get; set; }
         public event FieldCopyAction OnInsertRequested;
         public event ObjectCreatorData OnUpdated;
         public event ObjectCreatorData OnSaveRequested;
@@ -64,7 +66,7 @@ namespace Incas.Objects.Views.Pages
                     }
                 }               
             }
-            if (this.ClassData.ClassType != ClassType.Document)
+            if (this.Class.Type != ClassType.Document)
             {
                 this.RenderArea.Visibility = Visibility.Collapsed;
             }           
@@ -298,6 +300,14 @@ namespace Incas.Objects.Views.Pages
             {
                 throw new Exceptions.AuthorFailed($"Объект с именем \"{this.Object.Name}\" не может быть модифицирован, поскольку не вы являетесь его автором.");
             }
+            if (this.Object.Id == Guid.Empty && !this.PermissionSettings.CreateOperations) // if new
+            {
+                throw new Exceptions.AuthorFailed($"Вы не можете создавать объекты этого класса.");
+            }
+            else if (this.Object.Id != Guid.Empty && !this.PermissionSettings.UpdateOperations)// if already exists
+            {
+                throw new Exceptions.AuthorFailed($"Вы не можете редактировать объекты этого класса.");
+            }
             this.UpdateName();
             this.Object.Name = this.ObjectName.Text;
             if (this.Object.Fields == null)
@@ -426,30 +436,29 @@ namespace Incas.Objects.Views.Pages
             if (this.ClassData.NameTemplate is not null)
             {
                 name = this.ClassData.NameTemplate;
-            }
-            if (string.IsNullOrWhiteSpace(name) && string.IsNullOrEmpty(this.ObjectName.Text))
-            {
-                name = "Объект от " + DateTime.Now.ToString("dd.MM.yyyy");
-                this.ObjectName.Text = name;
-                return name;
-            }
-            foreach (IFillerBase tf in this.fillers)
-            {
-                switch (tf.Field.Type)
+                foreach (IFillerBase tf in this.fillers)
                 {
-                    case FieldType.Table:
-                    case FieldType.Generator:
-                        break;
-                    default:
-                        ISimpleFiller simple = (ISimpleFiller)tf;
-                        string val = simple.GetValue();
-                        if (val != null)
-                        {
-                            name = name.Replace("[" + simple.GetTagName() + "]", val);
-                        }
-                        break;
-                }             
+                    switch (tf.Field.Type)
+                    {
+                        case FieldType.Table:
+                        case FieldType.Generator:
+                            break;
+                        default:
+                            ISimpleFiller simple = (ISimpleFiller)tf;
+                            string val = simple.GetValue();
+                            if (val != null)
+                            {
+                                name = name.Replace("[" + simple.GetTagName() + "]", val);
+                            }
+                            break;
+                    }
+                }
             }
+            else
+            {
+                return this.ObjectName.Text;
+            }
+           
             this.ObjectName.Text = name;
             return name;
         }

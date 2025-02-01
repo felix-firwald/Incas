@@ -1,5 +1,7 @@
 ﻿using Incas.Objects.Engine;
+using Incas.Objects.Exceptions;
 using Incas.Objects.ServiceClasses.Groups.ViewModels;
+using Incas.Objects.ServiceClasses.Users.AutoUI;
 using Incas.Objects.ServiceClasses.Users.Components;
 using Incas.Objects.ServiceClasses.Users.ViewModels;
 using System.Windows.Controls;
@@ -26,7 +28,20 @@ namespace Incas.Objects.ServiceClasses.Users.Views.Controls
         }
         public IObject GetResult()
         {
+            if (string.IsNullOrEmpty(((User)this.TargetObject).Data.Password))
+            {
+                throw new NotNullFailed("Не установлен пароль.");
+            }
             return this.TargetObject;
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            PasswordChanger pc = new();
+            if (pc.ShowDialog("Придумайте пароль", Core.Classes.Icon.Key))
+            {
+                ((User)this.TargetObject).Data.Password = pc.Password1;
+            }
         }
     }
 }

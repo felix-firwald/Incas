@@ -13,44 +13,44 @@ namespace Incas.Objects.ServiceClasses.Groups.Components
         /// Means can users of this group create and copy objects
         /// </summary>
         [JsonProperty("co")]
-        public GroupPermissionType CreateOperations { get; set; }
+        public bool CreateOperations { get; set; }
 
         /// <summary>
         /// Means can users of this group open objects list
         /// </summary>
         [JsonProperty("vo")]
-        public GroupPermissionType ViewOperations { get; set; }
+        public bool ViewOperations { get; set; }
 
         /// <summary>
         /// Means can users of this group open object card and object editor
         /// </summary>
         [JsonProperty("ro")]
-        public GroupPermissionType ReadOperations { get; set; }
+        public bool ReadOperations { get; set; }
 
         /// <summary>
         /// Means can users of this group update existing objects
         /// </summary>
         [JsonProperty("uo")]
-        public GroupPermissionType UpdateOperations { get; set; }
+        public bool UpdateOperations { get; set; }
 
         /// <summary>
         /// Means can users of this group delete objects
         /// </summary>
         [JsonProperty("do")]
-        public GroupPermissionType DeleteOperations { get; set; }
+        public bool DeleteOperations { get; set; }
 
         /// <summary>
         /// Means can users of this group manage presets (if it enabled)
         /// <para>Note that this option does not affect the use of presets</para>
         /// </summary>
         [JsonProperty("po")]
-        public GroupPermissionType PresetOperations { get; set; }
+        public bool PresetOperations { get; set; }
 
         /// <summary>
         /// Means can users of this group access confidential fields (if such exist)
         /// </summary>
         [JsonProperty("ca")]
-        public GroupPermissionType ConfidentialAccess { get; set; }
+        public bool ConfidentialAccess { get; set; }
 
         /// <summary>
         /// Only for service classes
@@ -58,31 +58,38 @@ namespace Incas.Objects.ServiceClasses.Groups.Components
         /// <returns></returns>
         public bool IsTabVisible()
         {
-            if (this.ViewOperations == GroupPermissionType.Allowed)
-            {
-                return true;
-            }
-            return false;
+            return this.ViewOperations;
         }
         public void SetAll(GroupPermissionType type)
         {
-            this.CreateOperations = type;
-            this.ViewOperations = type;
-            this.ReadOperations = type;
-            this.UpdateOperations = type;
-            this.DeleteOperations = type;
-            this.PresetOperations = type;
-            this.ConfidentialAccess = type;
+            bool result = false;
+            switch (type)
+            {
+                case GroupPermissionType.Default:
+                case GroupPermissionType.Restricted:
+                    result = false;
+                    break;
+                case GroupPermissionType.Allowed:
+                    result = true;
+                    break;
+            }
+            this.CreateOperations = result;
+            this.ViewOperations = result;
+            this.ReadOperations = result;
+            this.UpdateOperations = result;
+            this.DeleteOperations = result;
+            this.PresetOperations = result;
+            this.ConfidentialAccess = result;
         }
         public void SetOnlyReadViewAllowed()
         {
-            this.CreateOperations = GroupPermissionType.Restricted;
-            this.ViewOperations = GroupPermissionType.Allowed;
-            this.ReadOperations = GroupPermissionType.Allowed;
-            this.UpdateOperations = GroupPermissionType.Restricted;
-            this.DeleteOperations = GroupPermissionType.Restricted;
-            this.PresetOperations = GroupPermissionType.Restricted;
-            this.ConfidentialAccess = GroupPermissionType.Allowed;
+            this.CreateOperations = false;
+            this.ViewOperations = true;
+            this.ReadOperations = true;
+            this.UpdateOperations = false;
+            this.DeleteOperations = false;
+            this.PresetOperations = false;
+            this.ConfidentialAccess = true;
         }
     }
 }

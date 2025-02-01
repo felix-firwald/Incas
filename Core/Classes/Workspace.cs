@@ -105,8 +105,12 @@ namespace Incas.Core.Classes
             this.CalculateFoldersPaths();
             this.SetDirs();
         }
-        internal WorkspacePrimarySettings GetDefinition()
+        internal WorkspacePrimarySettings GetDefinition(bool refresh = false)
         {
+            if (refresh)
+            {
+                this.definitionCache = null;
+            }
             if (this.definitionCache is null)
             {                
                 try
@@ -151,6 +155,15 @@ namespace Incas.Core.Classes
                 p.CreateParameter();             
             });
             ProgramStatusBar.HideLoadingWindow();
+        }
+        internal bool LogIn(string password)
+        {
+            bool result = false;
+            if (this.CurrentUser.Data.Password == password)
+            {
+                result = true;
+            }
+            return result;
         }
         private void CalculateFoldersPaths()
         {
