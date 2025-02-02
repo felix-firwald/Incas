@@ -12,7 +12,7 @@ namespace Incas.Objects.ServiceClasses.Components
 {
     public static class InitializationManager
     {
-        public async static void RunInitialization(WorkspacePrimarySettings wps, string password)
+        public async static void RunInitialization(WorkspaceDefinition wps, string password)
         {
             wps.ServiceGroups = InitializeGroupClass();
             wps.ServiceUsers = InitializeUserClass();

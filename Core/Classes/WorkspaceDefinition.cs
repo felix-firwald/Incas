@@ -4,7 +4,7 @@ using System;
 
 namespace Incas.Core.Classes
 {
-    public class WorkspacePrimarySettings
+    public class WorkspaceDefinition
     {
         [JsonProperty("i")]
         public Guid Id { get; set; }

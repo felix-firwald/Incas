@@ -142,12 +142,7 @@ namespace Incas.Core.Classes
         {
             return DatabaseManager.InitializeService();
         }
-        internal static Parameter GetParameter(ParameterType type, string name, string defaultValue = "0", bool createIfNot = true)
-        {
-            Parameter par = new();
-            par.GetParameter(type, name, defaultValue, createIfNot);
-            return par;
-        }
+        
 
         #region Incubator
         internal static void InitWorkspace(CreateWorkspace data)

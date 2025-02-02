@@ -88,7 +88,7 @@ namespace Incas.Objects.ServiceClasses.Groups.Components
             }
             catch
             {
-                WorkspacePrimarySettings wps = ProgramState.CurrentWorkspace.GetDefinition();
+                WorkspaceDefinition wps = ProgramState.CurrentWorkspace.GetDefinition();
                 if (wps.ServiceGroups.Id == classId)
                 {
                     result = this.GroupClassPermissions;

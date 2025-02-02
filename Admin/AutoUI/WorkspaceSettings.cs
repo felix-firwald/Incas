@@ -8,7 +8,7 @@ namespace Incas.Admin.AutoUI
 {
     public class WorkspaceSettings : AutoUIBase
     {
-        private WorkspacePrimarySettings data;
+        private WorkspaceDefinition data;
         [Description("Имя рабочего пространства")]
         public string Name
         {

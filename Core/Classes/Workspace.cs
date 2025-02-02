@@ -96,14 +96,14 @@ namespace Incas.Core.Classes
         internal Group CurrentGroup { get; private set; }
         internal delegate void UpdatedUser(User user);
         internal delegate void UpdatedGroup(Group group);
-        internal delegate void UpdatedDefinition(WorkspacePrimarySettings def);
+        internal delegate void UpdatedDefinition(WorkspaceDefinition def);
         internal event UpdatedUser OnUserChanged;
         internal event UpdatedGroup OnGroupChanged;
         internal event UpdatedDefinition OnDefinitionChanged;
         #endregion
 
         private Guid definitionId { get; set; }
-        private WorkspacePrimarySettings definitionCache { get; set; }
+        private WorkspaceDefinition definitionCache { get; set; }
 
         private DateTime LastGarbageCollect {  get; set; }
 
@@ -113,7 +113,7 @@ namespace Incas.Core.Classes
             this.CalculateFoldersPaths();
             this.SetDirs();
         }
-        internal WorkspacePrimarySettings GetDefinition(bool refresh = false)
+        internal WorkspaceDefinition GetDefinition(bool refresh = false)
         {
             if (refresh)
             {
@@ -125,7 +125,7 @@ namespace Incas.Core.Classes
                 {
                     using Parameter par = ProgramState.GetParameter(ParameterType.WORKSPACE, WorkspaceDataName, "", false);
                     this.definitionId = par.Id;
-                    return JsonConvert.DeserializeObject<WorkspacePrimarySettings>(par.Value);
+                    return JsonConvert.DeserializeObject<WorkspaceDefinition>(par.Value);
                 }
                 catch (Exception ex)
                 {
@@ -134,7 +134,7 @@ namespace Incas.Core.Classes
             }
             return this.definitionCache;
         }
-        internal void UpdateDefinition(WorkspacePrimarySettings settings)
+        internal void UpdateDefinition(WorkspaceDefinition settings)
         {
             Parameter p = new(this.definitionId)
             {
