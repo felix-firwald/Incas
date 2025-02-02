@@ -89,9 +89,17 @@ namespace Incas.Core.Classes
             {
                 this.currentUser = value;
                 this.CurrentGroup = value.GetGroup();
+                this.OnUserChanged?.Invoke(value);
+                this.OnGroupChanged?.Invoke(this.CurrentGroup);
             }
         }
-        internal Group CurrentGroup { get; private set; }  
+        internal Group CurrentGroup { get; private set; }
+        internal delegate void UpdatedUser(User user);
+        internal delegate void UpdatedGroup(Group group);
+        internal delegate void UpdatedDefinition(WorkspacePrimarySettings def);
+        internal event UpdatedUser OnUserChanged;
+        internal event UpdatedGroup OnGroupChanged;
+        internal event UpdatedDefinition OnDefinitionChanged;
         #endregion
 
         private Guid definitionId { get; set; }
