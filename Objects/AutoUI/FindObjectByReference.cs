@@ -1,9 +1,9 @@
-﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
-using Incas.Objects.Engine;
-using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI

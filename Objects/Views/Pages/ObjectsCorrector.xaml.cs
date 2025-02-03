@@ -1,7 +1,9 @@
 ﻿using Incas.Core.Classes;
-using Incas.Objects.Engine;
-using Incas.Objects.Exceptions;
 using Incas.Objects.Views.Controls;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,10 +18,10 @@ namespace Incas.Objects.Views.Pages
     public partial class ObjectsCorrector : UserControl
     {
         private const string EditedColumn = "edited";
-        public Models.Field Field { get; set; }
+        public Field Field { get; set; }
         public IClass Class { get; set; }
         public FieldFiller Filler { get; set; }
-        public ObjectsCorrector(IClass cl, List<Guid> list, Models.Field field)
+        public ObjectsCorrector(IClass cl, List<Guid> list, Field field)
         {
             this.InitializeComponent();
             this.Field = field;

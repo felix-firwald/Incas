@@ -1,10 +1,12 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Incas.Core.Classes;
-using Incas.Objects.Components;
-using Incas.Objects.Engine;
+﻿using Incas.Core.Classes;
 using Incas.Objects.Interfaces;
-using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -70,6 +72,36 @@ namespace Incas.Objects.Views.Controls
                 }
             }           
         }
+        public ObjectFieldViewer(ServiceClass cl, Guid data, string label) // all service fields with links (author, group, etc.)
+        {
+            this.InitializeComponent();
+            this.FieldName.Text = label + ":";
+            this.relationClass = cl;
+            this.relationObject = Processor.GetObject(this.relationClass, data);
+            this.FieldValue.Text = this.relationObject.Name;
+            this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
+            this.FieldValue.MouseDown += this.FieldValue_MouseDown;
+            this.FieldValue.ToolTip = "Кликнуть для просмотра объекта";
+            this.ColorizeField(243, 74, 147);
+            this.FilterButton.IsEnabled = false;
+        }
+        public ObjectFieldViewer(DateTime date, string name) // date
+        {
+            this.InitializeComponent();
+            this.FieldName.Text = name + ":";
+            this.FieldValue.Text = date.ToString("f");
+            this.ColorizeField(74, 243, 170);
+            this.FilterButton.IsEnabled = false;
+        }
+        public ObjectFieldViewer(string value, byte r, byte g, byte b) // custom
+        {
+            this.InitializeComponent();
+            this.FieldName.Text = value;
+            this.FieldValue.Text = "";
+            Grid.SetColumnSpan(this.FieldName, 2);
+            this.ColorizeName(r, g, b);
+            this.FilterButton.Visibility = Visibility.Collapsed;
+        }
 
         private async void GenerateRelatedField(Guid id, BindingData bd)
         {
@@ -100,36 +132,7 @@ namespace Incas.Objects.Views.Controls
             }
         }
 
-        public ObjectFieldViewer(Guid data) // author
-        {
-            this.InitializeComponent();
-            this.FieldName.Text = "Автор:";
-            this.relationClass = ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers;
-            this.relationObject = Processor.GetObject(this.relationClass, data);
-            this.FieldValue.Text = this.relationObject.Name;
-            this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
-            this.FieldValue.MouseDown += this.FieldValue_MouseDown;
-            this.FieldValue.ToolTip = "Кликнуть для просмотра объекта";
-            this.ColorizeField(243, 74, 147);
-            this.FilterButton.IsEnabled = false;
-        }
-        public ObjectFieldViewer(DateTime date, string name) // date
-        {
-            this.InitializeComponent();
-            this.FieldName.Text = name + ":";
-            this.FieldValue.Text = date.ToString("f");
-            this.ColorizeField(74, 243, 170);
-            this.FilterButton.IsEnabled = false;
-        }
-        public ObjectFieldViewer(string value, byte r, byte g, byte b) // custom
-        {
-            this.InitializeComponent();
-            this.FieldName.Text = value;
-            this.FieldValue.Text = "";
-            Grid.SetColumnSpan(this.FieldName, 2);
-            this.ColorizeName(r, g, b);
-            this.FilterButton.Visibility = Visibility.Collapsed;
-        }
+        
         public void HideSeparator()
         {
             this.Separator.Visibility = Visibility.Collapsed;

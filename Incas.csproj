@@ -301,9 +301,9 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.118.0" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118.0" />
-    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.118.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.119.0" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119.0" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.119.0" />
     <PackageReference Include="Telegram.Bot" Version="19.0.0" />
     <PackageReference Include="XLParser" Version="1.5.2" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
@@ -337,11 +337,17 @@
     <Folder Include="Objects.Processes\Views\Controls\" />
     <Folder Include="Objects.Processes\Views\Windows\" />
     <Folder Include="Objects.Processes\AutoUI\" />
+    <Folder Include="Objects.ServiceClasses\Groups\Components\" />
+    <Folder Include="Objects.ServiceClasses\Users\Components\" />
+    <Folder Include="Objects.StaticModels\Components\" />
     <Folder Include="Objects\Handlers\" />
     <Folder Include="Resources\" />
     <Folder Include="Rendering\Models\" />
     <Folder Include="Rendering\Views\Controls\" />
     <Folder Include="Rendering\Views\Pages\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IncasEngine\IncasEngine.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="WordGlue3.NET8">

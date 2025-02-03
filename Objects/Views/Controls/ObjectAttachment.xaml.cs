@@ -1,8 +1,8 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using Incas.Objects.Components;
-using Incas.Objects.Engine;
-using Incas.Objects.Models;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.IO;
 using System.Windows.Controls;
@@ -45,7 +45,7 @@ namespace Incas.Objects.Views.Controls
         }
         private void ColorizeExtensionRectangle(byte r, byte b, byte g)
         {
-            this.ExtensionRectangle.Fill = new SolidColorBrush(Color.FromRgb(r, g, b));
+            this.ExtensionRectangle.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(r, g, b));
         }
 
         private void OpenClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

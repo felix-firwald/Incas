@@ -1,6 +1,6 @@
 ﻿using Incas.Core.ViewModels;
-using Incas.Objects.Components;
-using Incas.Objects.Models;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Collections.Generic;
 
@@ -25,7 +25,7 @@ namespace Incas.Objects.ViewModels
         }
 
         public List<Class> Classes => this.classes;
-        public List<Objects.Models.Field> Fields => this.SelectedClass == null ? ([]) : this.SelectedClass.GetClassData().GetBindableFields();
+        public List<Field> Fields => this.SelectedClass == null ? ([]) : this.SelectedClass.GetClassData().GetBindableFields();
         public Class SelectedClass
         {
             get
@@ -47,7 +47,7 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedField));
             }
         }
-        public Objects.Models.Field SelectedField
+        public Field SelectedField
         {
             get
             {
@@ -55,7 +55,7 @@ namespace Incas.Objects.ViewModels
                 {
                     return null;
                 }
-                foreach (Objects.Models.Field f in this.Fields)
+                foreach (Field f in this.Fields)
                 {
                     if (f.Id == this.selectedField)
                     {

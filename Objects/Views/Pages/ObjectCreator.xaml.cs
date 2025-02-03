@@ -1,14 +1,18 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Objects.AutoUI;
-using Incas.Objects.Components;
-using Incas.Objects.Engine;
 using Incas.Objects.Interfaces;
-using Incas.Objects.Models;
-using Incas.Objects.ServiceClasses.Groups.Components;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.Components;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using IronPython.Hosting;
 using Microsoft.Scripting.Hosting;
 using System;
@@ -94,7 +98,7 @@ namespace Incas.Objects.Views.Pages
                 this.SaveArea.Visibility = Visibility.Collapsed;
                 this.TerminatedIcon.Visibility = Visibility.Visible;
                 this.ContentPanel.IsEnabled = false;
-                SolidColorBrush color = new(Color.FromRgb(52, 201, 36));
+                SolidColorBrush color = new(System.Windows.Media.Color.FromRgb(52, 201, 36));
                 this.Separator.Fill = color;
             }
         }
@@ -122,7 +126,7 @@ namespace Incas.Objects.Views.Pages
             {
                 this.ContentPanel.Children.Add((UserControl)this.serviceFiller);
             }
-            foreach (Objects.Models.Field f in this.ClassData.Fields)
+            foreach (Field f in this.ClassData.Fields)
             {
                 if (presetInUse)
                 {
@@ -175,7 +179,7 @@ namespace Incas.Objects.Views.Pages
         {
             try
             {
-                Dictionary<Models.Field, object> dict = this.PullObjectForScript();
+                Dictionary<Field, object> dict = this.PullObjectForScript();
                 await Task.Run(() =>
                 {
                     string scriptResult = this.ClassData.Script;
@@ -183,7 +187,7 @@ namespace Incas.Objects.Views.Pages
                     ScriptScope scope = engine.CreateScope();
                     scriptResult += $"\nmain = {this.Class.Name.Replace(" ", "_")}(";
                     List<string> args = new();
-                    foreach (KeyValuePair<Models.Field, object> fd in dict)
+                    foreach (KeyValuePair<Field, object> fd in dict)
                     {
                         switch (fd.Key.Type)
                         {
@@ -203,9 +207,9 @@ namespace Incas.Objects.Views.Pages
                     scriptResult += $")\nmain.{script}()";
                     engine.Execute(scriptResult, scope);
 
-                    List<Incas.Objects.Components.FieldData> fields = new();
+                    List<FieldData> fields = new();
                     dynamic target = scope.GetVariable("main");
-                    foreach (KeyValuePair<Models.Field, object> fd in dict)
+                    foreach (KeyValuePair<Field, object> fd in dict)
                     {
                         fields.Add(new()
                         {
@@ -237,7 +241,7 @@ namespace Incas.Objects.Views.Pages
             {
                 return;
             }
-            foreach (Components.FieldData field in obj.Fields)
+            foreach (FieldData field in obj.Fields)
             {
                 if (field.ClassField.Id == sender.Field.Id)
                 {
@@ -268,7 +272,7 @@ namespace Incas.Objects.Views.Pages
         public void ApplyObject(IObject obj)
         {
             this.ObjectName.Text = obj.Name;
-            foreach (Components.FieldData data in obj.Fields)
+            foreach (FieldData data in obj.Fields)
             {
                 foreach (IFillerBase filler in this.fillers)
                 {
@@ -280,14 +284,14 @@ namespace Incas.Objects.Views.Pages
                 }
             }      
         }
-        public Dictionary<Models.Field, object> PullObjectForScript()
+        public Dictionary<Field, object> PullObjectForScript()
         {
             if (this.Object.Fields == null)
             {
                 this.Object.Fields = [];
             }
             this.Object.Fields.Clear();
-            Dictionary<Models.Field, object> pairs = new();
+            Dictionary<Field, object> pairs = new();
             foreach (IFillerBase tf in this.ContentPanel.Children)
             {
                 pairs.Add(tf.Field, tf.GetDataForScript());
@@ -298,15 +302,15 @@ namespace Incas.Objects.Views.Pages
         {
             if (this.Locked == true)
             {
-                throw new Exceptions.AuthorFailed($"Объект с именем \"{this.Object.Name}\" не может быть модифицирован, поскольку не вы являетесь его автором.");
+                throw new AuthorFailed($"Объект с именем \"{this.Object.Name}\" не может быть модифицирован, поскольку не вы являетесь его автором.");
             }
             if (this.Object.Id == Guid.Empty && !this.PermissionSettings.CreateOperations) // if new
             {
-                throw new Exceptions.AuthorFailed($"Вы не можете создавать объекты этого класса.");
+                throw new AuthorFailed($"Вы не можете создавать объекты этого класса.");
             }
             else if (this.Object.Id != Guid.Empty && !this.PermissionSettings.UpdateOperations)// if already exists
             {
-                throw new Exceptions.AuthorFailed($"Вы не можете редактировать объекты этого класса.");
+                throw new AuthorFailed($"Вы не можете редактировать объекты этого класса.");
             }
             this.UpdateName();
             this.Object.Name = this.ObjectName.Text;
@@ -325,7 +329,7 @@ namespace Incas.Objects.Views.Pages
             }
             foreach (IFillerBase tf in this.fillers)
             {
-                Components.FieldData data = new()
+                FieldData data = new()
                 {
                     ClassField = tf.Field,
                     Value = tf.GetData()

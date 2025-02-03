@@ -1,7 +1,7 @@
-﻿using Incas.Objects.Components;
-using Incas.Objects.Engine;
-using Incas.Objects.Models;
-using Incas.Objects.Views.Windows;
+﻿using Incas.Objects.Views.Windows;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Interfaces;
 using System.Windows.Controls;
 
 namespace Incas.Objects.Views.Controls

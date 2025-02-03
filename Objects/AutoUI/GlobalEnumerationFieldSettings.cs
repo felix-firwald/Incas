@@ -1,6 +1,6 @@
-﻿using Incas.Core.Classes;
-using Incas.Core.Models;
-using Incas.DialogSimpleForm.Components;
+﻿using Incas.DialogSimpleForm.Components;
+using IncasEngine.Models;
+using IncasEngine.ObjectiveEngine.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -19,7 +19,7 @@ namespace Incas.Objects.AutoUI
         public Selector Selector { get; set; }
         #endregion
 
-        public GlobalEnumerationFieldSettings(Incas.Objects.Models.Field field)
+        public GlobalEnumerationFieldSettings(Field field)
         {
             this.Source = field;
             Parameter p = new();

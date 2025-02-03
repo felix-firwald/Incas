@@ -1,21 +1,21 @@
-﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.Views.Controls;
 using Incas.Core.Views.Windows;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
-using Incas.Objects.Engine;
-using Incas.Objects.Models;
-using Incas.Objects.ServiceClasses.Groups.Components;
 using Incas.Objects.Views.Windows;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 using static Incas.Core.Interfaces.ITabItem;
 
 namespace Incas.Objects.Views.Pages
@@ -135,7 +135,7 @@ namespace Incas.Objects.Views.Pages
             }
         }
 
-        private void ObjectCard_OnFilterRequested(FieldData data)
+        private void ObjectCard_OnFilterRequested(IncasEngine.ObjectiveEngine.Common.FieldData data)
         {
             this.UpdateViewWithFilter(data);
         }

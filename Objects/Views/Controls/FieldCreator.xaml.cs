@@ -6,6 +6,9 @@ using Incas.Objects.Views.Windows;
 using Newtonsoft.Json;
 using System.Windows;
 using System.Windows.Controls;
+using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -20,7 +23,7 @@ namespace Incas.Objects.Views.Controls
         public event FieldMoving OnMoveDownRequested;
         public event FieldMoving OnMoveUpRequested;
         public FieldViewModel vm;
-        public FieldCreator(int index, Incas.Objects.Models.Field data = null)
+        public FieldCreator(int index, Field data = null)
         {
             this.InitializeComponent();
             this.vm = data == null
@@ -32,7 +35,7 @@ namespace Incas.Objects.Views.Controls
             this.DataContext = this.vm;
             this.ExpanderButton.IsChecked = true;
         }
-        public Models.Field GetField()
+        public Field GetField()
         {
             this.vm.CheckField();
             return this.vm.Source;
@@ -93,24 +96,24 @@ namespace Incas.Objects.Views.Controls
 
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
-            Incas.Objects.Models.Field f = this.vm.Source;
+            Field f = this.vm.Source;
             string name = $"Настройки поля [{f.Name}]";
             switch (f.Type)
             {
-                case Components.FieldType.Variable:
+                case FieldType.Variable:
                     TextFieldSettings tf = new(f);
                     tf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
                     break;
-                case Components.FieldType.Text:
+                case FieldType.Text:
                     TextBigFieldSettings tb = new(f);
                     tb.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
                     break;
-                case Components.FieldType.Number:
+                case FieldType.Number:
                     NumberFieldSettings n = new(f);
                     n.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
-                case Components.FieldType.Relation:
-                    Objects.Components.BindingData db = new();
+                case FieldType.Relation:
+                    BindingData db = new();
                     DialogBinding dialog = new(f.Value);
                     dialog.ShowDialog();
                     if (dialog.Result == true)
@@ -120,38 +123,38 @@ namespace Incas.Objects.Views.Controls
                         f.Value = JsonConvert.SerializeObject(db);
                     }
                     break;
-                case Components.FieldType.LocalEnumeration:
+                case FieldType.LocalEnumeration:
                     LocalEnumerationFieldSettings le = new(f);
                     le.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
-                case Components.FieldType.GlobalEnumeration:
+                case FieldType.GlobalEnumeration:
                     GlobalEnumerationFieldSettings ge = new(f);
                     ge.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
-                case Components.FieldType.LocalConstant:
+                case FieldType.LocalConstant:
                     ConstantFieldSettings cf = new(f);
                     cf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
                     break;
-                case Components.FieldType.GlobalConstant:
+                case FieldType.GlobalConstant:
                     GlobalConstantFieldSettings gc = new(f);
                     gc.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
                     break;
-                case Components.FieldType.HiddenField:
+                case FieldType.HiddenField:
                     ConstantFieldSettings hf = new(f);
                     hf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
                     break;
-                case Components.FieldType.Date:
+                case FieldType.Date:
                     DateFieldSettings dt = new(f);
                     dt.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
-                case Components.FieldType.Table:
+                case FieldType.Table:
                     TableSettings ts = new(f.Value, f.Name);
                     if (ts.ShowDialog() == true)
                     {
                         this.vm.Source.Value = JsonConvert.SerializeObject(ts.Data);
                     }
                     break;
-                case Components.FieldType.Generator:
+                case FieldType.Generator:
                     GeneratorFieldSettings gf = new(f);
                     gf.ShowDialog(name, Icon.Sliders);
                     break;

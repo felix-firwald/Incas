@@ -1,15 +1,17 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using Incas.Objects.Components;
-using Incas.Objects.Engine;
 using Incas.Objects.Interfaces;
-using Incas.Objects.Models;
-using Incas.Objects.ServiceClasses.Groups.Components;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -70,9 +72,9 @@ namespace Incas.Objects.Views.Pages
         {
             return ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(this.Class.Id);
         }
-        private SolidColorBrush GetColor(Color color, byte a = 255)
+        private SolidColorBrush GetColor(IncasEngine.ObjectiveEngine.Common.Color color, byte a = 255)
         {
-            return new SolidColorBrush(Color.FromArgb(a, color.R, color.G, color.B));
+            return new SolidColorBrush(System.Windows.Media.Color.FromArgb(a, color.R, color.G, color.B));
         }
         //private void ShowStatus(Components.ObjectBase obj)
         //{
@@ -188,37 +190,38 @@ namespace Incas.Objects.Views.Pages
                 this.FieldsContentPanel.Children.Clear();
                 this.ObjectName.Text = obj.Name;
                 this.id = obj.Id;
-                IHasAuthor objWithAuthor = obj as IHasAuthor;
-                if (objWithAuthor is not null)
-                {
-                    ObjectFieldViewer ofAuthor = new(objWithAuthor.AuthorId);
-                    this.FieldsContentPanel.Children.Add(ofAuthor);
-                }
-                IHasCreationDate objWithCreationDate = obj as IHasCreationDate;
-                if (objWithCreationDate is not null)
-                {
-                    ObjectFieldViewer ofDate = new(objWithCreationDate.CreationDate, "Дата создания");
-                    this.FieldsContentPanel.Children.Add(ofDate);
-                }
-                ITerminable objWithTerm = obj as ITerminable;
-                if (objWithTerm is not null && objWithTerm.Terminated)
-                {
-                    this.StatusBorder.IsEnabled = false;
-                    this.EditIcon.Visibility = Visibility.Collapsed;
-                    ObjectFieldViewer terminatedCheck = new("Процесс был завершен.", 52, 201, 36);
-                    this.FieldsContentPanel.Children.Insert(0, terminatedCheck);
-                    ObjectFieldViewer ofTerminatedDate = new(objWithTerm.TerminatedDate, "Дата завершения процесса");
-                    this.FieldsContentPanel.Children.Add(ofTerminatedDate);
-                }
-                else
-                {
-                    //if (this.ClassData.Statuses?.Count == obj.Status)
-                    //{
-                    //    TerminateObjectProcessMessage box = new();
-                    //    box.OnTerminateRequested += this.Box_OnTerminateRequested;
-                    //    this.FieldsContentPanel.Children.Insert(0, box);
-                    //}
-                }
+                ServiceExtensionFieldsManager.AppendServiceFieldViewers(obj, this.FieldsContentPanel);
+                //IHasAuthor objWithAuthor = obj as IHasAuthor;
+                //if (objWithAuthor is not null)
+                //{
+                //    ObjectFieldViewer ofAuthor = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers, objWithAuthor.AuthorId, "Автор");
+                //    this.FieldsContentPanel.Children.Add(ofAuthor);
+                //}
+                //IHasCreationDate objWithCreationDate = obj as IHasCreationDate;
+                //if (objWithCreationDate is not null)
+                //{
+                //    ObjectFieldViewer ofDate = new(objWithCreationDate.CreationDate, "Дата создания");
+                //    this.FieldsContentPanel.Children.Add(ofDate);
+                //}
+                //ITerminable objWithTerm = obj as ITerminable;
+                //if (objWithTerm is not null && objWithTerm.Terminated)
+                //{
+                //    this.StatusBorder.IsEnabled = false;
+                //    this.EditIcon.Visibility = Visibility.Collapsed;
+                //    ObjectFieldViewer terminatedCheck = new("Процесс был завершен.", 52, 201, 36);
+                //    this.FieldsContentPanel.Children.Insert(0, terminatedCheck);
+                //    ObjectFieldViewer ofTerminatedDate = new(objWithTerm.TerminatedDate, "Дата завершения процесса");
+                //    this.FieldsContentPanel.Children.Add(ofTerminatedDate);
+                //}
+                //else
+                //{
+                //    //if (this.ClassData.Statuses?.Count == obj.Status)
+                //    //{
+                //    //    TerminateObjectProcessMessage box = new();
+                //    //    box.OnTerminateRequested += this.Box_OnTerminateRequested;
+                //    //    this.FieldsContentPanel.Children.Insert(0, box);
+                //    //}
+                //}
                 if (obj.Fields is null)
                 {
                     return;

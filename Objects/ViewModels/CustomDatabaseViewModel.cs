@@ -1,8 +1,8 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
-using Incas.Objects.Components;
-using Incas.Objects.Engine;
-using Incas.Objects.Models;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Windows;

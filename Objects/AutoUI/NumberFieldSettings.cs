@@ -1,4 +1,6 @@
 ﻿using Incas.Objects.Components;
+using IncasEngine.ObjectiveEngine.FieldComponents;
+using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System.ComponentModel;
 
@@ -22,7 +24,7 @@ namespace Incas.Objects.AutoUI
         public int MaxValue { get; set; }
         #endregion
 
-        public NumberFieldSettings(Incas.Objects.Models.Field field)
+        public NumberFieldSettings(Field field)
         {
             this.Source = field;
             this.GetBaseData();

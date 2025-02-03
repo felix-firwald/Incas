@@ -1,7 +1,7 @@
 ﻿using Incas.Core.Classes;
-using Incas.Core.Models;
 using Incas.Core.ViewModels;
-using Incas.Objects.Models;
+using IncasEngine.Models;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -44,7 +44,7 @@ namespace Incas.Admin.ViewModels
             }
         }
 
-        public DataTable Constants
+        public List<ParameterItem> Constants
         {
             get
             {
@@ -52,7 +52,7 @@ namespace Incas.Admin.ViewModels
                 return p.GetConstants();
             }
         }
-        public DataTable Enumerations
+        public List<ParameterItem> Enumerations
         {
             get
             {
@@ -60,8 +60,8 @@ namespace Incas.Admin.ViewModels
                 return p.GetEnumerators();
             }
         }
-        private DataRow selectedConstant;
-        public DataRow SelectedConstant
+        private ParameterItem selectedConstant;
+        public ParameterItem SelectedConstant
         {
             get => this.selectedConstant;
             set
@@ -70,8 +70,8 @@ namespace Incas.Admin.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedConstant));
             }
         }
-        private DataRow selectedEnumeration;
-        public DataRow SelectedEnumeration
+        private ParameterItem selectedEnumeration;
+        public ParameterItem SelectedEnumeration
         {
             get => this.selectedEnumeration;
             set
@@ -82,44 +82,79 @@ namespace Incas.Admin.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedEnumValues));
             }
         }
-        public string SelectedEnumerationName => this.selectedEnumeration == null ? "(не выбрано)" : this.SelectedEnumeration["Наименование перечисления"].ToString();
-        private string enumvals;
-        public string SelectedEnumValues
+        public string SelectedEnumerationName => this.selectedEnumeration.Id == Guid.Empty ? "(не выбрано)" : this.SelectedEnumeration.Name;
+        public List<string> SelectedEnumValues
         {
             get
             {
-                if (this.selectedEnumeration == null)
+                if (this.selectedEnumeration.Id == Guid.Empty)
                 {
-                    return "";
+                    return new();
                 }
-                string source = this.SelectedEnumeration["Идентификатор"].ToString();
-                List<string> list = ProgramState.GetEnumeration(Guid.Parse(source));
-                string result = "";
-                int counter = 1;
-                foreach (string value in list)
-                {
-                    result += $"({counter}) {value}\n";
-                    counter++;
-                }
-                //DialogsManager.ShowInfoDialog(result);
-                return result;
-            }
-            set
-            {
-                this.enumvals = value;
-                this.OnPropertyChanged(nameof(this.SelectedEnumValues));
+                return ProgramState.GetEnumeration(this.SelectedEnumeration.Id);
             }
         }
-        public DataTable Classes
+        public List<string> ClassesCategories
         {
             get
             {
                 using Class cl = new();
-                return cl.GetAllClassesAsDataTable();
+                return cl.GetCategories();
+            }
+        }
+        private string selectedCategory;
+        public string SelectedCategory
+        {
+            get
+            {
+                if (this.selectedCategory == null)
+                {
+                    List<string> categories = this.ClassesCategories;
+                    if (categories?.Count > 0)
+                    {
+                        return categories[0];
+                    }                   
+                }
+                return this.selectedCategory;
+            }
+            set
+            {
+                this.selectedCategory = value;
+                this.OnPropertyChanged(nameof(this.SelectedCategory));
+                this.classes = null;
+                this.OnPropertyChanged(nameof(this.Classes));
+                this.OnPropertyChanged(nameof(this.SelectedClass));
+            }
+        }
+        private List<ClassItem> classes;
+        public List<ClassItem> Classes
+        {
+            get
+            {
+                if (this.classes == null)
+                {
+                    using Class cl = new();
+                    this.classes = cl.GetAllClassItemsByCategory(this.SelectedCategory);
+                }
+                return this.classes;
+            }
+        }
+        private ClassItem selectedClass;
+        public ClassItem SelectedClass
+        {
+            get
+            {
+                return this.selectedClass;
+            }
+            set
+            {
+                this.selectedClass = value;
+                this.OnPropertyChanged(nameof(this.SelectedClass));
             }
         }
         public void UpdateClasses()
         {
+            this.OnPropertyChanged(nameof(this.ClassesCategories));
             this.OnPropertyChanged(nameof(this.Classes));
         }
         //private DataRow selectedRow;
@@ -139,6 +174,7 @@ namespace Incas.Admin.ViewModels
         public void UpdateConstants()
         {
             this.OnPropertyChanged(nameof(this.Constants));
+            this.OnPropertyChanged(nameof(this.SelectedConstant));
         }
         public void UpdateEnumerations()
         {

@@ -1,6 +1,7 @@
-﻿using Incas.Objects.Engine;
-using Incas.Objects.ServiceClasses.Groups.Components;
-using Incas.Objects.ServiceClasses.Groups.ViewModels;
+﻿using Incas.Objects.ServiceClasses.Groups.ViewModels;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Users.Components;
 using System;
 using System.Windows.Controls;
 

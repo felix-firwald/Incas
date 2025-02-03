@@ -1,6 +1,10 @@
 ﻿using Incas.Core.ViewModels;
 using Incas.Objects.Components;
-using Incas.Objects.Models;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.FieldComponents;
+using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -149,7 +153,7 @@ namespace Incas.Objects.ViewModels
         {
             if (string.IsNullOrWhiteSpace(this.NameOfField))
             {
-                throw new Exceptions.FieldDataFailed($"Одному из полей не присвоено имя. Настройте поле, а затем попробуйте снова.");
+                throw new FieldDataFailed($"Одному из полей не присвоено имя. Настройте поле, а затем попробуйте снова.");
             }
             try
             {
@@ -168,7 +172,7 @@ namespace Incas.Objects.ViewModels
                         BindingData bd = JsonConvert.DeserializeObject<BindingData>(this.Source.Value);
                         if (bd.Class == Guid.Empty || bd.Field == Guid.Empty)
                         {
-                            throw new Exceptions.FieldDataFailed($"Не определена привязка у поля [{this.Source.Name}] (\"{this.Source.VisibleName}\"). Настройте поле, а затем попробуйте снова.");
+                            throw new FieldDataFailed($"Не определена привязка у поля [{this.Source.Name}] (\"{this.Source.VisibleName}\"). Настройте поле, а затем попробуйте снова.");
                         }
                         break;
                     case FieldType.GlobalConstant:
@@ -189,7 +193,7 @@ namespace Incas.Objects.ViewModels
             }
             catch
             {
-                throw new Exceptions.FieldDataFailed($"Поле [{this.Source.Name}] (\"{this.Source.VisibleName}\") не настроено. Настройте поле, а затем попробуйте снова.");
+                throw new FieldDataFailed($"Поле [{this.Source.Name}] (\"{this.Source.VisibleName}\") не настроено. Настройте поле, а затем попробуйте снова.");
             }
         }
     }

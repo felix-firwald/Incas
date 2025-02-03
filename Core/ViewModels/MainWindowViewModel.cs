@@ -116,7 +116,8 @@ namespace Incas.Core.ViewModels
 
         public void LoadInfo()
         {
-            this.WorkspaceName = ProgramState.CurrentWorkspace.GetDefinition().Name;
+            this.WorkspaceName = ProgramState.CurrentWorkspace.GetDefinition(true).Name;
+            this.OnPropertyChanged(nameof(this.Surname));
         }
     }
 }

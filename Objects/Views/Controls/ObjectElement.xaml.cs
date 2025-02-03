@@ -1,6 +1,7 @@
-﻿using Incas.Objects.Engine;
-using Incas.Objects.Models;
-using Incas.Objects.Views.Pages;
+﻿using Incas.Objects.Views.Pages;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Windows.Controls;
 using System.Windows.Input;

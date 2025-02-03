@@ -1,6 +1,6 @@
 ﻿using Incas.DialogSimpleForm.Components;
-using Incas.Objects.Components;
-using Incas.Objects.Models;
+using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI

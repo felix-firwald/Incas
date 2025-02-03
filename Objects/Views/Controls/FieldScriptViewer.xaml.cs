@@ -1,4 +1,5 @@
 ﻿using Incas.Objects.ViewModels;
+using IncasEngine.ObjectiveEngine.Models;
 using System.Windows.Controls;
 
 namespace Incas.Objects.Views.Controls
@@ -9,7 +10,7 @@ namespace Incas.Objects.Views.Controls
     public partial class FieldScriptViewer : UserControl
     {
         public FieldViewModel vm;
-        public delegate void FieldScriptAction(Models.Field field);
+        public delegate void FieldScriptAction(Field field);
         public event FieldScriptAction OnLinkInsertingRequested;
         public event FieldScriptAction OnBindingEventRequested;
         public event FieldScriptAction OnBindingActionRequested;

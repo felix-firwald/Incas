@@ -3,6 +3,7 @@ using Incas.Core.Classes;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Pages;
+using IncasEngine.ObjectiveEngine.Classes;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -149,7 +150,7 @@ namespace Incas.Rendering.Components
                         string value = ff.GetValue();
                         this.tagsToReplace.Add(filler.Field.Name);
                         this.values.Add(value);
-                        if (ff.Field.Type == Objects.Components.FieldType.Relation)
+                        if (ff.Field.Type == FieldType.Relation)
                         {
                             foreach (KeyValuePair<string, string> fd in ff.GetDataFromObjectRelation())
                             {
@@ -158,10 +159,10 @@ namespace Incas.Rendering.Components
                             }
                         }
                         break;
-                    case Objects.Components.FieldType.Table:
+                    case FieldType.Table:
                         this.tables.Add(filler.Field.Name, ((ITableFiller)filler).GetValue());
                         break;
-                    case Objects.Components.FieldType.Generator:
+                    case FieldType.Generator:
                         break;
                 }
             }

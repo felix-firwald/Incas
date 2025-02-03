@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Attributes;
 using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
+using IncasEngine.Workspace.Interfaces;
 using System.ComponentModel;
 
 namespace Incas.Core.AutoUI
@@ -10,7 +11,7 @@ namespace Incas.Core.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    internal class CreateWorkspace : AutoUIBase
+    internal class CreateWorkspace : AutoUIBase, IWorkspaceCreationData
     {
         #region Data     
         [Description("Наименование рабочего пространства")]

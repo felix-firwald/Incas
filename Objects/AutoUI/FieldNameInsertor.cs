@@ -1,10 +1,8 @@
-﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
-using Incas.DialogSimpleForm.Components;
-using Incas.Objects.Models;
+﻿using Incas.DialogSimpleForm.Components;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Field = Incas.Objects.Models.Field;
 
 namespace Incas.Objects.AutoUI
 {
@@ -28,11 +26,11 @@ namespace Incas.Objects.AutoUI
             {
                 switch (field.Type)
                 {
-                    case Components.FieldType.Variable:
-                    case Components.FieldType.Text:
-                    case Components.FieldType.Number:
-                    case Components.FieldType.Date:
-                    case Components.FieldType.Relation:
+                    case FieldType.Variable:
+                    case FieldType.Text:
+                    case FieldType.Number:
+                    case FieldType.Date:
+                    case FieldType.Relation:
                         this.Selector.Pairs.Add(field, field.Name);
                         break;
                 }               

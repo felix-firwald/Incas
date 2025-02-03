@@ -1,5 +1,7 @@
 ﻿using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Components;
+using IncasEngine.ObjectiveEngine.FieldComponents;
+using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
@@ -25,7 +27,7 @@ namespace Incas.Objects.AutoUI
         public DateTime EndDate { get; set; }
         #endregion
 
-        public DateFieldSettings(Incas.Objects.Models.Field field)
+        public DateFieldSettings(Field field)
         {
             this.Source = field;
             this.GetBaseData();

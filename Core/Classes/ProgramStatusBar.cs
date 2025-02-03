@@ -15,6 +15,19 @@ namespace Incas.Core.Classes
             LoadingBox = new();
             ProgramState.MainWindow.PlaceStatusBar(LoadingBox);
         }
+        static ProgramStatusBar()
+        {
+            IncasEngine.Core.EngineEvents.OnLoadingDialogNeeds += InitializeLoadingWindow;
+            IncasEngine.Core.EngineEvents.OnLoadingDialogCanBeClosed += EngineEvents_OnLoadingDialogCanBeClosed;
+            IncasEngine.Core.EngineEvents.OnProcessLoadingNeeds += SetText;
+            IncasEngine.Core.EngineEvents.OnProcessLoadingCanBeHide += Hide;
+        }
+
+        private static void EngineEvents_OnLoadingDialogCanBeClosed(string header, string text)
+        {
+            HideLoadingWindow();
+        }
+
         private static void InitializeLoadingWindow(string name, string description)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>

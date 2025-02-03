@@ -43,15 +43,19 @@
                         </StackPanel>
                     </Button>
                 </Grid>
-                
+
             </GroupBox>
             <GroupBox Header="Классы (типы) объектов" Grid.Row="1">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" MinWidth="180"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <WrapPanel>
+                    <WrapPanel Grid.ColumnSpan="2">
                         <Button Style="{StaticResource ButtonMainFinish}" Click="AddClassClick" Visibility="{Binding CreatingClassVisibility}" Width="180" HorizontalAlignment="Left">
                             <StackPanel Orientation="Horizontal">
                                 <Path Fill="White" Data="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0 M12.096 6.223A5 5 0 0 0 13 5.698V7c0 .289-.213.654-.753 1.007a4.5 4.5 0 0 1 1.753.25V4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16c.536 0 1.058-.034 1.555-.097a4.5 4.5 0 0 1-.813-.927Q8.378 15 8 15c-1.464 0-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13h.027a4.6 4.6 0 0 1 0-1H8c-1.464 0-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10q.393 0 .774-.024a4.5 4.5 0 0 1 1.102-1.132C9.298 8.944 8.666 9 8 9c-1.464 0-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777M3 4c0-.374.356-.875 1.318-1.313C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4" VerticalAlignment="Center"/>
@@ -77,21 +81,54 @@
                             </StackPanel>
                         </Button>
                     </WrapPanel>
-                    <DataGrid x:Name="ClassesTable" Style="{StaticResource DataGridMain}" ColumnWidth="*" AutoGeneratingColumn="ClassesTable_AutoGeneratingColumn" IsReadOnly="True" ItemsSource="{Binding Classes}" SelectedValue="{Binding SelectedClass}" Grid.Row="1">
+                    <!--<DataGrid x:Name="ClassesTable" Style="{StaticResource DataGridMain}" ColumnWidth="*" AutoGeneratingColumn="ClassesTable_AutoGeneratingColumn" IsReadOnly="True" ItemsSource="{Binding Classes}" SelectedValue="{Binding SelectedClass}" Grid.Row="1">
                         
-                    </DataGrid>
+                    </DataGrid>-->
+                    <ListBox Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemGray}" ItemsSource="{Binding ClassesCategories}" SelectedItem="{Binding SelectedCategory}" Grid.Row="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Fill="{StaticResource DarkYellow}" Margin="0,0,5,0" Data="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+
+                                    <TextBlock Text="{Binding }" TextElement.FontWeight="Bold"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" ItemContainerStyle="{StaticResource ListBoxItemMicro}" Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Row="1" Grid.Column="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Класс: " Foreground="{StaticResource Icon}"/>
+                                    <TextBlock Text="{Binding Name}" TextElement.FontWeight="Bold"/>
+                                    <StackPanel.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Редактировать класс" Click="EditClassClick" Visibility="{Binding UpdatingClassVisibility}"/>
+                                            <MenuItem Header="Исправить класс" Click="FixClassClick" Visibility="{Binding UpdatingClassVisibility}"/>
+                                            <MenuItem Header="Удалить класс" Click="RemoveClassClick" Visibility="{Binding RemovingClassVisibility}"/>
+                                        </ContextMenu>
+                                    </StackPanel.ContextMenu>
+                                </StackPanel>
+
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
-                
+
             </GroupBox>
         </Grid>
-        
+
         <GroupBox Header="Глобальные константы" Grid.Column="1" Margin="5,5,5,5">
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*" MaxWidth="300"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <WrapPanel Orientation="Horizontal">
+                <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
                     <Button Style="{StaticResource ButtonMainFinish}" Click="AddConstantClick" Width="180" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal">
                             <Path Fill="White" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
@@ -117,11 +154,19 @@
                         </StackPanel>
                     </Button>
                 </WrapPanel>
-
-                <DataGrid x:Name="ConstantsTable" Style="{StaticResource DataGridMain}" ColumnWidth="*" AutoGeneratingColumn="ConstantsTable_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1">
-
-                </DataGrid>
-                
+                <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding Constants}" SelectedItem="{Binding SelectedConstant}" ItemContainerStyle="{StaticResource ListBoxItemGray}" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Path Fill="{StaticResource DarkYellow}" Margin="0,0,5,0" Data="M2.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C3.25 2 2.49 2.759 2.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6M13.886 7.9v.163c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456V7.332c-1.114 0-1.49-.362-1.49-1.456V4.352C13.51 2.759 12.75 2 11.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6"/>
+                                <TextBlock Text="{Binding Name}" TextElement.FontWeight="Bold"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Border Grid.Row="1" Grid.Column="1" Margin="5" CornerRadius="8" Background="{StaticResource Black}">
+                    <TextBlock Text="{Binding SelectedConstant.Value}" TextWrapping="WrapWithOverflow" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
             </Grid>
         </GroupBox>
         <GridSplitter Grid.RowSpan="2"/>
@@ -129,8 +174,8 @@
         <GroupBox Header="Глобальные перечисления" Grid.Column="1" Margin="5,5,5,5" Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="6*" MinWidth="200"/>
+                    <ColumnDefinition Width="4*" MinWidth="250"/>
+                    <ColumnDefinition Width="6*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
@@ -162,26 +207,19 @@
                         </StackPanel>
                     </Button>
                 </WrapPanel>
+                <ListBox Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemGray}" ItemsSource="{Binding Enumerations}" SelectedItem="{Binding SelectedEnumeration}" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Path Fill="{StaticResource DarkYellow}" RenderOptions.BitmapScalingMode="NearestNeighbor" Margin="0,0,5,0" Data="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                                <TextBlock Text="{Binding Name}" TextElement.FontWeight="Bold"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <ListBox Style="{StaticResource ListBoxMain}" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding SelectedEnumValues}" SelectionChanged="ListBox_SelectionChanged">
 
-                <DataGrid x:Name="EnumsTable" Style="{StaticResource DataGridMain}" ColumnWidth="*" AutoGeneratingColumn="EnumsTable_AutoGeneratingColumn" ItemsSource="{Binding Enumerations}" SelectionChanged="EnumsTable_SelectionChanged" SelectionUnit="FullRow" IsReadOnly="True" Grid.Row="1" Margin="5,5,5,5">
-
-                </DataGrid>
-                <Border Margin="5" CornerRadius="0,0,8,0" BorderBrush="{StaticResource Element}" BorderThickness="2" Background="{StaticResource Black}" Grid.Row="1" Grid.Column="1">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        <Rectangle Fill="{StaticResource Dark}"/>
-                        <Label Style="{StaticResource LabelElement}" MinHeight="25" Content="{Binding SelectedEnumerationName, FallbackValue=(Не выбрано)}" Foreground="{DynamicResource LightPurple}" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Center"/>
-                        <ScrollViewer Grid.Row="1" Margin="5,5,5,5">
-                            <TextBlock Text="{Binding SelectedEnumValues}" Foreground="{DynamicResource GrayLight}" FontFamily="JetBrains Mono" FontSize="11" />
-                        </ScrollViewer>
-                        
-                    </Grid>
-                </Border>
-
-
+                </ListBox>
             </Grid>
         </GroupBox>
     </Grid>

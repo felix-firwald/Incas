@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using IncasEngine.ObjectiveEngine.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -16,7 +17,7 @@ namespace Incas.Objects.AutoUI
         public List<string> Values { get; set; }
         #endregion
 
-        public LocalEnumerationFieldSettings(Incas.Objects.Models.Field field)
+        public LocalEnumerationFieldSettings(Field field)
         {
             this.Source = field;
             this.GetBaseData();

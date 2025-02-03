@@ -1,5 +1,6 @@
 ﻿using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Components;
+using IncasEngine.ObjectiveEngine.Common;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Media;
@@ -23,14 +24,14 @@ namespace Incas.Objects.AutoUI
         public string Description { get; set; }
 
         [Description("Цвет статуса")]
-        public Color Color { get; set; }
+        public System.Windows.Media.Color Color { get; set; }
         #endregion
 
         public StatusSettings(StatusData data)
         {
             this.Name = data.Name;
             this.Description = data.Description;
-            this.Color = data.Color;
+            this.Color = new() { R = data.Color.R, G = data.Color.G, B = data.Color.B };
         }
         public StatusSettings()
         {
@@ -44,7 +45,7 @@ namespace Incas.Objects.AutoUI
             {
                 Name = this.Name,
                 Description = this.Description,
-                Color = this.Color
+                Color = new() { R = this.Color.R, G = this.Color.G, B = this.Color.B }
             };
             return data;
         }

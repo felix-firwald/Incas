@@ -88,7 +88,7 @@ namespace Incas.Rendering.Components
                         string value = ff.GetValue();
                         this.tagsToReplace.Add(filler.Field.Name);
                         this.values.Add(value);
-                        if (filler.Field.Type == Objects.Components.FieldType.Relation)
+                        if (filler.Field.Type == IncasEngine.ObjectiveEngine.Classes.FieldType.Relation)
                         {
                             foreach (KeyValuePair<string,string> fd in ff.GetDataFromObjectRelation())
                             {
@@ -97,10 +97,10 @@ namespace Incas.Rendering.Components
                             }
                         }
                         break;
-                    case Objects.Components.FieldType.Table:
+                    case IncasEngine.ObjectiveEngine.Classes.FieldType.Table:
                         this.tables.Add(filler.Field.Name, ((ITableFiller)filler).GetValue());
                         break;
-                    case Objects.Components.FieldType.Generator:
+                    case IncasEngine.ObjectiveEngine.Classes.FieldType.Generator:
                         break;
                 }
             }

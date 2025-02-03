@@ -1,5 +1,5 @@
-﻿using Incas.Core.Models;
-using Incas.DialogSimpleForm.Components;
+﻿using Incas.DialogSimpleForm.Components;
+using IncasEngine.Models;
 using System.ComponentModel;
 
 namespace Incas.Admin.AutoUI

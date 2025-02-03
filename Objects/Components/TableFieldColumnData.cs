@@ -1,4 +1,6 @@
-﻿namespace Incas.Objects.Components
+﻿using IncasEngine.ObjectiveEngine.Classes;
+
+namespace Incas.Objects.Components
 {
     public class TableFieldColumnData
     {

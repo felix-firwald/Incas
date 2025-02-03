@@ -4,18 +4,20 @@ using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Documents.Views.Controls;
-using Incas.Objects.Exceptions;
-using Incas.Objects.Models;
 using Incas.Objects.ViewModels;
 using Incas.Objects.Views.Controls;
 using Incas.Rendering.Components;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
-using Field = Incas.Objects.Models.Field;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -55,7 +57,7 @@ namespace Incas.Objects.Views.Windows
             Class cl = new(id);
             this.vm = new(cl);
             this.DataContext = this.vm;
-            foreach (Models.Field f in cl.GetClassData().Fields)
+            foreach (Field f in cl.GetClassData().Fields)
             {
                 this.AddField(f);
             }            
@@ -68,7 +70,7 @@ namespace Incas.Objects.Views.Windows
             ProgramState.OpenWebPage("https://teletype.in/@incas/classes");
         }
 
-        private void AddField(Incas.Objects.Models.Field data = null)
+        private void AddField(Field data = null)
         {
             Controls.FieldCreator fc = new(this.ContentPanel.Children.Count, data);
             fc.OnRemove += this.Fc_OnRemove;
@@ -190,7 +192,7 @@ namespace Incas.Objects.Views.Windows
             if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
             {
                 ClassData cd = cs.GetSelectedClassData();
-                foreach (Objects.Models.Field f in cd.Fields)
+                foreach (Field f in cd.Fields)
                 {
                     f.Id = Guid.NewGuid();
                     this.AddField(f);
@@ -202,19 +204,19 @@ namespace Incas.Objects.Views.Windows
             VirtualFieldsAppender appender = new();
             if (appender.ShowDialog("Настройка виртуальных полей", Core.Classes.Icon.Magic))
             {
-                foreach (Models.Field f in appender.GetFields())
+                foreach (Field f in appender.GetFields())
                 {
                     this.AddField(f);
                 }
             }
         }
-        private List<Models.Field> GetActualFields()
+        private List<Field> GetActualFields()
         {
-            List<Models.Field> fields = [];
+            List<Field> fields = [];
             List<string> names = [];
             foreach (Controls.FieldCreator item in this.ContentPanel.Children)
             {
-                Models.Field f = item.GetField();
+                Field f = item.GetField();
                 if (names.Contains(f.Name))
                 {
                     throw new FieldDataFailed($"Поле [{f.Name}] встречается более одного раза. Имена полей должны быть уникальными.");
@@ -244,7 +246,7 @@ namespace Incas.Objects.Views.Windows
                     DialogsManager.ShowExclamationDialog("Класс не может не содержать полей.", "Сохранение прервано");
                     return;
                 }
-                List<Models.Field> fields = this.GetActualFields();
+                List<Field> fields = this.GetActualFields();
                 if (string.IsNullOrWhiteSpace(this.vm.NameTemplate))
                 {
                     FieldNameInsertor fn = new(fields);
@@ -340,7 +342,7 @@ namespace Incas.Objects.Views.Windows
                     {
                         continue;
                     }
-                    Objects.Models.Field tag = new()
+                    Field tag = new()
                     {
                         Name = tagname,
                         VisibleName = tagname.Replace("_", " ")
@@ -445,12 +447,12 @@ namespace Incas.Objects.Views.Windows
 
         private void ShowFormClick(object sender, MouseButtonEventArgs e)
         {
-            List<Incas.Objects.Models.Field> fields = [];
+            List<Field> fields = [];
             try
             {
                 foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
                 {
-                    Incas.Objects.Models.Field f = item.GetField();
+                    Field f = item.GetField();
                     f.SetId();
                     fields.Add(f);
                 }
@@ -484,11 +486,11 @@ namespace Incas.Objects.Views.Windows
             List<string> fieldsNames = new();
             string imports = "";
             string fieldsAllocation = "";
-            List<Models.Field> fields = new();
+            List<Field> fields = new();
             try
             {
                 fields = this.GetActualFields();
-                foreach (Models.Field field in fields)
+                foreach (Field field in fields)
                 {                 
                     switch (field.Type)
                     {

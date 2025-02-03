@@ -1,9 +1,7 @@
-﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
-using Incas.DialogSimpleForm.Components;
+﻿using Incas.DialogSimpleForm.Components;
+using IncasEngine.ObjectiveEngine.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Windows.Management.Deployment;
 
 namespace Incas.Objects.AutoUI
 {
@@ -16,7 +14,7 @@ namespace Incas.Objects.AutoUI
     public class ClassFieldsPresetting : AutoUIBase
     {
         #region Data
-        private readonly List<Models.Field> fields;
+        private readonly List<Field> fields;
 
         [Description("Ограничить просмотр общего списка")]
         public bool Constraint { get; set; }
@@ -24,11 +22,11 @@ namespace Incas.Objects.AutoUI
         public CheckedList Fields { get; set; }
         #endregion
 
-        public ClassFieldsPresetting(List<Models.Field> fields, bool constraint)
+        public ClassFieldsPresetting(List<Field> fields, bool constraint)
         {
             this.fields = fields;
             Dictionary<CheckedItem, bool> pairs = new();
-            foreach (Models.Field field in fields)
+            foreach (Field field in fields)
             {
                 CheckedItem ci = new()
                 {
@@ -54,7 +52,7 @@ namespace Incas.Objects.AutoUI
 
         public override void Save()
         {
-            foreach (Models.Field field in this.fields)
+            foreach (Field field in this.fields)
             {
                 foreach (KeyValuePair<CheckedItem, bool> pair in this.Fields.Pairs)
                 {

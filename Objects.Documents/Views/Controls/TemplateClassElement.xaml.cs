@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
+using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using System;
 using System.IO;
 using System.Windows.Controls;

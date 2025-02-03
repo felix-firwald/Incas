@@ -1,10 +1,14 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using Incas.Objects.Components;
-using Incas.Objects.Engine;
-using Incas.Objects.Exceptions;
 using Incas.Objects.Interfaces;
-using Incas.Objects.Models;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.FieldComponents;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -30,7 +34,7 @@ namespace Incas.Objects.Views.Controls
     /// </summary>
     public partial class FieldFiller : UserControl, ISimpleFiller
     {
-        public Objects.Models.Field Field { get; set; }
+        public Field Field { get; set; }
         //private bool validated = true;
         private bool unique = true;
         private bool eventChangedEnabled = true;
@@ -40,7 +44,7 @@ namespace Incas.Objects.Views.Controls
         public event CommandScript OnScriptRequested;
         public event FillerUpdate OnFillerUpdate;
         public event FillerUpdate OnDatabaseObjectCopyRequested;
-        public FieldFiller(Objects.Models.Field f)
+        public FieldFiller(Field f)
         {
             this.InitializeComponent();
             this.Field = f;
@@ -56,7 +60,7 @@ namespace Incas.Objects.Views.Controls
         }
         public void MarkAsNotValidated()
         {
-            this.Grid.Background = new SolidColorBrush(Color.FromRgb(68, 40, 45));
+            this.Grid.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(68, 40, 45));
         }
         public void MarkAsValidated()
         {
@@ -107,7 +111,7 @@ namespace Incas.Objects.Views.Controls
                 case FieldType.Number:
                     NumericBox numeric = new();
                     numeric.OnNumberChanged += this.NumericBox_OnNumberChanged;
-                    numeric.ApplyMinAndMax(JsonConvert.DeserializeObject<Objects.Components.NumberFieldData>(value));
+                    numeric.ApplyMinAndMax(JsonConvert.DeserializeObject<NumberFieldData>(value));
                     this.PlaceUIControl(numeric);
                     break;
                 case FieldType.LocalConstant:

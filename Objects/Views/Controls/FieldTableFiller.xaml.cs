@@ -2,10 +2,12 @@
 using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
-using Incas.Objects.Exceptions;
 using Incas.Objects.Interfaces;
 using Incas.Rendering.Components;
 using Incas.Rendering.ViewModels;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.Models;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
 using System;
@@ -27,11 +29,11 @@ namespace Incas.Objects.Views.Controls
     public partial class FieldTableFiller : System.Windows.Controls.UserControl, ITableFiller
     {
         private TableFillerViewModel vm;
-        public Objects.Models.Field Field { get; set; }
+        public Field Field { get; set; }
         public event FillerUpdate OnFillerUpdate;
         public event StringAction OnInsert;
         public event FillerUpdate OnDatabaseObjectCopyRequested;
-        public FieldTableFiller(Objects.Models.Field f)
+        public FieldTableFiller(Field f)
         {
             this.InitializeComponent();
             this.Field = f;

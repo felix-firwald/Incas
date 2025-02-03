@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IncasEngine.ObjectiveEngine.Models;
+using System;
 
 namespace Incas.Objects.Interfaces
 {
@@ -35,7 +36,7 @@ namespace Incas.Objects.Interfaces
         /// <summary>
         /// Source field from class
         /// </summary>
-        public Objects.Models.Field Field { get; set; }
+        public Field Field { get; set; }
 
         /// <summary>
         /// Get an internal value

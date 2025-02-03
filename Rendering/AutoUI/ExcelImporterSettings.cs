@@ -1,10 +1,9 @@
-﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
-using Incas.DialogSimpleForm.Components;
+﻿using Incas.DialogSimpleForm.Components;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Windows;
 
 namespace Incas.Rendering.AutoUI
 {
@@ -24,21 +23,21 @@ namespace Incas.Rendering.AutoUI
         public DataTable Values { get; set; }
         #endregion
 
-        public ExcelImporterSettings(List<Objects.Models.Field> input)
+        public ExcelImporterSettings(List<Field> input)
         {
             this.Values = new();
             DataColumn dc = this.Values.Columns.Add(columnField);           
             this.Values.Columns.Add(columnSearchName);
-            foreach (Objects.Models.Field field in input)
+            foreach (Field field in input)
             {
                 switch (field.Type)
                 {
-                    case Objects.Components.FieldType.Variable:
-                    case Objects.Components.FieldType.Text:
-                    case Objects.Components.FieldType.Number:
-                    case Objects.Components.FieldType.LocalEnumeration:
-                    case Objects.Components.FieldType.GlobalEnumeration:
-                    case Objects.Components.FieldType.Date:
+                    case FieldType.Variable:
+                    case FieldType.Text:
+                    case FieldType.Number:
+                    case FieldType.LocalEnumeration:
+                    case FieldType.GlobalEnumeration:
+                    case FieldType.Date:
                         DataRow dr = this.Values.Rows.Add();
                         dr[columnField] = field.Name;
                         dr[columnSearchName] = field.VisibleName;

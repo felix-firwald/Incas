@@ -1,5 +1,7 @@
 ﻿using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Components;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -30,10 +32,10 @@ namespace Incas.Objects.AutoUI
         }
 
         #region Functionality
-        public List<Models.Field> GetFields()
+        public List<Field> GetFields()
         {
-            List<Models.Field> fields = [];
-            Models.Field main = new()
+            List<Field> fields = [];
+            Field main = new()
             {
                 Name = this.Name.Replace(" ", "_"),
                 VisibleName = this.Name.Replace("_", " "),
@@ -47,7 +49,7 @@ namespace Incas.Objects.AutoUI
             foreach (Match match in matches)
             {
                 string name = match.Value.TrimStart('[').TrimEnd(']');
-                Models.Field field = new()
+                Field field = new()
                 {
                     Name = name,
                     VisibleName = name.Replace("_", " ")

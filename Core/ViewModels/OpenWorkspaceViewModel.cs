@@ -1,7 +1,8 @@
 ﻿using Incas.Core.Classes;
-using Incas.Objects.Engine;
-using Incas.Objects.ServiceClasses.Models;
-using Incas.Objects.ServiceClasses.Users.Components;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Users.Components;
+using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

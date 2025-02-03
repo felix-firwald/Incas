@@ -1,9 +1,10 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using Incas.Objects.Components;
-using Incas.Objects.Engine;
-using Incas.Objects.Models;
 using Incas.Objects.Views.Windows;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -125,7 +126,7 @@ namespace Incas.Core.Views.Controls
         {
             try
             {
-                Objects.Models.Class cl = new(this.Binding.Class);
+                Class cl = new(this.Binding.Class);
                 cl.GetClassData();
                 ObjectsEditor oe = new(cl, null, [this.SelectedObject]);
                 oe.OnUpdateRequested += this.Oe_OnUpdateRequested;

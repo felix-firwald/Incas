@@ -1,5 +1,5 @@
-﻿using Incas.Objects.Models;
-using Incas.Objects.Processes.Components;
+﻿using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.Processes;
 using System.Windows.Controls;
 using System.Windows.Input;
 

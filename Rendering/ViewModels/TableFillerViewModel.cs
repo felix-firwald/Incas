@@ -1,6 +1,8 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.Objects.Components;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,7 +16,7 @@ namespace Incas.Rendering.ViewModels
     {
         private DataTable _data;
         public TableFieldData TableDefinition;
-        public TableFillerViewModel(Objects.Models.Field t)
+        public TableFillerViewModel(Field t)
         {
             this.TableName = t.VisibleName;
             try

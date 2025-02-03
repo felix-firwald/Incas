@@ -1,14 +1,16 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Interfaces;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.ViewModels;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Exceptions;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Collections.Generic;
-using System;
-using Incas.Core.Interfaces;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -41,7 +43,7 @@ namespace Incas.Objects.Views.Controls
                     }
                     catch
                     {
-                        throw new Objects.Exceptions.FieldDataFailed($"Колонка [{this.vm.FieldData.Name}] (\"{this.vm.FieldData.VisibleName}\") не настроена.");
+                        throw new FieldDataFailed($"Колонка [{this.vm.FieldData.Name}] (\"{this.vm.FieldData.VisibleName}\") не настроена.");
                     }
                     break;
                 case FieldType.GlobalEnumeration:
@@ -51,7 +53,7 @@ namespace Incas.Objects.Views.Controls
                     }
                     catch
                     {
-                        throw new Objects.Exceptions.FieldDataFailed($"Колонка [{this.vm.FieldData.Name}] (\"{this.vm.FieldData.VisibleName}\") не настроена.");
+                        throw new FieldDataFailed($"Колонка [{this.vm.FieldData.Name}] (\"{this.vm.FieldData.VisibleName}\") не настроена.");
                     }
                     break;
             }
@@ -103,11 +105,11 @@ namespace Incas.Objects.Views.Controls
                     TextColumnSettings tc = new(f);
                     tc.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
                     break;
-                case Components.FieldType.LocalEnumeration:
+                case FieldType.LocalEnumeration:
                     LocalEnumerationColumnSettings le = new(f);
                     le.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
-                case Components.FieldType.GlobalEnumeration:
+                case FieldType.GlobalEnumeration:
                     GlobalEnumerationColumnSettings ge = new(f);
                     ge.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;

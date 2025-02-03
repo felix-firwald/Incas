@@ -1,10 +1,10 @@
-﻿using Incas.Core.AutoUI;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Pages;
-using Incas.Objects.Models;
 using Incas.Server.AutoUI;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.IO;
 using System.Media;
@@ -130,15 +130,15 @@ namespace Incas.Core.Views.Windows
             this.CustomTabs.Children.Clear();
             using (Class cl = new())
             {
-                foreach (string category in cl.GetCategoriesOfClassType(Objects.Components.ClassType.Process))
+                foreach (string category in cl.GetCategoriesOfClassType(ClassType.Process))
                 {
                     this.AddPageButton(category, Classes.Icon.Graph, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
                 }
-                foreach (string category in cl.GetCategoriesOfClassType(Objects.Components.ClassType.Document))
+                foreach (string category in cl.GetCategoriesOfClassType(ClassType.Document))
                 {
                     this.AddPageButton(category, Classes.Icon.FileRichText, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
                 }
-                foreach (string category in cl.GetCategoriesOfClassType(Objects.Components.ClassType.Model))
+                foreach (string category in cl.GetCategoriesOfClassType(ClassType.Model))
                 {
                     this.AddPageButton(category, Classes.Icon.Database, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
                 }

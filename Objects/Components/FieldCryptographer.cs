@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using IncasEngine.Core;
 using System;
 
 namespace Incas.Objects.Components

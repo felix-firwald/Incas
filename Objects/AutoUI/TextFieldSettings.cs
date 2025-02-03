@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Attributes;
+using IncasEngine.ObjectiveEngine.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -24,7 +25,7 @@ namespace Incas.Objects.AutoUI
         public bool Confidential { get; set; }
 
         #endregion
-        public TextFieldSettings(Incas.Objects.Models.Field field)
+        public TextFieldSettings(Field field)
         {
             this.Source = field;
             this.GetBaseData();

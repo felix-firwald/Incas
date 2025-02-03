@@ -1,9 +1,8 @@
-﻿using Incas.Objects.Engine;
-using Incas.Objects.Exceptions;
-using Incas.Objects.ServiceClasses.Groups.ViewModels;
-using Incas.Objects.ServiceClasses.Users.AutoUI;
-using Incas.Objects.ServiceClasses.Users.Components;
+﻿using Incas.Objects.ServiceClasses.Users.AutoUI;
 using Incas.Objects.ServiceClasses.Users.ViewModels;
+using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Users.Components;
 using System.Windows.Controls;
 
 namespace Incas.Objects.ServiceClasses.Users.Views.Controls

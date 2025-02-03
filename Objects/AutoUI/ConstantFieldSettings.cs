@@ -1,4 +1,5 @@
 ﻿using Incas.DialogSimpleForm.Components;
+using IncasEngine.ObjectiveEngine.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,14 +14,14 @@ namespace Incas.Objects.AutoUI
     {
         protected override string FinishButtonText { get => "Применить настройки"; }
         #region Data
-        private Incas.Objects.Models.Field Source;
+        private Field Source;
 
         [Description("Значение")]
         [StringLength(1200)]
         public string Text { get; set; }
         #endregion
 
-        public ConstantFieldSettings(Incas.Objects.Models.Field field)
+        public ConstantFieldSettings(Field field)
         {
             this.Source = field;
             this.Text = field.Value;

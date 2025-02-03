@@ -1,12 +1,13 @@
-﻿using Incas.Objects.Models;
-using Incas.Objects.Interfaces;
+﻿using Incas.Objects.Interfaces;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Incas.Objects.Engine;
 
 namespace Incas.Objects.Views.Controls
 {

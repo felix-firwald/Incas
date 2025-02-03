@@ -57,7 +57,135 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    <Style x:Key="ToggleButtonMain" TargetType="{x:Type ToggleButton}">
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}"/>
+        <Setter Property="Background" Value="{StaticResource Dark}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5,5,5,5"/>
+        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="MaxHeight" Value="30"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border x:Name="border" CornerRadius="8" Opacity="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsChecked" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <!--<ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>-->
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                            <MultiTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.250" To="#FF2D2D33" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <!--<ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>-->
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.ExitActions>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsChecked" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="#B255FF" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#B255FF" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <!--<ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>-->
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                            <MultiTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.250" To="#FF2D2D33" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <!--<ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>-->
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.ExitActions>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsChecked" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="#B255FF" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#B255FF" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <!--<ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>-->
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                            <MultiTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.250" To="#FF2D2D33" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        <!--<ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>-->
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.ExitActions>
+                        </MultiTrigger>
+                        <!--<Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        --><!--<ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>--><!--
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Duration="0:0:0.250" To="#FF2D2D33" Storyboard.TargetName="border" Storyboard.TargetProperty="Background.Color"/>
+                                        <ColorAnimation Duration="0:0:0.100" To="#FF434650" Storyboard.TargetProperty="BorderBrush.Color"/>
+                                        --><!--<ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="border" Storyboard.TargetProperty="BorderThickness"/>--><!--
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                            <Setter Property="BorderBrush" TargetName="border" Value="DodgerBlue"/>
+                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="White"/>
+                        </Trigger>-->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" TargetName="border" Value="{StaticResource LightPurple}"/>
+                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="White"/>
+                            <Setter Property="ContextMenu.IsOpen" Value="True"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="ButtonMainFinish" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource Success}"/>

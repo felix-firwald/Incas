@@ -1,7 +1,9 @@
 ﻿using Incas.Core.Views.Windows;
 using Incas.Miniservices.Tasks.Views.Windows;
+using Incas.Objects.Views.Pages;
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -9,6 +11,51 @@ namespace Incas.Core.Classes
 {
     internal static class DialogsManager
     {
+        static DialogsManager()
+        {
+            IncasEngine.Core.EngineEvents.OnMessageRequested += EngineEvents_OnMessageRequested;
+            IncasEngine.Core.EngineEvents.OnQuestionRequested += EngineEvents_OnQuestionRequested;
+            IncasEngine.Core.EngineEvents.OnShowTabRequested += EngineEvents_OnShowTabRequested;
+        }
+
+        private static void EngineEvents_OnShowTabRequested(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, System.Collections.Generic.List<Guid> list, IncasEngine.ObjectiveEngine.Models.Field field)
+        {
+            ObjectsCorrector oc = new(cl, list, field);
+            ShowPageWithGroupBox(oc, "Исправление несоответствий", "FIX:" + field.Id.ToString());
+        }
+
+        private static bool EngineEvents_OnQuestionRequested(string header, string message, string yesButton, string noButton)
+        {
+            switch (ShowQuestionDialog(message, header, yesButton, noButton))
+            {
+                case DialogStatus.Yes:
+                    return true;
+            }
+            return false;
+        }
+
+        private static void EngineEvents_OnMessageRequested(IncasEngine.Core.DialogMessageType type, string header, string message)
+        {
+            switch (type)
+            {
+                case IncasEngine.Core.DialogMessageType.AccessError:
+                    ShowAccessErrorDialog(message, header);
+                    break;
+                case IncasEngine.Core.DialogMessageType.DatabaseError:
+                    ShowDatabaseErrorDialog(message, header);
+                    break;
+                case IncasEngine.Core.DialogMessageType.CommonError:
+                    ShowErrorDialog(message, header);
+                    break;
+                case IncasEngine.Core.DialogMessageType.Exclamation:
+                    ShowExclamationDialog(message, header);
+                    break;
+                case IncasEngine.Core.DialogMessageType.Info:
+                    ShowInfoDialog(message, header);
+                    break;
+            }
+        }
+
         public static bool ShowFolderBrowserDialog(ref string path)
         {
             FolderBrowserDialog fb = new();

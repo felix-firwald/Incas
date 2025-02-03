@@ -1,6 +1,6 @@
 ﻿using Incas.DialogSimpleForm.Components;
-using Incas.Core.Classes;
-using Incas.Objects.Models;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Models;
 using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
@@ -32,18 +32,18 @@ namespace Incas.Objects.AutoUI
             //{
             //    this.ComboSelector.Pairs.Add("Дата создания", "Дата создания");
             //}
-            foreach (Objects.Models.Field f in data.Fields)
+            foreach (Field f in data.Fields)
             {
                 this.ComboSelector.Pairs.Add(f, f.VisibleName);
             }
         }
 
         #region Functionality
-        public Components.FieldData GetData()
+        public FieldData GetData()
         {
-            Components.FieldData f = new()
+            FieldData f = new()
             {
-                ClassField = (Models.Field)this.ComboSelector.SelectedObject,
+                ClassField = (Field)this.ComboSelector.SelectedObject,
                 Value = this.Value
             };
             return f;

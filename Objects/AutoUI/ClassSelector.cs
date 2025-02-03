@@ -1,6 +1,5 @@
 ﻿using Incas.DialogSimpleForm.Components;
-using Incas.Core.Classes;
-using Incas.Objects.Models;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.ComponentModel;
 

@@ -1,9 +1,10 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
-using Incas.Objects.Components;
-using Incas.Objects.Engine;
 using Incas.Objects.ViewModels;
-using Incas.Objects.Views.Windows;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using System.Windows.Controls;
 using static Incas.Core.Interfaces.ITabItem;
 
@@ -39,7 +40,7 @@ namespace Incas.Objects.Views.Pages
             this.DataContext = this.vm;
         }
 
-        private void OnPresetSelected(Models.Class selectedClass, Components.PresetReference preset)
+        private void OnPresetSelected(Class selectedClass, PresetReference preset)
         {
             if (selectedClass == null)
             {
@@ -58,14 +59,14 @@ namespace Incas.Objects.Views.Pages
             this.vm.SelectedPreset = new();
             this.ContentPanel.Content = pl;
         }
-        private void OnClassSelected(Models.Class selectedClass)
+        private void OnClassSelected(Class selectedClass)
         {
             if (selectedClass == null)
             {
                 this.ContentPanel.Content = new Core.Views.Controls.NoContent();
                 return;
             }
-            Models.ClassData data = selectedClass.GetClassData();
+            ClassData data = selectedClass.GetClassData();
             if (data.PresetsEnabled && data.RestrictFullView)
             {
                 this.PlacePresetsListPage(selectedClass);

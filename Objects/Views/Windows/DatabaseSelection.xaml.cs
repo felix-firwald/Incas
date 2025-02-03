@@ -1,12 +1,13 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
-using Incas.Objects.Components;
-using Incas.Objects.Engine;
-using Incas.Objects.Models;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Incas.Objects.Views.Windows
@@ -76,7 +77,7 @@ namespace Incas.Objects.Views.Windows
         private void SetFields()
         {
             List<string> fields = [];
-            foreach (Models.Field field in this.ClassData.Fields)
+            foreach (Field field in this.ClassData.Fields)
             {
                 fields.Add(field.VisibleName);
             }

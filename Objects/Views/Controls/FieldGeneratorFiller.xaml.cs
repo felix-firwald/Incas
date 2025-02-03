@@ -1,13 +1,13 @@
 ﻿using Incas.Core.Classes;
-using Incas.Objects.Engine;
-using Incas.Objects.Exceptions;
 using Incas.Objects.Interfaces;
-using Incas.Objects.Models;
 using Incas.Objects.Views.Pages;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using static Incas.Objects.Interfaces.IFillerBase;
@@ -31,9 +31,9 @@ namespace Incas.Objects.Views.Controls
         public event StringAction OnInsert;
         public Class TargetClass { get; set; }
         public ClassData TargetClassData { get; set; }
-        public Objects.Models.Field Field { get; set; }
+        public Field Field { get; set; }
         
-        public FieldGeneratorFiller(Models.Field f) // new
+        public FieldGeneratorFiller(Field f) // new
         {
             this.InitializeComponent();
             this.Field = f;

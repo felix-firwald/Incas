@@ -1,8 +1,10 @@
 ﻿using Incas.Core.AutoUI;
-using Incas.Core.Models;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
 using Incas.Objects.ViewModels;
+using IncasEngine.Core;
+using IncasEngine.Models;
+using IncasEngine.Workspace;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -42,7 +44,27 @@ namespace Incas.Core.Classes
         internal static MainWindowViewModel MainWindowViewModel { get; set; }
         internal static MainWindow MainWindow { get; set; }
         internal static CustomDatabaseViewModel DatabasePage { get; set; }
-        internal static Workspace CurrentWorkspace { get; set; }
+        internal static Workspace CurrentWorkspace
+        {
+            get
+            {
+                return IncasEngine.Core.EngineGlobals.CurrentWorkspace;
+            }
+            set
+            {
+                IncasEngine.Core.EngineGlobals.CurrentWorkspace = value;
+            }
+        }
+        static ProgramState()
+        {
+            IncasEngine.Core.EngineEvents.OnUpdateAllRequested += EngineEvents_OnUpdateAllRequested;
+        }
+
+        private static void EngineEvents_OnUpdateAllRequested()
+        {
+            MainWindowViewModel.LoadInfo();
+            MainWindow.UpdateTabs();
+        }
 
         internal static void InitDocumentsFolder()
         {
@@ -108,10 +130,6 @@ namespace Incas.Core.Classes
         private static DateTime LastGarbageCollect = DateTime.Now;
 
         #region Path and init
-        internal static string GetFullPathOfCustomDb(string path)
-        {
-            return $"{ProgramState.CurrentWorkspace.ObjectsPath}\\{path}.db";
-        }
         internal static bool CheckSensitive()
         {
             return CurrentWorkspace != null;

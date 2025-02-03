@@ -2,19 +2,17 @@
 using Incas.Admin.ViewModels;
 using Incas.Core.Classes;
 using Incas.Core.Interfaces;
-using Incas.Core.Models;
 using Incas.Objects.AutoUI;
-using Incas.Objects.Engine;
-using Incas.Objects.Models;
-using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
+using IncasEngine.Models;
+using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using static Incas.Core.Interfaces.ITabItem;
 
 namespace Incas.Admin.Views.Pages
@@ -35,8 +33,7 @@ namespace Incas.Admin.Views.Pages
 
         private void FillConstants()
         {
-            using Parameter p = new();
-            this.ConstantsTable.ItemsSource = p.GetConstants().DefaultView;
+            this.vm.UpdateConstants();
         }
 
         private void AddConstantClick(object sender, RoutedEventArgs e)
@@ -59,15 +56,15 @@ namespace Incas.Admin.Views.Pages
         {
             try
             {
-                if (this.ConstantsTable.SelectedItems.Count == 0)
+                if (this.vm.SelectedConstant.Id == Guid.Empty)
                 {
+                    DialogsManager.ShowExclamationDialog("Константа не выбрана", "Действие невозможно");
                     return;
                 }
-                Guid id = Guid.Parse(((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Идентификатор"].ToString());
                 ParameterConstant c = new(true);
                 using (Parameter p = new())
                 {
-                    Parameter par = p.GetParameter(id);
+                    Parameter par = p.GetParameter(this.vm.SelectedConstant.Id);
                     c.Name = par.Name;
                     c.Value = par.Value;
                 }
@@ -76,7 +73,7 @@ namespace Incas.Admin.Views.Pages
                 {
                     p.Name = c.Name;
                     p.Value = c.Value;
-                    p.UpdateParameter(id);
+                    p.UpdateParameter(this.vm.SelectedConstant.Id);
                 }
                 this.FillConstants();
             }
@@ -88,21 +85,20 @@ namespace Incas.Admin.Views.Pages
 
         private void RemoveConstantClick(object sender, RoutedEventArgs e)
         {
-            if (this.ConstantsTable.SelectedItems.Count == 0)
+            if (this.vm.SelectedConstant.Id == Guid.Empty)
             {
+                DialogsManager.ShowExclamationDialog("Константа не выбрана", "Действие невозможно");
                 return;
             }
             try
-            {
-                object name = ((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Наименование константы"];
-                if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить константу [{name}] из этого рабочего пространства?", "Удалить константу?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.No)
+            {              
+                if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить константу [{this.vm.SelectedConstant.Name}] из этого рабочего пространства?", "Удалить константу?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.No)
                 {
                     return;
                 }
-                Guid id = Guid.Parse(((DataRowView)this.ConstantsTable.SelectedItems[0]).Row["Идентификатор"].ToString());
                 using (Parameter p = new())
                 {
-                    p.RemoveParameterById(id);
+                    p.RemoveParameterById(this.vm.SelectedConstant.Id);
                 }
                 this.FillConstants();
             }
@@ -138,21 +134,19 @@ namespace Incas.Admin.Views.Pages
 
         private void RemoveEnumerationClick(object sender, RoutedEventArgs e)
         {
-            if (this.EnumsTable.SelectedItems.Count == 0)
+            if (this.vm.SelectedEnumeration.Id == Guid.Empty)
             {
                 return;
             }
             try
             {
-                object name = ((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Наименование перечисления"];
-                if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить перечисление [{name}] из этого рабочего пространства?", "Удалить константу?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.No)
+                if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить перечисление [{this.vm.SelectedEnumeration.Name}] из этого рабочего пространства?", "Удалить константу?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.No)
                 {
                     return;
                 }
-                Guid id = Guid.Parse(((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"].ToString());
                 using (Parameter p = new())
                 {
-                    p.RemoveParameterById(id);
+                    p.RemoveParameterById(this.vm.SelectedEnumeration.Id);
                 }
                 this.vm.UpdateEnumerations();
             }
@@ -170,15 +164,15 @@ namespace Incas.Admin.Views.Pages
         {
             try
             {
-                if (this.EnumsTable.SelectedItems.Count == 0)
+                if (this.vm.SelectedEnumeration.Id == Guid.Empty)
                 {
                     return;
                 }
-                Guid id = Guid.Parse(((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"].ToString());
+
                 ParameterEnum en = new(true);
                 using (Parameter p = new())
                 {
-                    Parameter par = p.GetParameter(id);
+                    Parameter par = p.GetParameter(this.vm.SelectedEnumeration.Id);
                     en.Name = par.Name;
                     en.Value = JsonConvert.DeserializeObject<List<string>>(par.Value);
                 }
@@ -188,7 +182,7 @@ namespace Incas.Admin.Views.Pages
                     {
                         p.Name = en.Name;
                         p.SetValue(en.Value);
-                        p.UpdateParameter(id);
+                        p.UpdateParameter(this.vm.SelectedEnumeration.Id);
                     }
                     this.vm.UpdateEnumerations();
                 }
@@ -218,9 +212,7 @@ namespace Incas.Admin.Views.Pages
         }
         private Guid GetSelectedClass()
         {
-            return this.ClassesTable.SelectedItems.Count == 0
-                ? Guid.Empty
-                : Guid.Parse(((DataRowView)this.ClassesTable.SelectedItems[0]).Row["Идентификатор"].ToString());
+            return this.vm.SelectedClass.Id;
         }
 
         private void EditClassClick(object sender, RoutedEventArgs e)
@@ -238,7 +230,7 @@ namespace Incas.Admin.Views.Pages
                 "Удалить",
                 "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
             {
-                using (Objects.Models.Class cl = new())
+                using (Class cl = new())
                 {
                     List<string> list = cl.FindBackReferencesNames(this.GetSelectedClass());
                     if (list.Count > 0)
@@ -278,22 +270,18 @@ namespace Incas.Admin.Views.Pages
             }
         }
 
-        private void EnumsTable_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (this.EnumsTable.SelectedItems.Count > 0)
-            {
-                string source = ((DataRowView)this.EnumsTable.SelectedItems[0]).Row["Идентификатор"].ToString();
-                List<string> names = ProgramState.GetEnumeration(Guid.Parse(source));
-                this.vm.SelectedEnumValues = string.Join(",\n", names);
-            }
-        }
-
         private void FixClassClick(object sender, RoutedEventArgs e)
         {
             using (Class cl = new(this.GetSelectedClass()))
             {
                 Processor.UpdateObjectMap(cl);
             }           
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox list = sender as ListBox;
+            list.SelectedItem = null;
         }
     }
 }

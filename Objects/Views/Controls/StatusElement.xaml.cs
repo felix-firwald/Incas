@@ -1,5 +1,5 @@
 ﻿using Incas.Objects.AutoUI;
-using Incas.Objects.Components;
+using IncasEngine.ObjectiveEngine.Common;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -24,9 +24,9 @@ namespace Incas.Objects.Views.Controls
             this.MainLabel.Foreground = this.GetColor(data.Color);
             this.MainLabel.Content = data.Name;
         }
-        public SolidColorBrush GetColor(Color color, byte a = 255)
+        public SolidColorBrush GetColor(IncasEngine.ObjectiveEngine.Common.Color color, byte a = 255)
         {
-            return new SolidColorBrush(Color.FromArgb(a, color.R, color.G, color.B));
+            return new SolidColorBrush(System.Windows.Media.Color.FromArgb(a, color.R, color.G, color.B));
         }
 
         private void EditClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
