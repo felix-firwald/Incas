@@ -155,7 +155,11 @@ namespace Incas.Admin.ViewModels
         public void UpdateClasses()
         {
             this.OnPropertyChanged(nameof(this.ClassesCategories));
+
+            this.OnPropertyChanged(nameof(this.SelectedCategory));
+            this.classes = null;
             this.OnPropertyChanged(nameof(this.Classes));
+            this.SelectedClass = new();
         }
         //private DataRow selectedRow;
         //public DataRow SelectedClass

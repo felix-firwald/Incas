@@ -60,6 +60,15 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.CategoryOfClass));
             }
         }
+        public string ListName
+        {
+            get => this.SourceData.ListName;
+            set
+            {
+                this.SourceData.ListName = value;
+                this.OnPropertyChanged(nameof(this.ListName));
+            }
+        }
         public string NameTemplate
         {
             get => this.SourceData.NameTemplate;

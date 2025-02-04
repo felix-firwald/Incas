@@ -5,6 +5,7 @@ using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.Components;
+using IncasEngine.Backups;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -51,7 +52,7 @@ namespace Incas.Objects.Views.Pages
             this.Class = source;
             this.ClassData = source.GetClassData();
             this.Preset = preset;
-            this.Object = obj;
+            this.Object = obj;           
             if (obj != null)
             {
                 this.FillContentPanel();

@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using IncasEngine.Backups;
 using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using System;
@@ -54,6 +55,7 @@ namespace Incas
                 ProgramState.OpenWebPage(FormError + "?version=" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "&description=" + e.Exception.Message);
                 DialogsManager.ShowErrorDialog($"Возникла ошибка, не позволяющая INCAS продолжать свою работу.\n" +
                     $"Описание: {e.Exception.Message}\nПриложение будет немедленно закрыто.", "Критическая ошибка");
+                BackupProcessor.WriteBackup(e.Exception);
                 this.Shutdown();
             }           
         }

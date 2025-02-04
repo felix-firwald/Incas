@@ -33,7 +33,7 @@ namespace Incas.Objects.Views.Pages
         private GroupClassPermissionSettings permissionSettings;
         public event TabAction OnClose;
         public string Id { get; set; }
-
+        private ObjectsListLoading loading;
         public delegate void ObjectsListAction(IClass source);
         public event ObjectsListAction OnPresetsViewRequested;
 
@@ -42,8 +42,7 @@ namespace Incas.Objects.Views.Pages
             this.InitializeComponent();
             DialogsManager.ShowWaitCursor();
             this.sourceClass = source;
-            this.ClassData = source.GetClassData();
-            this.UpdateView();
+            this.ClassData = source.GetClassData();          
             this.permissionSettings = this.GetPermissionSettings();
             if (this.ClassData.ShowCard)
             {
@@ -53,6 +52,7 @@ namespace Incas.Objects.Views.Pages
             {
                 this.PresetsButton.Visibility = Visibility.Visible;
             }
+            this.UpdateView();
             DialogsManager.ShowWaitCursor(false);
             this.ApplyGroupConstraints();
         }
@@ -75,12 +75,25 @@ namespace Incas.Objects.Views.Pages
             }          
             DialogsManager.ShowWaitCursor(false);
             this.ApplyGroupConstraints();
+            
         }
         private GroupClassPermissionSettings GetPermissionSettings()
         {
             return ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(this.sourceClass.Id);
         }
-
+        private void PlaceLoadingControl()
+        {
+            ObjectsListLoading loading = new();
+            this.loading = loading;
+            this.MainGrid.Children.Add(loading);
+            Grid.SetRow(loading, 1);
+            Grid.SetRowSpan(loading, 2);
+            Grid.SetColumn(loading, 0);
+        }
+        private void HideLoadingControl()
+        {
+            this.MainGrid.Children.Remove(this.loading);
+        }
         private void ApplyGroupConstraints()
         {
             if (!this.permissionSettings.ViewOperations)
@@ -163,7 +176,7 @@ namespace Incas.Objects.Views.Pages
                         this.Data.Columns.Clear();
                         this.Data.ItemsSource = dt.AsDataView();
                     });                   
-                }
+                }             
             });          
         }
         private void UpdateViewWithSearch(FieldData data)

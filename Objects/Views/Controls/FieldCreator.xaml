@@ -53,22 +53,32 @@
                         <ColumnDefinition Width="200"/>
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" SelectedIndex="{Binding TypeOfFieldValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1">
-                        <ComboBoxItem >
+                    <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding FieldTypes}" SelectedItem="{Binding TypeOfFieldValue}" Grid.Column="1">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse Width="5" Height="5" Fill="{Binding Value.ColorBrush}">
+                                    </Ellipse>
+                                    <Label Content="{Binding Value.Name}" Style="{DynamicResource LabelElement}" FontSize="11"/>
+                                    <Label Content="{Binding Value.Description}" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <!--<ComboBoxItem >
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Success}" Width="5" Height="5"/>
                                 <Label Content="Короткий текст" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Ручной ввод" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
-                        </ComboBoxItem>
-                        <ComboBoxItem >
+                        </ComboBoxItem>-->
+                        <!--<ComboBoxItem >
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Success}" Width="5" Height="5"/>
                                 <Label Content="Многострочный текст" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Ручной ввод" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
-                        </ComboBoxItem>
-                        <ComboBoxItem >
+                        </ComboBoxItem>-->
+                        <!--<ComboBoxItem >
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
                                 <Label Content="Перечисление" Style="{DynamicResource LabelElement}" FontSize="11"/>
@@ -81,22 +91,22 @@
                                 <Label Content="Глобальное перечисление" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Выпадающий список" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
+                        </ComboBoxItem>-->
+                        <!--<ComboBoxItem>
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
                                 <Label Content="Дата" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Выбор даты" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
+                        </ComboBoxItem>-->
+                        <!--<ComboBoxItem>
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
                                 <Label Content="Число" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Ввод числа" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
-                        </ComboBoxItem>
-                        <ComboBoxItem >
+                        </ComboBoxItem>-->
+                        <!--<ComboBoxItem >
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Error}" Width="5" Height="5"/>
                                 <Label Content="Константа" Style="{DynamicResource LabelElement}" FontSize="11"/>
@@ -109,8 +119,8 @@
                                 <Label Content="Глобальная константа" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Неизменяемое значение" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
-                        </ComboBoxItem>
-                        <ComboBoxItem >
+                        </ComboBoxItem>-->
+                        <!--<ComboBoxItem >
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Error}" Width="5" Height="5"/>
                                 <Label Content="Скрытое поле" Style="{DynamicResource LabelElement}" FontSize="11"/>
@@ -123,8 +133,8 @@
                                 <Label Content="Объект" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Выбор объекта" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
+                        </ComboBoxItem>-->
+                        <!--<ComboBoxItem>
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Purple}" Width="5" Height="5"/>
                                 <Label Content="Генератор" Style="{DynamicResource LabelElement}" FontSize="11"/>
@@ -137,7 +147,7 @@
                                 <Label Content="Таблица" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Заполнение таблицы" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10" Cursor=""/>
                             </StackPanel>
-                        </ComboBoxItem>
+                        </ComboBoxItem>-->
                     </ComboBox>
                     <Button Style="{DynamicResource ButtonMain}" Visibility="{Binding ButtonGeneratorVisibility}" Click="OpenSettingsClick">
                         <StackPanel Orientation="Horizontal">

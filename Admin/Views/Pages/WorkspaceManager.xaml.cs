@@ -225,7 +225,7 @@ namespace Incas.Admin.Views.Pages
         private void RemoveClassClick(object sender, RoutedEventArgs e)
         {
             if (DialogsManager.ShowQuestionDialog(
-                "Класс будет возвратно удален, вместе с объектами, которые к нему относятся. Вы уверены?",
+                "Класс будет безвозвратно удален, вместе с объектами, которые к нему относятся. Вы уверены?",
                 "Удалить класс?",
                 "Удалить",
                 "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
@@ -246,33 +246,14 @@ namespace Incas.Admin.Views.Pages
             }
         }
 
-        private void ClassesTable_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            if (e.Column.Header.ToString() == "Идентификатор")
-            {
-                e.Column.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private void EnumsTable_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            if (e.Column.Header.ToString() == "Идентификатор")
-            {
-                e.Column.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private void ConstantsTable_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            if (e.Column.Header.ToString() == "Идентификатор")
-            {
-                e.Column.Visibility = Visibility.Hidden;
-            }
-        }
-
         private void FixClassClick(object sender, RoutedEventArgs e)
         {
-            using (Class cl = new(this.GetSelectedClass()))
+            Guid id = this.GetSelectedClass();
+            if (id == Guid.Empty)
+            {
+                return;
+            }
+            using (Class cl = new(id))
             {
                 Processor.UpdateObjectMap(cl);
             }           

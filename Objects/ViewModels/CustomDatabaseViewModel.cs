@@ -132,11 +132,11 @@ namespace Incas.Objects.ViewModels
             {
                 if (this.selectedPreset.Id == Guid.Empty)
                 {
-                    return this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.Name;
+                    return this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.GetClassData().ListName;
                 }
                 else
                 {
-                    return this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.Name + ": " + this.selectedPreset.Name;
+                    return this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.GetClassData().ListName + ": " + this.selectedPreset.Name;
                 }
             }
         }

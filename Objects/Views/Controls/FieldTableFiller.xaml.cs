@@ -192,11 +192,14 @@ namespace Incas.Objects.Views.Controls
                             nc.Binding = new System.Windows.Data.Binding(e.Column.Header.ToString());
                             nc.EditingElementStyle = this.FindResource("TextBoxGrid") as Style;
                             e.Column = nc;
-                            //DataGridTemplateColumn dt = new();
-                            //dt.Header = col.VisibleName;
-                            //dt.CellTemplate = this.FindResource("EditingNumberTemplate") as DataTemplate;
-                            //dt.CellEditingTemplate = this.FindResource("EditingNumberTemplate") as DataTemplate;
-                            //e.Column = dt;
+                            break;
+                        case FieldType.Boolean:
+                            DataGridCheckBoxColumn cbc = new();
+                            cbc.Header = col.VisibleName;
+                            cbc.Binding = new System.Windows.Data.Binding(e.Column.Header.ToString());
+                            cbc.EditingElementStyle = this.FindResource("CheckBoxDataGrid") as Style;
+                            cbc.ElementStyle = this.FindResource("CheckBoxDataGridUsual") as Style;
+                            e.Column = cbc;
                             break;
                     }
                     break;

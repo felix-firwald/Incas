@@ -90,6 +90,13 @@
                         <ComboBoxItem>
                             <StackPanel Orientation="Horizontal">
                                 <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
+                                <Label Content="Логический флаг" Style="{DynamicResource LabelElement}" FontSize="11"/>
+                                <Label Content="Флажок (да/нет)" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
+                            </StackPanel>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Fill="{DynamicResource Yellow}" Width="5" Height="5"/>
                                 <Label Content="Число" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                 <Label Content="Ввод числа" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
                             </StackPanel>

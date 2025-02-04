@@ -141,6 +141,13 @@ namespace Incas.Objects.Views.Controls
                     picker.SelectedDateChanged += this.DatePicker_SelectedDateChanged;
                     this.PlaceUIControl(picker);
                     break;
+                case FieldType.Boolean:
+                    CheckBox checkBox = new() {
+                        ToolTip = description,
+                        Style = this.FindResource("CheckBoxOnlyMain") as Style
+                    };
+                    this.PlaceUIControl(checkBox);
+                    break;
                 case FieldType.Generator:
 
                     break;
@@ -206,6 +213,9 @@ namespace Incas.Objects.Views.Controls
                     break;
                 case FieldType.Generator:
                         
+                    break;
+                case FieldType.Boolean:
+                    ((CheckBox)this.control).IsChecked = value == "1";
                     break;
             }     
         }
@@ -308,6 +318,8 @@ namespace Incas.Objects.Views.Controls
                     return "";
                 case FieldType.Date:
                     return this.GetDateInFormat();
+                case FieldType.Boolean:
+                    return (bool)((CheckBox)this.control).IsChecked ? "1" : "0";
                 //case FieldType.Generator:
                 //    return ((GeneratorFiller)this.control).GetText();
             }

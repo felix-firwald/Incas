@@ -20,8 +20,11 @@ namespace Incas.Core.Classes
 
         private static void EngineEvents_OnShowTabRequested(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, System.Collections.Generic.List<Guid> list, IncasEngine.ObjectiveEngine.Models.Field field)
         {
-            ObjectsCorrector oc = new(cl, list, field);
-            ShowPageWithGroupBox(oc, "Исправление несоответствий", "FIX:" + field.Id.ToString());
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                ObjectsCorrector oc = new(cl, list, field);
+                ShowPageWithGroupBox(oc, "Исправление несоответствий", "FIX:" + field.Id.ToString());
+            });
         }
 
         private static bool EngineEvents_OnQuestionRequested(string header, string message, string yesButton, string noButton)
@@ -87,12 +90,15 @@ namespace Incas.Core.Classes
         }
         public static void ShowPageWithGroupBox(System.Windows.Controls.Control control, string name, string id, TabType tt = TabType.Usual)
         {
-            System.Windows.Controls.GroupBox result = new()
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                Header = name,
-                Content = control
-            };
-            ProgramState.MainWindow.AddTabItem(result, id, name, tt);
+                System.Windows.Controls.GroupBox result = new()
+                {
+                    Header = name,
+                    Content = control
+                };
+                ProgramState.MainWindow.AddTabItem(result, id, name, tt);
+            });
         }
         public static bool ShowOpenFileDialog(ref string file, string filter)
         {

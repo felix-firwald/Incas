@@ -61,6 +61,7 @@ namespace Incas.Objects.Views.Pages
         }
         private void OnClassSelected(Class selectedClass)
         {
+            this.ContentPanel.Content = new ObjectsListLoading();
             if (selectedClass == null)
             {
                 this.ContentPanel.Content = new Core.Views.Controls.NoContent();

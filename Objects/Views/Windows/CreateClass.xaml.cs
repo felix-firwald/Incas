@@ -29,7 +29,9 @@ namespace Incas.Objects.Views.Windows
         private ClassViewModel vm;
         public CreateClass(ClassTypeSettings primary)
         {
+            XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
             this.InitializeComponent();
+            this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             this.vm = new(new())
             {
                 CategoryOfClass = primary.Category,

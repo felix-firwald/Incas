@@ -8,6 +8,7 @@ using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace Incas.Objects.ViewModels
 {
@@ -21,6 +22,31 @@ namespace Incas.Objects.ViewModels
         public FieldViewModel()
         {
             this.Source = new();
+        }
+        private static Dictionary<FieldType, FieldTypeDescription> fieldTypes = new()
+        {
+            { FieldType.Variable, new() { Name="Короткий текст", Description="Ручной ввод", ColorBrush= new SolidColorBrush(new System.Windows.Media.Color() { R=52, G=201, B=36 }) } },
+            { FieldType.Text, new() { Name="Многострочный текст", Description="Ручной ввод", ColorBrush= new SolidColorBrush(new System.Windows.Media.Color() { R=52, G=201, B=36 }) } },
+
+            { FieldType.LocalEnumeration, new() { Name="Перечисление", Description="Выпадающий список", ColorBrush = new SolidColorBrush(new System.Windows.Media.Color() { R=245, G=166, B=35 }) } },
+            { FieldType.GlobalEnumeration, new() { Name="Глобальное перечисление", Description="Выпадающий список", ColorBrush = new SolidColorBrush(new System.Windows.Media.Color() { R=245, G=166, B=35 })} },
+            { FieldType.Date, new() { Name="Дата", Description="Выбор даты", ColorBrush= new SolidColorBrush(new System.Windows.Media.Color() { R=245, G=166, B=35 })} },
+            { FieldType.Number, new() { Name="Целочисленное число", Description="Ввод числа", ColorBrush = new SolidColorBrush(new System.Windows.Media.Color() { R=245, G=166, B=35 })} },
+            { FieldType.Boolean, new() { Name="Логический флаг", Description="Флажок (Да/Нет)", ColorBrush = new SolidColorBrush(new System.Windows.Media.Color() { R=245, G=166, B=35 })} },
+
+            { FieldType.LocalConstant, new() { Name="Константа", Description="Неизменяемое значение", ColorBrush = new SolidColorBrush(new System.Windows.Media.Color() { R=255, G=0, B=51 }) } },
+            { FieldType.GlobalConstant, new() { Name="Глобальная константа", Description="Неизменяемое значение", ColorBrush= new SolidColorBrush(new System.Windows.Media.Color() { R=255, G=0, B=51 })} },
+            { FieldType.HiddenField, new() { Name="Скрытое поле", Description="Скриптовое поле", ColorBrush= new SolidColorBrush(new System.Windows.Media.Color() { R=255, G=0, B=51 })} },
+
+            { FieldType.Relation, new() { Name="Объект", Description="Выбор объекта", ColorBrush= new SolidColorBrush(new System.Windows.Media.Color() { R=139, G=0, B=255 }) } },
+            { FieldType.Table, new() { Name="Таблица", Description="Заполнение таблицы", ColorBrush= new SolidColorBrush(new System.Windows.Media.Color() { R=139, G=0, B=255 })} },
+        };
+        public Dictionary<FieldType, FieldTypeDescription> FieldTypes
+        {
+            get
+            {
+                return fieldTypes;
+            }
         }
         public string VisibleName
         {
@@ -57,12 +83,15 @@ namespace Incas.Objects.ViewModels
             }
         }
 
-        public string TypeOfFieldValue
+        public KeyValuePair<FieldType, FieldTypeDescription> TypeOfFieldValue
         {
-            get => this.SerializeToInput(this.Source.Type);
+            get
+            {
+                return new(this.Source.Type, this.FieldTypes[this.Source.Type]);
+            }
             set
             {
-                this.Source.Type = this.SerializeFromInput(value);
+                this.Source.Type = value.Key;
                 this.OnPropertyChanged(nameof(this.TypeOfFieldValue));
                 this.OnPropertyChanged(nameof(this.ActionBindingEnabled));
                 this.OnPropertyChanged(nameof(this.EventBindingEnabled));
@@ -97,57 +126,7 @@ namespace Incas.Objects.ViewModels
                 }
             }
         }
-        // может лучше по selected index?
         #region Not Standart Properties
-        public FieldType SerializeFromInput(string val)
-        {
-            switch (val)
-            {
-                case "0":
-                default:
-                    return FieldType.Variable;
-                case "1":
-                    return FieldType.Text;
-                case "2":
-                    return FieldType.LocalEnumeration;
-                case "3":
-                    return FieldType.GlobalEnumeration;
-                case "4":
-                    return FieldType.Date;
-                case "5":
-                    return FieldType.Number;
-                case "6":
-                    return FieldType.LocalConstant;
-                case "7":
-                    return FieldType.GlobalConstant;
-                case "8":
-                    return FieldType.HiddenField;
-                case "9":
-                    return FieldType.Relation;
-                case "10":
-                    return FieldType.Generator;
-                case "11":
-                    return FieldType.Table;
-            }
-        }
-        public string SerializeToInput(FieldType tot)
-        {
-            return tot switch
-            {
-                FieldType.Text => "1",
-                FieldType.LocalEnumeration => "2",
-                FieldType.GlobalEnumeration => "3",
-                FieldType.Date => "4",
-                FieldType.Number => "5",
-                FieldType.LocalConstant => "6",
-                FieldType.GlobalConstant => "7",
-                FieldType.HiddenField => "8",
-                FieldType.Relation => "9",
-                FieldType.Generator => "10",
-                FieldType.Table => "11",
-                _ => "0",
-            };
-        }
 
         public void CheckField()
         {
