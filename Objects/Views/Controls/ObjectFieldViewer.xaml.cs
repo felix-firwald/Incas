@@ -146,7 +146,7 @@ namespace Incas.Objects.Views.Controls
             this.FieldName.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(r, g, b));
         }
 
-        private void FilterClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void FilterClick(object sender, RoutedEventArgs e)
         {
             FieldData data = new()
             {

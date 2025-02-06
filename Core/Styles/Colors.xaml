@@ -46,6 +46,7 @@
     
     <!--Цвета исключительно для контролов-->
     <SolidColorBrush x:Key="PrimaryMain" Color="DodgerBlue"/>
+    <SolidColorBrush x:Key="PrimaryMainUp" Color="DodgerBlue"/>
     <Color x:Key="PrimaryMainColor" R="30" G="144" B="255"/>
 
     <SolidColorBrush x:Key="Error" Color="#FF0033"/>

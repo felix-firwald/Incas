@@ -66,17 +66,17 @@ namespace Incas.Core.Views.Windows
             }
         }
 
-        private void RefreshClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void RefreshClick(object sender, RoutedEventArgs e)
         {
             this.vm.Refresh();
         }
 
-        private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void RemoveClick(object sender, RoutedEventArgs e)
         {
             this.vm.RemoveSelected();
         }
 
-        private void EditClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void EditClick(object sender, RoutedEventArgs e)
         {
             DefineExistingWorkspace dew = new()
             {
@@ -87,7 +87,7 @@ namespace Incas.Core.Views.Windows
             this.vm.Refresh();
         }
 
-        private void AddClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void AddClick(object sender, RoutedEventArgs e)
         {
             switch (DialogsManager.ShowQuestionDialog("Вы собираетесь добавить существующее рабочее пространство или хотите создать новое?", "Выбор добавления", "Создать новое", "Добавить существующее"))
             {

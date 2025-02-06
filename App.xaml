@@ -15,6 +15,7 @@
                 <ResourceDictionary Source="Core/Styles/CustomControls.xaml" />
                 <ResourceDictionary Source="Core/Styles/Expander.xaml" />
                 <ResourceDictionary Source="Core/Styles/Button.xaml" />
+                <ResourceDictionary Source="Core/Styles/CustomInputBoxes.xaml" />
                 <ResourceDictionary Source="Core/Styles/TextBox.xaml" />
                 <ResourceDictionary Source="Core/Styles/ComboBox.xaml" />
                 <ResourceDictionary Source="Core/Styles/CheckBox.xaml" />
@@ -73,7 +74,7 @@
             <Style x:Key="ThumbMain" TargetType="{x:Type Thumb}">
                 <Setter Property="BorderThickness" Value="0"/>
             </Style>
-            <Style TargetType="{x:Type RepeatButton}">
+            <Style x:Key="RepeatButtonHidden" TargetType="{x:Type RepeatButton}">
                 <Setter Property="Visibility" Value="Hidden"/>
                 <Setter Property="SnapsToDevicePixels" Value="True"/>
                 <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -199,20 +200,20 @@
                         <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
                     </Trigger>
                     <Trigger Property="IsHighlighted" Value="True">
-                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Background}"/>
-                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Border}"/>
+                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource Basic}"/>
+                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource Element}"/>
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{StaticResource Menu.Disabled.Foreground}"/>
-                        <Setter Property="Fill" TargetName="GlyphPanel" Value="{StaticResource Menu.Disabled.Foreground}"/>
+                        
+                        <Setter Property="Fill" TargetName="GlyphPanel" Value="{StaticResource Element}"/>
                     </Trigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
                             <Condition Property="IsHighlighted" Value="True"/>
                             <Condition Property="IsEnabled" Value="False"/>
                         </MultiTrigger.Conditions>
-                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Disabled.Background}"/>
-                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Disabled.Border}"/>
+                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource Basic}"/>
+                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource Element}"/>
                     </MultiTrigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
@@ -224,7 +225,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <ContentPresenter x:Name="Icon" ContentSource="Icon" HorizontalAlignment="Center" Height="16" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
-                        <Path x:Name="GlyphPanel" Data="{StaticResource Checkmark}" FlowDirection="LeftToRight" Fill="{TemplateBinding Foreground}" Margin="3" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        <Path x:Name="GlyphPanel" Data="{StaticResource Checkmark}" FlowDirection="LeftToRight" Fill="White" Margin="3" VerticalAlignment="Center" Visibility="Collapsed"/>
                         <ContentPresenter ContentSource="Header" Grid.Column="1" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         <Popup x:Name="PART_Popup" AllowsTransparency="true" Focusable="false" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource Mode=TemplatedParent}}" Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}" PlacementTarget="{Binding ElementName=templateRoot}">
                             <Border x:Name="SubMenuBorder" Background="{StaticResource Menu.Static.Background}" BorderBrush="{StaticResource Menu.Static.Border}" BorderThickness="1" Padding="2">
@@ -253,12 +254,11 @@
                         <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
                     </Trigger>
                     <Trigger Property="IsHighlighted" Value="True">
-                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Background}"/>
-                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Border}"/>
+                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource Black}"/>
+                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource Element}"/>
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{StaticResource Menu.Disabled.Foreground}"/>
-                        <Setter Property="Fill" TargetName="GlyphPanel" Value="{StaticResource Menu.Disabled.Foreground}"/>
+                        <Setter Property="Fill" TargetName="GlyphPanel" Value="{StaticResource Element}"/>
                     </Trigger>
                     <Trigger Property="ScrollViewer.CanContentScroll" SourceName="SubMenuScrollViewer" Value="false">
                         <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
@@ -294,20 +294,19 @@
                         <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
                     </Trigger>
                     <Trigger Property="IsHighlighted" Value="True">
-                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Background}"/>
-                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Border}"/>
+                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource Black}"/>
+                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource Element}"/>
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{StaticResource Menu.Disabled.Foreground}"/>
-                        <Setter Property="Fill" TargetName="Glyph" Value="{StaticResource Menu.Disabled.Foreground}"/>
+                        <Setter Property="Fill" TargetName="Glyph" Value="{StaticResource Element}"/>
                     </Trigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
                             <Condition Property="IsHighlighted" Value="True"/>
                             <Condition Property="IsEnabled" Value="False"/>
                         </MultiTrigger.Conditions>
-                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Disabled.Background}"/>
-                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Disabled.Border}"/>
+                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource Black}"/>
+                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource Element}"/>
                     </MultiTrigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
@@ -323,7 +322,7 @@
                             <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>
                         <ContentPresenter x:Name="Icon" ContentSource="Icon" HorizontalAlignment="Center" Height="16" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
-                        <Border x:Name="GlyphPanel" Background="{StaticResource MenuItem.Highlight.Background}" BorderBrush="{StaticResource MenuItem.Highlight.Border}" BorderThickness="1" Height="22" Margin="-1,0,0,0" VerticalAlignment="Center" Visibility="Hidden" Width="22">
+                        <Border x:Name="GlyphPanel" Background="{StaticResource Black}" BorderBrush="{StaticResource Element}" BorderThickness="1" Height="22" Margin="-1,0,0,0" VerticalAlignment="Center" Visibility="Hidden" Width="22">
                             <Path x:Name="Glyph" Data="{DynamicResource Checkmark}" FlowDirection="LeftToRight" Fill="{StaticResource Icon}" Height="11" Width="9"/>
                         </Border>
                         <ContentPresenter ContentSource="Header" Grid.Column="2" HorizontalAlignment="Left" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
@@ -356,13 +355,12 @@
                         <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
                     </Trigger>
                     <Trigger Property="IsHighlighted" Value="True">
-                        <Setter Property="Background" TargetName="templateRoot" Value="Transparent"/>
-                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource MenuItem.Highlight.Border}"/>
+                        <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource Black}"/>
+                        <Setter Property="BorderBrush" TargetName="templateRoot" Value="{StaticResource Element}"/>
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{StaticResource Menu.Disabled.Foreground}"/>
-                        <Setter Property="Fill" TargetName="Glyph" Value="{StaticResource Menu.Disabled.Foreground}"/>
-                        <Setter Property="Fill" TargetName="RightArrow" Value="{StaticResource Menu.Disabled.Foreground}"/>
+                        <Setter Property="Fill" TargetName="Glyph" Value="{StaticResource Element}"/>
+                        <Setter Property="Fill" TargetName="RightArrow" Value="{StaticResource Element}"/>
                     </Trigger>
                     <Trigger Property="ScrollViewer.CanContentScroll" SourceName="SubMenuScrollViewer" Value="false">
                         <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=SubMenuScrollViewer}"/>
@@ -391,7 +389,6 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
             <Style x:Key="IconButton" TargetType="{x:Type fa:FontAwesome}">
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="FontSize" Value="18"/>

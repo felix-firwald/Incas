@@ -38,19 +38,42 @@
                     </Grid.ColumnDefinitions>
                     <Border Grid.Row="2" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8">
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
-                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить поле" MouseDown="AddFieldClick" />
-                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="SearchPlus" ToolTip="Скопировать поля из другого класса" MouseDown="CopyFieldsFromAnotherClass" />
+                            <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить поле" MouseDown="AddFieldClick" />-->
+                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="AddFieldClick" ToolTip="Добавить поле">
+                                <Path Fill="#FFBAFF78" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
+                            </Button>
+                            <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="SearchPlus" ToolTip="Скопировать поля из другого класса" MouseDown="CopyFieldsFromAnotherClass" />-->
+
+                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="CopyFieldsFromAnotherClass" ToolTip="Скопировать поля из другого класса">
+                                <Path Fill="#FFBAFF78" VerticalAlignment="Center" Data="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm4.5 6V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5a.5.5 0 0 1 1 0"/>
+                            </Button>
+                            
                             <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Magic" ToolTip="Создать виртуальные поля" MouseDown="AddVirtualFieldsClick" />
                             <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAllClick" />
-                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAllClick"  />
-                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" ToolTip="Предпросмотр формы" MouseDown="ShowFormClick"  />
-                            <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Upload" ToolTip="Импортировать класс" IsEnabled="False" />
-                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Download" ToolTip="Экспортировать класс" IsEnabled="False" />
+                            <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAllClick" />
+                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAllClick"  />-->
+
+                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="MinimizeAllClick" ToolTip="Свернуть все вкладки">
+                                <Path Fill="#FF78DDFF" VerticalAlignment="Center" Stretch="Uniform" Data="M7.5519,19.8462V16.4385H4.1441v-.923H8.4749v4.3307Zm7.9855,0V15.5155h4.3185v.923H16.4606v3.4077ZM4.1441,8.472V7.549H7.5519V4.1538h.923V8.472Zm11.3933,0V4.1538h.9232V7.549h3.3953v.923Z"/>
+                            </Button>
+                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="MaximizeAllClick" ToolTip="Развернуть все вкладки">
+                                <Path Fill="#FF78DDFF" VerticalAlignment="Center" Stretch="Uniform" Data="M4.1441,19.8462V15.5155h.9233V18.923H8.4749v.9232Zm11.3933,0V18.923h3.3952V15.5155h.9233v4.3307ZM4.1441,8.472V4.1538H8.4749V5.077H5.0674V8.472Zm14.7885,0V5.077H15.5374V4.1538h4.3185V8.472Z"/>
+                            </Button>
+                            
+                            <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" ToolTip="Предпросмотр формы" MouseDown="ShowFormClick"  />-->
+                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="ShowFormClick" ToolTip="Предпросмотр формы">
+                                <Path Fill="#FF78DDFF" VerticalAlignment="Center" Stretch="Uniform" Data="M6.277,21.8462H3.689A1.52,1.52,0,0,1,2.1538,20.311V17.723H3.077v2.5848a.5922.5922,0,0,0,.6153.6152H6.277Zm11.4585,0V20.923h2.5723a.5922.5922,0,0,0,.6152-.6153V17.723h.9232v2.588a1.5194,1.5194,0,0,1-1.5352,1.5352ZM12.0033,17.623A7.9286,7.9286,0,0,1,7.2818,16.14,9.1091,9.1091,0,0,1,4.1345,12a9.1447,9.1447,0,0,1,3.149-4.1462,7.8988,7.8988,0,0,1,4.7133-1.4893A7.9406,7.9406,0,0,1,16.72,7.8538,9.1193,9.1193,0,0,1,19.878,12a9.0867,9.0867,0,0,1-3.16,4.1385A7.9489,7.9489,0,0,1,12.0033,17.623ZM11.997,16.7A6.9637,6.9637,0,0,0,16.04,15.47a8.3206,8.3206,0,0,0,2.82-3.4693,8.37,8.37,0,0,0-2.82-3.4762,6.9357,6.9357,0,0,0-4.0425-1.237,6.9418,6.9418,0,0,0-4.0447,1.237A8.2139,8.2139,0,0,0,5.153,12a8.1829,8.1829,0,0,0,2.7993,3.4678A6.9615,6.9615,0,0,0,11.997,16.7Zm-.0015-1.9088a2.7168,2.7168,0,0,0,1.991-.8095,2.8238,2.8238,0,0,0,0-3.9682,2.8218,2.8218,0,0,0-3.9665,0,2.8321,2.8321,0,0,0-.0017,3.9665A2.6874,2.6874,0,0,0,11.9955,14.7912ZM12,13.8682a1.8826,1.8826,0,0,1-1.3278-3.2027A1.8832,1.8832,0,0,1,13.3345,13.33,1.822,1.822,0,0,1,12,13.8682ZM2.1538,6.2645V3.689A1.5194,1.5194,0,0,1,3.689,2.1538H6.277V3.077H3.6923a.5922.5922,0,0,0-.6153.6152V6.2645Zm18.7692,0V3.6922a.5922.5922,0,0,0-.6152-.6152H17.7355V2.1538H20.311A1.5193,1.5193,0,0,1,21.8462,3.689V6.2645Z"/>
+                            </Button>
+
+                            <!--<Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>-->
+                            <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Upload" ToolTip="Импортировать класс" IsEnabled="False" />
+                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Download" ToolTip="Экспортировать класс" IsEnabled="False" />-->
 
                             <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-                            <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" Grid.Column="1" Grid.Row="1" ToolTip="Открыть справочную информацию" MouseDown="GetMoreInfoClick" />
+                            <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="QuestionCircle" Grid.Column="1" Grid.Row="1" ToolTip="Открыть справочную информацию" MouseDown="GetMoreInfoClick" />-->
+                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="GetMoreInfoClick" ToolTip="Открыть справочную информацию">
+                                <Path Fill="#FF78DDFF" VerticalAlignment="Center" Stretch="Uniform" Data="M12.9356,17.9427a.78.78,0,1,0-.5605-.2277A.7589.7589,0,0,0,12.9356,17.9427Zm-.5165-3.3115h.9655a2.7092,2.7092,0,0,1,.245-1.06,4.5017,4.5017,0,0,1,.851-1.04,6.9246,6.9246,0,0,0,.9963-1.199,2.2871,2.2871,0,0,0,.327-1.2265,2.3407,2.3407,0,0,0-.8308-1.8842A2.9485,2.9485,0,0,0,13.0076,7.52a2.89,2.89,0,0,0-1.8317.5865,3.6369,3.6369,0,0,0-1.1028,1.348l.919.3808A2.9346,2.9346,0,0,1,11.68,8.87a1.8167,1.8167,0,0,1,1.2895-.4192A1.7552,1.7552,0,0,1,14.39,8.984a1.7859,1.7859,0,0,1,.448,1.1742,1.5992,1.5992,0,0,1-.2808.9278,4.909,4.909,0,0,1-.7307.8222,5.0884,5.0884,0,0,0-1.1385,1.3595A3.1182,3.1182,0,0,0,12.4191,14.6312Zm.4918,7.0808a8.7726,8.7726,0,0,1-3.51-.7085A8.9859,8.9859,0,0,1,4.6169,16.224a9.0416,9.0416,0,0,1-.0008-7.019,8.9865,8.9865,0,0,1,4.78-4.7838,9.0422,9.0422,0,0,1,7.019-.0007A8.9865,8.9865,0,0,1,21.1984,9.2a9.0422,9.0422,0,0,1,.0007,7.019,8.9859,8.9859,0,0,1-4.78,4.7837A8.7525,8.7525,0,0,1,12.9109,21.712Zm-.0033-1a7.7211,7.7211,0,0,0,5.675-2.325,7.7211,7.7211,0,0,0,2.325-5.675,7.7209,7.7209,0,0,0-2.325-5.675,7.7211,7.7211,0,0,0-5.675-2.325,7.7211,7.7211,0,0,0-5.675,2.325,7.7209,7.7209,0,0,0-2.325,5.675,7.7211,7.7211,0,0,0,2.325,5.675A7.7211,7.7211,0,0,0,12.9076,20.712Z"/>
+                            </Button>
                         </StackPanel>
                     </Border>
                     <Border CornerRadius="8" Margin="5,5,0,5" Background="{DynamicResource Black}" Grid.Row="1">

@@ -157,12 +157,12 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void AddClick(object sender, MouseButtonEventArgs e)
+        private void AddClick(object sender, RoutedEventArgs e)
         {
             this.AddObjectCreator();
         }
 
-        private async void GetFromExcel(object sender, MouseButtonEventArgs e)
+        private async void GetFromExcel(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fd = new()
             {
@@ -193,7 +193,7 @@ namespace Incas.Objects.Views.Windows
                 DialogsManager.ShowWaitCursor(false);
             }
         }
-        private void SendToExcel(object sender, MouseButtonEventArgs e)
+        private void SendToExcel(object sender, RoutedEventArgs e)
         {
             XLWorkbook wb = new();
             try
@@ -241,7 +241,7 @@ namespace Incas.Objects.Views.Windows
                 DialogsManager.ShowErrorDialog(ex, "Сохранение прервано");
             }
         }
-        private void MinimizeAll(object sender, MouseButtonEventArgs e)
+        private void MinimizeAll(object sender, RoutedEventArgs e)
         {
             foreach (ObjectCreator c in this.ContentPanel.Children)
             {
@@ -249,7 +249,7 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void MaximizeAll(object sender, MouseButtonEventArgs e)
+        private void MaximizeAll(object sender, RoutedEventArgs e)
         {
             foreach (ObjectCreator c in this.ContentPanel.Children)
             {

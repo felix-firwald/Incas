@@ -501,12 +501,12 @@ namespace Incas.Objects.Views.Pages
             this.MainBorder.Height = 40;
         }
 
-        private void SaveClick(object sender, MouseButtonEventArgs e)
+        private void SaveClick(object sender, RoutedEventArgs e)
         {
             this.OnSaveRequested?.Invoke(this);
         }
 
-        private async void PreviewCLick(object sender, MouseButtonEventArgs e)
+        private async void PreviewCLick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -567,7 +567,7 @@ namespace Incas.Objects.Views.Pages
             return output;
         }
 
-        private void RemoveClick(object sender, MouseButtonEventArgs e)
+        private void RemoveClick(object sender, RoutedEventArgs e)
         {
             this.OnRemoveRequested?.Invoke(this);
         }

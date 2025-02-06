@@ -1,9 +1,11 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Tests;
 using IncasEngine.Backups;
 using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.Windows;
 
 namespace Incas
@@ -19,6 +21,11 @@ namespace Incas
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+#if DEBUG
+            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning;
+            PresentationTraceSources.DataBindingSource.Listeners.Add(new ConsoleTraceListener());
+#endif
+            //this.ShowChecker();
             ProgramState.CheckUMIExists();
             ProgramState.InitDocumentsFolder();
             if (!ProgramState.CheckLicense())
@@ -37,6 +44,12 @@ namespace Incas
                 //Core.Views.Windows.MainWindow mw = new Core.Views.Windows.MainWindow();
                 //mw.Show();
             }
+
+        }
+        private void ShowChecker()
+        {
+            CheckerWindow cw = new();
+            cw.ShowDialog();
         }
         private void ShowCI()
         {

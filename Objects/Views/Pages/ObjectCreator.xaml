@@ -23,13 +23,20 @@
                 <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" Checked="MaximizeClick" Unchecked="MinimizeClick"/>
                 <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="0,5,0,5" Opacity="0.5" />
                 <StackPanel x:Name="SaveArea" Orientation="Horizontal" Cursor="">
-                    <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Download" VerticalAlignment="Center" ToolTip="Сохранить объект" Cursor="Hand" MouseDown="SaveClick" Margin="8,5,5,5" />
-                    <Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,5,5,5" Opacity="0.5"/>
+                    <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Download" VerticalAlignment="Center" ToolTip="Сохранить объект" Cursor="Hand" MouseDown="SaveClick" Margin="8,5,5,5" />-->
+                    <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" Click="SaveClick" ToolTip="Сохранить объект" Grid.Column="1">
+                        <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Data="{StaticResource Save}"/>
+                    </Button>
+                    <!--<Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,5,5,5" Opacity="0.5"/>-->
 
                 </StackPanel>
                 <StackPanel x:Name="RenderArea" Orientation="Horizontal">
-                    <fa:FontAwesome x:Name="EyeButton" Style="{DynamicResource IconButton}" Icon="Eye" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть средство предпросмотра и рендера" Cursor="Hand" MouseDown="PreviewCLick" Margin="5,5,1,5"/>
-                    <Rectangle x:Name="EyeButtonSeparator" Width="1" Fill="{DynamicResource Element}" Opacity="0.5" Margin="10,5,10,5"/>
+                    <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" VerticalAlignment="Center" FontSize="18" ToolTip="Открыть средство предпросмотра и рендера" Cursor="Hand" MouseDown="PreviewCLick" Margin="5,5,1,5"/>-->
+                    <Button x:Name="EyeButton" Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" Click="PreviewCLick" ToolTip="Открыть средство предпросмотра и рендера" Grid.Column="1">
+                        <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Data="{StaticResource Eye}"/>
+                    </Button>
+
+                    <Rectangle x:Name="EyeButtonSeparator" Width="1" Fill="{DynamicResource Element}" Opacity="0.5" Margin="5,5,10,5"/>
                 </StackPanel>
                 <Path x:Name="TerminatedIcon" Visibility="Collapsed" Fill="{StaticResource Success}" VerticalAlignment="Center" ToolTip="Процесс завершен" Cursor="Hand" ToolTipService.InitialShowDelay="150" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" Margin="12,0,12,0"/>
 
@@ -43,7 +50,11 @@
                 </TextBox>
             </StackPanel>
             <Rectangle x:Name="RemoveButtonRect" Fill="{DynamicResource Element}" Opacity="0.5" HorizontalAlignment="Left" Grid.Column="1" Width="1" Margin="0,5,0,5"/>
-            <fa:FontAwesome x:Name="RemoveButton" Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" MouseDown="RemoveClick" ToolTip="Удалить объект" Cursor="Hand" Grid.Column="1"/>
+            <!--<fa:FontAwesome x:Name="RemoveButton" Style="{DynamicResource IconButton}" Icon="Remove" VerticalAlignment="Center" FontSize="18" MouseDown="RemoveClick" ToolTip="Удалить объект" Cursor="Hand" Grid.Column="1"/>-->
+            <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" Click="RemoveClick" ToolTip="Удалить объект" Grid.Column="1">
+                <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
+            </Button>
+
             <Rectangle x:Name="Separator" Grid.Row="1" Fill="{DynamicResource Element}" Grid.ColumnSpan="2"/>
             <StackPanel x:Name="ContentPanel" Grid.Row="2" Grid.ColumnSpan="2">
 

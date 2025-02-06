@@ -265,7 +265,7 @@ namespace Incas.Objects.Views.Pages
             this.OnFilterRequested?.Invoke(data);
         }
 
-        private void FontAwesome_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void EditClick(object sender, RoutedEventArgs e)
         {
             if (this.id == Guid.Empty)
             {
@@ -355,7 +355,7 @@ namespace Incas.Objects.Views.Pages
             //}
         }
 
-        private void GetObjectReferenceClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void GetObjectReferenceClick(object sender, RoutedEventArgs e)
         {
             ObjectReference reference = new(this.Class.Id, this.id);
             Clipboard.SetText(reference.ToString());

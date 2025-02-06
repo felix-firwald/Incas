@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="45"/>
+            <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
 
         <Path VerticalAlignment="Center" Fill="{DynamicResource Element}" HorizontalAlignment="Center" Grid.ColumnSpan="2" Data="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" Width="50" Height="50" Stretch="Fill" Margin="0,12,0,0" />
@@ -29,7 +29,7 @@
         <ComboBox x:Name="user" Style="{StaticResource ComboBoxMain}" ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=true}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedUser, Mode=TwoWay, NotifyOnSourceUpdated=True}" Tag="Пользователь" Grid.Row="3"  Grid.ColumnSpan="2" />
         <PasswordBox x:Name="pwd" Tag="Пароль для входа" Grid.Row="4" MaxLength="20" Grid.ColumnSpan="2">
         </PasswordBox>
-        <Border CornerRadius="5" Margin="6" Background="{DynamicResource LightBlack}" Grid.Row="2" >
+        <Border CornerRadius="8,0,0,8" Margin="5,5,0,5" Background="{DynamicResource LightBlack}" Grid.Row="2" >
             <ListBox Style="{DynamicResource ListBoxMain}" Background="{DynamicResource LightBlack}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}" Cursor="">
                 <!--<ListBoxItem Content="567567" IsSelected="True"/>
                 <ListBoxItem Content="567567"/>
@@ -38,12 +38,21 @@
                 <ListBoxItem Content="567567"/>-->
             </ListBox>
         </Border>
-        <Border Grid.Row="2" CornerRadius="5" Margin="6,6,6,6" Background="{DynamicResource LightBlack}" Grid.Column="1">
+        <Border Grid.Row="2" CornerRadius="0,8,8,0" Margin="0,5,5,5" Background="{DynamicResource LightBlack}" Grid.Column="1">
 
             <StackPanel Orientation="Vertical" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить рабочее пространство в список" MouseDown="AddClick" FontSize="16" />
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранное рабочее пространство из этого списка" MouseDown="RemoveClick"/>
-                <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" ToolTip="Обновить список" MouseDown="RefreshClick" FontSize="16" />
+                <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить рабочее пространство в список" MouseDown="AddClick" FontSize="16" />-->
+                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource LightBlack}" Click="AddClick" ToolTip="Добавить рабочее пространство в список">
+                    <Path Fill="#FFBAFF78" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
+                </Button>
+                <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Remove" ToolTip="Удалить выбранное рабочее пространство из этого списка" MouseDown="RemoveClick"/>-->
+                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource LightBlack}" Click="RemoveClick" ToolTip="Удалить выбранное рабочее пространство из этого списка">
+                    <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
+                </Button>
+                <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Refresh" ToolTip="Обновить список" MouseDown="RefreshClick" FontSize="16" />-->
+                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource LightBlack}" Click="RefreshClick" ToolTip="Обновить список">
+                    <Path Fill="#FF789FFF" VerticalAlignment="Center" Stretch="Uniform" Data="M12.05,19.4076a7.196,7.196,0,0,1-5.2688-2.161,7.14,7.14,0,0,1-2.1735-5.262V10.5519L2.4922,12.6674l-.6615-.6615L5.077,8.7749l3.2307,3.231-.6615.6615L5.5307,10.5519v1.4327a6.2636,6.2636,0,0,0,1.8975,4.6073A6.2986,6.2986,0,0,0,12.05,18.4846a6.4044,6.4044,0,0,0,1.1907-.1135,6.0315,6.0315,0,0,0,1.1823-.3527l.6885.6882a7.3193,7.3193,0,0,1-1.4918.5218A6.9151,6.9151,0,0,1,12.05,19.4076Zm6.873-4.1827-3.2308-3.2308.6616-.6615,2.1155,2.1155V12.0154a6.2625,6.2625,0,0,0-1.8976-4.6073A6.2982,6.2982,0,0,0,11.95,5.5154a6.4816,6.4816,0,0,0-2.373.4567l-.6885-.6885a7.7093,7.7093,0,0,1,1.4917-.512,6.916,6.916,0,0,1,1.57-.1792,7.1958,7.1958,0,0,1,5.2687,2.161,7.14,7.14,0,0,1,2.1735,5.262v1.4327l2.1155-2.1155.6616.6615Z"/>
+                </Button>
             </StackPanel>
         </Border>
 

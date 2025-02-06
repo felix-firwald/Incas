@@ -67,7 +67,7 @@ namespace Incas.Objects.Views.Windows
             this.UpdateTemplatesList();
         }
 
-        private void GetMoreInfoClick(object sender, MouseButtonEventArgs e)
+        private void GetMoreInfoClick(object sender, RoutedEventArgs e)
         {
             ProgramState.OpenWebPage("https://teletype.in/@incas/classes");
         }
@@ -184,11 +184,11 @@ namespace Incas.Objects.Views.Windows
             return true;
         }
 
-        private void AddFieldClick(object sender, MouseButtonEventArgs e)
+        private void AddFieldClick(object sender, RoutedEventArgs e)
         {
             this.AddField();
         }
-        private void CopyFieldsFromAnotherClass(object sender, MouseButtonEventArgs e)
+        private void CopyFieldsFromAnotherClass(object sender, RoutedEventArgs e)
         {
             ClassSelector cs = new();
             if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
@@ -201,7 +201,7 @@ namespace Incas.Objects.Views.Windows
                 }
             }
         }
-        private void AddVirtualFieldsClick(object sender, MouseButtonEventArgs e)
+        private void AddVirtualFieldsClick(object sender, RoutedEventArgs e)
         {
             VirtualFieldsAppender appender = new();
             if (appender.ShowDialog("Настройка виртуальных полей", Core.Classes.Icon.Magic))
@@ -431,7 +431,7 @@ namespace Incas.Objects.Views.Windows
 
         #endregion
 
-        private void MinimizeAllClick(object sender, MouseButtonEventArgs e)
+        private void MinimizeAllClick(object sender, RoutedEventArgs e)
         {
             foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
             {
@@ -439,7 +439,7 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void MaximizeAllClick(object sender, MouseButtonEventArgs e)
+        private void MaximizeAllClick(object sender, RoutedEventArgs e)
         {
             foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
             {
@@ -447,7 +447,7 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void ShowFormClick(object sender, MouseButtonEventArgs e)
+        private void ShowFormClick(object sender, RoutedEventArgs e)
         {
             List<Field> fields = [];
             try

@@ -7,6 +7,7 @@ using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -61,7 +62,7 @@ namespace Incas.Core.Views.Controls
             catch { }
         }
 
-        private async void ButtonClick(object sender, MouseButtonEventArgs e)
+        private async void ButtonClick(object sender, RoutedEventArgs e)
         {
             if (this.Binding.Class == Guid.Empty || this.Binding.Field == Guid.Empty)
             {

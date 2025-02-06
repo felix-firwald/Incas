@@ -30,10 +30,16 @@
                         </TextBox>
                     </StackPanel>
                 </Border>
-                <fa:FontAwesome x:Name="LinkIcon" Style="{StaticResource IconButton}" Icon="Link" ToolTip="Скопировать ссылку на объект"  HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseDown="GetObjectReferenceClick"/>
+                <!--<fa:FontAwesome  Style="{StaticResource IconButton}" Icon="Link" ToolTip="Скопировать ссылку на объект"  HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseDown="GetObjectReferenceClick"/>-->
+                <Button x:Name="LinkIcon" Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="GetObjectReferenceClick" ToolTip="Скопировать ссылку на объект" VerticalAlignment="Bottom">
+                    <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Data="M17.5332,20.8463a2.2931,2.2931,0,0,1-2.3177-2.32,4.0668,4.0668,0,0,1,.145-.7577L8.2087,13.526a2.2692,2.2692,0,0,1-.782.5845,2.3353,2.3353,0,0,1-.989.2125,2.18,2.18,0,0,1-1.6177-.68,2.3459,2.3459,0,0,1,.0012-3.2767A2.1764,2.1764,0,0,1,6.4422,9.68a2.3417,2.3417,0,0,1,.9823.2085,2.1966,2.1966,0,0,1,.7717.5762l7.1643-4.2252a1.66,1.66,0,0,1-.112-.3738,2.3589,2.3589,0,0,1-.033-.401,2.3154,2.3154,0,1,1,4.6308.0067A2.3,2.3,0,0,1,17.534,7.7875a2.2054,2.2054,0,0,1-.9785-.2173,2.2941,2.2941,0,0,1-.767-.602l-7.152,4.2423a2.749,2.749,0,0,1,.1072.396,2.1071,2.1071,0,0,1,.038.397,2.3433,2.3433,0,0,1-.0317.388,2.2481,2.2481,0,0,1-.101.384l7.14,4.2465a2.3547,2.3547,0,0,1,.7647-.597,2.1813,2.1813,0,0,1,.9808-.222,2.2194,2.2194,0,0,1,1.6377.68,2.317,2.317,0,0,1-1.6385,3.963Zm-.0025-.9233a1.3563,1.3563,0,0,0,1.3923-1.3922,1.37,1.37,0,0,0-.3988-.999,1.419,1.419,0,0,0-1.989.002,1.4458,1.4458,0,0,0,0,1.99A1.346,1.346,0,0,0,17.5307,19.923ZM6.4422,13.4a1.3913,1.3913,0,0,0,1.0065-.3967,1.328,1.328,0,0,0,.41-.9955,1.3555,1.3555,0,0,0-.4072-.9991,1.3732,1.3732,0,0,0-1.0093-.4057,1.2957,1.2957,0,0,0-.9727.4078,1.4511,1.4511,0,0,0,0,1.985A1.3014,1.3014,0,0,0,6.4422,13.4ZM17.5307,6.8645a1.3433,1.3433,0,0,0,.9955-.401,1.3576,1.3576,0,0,0,.3968-.9943,1.3924,1.3924,0,1,0-2.7845-.0047,1.3633,1.3633,0,0,0,.3967.999A1.3434,1.3434,0,0,0,17.5307,6.8645Z"/>
+                </Button>
 
-                <fa:FontAwesome x:Name="EditIcon" Style="{StaticResource IconButton}" Icon="Pencil" ToolTip="Открыть окно редактирования объекта" MouseDown="FontAwesome_MouseDown" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="2"/>
 
+                <!--<fa:FontAwesome  Style="{StaticResource IconButton}" Icon="Pencil" ToolTip="Открыть окно редактирования объекта" MouseDown="FontAwesome_MouseDown" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="2"/>-->
+                <Button x:Name="EditIcon" Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="EditClick" ToolTip="Открыть окно редактирования объекта" VerticalAlignment="Bottom" Grid.Column="2">
+                    <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M5.077,18.923H6.1135L16.827,8.2125l-1.04-1.04L5.077,17.89Zm-.9232.9233v-2.35L17.2115,4.4125a1.0387,1.0387,0,0,1,.3053-.1913.9393.9393,0,0,1,.356-.0675,1.0646,1.0646,0,0,1,.36.062,1.0336,1.0336,0,0,1,.3338.2025l1.0212,1.024a.8678.8678,0,0,1,.2.321,1.0808,1.0808,0,0,1,.0592.3508,1.03,1.03,0,0,1-.0645.3625.854.854,0,0,1-.196.307L6.5038,19.8463ZM18.9422,6.1105,17.89,5.0578ZM16.299,7.701l-.5115-.528,1.04,1.04Z"/>
+                </Button>
             </Grid>
             <Border x:Name="StatusBorder" Visibility="Collapsed" Margin="0,10,0,0" Grid.Row="1">
                 <StackPanel VerticalAlignment="Center" Grid.Column="1"  >

@@ -24,7 +24,11 @@
             </StackPanel>
         </Button>
         <TextBlock x:Name="FieldValue" Style="{StaticResource TextBlockMain}" FontSize="11" ToolTipService.InitialShowDelay="180" Text="(пусто)" Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource Light}" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow" Margin="0,5,0,5"/>
-        <fa:FontAwesome x:Name="FilterButton" Style="{StaticResource IconButton}" Icon="Filter" MouseDown="FilterClick" ToolTip="Показать список объектов с идентичным значением" Grid.Column="2"/>
+        <!--<fa:FontAwesome  Style="{StaticResource IconButton}" Icon="Filter" MouseDown="FilterClick" ToolTip="Показать список объектов с идентичным значением" Grid.Column="2"/>-->
+        <Button x:Name="FilterButton" Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="FilterClick" ToolTip="Показать список объектов с идентичным значением" Grid.Column="2">
+            <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Margin="3" Data="{StaticResource Filter}"/>
+        </Button>
+
         <Rectangle x:Name="Separator" Height="1" VerticalAlignment="Bottom" Fill="{DynamicResource Basic}" Grid.ColumnSpan="3" Grid.Row="1"/>
     </Grid>
 </UserControl>
