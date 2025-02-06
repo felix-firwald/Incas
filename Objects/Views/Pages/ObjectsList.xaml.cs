@@ -5,12 +5,15 @@ using Incas.Core.Views.Windows;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
+using Incas.Rendering.AutoUI;
+using Incas.Rendering.Components;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -111,6 +114,7 @@ namespace Incas.Objects.Views.Pages
             {
                 this.AddButton.Visibility = Visibility.Collapsed;
                 this.CopyButton.Visibility = Visibility.Collapsed;
+                this.ParseButton.Visibility = Visibility.Collapsed;
             }
             if (!this.permissionSettings.DeleteOperations)
             {
@@ -195,7 +199,7 @@ namespace Incas.Objects.Views.Pages
                 this.Data.ItemsSource = dt.AsDataView();
             }
         }
-        private void UpdateViewWithFilter(FieldData data)
+        public void UpdateViewWithFilter(FieldData data)
         {
             DataTable dt = Processor.GetObjectsListWhereEqual(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
@@ -484,8 +488,18 @@ namespace Incas.Objects.Views.Pages
 
         private void OpenInAnotherWindowClick(object sender, RoutedEventArgs e)
         {
-            ContainerWindow cw = new(this, this.sourceClass.Name);
-            cw.Show();
+            if (this.sourceClass == null)
+            {
+                return;
+            }
+            ObjectsList ol = new(this.sourceClass);
+            ol.OpenInNewTabButton.Visibility = Visibility.Collapsed;
+            GroupBox gb = new()
+            {
+                Header = this.ClassData.ListName,
+                Content = ol
+            };
+            DialogsManager.ShowPage(gb, this.ClassData.ListName, MainWindowButtonTab.ClassPrefix + this.sourceClass.Id.ToString());
         }
 
         private void OpenPresetsListClick(object sender, RoutedEventArgs e)
@@ -496,6 +510,43 @@ namespace Incas.Objects.Views.Pages
         private void CMOpenObjectClick(object sender, RoutedEventArgs e)
         {
             this.OpenSelectedObject();
+        }
+
+        private void AggregateClick(object sender, RoutedEventArgs e)
+        {
+            DialogsManager.ShowInfoDialog("Функционал не реализован");
+        }
+
+        private void CompareClick(object sender, RoutedEventArgs e)
+        {
+            DialogsManager.ShowInfoDialog("Функционал не реализован");
+        }
+
+        private void ShowHistoryClick(object sender, RoutedEventArgs e)
+        {
+            DialogsManager.ShowInfoDialog("Функционал не реализован");
+        }
+
+        private void ExportClick(object sender, RoutedEventArgs e)
+        {
+            DialogsManager.ShowInfoDialog("Функционал не реализован");
+        }
+
+        private void ParseClick(object sender, RoutedEventArgs e)
+        {
+            ParseSettings parse = new();
+            if (parse.ShowDialog("Настройки парсинга"))
+            {
+                IObject obj = ObjectParser.ParseString(parse.Source, parse.Pattern, this.sourceClass);
+                ObjectsEditor editor = new(this.sourceClass, null, [obj]);
+                editor.Show();
+            }
+        }
+
+        private void RefreshClick(object sender, RoutedEventArgs e)
+        {
+            this.CancelSearchButton.Visibility = Visibility.Collapsed;
+            this.UpdateView();
         }
     }
 }

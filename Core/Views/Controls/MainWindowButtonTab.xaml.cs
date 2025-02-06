@@ -44,11 +44,13 @@ namespace Incas.Core.Views.Controls
                     return new CustomDatabaseMain();
                 case GroupsSettings:
                     ObjectsList listGroup = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceGroups);
+                    listGroup.OpenInNewTabButton.Visibility = System.Windows.Visibility.Collapsed;
                     gb.Content = listGroup;
                     gb.Header = "Управление группами";
                     return gb;
                 case UsersSettings:
                     ObjectsList listUser = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers);
+                    listUser.OpenInNewTabButton.Visibility = System.Windows.Visibility.Collapsed;
                     gb.Content = listUser;
                     gb.Header = "Управление пользователями";
                     return gb;

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incas.Objects.Views.Pages"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Background="{StaticResource Area}"
              d:DesignHeight="550" d:DesignWidth="800" >
 
     <Grid x:Name="MainGrid">
@@ -17,80 +17,54 @@
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <WrapPanel x:Name="Tools" Orientation="Horizontal" Grid.ColumnSpan="2">
-            <Button x:Name="AddButton" Style="{StaticResource ButtonMainFinish}" Click="AddClick" ToolTip="Добавить новый экземпляр объекта (A, N)">
-                <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
-                    <Path Fill="White" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
-                    <Label Content="Добавить" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
-                </StackPanel>
-            </Button>
-            <Button x:Name="CopyButton" Style="{StaticResource ButtonMainFinish}" Click="CopyClick" ToolTip="Добавить новый экземпляр объекта, скопировав поля из выбранного (C, RightShift)">
-                <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
-                    <Path Fill="White" Data="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm4.5 6V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
-                    <Label Content="Скопировать" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
-                </StackPanel>
-            </Button>
-            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="SearchClick" ToolTip="Найти список объектов по критерию (F)">
-                <Path Fill="#FFBAFF78" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" VerticalAlignment="Center"/>
-            </Button>
-            <Button x:Name="CancelSearchButton" Style="{StaticResource ButtonSquare}" Visibility="Collapsed" Background="{StaticResource Area}"  Click="CancelSearchClick" ToolTip="Отменить результат поиска объектов">
-                <Path Fill="#FFFF7878" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0 M 3.146 3.146 a 0.5 0.5 0 0 1 0.708 0 L 6.5 5.793 l 2.646 -2.647 a 0.5 0.5 0 0 1 0.708 0.708 L 7.207 6.5 l 2.647 2.646 a 0.5 0.5 0 0 1 -0.708 0.708 L 6.5 7.207 l -2.646 2.647 a 0.5 0.5 0 0 1 -0.708 -0.708 L 5.793 6.5 L 3.146 3.854 a 0.5 0.5 0 0 1 0 -0.708" VerticalAlignment="Center"/>
-            </Button>
-            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="SearchClick" ToolTip="Агрегация и анализ данных">
-                <Path Fill="#FF78FFE9" VerticalAlignment="Center" Data="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm.5 5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1 0-1M4 8.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m2 3a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5"/>
-            </Button>
-            <Button x:Name="PresetsButton" Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Visibility="Collapsed" ToolTip="Открыть страницу управления пресетами" Click="OpenPresetsListClick">
-                <Path Fill="#FF78FFE9" VerticalAlignment="Center" Data="M3.112 3.645A1.5 1.5 0 0 1 4.605 2H7a.5.5 0 0 1 .5.5v.382c0 .696-.497 1.182-.872 1.469a.5.5 0 0 0-.115.118l-.012.025L6.5 4.5v.003l.003.01q.005.015.036.053a.9.9 0 0 0 .27.194C7.09 4.9 7.51 5 8 5c.492 0 .912-.1 1.19-.24a.9.9 0 0 0 .271-.194.2.2 0 0 0 .036-.054l.003-.01v-.008l-.012-.025a.5.5 0 0 0-.115-.118c-.375-.287-.872-.773-.872-1.469V2.5A.5.5 0 0 1 9 2h2.395a1.5 1.5 0 0 1 1.493 1.645L12.645 6.5h.237c.195 0 .42-.147.675-.48.21-.274.528-.52.943-.52.568 0 .947.447 1.154.862C15.877 6.807 16 7.387 16 8s-.123 1.193-.346 1.638c-.207.415-.586.862-1.154.862-.415 0-.733-.246-.943-.52-.255-.333-.48-.48-.675-.48h-.237l.243 2.855A1.5 1.5 0 0 1 11.395 14H9a.5.5 0 0 1-.5-.5v-.382c0-.696.497-1.182.872-1.469a.5.5 0 0 0 .115-.118l.012-.025.001-.006v-.003l-.003-.01a.2.2 0 0 0-.036-.053.9.9 0 0 0-.27-.194C8.91 11.1 8.49 11 8 11s-.912.1-1.19.24a.9.9 0 0 0-.271.194.2.2 0 0 0-.036.054l-.003.01v.002l.001.006.012.025c.016.027.05.068.115.118.375.287.872.773.872 1.469v.382a.5.5 0 0 1-.5.5H4.605a1.5 1.5 0 0 1-1.493-1.645L3.356 9.5h-.238c-.195 0-.42.147-.675.48-.21.274-.528.52-.943.52-.568 0-.947-.447-1.154-.862C.123 9.193 0 8.613 0 8s.123-1.193.346-1.638C.553 5.947.932 5.5 1.5 5.5c.415 0 .733.246.943.52.255.333.48.48.675.48h.238z"/>
-            </Button>
-            <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="RemoveClick" ToolTip="Удалить выбранный объект (R, Delete)">
-                <Path Fill="#FFFF7878" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
-            </Button>
-            <!--<Button Style="{StaticResource ButtonMain}" Click="SearchClick" ToolTip="Найти список объектов по критерию (F)">
-                <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
-                    <Path Fill="White" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" VerticalAlignment="Center"/>
-                    <Label Content="Найти" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
-                </StackPanel>
-            </Button>-->
-            <!--<Button x:Name="CancelSearchButton" Style="{StaticResource ButtonMain}" Visibility="Collapsed" Click="CancelSearchClick">
-                <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
-                    <Path Fill="White" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0 M 3.146 3.146 a 0.5 0.5 0 0 1 0.708 0 L 6.5 5.793 l 2.646 -2.647 a 0.5 0.5 0 0 1 0.708 0.708 L 7.207 6.5 l 2.647 2.646 a 0.5 0.5 0 0 1 -0.708 0.708 L 6.5 7.207 l -2.646 2.647 a 0.5 0.5 0 0 1 -0.708 -0.708 L 5.793 6.5 L 3.146 3.854 a 0.5 0.5 0 0 1 0 -0.708" VerticalAlignment="Center"/>
-                    <Label Content="Отменить поиск" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
-                </StackPanel>
-            </Button>-->
-            <!--<Button x:Name="RemoveButton" Style="{StaticResource ButtonMain}" Click="RemoveClick" ToolTip="Удалить выбранный объект (R, Delete)">
-                <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
-                    <Path Fill="White" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
-                    <Label Content="Удалить" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
-                </StackPanel>
-            </Button>-->
-            <!--<Button x:Name="PresetsButton" Style="{StaticResource ButtonMain}" Visibility="Collapsed" ToolTip="Открыть страницу управления пресетами" Click="OpenPresetsListClick" Cursor="Hand">
-                <StackPanel Orientation="Horizontal" Margin="10,2,10,2">
-                    <Path Fill="White" VerticalAlignment="Center" Data="M3.112 3.645A1.5 1.5 0 0 1 4.605 2H7a.5.5 0 0 1 .5.5v.382c0 .696-.497 1.182-.872 1.469a.5.5 0 0 0-.115.118l-.012.025L6.5 4.5v.003l.003.01q.005.015.036.053a.9.9 0 0 0 .27.194C7.09 4.9 7.51 5 8 5c.492 0 .912-.1 1.19-.24a.9.9 0 0 0 .271-.194.2.2 0 0 0 .036-.054l.003-.01v-.008l-.012-.025a.5.5 0 0 0-.115-.118c-.375-.287-.872-.773-.872-1.469V2.5A.5.5 0 0 1 9 2h2.395a1.5 1.5 0 0 1 1.493 1.645L12.645 6.5h.237c.195 0 .42-.147.675-.48.21-.274.528-.52.943-.52.568 0 .947.447 1.154.862C15.877 6.807 16 7.387 16 8s-.123 1.193-.346 1.638c-.207.415-.586.862-1.154.862-.415 0-.733-.246-.943-.52-.255-.333-.48-.48-.675-.48h-.237l.243 2.855A1.5 1.5 0 0 1 11.395 14H9a.5.5 0 0 1-.5-.5v-.382c0-.696.497-1.182.872-1.469a.5.5 0 0 0 .115-.118l.012-.025.001-.006v-.003l-.003-.01a.2.2 0 0 0-.036-.053.9.9 0 0 0-.27-.194C8.91 11.1 8.49 11 8 11s-.912.1-1.19.24a.9.9 0 0 0-.271.194.2.2 0 0 0-.036.054l-.003.01v.002l.001.006.012.025c.016.027.05.068.115.118.375.287.872.773.872 1.469v.382a.5.5 0 0 1-.5.5H4.605a1.5 1.5 0 0 1-1.493-1.645L3.356 9.5h-.238c-.195 0-.42.147-.675.48-.21.274-.528.52-.943.52-.568 0-.947-.447-1.154-.862C.123 9.193 0 8.613 0 8s.123-1.193.346-1.638C.553 5.947.932 5.5 1.5 5.5c.415 0 .733.246.943.52.255.333.48.48.675.48h.238z"/>
-                    <Label Content="Список пресетов" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
-                </StackPanel>
-            </Button>-->
-            
-            <!--<Menu Background="{x:Null}">
-                <Button>
-                    <MenuItem Header="Парсинг (обратная шаблонизацияAWER)"/>
+        <Border x:Name="Tools" Grid.ColumnSpan="2" >
+            <WrapPanel   Orientation="Horizontal" Grid.ColumnSpan="2">
+                <Button x:Name="AddButton" Style="{StaticResource ButtonRectangle}" Click="AddClick" ToolTip="Добавить новый экземпляр объекта (A, N)">
+                    <StackPanel Orientation="Horizontal" Margin="5,2,5,2">
+                        <Path Fill="#FFBAFF78" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
+                        <Label Content="Добавить" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="#FFBAFF78"/>
+                    </StackPanel>
                 </Button>
-                <MenuItem Header="...">
-                    
-                </MenuItem>
-            </Menu>-->
-            <!--<ToggleButton Style="{StaticResource ToggleButtonMain}" >
-                <Path Fill="White" VerticalAlignment="Center" Data="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" Margin="10,0,10,0"/>
-                <ToggleButton.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Парсинг (обратная шаблонизацияAWER)"/>
-                    </ContextMenu>
-                </ToggleButton.ContextMenu>
-            </ToggleButton>-->
-            <Button Visibility="Collapsed" Style="{StaticResource ButtonMainFinish}" Click="OpenInAnotherWindowClick" Padding="10,0,10,0">
-                <Path Fill="White" Data="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5 M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" VerticalAlignment="Center"/>
-            </Button>
-        </WrapPanel>
-        <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" RenderOptions.BitmapScalingMode="LowQuality" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="true" SelectionChanged="Data_SelectionChanged" PreviewKeyDown="Data_PreviewKeyDown" LoadingRow="Data_LoadingRow" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1" >
+                <Button x:Name="CopyButton" Style="{StaticResource ButtonSquare}" Click="CopyClick" ToolTip="Добавить новый экземпляр объекта, скопировав поля из выбранного (C, RightShift)">
+                    <Path Fill="#FFBAFF78" Data="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm4.5 6V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
+                </Button>
+                <Button x:Name="ParseButton" Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" ToolTip="Парсинг объекта (обратная шаблонизация)" Click="ParseClick">
+                    <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M5.1725,20.3615a1.52,1.52,0,0,1-1.534-1.5337V6.1723A1.52,1.52,0,0,1,5.177,4.6385h9.2585v.923H5.177a.5923.5923,0,0,0-.6155.6155V18.823a.5923.5923,0,0,0,.6155.6155H17.823a.5923.5923,0,0,0,.6155-.6155V9.5645h.923V18.823a1.52,1.52,0,0,1-1.5337,1.5385ZM7.323,16.923h.9232V11.0462H7.323Zm3.7232,0h.923V8.077h-.923Zm3.7075,0h.9233V14.0155h-.9233Zm2.7-8.3923V6.5462H15.4692V5.623h1.9845V3.6385h.9233V5.623h1.9845v.9232H18.377V8.5307Z"/>
+                </Button>
+                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" ToolTip="Обновить список объектов" Click="RefreshClick">
+                    <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M6.1421,15.9157a7.44,7.44,0,0,1-.546-1.5365,7.01,7.01,0,0,1-.1885-1.6172,7.3041,7.3041,0,0,1,2.19-5.3443,7.2049,7.2049,0,0,1,5.31-2.2057h1.3865l-2.1-2.1.7078-.7078L16.21,5.712,12.9019,9.02l-.7078-.7077,2.1-2.1H12.9076A6.2484,6.2484,0,0,0,8.3019,8.1187,6.34,6.34,0,0,0,6.4076,12.762a6.3361,6.3361,0,0,0,.4845,2.4037Zm6.7713,7.104L9.6056,19.712l3.3078-3.3078.7077.7078-2.1,2.1h1.3865a6.2488,6.2488,0,0,0,4.6058-1.9068,6.3406,6.3406,0,0,0,1.8942-4.6432,6.331,6.331,0,0,0-.4845-2.4038l.75-.75a7.44,7.44,0,0,1,.546,1.5365,7.01,7.01,0,0,1,.1885,1.6173,7.3041,7.3041,0,0,1-2.19,5.3442,7.205,7.205,0,0,1-5.3095,2.2058H11.5211l2.1,2.1Z"/>
+                </Button>
+                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="SearchClick" ToolTip="Найти список объектов по критерию (F)">
+                    <Path Fill="{StaticResource PrimaryMain}" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" VerticalAlignment="Center"/>
+                </Button>
+                <Button x:Name="CancelSearchButton" Style="{StaticResource ButtonSquare}" Visibility="Collapsed" Background="{StaticResource Area}"  Click="CancelSearchClick" ToolTip="Отменить результат поиска объектов" Cursor="Hand">
+                    <Path Fill="#FFFF7878" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0 M 3.146 3.146 a 0.5 0.5 0 0 1 0.708 0 L 6.5 5.793 l 2.646 -2.647 a 0.5 0.5 0 0 1 0.708 0.708 L 7.207 6.5 l 2.647 2.646 a 0.5 0.5 0 0 1 -0.708 0.708 L 6.5 7.207 l -2.646 2.647 a 0.5 0.5 0 0 1 -0.708 -0.708 L 5.793 6.5 L 3.146 3.854 a 0.5 0.5 0 0 1 0 -0.708" VerticalAlignment="Center"/>
+                </Button>
+                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" ToolTip="Агрегация и анализ данных" Click="AggregateClick">
+                    <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M4.7441,14.4677l-.8172-.5787,4.25-6.827,2.8845,3.3845L14.8691,4.235l2.8848,4.3462L21.11,3.212l.7788.598-4.123,6.6-2.86-4.321-3.7037,6.04-2.89-3.39ZM16.0426,19.212a2.8773,2.8773,0,0,0,2.034-4.9,2.8772,2.8772,0,0,0-4.0687,4.0692A2.7677,2.7677,0,0,0,16.0426,19.212Zm5.1573,3-2.8153-2.8155a3.757,3.757,0,0,1-1.08.602,3.8758,3.8758,0,0,1-4.0005-.913,3.8876,3.8876,0,0,1-.001-5.4745,3.8836,3.8836,0,0,1,5.4745-.0023,3.7234,3.7234,0,0,1,1.13,2.7378,3.7843,3.7843,0,0,1-.2135,1.2722,3.7313,3.7313,0,0,1-.6017,1.09l2.796,2.8153Z"/>
+                </Button>
+                <!--<Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" ToolTip="Сравнить выбранные объекты" Click="CompareClick">
+                    <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M14.4076,11.212h1v-2h2v-1h-2v-2h-1v2h-2v1h2Zm-2,4h5v-1h-5Zm-2.3845,3.5a1.58,1.58,0,0,1-1.6155-1.6155V4.3275A1.58,1.58,0,0,1,10.0231,2.712h6.8845l4.5,4.5v9.8845a1.58,1.58,0,0,1-1.6155,1.6155Zm0-1h9.769a.6615.6615,0,0,0,.6155-.6155V7.712l-4-4H10.0231a.6615.6615,0,0,0-.6155.6155v12.769a.6617.6617,0,0,0,.6155.6155Zm-4,5a1.58,1.58,0,0,1-1.6155-1.6155V8.712h1V21.0965a.6617.6617,0,0,0,.6155.6155h9.3845v1Zm3.3845-5v0Z"/>
+                </Button>-->
+                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" ToolTip="Просмотреть историю выбранного объекта" Click="ShowHistoryClick">
+                    <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M18.2921,18.4423v-2.73h-.769v3.0463l2.0345,2.0345.5463-.546ZM11.6,3.9618l-6.1173,3.54,6.425,3.7135,6.425-3.7135-6.1172-3.54a.5413.5413,0,0,0-.6155,0ZM3.9076,15.3983V8.1793a1.5858,1.5858,0,0,1,.212-.8037,1.6158,1.6158,0,0,1,.5958-.5945L11.1,3.1023a1.4964,1.4964,0,0,1,.4-.1712,1.71,1.71,0,0,1,.4067-.046,1.8858,1.8858,0,0,1,.42.046,1.1612,1.1612,0,0,1,.3885.1712L19.1,6.7811a1.6162,1.6162,0,0,1,.5957.5945,1.5858,1.5858,0,0,1,.212.8037v3.4558h-1V8.3118l-7.025,4.05-6.975-4.05v7.0808a.5718.5718,0,0,0,.077.2885.6586.6586,0,0,0,.2308.2307l6.3077,3.6675v1.1268L4.7154,16.7966a1.6165,1.6165,0,0,1-.5958-.5945A1.5859,1.5859,0,0,1,3.9076,15.3983Zm14,7.14a3.9761,3.9761,0,0,1-4-4,3.9761,3.9761,0,0,1,4-4,3.9761,3.9761,0,0,1,4,4,3.9761,3.9761,0,0,1-4,4Z"/>
+                </Button>
+                <Button x:Name="PresetsButton" Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Visibility="Collapsed" ToolTip="Открыть страницу управления пресетами" Click="OpenPresetsListClick">
+                    <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M4.7731,21.2023a2.4479,2.4479,0,0,1-1.7982-.7405,2.5536,2.5536,0,0,1,0-3.596,2.4482,2.4482,0,0,1,1.7982-.7405,2.6319,2.6319,0,0,1,.502.0473,2.163,2.163,0,0,1,.4825.1547l4.5115-6.1905a3.4314,3.4314,0,0,1-.6625-1.08A3.5566,3.5566,0,0,1,9.3691,7.76a3.5194,3.5194,0,0,1,3.5385-3.5385A3.5192,3.5192,0,0,1,16.4461,7.76a3.3983,3.3983,0,0,1-.25,1.2965,3.625,3.625,0,0,1-.675,1.08l4.5173,6.21a2.5528,2.5528,0,0,1,.4887-.1645,2.3173,2.3173,0,0,1,.515-.0568,2.543,2.543,0,1,1-2.5382,2.5385,2.3758,2.3758,0,0,1,.195-.96,2.7969,2.7969,0,0,1,.5222-.7972l-4.473-6.1518a2.8268,2.8268,0,0,1-.6317.325,3.7234,3.7234,0,0,1-.7088.1783v4.9082a2.5344,2.5344,0,1,1-2.298,4.277,2.5329,2.5329,0,0,1,1.298-4.277V11.2576a3.7224,3.7224,0,0,1-.7087-.1783,2.8253,2.8253,0,0,1-.6318-.325L6.5749,16.9061a2.9692,2.9692,0,0,1,.5317.7972,2.2789,2.2789,0,0,1,.2048.96,2.528,2.528,0,0,1-2.5383,2.5385Zm0-1a1.5385,1.5385,0,1,0-1.0875-2.626,1.5385,1.5385,0,0,0,1.0875,2.626Zm8.1345-.0192a1.54,1.54,0,1,0-1.0875-.451A1.4825,1.4825,0,0,0,12.9076,20.1831Zm8.1345.0192a1.5393,1.5393,0,1,0-1.0875-.451A1.4814,1.4814,0,0,0,21.0421,20.2023Zm-8.1345-9.9037A2.5462,2.5462,0,0,0,15.4461,7.76a2.546,2.546,0,0,0-2.5385-2.5385A2.5462,2.5462,0,0,0,10.3691,7.76a2.5464,2.5464,0,0,0,2.5385,2.5385Z"/>
+                </Button>
+                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" ToolTip="Экспорт списка объектов (отчета)" Click="ExportClick">
+                    <Path Fill="{StaticResource LightPurple}" VerticalAlignment="Center" Stretch="Uniform" Data="M16.4731,19.7505,19.0039,17.22v2.069h.7692V15.9042H16.3884v.7693h2.0692l-2.5307,2.5307Zm-10.95-.0963a1.6115,1.6115,0,0,1-1.6155-1.6155V5.27A1.6115,1.6115,0,0,1,5.5231,3.6542h12.769A1.6115,1.6115,0,0,1,19.9076,5.27v5.95q-.2635-.09-.5037-.1472t-.4963-.1125V5.27a.6615.6615,0,0,0-.6155-.6155H5.5231a.6617.6617,0,0,0-.6155.6155v12.769a.6615.6615,0,0,0,.6155.6155h5.6653a5.189,5.189,0,0,0,.0932.5213,3.8178,3.8178,0,0,0,.1473.4787Zm-.6155-2v0Zm2.5-1.7307h3.96a3.227,3.227,0,0,1,.151-.4963q.0953-.24.199-.5037H7.4076Zm0-3.7693h6.5808a7.7154,7.7154,0,0,1,.97-.5865,4.9156,4.9156,0,0,1,1.026-.377v-.0365H7.4076Zm0-3.7692h9v-1h-9Zm10.5,13.3847a3.9761,3.9761,0,0,1-4-4,3.9758,3.9758,0,0,1,4-4,3.9758,3.9758,0,0,1,4,4,3.9761,3.9761,0,0,1-4,4Z"/>
+                </Button>
+                <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="RemoveClick" ToolTip="Удалить выбранный объект (R, Delete)">
+                    <Path Fill="#FFFF7878" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
+                </Button>
+                <Button x:Name="OpenInNewTabButton" Style="{StaticResource ButtonSquare}" Click="OpenInAnotherWindowClick" ToolTip="Открыть список в другой вкладке">
+                    <Path Fill="#FFBAFF78" Margin="2" Stretch="Uniform" Data="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5 M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" VerticalAlignment="Center"/>
+                </Button>
+            </WrapPanel>
+        </Border>
+        
+        <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" RowHeight="30" RenderOptions.BitmapScalingMode="LowQuality" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="true" SelectionChanged="Data_SelectionChanged" PreviewKeyDown="Data_PreviewKeyDown" LoadingRow="Data_LoadingRow" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1" >
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RowMain}">
                     <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"/>

@@ -53,11 +53,6 @@
         </GroupBox>
         <GridSplitter/>
         <GroupBox x:Name="ContentPanel" Grid.Column="1" Header="{Binding SelectedClassName}" Margin="5,5,5,5">
-            <GroupBox.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Открыть в новой вкладке" Click="MenuItem_Click"/>
-                </ContextMenu>
-            </GroupBox.ContextMenu>
         </GroupBox>
     </Grid>
 </UserControl>

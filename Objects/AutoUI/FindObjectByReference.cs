@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Views.Controls;
 using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Views.Pages;
 using IncasEngine.ObjectiveEngine;
@@ -49,7 +50,9 @@ namespace Incas.Objects.AutoUI
                     ObjectCard card = new();
                     card.MinWidth = 600;
                     card.MaxWidth = 600;
+                    card.OnFilterRequested += this.Card_OnFilterRequested;
                     Class @class = new(or.Class);
+                    this.classSource = @class;
                     card.SetClass(@class);
                     IObject @object = Processor.GetObject(@class, or.Object);
                     card.UpdateFor(@object);
@@ -64,6 +67,14 @@ namespace Incas.Objects.AutoUI
             {
                 DialogsManager.ShowErrorDialog("Не удалось расшифровать ссылку на объект, либо ссылка отсылает на несуществующий класс.");
             }
+        }
+        private IClass classSource { get; set; }
+        private void Card_OnFilterRequested(IncasEngine.ObjectiveEngine.Common.FieldData data)
+        {
+            ObjectsList list = new(this.classSource);
+            list.OpenInNewTabButton.Visibility = System.Windows.Visibility.Collapsed;
+            DialogsManager.ShowPageWithGroupBox(list, this.classSource.GetClassData().ListName, MainWindowButtonTab.ClassPrefix + this.classSource.Id, TabType.Usual);
+            list.UpdateViewWithFilter(data);
         }
         #endregion
     }
