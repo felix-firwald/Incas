@@ -13,6 +13,8 @@
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
         <Setter Property="Padding" Value="1"/>
+        <Setter Property="FontSize" Value="11"/>
+        <!--<Setter Property="FontFamily" Value="{StaticResource Rubik}"/>-->
         <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="Template">
@@ -198,6 +200,7 @@
         <Setter Property="Margin" Value="5,5,5,5"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
+        <!--<Setter Property="FontFamily" Value="{StaticResource Rubik}"/>-->
         <Setter Property="Padding" Value="1"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
@@ -389,6 +392,7 @@
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
         <Setter Property="MinWidth" Value="30"/>
+        <!--<Setter Property="FontFamily" Value="{StaticResource Rubik}"/>-->
         <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
         <Setter Property="Template">
             <Setter.Value>

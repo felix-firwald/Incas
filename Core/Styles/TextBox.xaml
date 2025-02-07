@@ -269,7 +269,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="{DynamicResource GrayLight}"/>
-        <Setter Property="TextElement.FontFamily" Value="#JetBrains Mono"/>
+        <Setter Property="TextElement.FontFamily" Value="{StaticResource JetBrains}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
@@ -407,7 +407,7 @@
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="TextElement.FontFamily" Value="#JetBrains Mono"/>
+        <Setter Property="TextElement.FontFamily" Value="{StaticResource JetBrains}"/>
         <Setter Property="AcceptsReturn" Value="True"/>
 
     </Style>
@@ -416,7 +416,7 @@
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="TextElement.FontFamily" Value="#JetBrains Mono"/>
+        <Setter Property="TextElement.FontFamily" Value="{StaticResource JetBrains}"/>
         <Setter Property="AcceptsReturn" Value="True"/>
     </Style>
     <Style x:Key="SliderMain" TargetType="{x:Type Slider}">

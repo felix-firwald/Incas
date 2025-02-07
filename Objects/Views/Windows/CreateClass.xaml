@@ -337,7 +337,7 @@
                             </StackPanel>
                         </ScrollViewer>
                     </Border>
-                    <avalonEdit:TextEditor x:Name="CodeModule" Grid.Column="1" HorizontalScrollBarVisibility="Disabled" Background="{x:Null}" ShowLineNumbers="True" BorderThickness="0" Document="{Binding CodeModule}" BorderBrush="{DynamicResource Dark}" FontSize="13" FontFamily="#JetBrains Mono" Foreground="White" Margin="10,0,0,0">
+                    <avalonEdit:TextEditor x:Name="CodeModule" Grid.Column="1" HorizontalScrollBarVisibility="Disabled" Background="{x:Null}" ShowLineNumbers="True" BorderThickness="0" Document="{Binding CodeModule}" BorderBrush="{DynamicResource Dark}" FontSize="13" FontFamily="{StaticResource JetBrains}" Foreground="White" Margin="10,0,0,0">
                     </avalonEdit:TextEditor>
                 </Grid>
             </TabItem>

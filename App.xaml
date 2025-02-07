@@ -379,9 +379,9 @@
                         <ControlTemplate TargetType="ToolTip">
                             <Border CornerRadius="5" BorderBrush="{StaticResource LightBlack}" BorderThickness="1" Background="{DynamicResource Black}" Padding="8,8,8,8">
                                 <StackPanel>
-                                    <Label Content="Помощь" TextElement.FontFamily="#JetBrains Mono" TextElement.FontSize="11" TextElement.FontWeight="Bold" Foreground="{TemplateBinding Foreground}"/>
+                                    <Label Content="Помощь" TextElement.FontFamily="{StaticResource JetBrains}" TextElement.FontSize="11" TextElement.FontWeight="Bold" Foreground="{TemplateBinding Foreground}"/>
                                     <Border Background="{StaticResource LightBlack}" CornerRadius="5" Padding="5">
-                                        <ContentPresenter TextElement.Foreground="White" TextElement.FontFamily="#JetBrains Mono" TextElement.FontWeight="ExtraLight" TextElement.FontSize="11"/>
+                                        <ContentPresenter TextElement.Foreground="White" TextElement.FontFamily="{StaticResource JetBrains}" TextElement.FontWeight="ExtraLight" TextElement.FontSize="11"/>
                                     </Border>
                                 </StackPanel>
                             </Border>

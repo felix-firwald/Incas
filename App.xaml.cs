@@ -6,6 +6,7 @@ using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Windows;
 
 namespace Incas
@@ -21,6 +22,7 @@ namespace Incas
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            DialogsManager.ShowInfoDialog(Assembly.GetEntryAssembly().GetName().Name);
 #if DEBUG
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning;
             PresentationTraceSources.DataBindingSource.Listeners.Add(new ConsoleTraceListener());

@@ -64,7 +64,7 @@
             </WrapPanel>
         </Border>
         
-        <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" RowHeight="30" RenderOptions.BitmapScalingMode="LowQuality" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="true" SelectionChanged="Data_SelectionChanged" PreviewKeyDown="Data_PreviewKeyDown" LoadingRow="Data_LoadingRow" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1" >
+        <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" EnableColumnVirtualization="True" EnableRowVirtualization="True" RowHeight="30" RenderOptions.BitmapScalingMode="LowQuality" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="true" SelectionChanged="Data_SelectionChanged" PreviewKeyDown="Data_PreviewKeyDown" LoadingRow="Data_LoadingRow" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1" >
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RowMain}">
                     <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"/>

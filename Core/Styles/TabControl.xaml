@@ -35,7 +35,7 @@
                                     <ContentPresenter x:Name="contentPresenter" 
                                           ContentSource="Header" 
                                           Focusable="False" 
-                                          TextElement.FontFamily="#JetBrains Mono"
+                                          TextElement.FontFamily="{StaticResource JetBrains}"
                                           TextElement.FontSize="11"
                                           HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" 
                                           Margin="{TemplateBinding Padding}" 
@@ -124,7 +124,7 @@
                                     <ContentPresenter x:Name="contentPresenter" 
                                       ContentSource="Header" 
                                       Focusable="False" 
-                                      TextElement.FontFamily="#JetBrains Mono"
+                                      TextElement.FontFamily="{StaticResource JetBrains}"
                                       TextElement.FontSize="11"
                                       HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" 
                                       Margin="{TemplateBinding Padding}" 
@@ -241,7 +241,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

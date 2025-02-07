@@ -41,7 +41,7 @@
                             <SolidColorBrush Color="Transparent" />
                         </Border.Background>
 
-                        <ContentPresenter Margin="5" TextElement.Foreground="{StaticResource Light}" TextElement.FontFamily="#JetBrains Mono" TextElement.FontSize="11" />
+                        <ContentPresenter Margin="5" TextElement.Foreground="{StaticResource Light}" TextElement.FontFamily="{StaticResource JetBrains}" TextElement.FontSize="11" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -72,7 +72,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="40"/>
                             </Grid.ColumnDefinitions>
-                            <ContentPresenter Margin="5" Grid.Column="0" TextElement.Foreground="{StaticResource Light}" TextElement.FontFamily="#JetBrains Mono" TextElement.FontSize="11" />
+                            <ContentPresenter Margin="5" Grid.Column="0" TextElement.Foreground="{StaticResource Light}" TextElement.FontFamily="{StaticResource JetBrains}" TextElement.FontSize="11" />
                             <Path Name="Arrow" Grid.Column="1" Data="m -6.354 -2.354 a 0.5 0.5 0 0 1 0.708 0 l 5.646 5.647 l 5.646 -5.647 a 0.5 0.5 0 0 1 0.708 0.708 l -6 6 a 0.5 0.5 0 0 1 -0.708 0 l -6 -6 a 0.5 0.5 0 0 1 0 -0.708" HorizontalAlignment="Center" Fill="{StaticResource Icon}" VerticalAlignment="Center" Margin="4,4,0,0">
                                 <Path.RenderTransform>
                                     <RotateTransform Angle="90" x:Name="ArrowRotate"/>
@@ -124,7 +124,7 @@
                     <Border Name="bor" Grid.Column="1" Background="{StaticResource Area}" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource Element}" Margin="0,0,0,0">
                         <StackPanel Orientation="Horizontal">
                             <Polygon x:Name="PolygonMain" Points="10, 20, 10, 0, 20, 10" Fill="{StaticResource LightPurple}" Visibility="Collapsed" VerticalAlignment="Center" Margin="-10,0,0,0" Width="NaN" Height="NaN" Panel.ZIndex="-9"/>
-                            <ContentPresenter TextElement.FontFamily="#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
+                            <ContentPresenter TextElement.FontFamily="{StaticResource JetBrains}" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
                         </StackPanel>
 
                     </Border>
@@ -185,7 +185,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                     <Border Name="bor" Grid.Column="1" Background="{Binding Background}" CornerRadius="6" BorderThickness="0" BorderBrush="{StaticResource Element}" Margin="0,0,0,0">
-                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"></ContentPresenter>
+                        <ContentPresenter VerticalAlignment="Center" TextElement.FontFamily="{StaticResource JetBrains}" HorizontalAlignment="Center"></ContentPresenter>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -233,7 +233,7 @@
                                 <Path x:Name="Plus" RenderOptions.EdgeMode="Aliased" Fill="{StaticResource Success}" Data="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" Visibility="Collapsed" Margin="0,0,0,0"/>
                                 <Path x:Name="Minus" RenderOptions.EdgeMode="Aliased" Fill="{StaticResource Error}" Data="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" Visibility="Visible" Margin="1,0,0,0"/>
                             </Grid>
-                            <ContentPresenter TextElement.FontFamily="#JetBrains Mono" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
+                            <ContentPresenter TextElement.FontFamily="{StaticResource JetBrains}" TextElement.FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0"></ContentPresenter>
                         </StackPanel>
 
                     </Border>

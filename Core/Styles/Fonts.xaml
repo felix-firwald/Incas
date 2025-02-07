@@ -1,5 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <FontFamily x:Key="DroidSans">pack://application:,,,/Static/Fonts/#Droid Sans</FontFamily>
-    <FontFamily x:Key="JetBrains">pack://application:,,,/Static/Fonts/#JetBrains Mono</FontFamily>
+    <FontFamily x:Key="DroidSans">pack://application:,,,/Incas;component/Static/Fonts/#Droid Sans</FontFamily>
+    <FontFamily x:Key="Roboto">pack://application:,,,/Incas;component/Static/Fonts/#Roboto Mono</FontFamily>
+    <FontFamily x:Key="Rubik">pack://application:,,,/Incas;component/Static/Fonts/#Rubik</FontFamily>
+    <FontFamily x:Key="JetBrains">pack://application:,,,/Incas;component/Static/Fonts/#JetBrains Mono</FontFamily>
 </ResourceDictionary>

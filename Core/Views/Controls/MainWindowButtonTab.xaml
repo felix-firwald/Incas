@@ -33,7 +33,7 @@
             </Grid.ColumnDefinitions>
             <Path x:Name="Icon" Fill="{Binding BorderBrush, ElementName=bbb}" VerticalAlignment="Center" HorizontalAlignment="Center">
             </Path>
-            <TextBlock x:Name="Text" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=bbb}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" FontFamily="JetBrains Mono Thin" FontSize="11">
+            <TextBlock x:Name="Text" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=bbb}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" FontFamily="{StaticResource JetBrains}" FontWeight="Thin" FontSize="11">
             </TextBlock>
         </Grid>
     </Border>

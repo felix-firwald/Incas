@@ -56,10 +56,10 @@
             <Path Style="{DynamicResource IconStyle}" Fill="{DynamicResource Error}" Data="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708" MinWidth="25" MinHeight="25" MaxWidth="0" MaxHeight="0" Height="0" Margin="32,27,0,0" />
         </Grid>
 
-        <Label x:Name="TitleText" Grid.Column="1" Content="Возникла неизвестная ошибка" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" Width="240" FontWeight="Bold" FontFamily="JetBrains Mono" Margin="5,0,0,0"/>
+        <Label x:Name="TitleText" Grid.Column="1" Content="Возникла неизвестная ошибка" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" Width="240" FontWeight="Bold" FontFamily="{StaticResource JetBrains}" Margin="5,0,0,0"/>
 
         <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Margin="5" MaxHeight="400" >
-            <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="По умолчанию, такой текст обозначает критическую неисправность в работе программы." Margin="5,0,10,10"/>
+            <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" FontFamily="{StaticResource JetBrains}" Text="По умолчанию, такой текст обозначает критическую неисправность в работе программы." Margin="5,0,10,10"/>
         </ScrollViewer>
 
         <!--<Rectangle Fill="{DynamicResource LightBlack}" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2"/>-->
