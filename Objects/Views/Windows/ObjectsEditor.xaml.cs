@@ -10,6 +10,7 @@ using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.Documents;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using System;
@@ -290,6 +291,8 @@ namespace Incas.Objects.Views.Windows
         private async void RenderObjectsClick(object sender, RoutedEventArgs e)
         {
             List<IObject> objects = [];
+            Document doc = (this.ContentPanel.Children[0] as ObjectCreator).PullObject() as Document;
+            RenderData render = doc.GetDataForRender();
             TemplateData templateFile = new();
             if (this.ClassData.Templates?.Count == 1)
             {
@@ -318,7 +321,7 @@ namespace Incas.Objects.Views.Windows
                     foreach (ObjectCreator c in this.ContentPanel.Children)
                     {                      
                         objects.Add(c.PullObject());
-                        await c.GenerateDocument(templateFile, path);
+                        await c.GenerateDocument(templateFile, path, false);
                     }
                     ProgramStatusBar.Hide();
                     bool result = await Processor.WriteObjects(this.Class, objects);

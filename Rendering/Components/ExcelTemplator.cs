@@ -4,6 +4,8 @@ using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Pages;
 using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Types.Documents;
+using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -139,46 +141,25 @@ namespace Incas.Rendering.Components
             this.workbook.Save();
         }
         
-        private void GetDataFromFillers(List<IFillerBase> fillers)
+        private void GetDataFromDocument(Document doc)
         {
-            foreach (IFillerBase filler in fillers)
-            {
-                switch (filler.Field.Type)
-                {
-                    default:
-                        ISimpleFiller ff = (ISimpleFiller)filler;
-                        string value = ff.GetValue();
-                        this.tagsToReplace.Add(filler.Field.Name);
-                        this.values.Add(value);
-                        if (ff.Field.Type == FieldType.Relation)
-                        {
-                            foreach (KeyValuePair<string, string> fd in ff.GetDataFromObjectRelation())
-                            {
-                                this.tagsToReplace.Add(fd.Key);
-                                this.values.Add(fd.Value);
-                            }
-                        }
-                        break;
-                    case FieldType.Table:
-                        this.tables.Add(filler.Field.Name, ((ITableFiller)filler).GetValue());
-                        break;
-                    case FieldType.Generator:
-                        break;
-                }
-            }
+            RenderData data = doc.GetDataForRender();
+            this.tagsToReplace = data.TagsToReplace;
+            this.values = data.Values;
+            this.tables = data.Tables;
         }
-        public void GenerateDocument(List<IFillerBase> fillers)
+        public void GenerateDocument(Document doc)
         {
-            this.GetDataFromFillers(fillers);
+            this.GetDataFromDocument(doc);
             foreach (KeyValuePair<string, DataTable> pair in this.tables)
             {
                 this.CreateTable(pair.Key, pair.Value);
             }
             this.Replace(this.tagsToReplace, this.values);
         }
-        public async Task<bool> GenerateDocumentAsync(List<IFillerBase> fillers)
+        public async Task<bool> GenerateDocumentAsync(Document doc)
         {
-            this.GetDataFromFillers(fillers);
+            this.GetDataFromDocument(doc);
             await System.Threading.Tasks.Task.Run(() =>
             {
                 foreach (KeyValuePair<string, DataTable> pair in this.tables)

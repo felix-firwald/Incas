@@ -1,5 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.Interfaces;
+using IncasEngine.ObjectiveEngine.Types.Documents;
+using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using Microsoft.Scripting.Utils;
 using Spire.Doc;
 using System;
@@ -77,33 +79,12 @@ namespace Incas.Rendering.Components
             MakeReplace();
             doc.Save();
         }
-        private void GetDataFromFillers(List<IFillerBase> fillers)
+        private void GetDataFromDocument(IncasEngine.ObjectiveEngine.Types.Documents.Document doc)
         {
-            foreach (IFillerBase filler in fillers)
-            {
-                switch (filler.Field.Type)
-                {
-                    default:
-                        ISimpleFiller ff = (ISimpleFiller)filler;
-                        string value = ff.GetValue();
-                        this.tagsToReplace.Add(filler.Field.Name);
-                        this.values.Add(value);
-                        if (filler.Field.Type == IncasEngine.ObjectiveEngine.Classes.FieldType.Relation)
-                        {
-                            foreach (KeyValuePair<string,string> fd in ff.GetDataFromObjectRelation())
-                            {
-                                this.tagsToReplace.Add(fd.Key);
-                                this.values.Add(fd.Value);
-                            }
-                        }
-                        break;
-                    case IncasEngine.ObjectiveEngine.Classes.FieldType.Table:
-                        this.tables.Add(filler.Field.Name, ((ITableFiller)filler).GetValue());
-                        break;
-                    case IncasEngine.ObjectiveEngine.Classes.FieldType.Generator:
-                        break;
-                }
-            }
+            RenderData data = doc.GetDataForRender();
+            this.tagsToReplace = data.TagsToReplace;
+            this.values = data.Values;
+            this.tables = data.Tables;
         }
         private void ClearData()
         {
@@ -111,18 +92,18 @@ namespace Incas.Rendering.Components
             this.values.Clear();
             this.tables.Clear();
         }
-        public void GenerateDocument(List<IFillerBase> fillers)
+        public void GenerateDocument(IncasEngine.ObjectiveEngine.Types.Documents.Document doc)
         {
-            this.GetDataFromFillers(fillers);
+            this.GetDataFromDocument(doc);
             foreach (KeyValuePair<string, DataTable> pair in this.tables)
             {
                 this.CreateTable(pair.Key, pair.Value);
             }
             this.Replace(this.tagsToReplace, this.values);
         }
-        public async Task<bool> GenerateDocumentAsync(List<IFillerBase> fillers)
+        public async Task<bool> GenerateDocumentAsync(IncasEngine.ObjectiveEngine.Types.Documents.Document doc)
         {
-            this.GetDataFromFillers(fillers);
+            this.GetDataFromDocument(doc);
             await System.Threading.Tasks.Task.Run(() =>
             {
                 foreach (KeyValuePair<string, DataTable> pair in this.tables)

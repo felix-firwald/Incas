@@ -12,6 +12,7 @@ using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.Documents;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using IronPython.Hosting;
@@ -372,7 +373,7 @@ namespace Incas.Objects.Views.Pages
             {
                 if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
                 {
-                    await this.GenerateDocument(this.ClassData.Templates[1], path);
+                    await this.GenerateDocument(this.ClassData.Templates[1], path, true);
                 }
             }
             else if (this.ClassData.Templates?.Count > 1)
@@ -382,7 +383,7 @@ namespace Incas.Objects.Views.Pages
                 {
                     if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
                     {
-                        await this.GenerateDocument(ts.GetSelectedPath(), path);
+                        await this.GenerateDocument(ts.GetSelectedPath(), path, true);
                     }
                 }
             }
@@ -391,18 +392,18 @@ namespace Incas.Objects.Views.Pages
 
             }
         }
-        public async Task<string> GenerateDocument(TemplateData templateData, string folder)
+        public async Task<string> GenerateDocument(TemplateData templateData, string folder, bool needsPullObject)
         {
             string newFile = "";
             string oldFile = templateData.File;
-            ITemplator templ = null;
-            List<IFillerBase> fillers = new();
-            foreach (IFillerBase filler in this.ContentPanel.Children)
-            {
-                fillers.Add(filler);
-            }
+            ITemplator templ = null;           
             try
             {
+                if (needsPullObject)
+                {
+                    this.PullObject();
+                }
+                
                 if (oldFile.EndsWith(".docx"))
                 {
                     newFile = this.GetNameOfFile(folder, templateData.Name, "docx");
@@ -419,7 +420,7 @@ namespace Incas.Objects.Views.Pages
                 {
                     
                 });
-                bool result = await templ.GenerateDocumentAsync(fillers);
+                bool result = await templ.GenerateDocumentAsync(this.Object as Document);
                 return newFile;
             }
             catch (IOException ioex)
@@ -524,7 +525,7 @@ namespace Incas.Objects.Views.Pages
                     }
                     ProgramStatusBar.SetText("Рендеринг документа...");
                     DialogsManager.ShowWaitCursor(true);
-                    string name = await this.GenerateDocument(this.ClassData.Templates[1], path);
+                    string name = await this.GenerateDocument(this.ClassData.Templates[1], path, true);
                     DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.Name})", WordTemplator.ReplaceToPDF(name), true);
 
                 }
@@ -539,7 +540,7 @@ namespace Incas.Objects.Views.Pages
                             return;
                         }
                         ProgramStatusBar.SetText("Рендеринг документа...");
-                        string name = await this.GenerateDocument(ts.GetSelectedPath(), path);
+                        string name = await this.GenerateDocument(ts.GetSelectedPath(), path, true);
                         DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.Name})", WordTemplator.ReplaceToPDF(name), true);
                     }
                 }

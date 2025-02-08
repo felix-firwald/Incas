@@ -1,5 +1,6 @@
 ﻿using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
+using IncasEngine.ObjectiveEngine.Types.Documents;
 using System.Collections.Generic;
 
 namespace Incas.Rendering.Components
@@ -15,9 +16,9 @@ namespace Incas.Rendering.Components
         {
             this.templator = name.EndsWith(".docx") ? new WordTemplator(template, name) : new ExcelTemplator(template, name);
         }
-        public void GenerateDocument(List<IFillerBase> fillers)
+        public void GenerateDocument(Document doc)
         {
-            this.templator.GenerateDocument(fillers);
+            this.templator.GenerateDocument(doc);
         }
         public List<string> FindAllTags()
         {
