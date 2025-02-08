@@ -245,8 +245,8 @@
         <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-        <Setter Property="MinHeight" Value="20"/>
-        <Setter Property="Margin" Value="-3,0,0,0"/>
+        <Setter Property="MinHeight" Value="29"/>
+        <Setter Property="Margin" Value="-4,0,0,0"/>
         <Setter Property="Padding" Value="10 3"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MaxDropDownHeight" Value="250"/>

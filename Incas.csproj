@@ -336,6 +336,10 @@
     <Folder Include="Admin\Components\" />
     <Folder Include="Admin\Views\Controls\" />
     <Folder Include="License\Views\Controls\" />
+    <Folder Include="Miniservices\Tasks\AutoUI\" />
+    <Folder Include="Miniservices\Tasks\Classes\" />
+    <Folder Include="Miniservices\Tasks\Views\Controls\" />
+    <Folder Include="Miniservices\Tasks\Views\Windows\" />
     <Folder Include="Objects.Documents\AutoUI\" />
     <Folder Include="Objects.Documents\Views\Pages\" />
     <Folder Include="Objects.Processes\Views\Controls\" />

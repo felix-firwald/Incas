@@ -548,5 +548,10 @@ namespace Incas.Objects.Views.Pages
             this.CancelSearchButton.Visibility = Visibility.Collapsed;
             this.UpdateView();
         }
+
+        private void ConvertClick(object sender, RoutedEventArgs e)
+        {
+            DialogsManager.ShowInfoDialog("Функционал не реализован");
+        }
     }
 }

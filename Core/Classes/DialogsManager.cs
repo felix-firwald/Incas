@@ -1,9 +1,7 @@
 ﻿using Incas.Core.Views.Windows;
-using Incas.Miniservices.Tasks.Views.Windows;
 using Incas.Objects.Views.Pages;
 using System;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -174,8 +172,8 @@ namespace Incas.Core.Classes
         }
         public static void ShowTasksManager()
         {
-            Taskboard t = new();
-            t.ShowDialog();
+            //Taskboard t = new();
+            //t.ShowDialog();
         }
         public static void ShowDatabaseErrorDialog(string message, string title = "Ошибка при выполнении запроса")
         {

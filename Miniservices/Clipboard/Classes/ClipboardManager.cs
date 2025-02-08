@@ -17,14 +17,14 @@ namespace Incas.Miniservices.Clipboard.Classes
         private static Parameter GetByUser()
         {
             using Parameter p = new();
-            return p.GetParameter(ParameterType.USER_CLIPBOARD, ProgramState.CurrentWorkspace.CurrentUser.Id.ToString());
+            return new();
         }
         private static void SetByUser(List<ClipboardRecord> records)
         {
-            using Parameter p = new();
-            p.GetParameter(ParameterType.USER_CLIPBOARD, ProgramState.CurrentWorkspace.CurrentUser.Id.ToString());
-            p.Value = JsonConvert.SerializeObject(records);
-            p.UpdateValue();
+            //using Parameter p = new();
+            //p.GetParameter(ParameterType.USER_CLIPBOARD, ProgramState.CurrentWorkspace.CurrentUser.Id.ToString());
+            //p.Value = JsonConvert.SerializeObject(records);
+            //p.UpdateValue();
         }
         public static List<ClipboardRecord> GetClipboardRecords()
         {

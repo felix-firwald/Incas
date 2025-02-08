@@ -169,7 +169,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource Focus}"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="MinHeight" Value="29"/>
         <Setter Property="Margin" Value="-4,0,0,0"/>
         <Setter Property="Padding" Value="5 3"/>
         <Setter Property="Opacity" Value="1"/>
