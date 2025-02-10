@@ -1,4 +1,5 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using Incas.Core.Classes;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Pages;
 using IncasEngine.ObjectiveEngine;
@@ -19,7 +20,7 @@ namespace Incas.Objects.Views.Controls
     public partial class ObjectFieldViewer : UserControl, IObjectFieldViewer
     {
         private IClass relationClass;
-        private IObject relationObject;
+        private Guid relationObject;
         private bool isNestedObjectShowed = false;
         private ObjectCard card;
         public delegate void FieldDataAction(FieldData data);
@@ -77,13 +78,22 @@ namespace Incas.Objects.Views.Controls
             this.InitializeComponent();
             this.FieldName.Text = label + ":";
             this.relationClass = cl;
-            this.relationObject = Processor.GetObject(this.relationClass, data);
-            this.FieldValue.Text = this.relationObject.Name;
-            this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
-            this.FieldValue.MouseDown += this.FieldValue_MouseDown;
-            this.FieldValue.ToolTip = "Кликнуть для просмотра объекта";
-            this.ColorizeField(243, 74, 147);
-            this.FilterButton.IsEnabled = false;
+            this.relationObject = data;
+            this.FilterButton.Visibility = Visibility.Collapsed;
+            string value = Processor.GetObjectFieldValue(cl, data, Helpers.NameField);
+            if (string.IsNullOrEmpty(value))
+            {
+                this.FieldValue.Text = "(объект не определен)";
+                this.ColorizeField(200, 0, 90);
+            }
+            else
+            {
+                this.FieldValue.Text = value;
+                this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
+                this.FieldValue.MouseDown += this.FieldValue_MouseDown;
+                this.FieldValue.ToolTip = "Кликнуть для просмотра объекта";
+                this.ColorizeField(243, 74, 147);
+            }           
         }
         public ObjectFieldViewer(DateTime date, string name) // date
         {
@@ -91,7 +101,7 @@ namespace Incas.Objects.Views.Controls
             this.FieldName.Text = name + ":";
             this.FieldValue.Text = date.ToString("f");
             this.ColorizeField(74, 243, 170);
-            this.FilterButton.IsEnabled = false;
+            this.FilterButton.Visibility = Visibility.Collapsed;
         }
         public ObjectFieldViewer(string value, byte r, byte g, byte b) // custom
         {
@@ -103,11 +113,11 @@ namespace Incas.Objects.Views.Controls
             this.FilterButton.Visibility = Visibility.Collapsed;
         }
 
-        private async void GenerateRelatedField(Guid id, BindingData bd)
+        private void GenerateRelatedField(Guid id, BindingData bd)
         {
             this.relationClass = new Class(bd.Class);
-            this.relationObject = Processor.GetObject(this.relationClass, id);
-            this.FieldValue.Text = await this.relationObject.GetFieldValue(bd.Field);
+            this.relationObject = id;
+            this.FieldValue.Text = Processor.GetObjectFieldValue(this.relationClass, this.relationObject, bd.Field.ToString());
             this.ColorizeField(130, 113, 239);
             this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
             this.FieldValue.MouseDown += this.FieldValue_MouseDown;
@@ -119,8 +129,8 @@ namespace Incas.Objects.Views.Controls
             if (this.isNestedObjectShowed == false)
             {
                 this.isNestedObjectShowed = true;
-                this.card = new(this.relationClass, false);
-                this.card.UpdateFor(this.relationObject);
+                this.card = new(this.relationClass, false);             
+                this.card.UpdateFor(Processor.GetObject(this.relationClass, this.relationObject));
                 this.MainGrid.Children.Add(this.card);
                 Grid.SetRow(this.card, 1);
                 Grid.SetColumnSpan(this.card, 3);

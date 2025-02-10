@@ -29,6 +29,7 @@ namespace Incas.Objects.Views.Pages
     public partial class ObjectsList : UserControl, ITabItem
     {
         private const string ColorColumn = "__COLOR_COLUMN__";
+        public Style ColumnHeaderSpecialStyle { get; set; }
         public IClass sourceClass;
         public ClassData ClassData;
         private ObjectCard ObjectCard;
@@ -43,6 +44,7 @@ namespace Incas.Objects.Views.Pages
         public ObjectsList(IClass source)
         {
             this.InitializeComponent();
+            this.ColumnHeaderSpecialStyle = this.FindResource("ColumnHeaderSpecial") as Style;
             DialogsManager.ShowWaitCursor();
             this.sourceClass = source;
             this.ClassData = source.GetClassData();          
@@ -62,6 +64,7 @@ namespace Incas.Objects.Views.Pages
         public ObjectsList(IClass source, Preset preset)
         {
             this.InitializeComponent();
+            this.ColumnHeaderSpecialStyle = this.FindResource("ColumnHeaderSpecial") as Style;
             DialogsManager.ShowWaitCursor();
             this.sourceClass = source;
             this.ClassData = source.GetClassData();
@@ -217,7 +220,6 @@ namespace Incas.Objects.Views.Pages
         }
         private void Data_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            Style style = this.FindResource("ColumnHeaderSpecial") as Style;
             switch (e.Column.Header.ToString())
             {
                 case Helpers.IdField:
@@ -225,14 +227,14 @@ namespace Incas.Objects.Views.Pages
                     break;
                 case Helpers.NameField:
                     e.Column.Header = "Наименование";
-                    e.Column.HeaderStyle = style;
+                    e.Column.HeaderStyle = this.ColumnHeaderSpecialStyle;
                     e.Column.MinWidth = 100;
                     e.Column.MaxWidth = 180;
                     e.Column.CanUserReorder = false;
                     break;
                 case Helpers.DateCreatedField:
                     e.Column.Header = "Дата создания";
-                    e.Column.HeaderStyle = style;
+                    e.Column.HeaderStyle = this.ColumnHeaderSpecialStyle;
                     e.Column.MinWidth = 100;
                     e.Column.MaxWidth = 120;
                     e.Column.CanUserReorder = false;
@@ -342,21 +344,28 @@ namespace Incas.Objects.Views.Pages
                 DialogsManager.ShowAccessErrorDialog("Вы не можете просматривать объекты этого класса.");
                 return;
             }
-            DialogsManager.ShowWaitCursor(true);
-            Guid id = this.GetSelectedObjectGuid();
-            if (id == Guid.Empty)
+            try
             {
-                return;
+                DialogsManager.ShowWaitCursor(true);
+                Guid id = this.GetSelectedObjectGuid();
+                if (id == Guid.Empty)
+                {
+                    return;
+                }
+                IObject obj = Processor.GetObject(this.sourceClass, id);
+                Preset preset = null;
+                if (obj is IHasPreset objWithPreset)
+                {
+                    preset = Processor.GetPreset(this.sourceClass, objWithPreset.Preset);
+                }
+                ObjectsEditor oc = new(this.sourceClass, preset, [obj]);
+                oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+                oc.Show();
             }
-            IObject obj = Processor.GetObject(this.sourceClass, id);
-            Preset preset = null;
-            if (obj is IHasPreset objWithPreset)
+            catch (Exception ex)
             {
-                preset = Processor.GetPreset(this.sourceClass, objWithPreset.Preset);
-            }          
-            ObjectsEditor oc = new(this.sourceClass, preset, [obj]);
-            oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-            oc.Show();
+                DialogsManager.ShowErrorDialog(ex);
+            }
         }
         private async void OpenSelectedObjects()
         {
@@ -366,10 +375,17 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             DialogsManager.ShowWaitCursor(true);
-            List<IObject> objects = await Processor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
-            ObjectsEditor oc = new(this.sourceClass, Processor.GetPreset(this.sourceClass, ((IHasPreset)objects[0]).Preset), objects);
-            oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-            oc.Show();
+            try
+            {
+                List<IObject> objects = await Processor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
+                ObjectsEditor oc = new(this.sourceClass, Processor.GetPreset(this.sourceClass, ((IHasPreset)objects[0]).Preset), objects);
+                oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+                oc.Show();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+            }
         }
 
         private void OpenCopyOfSelectedObject()
@@ -524,7 +540,14 @@ namespace Incas.Objects.Views.Pages
 
         private void ShowHistoryClick(object sender, RoutedEventArgs e)
         {
-            DialogsManager.ShowInfoDialog("Функционал не реализован");
+            Guid id = this.GetSelectedObjectGuid();
+            if (id == Guid.Empty)
+            {
+                DialogsManager.ShowExclamationDialog("Не выбран объект для просмотра версий.", "Действие невозможно");
+                return;
+            }
+            ObjectEditions editions = new(this.sourceClass, Processor.GetObject(this.sourceClass, id));
+            DialogsManager.ShowPageWithGroupBox(editions, "История версий", id.ToString());
         }
 
         private void ExportClick(object sender, RoutedEventArgs e)

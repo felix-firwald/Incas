@@ -264,5 +264,22 @@ namespace Incas.Admin.Views.Pages
             ListBox list = sender as ListBox;
             list.SelectedItem = null;
         }
+
+        private async void FixUsersMapClick(object sender, RoutedEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                Processor.UpdateObjectMap(ProgramState.CurrentWorkspace.CurrentUser.Class);
+            });
+            
+        }
+
+        private async void FixGroupsMapClick(object sender, RoutedEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                Processor.UpdateObjectMap(ProgramState.CurrentWorkspace.CurrentGroup.Class);
+            });           
+        }
     }
 }

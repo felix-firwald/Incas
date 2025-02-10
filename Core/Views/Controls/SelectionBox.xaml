@@ -56,7 +56,7 @@
 
             <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="3" Height="24" VerticalAlignment="Center"/>
             <Button x:Name="EyeButton" Style="{StaticResource ButtonSquare}" Margin="-5" Background="{StaticResource Black}" Grid.Column="4" Click="ButtonClick" ToolTip="Выбрать запись" MinHeight="25" MaxHeight="25">
-                <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Data="{StaticResource ThreeDots}"/>
+                <Path Fill="#FFBAFF78" VerticalAlignment="Center" Margin="2" Stretch="Uniform" Data="{StaticResource ThreeDots}"/>
             </Button>
             <!--<fa:FontAwesome Icon="EllipsisH" Grid.Column="4" Style="{DynamicResource IconButton}" MouseDown="ButtonClick" ToolTip="Выбрать запись"/>-->
             <!--<Path Grid.Column="2" Style="{DynamicResource PathMain}" VerticalAlignment="Center" HorizontalAlignment="Center" MouseDown="ButtonClick" ToolTip="Выбрать запись" Data="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" Stretch="Uniform" Margin="12,12,12,12" />-->

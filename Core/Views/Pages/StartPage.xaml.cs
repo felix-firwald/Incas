@@ -29,7 +29,7 @@ namespace Incas.Core.Views.Pages
         public void SetMainText()
         {
             string result = "";
-            string user = "ProgramState.CurrentUser.secondName";
+            string user = ProgramState.CurrentWorkspace.CurrentUser.Name;
             int hour = DateTime.Now.Hour;
             switch (hour)
             {

@@ -302,7 +302,9 @@
 
                                 <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Top">
                                     <Run>Чтобы настроить класс, </Run>
-                                    <Hyperlink>нажмите сюда</Hyperlink>
+                                    <Hyperlink>нажмите сюда.</Hyperlink>
+                                    <Run>Чтобы исправить класс, </Run>
+                                    <Hyperlink Click="FixUsersMapClick">нажмите сюда.</Hyperlink>
                                 </TextBlock>
                             </Grid>
                         </Border>
@@ -321,7 +323,9 @@
 
                                 <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Top">
                                     <Run>Чтобы настроить класс, </Run>
-                                    <Hyperlink>нажмите сюда</Hyperlink>
+                                    <Hyperlink>нажмите сюда.</Hyperlink>
+                                    <Run>Чтобы исправить класс, </Run>
+                                    <Hyperlink Click="FixGroupsMapClick">нажмите сюда.</Hyperlink>
                                 </TextBlock>
                             </Grid>
                         </Border>

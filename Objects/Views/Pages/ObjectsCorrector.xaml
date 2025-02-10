@@ -33,7 +33,7 @@
                 </Button>
             </Grid>
 
-            <DataGrid x:Name="Grid" Style="{StaticResource DataGridMain}" CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True" AutoGeneratingColumn="Grid_AutoGeneratingColumn" Grid.Row="2">
+            <DataGrid x:Name="Grid" Style="{StaticResource DataGridMain}" RowHeight="30" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" CanUserDeleteRows="False" CanUserAddRows="False" IsReadOnly="True" AutoGeneratingColumn="Grid_AutoGeneratingColumn" Grid.Row="2">
 
             </DataGrid>
             <Button Style="{StaticResource ButtonMainFinish}" Grid.Row="3" Width="180" HorizontalAlignment="Left" Click="FinishClick">

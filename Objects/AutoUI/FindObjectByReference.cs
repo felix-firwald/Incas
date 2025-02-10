@@ -47,16 +47,10 @@ namespace Incas.Objects.AutoUI
                 ObjectReference or = ObjectReference.Parse(this.link);
                 if (or.IsCorrect)
                 {
-                    ObjectCard card = new();
-                    card.MinWidth = 600;
-                    card.MaxWidth = 600;
-                    card.OnFilterRequested += this.Card_OnFilterRequested;
                     Class @class = new(or.Class);
-                    this.classSource = @class;
-                    card.SetClass(@class);
                     IObject @object = Processor.GetObject(@class, or.Object);
-                    card.UpdateFor(@object);
-                    DialogsManager.ShowPageWithGroupBox(card, "Поиск: " + @class.Name, "FIND" + this.link, TabType.Usual);
+                    ObjectEditions objViewer = new(@class, @object);
+                    DialogsManager.ShowPageWithGroupBox(objViewer, "Поиск: " + @class.Name, "FIND" + this.link, TabType.Usual);
                 }
                 else
                 {
@@ -67,14 +61,6 @@ namespace Incas.Objects.AutoUI
             {
                 DialogsManager.ShowErrorDialog("Не удалось расшифровать ссылку на объект, либо ссылка отсылает на несуществующий класс.");
             }
-        }
-        private IClass classSource { get; set; }
-        private void Card_OnFilterRequested(IncasEngine.ObjectiveEngine.Common.FieldData data)
-        {
-            ObjectsList list = new(this.classSource);
-            list.OpenInNewTabButton.Visibility = System.Windows.Visibility.Collapsed;
-            DialogsManager.ShowPageWithGroupBox(list, this.classSource.GetClassData().ListName, MainWindowButtonTab.ClassPrefix + this.classSource.Id, TabType.Usual);
-            list.UpdateViewWithFilter(data);
         }
         #endregion
     }

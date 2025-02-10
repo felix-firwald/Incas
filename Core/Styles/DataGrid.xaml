@@ -81,7 +81,7 @@
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ColorAnimation Duration="0:0:0.100" To="#FF2F323C" Storyboard.TargetProperty="Background.Color"/>
+                            <ColorAnimation Duration="0:0:0.050" To="#FF2F323C" Storyboard.TargetProperty="Background.Color"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>
@@ -239,6 +239,7 @@
         <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderMain}"/>
         <Setter Property="CellStyle" Value="{DynamicResource CellMain}"/>
         <Setter Property="RowStyle" Value="{DynamicResource RowMain}"/>
+        <Setter Property="RowHeight" Value="30"/>
         <Setter Property="HeadersVisibility" Value="Column"/>
         <Setter Property="Padding" Value="0"/> <!--это здесь выставлен внутренний отступ !!!!!!-->
         <Setter Property="MinColumnWidth" Value="40"/>

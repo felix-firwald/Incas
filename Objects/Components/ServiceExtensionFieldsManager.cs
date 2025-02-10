@@ -75,5 +75,51 @@ namespace Incas.Objects.Components
                 return;
             }
         }
+        public static void AppendServiceFieldViewers(IObjectEdition edit, StackPanel contentPanel)
+        {
+            ObjectFieldViewer ofAuthor = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers, edit.Editor, "Редактор");
+            contentPanel.Children.Add(ofAuthor);
+            contentPanel.Children.Add(new ObjectFieldViewer(edit.EditionDate, "Дата версии"));
+            //if (obj is IncasEngine.ObjectiveEngine.Types.Documents.DocumentEdition objDoc)
+            //{
+            //    contentPanel.Children.Add(new ObjectFieldViewer(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers, objDoc.AuthorId, "Автор"));
+                
+            //    if (objDoc.Terminated)
+            //    {
+            //        contentPanel.Children.Add(new ObjectFieldViewer("Процесс завершен", 152, 255, 0));
+            //        contentPanel.Children.Add(new ObjectFieldViewer(objDoc.TerminatedDate, "Дата завершения"));
+            //    }
+            //    return;
+            //}
+            //if (obj is IncasEngine.ObjectiveEngine.Types.Processes.ProcessEdition objProc)
+            //{
+            //    contentPanel.Children.Add(new ObjectFieldViewer(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers, objProc.AuthorId, "Инициатор"));
+            //    contentPanel.Children.Add(new ObjectFieldViewer(objProc.CreationDate, "Дата инициализации"));
+            //    if (objProc.OpenDate != DateTime.MinValue)
+            //    {
+            //        contentPanel.Children.Add(new ObjectFieldViewer(objProc.OpenDate, "Дата открытия"));
+            //        if (objProc.Terminated)
+            //        {
+            //            contentPanel.Children.Add(new ObjectFieldViewer(objProc.TerminatedDate, "Дата завершения"));
+            //        }
+            //        else
+            //        {
+            //            contentPanel.Children.Add(new ObjectFieldViewer(objProc.CloseDate, "Открыт до"));
+            //        }
+            //    }
+            //    return;
+            //}
+            //if (obj is IncasEngine.ObjectiveEngine.Types.ServiceClasses.Users.Components.UserEdition objUser)
+            //{
+            //    contentPanel.Children.Add(new ObjectFieldViewer(ProgramState.CurrentWorkspace.GetDefinition().ServiceGroups, objUser.Group, "Группа"));
+            //    return;
+            //}
+            //if (obj is IncasEngine.ObjectiveEngine.Types.StaticModels.StaticObjectEdition objStatic)
+            //{
+            //    contentPanel.Children.Add(new ObjectFieldViewer(objStatic.StartPeriod, "Начало действия"));
+            //    contentPanel.Children.Add(new ObjectFieldViewer(objStatic.EndPeriod, "Конец действия"));
+            //    return;
+            //}
+        }
     }
 }

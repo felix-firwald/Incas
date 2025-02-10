@@ -12,7 +12,7 @@
             <RowDefinition/>
             <RowDefinition Height="1.5*"/>
         </Grid.RowDefinitions>
-        <Label x:Name="TitleText" Grid.Column="1" Grid.ColumnSpan="2" Content="Заголовок" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" FontWeight="Bold" FontFamily="JetBrains Mono" HorizontalAlignment="Center"/>
+        <Label x:Name="TitleText" Grid.Column="1" Grid.ColumnSpan="2" Content="Заголовок" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" FontWeight="Bold" FontFamily="{StaticResource JetBrains}" HorizontalAlignment="Center"/>
         <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,5,5" VerticalAlignment="Center" HorizontalAlignment="Center" >
             <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="По умолчанию, такой текст обозначает неисправность в работе программы." Margin="5,0,10,0" HorizontalAlignment="Center"/>
         </ScrollViewer>

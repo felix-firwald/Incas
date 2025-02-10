@@ -161,6 +161,43 @@ namespace Incas.Objects.Views.Pages
             }
             return true;
         }
+        public void UpdateFor(IObjectEdition edit)
+        {
+            if (edit is null)
+            {
+                return;
+            }
+            if (!this.permissionSettings.ReadOperations)
+            {
+                this.SetProtected();
+                return;
+            }
+            this.Dispatcher.Invoke(() =>
+            {
+                this.FieldsContentPanel.Children.Clear();
+                this.ObjectName.Text = "Версия по состоянию на " + edit.EditionDate.ToString();
+                this.EditIcon.Visibility = Visibility.Collapsed;
+                this.LinkIcon.Visibility = Visibility.Collapsed;
+                this.id = edit.Id;
+                ServiceExtensionFieldsManager.AppendServiceFieldViewers(edit, this.FieldsContentPanel);
+                if (edit.Fields is null)
+                {
+                    return;
+                }
+                foreach (FieldData field in edit.Fields)
+                {
+                    ObjectFieldViewer of = new(field, this.first);
+                    of.OnFilterRequested += this.Of_OnFilterRequested;
+                    this.FieldsContentPanel.Children.Add(of);
+                }
+                if (this.first)
+                {
+                    ObjectBackReferenceViewer ob = new(this.Class, this.id);
+                    this.FieldsContentPanel.Children.Add(ob);
+                }
+                ((IObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
+            });
+        }
         public void UpdateFor(IObject obj)
         {
             if (obj is null)
@@ -191,37 +228,6 @@ namespace Incas.Objects.Views.Pages
                 this.ObjectName.Text = obj.Name;
                 this.id = obj.Id;
                 ServiceExtensionFieldsManager.AppendServiceFieldViewers(obj, this.FieldsContentPanel);
-                //IHasAuthor objWithAuthor = obj as IHasAuthor;
-                //if (objWithAuthor is not null)
-                //{
-                //    ObjectFieldViewer ofAuthor = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers, objWithAuthor.AuthorId, "Автор");
-                //    this.FieldsContentPanel.Children.Add(ofAuthor);
-                //}
-                //IHasCreationDate objWithCreationDate = obj as IHasCreationDate;
-                //if (objWithCreationDate is not null)
-                //{
-                //    ObjectFieldViewer ofDate = new(objWithCreationDate.CreationDate, "Дата создания");
-                //    this.FieldsContentPanel.Children.Add(ofDate);
-                //}
-                //ITerminable objWithTerm = obj as ITerminable;
-                //if (objWithTerm is not null && objWithTerm.Terminated)
-                //{
-                //    this.StatusBorder.IsEnabled = false;
-                //    this.EditIcon.Visibility = Visibility.Collapsed;
-                //    ObjectFieldViewer terminatedCheck = new("Процесс был завершен.", 52, 201, 36);
-                //    this.FieldsContentPanel.Children.Insert(0, terminatedCheck);
-                //    ObjectFieldViewer ofTerminatedDate = new(objWithTerm.TerminatedDate, "Дата завершения процесса");
-                //    this.FieldsContentPanel.Children.Add(ofTerminatedDate);
-                //}
-                //else
-                //{
-                //    //if (this.ClassData.Statuses?.Count == obj.Status)
-                //    //{
-                //    //    TerminateObjectProcessMessage box = new();
-                //    //    box.OnTerminateRequested += this.Box_OnTerminateRequested;
-                //    //    this.FieldsContentPanel.Children.Insert(0, box);
-                //    //}
-                //}
                 if (obj.Fields is null)
                 {
                     return;
