@@ -160,6 +160,13 @@ namespace Incas.Objects.ViewModels
                 }
             }
         }
+        public List<Field> MapFieldsList
+        {
+            get
+            {
+                return this.SourceData.GetFieldsForMap();
+            }
+        }
 
         public void SetData(List<Field> fields)
         {

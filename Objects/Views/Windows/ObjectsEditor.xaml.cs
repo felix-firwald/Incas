@@ -29,22 +29,19 @@ namespace Incas.Objects.Views.Windows
     {
         public readonly IClass Class;
         public readonly ClassData ClassData;
-        public readonly Preset Preset;
         public delegate void UpdateRequested();
         public delegate void CreateRequested(Guid id);
         public event UpdateRequested OnUpdateRequested;
         public GroupClassPermissionSettings PermissionSettings { get; set; }
         public event CreateRequested OnSetNewObjectRequested;
-        public ObjectsEditor(IClass source, Preset preset, List<IObject> objects = null)
+        public ObjectsEditor(IClass source, List<IObject> objects = null)
         {
             this.InitializeComponent();
-            this.Title = preset is null ? source.Name : $"{source.Name} — {preset.Name}";
+            this.Title = source.Name;
             this.Class = source;         
             this.ClassData = source.GetClassData();
             this.PermissionSettings = ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(source.Id);
             this.RenderButton.Visibility = source.Type == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
-            this.Preset = preset;
-            this.FillPresettingData();
             if (objects != null)
             {
                 foreach (IObject obj in objects)
@@ -77,36 +74,9 @@ namespace Incas.Objects.Views.Windows
             this.GenerateButton.IsEnabled = false;
             this.ToolBar.IsEnabled = false;
         }
-        public void FillPresettingData()
-        {
-            if (this.Preset is not null)
-            {
-                foreach (Field f in this.ClassData.Fields)
-                {
-                    string value;
-                    if (this.Preset.Data.TryGetValue(f.Id, out value))
-                    {
-                        this.Preset.RegisterPresettingField(f, value);
-                    }
-                }
-            }
-        }
         private ObjectCreator AddObjectCreator(IObject obj = null)
         {
-            if (obj is not null)
-            {
-                if (obj is IHasPreset objWithPreset)
-                {
-                    if ((this.Preset is null && objWithPreset.Preset != Guid.Empty) // в едиторе нет пресета а у объекта есть
-                    || (this.Preset is not null && objWithPreset.Preset == Guid.Empty) // в едиторе есть пресет а у объекта нет
-                    || (this.Preset is not null && objWithPreset.Preset != this.Preset.Id)) // в едиторе есть пресет и он отличается от того что в объекте
-                    {
-                        DialogsManager.ShowExclamationDialog($"Объект с наименованием \"{obj.Name}\" не будет добавлен в коллекцию редактирования, поскольку пресет, к которому он привязан, отличается от пресета первого объекта в списке.", "Редактирование ограничено");
-                        return null;
-                    }
-                }
-            }
-            ObjectCreator creator = new(this.Class, this.Preset, obj);
+            ObjectCreator creator = new(this.Class, obj);
             creator.PermissionSettings = this.PermissionSettings;
             creator.OnSaveRequested += this.Creator_OnSaveRequested;
             creator.OnRemoveRequested += this.Creator_OnRemoveRequested;

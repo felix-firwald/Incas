@@ -84,7 +84,7 @@ namespace Incas.Objects.Views.Controls
         
         private void AddObjectCreator(IObject obj = null)
         {
-            ObjectCreator creator = new(this.TargetClass, null, obj);
+            ObjectCreator creator = new(this.TargetClass, obj);
             creator.OnUpdated += this.Creator_OnUpdated;
             creator.OnRemoveRequested += this.Creator_OnRemoveRequested;
             this.ContentPanel.Children.Add(creator);

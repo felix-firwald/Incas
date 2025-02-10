@@ -26,7 +26,7 @@ namespace Incas.Objects.Views.Controls
 
         private void CreateObjectClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ObjectsEditor oe = new(this.ClassSource, Processor.GetPreset(this.ClassSource, this.Preset));
+            ObjectsEditor oe = new(this.ClassSource);
             oe.Show();
         }
 

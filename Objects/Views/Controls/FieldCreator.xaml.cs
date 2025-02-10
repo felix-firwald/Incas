@@ -63,7 +63,7 @@ namespace Incas.Objects.Views.Controls
             this.MainBorder.Height = 40;
         }
 
-        private void RemoveClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void RemoveClick(object sender, RoutedEventArgs e)
         {
             if (DialogsManager.ShowQuestionDialog(
                 "Вы уверены, что хотите удалить поле? Отменить это действие после сохранения будет невозможно.",
@@ -74,12 +74,12 @@ namespace Incas.Objects.Views.Controls
             }
         }
 
-        private void UpClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void UpClick(object sender, RoutedEventArgs e)
         {
             this.OnMoveDownRequested?.Invoke(this);
         }
 
-        private void DownClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void DownClick(object sender, RoutedEventArgs e)
         {
             this.OnMoveUpRequested?.Invoke(this);
         }

@@ -47,12 +47,11 @@ namespace Incas.Objects.Views.Pages
         private bool Locked = false;
         private List<IFillerBase> fillers;
         private IServiceFieldFiller serviceFiller;
-        public ObjectCreator(IClass source, Preset preset, IObject obj = null)
+        public ObjectCreator(IClass source, IObject obj = null)
         {
             this.InitializeComponent();
             this.Class = source;
             this.ClassData = source.GetClassData();
-            this.Preset = preset;
             this.Object = obj;           
             if (obj != null)
             {
@@ -62,15 +61,7 @@ namespace Incas.Objects.Views.Pages
             else
             {
                 this.Object = Helpers.CreateObjectByType(source);
-                this.FillContentPanel();
-                if (preset is not null)
-                {
-                    IHasPreset objWithPreset = this.Object as IHasPreset;
-                    if (objWithPreset != null)
-                    {
-                        objWithPreset.Preset = preset.Id;
-                    }
-                }               
+                this.FillContentPanel();             
             }
             if (this.Class.Type != ClassType.Document)
             {

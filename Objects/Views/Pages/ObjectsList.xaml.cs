@@ -1,9 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.Views.Controls;
-using Incas.Core.Views.Windows;
 using Incas.Objects.AutoUI;
-using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.AutoUI;
 using Incas.Rendering.Components;
@@ -13,7 +11,6 @@ using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -266,18 +263,9 @@ namespace Incas.Objects.Views.Pages
                 DialogsManager.ShowAccessErrorDialog("Вы не вправе создавать объекты этого класса.");
                 return;
             }
-            if (this.SourcePreset == null)
-            {
-                ObjectsEditor oc = new(this.sourceClass, this.SourcePreset);
-                oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-                oc.Show();
-            }
-            else
-            {
-                ObjectsEditor oc = new(this.sourceClass, this.SourcePreset);
-                oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-                oc.Show();
-            }
+            ObjectsEditor oc = new(this.sourceClass);
+            oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+            oc.Show();
         }
         private void CopyClick(object sender, RoutedEventArgs e)
         {
@@ -358,7 +346,7 @@ namespace Incas.Objects.Views.Pages
                 {
                     preset = Processor.GetPreset(this.sourceClass, objWithPreset.Preset);
                 }
-                ObjectsEditor oc = new(this.sourceClass, preset, [obj]);
+                ObjectsEditor oc = new(this.sourceClass, [obj]);
                 oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
                 oc.Show();
             }
@@ -378,7 +366,7 @@ namespace Incas.Objects.Views.Pages
             try
             {
                 List<IObject> objects = await Processor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
-                ObjectsEditor oc = new(this.sourceClass, Processor.GetPreset(this.sourceClass, ((IHasPreset)objects[0]).Preset), objects);
+                ObjectsEditor oc = new(this.sourceClass, objects);
                 oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
                 oc.Show();
             }
@@ -403,7 +391,7 @@ namespace Incas.Objects.Views.Pages
             IObject obj = Processor.GetObject(this.sourceClass, id);
             List<IObject> objects = new();
             objects.Add(obj.Copy());
-            ObjectsEditor oc = new(this.sourceClass, this.SourcePreset, objects);
+            ObjectsEditor oc = new(this.sourceClass, objects);
             oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             oc.Show();
         }
@@ -561,7 +549,7 @@ namespace Incas.Objects.Views.Pages
             if (parse.ShowDialog("Настройки парсинга"))
             {
                 IObject obj = ObjectParser.ParseString(parse.Source, parse.Pattern, this.sourceClass);
-                ObjectsEditor editor = new(this.sourceClass, null, [obj]);
+                ObjectsEditor editor = new(this.sourceClass, [obj]);
                 editor.Show();
             }
         }
@@ -575,6 +563,18 @@ namespace Incas.Objects.Views.Pages
         private void ConvertClick(object sender, RoutedEventArgs e)
         {
             DialogsManager.ShowInfoDialog("Функционал не реализован");
+        }
+
+        private void ShowBackReferencesClick(object sender, RoutedEventArgs e)
+        {
+            Guid id = this.GetSelectedObjectGuid();
+            if (id == Guid.Empty)
+            {
+                DialogsManager.ShowExclamationDialog("Не выбран объект для просмотра обратных ссылок.", "Действие невозможно");
+                return;
+            }
+            ObjectBackReferences backReferenceViewer = new(this.sourceClass, Processor.GetObject(this.sourceClass, id));
+            DialogsManager.ShowPageWithGroupBox(backReferenceViewer, "Список обратных ссылок", id.ToString());
         }
     }
 }

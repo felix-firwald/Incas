@@ -279,12 +279,7 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             List<IObject> objects = [Processor.GetObject(this.Class, this.id)];
-            Preset preset = null;
-            if (objects[0] is IHasPreset objWithPreset)
-            {
-                preset = Processor.GetPreset(this.Class, objWithPreset.Preset);
-            }
-            ObjectsEditor oe = new(this.Class, preset, objects);
+            ObjectsEditor oe = new(this.Class, objects);
             oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
             oe.ShowDialog();
         }
