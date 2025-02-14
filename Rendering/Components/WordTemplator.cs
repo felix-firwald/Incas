@@ -1,6 +1,4 @@
 ﻿using Incas.Core.Classes;
-using Incas.Objects.Interfaces;
-using IncasEngine.ObjectiveEngine.Types.Documents;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using Microsoft.Scripting.Utils;
 using Spire.Doc;
@@ -17,6 +15,7 @@ using Xceed.Words.NET;
 using Font = Xceed.Document.NET.Font;
 using Formatting = Xceed.Document.NET.Formatting;
 using Table = Xceed.Document.NET.Table;
+using Template = IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents.Template;
 
 namespace Incas.Rendering.Components
 {
@@ -27,9 +26,11 @@ namespace Incas.Rendering.Components
         private List<string> tagsToReplace = [];
         private List<string> values = [];
         private Dictionary<string, DataTable> tables = new();
-        public WordTemplator(string templatePath, string newPath)
+        private readonly Template template;
+        public WordTemplator(Template template, string newPath)
         {
-            string oldpath = ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(templatePath);
+            this.template = template;
+            string oldpath = ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(template.File);
             if (File.Exists(newPath))
             {
                 File.Delete(newPath);
@@ -81,7 +82,7 @@ namespace Incas.Rendering.Components
         }
         private void GetDataFromDocument(IncasEngine.ObjectiveEngine.Types.Documents.Document doc)
         {
-            RenderData data = doc.GetDataForRender();
+            RenderData data = doc.GetDataForRender(this.template);
             this.tagsToReplace = data.TagsToReplace;
             this.values = data.Values;
             this.tables = data.Tables;

@@ -1,6 +1,8 @@
 ﻿using Incas.DialogSimpleForm.Components;
 using IncasEngine.Models;
+using IncasEngine.ObjectiveEngine.FieldComponents;
 using IncasEngine.ObjectiveEngine.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -14,6 +16,7 @@ namespace Incas.Objects.AutoUI
     public class GlobalEnumerationFieldSettings : BaseFieldSettings
     {
         #region Data
+        private GlobalEnumerationData data;
 
         [Description("Выбор перечисления из списка")]
         public Selector Selector { get; set; }
@@ -30,7 +33,8 @@ namespace Incas.Objects.AutoUI
             }
             try
             {
-                this.Selector.SetSelection(System.Guid.Parse(field.Value));
+                this.data = field.GetGlobalEnumeration();
+                this.Selector.SetSelection(this.data.TargetId);
             }
             catch
             {
@@ -42,7 +46,8 @@ namespace Incas.Objects.AutoUI
         public override void Save()
         {
             this.SaveBaseData();
-            this.Source.Value = this.Selector.SelectedObject.ToString();
+            this.data.TargetId = (System.Guid)this.Selector.SelectedObject;
+            this.Source.SetGlobalEnumeration(this.data);
         }
         #endregion
     }

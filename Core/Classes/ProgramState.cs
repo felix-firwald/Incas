@@ -166,7 +166,6 @@ namespace Incas.Core.Classes
         internal static void InitWorkspace(CreateWorkspace data)
         {
             DialogsManager.ShowWaitCursor();
-            Permission.CurrentUserPermission = PermissionGroup.Admin;
             ProgramState.CurrentWorkspace = new(data.Path);
             ProgramState.CurrentWorkspace.InitializeDefinition(data);
             RegistryData.SetWorkspacePath(data.WorkspaceName, data.Path);
@@ -241,74 +240,6 @@ namespace Incas.Core.Classes
         internal static void UpdateWindowTabs()
         {
             MainWindow.UpdateTabs();
-        }
-        private static string GenerateUMI()
-        {
-            string key = Cryptographer.GenerateKey(Environment.MachineName);
-            Guid id = Guid.NewGuid();
-            return Cryptographer.EncryptString(key, id.ToString());
-        }
-        internal static void InitializeUMI()
-        {
-            RegistryData.SetUMI(ProgramState.GenerateUMI());
-        }
-        internal static string GetUMI()
-        {
-            string source = RegistryData.GetUMI();
-            string key = Cryptographer.GenerateKey(Environment.MachineName);
-            return Cryptographer.DecryptString(key, source);
-        }
-        internal static void CheckUMIExists()
-        {
-            if (string.IsNullOrEmpty(RegistryData.GetUMI()))
-            {
-                ProgramState.InitializeUMI();
-            }
-        }
-        internal static bool CheckLicense()
-        {
-            string path = RegistryData.GetPathToLicense();
-            if (string.IsNullOrEmpty(path))
-            {
-                return false;
-            }
-            else
-            {
-                if (File.Exists(path))
-                {
-                    License.License l = License.License.ReadLicense(path);
-                    if (!l.CheckVerificationSignatures())
-                    {
-                        DialogsManager.ShowAccessErrorDialog($"Лицензия на данное ПО скомпрометирована и не является подлинной. Пожалуйста, укажите правильную лицензию в следующем окне.", "Лицензия невалидна");
-                        return false;
-                    }
-                    else
-                    {
-                        if (l.IsActual())
-                        {
-                            if (l.IsItForMe())
-                            {                               
-                                return true;
-                            }
-                            else
-                            {
-                                DialogsManager.ShowAccessErrorDialog($"Данная лицензия не подходит к данному устройству.", "Лицензия невалидна");
-                                return false;
-                            } 
-                        }
-                        else
-                        {
-                            DialogsManager.ShowAccessErrorDialog($"Предельный срок действия лицензии истек. Дальнейшее использование программы станет возможным только после прикрепления новой лицензии.", "Лицензия истекла");
-                            return false;
-                        }                       
-                    }
-                }
-                else
-                {
-                    DialogsManager.ShowAccessErrorDialog($"По указанному пути ({path}) лицензия не найдена.", "Лицензия не найдена");
-                    return false;
-                }
-            }
         }
     }
 }

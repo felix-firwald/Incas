@@ -171,6 +171,7 @@
         <Setter Property="Margin" Value="5,5,5,5"/>
         <Setter Property="Padding" Value="10 3"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="FontFamily" Value="{StaticResource Rubik}"/>
         <Setter Property="MaxDropDownHeight" Value="250"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>

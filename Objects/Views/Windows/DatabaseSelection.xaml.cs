@@ -20,7 +20,7 @@ namespace Incas.Objects.Views.Windows
         public DialogStatus Result = DialogStatus.Undefined;
         public readonly BindingData Binding;
         public readonly Class Class;
-        public readonly ClassData ClassData;
+        public readonly IClassData ClassData;
         private Guid SelectedId
         {
             get

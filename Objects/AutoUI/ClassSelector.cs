@@ -1,4 +1,5 @@
 ﻿using Incas.DialogSimpleForm.Components;
+using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.ComponentModel;
@@ -33,7 +34,7 @@ namespace Incas.Objects.AutoUI
             Class cl = new((Guid)this.ComboSelector.SelectedObject);
             return cl;
         }
-        public ClassData GetSelectedClassData()
+        public IClassData GetSelectedClassData()
         {
             Class cl = new((Guid)this.ComboSelector.SelectedObject);
             return cl.GetClassData();

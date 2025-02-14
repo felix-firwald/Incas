@@ -2,6 +2,7 @@
 using Incas.Core.ViewModels;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Collections.Generic;
@@ -74,8 +75,8 @@ namespace Incas.Objects.ViewModels
                 }              
             }
         }
-        private ClassData classData;
-        public ClassData ClassData
+        private IClassData classData;
+        public IClassData ClassData
         {
             get
             {

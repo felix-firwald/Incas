@@ -1,5 +1,6 @@
 ﻿using Incas.DialogSimpleForm.Components;
 using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using System.ComponentModel;
 
@@ -24,7 +25,7 @@ namespace Incas.Objects.AutoUI
         public bool OnlyEqual { get; set; }
         #endregion
 
-        public DataSearch(ClassData data)
+        public DataSearch(ClassDataBase data)
         {
             this.ComboSelector = new([]);
             //this.ComboSelector.Pairs.Add("Наименование", "Наименование");
@@ -32,7 +33,7 @@ namespace Incas.Objects.AutoUI
             //{
             //    this.ComboSelector.Pairs.Add("Дата создания", "Дата создания");
             //}
-            foreach (Field f in data.Fields)
+            foreach (Field f in data.GetVisibleListFields())
             {
                 this.ComboSelector.Pairs.Add(f, f.VisibleName);
             }

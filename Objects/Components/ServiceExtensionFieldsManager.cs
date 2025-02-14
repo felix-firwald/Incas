@@ -1,6 +1,10 @@
 ﻿using Incas.Core.Classes;
+using Incas.Objects.Documents.Views.Pages;
+using Incas.Objects.Interfaces;
+using Incas.Objects.Processes.Views.Pages;
 using Incas.Objects.ServiceClasses.Groups.Views.Controls;
 using Incas.Objects.ServiceClasses.Users.Views.Controls;
+using Incas.Objects.ViewModels;
 using Incas.Objects.Views.Controls;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
@@ -14,6 +18,17 @@ namespace Incas.Objects.Components
 {
     public static class ServiceExtensionFieldsManager
     {
+        public static IClassPartSettings GetPartSettingsByType(ClassViewModel classViewModel)
+        {
+            switch (classViewModel.Type)
+            {
+                case IncasEngine.ObjectiveEngine.Classes.ClassType.Document:
+                    return new DocumentClassPart().SetUp(classViewModel);
+                case IncasEngine.ObjectiveEngine.Classes.ClassType.Process:
+                    return new ProcessClassPart().SetUp(classViewModel);
+            }
+            return null;
+        }
         public static IServiceFieldFiller GetFillerByType(IObject obj)
         {
             if (obj is Group objGroup)

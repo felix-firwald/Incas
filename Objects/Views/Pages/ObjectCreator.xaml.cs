@@ -35,8 +35,7 @@ namespace Incas.Objects.Views.Pages
     {
         public IObject Object { get; set; }
         public IClass Class { get; set; }
-        public ClassData ClassData { get; set; }
-        public Preset Preset { get; set; }
+        public IClassData ClassData { get; set; }
         public delegate bool ObjectCreatorData(ObjectCreator creator);
         public delegate void FieldCopyAction(Guid id, string text);
         public GroupClassPermissionSettings PermissionSettings { get; set; }
@@ -74,7 +73,7 @@ namespace Incas.Objects.Views.Pages
             this.ExpanderButton.IsChecked = true;
             this.ApplyAuthorConstraint();
         }
-        public ObjectCreator(ClassData data) // dev mode
+        public ObjectCreator(IClassData data) // dev mode
         {
             this.InitializeComponent();
             this.ClassData = data;
@@ -113,7 +112,6 @@ namespace Incas.Objects.Views.Pages
         private void FillContentPanel()
         {
             this.fillers = new();
-            bool presetInUse = this.Preset is null? false: true;
             this.serviceFiller = Components.ServiceExtensionFieldsManager.GetFillerByType(this.Object);
             if (this.serviceFiller != null)
             {
@@ -121,13 +119,6 @@ namespace Incas.Objects.Views.Pages
             }
             foreach (Field f in this.ClassData.Fields)
             {
-                if (presetInUse)
-                {
-                    if (this.Preset.Data.ContainsKey(f.Id))
-                    {
-                        continue; // if preset data contains field not draw it
-                    }
-                }
                 switch (f.Type)
                 {
                     default:
@@ -312,10 +303,6 @@ namespace Incas.Objects.Views.Pages
                 this.Object.Fields = [];
             }
             this.Object.Fields.Clear();
-            if (this.Preset is not null)
-            {
-                this.Object.Fields.AddRange(this.Preset.GetPresettingData());
-            }
             if (this.serviceFiller is not null)
             {
                 this.Object = this.serviceFiller.GetResult();
@@ -349,7 +336,7 @@ namespace Incas.Objects.Views.Pages
         {
             string result = "";
             string templatePart = "";
-            if (this.ClassData.InsertTemplateName)
+            if (((DocumentClassData)this.ClassData).InsertTemplateName)
             {
                 templatePart = " (" + template + ")";
             }
@@ -360,16 +347,17 @@ namespace Incas.Objects.Views.Pages
         {
             string name = this.ObjectName.Text;
             string path = "";
-            if (this.ClassData.Templates?.Count == 1)
+            DocumentClassData docData = this.ClassData as DocumentClassData;
+            if (docData.Documents?.Count == 1)
             {
                 if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
                 {
-                    await this.GenerateDocument(this.ClassData.Templates[1], path, true);
+                    await this.GenerateDocument(docData.Documents[1], path, true);
                 }
             }
-            else if (this.ClassData.Templates?.Count > 1)
+            else if (docData.Documents?.Count > 1)
             {
-                TemplateSelection ts = new(this.ClassData);
+                TemplateSelection ts = new(docData);
                 if (ts.ShowDialog("Выбор шаблона", Icon.Magic) == true)
                 {
                     if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
@@ -383,7 +371,7 @@ namespace Incas.Objects.Views.Pages
 
             }
         }
-        public async Task<string> GenerateDocument(TemplateData templateData, string folder, bool needsPullObject)
+        public async Task<string> GenerateDocument(Template templateData, string folder, bool needsPullObject)
         {
             string newFile = "";
             string oldFile = templateData.File;
@@ -398,13 +386,13 @@ namespace Incas.Objects.Views.Pages
                 if (oldFile.EndsWith(".docx"))
                 {
                     newFile = this.GetNameOfFile(folder, templateData.Name, "docx");
-                    WordTemplator wt = new(oldFile, newFile);
+                    WordTemplator wt = new(templateData, newFile);
                     templ = wt;                
                 }
                 else if (oldFile.EndsWith(".xlsx"))
                 {
                     newFile = this.GetNameOfFile(folder, templateData.Name, "xlsx");
-                    ExcelTemplator et = new(oldFile, newFile);
+                    ExcelTemplator et = new(templateData, newFile);
                     templ = et;                  
                 }
                 this.Dispatcher.Invoke(() =>
@@ -506,23 +494,24 @@ namespace Incas.Objects.Views.Pages
                 {
                     return;
                 }
+                DocumentClassData docData = this.ClassData as DocumentClassData;
                 string path = ProgramState.CurrentWorkspace.GetRuntimesTemplatesFolder();
-                if (this.ClassData.Templates?.Count == 1)
+                if (docData.Documents?.Count == 1)
                 {
-                    if (this.ClassData.Templates[1].File.EndsWith(".xlsx"))
+                    if (docData.Documents[1].File.EndsWith(".xlsx"))
                     {
                         DialogsManager.ShowExclamationDialog("Предпросмотр для Excel файлов недоступен.", "Рендеринг прерван");
                         return;
                     }
                     ProgramStatusBar.SetText("Рендеринг документа...");
                     DialogsManager.ShowWaitCursor(true);
-                    string name = await this.GenerateDocument(this.ClassData.Templates[1], path, true);
+                    string name = await this.GenerateDocument(docData.Documents[1], path, true);
                     DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.Name})", WordTemplator.ReplaceToPDF(name), true);
 
                 }
-                else if (this.ClassData.Templates?.Count > 1)
+                else if (docData.Documents?.Count > 1)
                 {
-                    TemplateSelection ts = new(this.ClassData);
+                    TemplateSelection ts = new(docData);
                     if (ts.ShowDialog("Выбор шаблона", Icon.Magic) == true)
                     {
                         if (ts.GetSelectedPath().File.EndsWith(".xlsx"))

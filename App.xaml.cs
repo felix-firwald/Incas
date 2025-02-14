@@ -2,6 +2,7 @@
 using Incas.Core.Views.Windows;
 using Incas.Tests;
 using IncasEngine.Backups;
+using IncasEngine.Core;
 using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using System;
@@ -22,21 +23,24 @@ namespace Incas
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-#if DEBUG
-            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning;
-            PresentationTraceSources.DataBindingSource.Listeners.Add(new ConsoleTraceListener());
-#endif
-            //this.ShowChecker();
-            ProgramState.CheckUMIExists();
+            SplashScreen splashScreen = new("Static\\Splash.png");
+            splashScreen.Show(false, true);
+            EngineGlobals.CheckUMIExists();
             ProgramState.InitDocumentsFolder();
-            if (!ProgramState.CheckLicense())
+            if (!EngineGlobals.CheckLicense())
             {
+                splashScreen.Close(new(1000));
                 License.Views.Windows.LicenseDialog ld = new();
                 if (ld.ShowDialog() != true)
                 {
                     System.Windows.Application.Current.Shutdown();
                 }
             }
+            else
+            {
+                splashScreen.Close(new(1000));
+            }
+            
             ProgramState.CheckoutWorkspaces();
             
             OpenWorkspace ow = new();
@@ -44,8 +48,7 @@ namespace Incas
             {
                 //Core.Views.Windows.MainWindow mw = new Core.Views.Windows.MainWindow();
                 //mw.Show();
-            }
-
+            }           
         }
         private void ShowChecker()
         {

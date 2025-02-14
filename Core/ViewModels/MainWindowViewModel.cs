@@ -73,8 +73,6 @@ namespace Incas.Core.ViewModels
         }
 
         #endregion
-        public Visibility AdminFunctionVisibility => Permission.CurrentUserPermission == PermissionGroup.Admin ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility ModeratorFunctionVisibility => Permission.IsUserHavePermission(PermissionGroup.Moderator) ? Visibility.Visible : Visibility.Collapsed;
         public bool ProcessHandled
         {
             get => this._processHandled;

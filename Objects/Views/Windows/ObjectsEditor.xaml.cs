@@ -4,6 +4,7 @@ using Incas.Objects.AutoUI;
 using Incas.Objects.Views.Pages;
 using Incas.Rendering.AutoUI;
 using Incas.Rendering.Components;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -28,7 +29,7 @@ namespace Incas.Objects.Views.Windows
     public partial class ObjectsEditor : Window
     {
         public readonly IClass Class;
-        public readonly ClassData ClassData;
+        public readonly IClassData ClassData;
         public delegate void UpdateRequested();
         public delegate void CreateRequested(Guid id);
         public event UpdateRequested OnUpdateRequested;
@@ -262,15 +263,16 @@ namespace Incas.Objects.Views.Windows
         {
             List<IObject> objects = [];
             Document doc = (this.ContentPanel.Children[0] as ObjectCreator).PullObject() as Document;
-            RenderData render = doc.GetDataForRender();
-            TemplateData templateFile = new();
-            if (this.ClassData.Templates?.Count == 1)
+            
+            Template templateFile = new();
+            DocumentClassData docData = this.ClassData as DocumentClassData;
+            if (docData.Documents?.Count == 1)
             {
-                templateFile = this.ClassData.Templates[1];
+                templateFile = docData.Documents[1];
             }
-            else if (this.ClassData.Templates?.Count > 1)
+            else if (docData.Documents?.Count > 1)
             {
-                TemplateSelection ts = new(this.ClassData);
+                TemplateSelection ts = new(docData);
                 if (ts.ShowDialog("Выбор шаблона", Incas.Core.Classes.Icon.Magic) == true)
                 {
                     templateFile = ts.GetSelectedPath();

@@ -59,25 +59,25 @@ namespace Incas.Objects.Views.Controls
 
         private void Exp_Expanded(object sender, RoutedEventArgs e)
         {
-            Expander exp = (Expander)sender;
-            Guid id = Guid.Parse(exp.Uid); // back class
-            Class back = new(id);
-            StackPanel panel = new()
-            {
-                Margin = new(0, 5, 0, 5)
-            };
-            DataTable dt = Processor.GetSimpleObjectsListWhereEqual(
-                back,
-                null,
-                back.GetClassData().FindFieldByBackReference(this.Class.Id).VisibleName, // не находит
-                this.TargetObject.ToString());
-            foreach (DataRow dr in dt.Rows)
-            {
-                string elId = dr[Helpers.IdField].ToString();
-                string elName = dr[Helpers.NameField].ToString();
-                panel.Children.Add(new ObjectElement(back, elId, elName));
-            }
-            exp.Content = panel;
+            //Expander exp = (Expander)sender;
+            //Guid id = Guid.Parse(exp.Uid); // back class
+            //Class back = new(id);
+            //StackPanel panel = new()
+            //{
+            //    Margin = new(0, 5, 0, 5)
+            //};
+            //DataTable dt = Processor.GetSimpleObjectsListWhereEqual(
+            //    back,
+            //    null,
+            //    back.GetClassData().FindFieldByBackReference(this.Class.Id).VisibleName, // не находит
+            //    this.TargetObject.ToString());
+            //foreach (DataRow dr in dt.Rows)
+            //{
+            //    string elId = dr[Helpers.IdField].ToString();
+            //    string elName = dr[Helpers.NameField].ToString();
+            //    panel.Children.Add(new ObjectElement(back, elId, elName));
+            //}
+            //exp.Content = panel;
         }
 
         public void HideSeparator()

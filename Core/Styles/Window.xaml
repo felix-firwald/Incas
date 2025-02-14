@@ -33,12 +33,12 @@
         </Style.Triggers>
     </Style>
     <ControlTemplate x:Key="WindowDialog" TargetType="{x:Type Window}">
-        <Border CornerRadius="8" BorderThickness="2" BorderBrush="{DynamicResource Dark}" Background="{DynamicResource Black}">
+        <Border CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource LightBlack}" Background="{DynamicResource Black}">
             <ContentPresenter/>
         </Border>
     </ControlTemplate>
     <ControlTemplate x:Key="WindowWithHeader" TargetType="{x:Type Window}">
-        <Border CornerRadius="6" BorderThickness="2" BorderBrush="{DynamicResource Element}" Background="{DynamicResource Basic}">
+        <Border CornerRadius="8" BorderThickness="2" BorderBrush="{DynamicResource Element}" Background="{DynamicResource Basic}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>

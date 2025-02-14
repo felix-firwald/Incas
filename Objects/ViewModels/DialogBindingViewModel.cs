@@ -7,70 +7,77 @@ using System.Collections.Generic;
 namespace Incas.Objects.ViewModels
 {
     public class DialogBindingViewModel : BaseViewModel
-    {
-        private Guid selectedClass;
-        private Guid selectedField;
-        private List<Class> classes;
+    {        
+        private Field selectedField;
+        
         public DialogBindingViewModel(BindingData data)
         {
-            this.selectedClass = data.Class;
-            this.selectedField = data.Field;
             using (Class cl = new())
             {
-                this.classes = cl.GetAllClasses();
+                this.classes = cl.GetAllClassItems();
             }
-            this.OnPropertyChanged(nameof(this.SelectedClass));
-            this.OnPropertyChanged(nameof(this.Fields));
-            this.OnPropertyChanged(nameof(this.SelectedField));
-        }
-
-        public List<Class> Classes => this.classes;
-        public List<Field> Fields => this.SelectedClass == null ? ([]) : this.SelectedClass.GetClassData().GetBindableFields();
-        public Class SelectedClass
-        {
-            get
+            foreach (ClassItem cl in this.Classes)
             {
-                foreach (Class cl in this.classes)
+                if (cl.Id == data.Class)
                 {
-                    if (cl.Id == this.selectedClass)
-                    {
-                        return cl;
-                    }
+                    this.SelectedClass = cl;
+                    break;
                 }
-                return null;
             }
-            set
+            this.OnPropertyChanged(nameof(this.Fields));           
+            if (this.selectedClass.Id != Guid.Empty)
             {
-                this.selectedClass = value.Id;
-                this.OnPropertyChanged(nameof(this.SelectedClass));
-                this.OnPropertyChanged(nameof(this.Fields));
-                this.OnPropertyChanged(nameof(this.SelectedField));
-            }
-        }
-        public Field SelectedField
-        {
-            get
-            {
-                if (this.SelectedClass is null)
-                {
-                    return null;
-                }
                 foreach (Field f in this.Fields)
                 {
-                    if (f.Id == this.selectedField)
+                    if (f.Id == data.Field)
                     {
-                        return f;
+                        this.BindingField = f;
+                        break;
                     }
                 }
-                return null;
+            }
+        }
+        private List<ClassItem> classes;
+        public List<ClassItem> Classes => this.classes;
+
+        private List<Field> fields;
+        public List<Field> Fields
+        {
+            get 
+            {
+                return this.fields;
             }
             set
             {
-                if (value is not null)
-                {
-                    this.selectedField = value.Id;
-                }
-                this.OnPropertyChanged(nameof(this.SelectedField));
+                this.fields = value;
+                this.OnPropertyChanged(nameof(this.Fields));
+            }
+        }
+        private ClassItem selectedClass;
+        public ClassItem SelectedClass
+        {
+            get
+            {
+                return this.selectedClass;
+            }
+            set
+            {
+                this.selectedClass = value;
+                this.OnPropertyChanged(nameof(this.SelectedClass));
+                this.Fields = (new Class(this.SelectedClass.Id).GetClassData() as ClassDataBase).GetBindableFields();
+                this.OnPropertyChanged(nameof(this.BindingField));
+            }
+        }
+        public Field BindingField
+        {
+            get
+            {
+                return this.selectedField;
+            }
+            set
+            {
+                this.selectedField = value;
+                this.OnPropertyChanged(nameof(this.BindingField));
             }
         }
     }

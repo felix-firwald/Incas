@@ -60,6 +60,7 @@
         <Setter Property="Padding" Value="10 3"/>
         <Setter Property="Opacity" Value="1"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="FontFamily" Value="{StaticResource Rubik}"/>
         <Setter Property="ContextMenu">
             <Setter.Value>
                 <ContextMenu>

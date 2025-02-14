@@ -1,5 +1,7 @@
-﻿using IncasEngine.ObjectiveEngine.Models;
+﻿using Incas.Core.Classes;
+using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -23,10 +25,12 @@ namespace Incas.Objects.AutoUI
             this.GetBaseData();
             try
             {
-                this.Values = JsonConvert.DeserializeObject<List<string>>(field.Value);
+                this.Values = field.GetLocalEnumeration();
+                //this.Values = JsonConvert.DeserializeObject<List<string>>(field.Value);
             }
-            catch
+            catch (Exception ex)
             {
+                DialogsManager.ShowErrorDialog(ex);
                 this.Values = [];
             }
         }
@@ -35,7 +39,8 @@ namespace Incas.Objects.AutoUI
         public override void Save()
         {
             this.SaveBaseData();
-            this.Source.Value = JsonConvert.SerializeObject(this.Values);
+            //this.Source.Value = JsonConvert.SerializeObject(this.Values);
+            this.Source.SetLocalEnumeration(this.Values);
         }
         #endregion
     }

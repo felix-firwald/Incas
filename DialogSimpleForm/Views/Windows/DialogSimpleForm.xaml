@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.DialogSimpleForm.Views.Windows"
         mc:Ignorable="d" MouseDown="Window_MouseDown"
-        Title="Форма заполнения" Style="{DynamicResource Dialog}" Height="150" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
+        Title="Форма заполнения" Style="{DynamicResource Dialog}" Height="150" Width="500" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard>

@@ -125,7 +125,7 @@ namespace Incas.License
         }
         internal bool IsItForMe()
         {
-            return (Environment.MachineName == this.MachineName && Environment.UserDomainName == this.UserDomainName && ProgramState.GetUMI() == this.UniqueMachineId.ToString());
+            return (Environment.MachineName == this.MachineName && Environment.UserDomainName == this.UserDomainName && EngineGlobals.GetUMI() == this.UniqueMachineId.ToString());
         }
         internal static License ReadLicense(string path)
         {

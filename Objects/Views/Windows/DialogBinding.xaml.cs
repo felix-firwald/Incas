@@ -2,6 +2,7 @@
 using Incas.Objects.Components;
 using Incas.Objects.ViewModels;
 using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
 using System.Windows;
@@ -18,10 +19,11 @@ namespace Incas.Objects.Views.Windows
         public Guid SelectedField { get; set; }
         public DialogBindingViewModel vm;
         public bool Result = false;
-        public DialogBinding(string data)
+        public DialogBinding(Field data)
         {
             this.InitializeComponent();
-            if (string.IsNullOrEmpty(data))
+            BindingData bd = data.GetBindingData();
+            if (bd is null)
             {
                 this.vm = new(new());
             }
@@ -29,7 +31,7 @@ namespace Incas.Objects.Views.Windows
             {
                 try
                 {
-                    this.vm = new(JsonConvert.DeserializeObject<BindingData>(data));
+                    this.vm = new(bd);
                 }
                 catch
                 {
@@ -127,18 +129,18 @@ namespace Incas.Objects.Views.Windows
 
         private void FinishClick(object sender, RoutedEventArgs e)
         {
-            if (this.vm.SelectedClass is null)
+            if (this.vm.SelectedClass.Id == Guid.Empty)
             {
                 DialogsManager.ShowExclamationDialog("Не выбран класс объекта!", "Сохранение прервано");
                 return;
             }
-            if (this.vm.SelectedField is null)
+            if (this.vm.BindingField is null)
             {
                 DialogsManager.ShowExclamationDialog("Не выбрано поле у объекта!", "Сохранение прервано");
                 return;
             }
             this.SelectedClass = this.vm.SelectedClass.Id;
-            this.SelectedField = this.vm.SelectedField.Id;
+            this.SelectedField = this.vm.BindingField.Id;
             this.Result = true;
             this.Close();
         }

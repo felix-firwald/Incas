@@ -1,4 +1,6 @@
 ﻿using Incas.Core.Views.Windows;
+using Incas.Help.Components;
+using Incas.Help.Windows;
 using Incas.Objects.Views.Pages;
 using System;
 using System.IO;
@@ -81,6 +83,11 @@ namespace Incas.Core.Classes
             }
             file = "";
             return false;
+        }
+        public static void ShowHelp(HelpType type)
+        {
+            HelpWindow help = new(type);
+            help.Show();
         }
         public static void ShowPage(System.Windows.Controls.Control control, string name, string id, TabType tt = TabType.Usual)
         {

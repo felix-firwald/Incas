@@ -1,4 +1,5 @@
 ﻿using Incas.DialogSimpleForm.Components;
+using Incas.Objects.ViewModels;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
 using System.Collections.Generic;
@@ -19,10 +20,10 @@ namespace Incas.Objects.AutoUI
         public Selector Selector { get; set; }
         #endregion
 
-        public FieldNameInsertor(List<Field> fields)
+        public FieldNameInsertor(List<FieldViewModel> fields)
         {
             this.Selector = new(new());
-            foreach (Field field in fields)
+            foreach (FieldViewModel field in fields)
             {
                 switch (field.Type)
                 {

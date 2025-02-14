@@ -14,14 +14,14 @@ namespace Incas.Objects.Documents.Views.Controls
     /// </summary>
     public partial class TemplateClassElement : UserControl
     {
-        private TemplateData data;
+        private Template data;
         private int index;
-        public delegate void TemplateElementAction(int index, TemplateData data);
+        public delegate void TemplateElementAction(int index, Template data);
         public delegate void TemplateFileAction(string path);
         public event TemplateElementAction OnEdit;
         public event TemplateElementAction OnRemove;
         public event TemplateFileAction OnSearchInFileRequested;
-        public TemplateClassElement(int index, TemplateData data)
+        public TemplateClassElement(int index, Template data)
         {
             this.InitializeComponent();
             this.index = index;

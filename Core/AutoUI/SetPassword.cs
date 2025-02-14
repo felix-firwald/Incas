@@ -19,11 +19,7 @@ namespace Incas.Core.AutoUI
         #region Functionality
         public override void Save()
         {
-            //UserParameters parameters = ProgramState.CurrentUser.GetParametersContext();
-            //parameters.Password = this.Password;
-            //ProgramState.CurrentUserParameters = parameters;
-            //ProgramState.CurrentUser.SaveParametersContext(parameters);
-            //ProgramState.CurrentUser.SaveUser();
+            
         }
         #endregion
     }

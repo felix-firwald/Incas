@@ -8,16 +8,16 @@
              d:DesignHeight="650" d:DesignWidth="1200" Cursor="">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" MaxWidth="350"/>
+            <ColumnDefinition Width="auto" MaxWidth="450"/>
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <GroupBox Header="{Binding CategoryName}" Margin="5,5,5,5">
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.RowSpan="3">
-                <StackPanel MaxWidth="340">
-                    <Button Style="{StaticResource ButtonMain}" Click="Button_Click">
+                <StackPanel>
+                    <Button Style="{StaticResource ButtonRectangle}" Click="Button_Click">
                         <StackPanel Orientation="Horizontal">
-                            <Path Fill="White" Data="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9 M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" VerticalAlignment="Center"/>
-                            <Label Content="Обновить список" Foreground="White"/>
+                            <Path Fill="DodgerBlue" Margin="2" Stretch="Uniform" VerticalAlignment="Center" Data="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9 M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+                            <Label Content="Обновить список" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="DodgerBlue"/>
                         </StackPanel>
                     </Button>
                     <Expander x:Name="CategoriesList" Style="{DynamicResource ExpanderMain}" Header="Категории" IsExpanded="True">
@@ -29,15 +29,14 @@
                             </ListBox>
                         </StackPanel>
                     </Expander>
-                    <Expander Style="{DynamicResource ExpanderMain}" Header="Классы объектов" IsExpanded="True" Visibility="{Binding TablesVisibility}">
-                        <StackPanel MaxWidth="320">
-                            <ListBox
-                    Style="{DynamicResource ListBoxMain}"
-                    ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
-                    ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" DisplayMemberPath="Name" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                            </ListBox>
-                        </StackPanel>
-                    </Expander>
+                    <ListBox Style="{DynamicResource ListBoxMain}" MaxWidth="450" Background="{StaticResource Black}" ItemsSource="{Binding Classes}" SelectedItem="{Binding SelectedClass}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" DisplayMemberPath="Name" Grid.RowSpan="2" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource ListBoxItemGray}">
+                                <Setter Property="MaxWidth" Value="260"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+
                     <Expander Style="{DynamicResource ExpanderMain}" Header="Срезы данных" IsExpanded="True" Visibility="{Binding PresetsVisibility}">
                         <StackPanel MaxWidth="320">
                             

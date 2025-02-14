@@ -18,7 +18,7 @@ namespace Incas.Objects.Views.Windows
     public partial class AddPreset : Window
     {
         public IClass TargetClass { get; set; }
-        public ClassData ClassData { get; set; }
+        public IClassData ClassData { get; set; }
         public Preset Preset { get; set; }
         public delegate void UpdateRequested();
         public event UpdateRequested OnUpdateRequested;
@@ -45,7 +45,7 @@ namespace Incas.Objects.Views.Windows
             Dictionary<CheckedItem, bool> dict = new();
             if (preset == null)
             {
-                foreach (Field f in this.ClassData.GetPresettingFields())
+                foreach (Field f in (this.ClassData as ClassDataBase).GetPresettingFields())
                 {
                     CheckedItem item = new()
                     {
@@ -57,7 +57,7 @@ namespace Incas.Objects.Views.Windows
             }
             else
             {
-                foreach (Field f in this.ClassData.GetPresettingFields())
+                foreach (Field f in (this.ClassData as ClassDataBase).GetPresettingFields())
                 {
                     CheckedItem item = new()
                     {

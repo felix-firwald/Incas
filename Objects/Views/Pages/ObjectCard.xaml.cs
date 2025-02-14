@@ -24,7 +24,7 @@ namespace Incas.Objects.Views.Pages
     public partial class ObjectCard : UserControl
     {
         private IClass Class { get; set; }
-        private ClassData ClassData { get; set; }
+        private IClassData ClassData { get; set; }
         private bool first;
         private Guid id;
         //private byte status;

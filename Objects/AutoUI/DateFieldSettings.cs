@@ -59,7 +59,8 @@ namespace Incas.Objects.AutoUI
                 EndDate = this.EndDate,
                 Format = (DateFormats)this.Format.SelectedObject
             };
-            this.Source.Value = JsonConvert.SerializeObject(df);
+            this.Source.SetDateFieldData(df);
+            //this.Source.Value = JsonConvert.SerializeObject(df);
         }
         #endregion
     }

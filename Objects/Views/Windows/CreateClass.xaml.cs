@@ -3,19 +3,21 @@ using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
-using Incas.Objects.Documents.Views.Controls;
+using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
-using Incas.Objects.Views.Controls;
 using Incas.Rendering.Components;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
 
@@ -27,6 +29,7 @@ namespace Incas.Objects.Views.Windows
     public partial class CreateClass : Window
     {
         private ClassViewModel vm;
+        private IClassPartSettings partSettings;
         public CreateClass(ClassTypeSettings primary)
         {
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
@@ -43,6 +46,7 @@ namespace Incas.Objects.Views.Windows
                 this.vm.ShowCard = true;
             }
             this.DataContext = this.vm;
+            this.ApplyPartSettings();
         }
         public CreateClass(Guid id)
         {
@@ -62,28 +66,41 @@ namespace Incas.Objects.Views.Windows
             foreach (Field f in cl.GetClassData().Fields)
             {
                 this.AddField(f);
-            }            
-            this.UpdateStatusesList();
-            this.UpdateTemplatesList();
+            }
+            this.ApplyPartSettings();
         }
-
+        private void ApplyPartSettings()
+        {
+            this.partSettings = ServiceExtensionFieldsManager.GetPartSettingsByType(this.vm);
+            if (this.partSettings is not null)
+            {
+                TabItem item = new()
+                {
+                    Content = this.partSettings,
+                    Header = this.partSettings.ItemName,
+                    BorderBrush = this.FindResource("LightPurple") as Brush
+                };
+                this.TabControlMain.Items.Add(item);
+            }
+        }
         private void GetMoreInfoClick(object sender, RoutedEventArgs e)
         {
-            ProgramState.OpenWebPage("https://teletype.in/@incas/classes");
+            //ProgramState.OpenWebPage("https://teletype.in/@incas/classes");
+            DialogsManager.ShowHelp(Help.Components.HelpType.Classes_General);
         }
 
         private void AddField(Field data = null)
         {
-            Controls.FieldCreator fc = new(this.ContentPanel.Children.Count, data);
-            fc.OnRemove += this.Fc_OnRemove;
-            fc.OnMoveDownRequested += this.Fc_OnMoveDownRequested;
-            fc.OnMoveUpRequested += this.Fc_OnMoveUpRequested;
-            this.ContentPanel.Children.Add(fc);
-            Controls.FieldScriptViewer fsv = new(fc.vm);
-            fsv.OnBindingActionRequested += this.Fsv_OnBindingActionRequested;
-            fsv.OnBindingEventRequested += this.Fsv_OnBindingEventRequested;
-            fsv.OnLinkInsertingRequested += this.Fsv_OnLinkInsertingRequested;
-            this.ScriptFieldsPanel.Children.Add(fsv);
+            //Controls.FieldCreator fc = new(this.ContentPanel.Children.Count, data);
+            //fc.OnRemove += this.Fc_OnRemove;
+            //fc.OnMoveDownRequested += this.Fc_OnMoveDownRequested;
+            //fc.OnMoveUpRequested += this.Fc_OnMoveUpRequested;
+            //this.ContentPanel.Children.Add(fc);
+            //Controls.FieldScriptViewer fsv = new(fc.vm);
+            //fsv.OnBindingActionRequested += this.Fsv_OnBindingActionRequested;
+            //fsv.OnBindingEventRequested += this.Fsv_OnBindingEventRequested;
+            //fsv.OnLinkInsertingRequested += this.Fsv_OnLinkInsertingRequested;
+            //this.ScriptFieldsPanel.Children.Add(fsv);
         }
 
         private void Fsv_OnLinkInsertingRequested(Field field)
@@ -125,75 +142,17 @@ namespace Incas.Objects.Views.Windows
             catch { }
         }
 
-        private int Fc_OnMoveUpRequested(Controls.FieldCreator t)
-        {
-            int position = this.ContentPanel.Children.IndexOf(t);
-            if (position < this.ContentPanel.Children.Count - 1)
-            {
-                position += 1;
-            }
-            this.ContentPanel.Children.Remove(t);
-            this.ContentPanel.Children.Insert(position, t);
-            return position;
-        }
-
-        private int Fc_OnMoveDownRequested(Controls.FieldCreator t)
-        {
-            int position = this.ContentPanel.Children.IndexOf(t);
-            if (position > 0)
-            {
-                position -= 1;
-            }
-
-            this.ContentPanel.Children.Remove(t);
-            this.ContentPanel.Children.Insert(position, t);
-            return position;
-        }
-
-        private bool Fc_OnRemove(Controls.FieldCreator t)
-        {
-            BindingData data = new()
-            {
-                Class = this.vm.Source.Id,
-                Field = t.vm.Source.Id
-            };
-            if (data.Class == Guid.Empty || data.Field == Guid.Empty)
-            {
-                this.ContentPanel.Children.Remove(t);
-                return true;
-            }
-            using Class cl = new();
-            List<string> list = cl.FindBackReferencesNames(data);
-            if (list.Count > 0)
-            {
-                DialogsManager.ShowExclamationDialog($"Поле невозможно удалить, поскольку на него ссылаются следующие классы:\n{string.Join(",\n", list)}", "Удаление невозможно");
-                return false;
-            }
-            else
-            {
-                this.ContentPanel.Children.Remove(t);
-                foreach (FieldScriptViewer viewer in this.ScriptFieldsPanel.Children)
-                {
-                    if (viewer.vm == t.vm)
-                    {
-                        this.ScriptFieldsPanel.Children.Remove(viewer);
-                        break;
-                    }
-                }
-            }
-            return true;
-        }
-
         private void AddFieldClick(object sender, RoutedEventArgs e)
         {
-            this.AddField();
+            this.vm.Fields.Add(new());
+            //this.AddField();
         }
         private void CopyFieldsFromAnotherClass(object sender, RoutedEventArgs e)
         {
             ClassSelector cs = new();
             if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
             {
-                ClassData cd = cs.GetSelectedClassData();
+                IClassData cd = cs.GetSelectedClassData();
                 foreach (Field f in cd.Fields)
                 {
                     f.Id = Guid.NewGuid();
@@ -215,124 +174,102 @@ namespace Incas.Objects.Views.Windows
         private List<Field> GetActualFields()
         {
             List<Field> fields = [];
-            List<string> names = [];
-            foreach (Controls.FieldCreator item in this.ContentPanel.Children)
-            {
-                Field f = item.GetField();
-                if (names.Contains(f.Name))
-                {
-                    throw new FieldDataFailed($"Поле [{f.Name}] встречается более одного раза. Имена полей должны быть уникальными.");
-                }
-                else
-                {
-                    names.Add(f.Name);
-                }
-                f.SetId();
-                fields.Add(f);
-            }
+            //List<string> names = [];
+            //foreach (Controls.FieldCreator item in this.ContentPanel.Children)
+            //{
+            //    Field f = item.GetField();
+            //    if (names.Contains(f.Name))
+            //    {
+            //        throw new FieldDataFailed($"Поле [{f.Name}] встречается более одного раза. Имена полей должны быть уникальными.");
+            //    }
+            //    else
+            //    {
+            //        names.Add(f.Name);
+            //    }
+            //    f.SetId();
+            //    fields.Add(f);
+            //}
             return fields;
         }
         private void SaveClick(object sender, RoutedEventArgs e)
         {
+            DialogsManager.ShowWaitCursor();
             try
             {
-                if (string.IsNullOrWhiteSpace(this.vm.NameOfClass))
+                this.partSettings?.Save();
+                if (this.vm.Save())
                 {
-                    DialogsManager.ShowExclamationDialog("Классу не присвоено наименование!", "Сохранение прервано");
-                    return;
+                    DialogsManager.ShowWaitCursor(false);
+                    this.Close();
                 }
-                
-                
-                if (this.ContentPanel.Children.Count == 0)
-                {
-                    DialogsManager.ShowExclamationDialog("Класс не может не содержать полей.", "Сохранение прервано");
-                    return;
-                }
-                List<Field> fields = this.GetActualFields();
-                if (string.IsNullOrWhiteSpace(this.vm.NameTemplate))
-                {
-                    FieldNameInsertor fn = new(fields);
-                    if (fn.ShowDialog("Поле для наименования объектов", Core.Classes.Icon.Subscript))
-                    {
-                        this.vm.NameTemplate = $"{this.vm.NameOfClass} {fn.GetSelectedField()}";
-                    }
-                    else
-                    {
-                        this.vm.NameTemplate = $"{this.vm.NameOfClass} [{fields[0].Name}]";
-                    }
-                }
-                this.vm.SetData(fields);
-                this.vm.Source.Save();
-                this.Close();
-                //ProgramState.DatabasePage.UpdateAll();
             }
-            catch (FieldDataFailed fd)
+            catch (Exception ex)
             {
-                DialogsManager.ShowExclamationDialog(fd.Message, "Сохранение прервано");
-            }
+                DialogsManager.ShowErrorDialog(ex);
+            }           
         }
         #region Templates
         private void AddTemplateClick(object sender, MouseButtonEventArgs e)
         {
-            TemplateClassEditor ce = new();
-            ce.ShowDialog();
-            if (ce.Result)
-            {
-                TemplateData td = new()
-                {
-                    Name = ce.SelectedName,
-                    File = ce.SelectedPath
-                };
-                this.vm.SourceData.AddTemplate(td);
-            }
-            this.UpdateTemplatesList();
+            //TemplateClassEditor ce = new();
+            //ce.ShowDialog();
+            //if (ce.Result)
+            //{
+            //    TemplateData td = new()
+            //    {
+            //        Name = ce.SelectedName,
+            //        File = ce.SelectedPath
+            //    };
+            //    this.vm.SourceData.AddTemplate(td);
+            //}
+            //this.UpdateTemplatesList();
         }
         private void CopyTemplatesClick(object sender, MouseButtonEventArgs e)
         {
-            ClassSelector cs = new();
-            if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
-            {
-                ClassData cd = cs.GetSelectedClassData();
-                if (cd.Templates == null)
-                {
-                    return;
-                }
-                this.vm.SourceData.Templates = cd.Templates;
-                //foreach (TemplateData sd in cd.Templates.Values)
-                //{
-                //    this.vm.SourceData.AddTemplate(sd);
-                //}
-            }
-            this.UpdateTemplatesList();
+            //ClassSelector cs = new();
+            //if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
+            //{
+            //    ClassData cd = cs.GetSelectedClassData();
+            //    if (cd.Templates == null)
+            //    {
+            //        return;
+            //    }
+            //    this.vm.SourceData.Templates = cd.Templates;
+            //    //foreach (TemplateData sd in cd.Templates.Values)
+            //    //{
+            //    //    this.vm.SourceData.AddTemplate(sd);
+            //    //}
+            //}
+            //this.UpdateTemplatesList();
         }
         private void UpdateTemplatesList()
         {
-            this.TemplatesPanel.Children.Clear();
-            if (this.vm.SourceData.Templates is null)
-            {
-                return;
-            }
-            foreach (KeyValuePair<int, TemplateData> template in this.vm.SourceData.Templates)
-            {
-                TemplateClassElement tce = new(template.Key, template.Value);
-                tce.OnEdit += this.Tce_OnEdit;
-                tce.OnRemove += this.Tce_OnRemove;
-                tce.OnSearchInFileRequested += this.Tce_OnSearchInFileRequested;
-                this.TemplatesPanel.Children.Add(tce);
-            }
+            //this.TemplatesPanel.Children.Clear();
+            //if (this.vm.SourceData.Templates is null)
+            //{
+            //    return;
+            //}
+            //foreach (KeyValuePair<int, TemplateData> template in this.vm.SourceData.Templates)
+            //{
+            //    TemplateClassElement tce = new(template.Key, template.Value);
+            //    tce.OnEdit += this.Tce_OnEdit;
+            //    tce.OnRemove += this.Tce_OnRemove;
+            //    tce.OnSearchInFileRequested += this.Tce_OnSearchInFileRequested;
+            //    this.TemplatesPanel.Children.Add(tce);
+            //}
         }
 
         private void Tce_OnSearchInFileRequested(string path)
         {
             bool CheckNameUniqueness(string name)
             {
-                foreach (Objects.Views.Controls.FieldCreator creator in this.ContentPanel.Children)
-                {
-                    if (creator.vm.Source.Name == name)
-                    {
-                        return false;
-                    }
-                }
+                //foreach (Objects.Views.Controls.FieldCreator creator in this.ContentPanel.Children)
+                //{
+                //    if (creator.vm.Source.Name == name)
+                //    {
+                //        return false;
+                //    }
+                //}
                 return true;
             }
             try
@@ -358,40 +295,40 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void Tce_OnRemove(int index, TemplateData data)
+        private void Tce_OnRemove(int index, Template data)
         {
-            this.vm.SourceData.Templates.Remove(index);
-            this.UpdateTemplatesList();
+            //this.vm.SourceData.Templates.Remove(index);
+            //this.UpdateTemplatesList();
         }
 
-        private void Tce_OnEdit(int index, TemplateData data)
+        private void Tce_OnEdit(int index, Template data)
         {
-            this.vm.SourceData.EditTemplate(index, data);
-            this.UpdateTemplatesList();
+            //this.vm.SourceData.EditTemplate(index, data);
+            //this.UpdateTemplatesList();
         }
         #endregion
 
         #region Statuses
         private void AddStatusClick(object sender, MouseButtonEventArgs e)
         {
-            StatusSettings ss = new();
-            if (ss.ShowDialog("Настройка статуса", Core.Classes.Icon.Tag) == true)
-            {
-                this.vm.SourceData.AddStatus(ss.GetData());
-                this.UpdateStatusesList();
-            }
+            //StatusSettings ss = new();
+            //if (ss.ShowDialog("Настройка статуса", Core.Classes.Icon.Tag) == true)
+            //{
+            //    this.vm.SourceData.AddStatus(ss.GetData());
+            //    this.UpdateStatusesList();
+            //}
         }
         private void CopyStatusesClick(object sender, MouseButtonEventArgs e)
         {
             ClassSelector cs = new();
             if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
             {
-                ClassData cd = cs.GetSelectedClassData();
-                if (cd.Statuses == null)
-                {
-                    return;
-                }
-                this.vm.SourceData.Statuses = cd.Statuses;
+                IClassData cd = cs.GetSelectedClassData();
+                //if (cd.Statuses == null)
+                //{
+                //    return;
+                //}
+                //this.vm.SourceData.Statuses = cd.Statuses;
                 //foreach (StatusData sd in cd.Statuses.Values)
                 //{
                 //    this.vm.SourceData.AddStatus(sd);
@@ -401,49 +338,49 @@ namespace Incas.Objects.Views.Windows
         }
         private void UpdateStatusesList()
         {
-            this.StatusesPanel.Children.Clear();
-            if (this.vm.SourceData.Statuses is null)
-            {
-                return;
-            }
-            int index = 0;
-            foreach (StatusData data in this.vm.SourceData.Statuses.Values)
-            {
-                index++;
-                StatusElement se = new(index, data);
-                se.OnEdit += this.Se_OnEdit;
-                se.OnRemove += this.Se_OnRemove;
-                this.StatusesPanel.Children.Add(se);
-            }
+            //this.StatusesPanel.Children.Clear();
+            //if (this.vm.SourceData.Statuses is null)
+            //{
+            //    return;
+            //}
+            //int index = 0;
+            //foreach (StatusData data in this.vm.SourceData.Statuses.Values)
+            //{
+            //    index++;
+            //    StatusElement se = new(index, data);
+            //    se.OnEdit += this.Se_OnEdit;
+            //    se.OnRemove += this.Se_OnRemove;
+            //    this.StatusesPanel.Children.Add(se);
+            //}
         }
 
         private void Se_OnRemove(int index, StatusData statusData)
         {
-            this.vm.SourceData.RemoveStatus(index);
-            this.UpdateStatusesList();
+            //this.vm.SourceData.RemoveStatus(index);
+            //this.UpdateStatusesList();
         }
 
         private void Se_OnEdit(int index, StatusData statusData)
         {
-            this.vm.SourceData.Statuses[index] = statusData;
-            this.UpdateStatusesList();
+            //this.vm.SourceData.Statuses[index] = statusData;
+            //this.UpdateStatusesList();
         }
 
         #endregion
 
         private void MinimizeAllClick(object sender, RoutedEventArgs e)
         {
-            foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
+            foreach (FieldViewModel f in this.vm.Fields)
             {
-                item.Minimize();
+                f.IsExpanded = false;
             }
         }
 
         private void MaximizeAllClick(object sender, RoutedEventArgs e)
         {
-            foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
+            foreach (FieldViewModel f in this.vm.Fields)
             {
-                item.Maximize();
+                f.IsExpanded = true;
             }
         }
 
@@ -452,15 +389,15 @@ namespace Incas.Objects.Views.Windows
             List<Field> fields = [];
             try
             {
-                foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
-                {
-                    Field f = item.GetField();
-                    f.SetId();
-                    fields.Add(f);
-                }
-                this.vm.SourceData.Fields = fields;
-                ObjectsEditor oe = new(this.vm.Source, this.vm.SourceData);
-                oe.ShowDialog();
+                //foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
+                //{
+                //    Field f = item.GetField();
+                //    f.SetId();
+                //    fields.Add(f);
+                //}
+                //this.vm.SourceData.Fields = fields;
+                //ObjectsEditor oe = new(this.vm.Source, this.vm.SourceData);
+                //oe.ShowDialog();
             }
             catch (FieldDataFailed fd)
             {
@@ -470,16 +407,16 @@ namespace Incas.Objects.Views.Windows
 
         private void InsertFieldNameClick(object sender, RoutedEventArgs e)
         {
-            List<Field> fields = new();
-            foreach (Controls.FieldCreator item in this.ContentPanel.Children)
-            {
-                fields.Add(item.vm.Source);
-            }
-            FieldNameInsertor fn = new(fields);
-            if (fn.ShowDialog("Вставка имени", Core.Classes.Icon.Tags))
-            {
-                this.vm.NameTemplate = this.NameTemplate.Text + " " + fn.GetSelectedField();
-            }
+            //List<Field> fields = new();
+            //foreach (Controls.FieldCreator item in this.ContentPanel.Children)
+            //{
+            //    fields.Add(item.vm.Source);
+            //}
+            //FieldNameInsertor fn = new(fields);
+            //if (fn.ShowDialog("Вставка имени", Core.Classes.Icon.Tags))
+            //{
+            //    this.vm.NameTemplate = this.NameTemplate.Text + " " + fn.GetSelectedField();
+            //}
         }
 
         private void GenerateBaseScriptClick(object sender, RoutedEventArgs e)
@@ -545,6 +482,29 @@ namespace Incas.Objects.Views.Windows
                 DialogsManager.ShowExclamationDialog(fd.Message, "Действие прервано");
                 return;
             }
+        }
+
+        #region Fields Logics
+
+        private void OpenSettingsClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+        #endregion
+
+        private void UpClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DownClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ComboType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            this.vm.UpdateFieldCollections();
         }
     }
 }

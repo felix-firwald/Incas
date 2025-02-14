@@ -21,7 +21,7 @@ namespace Incas.Rendering.Components
             // Экранируем спецсимволы регулярных выражений в строке-шаблоне, кроме тегов
             // экранируем только те символы, которые *не* являются частью тега
             string regexPattern = Regex.Replace(patternString, @"([^\w\s\[\]])", m => "\\" + m.Groups[1].Value);
-            ClassData data = @class.GetClassData();
+            IClassData data = @class.GetClassData();
             // Заменяем теги на группы захвата в регулярном выражении
             List<Field> fields = new();
             foreach (Field f in data.Fields)

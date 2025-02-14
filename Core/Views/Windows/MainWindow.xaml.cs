@@ -3,6 +3,7 @@ using Incas.Core.Interfaces;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Pages;
 using Incas.Server.AutoUI;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
 using System;

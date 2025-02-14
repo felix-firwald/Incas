@@ -30,7 +30,7 @@ namespace Incas.Objects.AutoUI
             this.GetBaseData();
             try
             {
-                NumberFieldData nf = JsonConvert.DeserializeObject<NumberFieldData>(field.Value);
+                NumberFieldData nf = field.GetNumberFieldData();
                 this.MinValue = nf.MinValue;
                 this.DefaultValue = nf.DefaultValue;
                 this.MaxValue = nf.MaxValue;
@@ -51,7 +51,8 @@ namespace Incas.Objects.AutoUI
                 MaxValue = this.MaxValue,
                 DefaultValue = this.DefaultValue
             };
-            this.Source.Value = JsonConvert.SerializeObject(nf);
+            this.Source.SetNumberFieldData(nf);
+            //this.Source.Value = JsonConvert.SerializeObject(nf);
         }
         #endregion
     }

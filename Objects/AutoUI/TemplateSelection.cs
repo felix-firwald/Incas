@@ -17,18 +17,18 @@ namespace Incas.Objects.AutoUI
         public Selector Selector { get; set; }
         #endregion
 
-        public TemplateSelection(ClassData data)
+        public TemplateSelection(DocumentClassData data)
         {
             this.Selector = new([]);
-            foreach (TemplateData item in data.Templates.Values)
+            foreach (Template item in data.Documents)
             {
                 this.Selector.Pairs.Add(item, item.Name);
             }
             this.Selector.SetSelectionByIndex(0);
         }
-        public TemplateData GetSelectedPath()
+        public Template GetSelectedPath()
         {
-            return (TemplateData)this.Selector.SelectedObject;
+            return (Template)this.Selector.SelectedObject;
         }
 
         #region Functionality

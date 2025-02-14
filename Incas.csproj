@@ -90,6 +90,7 @@
     <None Remove="Static\Fonts\Rubik.ttf" />
     <None Remove="Static\Chicken.wav" />
     <None Remove="Static\Rooster.wav" />
+    <None Remove="Static\Splash.png" />
     <None Remove="Static\UI-Attention.wav" />
     <None Remove="Static\UI-Exclamation.wav" />
     <None Remove="Core\Styles\Tile.png" />
@@ -246,7 +247,8 @@
     <Resource Include="Core\Styles\Tile.png" />
   </ItemGroup>
   <ItemGroup>
-    <SplashScreen Include="Logo.ico" />
+    <Resource Include="Logo.ico" />
+    <Resource Include="Static\Splash.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8.1">
@@ -281,7 +283,7 @@
     <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
     <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.0.6" />
     <PackageReference Include="ClosedXML" Version="0.102.1" />
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.16.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
     <PackageReference Include="DocX" Version="3.0.0" />
     <PackageReference Include="DynamicLanguageRuntime" Version="1.3.4" />
     <PackageReference Include="ExcelNumberFormat" Version="1.1.0" />
@@ -340,8 +342,6 @@
     <Folder Include="Miniservices\Tasks\Classes\" />
     <Folder Include="Miniservices\Tasks\Views\Controls\" />
     <Folder Include="Miniservices\Tasks\Views\Windows\" />
-    <Folder Include="Objects.Documents\AutoUI\" />
-    <Folder Include="Objects.Documents\Views\Pages\" />
     <Folder Include="Objects.Processes\Views\Controls\" />
     <Folder Include="Objects.Processes\Views\Windows\" />
     <Folder Include="Objects.Processes\AutoUI\" />

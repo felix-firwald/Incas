@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Incas.Core.Views.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <GroupBox Header="">
+    <Border Margin="5" Background="{StaticResource Area}" CornerRadius="8">
         <Grid>
             <StackPanel VerticalAlignment="Center">
                 <Label x:Name="MainText" Content="????" FontSize="20" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource Light}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1">
@@ -63,5 +63,5 @@
             </StackPanel>
             
         </Grid>
-    </GroupBox>
+    </Border>
 </UserControl>

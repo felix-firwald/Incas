@@ -5,11 +5,12 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TreeView">
-                    <Border Name="Border" CornerRadius="1" Background="Black" BorderThickness="1">
-                        <ScrollViewer Focusable="False" CanContentScroll="False" Padding="4">
+                    <Border Name="Border" CornerRadius="8" Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderThickness="0">
+                        <ScrollViewer Focusable="False" CanContentScroll="False" Padding="0">
                             <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>
@@ -20,16 +21,16 @@
 
     <Style x:Key="ExpandCollapseToggleStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Focusable" Value="False"/>
-        <Setter Property="Width" Value="20"/>
-        <Setter Property="Height" Value="20"/>
+        <Setter Property="Width" Value="18"/>
+        <Setter Property="Height" Value="18"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border x:Name="Bd" CornerRadius="4" Background="Transparent" BorderBrush="{StaticResource Element}" BorderThickness="1">
-                        <Grid>
-                            <Path x:Name="ExpandPath" Stroke="{StaticResource Success}" Data="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" Stretch="UniformToFill" MinWidth="8" MinHeight="8" Width="8" Height="8"/>
-                            <Path x:Name="ExpandPathMinus" Stroke="{StaticResource Error}" Data="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" Stretch="Uniform" MinWidth="8" MinHeight="8" Width="8" Height="8"/>
+                    <Border x:Name="Bd" CornerRadius="2" Background="Transparent" BorderBrush="{StaticResource Element}" BorderThickness="1">
+                        <Grid Margin="3">
+                            <Path x:Name="ExpandPath" Stroke="{StaticResource Success}" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" Data="M11.65,12.35h-5a.35.35,0,1,1,0-.7h5v-5a.35.35,0,1,1,.7,0v5h5a.35.35,0,1,1,0,.7h-5v5a.35.35,0,1,1-.7,0Z"/>
+                            <Path x:Name="ExpandPathMinus" Stroke="{StaticResource Error}" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" Data="M6.65,12.35a.35.35,0,1,1,0-.7h10.7a.35.35,0,1,1,0,.7Z"/>
                         </Grid>
                         </Border>
                     <ControlTemplate.Triggers>
@@ -42,7 +43,7 @@
                             <Setter Property="Visibility" TargetName="ExpandPath" Value="Visible"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource Element}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource Area}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -59,14 +60,15 @@
         </Setter>
     </Style>
     
-    <Style  TargetType="{x:Type TreeViewItem}">
+    <Style TargetType="{x:Type TreeViewItem}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-        <Setter Property="Padding" Value="2"/>
+        <Setter Property="Padding" Value="0"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="FontFamily" Value="{StaticResource JetBrains}"/>
         <Setter Property="Foreground" Value="{StaticResource Light}"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
         <Setter Property="Template">
@@ -75,7 +77,7 @@
                     <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="4" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="ColumnExpander" MinWidth="40" Width="Auto"/>
+                                <ColumnDefinition x:Name="ColumnExpander" MinWidth="20" Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
@@ -84,7 +86,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <ToggleButton x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource Mode=TemplatedParent}}" Style="{StaticResource ExpandCollapseToggleStyle}"/>
-                            <Border Grid.Column="1">
+                            <Border Grid.Column="1" Margin="5">
                                 <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </Border>
                             <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"/>
@@ -97,17 +99,16 @@
                         </Trigger>
                         <Trigger Property="HasItems" Value="False">
                             <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
-                            <Setter TargetName="ColumnExpander" Property="MinWidth" Value="10"/>
-                            <Setter TargetName="ColumnExpander" Property="MaxWidth" Value="10"/>
+                            <Setter TargetName="ColumnExpander" Property="MinWidth" Value="5"/>
+                            <Setter TargetName="ColumnExpander" Property="MaxWidth" Value="5"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="true">
                             <Setter Property="Foreground" Value="White"/>
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Dark}"/>
                         </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
+                        <!--<Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Dark}"/>
                             <Setter TargetName="Bd" Property="BorderThickness" Value="1"/>
-                        </Trigger>
+                        </Trigger>-->
                         <!--<MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsSelected" Value="true"/>

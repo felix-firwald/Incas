@@ -72,6 +72,10 @@ namespace Incas.Objects.Views.Controls
                     this.FieldValue.Text = data.Value;
                 }
             }           
+            if (!data.ClassField.ListVisibility)
+            {
+                this.FilterButton.IsEnabled = false;
+            }
         }
         public ObjectFieldViewer(ServiceClass cl, Guid data, string label) // all service fields with links (author, group, etc.)
         {

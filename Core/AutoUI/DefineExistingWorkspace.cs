@@ -1,6 +1,6 @@
 ﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
+using IncasEngine.Core;
 using System.ComponentModel;
 
 namespace Incas.Core.AutoUI

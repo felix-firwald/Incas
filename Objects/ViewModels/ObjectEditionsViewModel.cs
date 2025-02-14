@@ -24,7 +24,7 @@ namespace Incas.Objects.ViewModels
         {
             get
             {
-                return this.TargetClass.GetClassData().GetSavebleFields();
+                return (this.TargetClass.GetClassData() as ClassDataBase).GetSavebleFields();
             }
         }
         private Field selectedField { get; set; }

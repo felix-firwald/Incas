@@ -23,11 +23,13 @@ namespace Incas.Rendering.Components
         private List<string> tagsToReplace = [];
         private List<string> values = [];
         private Dictionary<string, DataTable> tables = new();
+        private readonly Template template;
         public XLWorkbook workbook;
         public IXLWorksheet worksheet;
-        public ExcelTemplator(string templatePath, string newPath)
+        public ExcelTemplator(Template template, string newPath)
         {
-            string oldpath = ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(templatePath);
+            this.template = template;
+            string oldpath = ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(template.File);
             if (File.Exists(newPath))
             {
                 File.Delete(newPath);
@@ -143,7 +145,7 @@ namespace Incas.Rendering.Components
         
         private void GetDataFromDocument(Document doc)
         {
-            RenderData data = doc.GetDataForRender();
+            RenderData data = doc.GetDataForRender(this.template);
             this.tagsToReplace = data.TagsToReplace;
             this.values = data.Values;
             this.tables = data.Tables;

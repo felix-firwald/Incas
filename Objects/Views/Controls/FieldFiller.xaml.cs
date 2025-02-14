@@ -101,7 +101,7 @@ namespace Incas.Objects.Views.Controls
                     value ??= "";
                     ComboBox comboBox = new()
                     {
-                        ItemsSource = type == FieldType.LocalEnumeration ? JsonConvert.DeserializeObject<List<string>>(value) : ProgramState.GetEnumeration(Guid.Parse(value.ToString())),
+                        ItemsSource = type == FieldType.LocalEnumeration ? this.Field.GetLocalEnumeration() : ProgramState.GetEnumeration(this.Field.GetGlobalEnumeration().TargetId),
                         SelectedIndex = 0,
                         Style = this.FindResource("ComboBoxMain") as Style
                     };
@@ -110,8 +110,9 @@ namespace Incas.Objects.Views.Controls
                     break;
                 case FieldType.Number:
                     NumericBox numeric = new();
+                    numeric.ToolTip = description;
                     numeric.OnNumberChanged += this.NumericBox_OnNumberChanged;
-                    numeric.ApplyMinAndMax(JsonConvert.DeserializeObject<NumberFieldData>(value));
+                    numeric.ApplyMinAndMax(this.Field.GetNumberFieldData());
                     this.PlaceUIControl(numeric);
                     break;
                 case FieldType.LocalConstant:
@@ -125,7 +126,7 @@ namespace Incas.Objects.Views.Controls
                     this.Field.Value = ProgramState.GetConstant(id);
                     break;
                 case FieldType.Relation:
-                    SelectionBox selectionBox = new(JsonConvert.DeserializeObject<BindingData>(value));
+                    SelectionBox selectionBox = new(this.Field.GetBindingData());
                     selectionBox.OnValueChanged += this.SelectionBox_OnValueChanged;
                     this.PlaceUIControl(selectionBox);
                     break;

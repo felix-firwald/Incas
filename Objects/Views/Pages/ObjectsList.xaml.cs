@@ -28,7 +28,7 @@ namespace Incas.Objects.Views.Pages
         private const string ColorColumn = "__COLOR_COLUMN__";
         public Style ColumnHeaderSpecialStyle { get; set; }
         public IClass sourceClass;
-        public ClassData ClassData;
+        public IClassData ClassData;
         private ObjectCard ObjectCard;
         public Preset SourcePreset;
         private GroupClassPermissionSettings permissionSettings;
@@ -223,18 +223,23 @@ namespace Incas.Objects.Views.Pages
                     e.Column.Visibility = Visibility.Hidden;
                     break;
                 case Helpers.NameField:
-                    e.Column.Header = "Наименование";
-                    e.Column.HeaderStyle = this.ColumnHeaderSpecialStyle;
-                    e.Column.MinWidth = 100;
-                    e.Column.MaxWidth = 180;
-                    e.Column.CanUserReorder = false;
+                    if (this.ClassData.ShowCard)
+                    {
+                        e.Column.Visibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        e.Column.Header = "Наименование";
+                        e.Column.HeaderStyle = this.ColumnHeaderSpecialStyle;
+                        e.Column.MinWidth = 40;
+                        e.Column.MaxWidth = 200;
+                    }                    
                     break;
                 case Helpers.DateCreatedField:
                     e.Column.Header = "Дата создания";
                     e.Column.HeaderStyle = this.ColumnHeaderSpecialStyle;
-                    e.Column.MinWidth = 100;
+                    e.Column.MinWidth = 40;
                     e.Column.MaxWidth = 120;
-                    e.Column.CanUserReorder = false;
                     break;
                 case Helpers.StatusField:
                     e.Column.Visibility = Visibility.Hidden;
@@ -278,7 +283,7 @@ namespace Incas.Objects.Views.Pages
         }
         private void OpenSearchDialog()
         {
-            DataSearch ds = new(this.ClassData);
+            DataSearch ds = new(this.ClassData as ClassDataBase);
             if (ds.ShowDialog("Поиск", Icon.Search))
             {
                 if (ds.OnlyEqual)

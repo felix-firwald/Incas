@@ -36,10 +36,10 @@ namespace Incas.Objects.Views.Controls
         public FieldGeneratorFiller(Field f) // new
         {
             this.InitializeComponent();
-            this.Field = f;
-            this.GeneratorName.Content = f.VisibleName;
-            this.TargetClass = new(Guid.Parse(f.Value));
-            this.TargetClassData = this.TargetClass.GetClassData();
+            //this.Field = f;
+            //this.GeneratorName.Content = f.VisibleName;
+            //this.TargetClass = new(Guid.Parse(f.Value));
+            //this.TargetClassData = this.TargetClass.GetClassData();
         }
         public string GetData()
         {

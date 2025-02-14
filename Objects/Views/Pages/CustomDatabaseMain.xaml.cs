@@ -67,7 +67,7 @@ namespace Incas.Objects.Views.Pages
                 this.ContentPanel.Content = new Core.Views.Controls.NoContent();
                 return;
             }
-            ClassData data = selectedClass.GetClassData();
+            IClassData data = selectedClass.GetClassData();
             if (data.PresetsEnabled && data.RestrictFullView)
             {
                 this.PlacePresetsListPage(selectedClass);

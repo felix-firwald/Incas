@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Users.Components;
@@ -37,7 +38,6 @@ namespace Incas.Core.ViewModels
             this.OnPropertyChanged(nameof(this.SelectedWorkspace));
             this.OnPropertyChanged(nameof(this.Path));
             this.UpdateUsers();
-            this.OnPropertyChanged(nameof(this.Password));
         }
 
         public void RemoveSelected()
@@ -68,7 +68,6 @@ namespace Incas.Core.ViewModels
                     this.OnPropertyChanged(nameof(this.SelectedWorkspace));
                     this.OnPropertyChanged(nameof(this.Path));
                     this.UpdateUsers();
-                    this.OnPropertyChanged(nameof(this.Password));
                     this.OnPropertyChanged(nameof(this.Users));
                 }
             }
@@ -86,7 +85,10 @@ namespace Incas.Core.ViewModels
                 {
                     return RegistryData.GetWorkspacePath(this.SelectedWorkspace);
                 }
-                catch (Exception) { return ""; }
+                catch (Exception)
+                {
+                    return "";
+                }
             }
             set
             {
@@ -147,17 +149,6 @@ namespace Incas.Core.ViewModels
                 catch (Exception) { }
             }
         }
-        //private string pwd = "";
-        public string Password
-        {
-            get => RegistryData.GetWorkspacePassword(this.SelectedWorkspace);
-            set
-            {
-                RegistryData.SetWorkspacePassword(this.SelectedWorkspace, value);
-                this.OnPropertyChanged(nameof(this.Password));
-            }
-        }
-
         #endregion
     }
 }

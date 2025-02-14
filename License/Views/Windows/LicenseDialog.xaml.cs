@@ -26,7 +26,7 @@ namespace Incas.License.Views.Windows
             {
                 MachineName = Environment.MachineName,
                 UserDomainName = Environment.UserDomainName,
-                UniqueMachineId = ProgramState.GetUMI()
+                UniqueMachineId = EngineGlobals.GetUMI()
             };
             string result = JsonConvert.SerializeObject(uci);
             result = Cryptographer.ToDifficultHex(result);
@@ -47,7 +47,7 @@ namespace Incas.License.Views.Windows
             if (path.EndsWith(License.Extension))
             {
                 RegistryData.SetPathToLicense(path);
-                if (ProgramState.CheckLicense() == true)
+                if (EngineGlobals.CheckLicense() == true)
                 {
                     this.DialogResult = true;
                     this.Close();
