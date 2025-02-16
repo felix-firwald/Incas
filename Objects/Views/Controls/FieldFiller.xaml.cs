@@ -404,10 +404,10 @@ namespace Incas.Objects.Views.Controls
                 if (data.ClassField.Type == FieldType.Relation)
                 {
                     BindingData bd = data.ClassField.GetBindingData();
-                    IObject recurObj = Processor.GetObject(new Class(bd.Class), Guid.Parse(data.Value));
+                    IObject recurObj = Processor.GetObject(new Class(bd.BindingClass), Guid.Parse(data.Value));
                     foreach (FieldData recdata in recurObj.Fields)
                     {
-                        if (recdata.ClassField.Id == bd.Field)
+                        if (recdata.ClassField.Id == bd.BindingField)
                         {
                             result.Add($"{this.Field.Name}.{data.ClassField.Name}", recdata.Value);
                         }
@@ -478,7 +478,7 @@ namespace Incas.Objects.Views.Controls
         }
         private void CheckForScriptOnUpdate()
         {
-            this.PlayScript(this.Field.ChangedEvent);
+            //this.PlayScript(this.Field.ChangedEvent);
         }
         private void RunUpdateEvent()
         {

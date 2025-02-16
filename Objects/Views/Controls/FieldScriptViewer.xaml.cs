@@ -28,7 +28,7 @@ namespace Incas.Objects.Views.Controls
 
         private void InsertEventClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            this.vm.Source.ChangedEvent = $"{this.vm.Source.Name}_changed";
+            //this.vm.Source.ChangedEvent = $"{this.vm.Source.Name}_changed";
             this.OnBindingEventRequested?.Invoke(this.vm.Source);
         }
 

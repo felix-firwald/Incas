@@ -33,8 +33,24 @@ namespace Incas.Objects.Views.Pages
     /// </summary>
     public partial class ObjectCreator : System.Windows.Controls.UserControl, ICollapsible
     {
+        /// <summary>
+        /// Target object
+        /// </summary>
         public IObject Object { get; set; }
+
+        /// <summary>
+        /// Target class
+        /// </summary>
         public IClass Class { get; set; }
+
+        /// <summary>
+        /// Parents classes of target class
+        /// </summary>
+        private List<IClass> parents { get; set; }
+
+        /// <summary>
+        /// ClassData of target class
+        /// </summary>
         public IClassData ClassData { get; set; }
         public delegate bool ObjectCreatorData(ObjectCreator creator);
         public delegate void FieldCopyAction(Guid id, string text);
@@ -51,6 +67,7 @@ namespace Incas.Objects.Views.Pages
             this.InitializeComponent();
             this.Class = source;
             this.ClassData = source.GetClassData();
+            this.parents = source.GetParentClasses();
             this.Object = obj;           
             if (obj != null)
             {
@@ -215,8 +232,8 @@ namespace Incas.Objects.Views.Pages
         {
             BindingData bd = new()
             {
-                Class = this.Class.Id,
-                Field = sender.Field.Id
+                BindingClass = this.Class.Id,
+                BindingField = sender.Field.Id
             };
             DatabaseSelection ds = new(bd);
             ds.ShowDialog();

@@ -240,7 +240,7 @@ namespace Incas.Core.Views.Windows
 
         private void ShowLicenseClick(object sender, RoutedEventArgs e)
         {
-            License.License lic = License.License.ReadLicense(RegistryData.GetPathToLicense());
+            IncasEngine.License.License lic = IncasEngine.License.License.ReadLicense(RegistryData.GetPathToLicense());
             DialogsManager.ShowInfoDialog($"Поставщик:    {lic.LicenseAuthorComputer}\n" +
                 $"Дата выдачи:  {lic.LicenseDate.ToString("dd.MM.yyyy HH:mm")}\n" +
                 $"Область:      {lic.LicenseNamespace}\n" +

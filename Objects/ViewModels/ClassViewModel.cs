@@ -28,6 +28,7 @@ namespace Incas.Objects.ViewModels
             this.Source = source;
             this.SourceData = this.Source.GetClassData();
             this.Fields = new();
+            
             foreach (Field f in this.SourceData.Fields)
             {
                 this.Fields.Add(new(f));
@@ -59,10 +60,10 @@ namespace Incas.Objects.ViewModels
             FieldViewModel field = obj as FieldViewModel;
             BindingData data = new()
             {
-                Class = this.Source.Id,
-                Field = field.Source.Id
+                BindingClass = this.Source.Id,
+                BindingField = field.Source.Id
             };
-            if (data.Class == Guid.Empty || data.Field == Guid.Empty)
+            if (data.BindingClass == Guid.Empty || data.BindingField == Guid.Empty)
             {
                 this.Fields.Remove(field);
             }
@@ -123,8 +124,8 @@ namespace Incas.Objects.ViewModels
                     dialog.ShowDialog();
                     if (dialog.Result == true)
                     {
-                        db.Class = dialog.SelectedClass;
-                        db.Field = dialog.SelectedField;
+                        db.BindingClass = dialog.SelectedClass;
+                        db.BindingField = dialog.SelectedField;
                         //field.Source.Value = JsonConvert.SerializeObject(db);
                         field.Source.SetBindingData(db);
                     }
@@ -180,6 +181,28 @@ namespace Incas.Objects.ViewModels
             {
                 this.Source.Type = value;
                 this.OnPropertyChanged(nameof(this.Type));
+            }
+        }
+        public Visibility InheritanceVisibility
+        {
+            get
+            {
+                if (this.Source.Parents is null || this.Source.Parents.Count == 0)
+                {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
+        public string Inheritance
+        {
+            get
+            {
+                if (this.Source.Parents is null || this.Source.Parents.Count == 0)
+                {
+                    return "";
+                }
+                return string.Join(", ", this.Source.GetParentClassesNames());
             }
         }
         public string NameOfClass
@@ -372,7 +395,10 @@ namespace Incas.Objects.ViewModels
             this.SourceData.Fields = new();
             foreach (FieldViewModel field in this.Fields)
             {
-                this.SourceData.Fields.Add(field.Source);
+                if (field.BelongsThisClass)
+                {
+                    this.SourceData.Fields.Add(field.Source);
+                }              
             }
             this.Source.SetClassData(this.SourceData);
         }
@@ -390,11 +416,10 @@ namespace Incas.Objects.ViewModels
                     case FieldType.Variable:
                         break;
                     case FieldType.LocalEnumeration:
-                        if (f.GetLocalEnumeration() == null || f.GetLocalEnumeration().Count == 0)
+                        if (f.GetLocalEnumeration().Count == 0)
                         {
                             throw new FieldDataFailed("");
                         }
-                        JsonConvert.DeserializeObject<List<string>>(f.Value);
                         break;
                     case FieldType.GlobalEnumeration:
                         if (f.GetGlobalEnumeration().TargetId == Guid.Empty)
@@ -404,7 +429,7 @@ namespace Incas.Objects.ViewModels
                         break;
                     case FieldType.Relation:
                         BindingData bd = f.GetBindingData();
-                        if (bd.Class == Guid.Empty || bd.Field == Guid.Empty)
+                        if (bd.BindingClass == Guid.Empty || bd.BindingField == Guid.Empty)
                         {
                             throw new FieldDataFailed($"Не определена привязка у поля [{f.Name}] (\"{f.VisibleName}\"). Настройте поле, а затем попробуйте снова.");
                         }
@@ -419,7 +444,6 @@ namespace Incas.Objects.ViewModels
                         {
                             throw new FieldDataFailed("");
                         }
-                        //JsonConvert.DeserializeObject<NumberFieldData>(f.Value);
                         break;
                     case FieldType.Date:
                         f.GetDateFieldData();
@@ -462,8 +486,12 @@ namespace Incas.Objects.ViewModels
                 }
                 foreach (FieldViewModel field in this.Fields)
                 {
-                    this.CheckField(field.Source);
-                    field.Source.SetId();
+                    
+                    if (field.BelongsThisClass)
+                    {
+                        this.CheckField(field.Source);
+                        field.Source.SetId();
+                    }                  
                 }
                 this.SetData();
                 this.Source.Save();

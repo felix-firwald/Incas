@@ -119,9 +119,9 @@ namespace Incas.Objects.Views.Controls
 
         private void GenerateRelatedField(Guid id, BindingData bd)
         {
-            this.relationClass = new Class(bd.Class);
+            this.relationClass = new Class(bd.BindingClass);
             this.relationObject = id;
-            this.FieldValue.Text = Processor.GetObjectFieldValue(this.relationClass, this.relationObject, bd.Field.ToString());
+            this.FieldValue.Text = Processor.GetObjectFieldValue(this.relationClass, this.relationObject, bd.BindingField.ToString());
             this.ColorizeField(130, 113, 239);
             this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
             this.FieldValue.MouseDown += this.FieldValue_MouseDown;

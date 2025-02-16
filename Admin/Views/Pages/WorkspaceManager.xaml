@@ -62,37 +62,19 @@
                                 <Label Foreground="#FFBAFF78" Content="Добавить класс"/>
                             </StackPanel>
                         </Button>
-                        <!--<Button Style="{StaticResource ButtonMain}" Click="EditClassClick" Visibility="{Binding UpdatingClassVisibility}">
-                            <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                <Path Fill="White" Data="M8 1c-1.573 0-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4s.875 1.755 1.904 2.223C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777C13.125 5.755 14 5.007 14 4s-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1 M2 7v-.839c.457.432 1.004.751 1.49.972C4.722 7.693 6.318 8 8 8s3.278-.307 4.51-.867c.486-.22 1.033-.54 1.49-.972V7c0 .424-.155.802-.411 1.133a4.51 4.51 0 0 0-4.815 1.843A12 12 0 0 1 8 10c-1.573 0-3.022-.289-4.096-.777C2.875 8.755 2 8.007 2 7m6.257 3.998L8 11c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V10c0 1.007.875 1.755 1.904 2.223C4.978 12.711 6.427 13 8 13h.027a4.55 4.55 0 0 1 .23-2.002m-.002 3L8 14c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V13c0 1.007.875 1.755 1.904 2.223C4.978 15.711 6.427 16 8 16c.536 0 1.058-.034 1.555-.097a4.5 4.5 0 0 1-1.3-1.905m3.631-4.538c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" VerticalAlignment="Center"/>
-                                <Label Foreground="White" Content="Редактировать класс"/>
-                            </StackPanel>
-                        </Button>-->
-                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="EditClassClick" Visibility="{Binding UpdatingClassVisibility}" ToolTip="Редактировать класс">
+                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Visibility="{Binding CreatingClassVisibility}" ToolTip="Унаследовать новый класс от выбранного" Click="InheritClassClick">
+                            <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Data="M10.8057,20.0951V18.6509a.786.786,0,0,1,.0557-.2963.8211.8211,0,0,1,.1865-.269L17.79,11.3491A1.0409,1.0409,0,0,1,18.13,11.13a1.0116,1.0116,0,0,1,.3742-.0733,1.1845,1.1845,0,0,1,.3778.0635.8528.8528,0,0,1,.3355.21l1.0712,1.0385a1.0631,1.0631,0,0,1,.2328.3547,1.4746,1.4746,0,0,1,.0922.3913.8268.8268,0,0,1-.0567.3915,1.1067,1.1067,0,0,1-.2355.3547l-6.7943,6.8a.816.816,0,0,1-.269.1865.7855.7855,0,0,1-.2965.0558h-1.348a.7934.7934,0,0,1-.8077-.8078Zm8.7905-6.9307-1.077-1.1288Zm-7.79,6.7385h1.0577l4.723-4.723-.5287-.529-.5865-.5673-4.6655,4.6655Zm5.252-5.252-.5865-.5673.5865.5673.5287.529Zm-11.67,6.252a1.997,1.997,0,0,1-2.0045-2A1.9048,1.9048,0,0,1,3.81,17.6684a2.0138,2.0138,0,0,1,1.0723-.7V8.3816A2.0082,2.0082,0,0,1,3.81,7.6789a1.9167,1.9167,0,0,1-.4277-1.2375,1.9912,1.9912,0,0,1,2-2A1.9167,1.9167,0,0,1,6.62,4.8691a2.0082,2.0082,0,0,1,.7027,1.0723H12L10.01,3.97a.45.45,0,0,1-.1655-.345.5038.5038,0,0,1,.1655-.3625.4669.4669,0,0,1,.7132,0l2.6135,2.6133a.78.78,0,0,1,0,1.1307L10.7172,9.6259a.5067.5067,0,0,1-.3443.1557.47.47,0,0,1-.3632-.1557.467.467,0,0,1,0-.7133L12,6.9414H7.3229a2.0326,2.0326,0,0,1-1.44,1.44v8.581a2.0068,2.0068,0,0,1,1.072.7028,1.9967,1.9967,0,0,1-1.5675,3.2375ZM17.84,4.4414a1.9394,1.9394,0,0,1,1.418.582,1.9169,1.9169,0,0,1,.5865,1.4135,1.9394,1.9394,0,0,1-.582,1.418,1.917,1.917,0,0,1-1.4135.5865,1.9392,1.9392,0,0,1-1.418-.582,1.917,1.917,0,0,1-.5865-1.4135,1.9392,1.9392,0,0,1,.582-1.418A1.9169,1.9169,0,0,1,17.84,4.4414ZM5.3827,19.9029A1,1,0,1,0,4.67,18.19a1,1,0,0,0,.7125,1.7125Zm0-12.4615a1.0077,1.0077,0,0,0,.7125-1.7125,1.0266,1.0266,0,0,0-1.425,0,1,1,0,0,0,.7125,1.7125Zm12.4615,0a1.0077,1.0077,0,0,0,.7125-1.7125,1.0077,1.0077,0,0,0-1.425,1.425A.9676.9676,0,0,0,17.8442,7.4414Z"/>
+                        </Button>
+                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="EditClassClick" Visibility="{Binding UpdatingClassVisibility}" ToolTip="Редактировать выбранный класс">
                             <Path Fill="#FFBAFF78" Data="M8 1c-1.573 0-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4s.875 1.755 1.904 2.223C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777C13.125 5.755 14 5.007 14 4s-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1 M2 7v-.839c.457.432 1.004.751 1.49.972C4.722 7.693 6.318 8 8 8s3.278-.307 4.51-.867c.486-.22 1.033-.54 1.49-.972V7c0 .424-.155.802-.411 1.133a4.51 4.51 0 0 0-4.815 1.843A12 12 0 0 1 8 10c-1.573 0-3.022-.289-4.096-.777C2.875 8.755 2 8.007 2 7m6.257 3.998L8 11c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V10c0 1.007.875 1.755 1.904 2.223C4.978 12.711 6.427 13 8 13h.027a4.55 4.55 0 0 1 .23-2.002m-.002 3L8 14c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V13c0 1.007.875 1.755 1.904 2.223C4.978 15.711 6.427 16 8 16c.536 0 1.058-.034 1.555-.097a4.5 4.5 0 0 1-1.3-1.905m3.631-4.538c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0" VerticalAlignment="Center"/>
                         </Button>
-                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="FixClassClick" Visibility="{Binding UpdatingClassVisibility}" ToolTip="Исправить класс">
-                            <Path Fill="#FFBAFF78" VerticalAlignment="Center" Data="M16 4.5a4.5 4.5 0 0 1-1.703 3.526L13 5l2.959-1.11q.04.3.041.61 M11.5 9c.653 0 1.273-.139 1.833-.39L12 5.5 11 3l3.826-1.53A4.5 4.5 0 0 0 7.29 6.092l-6.116 5.096a2.583 2.583 0 1 0 3.638 3.638L9.908 8.71A4.5 4.5 0 0 0 11.5 9m-1.292-4.361-.596.893.809-.27a.25.25 0 0 1 .287.377l-.596.893.809-.27.158.475-1.5.5a.25.25 0 0 1-.287-.376l.596-.893-.809.27a.25.25 0 0 1-.287-.377l.596-.893-.809.27-.158-.475 1.5-.5a.25.25 0 0 1 .287.376M3 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
+                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="FixClassClick" Visibility="{Binding UpdatingClassVisibility}" ToolTip="Исправить выбранный класс">
+                            <Path Fill="{StaticResource LightPurple}" VerticalAlignment="Center" Data="M16 4.5a4.5 4.5 0 0 1-1.703 3.526L13 5l2.959-1.11q.04.3.041.61 M11.5 9c.653 0 1.273-.139 1.833-.39L12 5.5 11 3l3.826-1.53A4.5 4.5 0 0 0 7.29 6.092l-6.116 5.096a2.583 2.583 0 1 0 3.638 3.638L9.908 8.71A4.5 4.5 0 0 0 11.5 9m-1.292-4.361-.596.893.809-.27a.25.25 0 0 1 .287.377l-.596.893.809-.27.158.475-1.5.5a.25.25 0 0 1-.287-.376l.596-.893-.809.27a.25.25 0 0 1-.287-.377l.596-.893-.809.27-.158-.475 1.5-.5a.25.25 0 0 1 .287.376M3 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
                         </Button>
-                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="RemoveClassClick" Visibility="{Binding RemovingClassVisibility}" ToolTip="Удалить класс и все его объекты">
+                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Area}" Click="RemoveClassClick" Visibility="{Binding RemovingClassVisibility}" ToolTip="Удалить выбранный класс и все его объекты">
                             <Path Fill="#FFFF7878" Data="M8 1c-1.573 0-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4s.875 1.755 1.904 2.223C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777C13.125 5.755 14 5.007 14 4s-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1 M2 7v-.839c.457.432 1.004.751 1.49.972C4.722 7.693 6.318 8 8 8s3.278-.307 4.51-.867c.486-.22 1.033-.54 1.49-.972V7c0 .424-.155.802-.411 1.133a4.51 4.51 0 0 0-4.815 1.843A12 12 0 0 1 8 10c-1.573 0-3.022-.289-4.096-.777C2.875 8.755 2 8.007 2 7m6.257 3.998L8 11c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V10c0 1.007.875 1.755 1.904 2.223C4.978 12.711 6.427 13 8 13h.027a4.55 4.55 0 0 1 .23-2.002m-.002 3L8 14c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V13c0 1.007.875 1.755 1.904 2.223C4.978 15.711 6.427 16 8 16c.536 0 1.058-.034 1.555-.097a4.5 4.5 0 0 1-1.3-1.905 M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708" VerticalAlignment="Center"/>
                         </Button>
-                        <!--<Button Style="{StaticResource ButtonMain}" Click="RemoveClassClick" Visibility="{Binding RemovingClassVisibility}">
-                            <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                <Path Fill="White" Data="M8 1c-1.573 0-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4s.875 1.755 1.904 2.223C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777C13.125 5.755 14 5.007 14 4s-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1 M2 7v-.839c.457.432 1.004.751 1.49.972C4.722 7.693 6.318 8 8 8s3.278-.307 4.51-.867c.486-.22 1.033-.54 1.49-.972V7c0 .424-.155.802-.411 1.133a4.51 4.51 0 0 0-4.815 1.843A12 12 0 0 1 8 10c-1.573 0-3.022-.289-4.096-.777C2.875 8.755 2 8.007 2 7m6.257 3.998L8 11c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V10c0 1.007.875 1.755 1.904 2.223C4.978 12.711 6.427 13 8 13h.027a4.55 4.55 0 0 1 .23-2.002m-.002 3L8 14c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V13c0 1.007.875 1.755 1.904 2.223C4.978 15.711 6.427 16 8 16c.536 0 1.058-.034 1.555-.097a4.5 4.5 0 0 1-1.3-1.905 M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-.646-4.854.646.647.646-.647a.5.5 0 0 1 .708.708l-.647.646.647.646a.5.5 0 0 1-.708.708l-.646-.647-.646.647a.5.5 0 0 1-.708-.708l.647-.646-.647-.646a.5.5 0 0 1 .708-.708" VerticalAlignment="Center"/>
-                                <Label Foreground="White" Content="Удалить класс"/>
-                            </StackPanel>
-                        </Button>-->
-                        <!--<Button Style="{StaticResource ButtonMain}" Click="FixClassClick" Visibility="{Binding UpdatingClassVisibility}">
-                            <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                <Path Fill="White" VerticalAlignment="Center" Data="M16 4.5a4.5 4.5 0 0 1-1.703 3.526L13 5l2.959-1.11q.04.3.041.61 M11.5 9c.653 0 1.273-.139 1.833-.39L12 5.5 11 3l3.826-1.53A4.5 4.5 0 0 0 7.29 6.092l-6.116 5.096a2.583 2.583 0 1 0 3.638 3.638L9.908 8.71A4.5 4.5 0 0 0 11.5 9m-1.292-4.361-.596.893.809-.27a.25.25 0 0 1 .287.377l-.596.893.809-.27.158.475-1.5.5a.25.25 0 0 1-.287-.376l.596-.893-.809.27a.25.25 0 0 1-.287-.377l.596-.893-.809.27-.158-.475 1.5-.5a.25.25 0 0 1 .287.376M3 14a1 1 0 1 1 0-2 1 1 0 0 1 0 2" />
-                                <Label Foreground="White" Content="Исправить класс"/>
-                            </StackPanel>
-                        </Button>-->
                     </WrapPanel>
-                    <!--<DataGrid x:Name="ClassesTable" Style="{StaticResource DataGridMain}" ColumnWidth="*" AutoGeneratingColumn="ClassesTable_AutoGeneratingColumn" IsReadOnly="True" ItemsSource="{Binding Classes}" SelectedValue="{Binding SelectedClass}" Grid.Row="1">
-                        
-                    </DataGrid>-->
                     <ListBox Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemGray}" ItemsSource="{Binding ClassesCategories}" SelectedItem="{Binding SelectedCategory}" Grid.Row="1">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -281,7 +263,48 @@
             </TabItem>
             <TabItem Header="Обобщения" BorderBrush="{DynamicResource LightPurple}">
                 <GroupBox Header="Обобщения">
-
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+                            <Button Style="{StaticResource ButtonRectangle}" Padding="0" Width="180" HorizontalAlignment="Left" Click="AddGeneralizator">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Fill="#FFBAFF78" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
+                                    <Label Foreground="#FFBAFF78" Content="Добавить обобщение"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ButtonRectangle}" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                                    <Path Fill="#FFBAFF78" VerticalAlignment="Center" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <Label Foreground="#FFBAFF78" Content="Редактировать"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ButtonRectangle}" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                                    <Path Fill="#FFFF7878" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
+                                    <Label Foreground="#FFFF7878" Content="Удалить"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ButtonRectangle}" Padding="0">
+                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                                    <Path Fill="DodgerBlue" Data="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9 M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" VerticalAlignment="Center"/>
+                                    <Label Foreground="DodgerBlue" Content="Обновить"/>
+                                </StackPanel>
+                            </Button>
+                        </WrapPanel>
+                        <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding Constants}" SelectedItem="{Binding SelectedConstant}" ItemContainerStyle="{StaticResource ListBoxItemGray}" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Fill="{StaticResource DarkYellow}" Margin="0,0,5,0" Data="M2.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C3.25 2 2.49 2.759 2.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6M13.886 7.9v.163c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456V7.332c-1.114 0-1.49-.362-1.49-1.456V4.352C13.51 2.759 12.75 2 11.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6"/>
+                                        <TextBlock Text="{Binding Name}" TextElement.FontWeight="Bold"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
                 </GroupBox>
             </TabItem>
             <TabItem Header="Служебные классы" BorderBrush="{DynamicResource LightPurple}">

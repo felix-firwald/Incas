@@ -1,6 +1,7 @@
 ﻿using Incas.Core.ViewModels;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
+using System.Windows;
 
 namespace Incas.Objects.ViewModels
 {
@@ -24,6 +25,21 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.VisibleName));
             }
         }
+        public bool BelongsThisClass
+        {
+            get
+            {
+                return this.Source.Owner is null;
+            }
+        }
+        public Visibility BelongsVisibility
+        {
+            get
+            {
+                return this.FromBool(this.BelongsThisClass);
+            }
+        }
+
         public string SelectedValue
         {
             get => this.Source.Value;

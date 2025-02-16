@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Objects.ViewModels;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Interfaces;
@@ -38,18 +39,31 @@ namespace Incas.Objects.Views.Pages
             this.vm.OnClassSelected += this.OnClassSelected;
             this.vm.OnPresetSelected += this.OnPresetSelected;
             this.DataContext = this.vm;
+            EngineEvents.OnUpdateClassRequested += this.EngineEvents_OnUpdateClassRequested;
+        }
+
+        private void EngineEvents_OnUpdateClassRequested(IClass @class, bool requiredLock)
+        {
+            for (int i = 0; i < this.vm.Classes.Count; i++)
+            {
+                if (this.vm.Classes[i].Id == @class.Id)
+                {
+                    this.vm.Classes[i] = @class as Class;
+                    break;
+                }
+            }
         }
 
         private void OnPresetSelected(Class selectedClass, PresetReference preset)
         {
-            if (selectedClass == null)
-            {
-                this.ContentPanel.Content = new Core.Views.Controls.NoContent();
-                return;
-            }
-            ObjectsList ol = new(selectedClass, Processor.GetPreset(selectedClass, preset));
-            ol.OnPresetsViewRequested += this.OnPresetsViewRequested;
-            this.ContentPanel.Content = ol;
+            //if (selectedClass == null)
+            //{
+            //    this.ContentPanel.Content = new Core.Views.Controls.NoContent();
+            //    return;
+            //}
+            //ObjectsList ol = new(selectedClass, Processor.GetPreset(selectedClass, preset));
+            //ol.OnPresetsViewRequested += this.OnPresetsViewRequested;
+            //this.ContentPanel.Content = ol;
         }
         private void PlacePresetsListPage(IClass selectedClass)
         {

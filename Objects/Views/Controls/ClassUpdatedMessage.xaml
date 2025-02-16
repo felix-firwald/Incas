@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="Incas.Objects.Views.Controls.ClassUpdatedMessage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Incas.Objects.Views.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="80"/>
+            <RowDefinition MinHeight="80"/>
+        </Grid.RowDefinitions>
+        <Path VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15" MinWidth="40" MinHeight="40" Stretch="Uniform" MaxWidth="40" MaxHeight="40" Fill="{DynamicResource Icon}" Data="M5.713,11.6924a6.2965,6.2965,0,0,0,.675,2.8992,10.7146,10.7146,0,0,0,2.525,2.9508v-2.85a.35.35,0,1,1,.7,0v3.3a.7367.7367,0,0,1-.75.75h-3.3a.35.35,0,1,1,0-.7h2.85a10.6858,10.6858,0,0,1-2.675-3.2,7.17,7.17,0,0,1-.725-3.159A7.2732,7.2732,0,0,1,6.138,7.73a7.3813,7.3813,0,0,1,2.95-2.7125.4232.4232,0,0,1,.3-.0375.2685.2685,0,0,1,.2.1875.371.371,0,0,1-.0162.2882.4576.4576,0,0,1-.2088.2118,6.46,6.46,0,0,0-2.65,2.45A6.69,6.69,0,0,0,5.713,11.6924Zm13.6518-.05a.3418.3418,0,0,1-.3518-.35A6.1384,6.1384,0,0,0,18.2505,8.48,11.2951,11.2951,0,0,0,15.813,5.6674v2.825a.35.35,0,1,1-.7,0v-3.3a.7367.7367,0,0,1,.75-.75h3.3a.35.35,0,1,1,0,.7h-2.85a9.6208,9.6208,0,0,1,2.625,3.1625,7.754,7.754,0,0,1,.775,2.9875.3424.3424,0,0,1-.0982.25A.3354.3354,0,0,1,19.3648,11.6424Zm-2.8018,9.6a.942.942,0,0,1-.9-.9v-2.6a.942.942,0,0,1,.9-.9h.125v-1a1.7,1.7,0,1,1,3.4,0v1h.125a.7774.7774,0,0,1,.6055.275.9148.9148,0,0,1,.2445.625v2.6a.942.942,0,0,1-.9.9Zm.825-4.4h2v-1a1,1,0,1,0-2,0Z"/>
+        <StackPanel Grid.Row="1">
+            <Label Style="{DynamicResource LabelPrimary}" Content="Этот класс обновился" Foreground="{DynamicResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <TextBlock Style="{DynamicResource TextBlockMain}" Text="Администратор рабочего пространства внес изменения" Foreground="{DynamicResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <TextBlock Style="{DynamicResource TextBlockMain}" Text="в этот класс, в связи с чем дальнейшее использование" Foreground="{DynamicResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <TextBlock Style="{DynamicResource TextBlockMain}" Text="этого окна невозможно (окно необходимо перезапустить)" Foreground="{DynamicResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            
+        </StackPanel>
+    </Grid>
+</UserControl>

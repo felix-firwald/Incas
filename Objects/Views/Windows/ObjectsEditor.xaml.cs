@@ -1,13 +1,13 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Pages;
 using Incas.Rendering.AutoUI;
 using Incas.Rendering.Components;
 using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
-using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
@@ -18,8 +18,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -55,7 +55,23 @@ namespace Incas.Objects.Views.Windows
                 this.AddObjectCreator();
             }
             DialogsManager.ShowWaitCursor(false);
+            EngineEvents.OnUpdateClassRequested += this.EngineEvents_OnUpdateClassRequested;
         }
+
+        private void EngineEvents_OnUpdateClassRequested(IClass @class, bool requiredLock)
+        {
+            if (this.Class.Id == @class.Id)
+            {              
+                ClassUpdatedMessage message = new();
+                this.MainGrid.Children.Clear();
+                this.MainGrid.Children.Add(message);
+                Grid.SetRow(message, 0);
+                Grid.SetRowSpan(message, 2);
+                Grid.SetColumnSpan(message, 2);
+                Grid.SetColumn(message, 0);
+            }
+        }
+
         public ObjectsEditor(IClass source, ClassData data) // dev
         {
             this.InitializeComponent();
@@ -283,12 +299,12 @@ namespace Incas.Objects.Views.Windows
                 DialogsManager.ShowExclamationDialog("Не найдены привязанные шаблоны к этому классу.", "Рендеринг невозможен");
                 return;
             }
-            string path = RegistryData.GetClassTemplatePrefferedPath(this.Class.Id, templateFile.Name);
+            string path = RegistryData.GetClassTemplatePrefferedPath(this.Class.Id, templateFile);
             if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
             {
                 try
                 {
-                    RegistryData.SetClassTemplatePrefferedPath(this.Class.Id, templateFile.Name, path);
+                    RegistryData.SetClassTemplatePrefferedPath(this.Class.Id, templateFile, path);
                     ProgramStatusBar.SetText("Выполняется рендеринг объектов...");
                     foreach (ObjectCreator c in this.ContentPanel.Children)
                     {                      

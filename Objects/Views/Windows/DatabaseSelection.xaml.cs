@@ -1,5 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using Incas.Objects.Views.Controls;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -45,7 +47,7 @@ namespace Incas.Objects.Views.Windows
         {
             this.InitializeComponent();
             this.Binding = data;
-            this.Class = new(this.Binding.Class);
+            this.Class = new(this.Binding.BindingClass);
             this.ClassData = this.Class.GetClassData();
             if (this.ClassData is null || this.ClassData.Fields is null)
             {
@@ -56,7 +58,22 @@ namespace Incas.Objects.Views.Windows
             this.Title = this.ClassData.ListName;
             this.SetFields();
             this.FillList();
+            EngineEvents.OnUpdateClassRequested += this.EngineEvents_OnUpdateClassRequested;
         }
+
+        private void EngineEvents_OnUpdateClassRequested(IClass @class, bool requiredLock)
+        {
+            if (@class.Id == this.Class.Id)
+            {
+                ClassUpdatedMessage message = new();
+                this.MainGrid.Children.Clear();
+                this.MainGrid.Children.Add(message);
+                System.Windows.Controls.Grid.SetRow(message, 0);
+                System.Windows.Controls.Grid.SetRowSpan(message, 3);
+                System.Windows.Controls.Grid.SetColumn(message, 0);
+            }
+        }
+
         private void FillList()
         {
             DataTable dt = Processor.GetObjectsList(this.Class, null);

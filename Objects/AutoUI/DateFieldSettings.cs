@@ -37,7 +37,7 @@ namespace Incas.Objects.AutoUI
             this.Format.Pairs.Add(DateFormats.FullWithQuotes, "«01» января 2001");
             try
             {
-                DateFieldData df = JsonConvert.DeserializeObject<DateFieldData>(field.Value);
+                DateFieldData df = field.GetDateFieldData();
                 this.StartDate = df.StartDate;
                 this.EndDate = df.EndDate;
                 this.Format.SetSelection(df.Format);
@@ -60,7 +60,6 @@ namespace Incas.Objects.AutoUI
                 Format = (DateFormats)this.Format.SelectedObject
             };
             this.Source.SetDateFieldData(df);
-            //this.Source.Value = JsonConvert.SerializeObject(df);
         }
         #endregion
     }

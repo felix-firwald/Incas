@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Incas.Objects.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="Выбор записи" Height="650" Width="800" MinHeight="450" MinWidth="650" Style="{DynamicResource WindowBase}" SnapsToDevicePixels="True" UseLayoutRounding="True" Topmost="True" WindowStartupLocation="CenterScreen">
-    <Grid>
+    <Grid x:Name="MainGrid">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>

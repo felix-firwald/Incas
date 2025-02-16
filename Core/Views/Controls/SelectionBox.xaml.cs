@@ -37,9 +37,9 @@ namespace Incas.Core.Views.Controls
                 {
                     await Task.Run(() =>
                     {
-                        this.SelectedObject = Processor.GetObject(new Class(this.Binding.Class), id);                       
+                        this.SelectedObject = Processor.GetObject(new Class(this.Binding.BindingClass), id);                       
                     });
-                    this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
+                    this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.BindingField);
                     this.SetAsEditingEnabled();
                 }
             }
@@ -53,9 +53,9 @@ namespace Incas.Core.Views.Controls
                 {
                     await Task.Run(() =>
                     {
-                        this.SelectedObject = Processor.GetObject(new Class(this.Binding.Class), id);
+                        this.SelectedObject = Processor.GetObject(new Class(this.Binding.BindingClass), id);
                     });
-                    this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
+                    this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.BindingField);
                     this.SetAsEditingEnabled();
                 }
             }
@@ -64,7 +64,7 @@ namespace Incas.Core.Views.Controls
 
         private async void ButtonClick(object sender, RoutedEventArgs e)
         {
-            if (this.Binding.Class == Guid.Empty || this.Binding.Field == Guid.Empty)
+            if (this.Binding.BindingClass == Guid.Empty || this.Binding.BindingField == Guid.Empty)
             {
                 DialogsManager.ShowExclamationDialog("Не определена привязка к классу объектов!", "Действие прервано");
                 return;
@@ -76,7 +76,7 @@ namespace Incas.Core.Views.Controls
                 try
                 {
                     this.SelectedObject = s.GetSelectedObject();
-                    this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.Field);
+                    this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.BindingField);
                     this.SetAsEditingEnabled();
                 }
                 catch (Exception ex)
@@ -127,7 +127,7 @@ namespace Incas.Core.Views.Controls
         {
             try
             {
-                Class cl = new(this.Binding.Class);
+                Class cl = new(this.Binding.BindingClass);
                 cl.GetClassData();
                 ObjectsEditor oe = new(cl, [this.SelectedObject]);
                 oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
@@ -143,7 +143,7 @@ namespace Incas.Core.Views.Controls
 
         private void AddClick(object sender, MouseButtonEventArgs e)
         {
-            ObjectsEditor oe = new(new Class(this.Binding.Class), []);
+            ObjectsEditor oe = new(new Class(this.Binding.BindingClass), []);
             oe.SetSingleObjectMode();
             oe.OnSetNewObjectRequested += this.Oe_OnSetNewObjectRequested;
             oe.ShowDialog();

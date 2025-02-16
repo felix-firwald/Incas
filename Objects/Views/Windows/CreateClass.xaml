@@ -84,6 +84,21 @@
                     <Border CornerRadius="8" Margin="5,5,0,5" Background="{DynamicResource Black}" Grid.Row="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                             <StackPanel >
+                                <!--Inheritance-->
+                                <Border Background="{StaticResource Dark}" Visibility="{Binding InheritanceVisibility}" CornerRadius="8" Margin="5">
+
+                                    <Grid Margin="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Stretch="Uniform" Data="M4.02,19.0346V14.85a.79.79,0,0,1,.8077-.8153h6.2308a.7934.7934,0,0,1,.8077.8078v4.1847a.79.79,0,0,1-.8077.8153H4.8275a.7934.7934,0,0,1-.8077-.8078Zm0-8.1922V6.6576a.79.79,0,0,1,.8077-.8152h6.2308a.7932.7932,0,0,1,.8077.8077v4.1848a.79.79,0,0,1-.8077.8152H4.8275a.7932.7932,0,0,1-.8077-.8077Zm1-.1923H10.866V6.8424H5.02Zm12.94,8.8635a.808.808,0,0,1-.2955-.053.7816.7816,0,0,1-.2672-.1837l-3.3885-3.3883a.4423.4423,0,0,1-.1338-.3415.5053.5053,0,0,1,.1563-.3505.4512.4512,0,0,1,.3312-.137.4575.4575,0,0,1,.3348.1405l2.7652,2.721V6.3424a.5.5,0,1,1,1,0V17.9211L21.2275,15.2a.4845.4845,0,0,1,.339-.14.4663.4663,0,0,1,.3528.14.4568.4568,0,0,1,.137.341.4724.4724,0,0,1-.14.3475l-3.3885,3.3883a.7721.7721,0,0,1-.27.1837A.8276.8276,0,0,1,17.96,19.5136Z"/>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <Label Content="Наследуется от:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" />
+                                            <TextBlock Margin="12,5,5,5" Style="{StaticResource TextBlockMain}" TextTrimming="WordEllipsis" Foreground="{DynamicResource GrayLight}" Text="{Binding Inheritance}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
                                 <!--Basic Options-->
                                 <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
                                     <StackPanel>
@@ -180,7 +195,7 @@
                                         <ListBox Style="{StaticResource ListBoxMain}" MinHeight="40" ItemContainerStyle="{StaticResource ListBoxItemUnselectable}" ItemsSource="{Binding MapFieldsList}" MaxHeight="200">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox Style="{StaticResource CheckBoxMain}" MinHeight="15" Margin="2" Content="{Binding Name}" IsChecked="{Binding ListVisibility}"/>
+                                                    <CheckBox Style="{StaticResource CheckBoxMain}" MinHeight="15" Margin="2" Content="{Binding Name}" IsEnabled="{Binding BelongsThisClass}" IsChecked="{Binding ListVisibility}"/>
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
@@ -201,7 +216,7 @@
                                         <ListBox Style="{StaticResource ListBoxMain}" MinHeight="40" ItemContainerStyle="{StaticResource ListBoxItemUnselectable}" ItemsSource="{Binding MapFieldsList}" MaxHeight="200">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox Style="{StaticResource CheckBoxMain}" MinHeight="15" Margin="2" Content="{Binding Name}" IsChecked="{Binding IsUnique}"/>
+                                                    <CheckBox Style="{StaticResource CheckBoxMain}" MinHeight="15" Margin="2" Content="{Binding Name}" IsEnabled="{Binding BelongsThisClass}" IsChecked="{Binding IsUnique}"/>
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
@@ -238,7 +253,7 @@
                                             <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" IsChecked="{Binding IsExpanded}" ToolTip="Свернуть / развернуть поле"/>
                                             <Rectangle Width="1" Fill="{DynamicResource Area}" Margin="0,5,0,5" Opacity="0.5" />
                                             <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
-                                            <TextBox Style="{DynamicResource TextBoxTransparent}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
+                                            <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding BelongsThisClass}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
                                                 <TextBox.ContextMenu>
                                                     <ContextMenu>
                                                         <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -251,7 +266,7 @@
 
                                         <Rectangle Grid.Row="1" Fill="{DynamicResource Area}" Grid.ColumnSpan="2" />
 
-                                        <StackPanel Grid.Row="2" x:Name="ContentPanel">
+                                        <StackPanel Grid.Row="2" x:Name="ContentPanel" IsEnabled="{Binding BelongsThisClass}">
 
                                             <TextBox Style="{DynamicResource TextBoxMain}" IsReadOnly="False" Tag="Отображаемое название" Text="{Binding VisibleName, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" TextWrapping="Wrap">
                                                 <TextBox.ContextMenu>
@@ -282,11 +297,11 @@
                                                 </Button>
                                             </Grid>
                                         </StackPanel>
-                                        <Rectangle Width="1" Fill="{DynamicResource Area}" Grid.Column="1" HorizontalAlignment="Left"  Margin="-2,5,0,5" Opacity="0.5" />
-                                        <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" ToolTip="Удалить поле" Grid.Column="1" Command="{Binding DataContext.RemoveField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
+                                        <Rectangle Width="1" Fill="{DynamicResource Area}" Grid.Column="1" Visibility="{Binding BelongsVisibility}" HorizontalAlignment="Left"  Margin="-2,5,0,5" Opacity="0.5" />
+                                        <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" Background="{StaticResource Dark}" ToolTip="Удалить поле" Grid.Column="1" Command="{Binding DataContext.RemoveField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
                                             <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
                                         </Button>
-                                        <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
+                                        <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding BelongsVisibility}">
                                             <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}"  ToolTip="Поднять выше" Grid.Column="1" Command="{Binding DataContext.MoveUpField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
                                                 <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Margin="4" Data="M13.04,11.1856l-4.2463,4.246a.5021.5021,0,0,1-.3442.15.4664.4664,0,0,1-.3633-.15.4716.4716,0,0,1,0-.7075l4.3883-4.3885a.7813.7813,0,0,1,1.131,0l4.3882,4.3885a.5024.5024,0,0,1,.15.3443.4662.4662,0,0,1-.15.3632.4714.4714,0,0,1-.7075,0Z"/>
                                             </Button>

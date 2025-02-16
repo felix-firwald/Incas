@@ -1,8 +1,7 @@
 ﻿using Incas.Core.Classes;
-using Incas.License.Components;
 using IncasEngine.Core;
+using IncasEngine.License;
 using Newtonsoft.Json;
-using PdfSharp.Snippets.Pdf;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -36,7 +35,7 @@ namespace Incas.License.Views.Windows
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string path = RegistryData.GetPathToLicense();
-            if (DialogsManager.ShowOpenFileDialog(ref path, "Файл лицензии|*" + License.Extension))
+            if (DialogsManager.ShowOpenFileDialog(ref path, "Файл лицензии|*" + IncasEngine.License.License.Extension))
             {
                 this.HandleFile(path);
             }
@@ -44,7 +43,7 @@ namespace Incas.License.Views.Windows
 
         private void HandleFile(string path)
         {
-            if (path.EndsWith(License.Extension))
+            if (path.EndsWith(IncasEngine.License.License.Extension))
             {
                 RegistryData.SetPathToLicense(path);
                 if (EngineGlobals.CheckLicense() == true)

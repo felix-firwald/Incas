@@ -1,10 +1,13 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.Views.Controls;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.AutoUI;
 using Incas.Rendering.Components;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -42,44 +45,50 @@ namespace Incas.Objects.Views.Pages
         {
             this.InitializeComponent();
             this.ColumnHeaderSpecialStyle = this.FindResource("ColumnHeaderSpecial") as Style;
+                      
             DialogsManager.ShowWaitCursor();
-            this.sourceClass = source;
-            this.ClassData = source.GetClassData();          
-            this.permissionSettings = this.GetPermissionSettings();
-            if (this.ClassData.ShowCard)
-            {
-                this.PlaceCard();
-            }
-            if (this.ClassData.PresetsEnabled)
-            {
-                this.PresetsButton.Visibility = Visibility.Visible;
-            }
-            this.UpdateView();
-            DialogsManager.ShowWaitCursor(false);
+            this.ApplyClass(source);
             this.ApplyGroupConstraints();
+            DialogsManager.ShowWaitCursor(false);          
+            EngineEvents.OnUpdateClassRequested += this.EngineEvents_OnUpdateClassRequested;
         }
-        public ObjectsList(IClass source, Preset preset)
+
+        private void ApplyClass(IClass source)
         {
-            this.InitializeComponent();
-            this.ColumnHeaderSpecialStyle = this.FindResource("ColumnHeaderSpecial") as Style;
-            DialogsManager.ShowWaitCursor();
             this.sourceClass = source;
-            this.ClassData = source.GetClassData();
             this.permissionSettings = this.GetPermissionSettings();
-            this.SourcePreset = preset;
-            this.UpdateView();
+            this.ClassData = source.GetClassData();           
+            if (this.ClassData.ShowCard)
+            {
+                this.PlaceCard();
+            }
             if (this.ClassData.PresetsEnabled)
             {
                 this.PresetsButton.Visibility = Visibility.Visible;
             }
-            if (this.ClassData.ShowCard)
-            {
-                this.PlaceCard();
-            }          
-            DialogsManager.ShowWaitCursor(false);
-            this.ApplyGroupConstraints();
-            
+            this.UpdateView();
         }
+
+        private void EngineEvents_OnUpdateClassRequested(IClass @class, bool doNotUpdate)
+        {
+            if (this.sourceClass.Id == @class.Id)
+            {
+                if (doNotUpdate)
+                {
+                    ClassUpdatedMessage message = new();
+                    this.MainGrid.Children.Clear();
+                    this.MainGrid.Children.Add(message);
+                    Grid.SetRow(message, 1);
+                    Grid.SetRowSpan(message, 2);
+                    Grid.SetColumn(message, 0);
+                }
+                else
+                {
+                    this.ApplyClass(@class);
+                }             
+            }
+        }
+        
         private GroupClassPermissionSettings GetPermissionSettings()
         {
             return ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(this.sourceClass.Id);

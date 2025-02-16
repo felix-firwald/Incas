@@ -32,24 +32,28 @@ namespace Incas.Objects.Views.Windows
         private IClassPartSettings partSettings;
         public CreateClass(ClassTypeSettings primary)
         {
+            DialogsManager.ShowWaitCursor();
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
             this.InitializeComponent();
             this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-            this.vm = new(new())
-            {
-                CategoryOfClass = primary.Category,
-                NameOfClass = primary.Name,
-                Type = (ClassType)primary.Selector.SelectedObject
-            };
+            Class @class = new();
+            @class.Name = primary.Name;
+            @class.Category = primary.Category;
+            @class.Type = (ClassType)primary.Selector.SelectedObject;
+            @class.Parents = primary.GetParents();
+
+            this.vm = new(@class);
             if (this.vm.Type == ClassType.Document)
             {
                 this.vm.ShowCard = true;
             }
             this.DataContext = this.vm;
             this.ApplyPartSettings();
+            DialogsManager.ShowWaitCursor(false);
         }
         public CreateClass(Guid id)
         {
+            DialogsManager.ShowWaitCursor();
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");        
             this.InitializeComponent();
             this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
@@ -68,6 +72,7 @@ namespace Incas.Objects.Views.Windows
                 this.AddField(f);
             }
             this.ApplyPartSettings();
+            DialogsManager.ShowWaitCursor(false);
         }
         private void ApplyPartSettings()
         {

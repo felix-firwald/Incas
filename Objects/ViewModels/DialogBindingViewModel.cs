@@ -18,7 +18,7 @@ namespace Incas.Objects.ViewModels
             }
             foreach (ClassItem cl in this.Classes)
             {
-                if (cl.Id == data.Class)
+                if (cl.Id == data.BindingClass)
                 {
                     this.SelectedClass = cl;
                     break;
@@ -29,7 +29,7 @@ namespace Incas.Objects.ViewModels
             {
                 foreach (Field f in this.Fields)
                 {
-                    if (f.Id == data.Field)
+                    if (f.Id == data.BindingField)
                     {
                         this.BindingField = f;
                         break;

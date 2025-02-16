@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Редактор объектов" Height="700" MinHeight="600" Width="850" MinWidth="850" Style="{StaticResource WindowBase}" Topmost="True" Uid="8" Cursor="" SnapsToDevicePixels="True" WindowStartupLocation="CenterScreen">
     <Border>
-        <Grid Background="{StaticResource Black}">
+        <Grid x:Name="MainGrid" Background="{StaticResource Black}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="50"/>

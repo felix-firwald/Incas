@@ -36,12 +36,5 @@ namespace Incas.Objects.AutoUI
 
             }
         }
-        #region Functionality
-        public override void Save()
-        {
-            this.SaveBaseData();
-            this.Source.Value = this.Selector.SelectedObject.ToString();
-        }
-        #endregion
     }
 }

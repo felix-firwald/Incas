@@ -206,7 +206,6 @@ namespace Incas.Admin.Views.Pages
             {
                 CreateClass cc = new(ct);
                 cc.ShowDialog();
-                //DialogsManager.ShowPageWithGroupBox(cc, "CLASS_EDITOR", "Создание класса", TabType.Usual);
                 this.vm.UpdateClasses();
             }
         }
@@ -224,22 +223,28 @@ namespace Incas.Admin.Views.Pages
 
         private void RemoveClassClick(object sender, RoutedEventArgs e)
         {
+            Guid id = this.GetSelectedClass();
+            if (id == Guid.Empty)
+            {
+                return;
+            }
             if (DialogsManager.ShowQuestionDialog(
                 "Класс будет безвозвратно удален, вместе с объектами, которые к нему относятся. Вы уверены?",
                 "Удалить класс?",
                 "Удалить",
                 "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
-            {
+            {              
                 using (Class cl = new())
                 {
-                    List<string> list = cl.FindBackReferencesNames(this.GetSelectedClass());
+                    List<string> list = cl.FindBackReferencesNames(id);
                     if (list.Count > 0)
                     {
                         DialogsManager.ShowExclamationDialog("Класс невозможно удалить, поскольку на него ссылаются следующие классы:\n" + string.Join(",\n", list), "Удаление невозможно");
                     }
                     else
                     {
-                        cl.Remove(this.GetSelectedClass());
+                        Class targetClass = new(id);
+                        targetClass.Remove();
                     }
                 }
                 this.vm.UpdateClasses();
@@ -280,6 +285,29 @@ namespace Incas.Admin.Views.Pages
             {
                 Processor.UpdateObjectMap(ProgramState.CurrentWorkspace.CurrentGroup.Class);
             });           
+        }
+
+        private void AddGeneralizator(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void InheritClassClick(object sender, RoutedEventArgs e)
+        {
+            Guid id = this.GetSelectedClass();
+            if (id == Guid.Empty)
+            {
+                return;
+            }
+            Class parent = new(id);
+            ClassTypeSettings ct = new(parent);
+            if (ct.ShowDialog("Первичная настройка наследника", Icon.Lightning))
+            {
+                CreateClass cc = new(ct);
+                
+                cc.ShowDialog();
+                this.vm.UpdateClasses();
+            }
         }
     }
 }
