@@ -268,7 +268,7 @@ namespace Incas.Objects.Views.Controls
                 }
                 return "";
             }
-            DateFieldData df = JsonConvert.DeserializeObject<DateFieldData>(this.Field.Value);
+            DateFieldData df = this.Field.GetDateFieldData();
             string format = "dd.MM.yyyy";
             switch (df.Format)
             {

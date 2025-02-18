@@ -28,37 +28,15 @@
                 <TextBlock Grid.Row="1" FontSize="15" Foreground="{DynamicResource GrayLight}" FontFamily="{StaticResource Rubik}" HorizontalAlignment="Center">
                     <Run>Добро пожаловать в</Run>
                     <Run FontFamily="{StaticResource JetBrains}" Foreground="DodgerBlue">INCAS</Run>
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Opacity" Value="1.0"/>
-                            <Style.Triggers>
-                                <EventTrigger RoutedEvent="Loaded">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:2" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
                 </TextBlock>
                 <TextBlock Grid.Row="1" FontSize="14" Foreground="{DynamicResource GrayLight}" FontFamily="{StaticResource Rubik}" HorizontalAlignment="Center">
                     <Run BaselineAlignment="Top">Давайте начнем</Run>
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Opacity" Value="1.0"/>
-                            <Style.Triggers>
-                                <EventTrigger RoutedEvent="Loaded">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:3" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Grid.Row="1" FontSize="14" Foreground="{DynamicResource GrayLight}" FontFamily="{StaticResource Rubik}" HorizontalAlignment="Center">
+                    <LineBreak/>
+                    <Run BaselineAlignment="Top">Есть вопросы?</Run>
+                    <Run BaselineAlignment="Top">Загляните в </Run>
+                    <Hyperlink Click="Hyperlink_Click">интерактивную документацию</Hyperlink>
                 </TextBlock>
             </StackPanel>
             

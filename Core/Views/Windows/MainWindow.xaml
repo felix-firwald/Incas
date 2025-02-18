@@ -9,8 +9,8 @@
         Width="1300"
         Style="{DynamicResource WindowBase}"
         WindowState="Maximized"
-        Title="{Binding Title}"
-        Closed="OnClosed"     
+        Title="{Binding Title}" AllowDrop="True"
+        Closed="OnClosed" DragDrop.Drop="window_Drop"
         MinHeight="700" MinWidth="900" PreviewKeyDown="window_PreviewKeyDown" Background="#FF2F323C">
     <Window.Resources>
         <Style x:Key="FocusVisual">

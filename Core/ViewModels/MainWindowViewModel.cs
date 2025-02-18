@@ -69,7 +69,7 @@ namespace Incas.Core.ViewModels
         }
         public void DoOpenWeb(object parameter)
         {
-            ProgramState.OpenWebPage("https://teletype.in/@incas/main");
+            DialogsManager.ShowHelp(Help.Components.HelpType.Core);
         }
 
         #endregion

@@ -15,6 +15,7 @@ using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
@@ -37,6 +38,8 @@ namespace Incas.Objects.Views.Pages
         private GroupClassPermissionSettings permissionSettings;
         public event TabAction OnClose;
         public string Id { get; set; }
+        private DataView View { get; set; }
+
         private ObjectsListLoading loading;
         public delegate void ObjectsListAction(IClass source);
         public event ObjectsListAction OnPresetsViewRequested;
@@ -130,22 +133,20 @@ namespace Incas.Objects.Views.Pages
                 this.RemoveButton.Visibility = Visibility.Collapsed;
             }            
         }
-        public void TryFindObject(Guid objectId)
+        public void TrySelectObject(Guid objectId)
         {
-            DataTable dt = Processor.GetObjectsListWhereEqual(this.sourceClass, this.SourcePreset, $"{Helpers.MainTable}].[{Helpers.IdField}", objectId.ToString());
-            this.Data.Columns.Clear();
-            if (this.sourceClass.Type == ClassType.Model)
+            string objectIdString = objectId.ToString();
+            for (int i = 0; i < this.View.Count; i++)
             {
-                DataView dv = dt.AsDataView();
-                dv.Sort = $"[{Helpers.NameField}] ASC";
-                this.Data.ItemsSource = dv;
-            }
-            else
-            {
-                this.Data.ItemsSource = dt.AsDataView();
+                DataRowView row = this.View[i];
+                if (row[0].ToString() == objectIdString)
+                {
+                    this.Data.SelectedIndex = i;
+                    this.Data.ScrollIntoView(row);
+                    break;
+                }
             }
         }
-
         private void PlaceCard()
         {
             if (this.permissionSettings.ViewOperations)
@@ -174,12 +175,12 @@ namespace Incas.Objects.Views.Pages
                 
                 if (this.sourceClass.Type == ClassType.Model)
                 {
-                    DataView dv = dt.AsDataView();
-                    dv.Sort = $"[{Helpers.NameField}] ASC";
+                    this.View = dt.AsDataView();
+                    this.View.Sort = $"[{Helpers.NameField}] ASC";
                     this.Dispatcher.Invoke(() =>
                     {
                         this.Data.Columns.Clear();
-                        this.Data.ItemsSource = dv;
+                        this.Data.ItemsSource = this.View;
                     });                   
                 }
                 else
@@ -355,14 +356,19 @@ namespace Incas.Objects.Views.Pages
                     return;
                 }
                 IObject obj = Processor.GetObject(this.sourceClass, id);
-                Preset preset = null;
-                if (obj is IHasPreset objWithPreset)
+                if (obj is IHierarchical objHierarchical && objHierarchical.Child != Guid.Empty)
                 {
-                    preset = Processor.GetPreset(this.sourceClass, objWithPreset.Preset);
+                    ObjectsEditor oc = new(new Class(objHierarchical.Child), [obj]);
+                    oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+                    oc.Show();
                 }
-                ObjectsEditor oc = new(this.sourceClass, [obj]);
-                oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-                oc.Show();
+                else
+                {
+                    ObjectsEditor oc = new(this.sourceClass, [obj]);
+                    oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+                    oc.Show();
+                }
+                
             }
             catch (Exception ex)
             {
@@ -589,6 +595,57 @@ namespace Incas.Objects.Views.Pages
             }
             ObjectBackReferences backReferenceViewer = new(this.sourceClass, Processor.GetObject(this.sourceClass, id));
             DialogsManager.ShowPageWithGroupBox(backReferenceViewer, "Список обратных ссылок", id.ToString());
+        }
+
+        private async void ExportXMLClick(object sender, RoutedEventArgs e)
+        {
+            string path = "";
+            List<Guid> ids = this.GetSelectedObjectsGuids();
+            if (ids.Count == 0)
+            {
+                DialogsManager.ShowExclamationDialog("Не выбраны объекты для экспорта", "Действие невозможно");
+                return;
+            }            
+            if (DialogsManager.ShowSaveFileDialog(ref path, ".xml|XML"))
+            {
+                List<IObject> objects = await Processor.GetObjects(this.sourceClass, ids);
+                Processor.ConvertObjectsToXml(objects, path);
+            }
+        }
+
+        private async void ExportJSONClick(object sender, RoutedEventArgs e)
+        {
+            string path = "";
+            List<Guid> ids = this.GetSelectedObjectsGuids();
+            if (ids.Count == 0)
+            {
+                DialogsManager.ShowExclamationDialog("Не выбраны объекты для экспорта", "Действие невозможно");
+                return;
+            }
+            if (DialogsManager.ShowSaveFileDialog(ref path, ".json|JSON"))
+            {
+                List<IObject> objects = await Processor.GetObjects(this.sourceClass, ids);
+                Processor.ConvertObjectsToJson(objects, path);
+            }
+        }
+
+        private void JumpToChildClick(object sender, RoutedEventArgs e)
+        {
+            Guid id = this.GetSelectedObjectGuid();
+            if (id == Guid.Empty)
+            {
+                DialogsManager.ShowExclamationDialog("Не выбран объект для просмотра наследника.", "Действие невозможно");
+                return;
+            }
+
+            IObject target = Processor.GetObject(this.sourceClass, id);
+            if (target is IHierarchical objHierarchical && objHierarchical.Child != Guid.Empty)
+            {
+                IClass targetClass = new Class(objHierarchical.Child);
+                ObjectsList oc = new(targetClass);
+                DialogsManager.ShowPageWithGroupBox(oc, "Поиск наследника", target.Id.ToString());
+                oc.TrySelectObject(target.Id);
+            }
         }
     }
 }

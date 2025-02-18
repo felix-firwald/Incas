@@ -70,8 +70,8 @@ namespace Incas
             {
                 this.criticalErrorOccured = true;
                 ProgramState.OpenWebPage(FormError + "?version=" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "&description=" + e.Exception.Message);
-                DialogsManager.ShowErrorDialog($"Возникла ошибка, не позволяющая INCAS продолжать свою работу.\n" +
-                    $"Описание: {e.Exception.Message}\nПриложение будет немедленно закрыто.", "Критическая ошибка");
+                DialogsManager.ShowCriticalErrorDialog($"Возникла ошибка, не позволяющая INCAS продолжать свою работу.\n" +
+                    $"Описание: {e.Exception.Message}\nПриложение будет немедленно закрыто.");
                 BackupProcessor.WriteBackup(e.Exception);
                 this.Shutdown();
             }           

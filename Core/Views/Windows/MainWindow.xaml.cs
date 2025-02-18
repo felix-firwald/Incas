@@ -1,12 +1,17 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Packaging;
+using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Pages;
+using Incas.Objects.Views.Windows;
+using Incas.Rendering.Components;
 using Incas.Server.AutoUI;
 using IncasEngine.Core;
+using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Media;
 using System.Windows;
@@ -119,7 +124,7 @@ namespace Incas.Core.Views.Windows
                     break;
                 case Key.F7:
                     this.vm.DoOpenWeb("");
-                    break;
+                    break;                    
                 case Key.F12:
                     TestSignal ts = new();
                     ts.ShowDialog("345", Classes.Icon.Pin);
@@ -255,6 +260,43 @@ namespace Incas.Core.Views.Windows
         {
             this.vm.LoadInfo();
             this.UpdateTabs();
+        }
+
+        private async void window_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                    string id = await FileTemplator.GetIdentifier(files[0]);
+                    if (id is not null)
+                    {
+                        ObjectReference or = ObjectReference.Parse(id);
+                        if (or.IsValid())
+                        {
+                            Class targetClass = new(or.Class);
+                            if (targetClass != null)
+                            {
+                                ObjectsEditor editor = new(targetClass, [Processor.GetObject(targetClass, or.Object)]);
+                                editor.Show();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        DialogsManager.ShowExclamationDialog("Документ не создавался в INCAS, либо был создан в версии программы, которая еще не поддерживала такую функциональность", "Действие невозможно");
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                DialogsManager.ShowErrorDialog("INCAS не удалось получить доступ к файлу (возможно он блокируется другим процессом).");
+            }
+            catch (KeyNotFoundException)
+            {
+                DialogsManager.ShowExclamationDialog("Документ не создавался в INCAS, либо был создан в версии программы, которая еще не поддерживала такую функциональность", "Действие невозможно");
+            }
         }
     }
 }

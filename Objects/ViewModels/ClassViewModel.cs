@@ -7,7 +7,6 @@ using Incas.Objects.Views.Windows;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Exceptions;
-using IncasEngine.ObjectiveEngine.FieldComponents;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
@@ -28,7 +27,6 @@ namespace Incas.Objects.ViewModels
             this.Source = source;
             this.SourceData = this.Source.GetClassData();
             this.Fields = new();
-            
             foreach (Field f in this.SourceData.Fields)
             {
                 this.Fields.Add(new(f));

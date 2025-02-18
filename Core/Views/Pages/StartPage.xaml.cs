@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Incas.Help.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,11 @@ namespace Incas.Core.Views.Pages
                     break;
             }
             this.MainText.Content = result;
+        }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            DialogsManager.ShowHelp(HelpType.Core);
         }
     }
 }

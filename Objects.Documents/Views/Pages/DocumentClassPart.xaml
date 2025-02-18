@@ -119,7 +119,7 @@
                                 </Button>
                             </Grid>
 
-                            <CheckBox Style="{StaticResource Toggle}" Content="Поддержка рекурсивной прогрузки (стриминга) объектов" ToolTip="Если опция включена, INCAS будет выгружать привязанные объекты при рендеринге (полностью). Глубина рекурсии составляет 2 этапа" IsChecked="{Binding RecursiveStreamingEnabled}"/>
+                            <CheckBox Style="{StaticResource Toggle}" Content="Поддержка рекурсивной прогрузки (стриминга) объектов" ToolTip="Если опция включена, INCAS будет выгружать привязанные объекты при рендеринге (полностью). Глубина рекурсии составляет 2 этапа" IsChecked="{Binding SelectedTemplate.RecursiveStreamingEnabled}"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>

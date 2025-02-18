@@ -1,9 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
-using Incas.Objects.Interfaces;
-using Incas.Objects.Views.Controls;
-using Incas.Objects.Views.Pages;
-using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Types.Documents;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using System.Collections.Generic;
@@ -24,11 +21,13 @@ namespace Incas.Rendering.Components
         private List<string> values = [];
         private Dictionary<string, DataTable> tables = new();
         private readonly Template template;
+        private string path;
         public XLWorkbook workbook;
         public IXLWorksheet worksheet;
         public ExcelTemplator(Template template, string newPath)
         {
             this.template = template;
+            this.path = newPath;
             string oldpath = ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(template.File);
             if (File.Exists(newPath))
             {
@@ -40,6 +39,7 @@ namespace Incas.Rendering.Components
         }
         public ExcelTemplator(string newPath)
         {
+            this.path = newPath;
             this.workbook = new XLWorkbook(newPath);
             this.worksheet = this.workbook.Worksheet(1);
         }
@@ -149,6 +149,31 @@ namespace Incas.Rendering.Components
             this.tagsToReplace = data.TagsToReplace;
             this.values = data.Values;
             this.tables = data.Tables;
+            this.SetMetaData(data);
+        }
+        private void SetMetaData(RenderData doc)
+        {
+            this.workbook.Properties.Author = $"{doc.Author.Name} (через INCAS)";
+            this.workbook.Properties.Category = doc.Class.Name;
+            this.workbook.Properties.Subject = doc.Class.Category;
+            this.workbook.Properties.Title = doc.TargetDocument.Name;
+            this.workbook.Properties.Created = doc.TargetDocument.CreationDate;
+            this.workbook.Properties.Modified = doc.TargetDocument.CreationDate;
+            ObjectReference reference = new(doc.Class.Id, doc.TargetDocument.Id);
+            this.workbook.Properties.LastModifiedBy = $"{ProgramState.CurrentWorkspace.CurrentUser.Name} (через INCAS)";
+            this.workbook.Properties.Company = ProgramState.CurrentWorkspace.GetDefinition().Name;
+            this.workbook.Properties.Comments = "Этот документ создан в программе INCAS";
+            this.workbook.CustomProperties.Add(FileTemplator.ObjectReferenceProperty, reference.ToString());
+        }
+        public async static Task<string> GetObjectReference(string path)
+        {
+            string result = "";
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                IXLWorkbook workbook = new XLWorkbook(path);
+                result = workbook.CustomProperty(FileTemplator.ObjectReferenceProperty).Value.ToString();
+            });
+            return result;
         }
         public void GenerateDocument(Document doc)
         {

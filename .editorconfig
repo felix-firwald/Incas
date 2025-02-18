@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# OOXML0001: Тип или член устарел
+dotnet_diagnostic.OOXML0001.severity = none

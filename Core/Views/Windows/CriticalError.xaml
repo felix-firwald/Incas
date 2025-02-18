@@ -1,0 +1,43 @@
+﻿<Window x:Class="Incas.Core.Views.Windows.CriticalError"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Incas.Core.Views.Windows"
+        mc:Ignorable="d"
+        Title="Критическая ошибка" Height="450" Style="{StaticResource Dialog}" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height" >
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
+                             From="0.0" To="1.0" Duration="0:0:0.180"
+                             AutoReverse="False"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+
+    </Window.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <Path x:Name="IconError" Fill="{DynamicResource Error}" Margin="15" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" />
+       
+        <Label x:Name="TitleText" Content="Возникла критическая ошибка" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Light}" FontWeight="Bold" FontFamily="{StaticResource JetBrains}" Grid.Row="2"/>
+
+        <ScrollViewer Grid.Row="3" Margin="8" MaxHeight="400" >
+            <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" FontFamily="{StaticResource JetBrains}" Text="По умолчанию, такой текст обозначает критическую неисправность в работе программы." Margin="5,0,10,10"/>
+        </ScrollViewer>
+
+        <!--<Rectangle Fill="{DynamicResource LightBlack}" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2"/>-->
+        <Button Style="{DynamicResource ButtonMainError}" Content="Закрыть программу" Grid.Row="5" VerticalAlignment="Center" Click="Button_Click" IsDefault="True" />
+
+    </Grid>
+</Window>

@@ -284,7 +284,7 @@ namespace Incas.Objects.Views.Windows
             DocumentClassData docData = this.ClassData as DocumentClassData;
             if (docData.Documents?.Count == 1)
             {
-                templateFile = docData.Documents[1];
+                templateFile = docData.Documents[0];
             }
             else if (docData.Documents?.Count > 1)
             {

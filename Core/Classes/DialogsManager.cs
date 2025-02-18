@@ -192,6 +192,16 @@ namespace Incas.Core.Classes
                 d.ShowDialog();
             });
         }
+        public static void ShowCriticalErrorDialog(string message)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                ProgramState.PlaySound("UI-Exclamation");
+                ShowWaitCursor(false);
+                CriticalError d = new(message);
+                d.ShowDialog();
+            });
+        }
         public static void ShowErrorDialog(Exception ex, string startMessage = "При выполнении действия возникла непредвиденная ошибка")
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>

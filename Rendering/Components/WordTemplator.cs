@@ -1,4 +1,6 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Packaging;
+using Incas.Core.Classes;
+using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using Microsoft.Scripting.Utils;
 using Spire.Doc;
@@ -6,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -86,6 +89,7 @@ namespace Incas.Rendering.Components
             this.tagsToReplace = data.TagsToReplace;
             this.values = data.Values;
             this.tables = data.Tables;
+            this.SetMetaData(data);
         }
         private void ClearData()
         {
@@ -256,13 +260,37 @@ namespace Incas.Rendering.Components
             return result;
         }
 
-        //public string TurnToXPS()
-        //{
-        //    Doc doc = new(this.Path);
-        //    string outputName = $"{WorkspacePaths.TemplatesRuntime}\\{DateTime.Now.ToString("yyMMddHHmmssff")}.xps";
-        //    doc.SaveAs(outputName);
-        //    return outputName;
-        //}
+        private void SetMetaData(RenderData doc)
+        {
+            string path = this.Path;
+            using (WordprocessingDocument d = WordprocessingDocument.Open(path, true))
+            {
+                d.PackageProperties.Creator = $"{doc.Author.Name} (через INCAS)";
+                d.PackageProperties.Category = doc.Class.Name;
+                d.PackageProperties.Subject = doc.Class.Category;
+                d.PackageProperties.Title = doc.TargetDocument.Name;
+                d.PackageProperties.Revision = "1";
+                d.PackageProperties.Version = DateTime.Now.ToString("yyMMddHHmm");
+                d.PackageProperties.Created = doc.TargetDocument.CreationDate;
+                d.PackageProperties.Modified = doc.TargetDocument.CreationDate;
+                ObjectReference reference = new(doc.Class.Id, doc.TargetDocument.Id);
+                d.PackageProperties.Identifier = reference.ToString();
+                d.PackageProperties.LastModifiedBy = $"{ProgramState.CurrentWorkspace.CurrentUser.Name} (через INCAS)";
+                d.PackageProperties.Description = "Этот документ создан в программе INCAS";
+            }
+        }
+        public async static Task<string> GetMetaDataIdentifier(string path)
+        {
+            string result = "";
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                using (WordprocessingDocument d = WordprocessingDocument.Open(path, true))
+                {
+                    result = d.PackageProperties.Identifier;
+                }
+            });
+            return result;
+        }
         public static string TurnToPDF(string file)
         {
             Doc doc = new(file);

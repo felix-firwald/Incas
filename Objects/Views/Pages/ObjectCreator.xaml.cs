@@ -515,14 +515,14 @@ namespace Incas.Objects.Views.Pages
                 string path = ProgramState.CurrentWorkspace.GetRuntimesTemplatesFolder();
                 if (docData.Documents?.Count == 1)
                 {
-                    if (docData.Documents[1].File.EndsWith(".xlsx"))
+                    if (docData.Documents[0].File.EndsWith(".xlsx"))
                     {
                         DialogsManager.ShowExclamationDialog("Предпросмотр для Excel файлов недоступен.", "Рендеринг прерван");
                         return;
                     }
                     ProgramStatusBar.SetText("Рендеринг документа...");
                     DialogsManager.ShowWaitCursor(true);
-                    string name = await this.GenerateDocument(docData.Documents[1], path, true);
+                    string name = await this.GenerateDocument(docData.Documents[0], path, true);
                     DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.Name})", WordTemplator.ReplaceToPDF(name), true);
 
                 }

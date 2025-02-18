@@ -243,20 +243,8 @@ namespace Incas.Objects.Views.Pages
                     ObjectBackReferenceViewer ob = new(this.Class, this.id);
                     this.FieldsContentPanel.Children.Add(ob);
                 }
-                ((IObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
-                if (this.Class.Type == ClassType.Document)
-                {
-                    this.ApplyObjectComments(obj);
-                }
+                ((IObjectFieldViewer)this.FieldsContentPanel.Children[^1]).HideSeparator();
             });         
-        }
-        private async void ApplyObjectComments(IObject obj)
-        {
-            List<ObjectComment> comments = await Processor.GetObjectComments(this.Class, obj);
-            foreach (ObjectComment oc in comments)
-            {
-                this.FieldsContentPanel.Children.Add(new ObjectAttachment(oc));
-            }
         }
 
         private void Box_OnTerminateRequested()

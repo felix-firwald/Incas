@@ -8,6 +8,7 @@ namespace Incas.Help.Components
 {
     public enum HelpType
     {
+        Core,
         Classes_General,
         Classes_Models,
         Classes_Processes,

@@ -20,6 +20,10 @@ namespace Incas.Help.Controls
             IControlHelper control;
             switch (helpType)
             {
+                case HelpType.Core:
+                    control = new Core();
+                    this.HelperName = "Справка: главная страница";
+                    break;
                 case HelpType.Classes_General:
                     control = new Classes();
                     this.HelperName = "Справка: классы";
