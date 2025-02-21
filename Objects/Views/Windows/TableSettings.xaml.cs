@@ -101,12 +101,12 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void AddFieldClick(object sender, MouseButtonEventArgs e)
+        private void AddFieldClick(object sender, RoutedEventArgs e)
         {
             this.AddColumnCreator(new());
         }
 
-        private void MinimizeAllClick(object sender, MouseButtonEventArgs e)
+        private void MinimizeAllClick(object sender, RoutedEventArgs e)
         {
             foreach (TableColumnCreator tcc in this.ContentPanel.Children)
             {
@@ -114,7 +114,7 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void MaximizeAllClick(object sender, MouseButtonEventArgs e)
+        private void MaximizeAllClick(object sender, RoutedEventArgs e)
         {
             foreach (TableColumnCreator tcc in this.ContentPanel.Children)
             {
@@ -122,7 +122,7 @@ namespace Incas.Objects.Views.Windows
             }
         }
 
-        private void FindColumnsInFile(object sender, MouseButtonEventArgs e)
+        private void FindColumnsInFile(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fd = new()
             {

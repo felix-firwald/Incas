@@ -39,10 +39,8 @@ namespace Incas.Objects.Documents.Views.Pages
             this.vm.Save();
         }
         private void AddTemplateClick(object sender, System.Windows.RoutedEventArgs e)
-        {
-            TemplateViewModel template = new(new());
-            this.vm.Templates.Add(template);
-            this.vm.SelectedTemplate = template;
+        {           
+            this.vm.SelectedTemplate = this.vm.AddTemplate();
             this.vm.UpdateAll();
         }
 
@@ -125,6 +123,7 @@ namespace Incas.Objects.Documents.Views.Pages
             string result = System.IO.Path.GetFileName(path);
             this.vm.SelectedTemplate.FilePath = result;
 
+
             if (!ProgramState.CurrentWorkspace.IsTemplatePathContainsWorkspacePath(path)) // если файл еще не в каталоге рабочего пространства
             {
                 if (ProgramState.CurrentWorkspace.HasTemplateWithSuchName(result)) // если в каталоге рабочего пространства есть файл с таким же именем
@@ -150,6 +149,33 @@ namespace Incas.Objects.Documents.Views.Pages
         {
             TemplateDebug debugger = new(this.vm.SelectedTemplate.Source);
             debugger.ShowDialog();
+        }
+
+        private void OpenTemplateFiel(object sender, System.Windows.RoutedEventArgs e)
+        {
+            string pathFile = ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(this.vm.SelectedTemplate.FilePath);
+
+            if (!File.Exists(pathFile))
+            {
+                DialogsManager.ShowExclamationDialog($"Файл ({this.vm.SelectedTemplate.FilePath}) не существует!", "Действие прервано");
+                return;
+            }
+            try
+            {
+                System.Diagnostics.Process proc = new();
+                proc.StartInfo.FileName = pathFile;
+                proc.StartInfo.UseShellExecute = true;
+                proc.Start();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog($"При попытке открытия файла возникла ошибка:\n{ex}");
+            }
+        }
+
+        private void RemoveSelectedTemplate(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.vm.Templates.Remove(this.vm.SelectedTemplate);
         }
     }
 }

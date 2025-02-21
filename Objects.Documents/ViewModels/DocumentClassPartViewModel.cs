@@ -3,14 +3,17 @@ using Incas.Objects.ViewModels;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using System.Collections.ObjectModel;
 using System.Windows;
+using WebSupergoo.WordGlue3;
 
 namespace Incas.Objects.Documents.ViewModels
 {
     public class DocumentClassPartViewModel : BaseViewModel
     {
+        public ClassViewModel BaseViewModel { get; set; }
         public DocumentClassData SourceData { get; set; }
         public DocumentClassPartViewModel(ClassViewModel vm)
         {
+            this.BaseViewModel = vm;
             this.SourceData = (DocumentClassData)vm.SourceData;
             if (this.SourceData.Documents is null)
             {
@@ -21,10 +24,27 @@ namespace Incas.Objects.Documents.ViewModels
                 this.Templates = new();
                 foreach (Template doc in this.SourceData.Documents)
                 {
-                    this.Templates.Add(new(doc));
+                    this.AddTemplate(doc);
                 }
             }
         }
+        public TemplateViewModel AddTemplate()
+        {
+            return this.AddTemplate(new Template());
+        }
+        public TemplateViewModel AddTemplate(Template doc)
+        {
+            TemplateViewModel vm = new(this.BaseViewModel, doc);
+            vm.OnFieldsRequested += this.Vm_OnFieldsRequested;
+            this.Templates.Add(vm);
+            return vm;
+        }
+
+        private System.Collections.Generic.List<IncasEngine.ObjectiveEngine.Models.Field> Vm_OnFieldsRequested()
+        {
+            return this.SourceData.Fields;
+        }
+
         private ObservableCollection<TemplateViewModel> templates;
         public ObservableCollection<TemplateViewModel> Templates
         {
@@ -54,7 +74,6 @@ namespace Incas.Objects.Documents.ViewModels
                 this.selectedTemplate = value;
                 this.OnPropertyChanged(nameof(this.SelectedTemplate));
                 this.OnPropertyChanged(nameof(this.DetailsVisibility));
-                this.OnPropertyChanged(nameof(this.TemplatePathSelected));
             }
         }
         public Visibility DetailsVisibility
@@ -63,13 +82,6 @@ namespace Incas.Objects.Documents.ViewModels
             {
                 bool visible = this.SelectedTemplate != null;
                 return this.FromBool(visible);
-            }
-        }
-        public bool TemplatePathSelected
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(this.SelectedTemplate?.Source.File);
             }
         }
         public bool InsertTemplateName

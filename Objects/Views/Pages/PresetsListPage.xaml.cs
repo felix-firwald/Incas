@@ -25,14 +25,14 @@ namespace Incas.Objects.Views.Pages
         }
         public void FillContentPanel(List<PresetReference> presets)
         {
-            this.ContentPanel.Children.Clear();
-            foreach (PresetReference preset in presets)
-            {
-                PresetElement pe = new(this.SourceClass, preset);
-                pe.OnUpdateRequested += this.Pe_OnUpdateRequested;
-                pe.OnViewRequested += this.Pe_OnViewRequested;
-                this.ContentPanel.Children.Add(pe);
-            }
+            //this.ContentPanel.Children.Clear();
+            //foreach (PresetReference preset in presets)
+            //{
+            //    PresetElement pe = new(this.SourceClass, preset);
+            //    pe.OnUpdateRequested += this.Pe_OnUpdateRequested;
+            //    pe.OnViewRequested += this.Pe_OnViewRequested;
+            //    this.ContentPanel.Children.Add(pe);
+            //}
         }
 
         private void Pe_OnViewRequested(PresetReference preset)

@@ -208,6 +208,10 @@ namespace Incas.Objects.Views.Windows
                     this.Close();
                 }
             }
+            catch (FieldDataFailed ex)
+            {
+                DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
+            }
             catch (Exception ex)
             {
                 DialogsManager.ShowErrorDialog(ex);

@@ -123,7 +123,7 @@ namespace Incas.Core.Views.Controls
             this.EditIcon.Visibility = System.Windows.Visibility.Collapsed;
         }
 
-        private void EditClick(object sender, MouseButtonEventArgs e)
+        private void EditClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace Incas.Core.Views.Controls
             this.SetObject(this.SelectedObject.Id);
         }
 
-        private void AddClick(object sender, MouseButtonEventArgs e)
+        private void AddClick(object sender, RoutedEventArgs e)
         {
             ObjectsEditor oe = new(new Class(this.Binding.BindingClass), []);
             oe.SetSingleObjectMode();

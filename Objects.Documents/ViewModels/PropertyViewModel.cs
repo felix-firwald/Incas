@@ -1,5 +1,7 @@
 ﻿using Incas.Core.ViewModels;
 using Incas.Objects.Documents.AutoUI;
+using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,14 @@ namespace Incas.Objects.Documents.ViewModels
     public class PropertyViewModel : BaseViewModel
     {
         public delegate void PropertyAction(PropertyViewModel sender);
+        public delegate List<Field> PropertyAccessToFields();
+        
         public event PropertyAction OnRemoveRequested;
         public event PropertyAction OnMoveUpRequested;
         public event PropertyAction OnMoveDownRequested;
         public event PropertyAction OnOpenSettingsRequested;
+        public event PropertyAccessToFields OnFieldsRequested;
+
         public TemplateProperty Source { get; set; }
         public PropertyViewModel(TemplateProperty prop)
         {
@@ -51,6 +57,10 @@ namespace Incas.Objects.Documents.ViewModels
                 case TemplateProperty.CalculationType.Constant:
                     PropertyConstantSettings settings = new(this.Source);
                     settings.ShowDialog($"Настройки свойства [{this.Source.Name}]");
+                    break;
+                case TemplateProperty.CalculationType.Switch:
+                    PropertySwitcherSettings settings2 = new(this.Source, this.OnFieldsRequested?.Invoke());
+                    settings2.ShowDialog($"Настройки свойства [{this.Source.Name}]");
                     break;
             }
         }
@@ -104,7 +114,7 @@ namespace Incas.Objects.Documents.ViewModels
         {
             get
             {
-                return this.Source.Order == TemplateProperty.RenderingOrder.BeforeFields ? true : false;
+                return this.Source.Order == TemplateProperty.RenderingOrder.BeforeFields;
             }
             set
             {

@@ -81,6 +81,26 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="ListBoxItemUnvisibleBorders" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="Border" MinHeight="{TemplateBinding MinHeight}" CornerRadius="8" BorderThickness="0" SnapsToDevicePixels="true">
+                        <Border.Background>
+                            <SolidColorBrush Color="Transparent" />
+                        </Border.Background>
+
+                        <ContentPresenter TextElement.Foreground="{StaticResource Light}" TextElement.FontFamily="{StaticResource JetBrains}" TextElement.FontSize="11" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="ListBoxItemGray" TargetType="{x:Type ListBoxItem}">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />

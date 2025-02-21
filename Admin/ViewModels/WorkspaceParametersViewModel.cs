@@ -22,6 +22,14 @@ namespace Incas.Admin.ViewModels
                 return ProgramState.CurrentWorkspace.CurrentGroup.Data.GeneralSettingsEditing;
             }
         }
+
+        public Visibility EditingWorkspaceVisibility
+        {
+            get
+            {
+                return this.FromBool(this.EditingWorkspaceEnabled);
+            }
+        }
         public Visibility CreatingClassVisibility
         {
             get

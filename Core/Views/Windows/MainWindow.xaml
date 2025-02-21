@@ -3,110 +3,120 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:pages1="clr-namespace:Incas.Objects.Views.Pages" xmlns:pages2="clr-namespace:Incas.Admin.Views.Pages" xmlns:controls="clr-namespace:Incas.Core.Views.Controls" xmlns:fa="http://schemas.fontawesome.io/icons/" x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
+        xmlns:pages1="clr-namespace:Incas.Objects.Views.Pages" 
+        xmlns:pages2="clr-namespace:Incas.Admin.Views.Pages" 
+        xmlns:controls="clr-namespace:Incas.Core.Views.Controls" 
+        xmlns:fa="http://schemas.fontawesome.io/icons/" 
+        xmlns:conv="clr-namespace:Incas.Core.Converters"
+    x:Name="window" x:Class="Incas.Core.Views.Windows.MainWindow"
         mc:Ignorable="d"
         Height="900"
         Width="1300"
         Style="{DynamicResource WindowBase}"
         WindowState="Maximized"
-        Title="{Binding Title}" AllowDrop="True"
-        Closed="OnClosed" DragDrop.Drop="window_Drop"
-        MinHeight="700" MinWidth="900" PreviewKeyDown="window_PreviewKeyDown" Background="#FF2F323C">
+        Title="{Binding Title}"
+        Closed="OnClosed" 
+        MinHeight="700" MinWidth="900" PreviewKeyDown="window_PreviewKeyDown" Background="{StaticResource Black}">
     <Window.Resources>
-        <Style x:Key="FocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="ButtonLicense" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Background" Value="{StaticResource Element}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="MaxHeight" Value="40"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" CornerRadius="8" Margin="5" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-                            <Label x:Name="Label" Style="{StaticResource LabelElement}" Content="Информация о лицензии" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#3C5948"/>
-                                <Setter Property="BorderBrush" TargetName="Label" Value="{StaticResource Success}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Storyboard x:Key="StoryboardLoaded">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="stackPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="stackPanel1" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
-                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1"/>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="stackPanel1" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
-                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="border1" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="border1" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseInOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetName="StackLeft" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
-                <EasingColorKeyFrame KeyTime="00:00:00.5000000" Value="#FF393C46"/>
-            </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetName="border1" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
-                <EasingColorKeyFrame KeyTime="00:00:00.5000000" Value="#FF2D2D33"/>
-            </ColorAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetName="stackPanel" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
-                <EasingColorKeyFrame KeyTime="00:00:00.5000000" Value="#FF252528"/>
-            </ColorAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TabMain" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0"/>
-                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1.0">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <CircleEase EasingMode="EaseOut"/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
-            <ColorAnimationUsingKeyFrames Storyboard.TargetName="window" Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)">
-                <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
-                <EasingColorKeyFrame KeyTime="00:00:00.5000000" Value="#FF2F323C"/>
-            </ColorAnimationUsingKeyFrames>
-        </Storyboard>
+        <ResourceDictionary>
+            <conv:CommandTypeToColorConverter x:Key="CommandTypeToColorConverter"/>
+            <conv:CommandTypeToIconConverter x:Key="CommandTypeToIconConverter"/>
+            <Style x:Key="FocusVisual">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ButtonLicense" TargetType="{x:Type Button}">
+                <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                <Setter Property="Background" Value="{StaticResource Element}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="MaxHeight" Value="40"/>
+                <Setter Property="Padding" Value="1"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="border" CornerRadius="8" Margin="5" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                                <Label x:Name="Label" Style="{StaticResource LabelElement}" Content="Информация о лицензии" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" TargetName="border" Value="#3C5948"/>
+                                    <Setter Property="BorderBrush" TargetName="Label" Value="{StaticResource Success}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Storyboard x:Key="StoryboardLoaded">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="stackPanel" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+                    <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <CircleEase EasingMode="EaseInOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="stackPanel1" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                    <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="stackPanel1" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+                    <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="border1" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+                    <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <CircleEase EasingMode="EaseInOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="border1" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+                    <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <CircleEase EasingMode="EaseInOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <ColorAnimationUsingKeyFrames Storyboard.TargetName="StackLeft" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                    <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
+                    <EasingColorKeyFrame KeyTime="00:00:00.5000000" Value="#FF393C46"/>
+                </ColorAnimationUsingKeyFrames>
+                <ColorAnimationUsingKeyFrames Storyboard.TargetName="border1" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)">
+                    <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
+                    <EasingColorKeyFrame KeyTime="00:00:00.5000000" Value="#FF2D2D33"/>
+                </ColorAnimationUsingKeyFrames>
+                <ColorAnimationUsingKeyFrames Storyboard.TargetName="stackPanel" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                    <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
+                    <EasingColorKeyFrame KeyTime="00:00:00.5000000" Value="#FF252528"/>
+                </ColorAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="TabMain" Storyboard.TargetProperty="(UIElement.Opacity)">
+                    <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0"/>
+                    <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1.0">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <CircleEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <ColorAnimationUsingKeyFrames Storyboard.TargetName="window" Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)">
+                    <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
+                    <EasingColorKeyFrame KeyTime="00:00:00.5000000" Value="#FF2F323C"/>
+                </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+        </ResourceDictionary>
+        
     </Window.Resources>
-    <Window.Triggers>
+    <!--<Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard Storyboard="{StaticResource StoryboardLoaded}"/>
         </EventTrigger>
-    </Window.Triggers>
-    <Grid x:Name="grid" Background="{DynamicResource Basic}">
+    </Window.Triggers>-->
+    <Grid x:Name="grid" Background="{DynamicResource Black}">
         <Grid.RowDefinitions>
             <RowDefinition Height="395*"/>
             <RowDefinition Height="50"/>
@@ -118,31 +128,21 @@
         </Grid.ColumnDefinitions>
 
 
-        <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" Background="#FF393C46" SizeChanged="OnResize" Cursor="" RenderTransformOrigin="0.5,0.5">
-            <StackPanel.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </StackPanel.RenderTransform>
+        <StackPanel x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" ScrollViewer.VerticalScrollBarVisibility="Visible" Background="#252528" SizeChanged="OnResize" Cursor="">
             <StackPanel x:Name="stackPanel2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock x:Name="Incubator" Style="{StaticResource TextBlockImportant}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,5,25" Text="{Binding WorkspaceName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
                 <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Refresh" ToolTip="Обновить окно" MouseDown="RefreshClick"/>
             </StackPanel>
-            <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="1" Margin="5,0,5,0" Visibility="{Binding ModeratorFunctionVisibility}" />
+            <Rectangle Stroke="{DynamicResource Basic}" StrokeThickness="1" Margin="5,0,5,0" Visibility="{Binding ModeratorFunctionVisibility}" />
 
             <Path x:Name="Logo" Fill="{StaticResource Element}" MaxHeight="50" MaxWidth="50" Width="auto" Height="auto" Data="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0 M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" HorizontalAlignment="Center" Stretch="UniformToFill" Margin="0,15,0,6"/>
-            <TextBlock x:Name="LSurname" Foreground="White" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis"/>
-            <TextBlock x:Name="LFullname" Foreground="White" Text="{Binding SecondName}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis"/>
-            <TextBlock x:Name="LPost" Foreground="{StaticResource GrayLight}" Margin="8,0,8,25" Text="{Binding Post, UpdateSourceTrigger=PropertyChanged, FallbackValue=Должность}" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="WordEllipsis" />
-
-            <Rectangle Stroke="{DynamicResource Element}" StrokeThickness="1" Margin="5,0,5,0" />
+            <TextBlock x:Name="LSurname" Foreground="White" FontFamily="{StaticResource Rubik}" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis" Margin="0,0,0,10"/>
+            <Rectangle Stroke="{DynamicResource Basic}" StrokeThickness="1" Margin="5,0,5,0" />
             <StackPanel x:Name="CustomTabs">
 
             </StackPanel>
-
+            <Rectangle Stroke="{DynamicResource Basic}" StrokeThickness="1" Margin="5,0,5,0" />
+            
         </StackPanel>
 
         <GridSplitter x:Name="gridSplitter" Grid.Column="1" HorizontalAlignment="Left" ResizeDirection="Columns" Grid.Row="0" Margin="1,0,0,0" />
@@ -187,10 +187,27 @@
                     <Image Height="30" Width="30" Source="/Core/Views/Windows/Logo.png" UseLayoutRounding="False" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" MouseDown="Logo_MouseDown" Margin="12,0,12,0"/>
 
                     <Label Style="{StaticResource LabelElement}" Content="{Binding Version}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                    <Rectangle Fill="{DynamicResource Element}" Width="1" Margin="6"/>
-                    <Label Style="{StaticResource LabelElement}" Content="Все права защищены" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" Foreground="{DynamicResource Icon}" VerticalContentAlignment="Center">
-                    </Label>
-                    <Button Style="{DynamicResource ButtonLicense}" Cursor="Hand" Click="ShowLicenseClick"/>
+                    <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" ToolTip="Информация о лицензии" Click="ShowLicenseClick">
+                        <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M480-480q-33.85 0-56.92-23.08Q400-526.15 400-560t23.08-56.92Q446.15-640 480-640t56.92 23.08Q560-593.85 560-560t-23.08 56.92Q513.85-480 480-480Zm0 318.46-158.54 47.39q-15.38 5.46-28.42-4.44Q280-128.5 280-145v-220.15q-38-37.39-59-87.7T200-560q0-117.25 81.34-198.63Q362.68-840 479.88-840q117.2 0 198.66 81.37Q760-677.25 760-560q0 56.84-21 107.15t-59 87.7V-145q0 16.5-13.04 26.41-13.04 9.9-28.42 4.44L480-161.54ZM480-320q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-158.23l160-44.85 160 44.85v-173.23q-33.46 24.61-74.51 38.04Q524.43-280 479.83-280q-44.6 0-85.48-13.42-40.89-13.43-74.35-38.04v173.23Zm160-86.62Z"/>
+                    </Button>
+                    <Rectangle Fill="{DynamicResource Area}" Width="1" Margin="6"/>
+                    <ListBox Background="{x:Null}" BorderThickness="0" BorderBrush="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemsSource="{Binding Commands}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource ButtonRectangle}" HorizontalContentAlignment="Stretch" ToolTip="{Binding Description}" Command="{Binding DataContext.UserCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding .}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Fill="{Binding Type,Converter={StaticResource CommandTypeToColorConverter}}" MaxHeight="15" Stretch="Uniform" Data="{Binding Type,Converter={StaticResource CommandTypeToIconConverter}}" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding Name}" FontFamily="{StaticResource Rubik}" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </StackPanel>
                 <Border x:Name="StatusBarContainer" Grid.Column="1">
 
@@ -235,6 +252,9 @@
             <Rectangle Fill="{DynamicResource Element}" Height="1" Margin="6"/>
             <Button Style="{DynamicResource ButtonSquare}" Command="{Binding OpenWeb}" CommandParameter="Web" ToolTip="Открыть справочную информацию">
                 <Path Fill="White" Stretch="Uniform" Data="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+            </Button>
+            <Button Style="{DynamicResource ButtonSquare}" Visibility="{Binding TestFunctionVisibility}"  ToolTip="Тестирование INCAS" Click="OpenTestClick">
+                <Path Fill="White" Stretch="Uniform" Data="M523.85-480 284.54-722.62q-2.92-2.92-3.73-5.93t-.81-6.23v-9.24q0-6.83 4.64-11.4 4.65-4.58 11.51-4.58h359.23q10.26 0 17.44 7.21 7.18 7.2 7.18 17.5 0 10.29-7.18 17.79t-17.44 7.5h-291.3l202.46 207.15q9.15 9.4 9.15 22.7 0 13.3-9.15 23L364.08-249.23h291.3q10.26 0 17.44 7.2 7.18 7.21 7.18 17.51 0 10.29-7.18 17.4-7.18 7.12-17.44 7.12H291.31q-4.68 0-8-3.31-3.31-3.32-3.31-8v-16.74q0-2.64.8-4.44.81-1.8 2.82-3.43L523.85-480Z"/>
             </Button>
         </StackPanel>
         <StackPanel x:Name="ProcessInfo" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">

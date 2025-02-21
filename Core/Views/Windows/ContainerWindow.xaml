@@ -3,8 +3,8 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-          mc:Ignorable="d" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
-        Title="ContainerWindow" MinHeight="550" Height="550" MinWidth="850" Width="850" AllowsTransparency="True" Background="{x:Null}" WindowStartupLocation="CenterScreen">
+          mc:Ignorable="d" MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        Title="ContainerWindow" MinHeight="550" Height="550" MinWidth="850" Width="850" WindowState="Maximized" Background="{x:Null}" WindowStartupLocation="CenterScreen">
     <Border x:Name="ContentPanel">
         
     </Border>

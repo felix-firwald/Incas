@@ -164,6 +164,10 @@ namespace Incas.Objects.Views.Controls
                 this.Grid.Children.Add(control);
                 Grid.SetRow(control, 0);
                 Grid.SetColumn(control, 1);
+                if (this.Field.ReadOnly)
+                {
+                    control.IsEnabled = false;
+                }
             });            
         }
 
@@ -315,6 +319,10 @@ namespace Incas.Objects.Views.Controls
                     if (cb.SelectedIndex != -1)
                     {
                         return cb.Items.GetItemAt(cb.SelectedIndex).ToString();
+                    }
+                    if (this.Field.NotNull == true)
+                    {
+                        this.ThrowNotNullFailed();
                     }
                     return "";
                 case FieldType.Date:

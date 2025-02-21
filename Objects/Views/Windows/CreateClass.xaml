@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Incas.Objects.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:local1="clr-namespace:Incas.Objects.Converters" xmlns:classes="clr-namespace:Incas.Objects.Views.Controls" xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit" xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:Incas.Objects.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:local1="clr-namespace:Incas.Objects.Converters" xmlns:classes="clr-namespace:Incas.Objects.Views.Controls" xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:ngv="clr-namespace:NodeGraph.View;assembly=NodeGraph"
         mc:Ignorable="d"
         Title="Создать класс" Height="750" Width="1000" MinHeight="750" MinWidth="960" WindowStartupLocation="CenterScreen" Style="{StaticResource WindowBase}">
     <Window.Resources>
@@ -58,16 +58,16 @@
                             <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAllClick" />
                             <fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMaximize" ToolTip="Развернуть все вкладки" MouseDown="MaximizeAllClick"  />-->
 
-                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="MinimizeAllClick" ToolTip="Свернуть все вкладки">
-                                <Path Fill="#FF78DDFF" VerticalAlignment="Center" Stretch="Uniform" Data="M7.5519,19.8462V16.4385H4.1441v-.923H8.4749v4.3307Zm7.9855,0V15.5155h4.3185v.923H16.4606v3.4077ZM4.1441,8.472V7.549H7.5519V4.1538h.923V8.472Zm11.3933,0V4.1538h.9232V7.549h3.3953v.923Z"/>
+                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="MinimizeAllClick" ToolTip="Свернуть все поля">
+                                <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M7.5519,19.8462V16.4385H4.1441v-.923H8.4749v4.3307Zm7.9855,0V15.5155h4.3185v.923H16.4606v3.4077ZM4.1441,8.472V7.549H7.5519V4.1538h.923V8.472Zm11.3933,0V4.1538h.9232V7.549h3.3953v.923Z"/>
                             </Button>
-                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="MaximizeAllClick" ToolTip="Развернуть все вкладки">
-                                <Path Fill="#FF78DDFF" VerticalAlignment="Center" Stretch="Uniform" Data="M4.1441,19.8462V15.5155h.9233V18.923H8.4749v.9232Zm11.3933,0V18.923h3.3952V15.5155h.9233v4.3307ZM4.1441,8.472V4.1538H8.4749V5.077H5.0674V8.472Zm14.7885,0V5.077H15.5374V4.1538h4.3185V8.472Z"/>
+                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="MaximizeAllClick" ToolTip="Развернуть все поля">
+                                <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M4.1441,19.8462V15.5155h.9233V18.923H8.4749v.9232Zm11.3933,0V18.923h3.3952V15.5155h.9233v4.3307ZM4.1441,8.472V4.1538H8.4749V5.077H5.0674V8.472Zm14.7885,0V5.077H15.5374V4.1538h4.3185V8.472Z"/>
                             </Button>
                             
                             <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Eye" ToolTip="Предпросмотр формы" MouseDown="ShowFormClick"  />-->
                             <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="ShowFormClick" ToolTip="Предпросмотр формы">
-                                <Path Fill="#FF78DDFF" VerticalAlignment="Center" Stretch="Uniform" Data="M6.277,21.8462H3.689A1.52,1.52,0,0,1,2.1538,20.311V17.723H3.077v2.5848a.5922.5922,0,0,0,.6153.6152H6.277Zm11.4585,0V20.923h2.5723a.5922.5922,0,0,0,.6152-.6153V17.723h.9232v2.588a1.5194,1.5194,0,0,1-1.5352,1.5352ZM12.0033,17.623A7.9286,7.9286,0,0,1,7.2818,16.14,9.1091,9.1091,0,0,1,4.1345,12a9.1447,9.1447,0,0,1,3.149-4.1462,7.8988,7.8988,0,0,1,4.7133-1.4893A7.9406,7.9406,0,0,1,16.72,7.8538,9.1193,9.1193,0,0,1,19.878,12a9.0867,9.0867,0,0,1-3.16,4.1385A7.9489,7.9489,0,0,1,12.0033,17.623ZM11.997,16.7A6.9637,6.9637,0,0,0,16.04,15.47a8.3206,8.3206,0,0,0,2.82-3.4693,8.37,8.37,0,0,0-2.82-3.4762,6.9357,6.9357,0,0,0-4.0425-1.237,6.9418,6.9418,0,0,0-4.0447,1.237A8.2139,8.2139,0,0,0,5.153,12a8.1829,8.1829,0,0,0,2.7993,3.4678A6.9615,6.9615,0,0,0,11.997,16.7Zm-.0015-1.9088a2.7168,2.7168,0,0,0,1.991-.8095,2.8238,2.8238,0,0,0,0-3.9682,2.8218,2.8218,0,0,0-3.9665,0,2.8321,2.8321,0,0,0-.0017,3.9665A2.6874,2.6874,0,0,0,11.9955,14.7912ZM12,13.8682a1.8826,1.8826,0,0,1-1.3278-3.2027A1.8832,1.8832,0,0,1,13.3345,13.33,1.822,1.822,0,0,1,12,13.8682ZM2.1538,6.2645V3.689A1.5194,1.5194,0,0,1,3.689,2.1538H6.277V3.077H3.6923a.5922.5922,0,0,0-.6153.6152V6.2645Zm18.7692,0V3.6922a.5922.5922,0,0,0-.6152-.6152H17.7355V2.1538H20.311A1.5193,1.5193,0,0,1,21.8462,3.689V6.2645Z"/>
+                                <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M6.277,21.8462H3.689A1.52,1.52,0,0,1,2.1538,20.311V17.723H3.077v2.5848a.5922.5922,0,0,0,.6153.6152H6.277Zm11.4585,0V20.923h2.5723a.5922.5922,0,0,0,.6152-.6153V17.723h.9232v2.588a1.5194,1.5194,0,0,1-1.5352,1.5352ZM12.0033,17.623A7.9286,7.9286,0,0,1,7.2818,16.14,9.1091,9.1091,0,0,1,4.1345,12a9.1447,9.1447,0,0,1,3.149-4.1462,7.8988,7.8988,0,0,1,4.7133-1.4893A7.9406,7.9406,0,0,1,16.72,7.8538,9.1193,9.1193,0,0,1,19.878,12a9.0867,9.0867,0,0,1-3.16,4.1385A7.9489,7.9489,0,0,1,12.0033,17.623ZM11.997,16.7A6.9637,6.9637,0,0,0,16.04,15.47a8.3206,8.3206,0,0,0,2.82-3.4693,8.37,8.37,0,0,0-2.82-3.4762,6.9357,6.9357,0,0,0-4.0425-1.237,6.9418,6.9418,0,0,0-4.0447,1.237A8.2139,8.2139,0,0,0,5.153,12a8.1829,8.1829,0,0,0,2.7993,3.4678A6.9615,6.9615,0,0,0,11.997,16.7Zm-.0015-1.9088a2.7168,2.7168,0,0,0,1.991-.8095,2.8238,2.8238,0,0,0,0-3.9682,2.8218,2.8218,0,0,0-3.9665,0,2.8321,2.8321,0,0,0-.0017,3.9665A2.6874,2.6874,0,0,0,11.9955,14.7912ZM12,13.8682a1.8826,1.8826,0,0,1-1.3278-3.2027A1.8832,1.8832,0,0,1,13.3345,13.33,1.822,1.822,0,0,1,12,13.8682ZM2.1538,6.2645V3.689A1.5194,1.5194,0,0,1,3.689,2.1538H6.277V3.077H3.6923a.5922.5922,0,0,0-.6153.6152V6.2645Zm18.7692,0V3.6922a.5922.5922,0,0,0-.6152-.6152H17.7355V2.1538H20.311A1.5193,1.5193,0,0,1,21.8462,3.689V6.2645Z"/>
                             </Button>
 
                             <!--<Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>-->
@@ -316,6 +316,9 @@
                     </ListBox>
                 </Grid>
             </TabItem>
+            <!--<TabItem Header="Проверка">
+                <ngv:FlowChartView Background="{DynamicResource Black}" DataContext="{Binding FlowChartViewModel}" />
+            </TabItem>-->
             <TabItem Header="Методы" BorderBrush="{DynamicResource LightPurple}">
                 <Grid Background="{DynamicResource Black}">
                     <Grid.ColumnDefinitions>

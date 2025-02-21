@@ -153,6 +153,7 @@ namespace Incas.Rendering.Components
         }
         private void SetMetaData(RenderData doc)
         {
+            this.workbook.Properties.Manager = $"INCAS";
             this.workbook.Properties.Author = $"{doc.Author.Name} (через INCAS)";
             this.workbook.Properties.Category = doc.Class.Name;
             this.workbook.Properties.Subject = doc.Class.Category;
@@ -162,7 +163,7 @@ namespace Incas.Rendering.Components
             ObjectReference reference = new(doc.Class.Id, doc.TargetDocument.Id);
             this.workbook.Properties.LastModifiedBy = $"{ProgramState.CurrentWorkspace.CurrentUser.Name} (через INCAS)";
             this.workbook.Properties.Company = ProgramState.CurrentWorkspace.GetDefinition().Name;
-            this.workbook.Properties.Comments = "Этот документ создан в программе INCAS";
+            this.workbook.Properties.Comments = "Этот документ создан в программе INCAS";            
             this.workbook.CustomProperties.Add(FileTemplator.ObjectReferenceProperty, reference.ToString());
         }
         public async static Task<string> GetObjectReference(string path)

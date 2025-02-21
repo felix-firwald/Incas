@@ -38,6 +38,38 @@ namespace Incas.Core.Views.Controls
                 this.OnPropertyChanged(nameof(this.SelectedIndex));
             }
         }
+        public void MoveUpSelectedRow()
+        {
+            if (this.selected < 1)
+            {
+                return;
+            }
+            int position = this.selected - 1;
+            DataRow newdata = this.Grid.NewRow();
+            newdata.ItemArray = this.Grid.Rows[this.selected].ItemArray;
+            this.Grid.Rows.RemoveAt(this.selected);
+            this.Grid.Rows.InsertAt(newdata, position);
+            this.Grid.AcceptChanges();
+            this.selected = position;
+        }
+        public void MoveDownSelectedRow()
+        {
+            if (this.selected == -1)
+            {
+                return;
+            }
+
+            int position = this.selected + 1;
+            if (position < this.Grid.Rows.Count)
+            {
+                DataRow newdata = this.Grid.NewRow();
+                newdata.ItemArray = this.Grid.Rows[this.selected].ItemArray;
+                this.Grid.Rows.RemoveAt(this.selected);
+                this.Grid.Rows.InsertAt(newdata, position);
+                this.Grid.AcceptChanges();
+                this.selected = position;
+            }
+        }
     }
 
     public partial class DataGridWithButtons : UserControl
@@ -51,25 +83,26 @@ namespace Incas.Core.Views.Controls
             this.DataContext = this.vm;
         }
 
-        private void AddRowClick(object sender, MouseButtonEventArgs e)
+        private void AddRowClick(object sender, RoutedEventArgs e)
         {
             this.vm.Grid.Rows.Add();
         }
 
-        private void RemoveRowClick(object sender, MouseButtonEventArgs e)
+        private void RemoveRowClick(object sender, RoutedEventArgs e)
         {
             if (this.vm.SelectedIndex > 0)
             {
                 this.vm.Grid.Rows[this.vm.SelectedIndex].Delete();
             }
         }
-        private void RowUpClick(object sender, MouseButtonEventArgs e)
+        private void MoveUpClick(object sender, RoutedEventArgs e)
         {
-
+            this.vm.MoveUpSelectedRow();
         }
-        private void RowDownClick(object sender, MouseButtonEventArgs e)
-        {
 
+        private void MoveDownClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.MoveDownSelectedRow();
         }
 
         private void Grid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)

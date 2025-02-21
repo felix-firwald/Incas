@@ -13,27 +13,23 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="GroupBox">
-                    <Border CornerRadius="8" BorderBrush="{StaticResource Area}" BorderThickness="1">
+                    <Border CornerRadius="3" BorderBrush="#4C60636E" Background="#19000000" BorderThickness="1">
 
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="40" />
+                                <RowDefinition Height="27" />
                                 <RowDefinition Height="2" />
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
 
-                            <Border Grid.Row="0" CornerRadius="8" Background="Transparent" BorderBrush="{StaticResource Element}" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                                <Label x:Name="HeaderLabel" FontSize="14" FontFamily="{StaticResource JetBrains}" FontWeight="ExtraLight" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource DarkLight}">
+                            <Border Grid.Row="0" CornerRadius="3" Background="Transparent" BorderBrush="#FF60636E" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                <Label x:Name="HeaderLabel" FontSize="12" FontFamily="{StaticResource Rubik}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Light}">
                                     <ContentPresenter Margin="2" ContentSource="Header" RecognizesAccessKey="True" >
                                     </ContentPresenter>
                                 </Label>
                             </Border>
-
-
-
-
                             <!--<Rectangle Grid.Row="2" Fill="{StaticResource Area}"  HorizontalAlignment="Stretch" Width="2" Margin="5,-8,0,0"/>-->
-                            <Border ClipToBounds="True" Grid.Row="2" BorderThickness="0,0,0,0" CornerRadius="8" BorderBrush="{StaticResource Element}" Background="{StaticResource Area}" Margin="0">
+                            <Border ClipToBounds="True" Grid.Row="2" BorderThickness="0,1,0,0" CornerRadius="3" BorderBrush="#3360636E" Background="{StaticResource Dark}" Margin="0">
                                 <ContentPresenter Margin="4,8,4,4" ClipToBounds="True"/>
                             </Border>
                             <Popup IsOpen="True" StaysOpen="True">

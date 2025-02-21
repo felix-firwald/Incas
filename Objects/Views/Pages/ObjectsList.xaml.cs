@@ -29,6 +29,11 @@ namespace Incas.Objects.Views.Pages
     /// </summary>
     public partial class ObjectsList : UserControl, ITabItem
     {
+        public enum OpenType
+        {
+            InPage,
+            InWindow
+        }
         private const string ColorColumn = "__COLOR_COLUMN__";
         public Style ColumnHeaderSpecialStyle { get; set; }
         public IClass sourceClass;
@@ -38,6 +43,7 @@ namespace Incas.Objects.Views.Pages
         private GroupClassPermissionSettings permissionSettings;
         public event TabAction OnClose;
         public string Id { get; set; }
+        public OpenType ShowTypeButtonAction { get; set; }
         private DataView View { get; set; }
 
         private ObjectsListLoading loading;
@@ -193,7 +199,7 @@ namespace Incas.Objects.Views.Pages
                 }             
             });          
         }
-        private void UpdateViewWithSearch(FieldData data)
+        public void UpdateViewWithSearch(FieldData data)
         {
             DataTable dt = Processor.GetObjectsListWhereLike(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
@@ -517,13 +523,22 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             ObjectsList ol = new(this.sourceClass);
-            ol.OpenInNewTabButton.Visibility = Visibility.Collapsed;
-            GroupBox gb = new()
+            ol.ShowTypeButtonAction = OpenType.InWindow;
+            switch (this.ShowTypeButtonAction)
             {
-                Header = this.ClassData.ListName,
-                Content = ol
-            };
-            DialogsManager.ShowPage(gb, this.ClassData.ListName, MainWindowButtonTab.ClassPrefix + this.sourceClass.Id.ToString());
+                case OpenType.InPage:
+                    GroupBox gb = new()
+                    {
+                        Header = this.ClassData.ListName,
+                        Content = ol
+                    };
+                    DialogsManager.ShowPage(gb, this.ClassData.ListName, MainWindowButtonTab.ClassPrefix + this.sourceClass.Id.ToString());
+                    break;
+                case OpenType.InWindow:
+                    ol.ShowTypeButtonAction = OpenType.InPage;
+                    DialogsManager.ShowWindow(this.ClassData.ListName, ol);
+                    break;
+            }            
         }
 
         private void OpenPresetsListClick(object sender, RoutedEventArgs e)

@@ -8,14 +8,25 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="PlusCircle" ToolTip="Добавить строку" MouseDown="AddRowClick"/>
-            <fa:FontAwesome Style="{StaticResource IconButton}" Icon="Remove" ToolTip="Удалить выбранную строку" MouseDown="RemoveRowClick"/>
-            <fa:FontAwesome Visibility="Collapsed" Style="{StaticResource IconButton}" Icon="ArrowUp" ToolTip="Переместить строку вверх" MouseDown="RowUpClick"/>
-            <fa:FontAwesome Visibility="Collapsed" Style="{StaticResource IconButton}" Icon="ArrowDown" ToolTip="Переместить строку вниз" MouseDown="RowDownClick"/>
+            <!--<fa:FontAwesome Style="{StaticResource IconButton}" Icon="PlusCircle" ToolTip="Добавить строку" MouseDown="AddRowClick"/>-->
+            <Button Style="{DynamicResource ButtonSquare}" Click="AddRowClick" ToolTip="Добавить новую строку" >
+                <Path Fill="#FFBAFF78" VerticalAlignment="Center"  Stretch="Uniform" Margin="1" Data="M460-460v140q0 8.5 5.76 14.25t14.27 5.75q8.51 0 14.24-5.75T500-320v-140h140q8.5 0 14.25-5.76t5.75-14.27q0-8.51-5.75-14.24T640-500H500v-140q0-8.5-5.76-14.25T479.97-660q-8.51 0-14.24 5.75T460-640v140H320q-8.5 0-14.25 5.76T300-479.97q0 8.51 5.75 14.24T320-460h140Zm20.13 340q-74.67 0-140.41-28.34-65.73-28.34-114.36-76.92-48.63-48.58-76.99-114.26Q120-405.19 120-479.87q0-74.67 28.34-140.41 28.34-65.73 76.92-114.36 48.58-48.63 114.26-76.99Q405.19-840 479.87-840q74.67 0 140.41 28.34 65.73 28.34 114.36 76.92 48.63 48.58 76.99 114.26Q840-554.81 840-480.13q0 74.67-28.34 140.41-28.34 65.73-76.92 114.36-48.58 48.63-114.26 76.99Q554.81-120 480.13-120Z"/>
+            </Button>
+            <!--<fa:FontAwesome Style="{StaticResource IconButton}" Icon="Remove" ToolTip="Удалить выбранную строку" MouseDown="RemoveRowClick"/>-->
+            <Button Style="{DynamicResource ButtonSquare}" Click="RemoveRowClick" ToolTip="Удалить выбранную строку">
+                <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Data="m480-451.69 129.85 129.84q5.61 5.62 13.77 6 8.15.39 14.53-6 6.39-6.38 6.39-14.15 0-7.77-6.39-14.15L508.31-480l129.84-129.85q5.62-5.61 6-13.77.39-8.15-6-14.53-6.38-6.39-14.15-6.39-7.77 0-14.15 6.39L480-508.31 350.15-638.15q-5.61-5.62-13.77-6-8.15-.39-14.53 6-6.39 6.38-6.39 14.15 0 7.77 6.39 14.15L451.69-480 321.85-350.15q-5.62 5.61-6 13.77-.39 8.15 6 14.53 6.38 6.39 14.15 6.39 7.77 0 14.15-6.39L480-451.69Zm.13 331.69q-74.67 0-140.41-28.34-65.73-28.34-114.36-76.92-48.63-48.58-76.99-114.26Q120-405.19 120-479.87q0-74.67 28.34-140.41 28.34-65.73 76.92-114.36 48.58-48.63 114.26-76.99Q405.19-840 479.87-840q74.67 0 140.41 28.34 65.73 28.34 114.36 76.92 48.63 48.58 76.99 114.26Q840-554.81 840-480.13q0 74.67-28.34 140.41-28.34 65.73-76.92 114.36-48.58 48.63-114.26 76.99Q554.81-120 480.13-120Zm-.13-40q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+            </Button>
+            <Button Style="{DynamicResource ButtonSquare}" ToolTip="Переместить вверх" Click="MoveUpClick">
+                <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" HorizontalAlignment="Center" Data="M460-541.08v176.46q0 8.5 5.76 14.25t14.27 5.75q8.51 0 14.62-5.97 6.12-5.97 6.12-14.79v-175.7l70.61 70.62q5.62 5.61 13.77 5.23 8.16-.39 13.77-6 5.62-5.62 5.62-13.9 0-8.28-5.62-13.64l-95.54-94.77q-9.69-9.69-22.61-9.69t-22.62 9.69L362.62-498q-5.62 5.62-5.62 13.38 0 7.77 5.62 13.39 5.61 5.61 13.89 5.61 8.28 0 13.64-5.61L460-541.08ZM480.13-120q-74.67 0-140.41-28.34-65.73-28.34-114.36-76.92-48.63-48.58-76.99-114.26Q120-405.19 120-479.87q0-74.67 28.34-140.41 28.34-65.73 76.92-114.36 48.58-48.63 114.26-76.99Q405.19-840 479.87-840q74.67 0 140.41 28.34 65.73 28.34 114.36 76.92 48.63 48.58 76.99 114.26Q840-554.81 840-480.13q0 74.67-28.34 140.41-28.34 65.73-76.92 114.36-48.58 48.63-114.26 76.99Q554.81-120 480.13-120Zm-.13-40q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+            </Button>
+            <Button Style="{DynamicResource ButtonSquare}" ToolTip="Переместить вниз" Click="MoveDownClick">
+                <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" HorizontalAlignment="Center" Data="M -460 541.08 v -176.46 q -0 -8.5 -5.76 -14.25 t -14.27 -5.75 q -8.51 0 -14.62 5.97 q -6.12 5.97 -6.12 14.79 v 175.7 l -70.61 -70.62 q -5.62 -5.61 -13.77 -5.23 q -8.16 0.39 -13.77 6 q -5.62 5.62 -5.62 13.9 q 0 8.28 5.62 13.64 l 95.54 94.77 q 9.69 9.69 22.61 9.69 t 22.62 -9.69 L -362.62 498 q 5.62 -5.62 5.62 -13.38 q -0 -7.77 -5.62 -13.39 q -5.61 -5.61 -13.89 -5.61 q -8.28 0 -13.64 5.61 L -460 541.08 Z M -480.13 120 q 74.67 -0 140.41 28.34 q 65.73 28.34 114.36 76.92 q 48.63 48.58 76.99 114.26 Q -120 405.19 -120 479.87 q 0 74.67 -28.34 140.41 q -28.34 65.73 -76.92 114.36 q -48.58 48.63 -114.26 76.99 Q -405.19 840 -479.87 840 q -74.67 0 -140.41 -28.34 q -65.73 -28.34 -114.36 -76.92 q -48.63 -48.58 -76.99 -114.26 Q -840 554.81 -840 480.13 q -0 -74.67 28.34 -140.41 q 28.34 -65.73 76.92 -114.36 q 48.58 -48.63 114.26 -76.99 Q -554.81 120 -480.13 120 Z m 0.13 40 q -134 0 -227 93 t -93 227 q 0 134 93 227 t 227 93 q 134 -0 227 -93 t 93 -227 q -0 -134 -93 -227 t -227 -93 Z m 0 320 Z"/>
+            </Button>
+
         </StackPanel>
         <DataGrid x:Name="Grid" MinHeight="60" MaxHeight="180" Style="{StaticResource DataGridMain}" ItemsSource="{Binding Grid}" RowHeight="30" AutoGeneratingColumn="Grid_AutoGeneratingColumn" SelectedIndex="{Binding SelectedIndex}" CanUserAddRows="False" Grid.Row="1"/>
     </Grid>

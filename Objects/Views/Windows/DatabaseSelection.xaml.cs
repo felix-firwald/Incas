@@ -159,12 +159,12 @@ namespace Incas.Objects.Views.Windows
             this.Close();
         }
 
-        private void SearchClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void SearchClick(object sender, RoutedEventArgs e)
         {
             this.FillList(this.Fields.SelectedValue?.ToString(), this.SearchText.Text);
         }
 
-        private void ClearClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void ClearClick(object sender, RoutedEventArgs e)
         {
             this.SearchText.Text = "";
             this.FillList();

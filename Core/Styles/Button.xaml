@@ -445,16 +445,17 @@
         <Setter Property="Foreground" Value="{StaticResource Icon}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Margin" Value="5"/>
-        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Padding" Value="10,0,5,0"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
         <Setter Property="MinWidth" Value="30"/>
-        <!--<Setter Property="FontFamily" Value="{StaticResource Rubik}"/>-->
+        <Setter Property="FontFamily" Value="{StaticResource Rubik}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="180"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" Opacity="1" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource Element}" BorderThickness="0" SnapsToDevicePixels="true">
+                    <Border x:Name="border" Opacity="1" CornerRadius="8" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource Element}" BorderThickness="0" SnapsToDevicePixels="true">
                         <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
 

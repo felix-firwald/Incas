@@ -2,7 +2,15 @@
 using Incas.Core.Views.Windows;
 using Incas.Miniservices.TextEditor.Views.Pages;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Views.Pages;
+using Incas.Objects.Views.Windows;
+using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.Workspace;
+using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Incas.Core.ViewModels
@@ -26,6 +34,42 @@ namespace Incas.Core.ViewModels
             this.CopyFile = new Command(this.DoCopyFile);
             this.OpenFileManager = new Command(this.DoOpenFileManager);
             this.OpenWeb = new Command(this.DoOpenWeb);
+            this.UserCommand = new Command(this.DoUserCommand);
+        }
+
+        private void DoUserCommand(object obj)
+        {
+            MenuCommand command = obj as MenuCommand;
+            switch (command.Type)
+            {
+                case MenuCommand.CommandType.Add:
+                    Class cl = new(command.TargetClass);
+                    ObjectsEditor editor = new(cl);
+                    editor.Show();
+                    break;
+                case MenuCommand.CommandType.Parse:
+                    break;
+                case MenuCommand.CommandType.Find:
+                    Class classFind = new(command.TargetClass);
+                    IClassData cd = classFind.GetClassData();
+                    DataSearchPredefined search = new(cd, command.TargetField);
+                    if (search.ShowDialog(command.Name))
+                    {
+                        ObjectsList ol = new(classFind);
+                        if (search.OnlyEqual)
+                        {
+                            ol.UpdateViewWithSearch(search.GetData());
+                        }
+                        else
+                        {
+                            ol.UpdateViewWithFilter(search.GetData());
+                        }
+                        DialogsManager.ShowPageWithGroupBox(ol, "Результат поиска", command.TargetField.ToString());
+                    }
+                    break;
+                case MenuCommand.CommandType.FindAndOpen:
+                    break;
+            }
         }
 
         #region ICommands
@@ -36,6 +80,7 @@ namespace Incas.Core.ViewModels
         public ICommand CopyFile { get; private set; }
         public ICommand OpenFileManager { get; private set; }
         public ICommand OpenWeb { get; private set; }
+        public ICommand UserCommand { get; private set; }
         public static RoutedCommand CopyToClipBoard2 = new("CopyToClipBoard", typeof(MainWindow), [new KeyGesture(Key.F2)]);
         #endregion
         #region Tools
@@ -73,6 +118,13 @@ namespace Incas.Core.ViewModels
         }
 
         #endregion
+        public List<MenuCommand> Commands
+        {
+            get
+            {
+                return ProgramState.CurrentWorkspace.GetDefinition().Commands;
+            }
+        }
         public bool ProcessHandled
         {
             get => this._processHandled;
@@ -97,7 +149,19 @@ namespace Incas.Core.ViewModels
         {
             get => "-";
         }
-
+        private bool testFunctionEnabled = false;
+        public Visibility TestFunctionVisibility
+        {
+            get
+            {
+                return this.FromBool(this.testFunctionEnabled);
+            }
+            set
+            {
+                this.testFunctionEnabled = true;
+                this.OnPropertyChanged(nameof(this.TestFunctionVisibility));
+            }
+        }
         public string WorkspaceName
         {
             get => this._workspaceName;

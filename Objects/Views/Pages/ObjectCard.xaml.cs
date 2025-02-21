@@ -190,12 +190,7 @@ namespace Incas.Objects.Views.Pages
                     of.OnFilterRequested += this.Of_OnFilterRequested;
                     this.FieldsContentPanel.Children.Add(of);
                 }
-                if (this.first)
-                {
-                    ObjectBackReferenceViewer ob = new(this.Class, this.id);
-                    this.FieldsContentPanel.Children.Add(ob);
-                }
-                ((IObjectFieldViewer)this.FieldsContentPanel.Children[this.FieldsContentPanel.Children.Count - 1]).HideSeparator();
+                ((IObjectFieldViewer)this.FieldsContentPanel.Children[^1]).HideSeparator();
             });
         }
         public void UpdateFor(IObject obj)
@@ -237,11 +232,6 @@ namespace Incas.Objects.Views.Pages
                     ObjectFieldViewer of = new(field, this.first);
                     of.OnFilterRequested += this.Of_OnFilterRequested;
                     this.FieldsContentPanel.Children.Add(of);
-                }
-                if (this.first)
-                {
-                    ObjectBackReferenceViewer ob = new(this.Class, this.id);
-                    this.FieldsContentPanel.Children.Add(ob);
                 }
                 ((IObjectFieldViewer)this.FieldsContentPanel.Children[^1]).HideSeparator();
             });         

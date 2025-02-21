@@ -17,11 +17,11 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{StaticResource Element}"/>
+                        <Setter Property="Background" Value="{StaticResource Basic}"/>
                         <Setter Property="BorderBrush" Value="{StaticResource PrimaryMain}"/>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="BorderBrush" Value="{StaticResource GrayLight}"/>
+                        <Setter Property="BorderBrush" Value="White"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -33,7 +33,7 @@
             </Grid.ColumnDefinitions>
             <Path x:Name="Icon" Fill="{Binding BorderBrush, ElementName=bbb}" VerticalAlignment="Center" HorizontalAlignment="Center">
             </Path>
-            <TextBlock x:Name="Text" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=bbb}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" FontFamily="{StaticResource JetBrains}" FontWeight="Thin" FontSize="11">
+            <TextBlock x:Name="Text" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=bbb}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" FontFamily="{StaticResource Rubik}" FontSize="11">
             </TextBlock>
         </Grid>
     </Border>

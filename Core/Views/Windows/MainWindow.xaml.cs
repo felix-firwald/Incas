@@ -82,15 +82,11 @@ namespace Incas.Core.Views.Windows
             if (this.StackLeft.RenderSize.Width < 150)
             {
                 this.LSurname.Visibility = Visibility.Collapsed;
-                this.LFullname.Visibility = Visibility.Collapsed;
-                this.LPost.Visibility = Visibility.Collapsed;
                 this.Incubator.Visibility = Visibility.Collapsed;
             }
             else
             {
                 this.LSurname.Visibility = Visibility.Visible;
-                this.LFullname.Visibility = Visibility.Visible;
-                this.LPost.Visibility = Visibility.Visible;
                 this.Incubator.Visibility = Visibility.Visible;
             }
         }
@@ -98,6 +94,10 @@ namespace Incas.Core.Views.Windows
         private void Logo_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.PlayEasterEgg("Rooster");
+            if (DialogsManager.ShowQuestionDialog("Это действие переведет рабочее пространство в неуправляемый тестовый режим после активации специальной кнопки. Все ваши данные могут быть потеряны. Продолжить?", "Продолжить?", "Продолжай", "Вырубай") == DialogStatus.Yes)
+            {
+                this.vm.TestFunctionVisibility = Visibility.Visible;
+            }            
         }
 
         private void window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -297,6 +297,15 @@ namespace Incas.Core.Views.Windows
             {
                 DialogsManager.ShowExclamationDialog("Документ не создавался в INCAS, либо был создан в версии программы, которая еще не поддерживала такую функциональность", "Действие невозможно");
             }
+        }
+
+        private void OpenTestClick(object sender, RoutedEventArgs e)
+        {
+            TesterWindow tw = new();
+            Application.Current.MainWindow = tw;
+            this.Hide();
+            tw.ShowDialog();
+            this.Close();
         }
     }
 }

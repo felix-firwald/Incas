@@ -1,6 +1,7 @@
 ﻿using Incas.Core.ViewModels;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
+using System;
 using System.Windows;
 
 namespace Incas.Objects.ViewModels
@@ -15,6 +16,10 @@ namespace Incas.Objects.ViewModels
         public FieldViewModel()
         {
             this.Source = new();
+            if (this.Source.Id == Guid.Empty)
+            {
+                this.Source.Id = Guid.NewGuid();
+            }
         }
         public string VisibleName
         {

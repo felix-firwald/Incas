@@ -84,6 +84,11 @@ namespace Incas.Core.Classes
             file = "";
             return false;
         }
+        public static void ShowWindow(string title, System.Windows.Controls.UserControl uc)
+        {
+            ContainerWindow cw = new(uc, title);
+            cw.Show();
+        }
         public static void ShowHelp(HelpType type)
         {
             HelpWindow help = new(type);

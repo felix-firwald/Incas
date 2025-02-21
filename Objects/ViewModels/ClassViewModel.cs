@@ -56,25 +56,28 @@ namespace Incas.Objects.ViewModels
         private void DoRemoveField(object obj)
         {
             FieldViewModel field = obj as FieldViewModel;
-            BindingData data = new()
+            if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить поле [{field.Name}] из этого класса? После сохранения класса это действие отменить нельзя: это поле будет безвозвратно удалено во всех объектах.", "Удалить поле?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
             {
-                BindingClass = this.Source.Id,
-                BindingField = field.Source.Id
-            };
-            if (data.BindingClass == Guid.Empty || data.BindingField == Guid.Empty)
-            {
-                this.Fields.Remove(field);
-            }
-            using Class cl = new();
-            List<string> list = cl.FindBackReferencesNames(data);
-            if (list.Count > 0)
-            {
-                DialogsManager.ShowExclamationDialog($"Поле невозможно удалить, поскольку на него ссылаются следующие классы:\n{string.Join(",\n", list)}", "Удаление невозможно");
-            }
-            else
-            {
-                this.Fields.Remove(field);
-            }
+                BindingData data = new()
+                {
+                    BindingClass = this.Source.Id,
+                    BindingField = field.Source.Id
+                };
+                if (data.BindingClass == Guid.Empty || data.BindingField == Guid.Empty)
+                {
+                    this.Fields.Remove(field);
+                }
+                using Class cl = new();
+                List<string> list = cl.FindBackReferencesNames(data);
+                if (list.Count > 0)
+                {
+                    DialogsManager.ShowExclamationDialog($"Поле невозможно удалить, поскольку на него ссылаются следующие классы:\n{string.Join(",\n", list)}", "Удаление невозможно");
+                }
+                else
+                {
+                    this.Fields.Remove(field);
+                }
+            }           
         }
         private void DoMoveUpField(object obj)
         {
@@ -379,7 +382,7 @@ namespace Incas.Objects.ViewModels
             FieldType.GlobalConstant, 
             FieldType.HiddenField,
             FieldType.Relation,
-            FieldType.Table, 
+            FieldType.Table,
         };
         public List<FieldType> FieldTypes
         {
@@ -388,6 +391,7 @@ namespace Incas.Objects.ViewModels
                 return fieldTypes;
             }
         }
+
         public void SetData()
         {
             this.SourceData.Fields = new();
@@ -399,6 +403,15 @@ namespace Incas.Objects.ViewModels
                 }              
             }
             this.Source.SetClassData(this.SourceData);
+        }
+        public List<Field> GetFields()
+        {
+            List<Field> result = new();
+            foreach (FieldViewModel field in this.Fields)
+            {
+                result.Add(field.Source);
+            }
+            return result;
         }
         private void CheckField(Field f)
         {
