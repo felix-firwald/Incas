@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Incas.Core.Views.Windows"
         xmlns:fa="http://schemas.fontawesome.io/icons/" x:Class="Incas.Core.Views.Windows.Dialog"
         mc:Ignorable="d" MouseDown="Window_MouseDown"
-        Title="Диалоговое окно" Style="{DynamicResource Dialog}" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height" Background="{DynamicResource Black}">
+        Title="Диалоговое окно" Style="{DynamicResource WindowBase}" ResizeMode="NoResize" Width="450" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height" Background="{DynamicResource Black}">
     <Window.Resources>
         <Style x:Key="IconStyle" TargetType="{x:Type Path}">
             <!--<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -31,7 +31,7 @@
         </EventTrigger>
 
     </Window.Triggers>
-    <Grid>
+    <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>
             <ColumnDefinition Width="71*"/>
@@ -59,7 +59,7 @@
         <Label x:Name="TitleText" Grid.Column="1" Content="Возникла неизвестная ошибка" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" Width="240" FontWeight="Bold" FontFamily="{StaticResource JetBrains}" Margin="5,0,0,0"/>
 
         <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Margin="5" MaxHeight="400" >
-            <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" FontFamily="{StaticResource JetBrains}" Text="По умолчанию, такой текст обозначает критическую неисправность в работе программы." Margin="5,0,10,10"/>
+            <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" FontFamily="{StaticResource JetBrains}" Text="По умолчанию, такой текст обозначает критическую неисправность в работе программы." Margin="5,0,10,10" Foreground="{DynamicResource Light}"/>
         </ScrollViewer>
 
         <!--<Rectangle Fill="{DynamicResource LightBlack}" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2"/>-->

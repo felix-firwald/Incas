@@ -4,14 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows" MouseDown="Window_MouseDown"
-        mc:Ignorable="d" Style="{DynamicResource Dialog}" Background="{StaticResource Black}"
-        Title="Выбор рабочего пространства" Height="400" Width="400" WindowStartupLocation="CenterScreen" Closed="OnClosed">
-    <Grid FocusManager.FocusedElement="{Binding ElementName=pwd}">
+        mc:Ignorable="d" Style="{DynamicResource WindowBase}" ResizeMode="NoResize" Background="{StaticResource Black}"
+        Title="Вход в рабочее пространство" Height="320" Width="480" WindowStartupLocation="CenterScreen" Closed="OnClosed">
+    <Grid FocusManager.FocusedElement="{Binding ElementName=pwd}" Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="3*"/>
             <RowDefinition Height="8*"/>
-            <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
@@ -20,16 +17,29 @@
             <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
 
-        <Path VerticalAlignment="Center" Fill="{DynamicResource Element}" HorizontalAlignment="Center" Grid.ColumnSpan="2" Data="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" Width="50" Height="50" Stretch="Fill" Margin="0,12,0,0" />
-        <Path VerticalAlignment="Center" Fill="{DynamicResource LightPurple}" HorizontalAlignment="Center" Grid.ColumnSpan="2" Data="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" Width="35" Height="35" Stretch="Fill" Margin="0,12,0,0" />
-        <Label Style="{DynamicResource LabelElement}" Content="Вход в рабочее пространство" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+        <!--<Path VerticalAlignment="Center" Fill="{DynamicResource Element}" HorizontalAlignment="Center" Grid.ColumnSpan="2" Data="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" Width="50" Height="50" Stretch="Fill" Margin="0,12,0,0" />
+        <Path VerticalAlignment="Center" Fill="{DynamicResource LightPurple}" HorizontalAlignment="Center" Grid.ColumnSpan="2" Data="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" Width="35" Height="35" Stretch="Fill" Margin="0,12,0,0" />-->
+        <!--<Label Style="{DynamicResource LabelElement}" Content="Вход в рабочее пространство" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>-->
 
         <TextBox x:Name="cpath" Visibility="Collapsed" Text="{Binding Path}" Grid.Row="3" Grid.ColumnSpan="2" Tag="Путь к рабочему пространству" HorizontalContentAlignment="Left" Margin="5,5,5,5" />
 
-        <ComboBox x:Name="user" Style="{StaticResource ComboBoxMain}" ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=true}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedUser, Mode=TwoWay, NotifyOnSourceUpdated=True}" Tag="Пользователь" Grid.Row="3"  Grid.ColumnSpan="2" />
-        <PasswordBox x:Name="pwd" Tag="Пароль для входа" Grid.Row="4" MaxLength="20" Grid.ColumnSpan="2">
-        </PasswordBox>
-        <Border CornerRadius="8,0,0,8" Margin="5,5,0,5" Background="{DynamicResource LightBlack}" Grid.Row="2" >
+        <ComboBox x:Name="user" Style="{StaticResource ComboBoxMain}" ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=true}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedUser, Mode=TwoWay, NotifyOnSourceUpdated=True}" Tag="Пользователь" Grid.Row="1"  Grid.ColumnSpan="2" />
+        <Grid Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <PasswordBox x:Name="pwd" Tag="Пароль для входа"  MaxLength="20" >
+            </PasswordBox>
+            <Button Style="{StaticResource ButtonRectangle}" IsDefault="True" HorizontalAlignment="Center" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0" Height="30" Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <Path 
+                    Data="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" Fill="#FFBAFF78" VerticalAlignment="Center" Margin="0,0,0,2"/>
+                    <Label Content="Войти" Foreground="White" Grid.Column="1"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <Border CornerRadius="8,0,0,8" Margin="5,5,0,5" Background="{DynamicResource LightBlack}" >
             <ListBox Style="{DynamicResource ListBoxMain}" Background="{DynamicResource LightBlack}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}" Cursor="">
                 <!--<ListBoxItem Content="567567" IsSelected="True"/>
                 <ListBoxItem Content="567567"/>
@@ -38,7 +48,7 @@
                 <ListBoxItem Content="567567"/>-->
             </ListBox>
         </Border>
-        <Border Grid.Row="2" CornerRadius="0,8,8,0" Margin="0,5,5,5" Background="{DynamicResource LightBlack}" Grid.Column="1">
+        <Border CornerRadius="0,8,8,0" Margin="0,5,5,5" Background="{DynamicResource LightBlack}" Grid.Column="1">
 
             <StackPanel Orientation="Vertical" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить рабочее пространство в список" MouseDown="AddClick" FontSize="16" />-->
@@ -56,18 +66,6 @@
             </StackPanel>
         </Border>
 
-        <Button Style="{StaticResource ButtonMain}" IsDefault="True" Grid.Row="5" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="LogInClicked" Margin="5,0,5,0" Height="30">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                
-                <Path 
-                    Data="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" Fill="White" VerticalAlignment="Center" Margin="0,0,0,2"/>
-                <Label Content="Войти" Foreground="White" Grid.Column="1"/>
-            </Grid>
-        </Button>
 
     </Grid>
 </Window>

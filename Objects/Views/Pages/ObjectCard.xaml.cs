@@ -37,8 +37,6 @@ namespace Incas.Objects.Views.Pages
             this.first = first;
             if (!first)
             {
-                this.MainBorder.BorderThickness = new Thickness(1);
-                this.MainBorder.CornerRadius = new CornerRadius(0);
                 this.ObjectName.FontSize = 12;
             }
             else
@@ -53,8 +51,6 @@ namespace Incas.Objects.Views.Pages
             this.first = first;
             if (!first)
             {
-                this.MainBorder.BorderThickness = new Thickness(1);
-                this.MainBorder.CornerRadius = new CornerRadius(0);
                 this.ObjectName.FontSize = 12;
             }
             else

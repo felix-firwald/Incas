@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Objects.Views.Windows"
-        mc:Ignorable="d"
-        Title="Выбор привязки" Style="{StaticResource Dialog}" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown" Height="350">
+        mc:Ignorable="d" xmlns:conv="clr-namespace:Incas.Objects.Converters"
+        Title="Выбор привязки" Style="{StaticResource WindowBase}" Background="{StaticResource Black}" Width="600" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown" Height="450" ResizeMode="NoResize">
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard>
@@ -18,12 +18,10 @@
         </EventTrigger>
 
     </Window.Triggers>
+    <Window.Resources>
+        <conv:BindingConstraintTypeToTextConverter x:Key="BindingConstraintTypeToTextConverter"/>
+    </Window.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="19*" MaxWidth="110"/>
-            <ColumnDefinition Width="26*"/>
-            <ColumnDefinition Width="45*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
@@ -31,9 +29,7 @@
             <RowDefinition Height="2"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <Path Fill="{StaticResource LightPurple}" Stretch="Uniform" Grid.RowSpan="2" MaxWidth="40" MaxHeight="40" Data="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434zM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567zM7.5 9.933l-2.75 1.571v3.134l2.75-1.571zm1 3.134 2.75 1.571v-3.134L8.5 9.933zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567zm2.242-2.433V3.504L8.5 5.076V8.21zM7.5 8.21V5.076L4.75 3.504v3.134zM5.258 2.643 8 4.21l2.742-1.567L8 1.076zM15 9.933l-2.75 1.571v3.134L15 13.067zM3.75 14.638v-3.134L1 9.933v3.134z"/>
-        <Label x:Name="TitleText" Grid.Column="1" Grid.ColumnSpan="2" Content="Выбор привязки" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" FontWeight="Bold" FontFamily="{StaticResource JetBrains}"/>
-        <TabControl Style="{StaticResource TabControlMain}" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Background="{x:Null}">
+        <TabControl Style="{StaticResource TabControlMain}" Grid.ColumnSpan="2" Grid.Column="1" Grid.RowSpan="3" Background="{x:Null}">
             <TabItem Header="Привязка" Style="{StaticResource TabItemMain}" BorderBrush="{DynamicResource LightPurple}">
                 <Border Background="{StaticResource Black}" Margin="5" MaxHeight="300" BorderThickness="2" BorderBrush="{StaticResource Basic}" CornerRadius="8" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
                     <Grid>
@@ -56,16 +52,79 @@
                 </Border>
             </TabItem>
             <TabItem Header="Ограничения" Style="{StaticResource TabItemMain}" BorderBrush="{DynamicResource LightPurple}">
+                <Border>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Button Style="{StaticResource ButtonRectangle}" ToolTip="Добавить новое ограничение для выбираемых объектов" Click="AddClick">
+                            <StackPanel Orientation="Horizontal" Margin="5,2,5,2">
+                                <Path Fill="{StaticResource Buttons.Green}" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
+                                <Label Content="Добавить ограничение" FontFamily="{StaticResource Rubik}" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
+                            </StackPanel>
+                        </Button>
+                        <ListBox Grid.Row="1" Background="{x:Null}" BorderBrush="{x:Null}" ItemsSource="{Binding Constraints}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Background="{StaticResource LightBlack}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="50" MinWidth="50" MaxWidth="50"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="50" MinWidth="50" MaxWidth="50"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <ComboBox Style="{StaticResource ComboBoxMain}" SelectedItem="{Binding ToField}" DisplayMemberPath="VisibleName" ItemsSource="{Binding TargetClassFields}" Grid.ColumnSpan="2">
 
+                                        </ComboBox>
+                                        <Grid Grid.Row="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="40"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Path Fill="White" Stretch="Uniform" Height="15" Data="M545.85-174.38q-6.62-6.62-6.23-14.54.38-7.93 6.23-13.77L683.15-340H304.62q-26.85 0-45.74-18.88Q240-377.77 240-404.62V-740q0-8.54 5.73-14.27T260-760q8.54 0 14.27 5.73T280-740v335.38q0 10.77 6.92 17.7 6.93 6.92 17.7 6.92h378.53L545.62-517.54q-6.62-6.61-6.5-14.15.11-7.54 6.5-14.16 6.61-6.61 14.53-6.34 7.93.27 13.77 6.11l163.46 163.46q5.24 5.24 7.35 10.7 2.12 5.46 2.12 11.92t-2.12 11.92q-2.11 5.46-7.35 10.7l-163 163q-6.61 6.61-14.26 6.61-7.66 0-14.27-6.61Z" />
+                                            <ComboBox Style="{StaticResource ComboBoxMain}" SelectedItem="{Binding ConstraintType}" ItemsSource="{Binding AvailableTypes}" Grid.Column="1" Grid.Row="3">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Label Content="{Binding ., Converter={StaticResource BindingConstraintTypeToTextConverter}}" Style="{DynamicResource LabelElement}" FontSize="11"/>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </Grid>
+                                        <Label Style="{StaticResource LabelIncubator}" Content="=" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Grid.Row="1"/>
+                                        <ComboBox Style="{StaticResource ComboBoxMain}" Visibility="{Binding FromFieldVisibility}" SelectedItem="{Binding FromMyField}" DisplayMemberPath="VisibleName" ItemsSource="{Binding MyFields}" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2">
+
+                                        </ComboBox>
+                                        <TextBox Style="{StaticResource TextBoxMain}" Visibility="{Binding FromValueVisibility}" Text="{Binding FromValue}" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"/>
+                                        <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Background="{x:Null}" ToolTip="Удалить ограничение" Grid.Column="3" Command="{Binding DataContext.RemoveField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
+                                            <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        
+                    </Grid>
+                </Border>
             </TabItem>
         </TabControl>
-        
-        <Button x:Name="Yes" Style="{DynamicResource ButtonMainFinish}" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="FinishClick" Margin="5,0,5,0" IsDefault="True">
-            <StackPanel Orientation="Horizontal">
-                <Path Fill="White" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" VerticalAlignment="Center"/>
-                <Label Foreground="White" Content="Сохранить"/>
-            </StackPanel>
-        </Button>
-        <Button x:Name="No" Style="{DynamicResource ButtonMain}" Content="Закрыть" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Margin="5,0,5,0" IsCancel="True" Click="CancelClick"/>
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal">
+            <Button x:Name="Yes" Style="{DynamicResource ButtonRectangle}" Background="{StaticResource Dark}" HorizontalAlignment="Right" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="FinishClick" Margin="5,0,5,0" IsDefault="True">
+                <StackPanel Orientation="Horizontal">
+                    <Path Fill="{StaticResource Buttons.Green}" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" VerticalAlignment="Center"/>
+                    <Label x:Name="FinishText" Foreground="White" Content="Сохранить привязку"/>
+                </StackPanel>
+            </Button>
+            <Button Style="{DynamicResource ButtonRectangle}" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="2" VerticalAlignment="Center" Click="CancelClick" Margin="5,0,5,0" IsCancel="True">
+                <StackPanel Orientation="Horizontal">
+                    <Path Fill="{StaticResource Buttons.Red}" Stretch="Uniform" Height="15" Data="M480.13-120q-74.67 0-140.41-28.34-65.73-28.34-114.36-76.92-48.63-48.58-76.99-114.26Q120-405.19 120-479.87q0-74.67 28.34-140.41 28.34-65.73 76.92-114.36 48.58-48.63 114.26-76.99Q405.19-840 479.87-840q74.67 0 140.41 28.34 65.73 28.34 114.36 76.92 48.63 48.58 76.99 114.26Q840-554.81 840-480.13q0 74.67-28.34 140.41-28.34 65.73-76.92 114.36-48.58 48.63-114.26 76.99Q554.81-120 480.13-120Zm-.13-40q58.59 0 112.83-20.58 54.25-20.57 98.55-59.73L240.31-691.38q-38.39 44.3-59.35 98.55Q160-538.59 160-480q0 134 93 227t227 93Zm239.69-108.62q39.16-44.3 59.73-98.55Q800-421.41 800-480q0-134-93-227t-227-93q-58.86 0-113.35 20.19-54.5 20.19-98.03 60.12l451.07 451.07Z" VerticalAlignment="Center"/>
+                    <Label x:Name="No" Foreground="White" Content="Отменить"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

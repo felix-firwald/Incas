@@ -2,9 +2,12 @@
 using Incas.Objects.Components;
 using Incas.Objects.ViewModels;
 using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -19,100 +22,27 @@ namespace Incas.Objects.Views.Windows
         public Guid SelectedField { get; set; }
         public DialogBindingViewModel vm;
         public bool Result = false;
-        public DialogBinding(Field data)
+        public DialogBinding(ObservableCollection<FieldViewModel> myClassFields, Field data)
         {
             this.InitializeComponent();
             BindingData bd = data.GetBindingData();
             if (bd is null)
             {
-                this.vm = new(new());
+                this.vm = new(myClassFields, new());
             }
             else
             {
                 try
                 {
-                    this.vm = new(bd);
+                    this.vm = new(myClassFields, bd);
                 }
                 catch
                 {
-                    this.vm = new(new());
+                    this.vm = new(myClassFields, new());
                 }
             }
             this.DataContext = this.vm;
         }
-        //private void ApplySelected(BindingData data)
-        //{
-        //    if (data.Class == Guid.Empty)
-        //    {
-        //        return;
-        //    }
-        //    foreach (ListBoxItem t in this.ClassesPanel.Items)
-        //    {
-        //        if (t.Uid == data.Class.ToString())
-        //        {
-        //            t.IsSelected = true;
-        //            this.LoadClassFields();
-        //            foreach (ListBoxItem fieldItem in this.FieldsPanel.Items)
-        //            {
-        //                if (fieldItem.Uid == data.Field.ToString())
-        //                {
-        //                    fieldItem.IsSelected = true;
-        //                    break;
-        //                }
-        //            }
-        //            break;
-        //        }
-        //    }
-        //}
-        //private void LoadClasses()
-        //{
-        //    using (Class cl = new())
-        //    {
-        //        foreach (Class item in cl.GetAllClasses())
-        //        {
-        //            TreeViewItem tvi = new()
-        //            {
-        //                Header = item.name,
-        //                Uid = item.identifier.ToString() // system guid
-        //            };
-        //            tvi.Selected += this.Tvi_Selected;
-        //            this.ClassesPanel.Items.Add(tvi);
-        //        }
-        //    }            
-        //}
-
-        //private void LoadClassFields()
-        //{
-        //    using (Class cl = new())
-        //    {
-        //        cl.GetClassById(this.SelectedClass);
-        //        ClassData cd = cl.GetClassData();
-        //        foreach (Incas.Objects.Models.Field f in cd.fields)
-        //        {
-        //            ListBoxItem sub = new()
-        //            {
-        //                Content = f.Name,
-        //                Uid = f.Id.ToString()
-        //            };
-        //            sub.Selected += this.Field_Selected;
-        //            this.FieldsPanel.Items.Add(sub);
-
-        //        }
-        //    }
-        //}
-        //private void Tvi_Selected(object sender, RoutedEventArgs e)
-        //{
-        //    ListBoxItem item = (ListBoxItem)sender;
-        //    this.SelectedClass = System.Guid.Parse(item.Uid);
-        //    this.LoadClassFields();
-        //}
-
-        //private void Field_Selected(object sender, RoutedEventArgs e)
-        //{
-        //    ListBoxItem item = (ListBoxItem)sender;
-        //    Guid id = System.Guid.Parse(item.Uid);
-        //    this.SelectedField = id;
-        //}
 
         private void CancelClick(object sender, RoutedEventArgs e)
         {
@@ -143,6 +73,11 @@ namespace Incas.Objects.Views.Windows
             this.SelectedField = this.vm.BindingField.Id;
             this.Result = true;
             this.Close();
+        }
+
+        private void AddClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.AddConstraint();
         }
     }
 }

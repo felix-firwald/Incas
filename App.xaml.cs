@@ -3,12 +3,15 @@ using Incas.Core.Views.Windows;
 using Incas.Tests;
 using IncasEngine.Backups;
 using IncasEngine.Core;
+using IncasEngine.Core.RequestsUtils;
 using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace Incas
 {
@@ -40,7 +43,9 @@ namespace Incas
             {
                 splashScreen.Close(new(1000));
             }
-            
+#if DEBUG
+            this.RunTest();
+#endif
             ProgramState.CheckoutWorkspaces();
             
             OpenWorkspace ow = new();
@@ -50,10 +55,32 @@ namespace Incas
                 //mw.Show();
             }           
         }
-        private void ShowChecker()
+        private void RunTest()
         {
-            CheckerWindow cw = new();
-            cw.ShowDialog();
+            //CheckerWindow cw = new();
+            //cw.ShowDialog();
+            Query q = new("ChekerTable");
+            WhereInstruction wi = new();
+            wi.ConditionGroups = new();
+            wi.ConditionGroups.Add(new()
+            {
+                LogicalOperator = WhereLogicalOperator.And,
+                Conditions = new()
+                {
+                    new() { LogicalOperator = WhereLogicalOperator.Or, Name = "Поле 1", Operator = WhereCompareOperator.BeginsWith, Value = "ГОНДОЛУПА" },
+                    new() { LogicalOperator = WhereLogicalOperator.And, Name = "Поле 2", Operator = WhereCompareOperator.EndsWith, Value = "Проверка" },
+                }
+            });
+            wi.ConditionGroups.Add(new()
+            {
+                LogicalOperator = WhereLogicalOperator.Or,
+                Conditions = new()
+                {
+                    new() { LogicalOperator = WhereLogicalOperator.Or, Name = "Поле 3", Operator = WhereCompareOperator.In, Value = new List<string>() { "привет", "пока" } },
+                    new() { LogicalOperator = WhereLogicalOperator.Or, Name = "Поле 4", Operator = WhereCompareOperator.NotIn, Value = new List<string>() { "gjrf", "dfggds" }  },
+                }
+            });
+            DialogsManager.ShowSQLViewer(q.Select().Where(wi));
         }
         private void ShowCI()
         {

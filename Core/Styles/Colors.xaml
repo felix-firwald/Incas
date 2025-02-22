@@ -58,5 +58,8 @@
     <SolidColorBrush x:Key="DarkYellow" Color="#F19A0B"/>
     <SolidColorBrush x:Key="Yellow" Color="#F5A623"/>
     <SolidColorBrush x:Key="LightYellow" Color="#F7BD5B"/>
-     
+
+    <SolidColorBrush x:Key="Buttons.Green" Color="#FFBAFF78"/>
+    <SolidColorBrush x:Key="Buttons.Red" Color="#FFFF7878"/>
+
 </ResourceDictionary>

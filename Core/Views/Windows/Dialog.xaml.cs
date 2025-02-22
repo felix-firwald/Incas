@@ -21,6 +21,7 @@ namespace Incas.Core.Views.Windows
         {
 
             this.InitializeComponent();
+            this.Title = "";
             this.TitleText.Content = title;
             this.Description.Text = text;
             switch (ic)

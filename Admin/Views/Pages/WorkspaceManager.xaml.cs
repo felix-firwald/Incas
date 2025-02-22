@@ -216,7 +216,13 @@ namespace Incas.Admin.Views.Pages
 
         private void EditClassClick(object sender, RoutedEventArgs e)
         {
-            CreateClass cc = new(this.GetSelectedClass());
+            Guid id = this.GetSelectedClass();
+            if (id == Guid.Empty)
+            {
+                DialogsManager.ShowExclamationDialog("Не выбран класс для редактирования.", "Действие невозможно");
+                return;
+            }
+            CreateClass cc = new(id);
             cc.ShowDialog();
             this.vm.UpdateClasses();
         }

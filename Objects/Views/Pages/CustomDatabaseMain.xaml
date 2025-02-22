@@ -36,17 +36,6 @@
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
-
-                    <Expander Style="{DynamicResource ExpanderMain}" Header="Срезы данных" IsExpanded="True" Visibility="{Binding PresetsVisibility}">
-                        <StackPanel MaxWidth="320">
-                            
-                            <ListBox
-                                Style="{DynamicResource ListBoxMain}"
-                                ItemContainerStyle="{DynamicResource ListBoxItemMicro}"
-                                ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset}" DisplayMemberPath="Name" Background="{x:Null}" Grid.RowSpan="2" Margin="0,-2,0,-2" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                            </ListBox>
-                        </StackPanel>
-                    </Expander>
                 </StackPanel>
             </ScrollViewer>
         </GroupBox>

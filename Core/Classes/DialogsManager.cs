@@ -2,6 +2,8 @@
 using Incas.Help.Components;
 using Incas.Help.Windows;
 using Incas.Objects.Views.Pages;
+using Incas.Testing;
+using IncasEngine.Core;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -88,6 +90,11 @@ namespace Incas.Core.Classes
         {
             ContainerWindow cw = new(uc, title);
             cw.Show();
+        }
+        public static void ShowSQLViewer(Query q)
+        {
+            SQLViewerWindow sqlv = new(q);
+            sqlv.ShowDialog();
         }
         public static void ShowHelp(HelpType type)
         {

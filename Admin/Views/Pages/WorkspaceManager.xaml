@@ -25,19 +25,19 @@
                 <WrapPanel Grid.ColumnSpan="2">
                     <Button Style="{StaticResource ButtonRectangle}" Click="AddClassClick" Visibility="{Binding CreatingClassVisibility}" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal">
-                            <Path Fill="#FFBAFF78" VerticalAlignment="Center" Data="M11.5,12.5V16a.5.5,0,1,0,1,0V12.5H16a.5.5,0,1,0,0-1H12.5V8a.5.5,0,1,0-1,0v3.5H8a.5.5,0,1,0,0,1ZM5.6155,20A1.58,1.58,0,0,1,4,18.3845V5.6155A1.58,1.58,0,0,1,5.6155,4h12.769A1.58,1.58,0,0,1,20,5.6155v12.769A1.58,1.58,0,0,1,18.3845,20Z" Stretch="Uniform"/>
+                            <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Data="M11.5,12.5V16a.5.5,0,1,0,1,0V12.5H16a.5.5,0,1,0,0-1H12.5V8a.5.5,0,1,0-1,0v3.5H8a.5.5,0,1,0,0,1ZM5.6155,20A1.58,1.58,0,0,1,4,18.3845V5.6155A1.58,1.58,0,0,1,5.6155,4h12.769A1.58,1.58,0,0,1,20,5.6155v12.769A1.58,1.58,0,0,1,18.3845,20Z" Stretch="Uniform"/>
                             <Label Foreground="White" Content="Добавить класс"/>
                         </StackPanel>
                     </Button>
                     <Button Style="{StaticResource ButtonRectangle}" Visibility="{Binding CreatingClassVisibility}" ToolTip="Унаследовать новый класс от выбранного" Click="InheritClassClick">
                         <StackPanel Orientation="Horizontal">
-                            <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Data="M5.3872,20.9029a1.997,1.997,0,0,1-2.0045-2A1.9048,1.9048,0,0,1,3.81,17.6684a2.0138,2.0138,0,0,1,1.0723-.7V8.3816A2.0082,2.0082,0,0,1,3.81,7.6789a1.9167,1.9167,0,0,1-.4277-1.2375,1.9912,1.9912,0,0,1,2-2A1.9167,1.9167,0,0,1,6.62,4.8691a2.0082,2.0082,0,0,1,.7027,1.0723H12L10.01,3.97a.45.45,0,0,1-.1655-.345.5038.5038,0,0,1,.1655-.3625.4669.4669,0,0,1,.7132,0l2.6135,2.6133a.78.78,0,0,1,0,1.1307L10.7172,9.6259a.5067.5067,0,0,1-.3443.1557.47.47,0,0,1-.3632-.1557.467.467,0,0,1,0-.7133L12,6.9414H7.3229a2.0326,2.0326,0,0,1-1.44,1.44v8.581a2.0068,2.0068,0,0,1,1.072.7028,1.9967,1.9967,0,0,1-1.5675,3.2375ZM17.84,4.4414a1.9394,1.9394,0,0,1,1.418.582,1.9169,1.9169,0,0,1,.5865,1.4135,1.9394,1.9394,0,0,1-.582,1.418,1.917,1.917,0,0,1-1.4135.5865,1.9392,1.9392,0,0,1-1.418-.582,1.917,1.917,0,0,1-.5865-1.4135,1.9392,1.9392,0,0,1,.582-1.418A1.9169,1.9169,0,0,1,17.84,4.4414ZM5.3827,19.9029A1,1,0,1,0,4.67,18.19a1,1,0,0,0,.7125,1.7125Zm0-12.4615a1.0077,1.0077,0,0,0,.7125-1.7125,1.0266,1.0266,0,0,0-1.425,0,1,1,0,0,0,.7125,1.7125Zm12.4615,0a1.0077,1.0077,0,0,0,.7125-1.7125,1.0077,1.0077,0,0,0-1.425,1.425A.9676.9676,0,0,0,17.8442,7.4414Z M15.6155,17.29v1.731a.3845.3845,0,0,0,.769,0V17.29h1.731a.3845.3845,0,0,0,0-.7689h-1.731V14.79a.3845.3845,0,0,0-.769,0v1.731h-1.731a.3845.3845,0,0,0,0,.769ZM16,20.9057a3.9761,3.9761,0,0,1-4-4,3.9761,3.9761,0,0,1,4-4,3.9761,3.9761,0,0,1,4,4,3.9761,3.9761,0,0,1-4,4Z"/>
+                            <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M5.3872,20.9029a1.997,1.997,0,0,1-2.0045-2A1.9048,1.9048,0,0,1,3.81,17.6684a2.0138,2.0138,0,0,1,1.0723-.7V8.3816A2.0082,2.0082,0,0,1,3.81,7.6789a1.9167,1.9167,0,0,1-.4277-1.2375,1.9912,1.9912,0,0,1,2-2A1.9167,1.9167,0,0,1,6.62,4.8691a2.0082,2.0082,0,0,1,.7027,1.0723H12L10.01,3.97a.45.45,0,0,1-.1655-.345.5038.5038,0,0,1,.1655-.3625.4669.4669,0,0,1,.7132,0l2.6135,2.6133a.78.78,0,0,1,0,1.1307L10.7172,9.6259a.5067.5067,0,0,1-.3443.1557.47.47,0,0,1-.3632-.1557.467.467,0,0,1,0-.7133L12,6.9414H7.3229a2.0326,2.0326,0,0,1-1.44,1.44v8.581a2.0068,2.0068,0,0,1,1.072.7028,1.9967,1.9967,0,0,1-1.5675,3.2375ZM17.84,4.4414a1.9394,1.9394,0,0,1,1.418.582,1.9169,1.9169,0,0,1,.5865,1.4135,1.9394,1.9394,0,0,1-.582,1.418,1.917,1.917,0,0,1-1.4135.5865,1.9392,1.9392,0,0,1-1.418-.582,1.917,1.917,0,0,1-.5865-1.4135,1.9392,1.9392,0,0,1,.582-1.418A1.9169,1.9169,0,0,1,17.84,4.4414ZM5.3827,19.9029A1,1,0,1,0,4.67,18.19a1,1,0,0,0,.7125,1.7125Zm0-12.4615a1.0077,1.0077,0,0,0,.7125-1.7125,1.0266,1.0266,0,0,0-1.425,0,1,1,0,0,0,.7125,1.7125Zm12.4615,0a1.0077,1.0077,0,0,0,.7125-1.7125,1.0077,1.0077,0,0,0-1.425,1.425A.9676.9676,0,0,0,17.8442,7.4414Z M15.6155,17.29v1.731a.3845.3845,0,0,0,.769,0V17.29h1.731a.3845.3845,0,0,0,0-.7689h-1.731V14.79a.3845.3845,0,0,0-.769,0v1.731h-1.731a.3845.3845,0,0,0,0,.769ZM16,20.9057a3.9761,3.9761,0,0,1-4-4,3.9761,3.9761,0,0,1,4-4,3.9761,3.9761,0,0,1,4,4,3.9761,3.9761,0,0,1-4,4Z"/>
                             <Label Foreground="White" Content="Унаследовать"/>
                         </StackPanel>
                     </Button>
                     <Button Style="{StaticResource ButtonRectangle}" Click="EditClassClick" Visibility="{Binding UpdatingClassVisibility}" ToolTip="Редактировать выбранный класс">
                         <StackPanel Orientation="Horizontal">
-                            <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                             <Label Foreground="White" Content="Редактировать"/>
                         </StackPanel>
                     </Button>
@@ -49,7 +49,7 @@
                     </Button>-->
                     <Button Style="{StaticResource ButtonRectangle}" Click="RemoveClassClick" Visibility="{Binding RemovingClassVisibility}" ToolTip="Удалить выбранный класс и все его объекты">
                         <StackPanel Orientation="Horizontal">
-                            <Path Fill="#FFFF7878" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
+                            <Path Fill="{StaticResource Buttons.Red}" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
                             <Label Foreground="White" Content="Удалить"/>
                         </StackPanel>
                     </Button>
@@ -204,19 +204,19 @@
                         <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
                             <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="AddConstantClick" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFBAFF78" Stretch="Uniform" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
+                                    <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
                                     <Label Foreground="White" Content="Добавить константу"/>
                                 </StackPanel>
                             </Button>
                             <Button Style="{StaticResource ButtonRectangle}" Click="EditConstantClick" Padding="0">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                     <Label Foreground="White" Content="Редактировать"/>
                                 </StackPanel>
                             </Button>
                             <Button Style="{StaticResource ButtonRectangle}" Click="RemoveConstantClick" Padding="0">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFFF7878" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
+                                    <Path Fill="{StaticResource Buttons.Red}" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
                                     <Label Foreground="White" Content="Удалить"/>
                                 </StackPanel>
                             </Button>
@@ -257,19 +257,19 @@
                         <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
                             <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="AddEnumerationClick" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFBAFF78" Stretch="Uniform" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center" />
+                                    <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center" />
                                     <Label Foreground="White" Content="Добавить перечисление"/>
                                 </StackPanel>
                             </Button>
                             <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="EditEnumerationClick">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFBAFF78" Stretch="Uniform" VerticalAlignment="Center" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" VerticalAlignment="Center" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                     <Label Foreground="White" Content="Редактировать"/>
                                 </StackPanel>
                             </Button>
                             <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="RemoveEnumerationClick">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFFF7878" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center" />
+                                    <Path Fill="{StaticResource Buttons.Red}" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center" />
                                     <Label Foreground="White" Content="Удалить"/>
                                 </StackPanel>
                             </Button>
@@ -306,19 +306,19 @@
                         <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
                             <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="AddEnumerationClick" HorizontalAlignment="Left">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFBAFF78" Stretch="Uniform" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
+                                    <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
                                     <Label Foreground="White" Content="Добавить конвертер"/>
                                 </StackPanel>
                             </Button>
                             <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="EditEnumerationClick">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                     <Label Foreground="White" Content="Редактировать"/>
                                 </StackPanel>
                             </Button>
                             <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="RemoveEnumerationClick">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFFF7878" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center" />
+                                    <Path Fill="{StaticResource Buttons.Red}" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center" />
                                     <Label Foreground="White" Content="Удалить"/>
                                 </StackPanel>
                             </Button>
@@ -352,19 +352,19 @@
                         <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
                             <Button Style="{StaticResource ButtonRectangle}" Padding="0" HorizontalAlignment="Left" Click="AddGeneralizator">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFBAFF78" Stretch="Uniform" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
+                                    <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
                                     <Label Foreground="White" Content="Добавить обобщение"/>
                                 </StackPanel>
                             </Button>
                             <Button Style="{StaticResource ButtonRectangle}" Padding="0">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFBAFF78" Stretch="Uniform" VerticalAlignment="Center" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" VerticalAlignment="Center" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                     <Label Foreground="White" Content="Редактировать"/>
                                 </StackPanel>
                             </Button>
                             <Button Style="{StaticResource ButtonRectangle}" Padding="0">
                                 <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="#FFFF7878" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center" />
+                                    <Path Fill="{StaticResource Buttons.Red}" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center" />
                                     <Label Foreground="White" Content="Удалить"/>
                                 </StackPanel>
                             </Button>

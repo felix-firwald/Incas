@@ -1,36 +1,224 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    x:Class="Incas.Core.Styles.IncasWindowStyle"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:fa="http://schemas.fontawesome.io/icons/">
+    <SolidColorBrush x:Key="TitleBarBackgroundBrush" Color="#1d1d1f" />
+    <SolidColorBrush x:Key="VS2012WindowBorderBrush" Color="DodgerBlue" />
+    <SolidColorBrush x:Key="VS2012WindowBorderBrushInactive" Color="#FF434650" />
+    <SolidColorBrush x:Key="VS2012WindowStatusForeground" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="VS2012WindowStatusForegroundInactive" Color="#FFFFFF" />
+    <Style x:Key="VS2012WindowStyleTitleBarButton" TargetType="{x:Type Button}">
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <Border
+                        x:Name="PART_border"
+                        Background="Transparent"
+                        />
+                        <ContentPresenter />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_border" Property="Background" Value="#252528" />
+                            <Setter TargetName="PART_border" Property="Opacity" Value="0.7" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="PART_border" Property="Background" Value="{StaticResource VS2012WindowBorderBrush}"/>
+                            <Setter TargetName="PART_border" Property="Opacity" Value="1" />
+                            <Setter Property="Foreground" Value="#252528"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="WindowBase" TargetType="{x:Type Window}">
-        <Setter Property="Background" Value="{DynamicResource Basic}"/>
-        <Setter Property="Foreground" Value="{DynamicResource Light}"/>
-        <Setter Property="BorderBrush" Value="DodgerBlue"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Style.Triggers>
-            <EventTrigger RoutedEvent="DragEnter">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <ColorAnimation Duration="0:0:0.100" To="#2D3B50" Storyboard.TargetProperty="Background.Color"/>
-                        <ThicknessAnimation Duration="0:0:0.05" To="2" Storyboard.TargetProperty="BorderThickness"/>
-                    </Storyboard>
-                </BeginStoryboard>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="DragLeave">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <ColorAnimation Duration="0:0:0.100" To="#FF2F323C" Storyboard.TargetProperty="Background.Color"/>
-                        <ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetProperty="BorderThickness"/>
-                    </Storyboard>
-                </BeginStoryboard>
-            </EventTrigger>
-            <EventTrigger RoutedEvent="Drop">
-                <BeginStoryboard>
-                    <Storyboard>
-                        <ColorAnimation Duration="0:0:0.200" To="#FF2F323C" Storyboard.TargetProperty="Background.Color"/>
-                        <ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetProperty="BorderThickness"/>
-                    </Storyboard>
-                </BeginStoryboard>
-            </EventTrigger>
-        </Style.Triggers>
+        <Setter Property="Icon" Value="{StaticResource MainLogo}"/>
+        <Setter Property="WindowStyle" Value="None" />
+        <Setter Property="AllowsTransparency" Value="true" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="ResizeMode" Value="CanResizeWithGrip" />
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <WindowChrome NonClientFrameEdges="None" GlassFrameThickness="0" ResizeBorderThickness="7" CaptionHeight="32" />
+            </Setter.Value>
+        </Setter>
+        <EventSetter Event="Loaded" Handler="WindowLoaded" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <!--
+            7 is a magic number. By default Windows fits a maximized window with Margin
+            7 7 7 5 to fill entire screen (WPF .Net 4.5). Larger numbers produce a gap
+            between maximized window and screen edges; smaller numbers show parts of
+            the window outside of the current monitor on multi-display computers.
+            -->
+                    <Border
+                x:Name="PART_Container"
+                Padding="7 7 7 5"
+                >
+                        <Grid
+                TextOptions.TextRenderingMode="ClearType"
+                TextOptions.TextFormattingMode="Display">
+                            <Border
+                    x:Name="PART_Border"
+                    Width="Auto"
+                    Height="Auto"
+                    Background="{StaticResource TitleBarBackgroundBrush}"
+                    BorderBrush="{StaticResource VS2012WindowBorderBrush}"
+                    BorderThickness="1"
+                    Padding="0">
+                                <DockPanel
+                        HorizontalAlignment="Stretch"
+                        Background="Transparent"
+                        VerticalAlignment="Stretch"
+                        >
+                                    <Border
+                            x:Name="TitleBar"
+                            DockPanel.Dock="Top"
+                            Background="{StaticResource TitleBarBackgroundBrush}"
+                            BorderThickness="0"
+                            >
+                                        <Grid Height="32">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="36"/>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="34"/>
+                                                <ColumnDefinition Width="34"/>
+                                                <ColumnDefinition Width="40"/>
+                                            </Grid.ColumnDefinitions>
+                                            <!--<Image x:Name="Icon" Grid.Column="0" HorizontalAlignment="Right" Margin="4,-7,0,7" Width="32" Height="32" SnapsToDevicePixels="True" MouseUp="IconMouseUp" MouseLeftButtonDown="IconMouseLeftButtonDown"  WindowChrome.IsHitTestVisibleInChrome="True"   />-->
+                                            <Path Fill="#FF434650" Width="20" Height="20" Stretch="Uniform" WindowChrome.IsHitTestVisibleInChrome="True" SnapsToDevicePixels="True" MouseUp="IconMouseUp" MouseLeftButtonDown="IconMouseLeftButtonDown" Data="M296.058,296.0825a2.0022,2.0022,0,0,0-2.2432-1.2609c-10.9258-1.0068-23.15-1.4992-34.0874-5.1744-17.8125-3.9806-31.5895,14.3079-48.1565,17.0282C149.02,324.146,138.7457,271.36,94.4715,268.8632c-14.5183-4.4447-22.582,12.249-25.0705.6783-.6077-13.317,6.6544-26.2437,16.7124-34.7779,10.9761-7.2069,37.7627-11.855,46.7088.1223,11.3607,11.3225,27.9557,16.8585,43.6667,13.69,21.9183-7.3007,25.621-34.6377,37.678-51.7033,7.0319-12.3513,18.7952-21.6335,28.3706-31.9074,16.4331-15.0525,36.5192-23.3827,57.9021-28.8064,30.2418-6.4745,65.666-4.5292,88.7242,18.09,7.77,8.2937,17.037,15.3068,23.1371,25.0253,2.91,5.3088,7.8927,8.6818,12.641,11.9185-3.8286,5.8051,2.041,8.8175,4.1162,12.4507,2.461,4.3089,5.778,8.2725,8.8043,12.3108,4.3018,4.1936.9752,4.088,2.6032,6.3444,6.8053,2.0766,8.8593,17.8417,10.31,24.088.4922,2.0379-4.1973,4.0093-6.7211,2.1933-3.6592-2.7762-5.2274,8.0775-5.1719,10.3122.219,7.1587-5.6863,3.63-4.194,11.236.3329,11.501-9.0117,5.7125-6.6424,13.8448-.272,1.27,1.6605,2.8936-.2771,3.8152-2.0851.9916-3.1855-.7932-4.009-2.2542-1.2943-2.2966-2.3781-1.73-4.7229-1.0867-4.3006,1.18-6.8264,3.1006-7.5754,7.4957-.9321,3.4729-6.714,1.3693-6.2638-1.8691-3.6808.063.5456,5.7047-5.6288,3.45-12.2311-5.7952-21.9378,6.6619-34.5423,4.7673-1.7365-.3528-4.3633,2.396-4.855-1.6873-.0021-.0169-1.6233-.15-1.95.232-2.164,4.1524-11.47,3.9491-10.993,7.3256,1.847,10.913-3.1359,20.6564-5.15,30.9185-6.1793,18.8071,8.3066,35.4786-6.986,38.92-14.263,1.9718-28.3234,6.9-42.75,4.1943-1.2015-.0842-1.57-.9064-1.11-1.7364,3.3461-5.6419-3.5626-5.1158-6.9926-5.5324,8.7392-14.9335,31.8584-6.0861,35.5236-24.8347,3.6038-10.1239,1.3045-19.8212.6407-30.0262.6908-3.3888-1.02-4.0089-3.534-2.9843-4.6451,1.8932-10.1737,2.8847-10.6012,9.683-.0957,1.5218-1.4958,3.048-2.5165,4.406-4.7278,8.0634,1.8537,12.0647-6.724,24.1131-1.5359,2.9622-1.7049-1.4977-3.3922-1.1889-1.0277,1.6078-3.0338,12.394-5.8722,7.521-.72-1.2991-1.4056-.9851-2.3318-.1545-2.0881,1.8723-4.8815,2.9817-5.8562,6.0318-.2866.8972-.6272,2.5745-2.1258,2.202-5.7986-11.09,2.93-24.5313.9642-36.5453C277.176,312.0335,282.5622,305.0953,296.058,296.0825Z"/>
+                                            <TextBlock
+                                    x:Name="Caption"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Margin="4,0,0,0"
+                                    FontFamily="{StaticResource JetBrains}"
+                                    FontSize="12" Foreground="White"
+                                    Opacity="1.0"
+                                    Text="{Binding Path=Title, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                    />
+                                            <Button
+                                    x:Name="MinButton"
+                                    Grid.Column="2"
+                                    VerticalAlignment="Top"
+                                    Width="34"
+                                    Height="26"
+                                    Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+                                    Click="MinButtonClick"
+                                    WindowChrome.IsHitTestVisibleInChrome="True"
+                                    >
+                                                <Grid MaxHeight="9" MaxWidth="9">
+                                                    <Path
+                                            Stroke="White"
+                                            StrokeThickness="1"
+                                            Stretch="None"
+                                            RenderOptions.EdgeMode="Aliased"
+                                            Data="M0,8 H8 M0,7 H8 M0,6 H8"
+                                            />
+                                                </Grid>
+                                            </Button>
+                                            <Button
+                                    Grid.Column="3"
+                                    x:Name="MaxButton" 
+                                    VerticalAlignment="Top"
+                                    Width="34"
+                                    Height="26"
+                                    Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+                                    Click="MaxButtonClick"
+                                    WindowChrome.IsHitTestVisibleInChrome="True"
+                                    >
+                                                <Grid MaxHeight="9" MaxWidth="9">
+                                                    <Path
+                                            x:Name="PART_MaxButton_Path"
+                                            Stroke="White"
+                                            StrokeThickness="1"
+                                            Stretch="None"
+                                            RenderOptions.EdgeMode="Aliased"
+                                            Data="M0,0 H8 V8 H0 V0 M0,1 H8 M0,2 H8"
+                                            />
+                                                </Grid>
+                                            </Button>
+                                            <Button
+                                    Grid.Column="4"
+                                    x:Name="CloseButton" 
+                                    VerticalAlignment="Top"
+                                    Width="40"
+                                    Height="26"
+                                    Style="{StaticResource VS2012WindowStyleTitleBarButton}"
+                                    Click="CloseButtonClick"
+                                    WindowChrome.IsHitTestVisibleInChrome="True"
+                                    >
+                                                <Grid MaxHeight="9" MaxWidth="9">
+                                                    <Path
+                                            Stroke="White"
+                                            StrokeThickness="1.5"
+                                            Stretch="None"
+                                            Data="M0,0 L8,8 M0,8 L8,0"
+                                            />
+                                                </Grid>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                    <ContentPresenter />
+                                </DockPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Window.Loaded">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="(Window.Opacity)"
+                                         From="0.0" To="1.0" Duration="0:0:0.130"
+                                         AutoReverse="False"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <Trigger Property="WindowState" Value="Maximized">
+                            <Setter TargetName="PART_MaxButton_Path" Property="Data" Value="M0,3 H5 V8 H0 V3 M0,4 H5 M3,0 H8 V5 H7 M3,1 H8"/>
+                        </Trigger>
+                        <Trigger Property="WindowState" Value="Normal">
+                            <Setter TargetName="PART_Border" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect
+                                Color="black"
+                                Opacity="0.5"
+                                BlurRadius="7"
+                                ShadowDepth="2"
+                                Direction="315"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="ResizeMode" Value="NoResize">
+                            <Setter TargetName="MaxButton" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="MinButton" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsActive" Value="False">
+                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource VS2012WindowBorderBrushInactive}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Resources>
+            <Style TargetType="{x:Type StatusBar}">
+                <Setter Property="Foreground" Value="{StaticResource VS2012WindowStatusForeground}" />
+                <Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrush}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsActive, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
+                        <Setter Property="Foreground" Value="{StaticResource VS2012WindowStatusForegroundInactive}" />
+                        <Setter Property="Background" Value="{StaticResource VS2012WindowBorderBrushInactive}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="{x:Type ResizeGrip}">
+                <Setter Property="WindowChrome.ResizeGripDirection" Value="BottomRight" />
+            </Style>
+        </Style.Resources>
     </Style>
     <ControlTemplate x:Key="WindowDialog" TargetType="{x:Type Window}">
         <Border CornerRadius="8" BorderThickness="1" BorderBrush="{DynamicResource LightBlack}" Background="{DynamicResource Black}">
@@ -63,14 +251,5 @@
         <Setter Property="AllowsTransparency" Value="True"/>
         <Setter Property="Template" Value="{StaticResource WindowDialog}"/>
     </Style>
-    <Style x:Key="CentralWindow" TargetType="{x:Type Window}" BasedOn="{StaticResource Dialog}">
-        <Setter Property="WindowState" Value="Normal"/>
-        <Setter Property="Height" Value="250"/>
-        <Setter Property="WindowStyle" Value="None"/>
-        <Setter Property="Topmost" Value="True"/>
-        <Setter Property="Width" Value="450"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="AllowsTransparency" Value="True"/>
-        <Setter Property="Template" Value="{StaticResource WindowWithHeader}"/>
-    </Style>
+    
 </ResourceDictionary>

@@ -31,7 +31,6 @@ namespace Incas.DialogSimpleForm.Views.Windows
             this.Result = values;
             this.FinishText.Content = values.GetFinishButtonText();
             this.No.Content = values.GetCancelButtonText();
-            this.TitleText.Content = title;
             this.Title = title;
             DialogsManager.ShowWaitCursor(false);
         }

@@ -121,12 +121,13 @@ namespace Incas.Objects.ViewModels
                     break;
                 case FieldType.Relation:
                     BindingData db = new();
-                    DialogBinding dialog = new(field.Source);
+                    DialogBinding dialog = new(this.Fields, field.Source);
                     dialog.ShowDialog();
                     if (dialog.Result == true)
                     {
                         db.BindingClass = dialog.SelectedClass;
                         db.BindingField = dialog.SelectedField;
+                        db.Compliance = dialog.vm.GetConstraintsForSave();
                         //field.Source.Value = JsonConvert.SerializeObject(db);
                         field.Source.SetBindingData(db);
                     }

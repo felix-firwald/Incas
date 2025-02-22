@@ -98,7 +98,7 @@
     <Style x:Key="TabItemRemovable" TargetType="{x:Type TabItem}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="{StaticResource Light}"/>
-        <Setter Property="Background" Value="{StaticResource Area}"/>
+        <Setter Property="Background" Value="{StaticResource Basic}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Success}"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="MinHeight" Value="40"/>
@@ -144,8 +144,8 @@
                                                         </Border>
                                                         <ControlTemplate.Triggers>
                                                             <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter TargetName="Border" Property="Background" Value="{StaticResource Element}"/>
-                                                                <Setter TargetName="Icon" Property="Fill" Value="{StaticResource Error}"/>
+                                                                <Setter TargetName="Border" Property="Background" Value="{StaticResource Basic}"/>
+                                                                <Setter TargetName="Icon" Property="Fill" Value="{StaticResource Buttons.Red}"/>
                                                             </Trigger>
                                                         </ControlTemplate.Triggers>
                                                     </ControlTemplate>
@@ -155,11 +155,7 @@
                                     </ToggleButton.Style>
                                 </ToggleButton>
                             </Grid>
-
-
-
                         </Border>
-
                     </Grid>
                     <ControlTemplate.Triggers>
                         <EventTrigger RoutedEvent="Loaded">
@@ -170,7 +166,7 @@
                             </BeginStoryboard>
                         </EventTrigger>
                         <Trigger SourceName="templateRoot" Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="internalBorder" Value="{StaticResource Element}"/>
+                            <Setter Property="Background" TargetName="internalBorder" Value="{StaticResource Basic}"/>
                         </Trigger>
                         <Trigger SourceName="Button" Property="IsChecked" Value="True">
                             <Setter Property="IsEnabled" Value="False"/>

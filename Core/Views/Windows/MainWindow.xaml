@@ -13,7 +13,7 @@
         Height="900"
         Width="1300"
         Style="{DynamicResource WindowBase}"
-        WindowState="Maximized"
+        WindowState="Normal"
         Title="{Binding Title}"
         Closed="OnClosed" 
         MinHeight="700" MinWidth="900" PreviewKeyDown="window_PreviewKeyDown" Background="{StaticResource Black}">
@@ -141,7 +141,6 @@
             <StackPanel x:Name="CustomTabs">
 
             </StackPanel>
-            <Rectangle Stroke="{DynamicResource Basic}" StrokeThickness="1" Margin="5,0,5,0" />
             
         </StackPanel>
 
@@ -215,7 +214,7 @@
             </Grid>
 
         </Border>
-        <StackPanel x:Name="stackPanel" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="2" Background="#252528" RenderTransformOrigin="0.5,0.5">
+        <StackPanel x:Name="stackPanel" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5">
             <StackPanel.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>

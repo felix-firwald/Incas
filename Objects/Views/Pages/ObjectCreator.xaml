@@ -25,7 +25,7 @@
                 <StackPanel x:Name="SaveArea" Orientation="Horizontal" Cursor="">
                     <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Download" VerticalAlignment="Center" ToolTip="Сохранить объект" Cursor="Hand" MouseDown="SaveClick" Margin="8,5,5,5" />-->
                     <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" Click="SaveClick" ToolTip="Сохранить объект" Grid.Column="1">
-                        <Path Fill="#FFBAFF78" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="{StaticResource Save}"/>
+                        <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="{StaticResource Save}"/>
                     </Button>
                     <!--<Rectangle Width="1" Fill="{DynamicResource Element}" Margin="5,5,5,5" Opacity="0.5"/>-->
 

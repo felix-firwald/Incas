@@ -89,6 +89,7 @@
     <None Remove="Static\Fonts\Rubik-Italic.ttf" />
     <None Remove="Static\Fonts\Rubik.ttf" />
     <None Remove="Static\Chicken.wav" />
+    <None Remove="Static\Logo.ico" />
     <None Remove="Static\Rooster.wav" />
     <None Remove="Static\Splash.png" />
     <None Remove="Static\UI-Attention.wav" />
@@ -99,6 +100,9 @@
     <Resource Include="Core\Views\Windows\Logo.png" />
     <EmbeddedResource Include="Static\Coding\IncasPython.xshd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Static\Logo.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
     <Resource Include="Static\Fonts\JetBrainsMono-Bold.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

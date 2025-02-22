@@ -30,7 +30,7 @@
             </Grid.ColumnDefinitions>
         </Grid>
 
-        <TabControl x:Name="TabControlMain" Style="{StaticResource TabControlMain}" Background="{DynamicResource Black}" Margin="-5,0,-5,0" ItemContainerStyle="{StaticResource TabItemMain}" Grid.RowSpan="2" Grid.ColumnSpan="3">
+        <TabControl x:Name="TabControlMain" Style="{StaticResource TabControlMain}" Background="{DynamicResource Black}" Margin="0" ItemContainerStyle="{StaticResource TabItemMain}" Grid.RowSpan="2" Grid.ColumnSpan="3">
             <TabItem Header="Атрибуты и поля"  BorderBrush="{DynamicResource LightPurple}">
                 <Grid Background="{DynamicResource Black}">
                     <Grid.ColumnDefinitions>
@@ -42,17 +42,17 @@
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
                             <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить поле" MouseDown="AddFieldClick" />-->
                             <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="AddFieldClick" ToolTip="Добавить поле">
-                                <Path Fill="#FFBAFF78" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
+                                <Path Fill="{StaticResource Buttons.Green}" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
                             </Button>
                             <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="SearchPlus" ToolTip="Скопировать поля из другого класса" MouseDown="CopyFieldsFromAnotherClass" />-->
 
                             <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="CopyFieldsFromAnotherClass" ToolTip="Скопировать поля из другого класса">
-                                <Path Fill="#FFBAFF78" VerticalAlignment="Center" Data="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm4.5 6V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5a.5.5 0 0 1 1 0"/>
+                                <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Data="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm4.5 6V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5a.5.5 0 0 1 1 0"/>
                             </Button>
                             
                             <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="Magic" ToolTip="Создать виртуальные поля" MouseDown="AddVirtualFieldsClick" />-->
                             <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="AddVirtualFieldsClick" ToolTip="Создать виртуальные поля">
-                                <Path Fill="#FFBAFF78" VerticalAlignment="Center" Data="{StaticResource Magic}"/>
+                                <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Data="{StaticResource Magic}"/>
                             </Button>
                             <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
                             <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="WindowMinimize" ToolTip="Свернуть все вкладки" MouseDown="MinimizeAllClick" />
