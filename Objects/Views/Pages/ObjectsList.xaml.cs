@@ -177,7 +177,7 @@ namespace Incas.Objects.Views.Pages
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                DataTable dt = Processor.GetObjectsList(this.sourceClass, this.SourcePreset);
+                DataTable dt = Processor.GetObjectsList(this.sourceClass);
                 
                 if (this.sourceClass.Type == ClassType.Model)
                 {
@@ -201,7 +201,7 @@ namespace Incas.Objects.Views.Pages
         }
         public void UpdateViewWithSearch(FieldData data)
         {
-            DataTable dt = Processor.GetObjectsListWhereLike(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
+            DataTable dt = Processor.GetObjectsListWhereLike(this.sourceClass, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.sourceClass.Type == ClassType.Model)
@@ -217,7 +217,7 @@ namespace Incas.Objects.Views.Pages
         }
         public void UpdateViewWithFilter(FieldData data)
         {
-            DataTable dt = Processor.GetObjectsListWhereEqual(this.sourceClass, this.SourcePreset, data.ClassField.VisibleName, data.Value);
+            DataTable dt = Processor.GetObjectsListWhereEqual(this.sourceClass, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.sourceClass.Type == ClassType.Model)

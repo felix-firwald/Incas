@@ -2,11 +2,13 @@
 using Incas.Core.Views.Windows;
 using Incas.Objects.Views.Controls;
 using IncasEngine.Core;
+using IncasEngine.Core.RequestsUtils;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using Microsoft.Scripting.Interpreter;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -48,7 +50,7 @@ namespace Incas.Objects.Views.Windows
             this.InitializeComponent();
             this.Binding = data;
             this.Class = new(this.Binding.BindingClass);
-            this.ClassData = this.Class.GetClassData();
+            this.ClassData = this.Class.GetClassData();            
             if (this.ClassData is null || this.ClassData.Fields is null)
             {
                 DialogsManager.ShowDatabaseErrorDialog("Не удалось идентифицировать класс и показать карту его объектов. Вероятно, это означает, что класс удален. Обратитесь к администратору рабочего пространства для устранения ошибки.", "Привязка сломана");
@@ -73,10 +75,31 @@ namespace Incas.Objects.Views.Windows
                 System.Windows.Controls.Grid.SetColumn(message, 0);
             }
         }
-
+        private WhereInstruction GetBaseInstruction()
+        {
+            WhereInstruction instruction = new();
+            if (this.Binding.Compliance is not null && this.Binding.Compliance.Count > 0)
+            {
+                foreach (KeyValuePair<Guid, ConstraintValue> pair in this.Binding.Compliance)
+                {
+                    switch (pair.Value.Type)
+                    {
+                        case ConstraintValue.ConstraintValueType.ByFixedValue:
+                            instruction.AndWhereEqual(pair.Key.ToString(), pair.Value.Value);
+                            break;
+                        //case ConstraintValue.ConstraintValueType.ByField:
+                        //    instruction.AndWhereEqual(pair.Key.ToString(), this.currentObject[pair.Value.TargetField].ToString());
+                        //    break;
+                    }
+                }
+            }
+            return instruction;
+        }
         private void FillList()
         {
-            DataTable dt = Processor.GetObjectsList(this.Class, null);
+            DataTable dt;
+            WhereInstruction instruction = this.GetBaseInstruction();
+            dt = Processor.GetObjectsList(this.Class, instruction);
             this.UpdateItemsSource(dt.Columns);
             DataView dv = dt.AsDataView();
             if (this.Class.Type == ClassType.Model)
@@ -87,7 +110,9 @@ namespace Incas.Objects.Views.Windows
         }
         private void FillList(string field, string value)
         {
-            DataTable dt = Processor.GetObjectsListWhereLike(this.Class, null, field, value);
+            WhereInstruction instruction = this.GetBaseInstruction();
+            instruction.AndWhereEqual(field, value);
+            DataTable dt = Processor.GetObjectsList(this.Class, instruction);
             this.UpdateItemsSource(dt.Columns);
             this.Grid.ItemsSource = dt.DefaultView;
         }

@@ -62,6 +62,10 @@ namespace Incas.Core.Classes
 
         private static void EngineEvents_OnUpdateAllRequested()
         {
+            UpdateAll();
+        }
+        public static void UpdateAll()
+        {
             MainWindowViewModel.LoadInfo();
             MainWindow.UpdateTabs();
         }

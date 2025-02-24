@@ -1,8 +1,11 @@
 ﻿using Incas.Admin.Views.Pages;
 using Incas.Core.Classes;
+using Incas.Core.Extensions;
 using Incas.Objects.Views.Pages;
+using IncasEngine.Workspace;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Incas.Core.Views.Controls
 {
@@ -19,15 +22,29 @@ namespace Incas.Core.Views.Controls
         public const string ClassPrefix = "$CLASS:SOLO/";
         public const string ClassCategoryPrefix = "$CLASS:CATEGORY/";
         private string internalPath = "";
+        private WorkspaceComponent component;
         private string name = "(нет имени)";
         public delegate void NewTabAction(Control item, string id, string name);
         public event NewTabAction OnNewTabRequested;
-        public MainWindowButtonTab(string path, Icon icon, string name)
+        public MainWindowButtonTab(WorkspaceComponent component)
+        {
+            this.InitializeComponent();
+            this.internalPath = component.Id.ToString();
+            this.Text.Text = component.Name;
+            this.name = component.Name;
+            this.component = component;
+            this.ToolTip = component.Description;
+            this.Icon.Data = component.Icon.ParseAsGeometry();
+            this.Icon.Fill = component.Color.AsBrush();
+            this.Text.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+        }
+        public MainWindowButtonTab(string visibleName, Classes.Icon icon, string path, string description)
         {
             this.InitializeComponent();
             this.internalPath = path;
-            this.Text.Text = name;
-            this.name = name;
+            this.Text.Text = visibleName;
+            this.name = visibleName;
+            this.ToolTip = description;
             this.Icon.Data = IconsManager.GetGeometryIconByName(icon);
         }
 
@@ -38,6 +55,10 @@ namespace Incas.Core.Views.Controls
         private Control GenerateControl()
         {
             GroupBox gb = new();
+            if (this.component != null)
+            {
+                return new CustomDatabaseMain(this.component);
+            }
             switch (this.internalPath)
             {
                 case CustomDatabase:
@@ -58,12 +79,8 @@ namespace Incas.Core.Views.Controls
                     return gb;
                 case WorkspaceSettings:
                     return new WorkspaceManager();
-                default:
-                    if (this.internalPath.Contains(MainWindowButtonTab.ClassCategoryPrefix))
-                    {
-                        return new CustomDatabaseMain(this.internalPath.Replace(MainWindowButtonTab.ClassCategoryPrefix, ""));
-                    }
-                    return new();
+                default:                   
+                    return new CustomDatabaseMain();
             }
         }
 

@@ -3,15 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:conv="clr-namespace:Incas.Core.Converters"
              xmlns:local="clr-namespace:Incas.Objects.Views.Pages" xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1200" Cursor="">
+    <UserControl.Resources>
+        <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" MaxWidth="450"/>
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
-        <GroupBox Header="{Binding CategoryName}" Margin="5,5,5,5">
+        <GroupBox Header="{Binding CategoryName}" Foreground="{Binding SelectedCategory.Color, Converter={StaticResource IEColorToBrushConverter}}" Margin="5,5,5,5">
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.RowSpan="3">
                 <StackPanel>
                     <Button Style="{StaticResource ButtonRectangle}" Click="Button_Click">

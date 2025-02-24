@@ -68,7 +68,7 @@ namespace Incas.Objects.Views.Pages
         {
             return ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(this.Class.Id);
         }
-        private SolidColorBrush GetColor(IncasEngine.ObjectiveEngine.Common.Color color, byte a = 255)
+        private SolidColorBrush GetColor(IncasEngine.Core.Color color, byte a = 255)
         {
             return new SolidColorBrush(System.Windows.Media.Color.FromArgb(a, color.R, color.G, color.B));
         }
@@ -150,8 +150,7 @@ namespace Incas.Objects.Views.Pages
         }
         private bool CheckAuthor(IObject obj)
         {
-            IHasAuthor objWithAuthor = obj as IHasAuthor;
-            if (objWithAuthor != null)
+            if (obj is IHasAuthor objWithAuthor)
             {
                 return objWithAuthor.AuthorId == ProgramState.CurrentWorkspace.CurrentUser.Id;
             }

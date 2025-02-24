@@ -38,7 +38,7 @@ namespace Incas.Objects.Views.Windows
             this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             Class @class = new();
             @class.Name = primary.Name;
-            @class.Category = primary.Category;
+            @class.Component = primary.GetComponent();
             @class.Type = (ClassType)primary.Selector.SelectedObject;
             @class.Parents = primary.GetParents();
 
@@ -67,10 +67,6 @@ namespace Incas.Objects.Views.Windows
             Class cl = new(id);
             this.vm = new(cl);
             this.DataContext = this.vm;
-            foreach (Field f in cl.GetClassData().Fields)
-            {
-                this.AddField(f);
-            }
             this.ApplyPartSettings();
             DialogsManager.ShowWaitCursor(false);
         }

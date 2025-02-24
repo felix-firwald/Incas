@@ -20,7 +20,7 @@
                 <!--кнопка создания файла или печати-->
 
             </Grid.RowDefinitions>
-            <Border x:Name="ToolBar" Grid.Row="0" Grid.Column="2" Margin="5,5,5,5" Background="{StaticResource Black}" CornerRadius="8">
+            <Border x:Name="ToolBar" Grid.Row="0" Grid.Column="2" Margin="5,-3,5,5" Background="{StaticResource Black}" CornerRadius="8">
                 <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" >
                     <!--<fa:FontAwesome Style="{StaticResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" MouseDown="AddClick" ToolTip="Добавить ещё один объект" />-->
                     <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="AddClick" ToolTip="Добавить ещё один объект">
@@ -59,15 +59,15 @@
                 </ScrollViewer>
             </Border>
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="1">
-                <Button x:Name="GenerateButton" Style="{StaticResource ButtonMainFinish}" MinWidth="240" Grid.Row="1" Click="CreateObjectsClick" ToolTip="Сохранить все объекты и закрыть окно" Margin="5,5,5,5" Grid.Column="1">
+                <Button x:Name="GenerateButton" Style="{StaticResource ButtonRectangle}" Background="{StaticResource Dark}" Grid.Row="1" Click="CreateObjectsClick" ToolTip="Сохранить все объекты и закрыть окно" Margin="5,5,5,5" Grid.Column="1">
                     <StackPanel Orientation="Horizontal">
-                        <Path Fill="White" VerticalAlignment="Center" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                         <Label Content="Завершить работу с объектами" Foreground="White"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="RenderButton" Style="{StaticResource ButtonMain}" MinWidth="300" Grid.Row="1" ToolTip="Сохранить все объекты и отправить их на рендеринг в указанную папку"  Margin="5,5,5,5" Grid.Column="1" Click="RenderObjectsClick">
+                <Button x:Name="RenderButton" Style="{StaticResource ButtonRectangle}" Grid.Row="1" ToolTip="Сохранить все объекты и отправить их на рендеринг в указанную папку"  Margin="5,5,5,5" Grid.Column="1" Click="RenderObjectsClick">
                     <StackPanel Orientation="Horizontal">
-                        <Path Fill="White" VerticalAlignment="Center" Data="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5m-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5"/>
+                        <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Height="15" Data="M480-480Zm255.38 320H416.92q-8.5 0-14.25-5.76t-5.75-14.27q0-8.51 5.75-14.24t14.25-5.73h318.46q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-510.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H224.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v132.3q0 8.5-5.76 14.25t-14.27 5.75q-8.51 0-14.24-5.75T160-603.08v-132.3q0-27.62 18.5-46.12Q197-800 224.62-800h510.76q27.62 0 46.12 18.5Q800-763 800-735.38v510.76q0 27.62-18.5 46.12Q763-160 735.38-160Zm-446.53 40q-70.69 0-120.35-49.43-49.65-49.44-49.65-119.8 0-54.32 30.65-97.2t78.65-61.26H140q-8.5 0-14.25-5.76T120-467.72q0-8.51 5.75-14.24t14.25-5.73h129.23q13.73 0 23.02 9.29 9.29 9.28 9.29 23.02v129.23q0 8.5-5.76 14.25t-14.27 5.75q-8.51 0-14.24-5.75t-5.73-14.25V-417q-44.7 9.49-73.7 45.07-28.99 35.58-28.99 81.83 0 54.56 37.88 92.33Q234.62-160 288.85-160q8.5 0 14.25 5.76t5.75 14.27q0 8.51-5.75 14.24T288.85-120Zm128.07-180H520q8.5 0 14.25-5.76t5.75-14.27q0-8.51-5.75-14.24T520-340H416.92q-8.5 0-14.25 5.76t-5.75 14.27q0 8.51 5.75 14.24t14.25 5.73Zm0-160H640q8.5 0 14.25-5.76t5.75-14.27q0-8.51-5.75-14.24T640-500H416.92q-8.5 0-14.25 5.76t-5.75 14.27q0 8.51 5.75 14.24t14.25 5.73ZM320-620h320q8.5 0 14.25-5.76t5.75-14.27q0-8.51-5.75-14.24T640-660H320q-8.5 0-14.25 5.76T300-639.97q0 8.51 5.75 14.24T320-620Z"/>
                         <Label Content="Отправить объекты в очередь рендеринга" Foreground="White"/>
                     </StackPanel>
                 </Button>

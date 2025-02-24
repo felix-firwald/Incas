@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows"
         mc:Ignorable="d"
-        Title="Критическая ошибка" Height="450" Style="{StaticResource Dialog}" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height" >
+        Title="Критическая ошибка" MinWidth="450" Width="450" MinHeight="250" Height="500" Style="{StaticResource WindowBase}" ResizeMode="NoResize"  Topmost="True" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height" >
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard>
@@ -24,20 +24,14 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="2"/>
-            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <Path x:Name="IconError" Fill="{DynamicResource Error}" Margin="15" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" />
+        <Path x:Name="IconError" Fill="{DynamicResource Error}" Margin="15" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Data="M329.8189,248.0457c-10.8643-3.9973-24.7521-1.569-36.33-6.4373-13.963-3.0842-27.0961,8.1-38.8855,14.1341-41.989,19.275-73.5539-7.6054-106.3111-30.0658-29.4613-15.3816-43.52,8.0958-45.13-4.1709-1.2762-29.3886,28.3776-47.5773,55.3578-40.6709,10.7373,6.482,18.7825,17.63,32.1938,19.2318,34.3659,10.97,43.59-29.0512,57.2117-51.2339,29.4437-45.5654,86.7031-73.6141,140.5992-60.8385,32.0145,4.3329,47.5818,36.8934,70.1757,55.1637-5.6735,9.0083,15.7621,21.563,14.9532,30.0355,5.3983,3.444,6.5861,8.9183,8.43,14.4526,1.8064,4.4476,5.5206,16.6912-4.268,12.8964-4.3719-1.8129-4.8865,7.3619-5.172,10.3115.77,5.0528-6.0089,5.6048-4.1935,11.2365,1.3974,9.0176-8.94,6.9263-6.6433,13.8445-.2713,1.27,1.6611,2.8939-.2764,3.8154-4.279,1.4408-3.8779-6.3186-8.7319-3.34-7.2308.4194-5.5641,8.0126-10.1459,9.3028-3.4232.1426-4.0529-6.2025-5.3509-2.4675.1014,6.4884-16.2788-3.21-22.59,3.4528-2.1823,2.2722-20.5457,7.01-20.7786,1.8679-4.0816.9078-7.563,5.2036-12.2641,5.6878.49,20.1015-12.25,40.18-5.4382,60.7887,3.4191,16.6624-39.2639,15.7009-50.1246,15.1167-4.2393-2.5759,6.1871-6.6838-8.1038-7.2725,8.7411-14.9338,31.8571-6.086,35.5236-24.8348,2.1257-4.1578,3.8688-37.0562-2.8923-33.0113-4.6461,1.8941-10.1748,2.8856-10.6022,9.6839-6.6023,8.4924-2.2663,19.8956-9.2393,28.52-3.68,3.1587-1.3343-7.6988-6.115,5.7255-.5628,1.1276-1.5371,3.5166-3.1508.6056-2.301-2.1448-6.9865,3.3824-8.1883,5.8765-.2861.8985-.6267,2.5758-2.1253,2.2033-5.7963-11.0905,2.9284-24.5308.9642-36.5453C310.0888,266.3536,317.6754,255.1871,329.8189,248.0457Z M110.0435,352.0265l25.2486,25.2466A3.9088,3.9088,0,0,0,137.97,378.44a3.6264,3.6264,0,0,0,2.8253-1.1667,3.6675,3.6675,0,0,0,0-5.5027l-25.2467-25.2487,25.2467-25.2486a3.9082,3.9082,0,0,0,1.1666-2.6775,3.6266,3.6266,0,0,0-1.1666-2.8253,3.6676,3.6676,0,0,0-5.5028,0L110.0435,341.017,84.7949,315.77a3.9086,3.9086,0,0,0-2.6775-1.1666,3.6265,3.6265,0,0,0-2.8253,1.1666,3.6676,3.6676,0,0,0,0,5.5028l25.2467,25.2486L79.2921,371.77a3.9087,3.9087,0,0,0-1.1667,2.6774,3.6269,3.6269,0,0,0,1.1667,2.8253,3.6676,3.6676,0,0,0,5.5028,0Zm.0253,64.4952a68.2248,68.2248,0,0,1-27.302-5.5105A69.8922,69.8922,0,0,1,45.56,373.8373a70.3258,70.3258,0,0,1-.0059-54.5922,69.8928,69.8928,0,0,1,37.1739-37.207,70.3254,70.3254,0,0,1,54.5923-.0058,69.8931,69.8931,0,0,1,37.2069,37.1739,70.3252,70.3252,0,0,1,.0058,54.5922,69.8919,69.8919,0,0,1-37.1739,37.207A68.0713,68.0713,0,0,1,110.0688,416.5217Z"/>
        
         <Label x:Name="TitleText" Content="Возникла критическая ошибка" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Light}" FontWeight="Bold" FontFamily="{StaticResource JetBrains}" Grid.Row="2"/>
 
         <ScrollViewer Grid.Row="3" Margin="8" MaxHeight="400" >
-            <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" FontFamily="{StaticResource JetBrains}" Text="По умолчанию, такой текст обозначает критическую неисправность в работе программы." Margin="5,0,10,10"/>
+            <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" FontFamily="{StaticResource JetBrains}" Text="По умолчанию, такой текст обозначает критическую неисправность в работе программы." Margin="5,0,10,10" Foreground="{DynamicResource Light}"/>
         </ScrollViewer>
-
-        <!--<Rectangle Fill="{DynamicResource LightBlack}" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2"/>-->
-        <Button Style="{DynamicResource ButtonMainError}" Content="Закрыть программу" Grid.Row="5" VerticalAlignment="Center" Click="Button_Click" IsDefault="True" />
-
     </Grid>
 </Window>

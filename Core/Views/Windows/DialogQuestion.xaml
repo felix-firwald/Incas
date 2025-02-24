@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d" MouseDown="Window_MouseDown"
-        Title="DialogQuestion" Style="{DynamicResource Dialog}" Height="150" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
+        Title="DialogQuestion" Style="{DynamicResource Dialog}" Height="150" Topmost="True" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard>
@@ -36,7 +36,7 @@
         </fa:FontAwesome>
         <Label x:Name="TitleText" Grid.Column="1" Grid.ColumnSpan="2" Content="Неизвестный вопрос" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" FontWeight="Bold" FontFamily="{StaticResource JetBrains}"/>
         <ScrollViewer Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="0,0,5,5" >
-            <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="По умолчанию, такой текст обозначает неисправность в работе программы." Margin="5,0,10,0"/>
+            <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" Text="По умолчанию, такой текст обозначает неисправность в работе программы." Margin="5,0,10,0" Foreground="{DynamicResource Light}"/>
         </ScrollViewer>
         <!--<Rectangle Fill="{DynamicResource Element}" Grid.Row="3" Grid.ColumnSpan="3"/>-->
         <Button x:Name="Yes" Style="{DynamicResource ButtonMainFinish}" Content="Да" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="Yes_Click" Margin="5,0,5,0" IsDefault="True"/>

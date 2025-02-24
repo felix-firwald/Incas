@@ -2,6 +2,7 @@
 using Incas.Core.ViewModels;
 using IncasEngine.Models;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -102,22 +103,21 @@ namespace Incas.Admin.ViewModels
                 return ProgramState.GetEnumeration(this.SelectedEnumeration.Id);
             }
         }
-        public List<string> ClassesCategories
+        public List<WorkspaceComponent> ClassesCategories
         {
             get
             {
-                using Class cl = new();
-                return cl.GetCategories();
+                return ProgramState.CurrentWorkspace.CurrentGroup.GetAvailableComponents();
             }
         }
-        private string selectedCategory;
-        public string SelectedCategory
+        private WorkspaceComponent selectedCategory;
+        public WorkspaceComponent SelectedCategory
         {
             get
             {
-                if (this.selectedCategory == null)
+                if (this.selectedCategory is null)
                 {
-                    List<string> categories = this.ClassesCategories;
+                    List<WorkspaceComponent> categories = this.ClassesCategories;
                     if (categories?.Count > 0)
                     {
                         return categories[0];
@@ -142,7 +142,7 @@ namespace Incas.Admin.ViewModels
                 if (this.classes == null)
                 {
                     using Class cl = new();
-                    this.classes = cl.GetAllClassItemsByCategory(this.SelectedCategory);
+                    this.classes = cl.GetAllClassItemsByComponent(this.SelectedCategory);
                 }
                 return this.classes;
             }

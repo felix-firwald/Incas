@@ -57,7 +57,7 @@ namespace Incas.Core.Classes
     }
     public static class IconsManager
     {
-        public static Dictionary<Icon, string> icons = new()
+        public static Dictionary<Icon, string> Icons = new()
         {
             {
                 Icon.Divide,
@@ -248,13 +248,13 @@ namespace Incas.Core.Classes
         };
         public static string GetIconByName(Icon name)
         {
-            return IconsManager.icons[name];
+            return IconsManager.Icons[name];
         }
         public static System.Windows.Media.Geometry GetGeometryIconByName(Icon name)
         {
             try
             {
-                return System.Windows.Media.Geometry.Parse(IconsManager.icons[name]);
+                return System.Windows.Media.Geometry.Parse(IconsManager.Icons[name]);
             }
             catch
             {

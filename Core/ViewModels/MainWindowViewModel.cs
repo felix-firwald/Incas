@@ -140,15 +140,11 @@ namespace Incas.Core.ViewModels
         {
             get => ProgramState.CurrentWorkspace.CurrentUser.Name;
         }
-        public string SecondName
+        public string Group
         {
-            get => "-";
+            get => ProgramState.CurrentWorkspace.CurrentGroup.Name;
         }
 
-        public string Post
-        {
-            get => "-";
-        }
         private bool testFunctionEnabled = false;
         public Visibility TestFunctionVisibility
         {

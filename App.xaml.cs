@@ -44,7 +44,7 @@ namespace Incas
                 splashScreen.Close(new(1000));
             }
 #if DEBUG
-            this.RunTest();
+            //this.RunTest();
 #endif
             ProgramState.CheckoutWorkspaces();
             

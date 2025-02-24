@@ -22,7 +22,7 @@ namespace Incas.Objects.AutoUI
         {
             this.ComboSelector = new([]);
             using Class main = new();
-            foreach (Class cl in main.GetAllClasses())
+            foreach (ClassItem cl in main.GetAllClassItems())
             {
                 this.ComboSelector.Pairs.Add(cl.Id, cl.Name);
             }

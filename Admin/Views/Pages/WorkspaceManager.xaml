@@ -3,9 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Incas.Admin.Views.Pages"
+             xmlns:local="clr-namespace:Incas.Admin.Views.Pages" xmlns:conv="clr-namespace:Incas.Core.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="520" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
+            <conv:PathDataToGeometryConverter x:Key="PathDataToGeometryConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -58,9 +64,10 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Path Fill="{StaticResource DarkYellow}" Margin="0,0,5,0" Data="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-
-                                <TextBlock Text="{Binding }" TextElement.FontWeight="Bold"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Height="15" Width="15" Stretch="Uniform" Fill="{Binding Color, Converter={StaticResource IEColorToBrushConverter}}" Data="{Binding Icon, Converter={StaticResource PathDataToGeometryConverter}}"/>
+                                    <Label FontFamily="{StaticResource Rubik}" Foreground="White" Content="{Binding Name}"/>
+                                </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -87,9 +94,9 @@
 
         </GroupBox>
         <TabControl Style="{StaticResource TabControlMain}" ItemContainerStyle="{StaticResource TabItemMain}" Grid.Column="1" Grid.RowSpan="2" Background="{x:Null}">
-            <TabItem Header="Настройки" BorderBrush="{DynamicResource LightPurple}" Visibility="{Binding EditingWorkspaceVisibility}">
+            <TabItem Header="Настройки" BorderBrush="{DynamicResource LightPurple}" >
                 <GroupBox Header="Первичные настройки">
-                    <StackPanel>
+                    <StackPanel Visibility="{Binding EditingWorkspaceVisibility}">
                         <Border Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
                             <Grid MinHeight="60">
                                 <Grid.ColumnDefinitions>
@@ -122,7 +129,7 @@
                                 <TextBlock Grid.Column="1" Foreground="White" VerticalAlignment="Bottom">Компоненты</TextBlock>
                                 <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Top">
                                     <Run>Чтобы настроить список компонент, </Run>
-                                    <Hyperlink Click="OpenSettingsClick" IsEnabled="{Binding EditingWorkspaceEnabled}">нажмите сюда.</Hyperlink>
+                                    <Hyperlink Click="OpenComponentsSettings" IsEnabled="{Binding EditingWorkspaceEnabled}">нажмите сюда.</Hyperlink>
                                 </TextBlock>
                             </Grid>
                         </Border>
@@ -140,7 +147,7 @@
                                 <TextBlock Grid.Column="1" Foreground="White" VerticalAlignment="Bottom">Команды</TextBlock>
                                 <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Top">
                                     <Run>Чтобы настроить список команд, </Run>
-                                    <Hyperlink Click="OpenSettingsClick" IsEnabled="{Binding EditingWorkspaceEnabled}">нажмите сюда.</Hyperlink>
+                                    <Hyperlink Click="OpenCommandsSettings" IsEnabled="{Binding EditingWorkspaceEnabled}">нажмите сюда.</Hyperlink>
                                 </TextBlock>
                             </Grid>
                         </Border>
@@ -190,7 +197,7 @@
                     </StackPanel>
                 </GroupBox>
             </TabItem>
-            <TabItem Header="Константы" BorderBrush="{DynamicResource LightPurple}" IsSelected="True">
+            <TabItem Header="Константы" BorderBrush="{DynamicResource LightPurple}">
                 <GroupBox Header="Глобальные константы">
                     <Grid>
                         <Grid.ColumnDefinitions>

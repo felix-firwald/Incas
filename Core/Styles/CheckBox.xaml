@@ -134,7 +134,7 @@
                         <Border x:Name="Bord" Opacity="1" Grid.Column="0" Margin="4" CornerRadius="4" MinWidth="20" MaxWidth="20" MinHeight="20" MaxHeight="20" BorderBrush="{StaticResource Element}" BorderThickness="1" Background="{StaticResource Black}" >
                             <Path x:Name="Fa" Fill="{StaticResource PrimaryMain}" Width="14" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Data="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" Stretch="Uniform"/>
                         </Border>
-                        <ContentPresenter x:Name="contentPresenter" TextElement.Foreground="{DynamicResource Light}" Grid.Column="1" TextElement.FontSize="10" HorizontalAlignment="Left" VerticalAlignment="Center" OpacityMask="{x:Null}" />
+                        <ContentPresenter x:Name="contentPresenter" TextElement.Foreground="{DynamicResource Light}" TextElement.FontFamily="{StaticResource Rubik}" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" OpacityMask="{x:Null}" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">

@@ -5,6 +5,7 @@
         <Setter Property="Opacity" Value="1"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="RenderTransformOrigin" Value="1,1" />
+        <Setter Property="Foreground" Value="{DynamicResource Light}"/>
         <Setter Property="RenderTransform">
             <Setter.Value>
                 <ScaleTransform />
@@ -23,7 +24,7 @@
                             </Grid.RowDefinitions>
 
                             <Border Grid.Row="0" CornerRadius="3" Background="Transparent" BorderBrush="#FF60636E" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                                <Label x:Name="HeaderLabel" FontSize="12" FontFamily="{StaticResource Rubik}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Light}">
+                                <Label x:Name="HeaderLabel" FontSize="12" FontFamily="{StaticResource Rubik}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{TemplateBinding Foreground}">
                                     <ContentPresenter Margin="2" ContentSource="Header" RecognizesAccessKey="True" >
                                     </ContentPresenter>
                                 </Label>

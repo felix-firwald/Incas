@@ -10,6 +10,7 @@ using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -79,16 +80,16 @@ namespace Incas.Core.Views.Windows
 
         private void OnResize(object sender, SizeChangedEventArgs e)
         {
-            if (this.StackLeft.RenderSize.Width < 150)
-            {
-                this.LSurname.Visibility = Visibility.Collapsed;
-                this.Incubator.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                this.LSurname.Visibility = Visibility.Visible;
-                this.Incubator.Visibility = Visibility.Visible;
-            }
+            //if (this.StackLeft.RenderSize.Width < 150)
+            //{
+            //    this.LSurname.Visibility = Visibility.Collapsed;
+            //    this.Incubator.Visibility = Visibility.Collapsed;
+            //}
+            //else
+            //{
+            //    this.LSurname.Visibility = Visibility.Visible;
+            //    this.Incubator.Visibility = Visibility.Visible;
+            //}
         }
 
         private void Logo_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -134,43 +135,32 @@ namespace Incas.Core.Views.Windows
         public void UpdateTabs()
         {
             this.CustomTabs.Children.Clear();
-            using (Class cl = new())
+            foreach (WorkspaceComponent wc in ProgramState.CurrentWorkspace.CurrentGroup.GetAvailableComponents())
             {
-                foreach (string category in cl.GetCategoriesOfClassType(ClassType.Process))
-                {
-                    this.AddPageButton(category, Classes.Icon.Graph, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
-                }
-                foreach (string category in cl.GetCategoriesOfClassType(ClassType.Document))
-                {
-                    this.AddPageButton(category, Classes.Icon.FileRichText, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
-                }
-                foreach (string category in cl.GetCategoriesOfClassType(ClassType.Model))
-                {
-                    this.AddPageButton(category, Classes.Icon.Database, Controls.MainWindowButtonTab.ClassCategoryPrefix + category);
-                }
+                this.AddPageButton(wc);
             }
             if (ProgramState.CurrentWorkspace.CurrentGroup.IsUsersSettingsVisible)
             {
-                this.AddAdminPageButton("Пользователи", Classes.Icon.UserGears, Controls.MainWindowButtonTab.UsersSettings);
+                this.AddAdminPageButton("Пользователи", Classes.Icon.UserGears, Controls.MainWindowButtonTab.UsersSettings, "Страница управления пользователями рабочего пространства");
             }
             if (ProgramState.CurrentWorkspace.CurrentGroup.IsGroupSettingsVisible)
             {
-                this.AddAdminPageButton("Группы", Classes.Icon.HouseGear, Controls.MainWindowButtonTab.GroupsSettings);             
+                this.AddAdminPageButton("Группы", Classes.Icon.HouseGear, Controls.MainWindowButtonTab.GroupsSettings, "Страница управления группами полномочий рабочего пространства");             
             }
             if (ProgramState.CurrentWorkspace.CurrentGroup.IsWorkspaceSettingsVisible)
             {
-                this.AddAdminPageButton("Рабочее пространство", Classes.Icon.GearWide, Controls.MainWindowButtonTab.WorkspaceSettings);
+                this.AddAdminPageButton("Рабочее пространство", Classes.Icon.GearWide, Controls.MainWindowButtonTab.WorkspaceSettings, "Страница управления рабочим пространством");
             }
         }
-        private void AddPageButton(string name, Icon icon, string path)
+        private void AddPageButton(WorkspaceComponent component)
         {
-            Controls.MainWindowButtonTab bt = new(path, icon, name);
+            Controls.MainWindowButtonTab bt = new(component);
             bt.OnNewTabRequested += this.Bt_OnNewTabRequested;
             this.CustomTabs.Children.Add(bt);
         }
-        private void AddAdminPageButton(string name, Icon icon, string path)
+        private void AddAdminPageButton(string name, Icon icon, string path, string description)
         {
-            Controls.MainWindowButtonTab bt = new(path, icon, name);
+            Controls.MainWindowButtonTab bt = new(name, icon, path, description);
             bt.OnNewTabRequested += this.Bt_OnNewTabRequested;
             this.CustomTabs.Children.Add(bt);
         }
@@ -256,7 +246,7 @@ namespace Incas.Core.Views.Windows
                 $"Комментарий:  {lic.Commentary}", "Информация о лицензии");
         }
 
-        private void RefreshClick(object sender, MouseButtonEventArgs e)
+        private void RefreshClick(object sender, RoutedEventArgs e)
         {
             this.vm.LoadInfo();
             this.UpdateTabs();

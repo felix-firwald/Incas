@@ -6,6 +6,8 @@ using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.Workspace;
+using System;
 using System.Windows.Controls;
 using static Incas.Core.Interfaces.ITabItem;
 
@@ -27,12 +29,12 @@ namespace Incas.Objects.Views.Pages
             this.vm.OnClassSelected += this.OnClassSelected;
             this.DataContext = this.vm;
         }
-        public CustomDatabaseMain(string category)
+        public CustomDatabaseMain(WorkspaceComponent component)
         {
             this.InitializeComponent();
             this.vm = new()
             {
-                SelectedCategory = category
+                SelectedCategory = component
             };
             this.CategoriesList.IsEnabled = false;
             this.CategoriesList.Visibility = System.Windows.Visibility.Collapsed;

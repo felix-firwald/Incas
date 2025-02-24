@@ -31,7 +31,7 @@
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Path x:Name="Icon" Fill="{Binding BorderBrush, ElementName=bbb}" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Path x:Name="Icon" Fill="{Binding BorderBrush, ElementName=bbb}" VerticalAlignment="Center" HorizontalAlignment="Center" Height="15" Width="15" Stretch="Uniform">
             </Path>
             <TextBlock x:Name="Text" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=bbb}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" FontFamily="{StaticResource Rubik}" FontSize="11">
             </TextBlock>

@@ -4,6 +4,7 @@ using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -12,7 +13,7 @@ namespace Incas.Objects.ViewModels
 {
     public class CustomDatabaseViewModel : BaseViewModel
     {
-        private string selectedCategory;
+        private WorkspaceComponent selectedCategory;
         private Class selectedClass;
         public delegate void SelectedClassDelegate(Class selectedClass);
         public event SelectedClassDelegate OnClassSelected;
@@ -22,15 +23,14 @@ namespace Incas.Objects.ViewModels
         {
             ProgramState.DatabasePage = this;
         }
-        public List<string> Categories
+        public List<WorkspaceComponent> Categories
         {
             get
             {
-                using Class cl = new();
-                return cl.GetCategories();
+                return ProgramState.CurrentWorkspace.GetDefinition().Components;
             }
         }
-        public string CategoryName => this.selectedCategory;
+        public string CategoryName => this.selectedCategory.Name;
         public void UpdateAll()
         {
             this.OnPropertyChanged(nameof(this.Categories));
@@ -38,7 +38,7 @@ namespace Incas.Objects.ViewModels
             this.OnPropertyChanged(nameof(this.Classes));
             this.OnPropertyChanged(nameof(this.SelectedClass));
         }
-        public string SelectedCategory
+        public WorkspaceComponent SelectedCategory
         {
             get => this.selectedCategory;
             set
@@ -53,7 +53,7 @@ namespace Incas.Objects.ViewModels
             get
             {
                 using Class cl = new();
-                return cl.GetClassesByCategory(this.SelectedCategory);
+                return cl.GetClassesByComponent(this.SelectedCategory);
             }
         }
         public Class SelectedClass

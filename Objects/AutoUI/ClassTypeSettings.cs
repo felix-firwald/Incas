@@ -1,7 +1,9 @@
 ﻿using Incas.Core.Attributes;
+using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,8 +22,8 @@ namespace Incas.Objects.AutoUI
         #region Data
         private Class parentClass;
 
-        [Description("Категория класса")]
-        public string Category { get; set; }
+        [Description("Компонент")]
+        public Selector Component { get; set; }
 
         [Description("Имя класса")]
         public string Name { get; set; }
@@ -54,6 +56,12 @@ namespace Incas.Objects.AutoUI
         }
         public ClassTypeSettings(Class parent)
         {
+            Dictionary<object, string> components = new()
+            {
+                { parent.Component, "Унаследован" }
+            };
+            this.Component = new(components);
+            this.Component.SetSelection(parent.Component);
             Dictionary<object, string> pairs = new()
             {
                 { parent.Type, "Унаследован" }
@@ -64,6 +72,12 @@ namespace Incas.Objects.AutoUI
         }
         private void Initialize()
         {
+            Dictionary<object, string> components = new();
+            foreach (WorkspaceComponent wc in ProgramState.CurrentWorkspace.GetDefinition().Components)
+            {
+                components.Add(wc, wc.Name);
+            }
+            this.Component = new(components);
             Dictionary<object, string> pairs = new()
             {
                 { ClassType.Model, "Модель данных" },
@@ -85,6 +99,10 @@ namespace Incas.Objects.AutoUI
                 result.Add(this.parentClass.Id);
             }           
             return result;
+        }
+        public WorkspaceComponent GetComponent()
+        {
+            return this.Component.SelectedObject as WorkspaceComponent;
         }
         public override void Validate()
         {

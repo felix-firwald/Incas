@@ -1,5 +1,6 @@
 ﻿using Incas.Admin.AutoUI;
 using Incas.Admin.ViewModels;
+using Incas.Admin.Views.Windows;
 using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Objects.AutoUI;
@@ -314,6 +315,20 @@ namespace Incas.Admin.Views.Pages
                 cc.ShowDialog();
                 this.vm.UpdateClasses();
             }
+        }
+
+        private void OpenComponentsSettings(object sender, RoutedEventArgs e)
+        {
+            ComponentsSettings settings = new();
+            settings.ShowDialog();
+            ProgramState.UpdateAll();
+        }
+
+        private void OpenCommandsSettings(object sender, RoutedEventArgs e)
+        {
+            CommandSettings settings = new();
+            settings.ShowDialog();
+            ProgramState.UpdateAll();
         }
     }
 }

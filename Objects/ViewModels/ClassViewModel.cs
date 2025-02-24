@@ -9,6 +9,7 @@ using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.Workspace;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,8 @@ namespace Incas.Objects.ViewModels
                 Text = this.SourceData.Script ?? ""
             };
             this.textDocument.TextChanged += this.TextDocument_TextChanged;
+            this.AvailableComponents = new(ProgramState.CurrentWorkspace.CurrentGroup.GetAvailableComponents());
+            this.SelectedComponent = this.Source.Component;
         }
        
         #region Commands
@@ -222,15 +225,47 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.NameOfClass));
             }
         }
-        public string CategoryOfClass
+        private ObservableCollection<WorkspaceComponent> components;
+        public ObservableCollection<WorkspaceComponent> AvailableComponents
         {
-            get => this.Source.Category;
+            get
+            {
+                return this.components;
+            }
             set
             {
-                this.Source.Category = value;
-                this.OnPropertyChanged(nameof(this.CategoryOfClass));
+                this.components = value;
+                this.OnPropertyChanged(nameof(this.AvailableComponents));
             }
         }
+        private Guid component;
+        public WorkspaceComponent SelectedComponent
+        {
+            get
+            {
+                foreach (WorkspaceComponent wc in this.AvailableComponents)
+                {
+                    if (wc.Id == this.component)
+                    {
+                        return wc;
+                    }
+                }
+                return null;
+            }
+            set
+            {
+                foreach (WorkspaceComponent wc in this.AvailableComponents)
+                {
+                    if (wc.Id == value.Id)
+                    {
+                        this.component = value.Id;
+                        break;
+                    }
+                }
+                this.OnPropertyChanged(nameof(this.SelectedComponent));
+            }
+        }
+        
         public string ListName
         {
             get => this.SourceData.ListName;
@@ -474,6 +509,7 @@ namespace Incas.Objects.ViewModels
         {
             try
             {
+                this.Source.Component = this.SelectedComponent;
                 if (string.IsNullOrWhiteSpace(this.NameOfClass))
                 {
                     DialogsManager.ShowExclamationDialog("Классу не присвоено наименование!", "Сохранение прервано");

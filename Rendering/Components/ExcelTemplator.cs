@@ -156,7 +156,7 @@ namespace Incas.Rendering.Components
             this.workbook.Properties.Manager = $"INCAS";
             this.workbook.Properties.Author = $"{doc.Author.Name} (через INCAS)";
             this.workbook.Properties.Category = doc.Class.Name;
-            this.workbook.Properties.Subject = doc.Class.Category;
+            this.workbook.Properties.Subject = doc.Class.Component.Name;
             this.workbook.Properties.Title = doc.TargetDocument.Name;
             this.workbook.Properties.Created = doc.TargetDocument.CreationDate;
             this.workbook.Properties.Modified = doc.TargetDocument.CreationDate;

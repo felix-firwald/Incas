@@ -267,7 +267,7 @@ namespace Incas.Rendering.Components
             {
                 d.PackageProperties.Creator = $"{doc.Author.Name} (через INCAS)";
                 d.PackageProperties.Category = doc.Class.Name;
-                d.PackageProperties.Subject = doc.Class.Category;
+                d.PackageProperties.Subject = doc.Class.Component.Name;
                 d.PackageProperties.Title = doc.TargetDocument.Name;
                 d.PackageProperties.Revision = "1";
                 d.PackageProperties.Version = DateTime.Now.ToString("yyMMddHHmm");
