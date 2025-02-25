@@ -159,12 +159,12 @@ namespace Incas.Objects.ViewModels
         private ObservableCollection<FieldViewModel> myClassFields;
         private Field selectedField;
 
-        public DialogBindingViewModel(ObservableCollection<FieldViewModel> fields, BindingData data)
+        public DialogBindingViewModel(ClassViewModel @class, BindingData data)
         {
-            this.myClassFields = fields;
+            this.myClassFields = @class.Fields;
             using (Class cl = new())
             {
-                List<WorkspaceComponent> components = ProgramState.CurrentWorkspace.GetDefinition().Components;
+                List<WorkspaceComponent> components = ProgramState.CurrentWorkspace.GetDefinition().GetAvailableComponentsFor(@class.Source.Component);
                 this.classes = new(cl.GetGroupedItems(components));
             }
             foreach (ClassGroupedItem cl in this.Classes)

@@ -9,6 +9,7 @@ using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using IncasEngine.Workspace;
 using Newtonsoft.Json;
 using System;
@@ -21,10 +22,17 @@ namespace Incas.Objects.ViewModels
 {
     public class ClassViewModel : BaseViewModel
     {
+        public enum ClassMode
+        {
+            Usual,
+            Service
+        }
+        public ClassMode Mode { get; set; }
         public IClassData SourceData { get; set; }
-        public Class Source;
+        public IClass Source;
         public ClassViewModel(Class source)
         {
+            this.Mode = ClassMode.Usual;
             this.Source = source;
             this.SourceData = this.Source.GetClassData();
             this.Fields = new();
@@ -42,7 +50,27 @@ namespace Incas.Objects.ViewModels
             this.AvailableComponents = new(ProgramState.CurrentWorkspace.CurrentGroup.GetAvailableComponents());
             this.SelectedComponent = this.Source.Component;
         }
-       
+        public ClassViewModel(ServiceClass source)
+        {
+            this.Mode = ClassMode.Service;
+            this.Source = source;
+            this.SourceData = this.Source.GetClassData();
+            this.Fields = new();
+            foreach (Field f in this.SourceData.Fields)
+            {
+                this.Fields.Add(new(f));
+            }
+            this.Fields.CollectionChanged += this.Fields_CollectionChanged;
+            this.SetCommands();
+            this.textDocument = new()
+            {
+                Text = this.SourceData.Script ?? ""
+            };
+            this.textDocument.TextChanged += this.TextDocument_TextChanged;
+            this.AvailableComponents = new([this.Source.Component]);
+            this.SelectedComponent = this.Source.Component;
+        }
+
         #region Commands
         private void SetCommands()
         {
@@ -124,7 +152,7 @@ namespace Incas.Objects.ViewModels
                     break;
                 case FieldType.Relation:
                     BindingData db = new();
-                    DialogBinding dialog = new(this.Fields, field.Source);
+                    DialogBinding dialog = new(this, field.Source);
                     dialog.ShowDialog();
                     if (dialog.Result == true)
                     {
@@ -403,6 +431,18 @@ namespace Incas.Objects.ViewModels
                     }
                 }
                 return result;
+            }
+        }
+        public bool InCustomClassEnabledOnly
+        {
+            get
+            {
+                switch (this.Mode)
+                {
+                    case ClassMode.Usual:
+                        return true;
+                }
+                return false;
             }
         }
         private static List<FieldType> fieldTypes = new()

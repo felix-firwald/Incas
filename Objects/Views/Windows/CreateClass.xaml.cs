@@ -20,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -30,7 +31,7 @@ namespace Incas.Objects.Views.Windows
     {
         private ClassViewModel vm;
         private IClassPartSettings partSettings;
-        public CreateClass(ClassTypeSettings primary)
+        public CreateClass(ClassTypeSettings primary) // init class
         {
             DialogsManager.ShowWaitCursor();
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
@@ -51,7 +52,7 @@ namespace Incas.Objects.Views.Windows
             this.ApplyPartSettings();
             DialogsManager.ShowWaitCursor(false);
         }
-        public CreateClass(Guid id)
+        public CreateClass(Guid id) // edit class
         {
             DialogsManager.ShowWaitCursor();
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");        
@@ -66,6 +67,18 @@ namespace Incas.Objects.Views.Windows
             this.Title = "Редактирование класса";
             Class cl = new(id);
             this.vm = new(cl);
+            this.DataContext = this.vm;
+            this.ApplyPartSettings();
+            DialogsManager.ShowWaitCursor(false);
+        }
+        public CreateClass(ServiceClass @class) // edit service class
+        {
+            DialogsManager.ShowWaitCursor();
+            XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
+            this.InitializeComponent();
+            this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+            this.Title = $"Служебный класс: {@class.Name}";
+            this.vm = new(@class);
             this.DataContext = this.vm;
             this.ApplyPartSettings();
             DialogsManager.ShowWaitCursor(false);

@@ -171,8 +171,7 @@ namespace Incas.Core.Classes
         {
             DialogsManager.ShowWaitCursor();
             ProgramState.CurrentWorkspace = new(data.Path);
-            ProgramState.CurrentWorkspace.InitializeDefinition(data);
-            RegistryData.SetWorkspacePath(data.WorkspaceName, data.Path);
+            ProgramState.CurrentWorkspace.InitializeDefinition(data);           
             DialogsManager.ShowWaitCursor(false);
         }
 

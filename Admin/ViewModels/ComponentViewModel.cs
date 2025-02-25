@@ -108,11 +108,11 @@ namespace Incas.Admin.ViewModels
         {
             get
             {
-                return this.Component.IsVisibleToEveryone;
+                return this.Component.IsPublic;
             }
             set
             {
-                this.Component.IsVisibleToEveryone = value;
+                this.Component.IsPublic = value;
                 this.OnPropertyChanged(nameof(this.IsVisibleToEveryone));
             }
         }

@@ -328,5 +328,17 @@ namespace Incas.Admin.Views.Pages
             CommandSettings settings = new();
             settings.ShowDialog();
         }
+
+        private void EditGroupsClick(object sender, RoutedEventArgs e)
+        {
+            CreateClass cc = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceGroups);
+            cc.ShowDialog();
+        }
+
+        private void EditUsersClick(object sender, RoutedEventArgs e)
+        {
+            CreateClass cc = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers);
+            cc.ShowDialog();
+        }
     }
 }

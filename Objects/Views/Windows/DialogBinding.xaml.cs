@@ -23,23 +23,23 @@ namespace Incas.Objects.Views.Windows
         public Guid SelectedField { get; set; }
         public DialogBindingViewModel vm;
         public bool Result = false;
-        public DialogBinding(ObservableCollection<FieldViewModel> myClassFields, Field data)
+        public DialogBinding(ClassViewModel @class, Field data)
         {
             this.InitializeComponent();
             BindingData bd = data.GetBindingData();
             if (bd is null)
             {
-                this.vm = new(myClassFields, new());
+                this.vm = new(@class, new());
             }
             else
             {
                 try
                 {
-                    this.vm = new(myClassFields, bd);
+                    this.vm = new(@class, bd);
                 }
                 catch
                 {
-                    this.vm = new(myClassFields, new());
+                    this.vm = new(@class, new());
                 }
             }
             this.DataContext = this.vm;

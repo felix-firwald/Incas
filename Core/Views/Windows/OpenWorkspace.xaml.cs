@@ -1,6 +1,7 @@
 ﻿using Incas.Core.AutoUI;
 using Incas.Core.Classes;
 using Incas.Core.ViewModels;
+using IncasEngine.Core;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -96,14 +97,19 @@ namespace Incas.Core.Views.Windows
                     CreateWorkspace cw = new();
                     if (cw.ShowDialog("Создание рабочего пространства", Classes.Icon.Folder))
                     {
-                        //ProgramState.InitWorkspace(cw);
+                        EngineEvents.OnUpdateWorkspacesListRequested += this.EngineEvents_OnUpdateWorkspacesListRequested;
                     }
                     break;
                 case DialogStatus.No:
                     DefineExistingWorkspace dew = new();
                     dew.ShowDialog("Добавление рабочего пространства", Classes.Icon.Folder);
+                    this.vm.Refresh();
                     break;
-            }
+            }           
+        }
+
+        private void EngineEvents_OnUpdateWorkspacesListRequested()
+        {
             this.vm.Refresh();
         }
 

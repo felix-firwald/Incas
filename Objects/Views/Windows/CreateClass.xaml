@@ -103,7 +103,7 @@
 
                                             <Label Content="Базовые настройки:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                         </Grid>
-                                        <ComboBox Style="{StaticResource ComboBoxMain}" ItemsSource="{Binding AvailableComponents}" SelectedItem="{Binding SelectedComponent, Mode=TwoWay}" ToolTip="Компонент, к которому относится класс">
+                                        <ComboBox Style="{StaticResource ComboBoxMain}" IsEnabled="{Binding InCustomClassEnabledOnly}" ItemsSource="{Binding AvailableComponents}" SelectedItem="{Binding SelectedComponent, Mode=TwoWay}" ToolTip="Компонент, к которому относится класс">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -113,7 +113,7 @@
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
-                                        <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding NameOfClass}" Tag="Наименование класса" MaxLength="50" ToolTip="Наименование класса (везде)"/>
+                                        <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding NameOfClass}" IsEnabled="{Binding InCustomClassEnabledOnly}" Tag="Наименование класса" MaxLength="50" ToolTip="Наименование класса (везде)"/>
                                         <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding ListName}" Tag="Наименование списка объектов" MaxLength="75" ToolTip="Наименование списка объектов (во всех вкладках, где показывается список объектов класса)"/>
                                     </StackPanel>
                                 </Border>
