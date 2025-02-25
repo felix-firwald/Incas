@@ -39,7 +39,6 @@ namespace Incas.Objects.Views.Pages
         public IClass sourceClass;
         public IClassData ClassData;
         private ObjectCard ObjectCard;
-        public Preset SourcePreset;
         private GroupClassPermissionSettings permissionSettings;
         public event TabAction OnClose;
         public string Id { get; set; }

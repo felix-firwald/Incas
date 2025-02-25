@@ -39,7 +39,6 @@ namespace Incas.Objects.Views.Pages
             this.CategoriesList.IsEnabled = false;
             this.CategoriesList.Visibility = System.Windows.Visibility.Collapsed;
             this.vm.OnClassSelected += this.OnClassSelected;
-            this.vm.OnPresetSelected += this.OnPresetSelected;
             this.DataContext = this.vm;
             EngineEvents.OnUpdateClassRequested += this.EngineEvents_OnUpdateClassRequested;
         }
@@ -56,25 +55,6 @@ namespace Incas.Objects.Views.Pages
             }
         }
 
-        private void OnPresetSelected(Class selectedClass, PresetReference preset)
-        {
-            //if (selectedClass == null)
-            //{
-            //    this.ContentPanel.Content = new Core.Views.Controls.NoContent();
-            //    return;
-            //}
-            //ObjectsList ol = new(selectedClass, Processor.GetPreset(selectedClass, preset));
-            //ol.OnPresetsViewRequested += this.OnPresetsViewRequested;
-            //this.ContentPanel.Content = ol;
-        }
-        private void PlacePresetsListPage(IClass selectedClass)
-        {
-            PresetsListPage pl = new(selectedClass, this.vm.Presets);
-            pl.OnViewRequested += this.Pl_OnViewRequested;
-            this.vm.UpdatePresets();
-            this.vm.SelectedPreset = new();
-            this.ContentPanel.Content = pl;
-        }
         private void OnClassSelected(Class selectedClass)
         {
             this.ContentPanel.Content = new ObjectsListLoading();
@@ -84,26 +64,15 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             IClassData data = selectedClass.GetClassData();
-            if (data.PresetsEnabled && data.RestrictFullView)
+            if (data.RestrictFullView)
             {
-                this.PlacePresetsListPage(selectedClass);
+                
             }
             else
             {
                 ObjectsList ol = new(selectedClass);
-                ol.OnPresetsViewRequested += this.OnPresetsViewRequested;
                 this.ContentPanel.Content = ol;
             }            
-        }
-
-        private void OnPresetsViewRequested(IClass source)
-        {
-            this.PlacePresetsListPage(source);
-        }
-
-        private void Pl_OnViewRequested(IClass sourceClass, Preset preset)
-        {
-            this.vm.SelectedPreset = preset.GetAsReference();
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -124,11 +93,6 @@ namespace Incas.Objects.Views.Pages
                 Content = new ObjectsList(this.vm.SelectedClass)
             };
             DialogsManager.ShowPage(gb, this.vm.SelectedClass.Name, this.vm.SelectedClass.Id.ToString());
-        }
-
-        private void Ap_OnUpdateRequested()
-        {
-            this.vm.UpdatePresets();
         }
     }
 }

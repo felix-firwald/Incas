@@ -17,8 +17,7 @@ namespace Incas.Objects.ViewModels
         private Class selectedClass;
         public delegate void SelectedClassDelegate(Class selectedClass);
         public event SelectedClassDelegate OnClassSelected;
-        public delegate void SelectedPresetDelegate(Class selectedClass, PresetReference preset);
-        public event SelectedPresetDelegate OnPresetSelected;
+
         public CustomDatabaseViewModel()
         {
             ProgramState.DatabasePage = this;
@@ -69,8 +68,6 @@ namespace Incas.Objects.ViewModels
                     this.classData = this.selectedClass.GetClassData();
                     this.OnPropertyChanged(nameof(this.ClassData));
                     this.OnPropertyChanged(nameof(this.PresetsVisibility));
-                    this.OnPropertyChanged(nameof(this.Presets));
-                    this.SelectedPreset = new();
                     this.OnClassSelected?.Invoke(value);
                 }              
             }
@@ -94,56 +91,12 @@ namespace Incas.Objects.ViewModels
                 return this.ClassData.PresetsEnabled ? Visibility.Visible : Visibility.Collapsed;
             }
         }
-        public List<PresetReference> Presets
-        {
-            get
-            {
-                if (this.classData is null)
-                {
-                    return new();
-                }
-                if (this.classData.PresetsEnabled)
-                {
-                    return Processor.GetPresetsReferences(this.selectedClass);
-                }
-                return new();
-            }
-        }
-        private PresetReference selectedPreset;
-        public PresetReference SelectedPreset
-        {
-            get
-            {
-                return this.selectedPreset;
-            }
-            set
-            {
-                this.selectedPreset = value;
-                this.OnPropertyChanged(nameof(this.SelectedPreset));
-                if (this.selectedPreset.Id != Guid.Empty)
-                {
-                    this.OnPresetSelected?.Invoke(this.selectedClass, this.selectedPreset);                   
-                }
-                this.OnPropertyChanged(nameof(this.SelectedClassName));
-            }
-        }
         public string SelectedClassName 
         {
             get
             {
-                if (this.selectedPreset.Id == Guid.Empty)
-                {
-                    return this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.GetClassData().ListName;
-                }
-                else
-                {
-                    return this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.GetClassData().ListName + ": " + this.selectedPreset.Name;
-                }
+                return this.SelectedClass == null ? "(класс не выбран)" : this.SelectedClass.GetClassData().ListName;
             }
-        }
-        public void UpdatePresets()
-        {
-            this.OnPropertyChanged(nameof(this.Presets));
         }
     }
 }
