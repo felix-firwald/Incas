@@ -31,6 +31,14 @@ namespace Incas.Admin.ViewModels
                 return this.FromBool(this.EditingWorkspaceEnabled);
             }
         }
+        public Visibility NoAccessLabelVisibility
+        {
+            get
+            {
+                return this.FromBool(!this.EditingWorkspaceEnabled);
+            }
+        }
+
         public Visibility CreatingClassVisibility
         {
             get

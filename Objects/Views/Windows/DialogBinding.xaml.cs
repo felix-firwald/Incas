@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Incas.Objects.Views.Windows
@@ -59,7 +60,7 @@ namespace Incas.Objects.Views.Windows
 
         private void FinishClick(object sender, RoutedEventArgs e)
         {
-            if (this.vm.SelectedClass.Id == Guid.Empty)
+            if (this.vm.SelectedClass.Id == Guid.Empty.ToString())
             {
                 DialogsManager.ShowExclamationDialog("Не выбран класс объекта!", "Сохранение прервано");
                 return;
@@ -69,7 +70,7 @@ namespace Incas.Objects.Views.Windows
                 DialogsManager.ShowExclamationDialog("Не выбрано поле у объекта!", "Сохранение прервано");
                 return;
             }
-            this.SelectedClass = this.vm.SelectedClass.Id;
+            this.SelectedClass = Guid.Parse(this.vm.SelectedClass.Id);
             this.SelectedField = this.vm.BindingField.Id;
             this.Result = true;
             this.Close();
@@ -78,6 +79,13 @@ namespace Incas.Objects.Views.Windows
         private void AddClick(object sender, RoutedEventArgs e)
         {
             this.vm.AddConstraint();
+        }
+
+        private void ClassesPanel_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
     }
 }

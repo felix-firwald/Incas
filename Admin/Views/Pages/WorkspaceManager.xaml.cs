@@ -321,14 +321,12 @@ namespace Incas.Admin.Views.Pages
         {
             ComponentsSettings settings = new();
             settings.ShowDialog();
-            ProgramState.UpdateAll();
         }
 
         private void OpenCommandsSettings(object sender, RoutedEventArgs e)
         {
             CommandSettings settings = new();
             settings.ShowDialog();
-            ProgramState.UpdateAll();
         }
     }
 }

@@ -6,6 +6,7 @@ using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,16 +49,6 @@ namespace Incas.Admin.Views.Windows
             this.vm.SelectedComponent = cvm;
         }
 
-        private void MinimizeAllClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void MaximizeAllClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void GetMoreInfoClick(object sender, RoutedEventArgs e)
         {
 
@@ -65,7 +56,19 @@ namespace Incas.Admin.Views.Windows
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                this.vm.Save();
+                this.Close();
+            }
+            catch (ValidationException ex)
+            {
+                DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+            }
         }
 
         private void RemoveComponentClick(object sender, RoutedEventArgs e)

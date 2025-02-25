@@ -108,7 +108,7 @@
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
                                                         <Path Height="15" Width="15" Stretch="Uniform" Fill="{Binding Color, Converter={StaticResource IEColorToBrushConverter}}" Data="{Binding Icon, Converter={StaticResource PathDataToGeometryConverter}}"/>
-                                                        <Label FontFamily="{StaticResource Rubik}" Foreground="White" Content="{Binding Name}"/>
+                                                        <Label Margin="5,0,0,0" FontFamily="{StaticResource Rubik}" Foreground="White" Content="{Binding Name}"/>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
@@ -157,7 +157,7 @@
 
                                                 <Label Content="Карточка объекта:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                             </Grid>
-                                            <CheckBox Style="{StaticResource Toggle}" Content="Показывать карточку объекта" IsChecked="{Binding ShowCard}"/>
+                                            <CheckBox Style="{StaticResource CheckBoxMain}" Content="Показывать карточку объекта" IsChecked="{Binding ShowCard}"/>
                                         </StackPanel>
                                     </Border>
 
@@ -176,8 +176,8 @@
                                             <Label Content="Доступ:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
 
                                         </Grid>
-                                        <CheckBox Style="{StaticResource Toggle}" Content="Редактирование объекта доступно только автору" IsChecked="{Binding EditByAuthorOnly}"/>
-                                        <CheckBox Style="{StaticResource Toggle}" Content="Разрешить переопределение автора и делегирование" IsChecked="{Binding AuthorOverrideEnabled}"/>
+                                        <CheckBox Style="{StaticResource CheckBoxMain}" Content="Редактирование объекта доступно только автору" IsChecked="{Binding EditByAuthorOnly}"/>
+                                        <CheckBox Style="{StaticResource CheckBoxMain}" Content="Разрешить переопределение автора и делегирование" IsChecked="{Binding AuthorOverrideEnabled}"/>
                                     </StackPanel>
                                 </Border>
                                 <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5" Grid.Column="1">
@@ -192,7 +192,7 @@
                                             <Label Content="Список объектов:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
 
                                         </Grid>
-                                        <CheckBox x:Name="ButtonPresetsEnabled" Style="{StaticResource Toggle}" Content="Ограничить просмотр общего списка" IsChecked="{Binding PresetsEnabled}"/>
+                                        <CheckBox x:Name="ButtonPresetsEnabled" Style="{StaticResource CheckBoxMain}" Content="Ограничить просмотр общего списка" IsChecked="{Binding PresetsEnabled}"/>
                                         <ListBox Style="{StaticResource ListBoxMain}" MinHeight="40" ItemContainerStyle="{StaticResource ListBoxItemUnselectable}" ItemsSource="{Binding MapFieldsList}" MaxHeight="200">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>

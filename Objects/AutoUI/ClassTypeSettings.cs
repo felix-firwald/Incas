@@ -73,7 +73,7 @@ namespace Incas.Objects.AutoUI
         private void Initialize()
         {
             Dictionary<object, string> components = new();
-            foreach (WorkspaceComponent wc in ProgramState.CurrentWorkspace.GetDefinition().Components)
+            foreach (WorkspaceComponent wc in ProgramState.CurrentWorkspace.CurrentGroup.GetAvailableComponents())
             {
                 components.Add(wc, wc.Name);
             }

@@ -8,97 +8,133 @@
              d:DesignHeight="850" d:DesignWidth="600" Background="{StaticResource Dark}">
     <TabControl Background="{x:Null}" BorderBrush="{x:Null}" Style="{StaticResource TabControlMain}" ItemContainerStyle="{StaticResource TabItemMain}">
         <TabItem Header="Общие настройки">
-            <StackPanel>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GeneralSettingsEditing}" Content="ИЗМЕНЕНИЕ РАБОЧЕГО ПРОСТРАНСТВА" ToolTip="Могут ли пользователи этой группы вносить изменения в основные настройки рабочего пространства"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding DefaultPermissionType}" Content="РАЗРЕШЕНО ВСЕ, ЧТО ЯВНО НЕ ЗАПРЕЩЕНО" ToolTip="Если да: отсутствие настройки к классу будет трактоваться INCAS как полный доступ, если нет: отсутствие настройки к классу будет трактоваться INCAS как полный запрет на доступ"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding CreatingClasses}" Content="СОЗДАНИЕ КЛАССОВ" ToolTip="Могут ли пользователи этой группы создавать классы"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UpdatingClasses}" Content="РЕДАКТИРОВАНИЕ КЛАССОВ" ToolTip="Могут ли пользователи этой группы редактировать существующие классы"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding RemovingClasses}" Content="УДАЛЕНИЕ КЛАССОВ" ToolTip="Могут ли пользователи этой группы удалять существующие классы"/>
+            <StackPanel IsEnabled="{Binding GroupEditable}">
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GeneralSettingsEditing}" Content="Изменение рабочего пространства" ToolTip="Могут ли пользователи этой группы вносить изменения в основные настройки рабочего пространства"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding DefaultPermissionType}" Content="Разрешено все, что явно не запрещено" ToolTip="Если да: отсутствие настройки к классу будет трактоваться INCAS как полный доступ, если нет: отсутствие настройки к классу будет трактоваться INCAS как полный запрет на доступ"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding CreatingClasses}" Content="Создание классов" ToolTip="Могут ли пользователи этой группы создавать классы"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UpdatingClasses}" Content="Редактирование классов" ToolTip="Могут ли пользователи этой группы редактировать существующие классы"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding RemovingClasses}" Content="Удаление классов" ToolTip="Могут ли пользователи этой группы удалять существующие классы"/>
             </StackPanel>
         </TabItem>
-        <TabItem Header="Группы">
-            <StackPanel>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsCreateOperations}" Content="СОЗДАНИЕ" ToolTip="Могут ли пользователи этой группы создавать новые группы"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsViewOperations}" Content="ПРОСМОТР" ToolTip="Могут ли пользователи этой группы просматривать список групп"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsReadOperations}" Content="ЧТЕНИЕ" ToolTip="Могут ли пользователи этой группы просматривать группы через интерфейс карточки и редактора"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsConfidentialAccess}" Content="ЧТЕНИЕ КОНФИДЕНЦИАЛЬНЫХ ПОЛЕЙ" ToolTip="Могут ли пользователи этой группы просматривать поля, обозначенные как конфиденциальные (если такие есть)"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsUpdateOperations}" Content="ИЗМЕНЕНИЕ" ToolTip="Могут ли пользователи этой группы изменять существующие группы"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding GroupsDeleteOperations}" Content="УДАЛЕНИЕ" ToolTip="Могут ли пользователи этой группы удалять существующие группы"/>
-            </StackPanel>
-        </TabItem>
-        <TabItem Header="Пользователи">
-            <StackPanel>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersCreateOperations}" Content="СОЗДАНИЕ" ToolTip="Могут ли пользователи этой группы создавать новых пользователей"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersViewOperations}" Content="ПРОСМОТР" ToolTip="Могут ли пользователи этой группы просматривать список пользователей"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersReadOperations}" Content="ЧТЕНИЕ" ToolTip="Могут ли пользователи этой группы просматривать пользователей через интерфейс карточки и редактора"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersConfidentialAccess}" Content="ЧТЕНИЕ КОНФИДЕНЦИАЛЬНЫХ ПОЛЕЙ" ToolTip="Могут ли пользователи этой группы просматривать поля, обозначенные как конфиденциальные (если такие есть). Примечание: применяется также в отношении пароля."/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersUpdateOperations}" Content="ИЗМЕНЕНИЕ" ToolTip="Могут ли пользователи этой группы изменять существующих пользователей"/>
-                <CheckBox Style="{StaticResource Toggle}" IsChecked="{Binding UsersDeleteOperations}" Content="УДАЛЕНИЕ" ToolTip="Могут ли пользователи этой группы удалять существующих пользователей"/>
-            </StackPanel>
-        </TabItem>
-        <TabItem Header="Доступ к классам">
-            <StackPanel>
-                <Grid Margin="5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="220"/>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="70"/>
-                    </Grid.ColumnDefinitions>
-                    <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.RowSpan="2"/>
-                    <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="1" Grid.RowSpan="2"/>
-                    <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="2" Grid.RowSpan="2"/>
-                    <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="3" Grid.RowSpan="2"/>
-                    <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="4" Grid.RowSpan="2"/>
-                    <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="5" Grid.RowSpan="2"/>
-                    <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="КЛАСС" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center" Grid.Row="1"/>
-                    <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="СОЗДАНИЕ" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="1" FontSize="10" HorizontalAlignment="Center"/>
-                    <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="ПРОСМОТР" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="2" FontSize="10" HorizontalAlignment="Center"/>
-                    <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="ЧТЕНИЕ" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="3" FontSize="10" HorizontalAlignment="Center"/>
-                    <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="ЧТЕНИЕ (КОНФ. ПОЛЕЙ)" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="4" FontSize="10" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="WrapWithOverflow"/>
-                    <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="ИЗМЕНЕНИЕ" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="5" FontSize="10" HorizontalAlignment="Center"/>
-                    <TextBlock Style="{StaticResource TextBlockMain}" FontFamily="{StaticResource JetBrains}" Text="УДАЛЕНИЕ" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="6" FontSize="10" HorizontalAlignment="Center"/>
-
-                </Grid>
-                <ListBox x:Name="List" ItemsSource="{Binding CustomPermissions}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MaxHeight="350" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" Background="{x:Null}" BorderBrush="{x:Null}" SelectionChanged="CustomPermissionSelectionChanged">
+        <TabItem Header="Компоненты" IsEnabled="{Binding GroupEditable}">
+            <ListBox Background="{x:Null}" BorderBrush="{x:Null}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}" ItemsSource="{Binding Components}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid MaxHeight="60">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="4*" MinWidth="200" MaxWidth="215"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                                <ColumnDefinition Width="70"/>
-                            </Grid.ColumnDefinitions>
-                            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right"/>
-                            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="1"/>
-                            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="2"/>
-                            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="3"/>
-                            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="4"/>
-                            <Rectangle Fill="{DynamicResource Area}" Width="1" HorizontalAlignment="Right" Grid.Column="5"/>
-                            <TextBlock Style="{StaticResource TextBlockMain}" Margin="5" FontFamily="{StaticResource JetBrains}" Text="{Binding Key.Name}" TextWrapping="WrapWithOverflow"  Foreground="White" FontWeight="Bold" FontSize="10" TextTrimming="CharacterEllipsis"/>
-                            <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.CreateOperations}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="1" FontSize="10" HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
-                            <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.ViewOperations}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="2" FontSize="10" HorizontalAlignment="Center"/>
-                            <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.ReadOperations}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="3" FontSize="10" HorizontalAlignment="Center"/>
-                            <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.ConfidentialAccess}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="4" FontSize="10" HorizontalAlignment="Center"/>
-                            <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.UpdateOperations}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="5" FontSize="10" HorizontalAlignment="Center"/>
-                            <CheckBox Style="{StaticResource CheckBoxOnlyMain}" IsChecked="{Binding Value.DeleteOperations}" Foreground="{DynamicResource GrayLight}" FontWeight="Bold" Grid.Column="6" FontSize="10" HorizontalAlignment="Center"/>
-                        </Grid>
+                        <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding IsActivated}" Content="{Binding Name}" ToolTip="Доступен ли этот компонент для этой группы"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            
+        </TabItem>
+        <TabItem Header="Группы" IsEnabled="{Binding GroupEditable}">
+            <StackPanel>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsCreateOperations}" Content="Создание" ToolTip="Могут ли пользователи этой группы создавать новые группы"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsViewOperations}" Content="Просмотр" ToolTip="Могут ли пользователи этой группы просматривать список групп"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsReadOperations}" Content="Чтение" ToolTip="Могут ли пользователи этой группы просматривать группы через интерфейс карточки и редактора"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsConfidentialAccess}" Content="Чтение конфиденциальных полей" ToolTip="Могут ли пользователи этой группы просматривать поля, обозначенные как конфиденциальные (если такие есть)"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsUpdateOperations}" Content="Изменение" ToolTip="Могут ли пользователи этой группы изменять существующие группы"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsDeleteOperations}" Content="Удаление" ToolTip="Могут ли пользователи этой группы удалять существующие группы"/>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Пользователи" IsEnabled="{Binding GroupEditable}">
+            <StackPanel>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersCreateOperations}" Content="Создание" ToolTip="Могут ли пользователи этой группы создавать новых пользователей"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersViewOperations}" Content="Просмотр" ToolTip="Могут ли пользователи этой группы просматривать список пользователей"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersReadOperations}" Content="Чтение" ToolTip="Могут ли пользователи этой группы просматривать пользователей через интерфейс карточки и редактора"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersConfidentialAccess}" Content="Чтение конфиденциальных полей" ToolTip="Могут ли пользователи этой группы просматривать поля, обозначенные как конфиденциальные (если такие есть). Примечание: применяется также в отношении пароля."/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersUpdateOperations}" Content="Изменение" ToolTip="Могут ли пользователи этой группы изменять существующих пользователей"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersDeleteOperations}" Content="Удаление" ToolTip="Могут ли пользователи этой группы удалять существующих пользователей"/>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Доступ к классам" IsEnabled="{Binding GroupEditable}">
+            
+            <StackPanel>
+                <DataGrid Style="{StaticResource DataGridMain}" ItemsSource="{Binding CustomPermissions}" VirtualizingPanel.IsVirtualizing="True" EnableRowVirtualization="True" EnableColumnVirtualization="True" MaxHeight="400" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Класс" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Height="15" Width="15" VerticalAlignment="Center" Data="M480-112.77q-8.46 0-16.15-1.73-7.7-1.73-15.16-5.96L173.31-273.15q-15.16-8.7-24.23-23.35-9.08-14.65-9.08-32.81v-301.38q0-18.16 9.08-32.81 9.07-14.65 24.23-23.35l275.38-152.69q7.46-4.23 15.16-5.96 7.69-1.73 16.15-1.73 8.46 0 16.15 1.73 7.7 1.73 15.16 5.96l275.38 152.69q15.16 8.7 24.23 23.35 9.08 14.65 9.08 32.81v301.38q0 18.16-9.08 32.81-9.07 14.65-24.23 23.35L511.31-120.46q-7.46 4.23-15.16 5.96-7.69 1.73-16.15 1.73ZM367.85-565.38q22.77-27.62 51.88-41.12Q448.85-620 480-620q31.92 0 60.65 13.5 28.73 13.5 51.5 41.12L756.77-657 492.31-804.15q-6.16-3.08-12.31-3.08t-12.31 3.08L203.23-657l164.62 91.62ZM460-160.15v-180.23q-52-9.39-86-48.04-34-38.66-34-91.58 0-13.31 2.15-24.85 2.16-11.53 6.7-24.38L180-623.85v293.77q0 6.93 3.08 12.31 3.07 5.39 9.23 9.23L460-160.15ZM480-380q41.46 0 70.73-29.27Q580-438.54 580-480q0-41.46-29.27-70.73Q521.46-580 480-580q-41.46 0-70.73 29.27Q380-521.46 380-480q0 41.46 29.27 70.73Q438.54-380 480-380Zm20 219.85 267.69-148.39q6.16-3.84 9.23-9.23 3.08-5.38 3.08-12.31v-293.77l-168.85 94.62q4.54 13.85 6.7 24.88Q620-493.31 620-480q0 52.92-34 91.58-34 38.65-86 48.04v180.23Z"/>
+                                        <TextBlock Foreground="White" Text="{Binding Item.Name}" TextWrapping="WrapWithOverflow" FontWeight="Bold" FontSize="10" TextTrimming="CharacterEllipsis" Margin="5,0,0,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Создание объектов" MaxWidth="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding CreateOperations}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsChecked="{Binding CreateOperations}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Просмотр списков" MaxWidth="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding ViewOperations}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsChecked="{Binding ViewOperations}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Чтение объектов" MaxWidth="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding ReadOperations}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsChecked="{Binding ReadOperations}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Редактирование объектов" MaxWidth="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding UpdateOperations}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsChecked="{Binding UpdateOperations}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Удаление объектов" MaxWidth="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding DeleteOperations}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsChecked="{Binding DeleteOperations}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Конфиденциальный доступ" MaxWidth="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding ConfidentialAccess}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsChecked="{Binding ConfidentialAccess}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </StackPanel>
         </TabItem>
     </TabControl>

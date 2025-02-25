@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incas.Admin.Views.Pages" xmlns:conv="clr-namespace:Incas.Core.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="520" d:DesignWidth="1200">
+             d:DesignHeight="590" d:DesignWidth="1200">
     <UserControl.Resources>
         <ResourceDictionary>
             <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
@@ -96,8 +96,8 @@
         <TabControl Style="{StaticResource TabControlMain}" ItemContainerStyle="{StaticResource TabItemMain}" Grid.Column="1" Grid.RowSpan="2" Background="{x:Null}">
             <TabItem Header="Настройки" BorderBrush="{DynamicResource LightPurple}" >
                 <GroupBox Header="Первичные настройки">
-                    <StackPanel Visibility="{Binding EditingWorkspaceVisibility}">
-                        <Border Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
+                    <StackPanel>
+                        <Border Visibility="{Binding EditingWorkspaceVisibility}" Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
                             <Grid MinHeight="60">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
@@ -115,7 +115,7 @@
                                 </TextBlock>
                             </Grid>
                         </Border>
-                        <Border Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
+                        <Border Visibility="{Binding EditingWorkspaceVisibility}" Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
                             <Grid MinHeight="60">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
@@ -133,7 +133,7 @@
                                 </TextBlock>
                             </Grid>
                         </Border>
-                        <Border Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
+                        <Border Visibility="{Binding EditingWorkspaceVisibility}" Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
                             <Grid MinHeight="60">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
@@ -151,7 +151,7 @@
                                 </TextBlock>
                             </Grid>
                         </Border>
-                        <Border Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
+                        <Border Visibility="{Binding EditingWorkspaceVisibility}" Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
                             <Grid MinHeight="60">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
@@ -172,7 +172,7 @@
                                 </TextBlock>
                             </Grid>
                         </Border>
-                        <Border Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
+                        <Border Visibility="{Binding EditingWorkspaceVisibility}" Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
                             <Grid MinHeight="60">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>
@@ -193,7 +193,19 @@
                                 </TextBlock>
                             </Grid>
                         </Border>
-                        
+                        <Border Visibility="{Binding NoAccessLabelVisibility}">
+                            <Grid MinHeight="200" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition MinHeight="80"/>
+                                    <RowDefinition MinHeight="80"/>
+                                </Grid.RowDefinitions>
+                                <Path VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15" MinWidth="40" MinHeight="40" Stretch="Uniform" MaxWidth="40" MaxHeight="40" Fill="{DynamicResource Icon}" Data="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5v-1a2 2 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693Q8.844 9.002 8 9c-5 0-6 3-6 4m7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
+                                <Label Style="{DynamicResource LabelPrimary}" Grid.Row="1" Content="У вас нет доступа к первичным настройкам" Foreground="{DynamicResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                            </Grid>
+                        </Border>
                     </StackPanel>
                 </GroupBox>
             </TabItem>

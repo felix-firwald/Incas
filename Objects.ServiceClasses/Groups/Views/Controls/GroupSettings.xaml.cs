@@ -32,13 +32,13 @@ namespace Incas.Objects.ServiceClasses.Groups.Views.Controls
         }
         public IObject GetResult()
         {
-            ((GroupSettingsViewModel)this.ViewModel).ApplyCustomPermissions();
+            ((GroupSettingsViewModel)this.ViewModel).ApplyCustomPermissions().ApplyComponents();
             return this.TargetObject;
         }
 
         private void CustomPermissionSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.List.SelectedItem = null;
+            //this.List.SelectedItem = null;
         }
     }
 }

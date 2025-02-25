@@ -1,9 +1,12 @@
 ﻿using ABI.Windows.AI.MachineLearning;
+using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
+using IncasEngine.Workspace;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Incas.Objects.ServiceClasses.Groups.ViewModels
 {
@@ -14,6 +17,7 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         {
             this.GroupData = data;
             this.GetAllClasses();
+            this.LoadComponents();
         }
         private void GetAllClasses()
         {
@@ -23,18 +27,36 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
                 List<ClassItem> classes = cl.GetAllClassItems();
                 foreach (ClassItem item in classes)
                 {
-                    GroupClassPermissionSettings ps = new();
-                    if (this.GroupData.ClassesPermissions.TryGetValue(item.Id, out ps))
+                    GroupClassPermissionSettings settingsInitState = new();
+                    GroupClassPermissionViewModel ps = new(item);                   
+                    if (this.GroupData.ClassesPermissions.TryGetValue(item.Id, out settingsInitState)) // if already exists
                     {
-                        this.customPermissions.Add(item, ps);
+                        ps.Settings = settingsInitState;                        
                     }
-                    else
+                    else // if not exists
                     {
-                        this.customPermissions.Add(item, new());
+                        ps.Settings = new();
                     }
+                    this.customPermissions.Add(ps);
                 }
             }
             this.OnPropertyChanged(nameof(this.CustomPermissions));
+        }
+        private void LoadComponents()
+        {
+            ObservableCollection<GroupComponentViewModel> result = new();
+            foreach (WorkspaceComponent component in ProgramState.CurrentWorkspace.GetDefinition().Components)
+            {
+                if (this.GroupData.VisibleComponents.ContainsKey(component.Id))
+                {
+                    result.Add(new(component, this.GroupData.VisibleComponents[component.Id]));
+                }
+                else
+                {
+                    result.Add(new(component, false));
+                }
+            }
+            this.Components = result;
         }
         public bool GeneralSettingsEditing
         {
@@ -251,6 +273,21 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
             }
         }
         #endregion
+        #region Components
+        private ObservableCollection<GroupComponentViewModel> components;
+        public ObservableCollection<GroupComponentViewModel> Components
+        {
+            get
+            {
+                return this.components;
+            }
+            set
+            {
+                this.components = value;
+                this.OnPropertyChanged(nameof(this.Components));
+            }
+        }
+        #endregion
         private bool FromPermissionType(GroupPermissionType permissionType)
         {
             switch (permissionType)
@@ -271,8 +308,8 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
             }
             return GroupPermissionType.Restricted;
         }
-        private Dictionary<ClassItem, GroupClassPermissionSettings> customPermissions;
-        public Dictionary<ClassItem, GroupClassPermissionSettings> CustomPermissions
+        private ObservableCollection<GroupClassPermissionViewModel> customPermissions;
+        public ObservableCollection<GroupClassPermissionViewModel> CustomPermissions
         {
             get
             {
@@ -284,63 +321,73 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
                 this.OnPropertyChanged(nameof(this.CustomPermissions));
             }
         }
-        
-        public void ApplyCustomPermissions()
+
+        public GroupSettingsViewModel ApplyCustomPermissions()
         {
             this.GroupData.ClassesPermissions = new();
-            foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> pair in this.CustomPermissions)
+            foreach (GroupClassPermissionViewModel pair in this.CustomPermissions)
             {
-                this.GroupData.ClassesPermissions.Add(pair.Key.Id, pair.Value);
+                this.GroupData.ClassesPermissions.Add(pair.Item.Id, pair.Settings);
             }
             this.OnPropertyChanged(nameof(this.CustomPermissions));
+            return this;
         }
-        public void SetAllCreateOperations(bool permission)
+        public void ApplyComponents()
         {
-            foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
+            this.GroupData.VisibleComponents = new();
+            foreach (GroupComponentViewModel comp in this.Components)
             {
-                item.Value.CreateOperations = permission;
+                this.GroupData.VisibleComponents.Add(comp.Component.Id, comp.IsActivated);
             }
             this.OnPropertyChanged(nameof(this.CustomPermissions));
         }
-        public void SetAllViewOperations(bool permission)
-        {
-            foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
-            {
-                item.Value.ViewOperations = permission;
-            }
-            this.OnPropertyChanged(nameof(this.CustomPermissions));
-        }
-        public void SetAllReadOperations(bool permission)
-        {
-            foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
-            {
-                item.Value.ReadOperations = permission;
-            }
-            this.OnPropertyChanged(nameof(this.CustomPermissions));
-        }
-        public void SetAllConfidentialAccess(bool permission)
-        {
-            foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
-            {
-                item.Value.ConfidentialAccess = permission;
-            }
-            this.OnPropertyChanged(nameof(this.CustomPermissions));
-        }
-        public void SetAllUpdateOperations(bool permission)
-        {
-            foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
-            {
-                item.Value.UpdateOperations = permission;
-            }
-            this.OnPropertyChanged(nameof(this.CustomPermissions));
-        }
-        public void SetAllDeleteOperations(bool permission)
-        {
-            foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
-            {
-                item.Value.DeleteOperations = permission;
-            }
-            this.OnPropertyChanged(nameof(this.CustomPermissions));
-        }
+        //public void SetAllCreateOperations(bool permission)
+        //{
+        //    foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
+        //    {
+        //        item.Value.CreateOperations = permission;
+        //    }
+        //    this.OnPropertyChanged(nameof(this.CustomPermissions));
+        //}
+        //public void SetAllViewOperations(bool permission)
+        //{
+        //    foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
+        //    {
+        //        item.Value.ViewOperations = permission;
+        //    }
+        //    this.OnPropertyChanged(nameof(this.CustomPermissions));
+        //}
+        //public void SetAllReadOperations(bool permission)
+        //{
+        //    foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
+        //    {
+        //        item.Value.ReadOperations = permission;
+        //    }
+        //    this.OnPropertyChanged(nameof(this.CustomPermissions));
+        //}
+        //public void SetAllConfidentialAccess(bool permission)
+        //{
+        //    foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
+        //    {
+        //        item.Value.ConfidentialAccess = permission;
+        //    }
+        //    this.OnPropertyChanged(nameof(this.CustomPermissions));
+        //}
+        //public void SetAllUpdateOperations(bool permission)
+        //{
+        //    foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
+        //    {
+        //        item.Value.UpdateOperations = permission;
+        //    }
+        //    this.OnPropertyChanged(nameof(this.CustomPermissions));
+        //}
+        //public void SetAllDeleteOperations(bool permission)
+        //{
+        //    foreach (KeyValuePair<ClassItem, GroupClassPermissionSettings> item in this.CustomPermissions)
+        //    {
+        //        item.Value.DeleteOperations = permission;
+        //    }
+        //    this.OnPropertyChanged(nameof(this.CustomPermissions));
+        //}
     }
 }

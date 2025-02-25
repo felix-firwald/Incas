@@ -4,6 +4,7 @@ using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,6 +50,21 @@ namespace Incas.Admin.ViewModels
                 this.selected = value;
                 this.OnPropertyChanged(nameof(this.SelectedComponent));
             }
+        }
+        public void Save()
+        {
+            List<WorkspaceComponent> result = new();
+            foreach (ComponentViewModel vm in this.Components)
+            {
+                if (string.IsNullOrWhiteSpace(vm.Name))
+                {
+                    throw new ValidationException("Одному из компонентов не присвоено имя.");
+                }
+                result.Add(vm.Component);
+            }
+            WorkspaceDefinition def = ProgramState.CurrentWorkspace.GetDefinition(true);
+            def.Components = result;
+            ProgramState.CurrentWorkspace.UpdateDefinition(def);
         }
     }
 }
