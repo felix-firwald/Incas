@@ -55,21 +55,24 @@ namespace Incas.Objects.Views.Windows
                 this.AddObjectCreator();
             }
             DialogsManager.ShowWaitCursor(false);
-            EngineEvents.OnUpdateClassRequested += this.EngineEvents_OnUpdateClassRequested;
+            this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
+            this.Class.OnRemoved += this.Class_OnRemoved;
         }
 
-        private void EngineEvents_OnUpdateClassRequested(IClass @class, bool requiredLock)
+        private void Class_OnRemoved()
         {
-            if (this.Class.Id == @class.Id)
-            {              
-                ClassUpdatedMessage message = new();
-                this.MainGrid.Children.Clear();
-                this.MainGrid.Children.Add(message);
-                Grid.SetRow(message, 0);
-                Grid.SetRowSpan(message, 2);
-                Grid.SetColumnSpan(message, 2);
-                Grid.SetColumn(message, 0);
-            }
+            this.Close();
+        }
+
+        private void EngineEvents_OnUpdateClassRequested()
+        {         
+            ClassUpdatedMessage message = new();
+            this.MainGrid.Children.Clear();
+            this.MainGrid.Children.Add(message);
+            Grid.SetRow(message, 0);
+            Grid.SetRowSpan(message, 2);
+            Grid.SetColumnSpan(message, 2);
+            Grid.SetColumn(message, 0);
         }
 
         public ObjectsEditor(IClass source, ClassData data) // dev

@@ -2,6 +2,7 @@
 using Incas.Core.Views.Controls;
 using Incas.Objects.Components;
 using Incas.Objects.Interfaces;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -412,7 +413,7 @@ namespace Incas.Objects.Views.Controls
                 if (data.ClassField.Type == FieldType.Relation)
                 {
                     BindingData bd = data.ClassField.GetBindingData();
-                    IObject recurObj = Processor.GetObject(new Class(bd.BindingClass), Guid.Parse(data.Value));
+                    IObject recurObj = Processor.GetObject(EngineGlobals.GetClass(bd.BindingClass), Guid.Parse(data.Value));
                     foreach (FieldData recdata in recurObj.Fields)
                     {
                         if (recdata.ClassField.Id == bd.BindingField)

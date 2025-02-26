@@ -1,4 +1,5 @@
 ﻿using Incas.DialogSimpleForm.Components;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using System;
@@ -31,12 +32,12 @@ namespace Incas.Objects.AutoUI
         #region Functionality
         public Class GetSelectedClass()
         {
-            Class cl = new((Guid)this.ComboSelector.SelectedObject);
+            Class cl = EngineGlobals.GetClass((Guid)this.ComboSelector.SelectedObject);
             return cl;
         }
         public IClassData GetSelectedClassData()
         {
-            Class cl = new((Guid)this.ComboSelector.SelectedObject);
+            Class cl = EngineGlobals.GetClass((Guid)this.ComboSelector.SelectedObject);
             return cl.GetClassData();
         }
         #endregion

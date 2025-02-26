@@ -58,7 +58,7 @@ namespace Incas.Objects.Views.Pages
             this.ApplyClass(source);
             this.ApplyGroupConstraints();
             DialogsManager.ShowWaitCursor(false);          
-            EngineEvents.OnUpdateClassRequested += this.EngineEvents_OnUpdateClassRequested;
+            source.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
         }
 
         private void ApplyClass(IClass source)
@@ -70,31 +70,17 @@ namespace Incas.Objects.Views.Pages
             {
                 this.PlaceCard();
             }
-            if (this.ClassData.PresetsEnabled)
-            {
-                this.PresetsButton.Visibility = Visibility.Visible;
-            }
             this.UpdateView();
         }
 
-        private void EngineEvents_OnUpdateClassRequested(IClass @class, bool doNotUpdate)
+        private void EngineEvents_OnUpdateClassRequested()
         {
-            if (this.sourceClass.Id == @class.Id)
-            {
-                if (doNotUpdate)
-                {
-                    ClassUpdatedMessage message = new();
-                    this.MainGrid.Children.Clear();
-                    this.MainGrid.Children.Add(message);
-                    Grid.SetRow(message, 1);
-                    Grid.SetRowSpan(message, 2);
-                    Grid.SetColumn(message, 0);
-                }
-                else
-                {
-                    this.ApplyClass(@class);
-                }             
-            }
+            ClassUpdatedMessage message = new();
+            this.MainGrid.Children.Clear();
+            this.MainGrid.Children.Add(message);
+            Grid.SetRow(message, 1);
+            Grid.SetRowSpan(message, 2);
+            Grid.SetColumn(message, 0);
         }
         
         private GroupClassPermissionSettings GetPermissionSettings()
@@ -363,7 +349,7 @@ namespace Incas.Objects.Views.Pages
                 IObject obj = Processor.GetObject(this.sourceClass, id);
                 if (obj is IHierarchical objHierarchical && objHierarchical.Child != Guid.Empty)
                 {
-                    ObjectsEditor oc = new(new Class(objHierarchical.Child), [obj]);
+                    ObjectsEditor oc = new(EngineGlobals.GetClass(objHierarchical.Child), [obj]);
                     oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
                     oc.Show();
                 }
@@ -655,7 +641,7 @@ namespace Incas.Objects.Views.Pages
             IObject target = Processor.GetObject(this.sourceClass, id);
             if (target is IHierarchical objHierarchical && objHierarchical.Child != Guid.Empty)
             {
-                IClass targetClass = new Class(objHierarchical.Child);
+                IClass targetClass = EngineGlobals.GetClass(objHierarchical.Child);
                 ObjectsList oc = new(targetClass);
                 DialogsManager.ShowPageWithGroupBox(oc, "Поиск наследника", target.Id.ToString());
                 oc.TrySelectObject(target.Id);

@@ -141,6 +141,18 @@ namespace Incas.Admin.ViewModels
                 this.OnPropertyChanged(nameof(this.IsIsolated));
             }
         }
+        public bool ForceLoad
+        {
+            get
+            {
+                return this.Component.ForceLoad;
+            }
+            set
+            {
+                this.Component.ForceLoad = value;
+                this.OnPropertyChanged(nameof(this.ForceLoad));
+            }
+        }
         public bool StateEditingEnabled
         {
             get

@@ -266,14 +266,13 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.AvailableComponents));
             }
         }
-        private Guid component;
         public WorkspaceComponent SelectedComponent
         {
             get
             {
                 foreach (WorkspaceComponent wc in this.AvailableComponents)
                 {
-                    if (wc.Id == this.component)
+                    if (wc == this.Source.Component)
                     {
                         return wc;
                     }
@@ -286,7 +285,7 @@ namespace Incas.Objects.ViewModels
                 {
                     if (wc.Id == value.Id)
                     {
-                        this.component = value.Id;
+                        this.Source.Component = value;
                         break;
                     }
                 }

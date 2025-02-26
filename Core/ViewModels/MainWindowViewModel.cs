@@ -4,6 +4,7 @@ using Incas.Miniservices.TextEditor.Views.Pages;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Views.Pages;
 using Incas.Objects.Views.Windows;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
@@ -43,14 +44,14 @@ namespace Incas.Core.ViewModels
             switch (command.Type)
             {
                 case MenuCommand.CommandType.Add:
-                    Class cl = new(command.TargetClass);
+                    Class cl = EngineGlobals.GetClass(command.TargetClass);
                     ObjectsEditor editor = new(cl);
                     editor.Show();
                     break;
                 case MenuCommand.CommandType.Parse:
                     break;
                 case MenuCommand.CommandType.Find:
-                    Class classFind = new(command.TargetClass);
+                    Class classFind = EngineGlobals.GetClass(command.TargetClass);
                     IClassData cd = classFind.GetClassData();
                     DataSearchPredefined search = new(cd, command.TargetField);
                     if (search.ShowDialog(command.Name))

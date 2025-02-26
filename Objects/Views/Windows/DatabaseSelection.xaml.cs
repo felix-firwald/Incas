@@ -49,7 +49,7 @@ namespace Incas.Objects.Views.Windows
         {
             this.InitializeComponent();
             this.Binding = data;
-            this.Class = new(this.Binding.BindingClass);
+            this.Class = EngineGlobals.GetClass(this.Binding.BindingClass);
             this.ClassData = this.Class.GetClassData();            
             if (this.ClassData is null || this.ClassData.Fields is null)
             {
@@ -60,20 +60,23 @@ namespace Incas.Objects.Views.Windows
             this.Title = this.ClassData.ListName;
             this.SetFields();
             this.FillList();
-            EngineEvents.OnUpdateClassRequested += this.EngineEvents_OnUpdateClassRequested;
+            this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
+            this.Class.OnRemoved += this.Class_OnRemoved;
         }
 
-        private void EngineEvents_OnUpdateClassRequested(IClass @class, bool requiredLock)
+        private void Class_OnRemoved()
         {
-            if (@class.Id == this.Class.Id)
-            {
-                ClassUpdatedMessage message = new();
-                this.MainGrid.Children.Clear();
-                this.MainGrid.Children.Add(message);
-                System.Windows.Controls.Grid.SetRow(message, 0);
-                System.Windows.Controls.Grid.SetRowSpan(message, 3);
-                System.Windows.Controls.Grid.SetColumn(message, 0);
-            }
+            this.Close();
+        }
+
+        private void EngineEvents_OnUpdateClassRequested()
+        {
+            ClassUpdatedMessage message = new();
+            this.MainGrid.Children.Clear();
+            this.MainGrid.Children.Add(message);
+            System.Windows.Controls.Grid.SetRow(message, 0);
+            System.Windows.Controls.Grid.SetRowSpan(message, 3);
+            System.Windows.Controls.Grid.SetColumn(message, 0);
         }
         private WhereInstruction GetBaseInstruction()
         {

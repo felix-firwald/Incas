@@ -2,6 +2,7 @@
 using Incas.Core.Views.Controls;
 using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Views.Pages;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
@@ -47,7 +48,7 @@ namespace Incas.Objects.AutoUI
                 ObjectReference or = ObjectReference.Parse(this.link);
                 if (or.IsCorrect)
                 {
-                    Class @class = new(or.Class);
+                    Class @class = EngineGlobals.GetClass(or.Class);
                     IObject @object = Processor.GetObject(@class, or.Object);
                     ObjectEditions objViewer = new(@class, @object);
                     DialogsManager.ShowPageWithGroupBox(objViewer, "Поиск: " + @class.Name, "FIND" + this.link, TabType.Usual);

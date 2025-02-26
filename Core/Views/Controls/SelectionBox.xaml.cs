@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
 using Incas.Objects.Views.Windows;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Interfaces;
@@ -37,7 +38,7 @@ namespace Incas.Core.Views.Controls
                 {
                     await Task.Run(() =>
                     {
-                        this.SelectedObject = Processor.GetObject(new Class(this.Binding.BindingClass), id);                       
+                        this.SelectedObject = Processor.GetObject(EngineGlobals.GetClass(this.Binding.BindingClass), id);                       
                     });
                     this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.BindingField);
                     this.SetAsEditingEnabled();
@@ -53,7 +54,7 @@ namespace Incas.Core.Views.Controls
                 {
                     await Task.Run(() =>
                     {
-                        this.SelectedObject = Processor.GetObject(new Class(this.Binding.BindingClass), id);
+                        this.SelectedObject = Processor.GetObject(EngineGlobals.GetClass(this.Binding.BindingClass), id);
                     });
                     this.Input.Text = await this.SelectedObject.GetFieldValue(this.Binding.BindingField);
                     this.SetAsEditingEnabled();
@@ -127,7 +128,7 @@ namespace Incas.Core.Views.Controls
         {
             try
             {
-                Class cl = new(this.Binding.BindingClass);
+                Class cl = EngineGlobals.GetClass(this.Binding.BindingClass);
                 cl.GetClassData();
                 ObjectsEditor oe = new(cl, [this.SelectedObject]);
                 oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
@@ -143,7 +144,7 @@ namespace Incas.Core.Views.Controls
 
         private void AddClick(object sender, RoutedEventArgs e)
         {
-            ObjectsEditor oe = new(new Class(this.Binding.BindingClass), []);
+            ObjectsEditor oe = new(EngineGlobals.GetClass(this.Binding.BindingClass), []);
             oe.SetSingleObjectMode();
             oe.OnSetNewObjectRequested += this.Oe_OnSetNewObjectRequested;
             oe.ShowDialog();

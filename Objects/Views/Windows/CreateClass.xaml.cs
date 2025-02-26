@@ -21,6 +21,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
+using IncasEngine.Core;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -65,7 +66,7 @@ namespace Incas.Objects.Views.Windows
                 return;
             }
             this.Title = "Редактирование класса";
-            Class cl = new(id);
+            Class cl = EngineGlobals.GetClass(id);
             this.vm = new(cl);
             this.DataContext = this.vm;
             this.ApplyPartSettings();

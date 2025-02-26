@@ -5,6 +5,7 @@ using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
 
@@ -14,7 +15,12 @@ namespace Incas.Admin.ViewModels
     {
         public WorkspaceParametersViewModel()
         {
-
+            this.ClassTypes = new();
+            this.ClassTypes.Add(new() { Name = "Модели данных" });
+            this.ClassTypes.Add(new() { Name = "Статические модели данных" });
+            this.ClassTypes.Add(new() { Name = "Модели документов" });
+            this.ClassTypes.Add(new() { Name = "Модели процессов" });
+            this.ClassTypes.Add(new() { Name = "Модели событий" });
         }
         public bool EditingWorkspaceEnabled
         {
@@ -166,6 +172,19 @@ namespace Incas.Admin.ViewModels
             {
                 this.selectedClass = value;
                 this.OnPropertyChanged(nameof(this.SelectedClass));
+            }
+        }
+        private ObservableCollection<TreeViewClassTypeViewModel> classTypes;
+        public ObservableCollection<TreeViewClassTypeViewModel> ClassTypes
+        {
+            get { return this.classTypes; }
+            set
+            {
+                if (this.classTypes != value)
+                {
+                    this.classTypes = value;
+                    this.OnPropertyChanged(nameof(this.ClassTypes));
+                }
             }
         }
         public void UpdateClasses()

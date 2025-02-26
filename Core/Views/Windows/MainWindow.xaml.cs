@@ -265,7 +265,7 @@ namespace Incas.Core.Views.Windows
                         ObjectReference or = ObjectReference.Parse(id);
                         if (or.IsValid())
                         {
-                            Class targetClass = new(or.Class);
+                            Class targetClass = EngineGlobals.GetClass(or.Class);
                             if (targetClass != null)
                             {
                                 ObjectsEditor editor = new(targetClass, [Processor.GetObject(targetClass, or.Object)]);

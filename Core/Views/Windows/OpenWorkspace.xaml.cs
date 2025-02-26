@@ -35,7 +35,7 @@ namespace Incas.Core.Views.Windows
             }
         }
 
-        private void TryAuthenticate()
+        private async void TryAuthenticate()
         {
             if (ProgramState.CurrentWorkspace.CurrentUser != null)
             {
@@ -43,8 +43,16 @@ namespace Incas.Core.Views.Windows
                 if (ProgramState.CurrentWorkspace.LogIn(this.pwd.Password))
                 {
                     DialogsManager.ShowWaitCursor(false);
-                    this.DialogResult = true;
-                    this.Close();
+                    if (await ProgramState.CurrentWorkspace.Enter())
+                    {
+                        this.DialogResult = true;
+                        this.Close();
+                    }
+                    else
+                    {
+                        this.DialogResult = false;
+                        this.Close();
+                    }
                 }
                 else
                 {

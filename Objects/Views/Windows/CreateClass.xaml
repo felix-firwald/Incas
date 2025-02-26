@@ -288,7 +288,7 @@
                                                             <StackPanel Orientation="Horizontal">
                                                                 <Ellipse Width="5" Height="5" Fill="{Binding ., Converter={StaticResource FieldTypeToColorConverter}}"/>
                                                                 <Label Content="{Binding ., Converter={StaticResource FieldTypeToVisibleNameConverter}}" Style="{DynamicResource LabelElement}" FontSize="11"/>
-                                                                <Label Content="{Binding ., Converter={StaticResource FieldTypeToVisibleNameConverter}}" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>
+                                                                <!--<Label Content="{Binding ., Converter={StaticResource FieldTypeToVisibleNameConverter}}" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>-->
                                                             </StackPanel>
                                                         </DataTemplate>
                                                     </ComboBox.ItemTemplate>
@@ -336,20 +336,31 @@
                                                 <ColumnDefinition Width="30"/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Path Fill="{DynamicResource Yellow}" Data="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                                            <Path Fill="{DynamicResource Yellow}" Stretch="Uniform" Height="15" Width="15" Data="M224.85-140q-35 0-57.62-19.38-22.61-19.39-22.61-50.93 0-22 11.23-35.34Q167.08-259 184.62-259q16.53 0 28.26 11.62 11.74 11.61 11.74 27.92 0 11.15-6.66 19.38-6.65 8.23-16.11 10.16 3.84 3.84 10.77 6.54 6.92 2.69 15.38 2.69 21.15-.23 34.27-18.58 13.11-18.35 21.27-57.88L346.31-580h-98.62q-8.54 0-14.27-5.73T227.69-600q0-8.54 5.73-14.27t14.27-5.73h105.93l19.46-104.77q8.54-46.46 32.11-70.85Q428.77-820 465.38-820q34.77 0 57.39 20.23 22.61 20.23 22.61 51.54 0 21.54-11.23 34.88Q522.92-700 505.38-700q-16.53 0-28.26-11.23-11.74-11.23-11.74-27.77 0-11.15 6.66-19.38 6.65-8.24 16.88-10.16-3.84-4.61-11.92-7.69t-16.54-3.08q-19.08.46-30.92 16-11.85 15.54-17.69 45.85l-17 97.46h157.46q8.54 0 14.27 5.73t5.73 14.27q0 8.08-5.27 13.69-5.27 5.62-13.12 6.08h-37.69l96.08 110 96.07-110h-37.69q-7.84-.46-13.11-6.08-5.27-5.61-5.27-13.69 0-8.54 5.73-14.27t14.27-5.73h120q8.54 0 14.27 5.73t5.73 14.27q0 8.54-5.73 14.27T792.31-580h-31.23L639.15-440l122.7 140h30.46q8.54 0 14.27 5.73t5.73 14.27q0 8.54-5.73 14.27T792.31-260h-120q-8.54 0-14.27-5.73T652.31-280q0-8.08 5.27-13.69 5.27-5.62 13.11-6.08h37.69L612.31-410l-96.08 110.23h37.69q7.85.46 13.12 6.08 5.27 5.61 5.27 13.69 0 8.54-5.73 14.27T552.31-260h-120q-8.54 0-14.27-5.73T412.31-280q0-8.54 5.73-14.27t14.27-5.73h31.23l121.92-140-121.92-140h-76.77l-64 327.85q-11.08 57.3-35.08 84.73-24 27.42-62.84 27.42Z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
 
-                                            <Label Content="Модуль:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                                            <Label Content="Методы:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                         </Grid>
-                                        <Button Style="{StaticResource ButtonMainFinish}" Click="GenerateBaseScriptClick">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Path Fill="White" Data="M1 8a7 7 0 1 1 2.898 5.673c-.167-.121-.216-.406-.002-.62l1.8-1.8a3.5 3.5 0 0 0 4.572-.328l1.414-1.415a.5.5 0 0 0 0-.707l-.707-.707 1.559-1.563a.5.5 0 1 0-.708-.706l-1.559 1.562-1.414-1.414 1.56-1.562a.5.5 0 1 0-.707-.706l-1.56 1.56-.707-.706a.5.5 0 0 0-.707 0L5.318 5.975a3.5 3.5 0 0 0-.328 4.571l-1.8 1.8c-.58.58-.62 1.6.121 2.137A8 8 0 1 0 0 8a.5.5 0 0 0 1 0" VerticalAlignment="Center"/>
-                                                <Label Foreground="White" Content="Сгенерировать модуль для этого класса" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                        </Button>
-
-                                        <MenuItem Style="{StaticResource Command}" Header="Определить новый метод"/>
-                                        <MenuItem Style="{StaticResource Command}" Header="Создать обработчик при сохранении объекта"/>
-                                        <MenuItem Style="{StaticResource Command}" Header="Создать обработчик при валидации объекта"/>
+                                        <WrapPanel>
+                                            <Button Style="{StaticResource ButtonRectangle}" ToolTip="Добавить шаблон" HorizontalAlignment="Left" Grid.Column="2" >
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M8.004,19.3885V9.6135a1.5425,1.5425,0,0,1,.475-1.141A1.573,1.573,0,0,1,9.6252,8.004h9.7633A1.62,1.62,0,0,1,21.004,9.62v6.29a1.5674,1.5674,0,0,1-.1308.6323,1.6576,1.6576,0,0,1-.348.5177L17.06,20.5252a1.6576,1.6576,0,0,1-.5177.348,1.5674,1.5674,0,0,1-.6323.1308H9.62A1.62,1.62,0,0,1,8.004,19.3885ZM3.029,6.6a1.5057,1.5057,0,0,1,.2567-1.2127,1.6084,1.6084,0,0,1,1.06-.6643L13.9655,3.029a1.5057,1.5057,0,0,1,1.2127.2567,1.61,1.61,0,0,1,.6643,1.06L16.054,5.62H9.62a4.0118,4.0118,0,0,0-4,4V17.4a1.6446,1.6446,0,0,1-.5818-.475,1.62,1.62,0,0,1-.3145-.7057ZM14.004,15.004v2.5a.5.5,0,1,0,1,0v-2.5h2.5a.5.5,0,1,0,0-1h-2.5v-2.5a.5.5,0,1,0-1,0v2.5h-2.5a.5.5,0,1,0,0,1Z"/>
+                                                    <Label Content="Добавить метод" Foreground="White"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Style="{StaticResource ButtonRectangle}" Visibility="{Binding DetailsVisibility}" ToolTip="Удалить шаблон" HorizontalAlignment="Center" >
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Path Fill="{StaticResource Buttons.Red}" VerticalAlignment="Center" Stretch="Uniform" Data="M13.5068,14.4591l-5.2463,5.246a.5021.5021,0,0,1-.3442.15.4665.4665,0,0,1-.3633-.15.4716.4716,0,0,1,0-.7075l5.246-5.2462L7.553,8.5051a.503.503,0,0,1-.15-.3442.4662.4662,0,0,1,.15-.3633.4716.4716,0,0,1,.7075,0l5.2463,5.246,5.2462-5.246a.5024.5024,0,0,1,.3443-.15.4662.4662,0,0,1,.3632.15.4714.4714,0,0,1,0,.7075l-5.246,5.2463,5.246,5.2462a.5024.5024,0,0,1,.15.3443.4662.4662,0,0,1-.15.3632.4714.4714,0,0,1-.7075,0Z"/>
+                                                    <Label Content="Удалить метод" Foreground="White"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </WrapPanel>
+                                        <ListBox Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemGray}" ItemsSource="{Binding Templates}" SelectedItem="{Binding SelectedTemplate}" MinHeight="30">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Label Style="{StaticResource LabelElement}" Margin="0" VerticalAlignment="Center" Content="{Binding Name}" Foreground="{DynamicResource Light}" Grid.Column="1"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
                                     </StackPanel>
                                 </Border>
                                 <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
@@ -359,15 +370,15 @@
                                                 <ColumnDefinition Width="30"/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Data="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434zM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567zM7.5 9.933l-2.75 1.571v3.134l2.75-1.571zm1 3.134 2.75 1.571v-3.134L8.5 9.933zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567zm2.242-2.433V3.504L8.5 5.076V8.21zM7.5 8.21V5.076L4.75 3.504v3.134zM5.258 2.643 8 4.21l2.742-1.567L8 1.076zM15 9.933l-2.75 1.571v3.134L15 13.067zM3.75 14.638v-3.134L1 9.933v3.134z"/>
+                                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" Stretch="Uniform" Height="15" VerticalAlignment="Center" Margin="0,0,2,0" Data="M480-640q-66 0-113 47t-47 113q0 50.38 28.65 91.08 28.66 40.69 75.58 58.61 7.54 3.39 11.35 11.19 3.8 7.81.65 15.35-3.15 7.08-9.85 11-6.69 3.92-13.76.77-59.93-21.54-96.27-72.85Q280-416.15 280-480q0-83.08 58.46-141.54Q396.92-680 480-680q63.31 0 115.12 36.35 51.8 36.34 73.11 95.96 2.92 7.07-1.27 14.15-4.19 7.08-11.27 10-8.31 3.16-15.84-.77-7.54-3.92-10.93-12.23-17.92-46.92-58.61-75.19Q529.62-640 480-640Zm0-160q-134 0-227 93t-93 227q0 133.69 89.92 225.23 89.93 91.54 221.85 94.31 8.54.46 14.5 6.54 5.96 6.07 5.73 14.61-.23 8.54-5.96 14.54-5.73 6-14.27 5.77-74.92-1.15-138.96-31.31-64.04-30.15-111.46-79.65-47.43-49.5-74.39-114.23T120-480q0-74.54 28.42-140.23 28.43-65.69 77.04-114.31 48.62-48.61 114.31-77.04Q405.46-840 480-840q142.38 0 250.04 100.46Q837.69-639.08 841-489q.46 8.31-5.27 14.42-5.73 6.12-14.27 6.35-8.54.23-15.11-6-6.58-6.23-7.04-14.77-3.46-126.15-96.81-218.58Q609.15-800 480-800Zm289.69 650.77L598.46-321l-20.77 63.31q-4.23 11.69-15.92 11.58-11.69-.12-15.15-11.81l-57.93-193q-2.46-9.46 4.23-16.16 6.7-6.69 16.16-4.23l193 57.93q11.69 3.46 11.81 15.15.11 11.69-11.58 15.92L639-361.54l172 171.23q8.54 8.54 8.54 20.54T811-149.23q-8.54 8.54-20.65 8.54-12.12 0-20.66-8.54Z"/>
 
-                                            <Label Content="Работа с полями:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                                            <Label Content="Выбранный метод:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                         </Grid>
-                                        <Border Background="{StaticResource Black}" CornerRadius="8" Margin="5" MinHeight="40">
-                                            <StackPanel x:Name="ScriptFieldsPanel">
-
-                                            </StackPanel>
-                                        </Border>
+                                        <StackPanel >
+                                            <TextBox Style="{StaticResource TextBoxMain}" Text="" Tag="Имя метода"/>
+                                            
+                                            <CheckBox Style="{StaticResource Toggle}" Content="Публичный"/>
+                                        </StackPanel>
                                     </StackPanel>
                                 </Border>
                             </StackPanel>

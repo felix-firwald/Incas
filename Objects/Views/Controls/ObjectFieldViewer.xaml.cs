@@ -2,6 +2,7 @@
 using Incas.Core.Classes;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Pages;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -119,7 +120,7 @@ namespace Incas.Objects.Views.Controls
 
         private void GenerateRelatedField(Guid id, BindingData bd)
         {
-            this.relationClass = new Class(bd.BindingClass);
+            this.relationClass = EngineGlobals.GetClass(bd.BindingClass);
             this.relationObject = id;
             this.FieldValue.Text = Processor.GetObjectFieldValue(this.relationClass, this.relationObject, bd.BindingField.ToString());
             this.ColorizeField(130, 113, 239);

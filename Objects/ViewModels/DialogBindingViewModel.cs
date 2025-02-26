@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
@@ -217,7 +218,7 @@ namespace Incas.Objects.ViewModels
             {
                 this.selectedClass = value;
                 this.OnPropertyChanged(nameof(this.SelectedClass));
-                this.Fields = (new Class(Guid.Parse(this.SelectedClass.Id)).GetClassData() as ClassDataBase).GetBindableFields();
+                this.Fields = (EngineGlobals.GetClass(Guid.Parse(this.SelectedClass.Id)).GetClassData() as ClassDataBase).GetBindableFields();
                 this.OnPropertyChanged(nameof(this.BindingField));
             }
         }

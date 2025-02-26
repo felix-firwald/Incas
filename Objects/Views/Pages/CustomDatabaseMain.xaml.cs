@@ -40,19 +40,7 @@ namespace Incas.Objects.Views.Pages
             this.CategoriesList.Visibility = System.Windows.Visibility.Collapsed;
             this.vm.OnClassSelected += this.OnClassSelected;
             this.DataContext = this.vm;
-            EngineEvents.OnUpdateClassRequested += this.EngineEvents_OnUpdateClassRequested;
-        }
-
-        private void EngineEvents_OnUpdateClassRequested(IClass @class, bool requiredLock)
-        {
-            for (int i = 0; i < this.vm.Classes.Count; i++)
-            {
-                if (this.vm.Classes[i].Id == @class.Id)
-                {
-                    this.vm.Classes[i] = @class as Class;
-                    break;
-                }
-            }
+            
         }
 
         private void OnClassSelected(Class selectedClass)

@@ -5,6 +5,7 @@ using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Views.Windows;
+using IncasEngine.Core;
 using IncasEngine.Models;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Models;
@@ -203,6 +204,7 @@ namespace Incas.Admin.Views.Pages
         private void AddClassClick(object sender, RoutedEventArgs e)
         {
             ClassTypeSettings ct = new();
+            ct.Component.SetSelection(this.vm.SelectedCategory);
             if (ct.ShowDialog("Первичная настройка", Icon.Lightning))
             {
                 CreateClass cc = new(ct);
@@ -250,7 +252,7 @@ namespace Incas.Admin.Views.Pages
                     }
                     else
                     {
-                        Class targetClass = new(id);
+                        Class targetClass = EngineGlobals.GetClass(id);
                         targetClass.Remove();
                     }
                 }
@@ -265,7 +267,7 @@ namespace Incas.Admin.Views.Pages
             {
                 return;
             }
-            using (Class cl = new(id))
+            using (Class cl = EngineGlobals.GetClass(id))
             {
                 Processor.UpdateObjectMap(cl);
             }           
@@ -306,8 +308,9 @@ namespace Incas.Admin.Views.Pages
             {
                 return;
             }
-            Class parent = new(id);
+            Class parent = EngineGlobals.GetClass(id);
             ClassTypeSettings ct = new(parent);
+            ct.Component.SetSelection(this.vm.SelectedCategory);
             if (ct.ShowDialog("Первичная настройка наследника", Icon.Lightning))
             {
                 CreateClass cc = new(ct);
