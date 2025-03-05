@@ -22,6 +22,7 @@ using System.Windows.Input;
 using System.Xml;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using IncasEngine.Core;
+using IncasEngine.ObjectiveEngine;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -45,6 +46,7 @@ namespace Incas.Objects.Views.Windows
             @class.Parents = primary.GetParents();
 
             this.vm = new(@class);
+            this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
             if (this.vm.Type == ClassType.Document)
             {
                 this.vm.ShowCard = true;
@@ -68,21 +70,28 @@ namespace Incas.Objects.Views.Windows
             this.Title = "Редактирование класса";
             Class cl = EngineGlobals.GetClass(id);
             this.vm = new(cl);
+            this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
             this.DataContext = this.vm;
             this.ApplyPartSettings();
             DialogsManager.ShowWaitCursor(false);
         }
+
+        
+
         public CreateClass(ServiceClass @class) // edit service class
         {
+#if !E_FREE
             DialogsManager.ShowWaitCursor();
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
             this.InitializeComponent();
             this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             this.Title = $"Служебный класс: {@class.Name}";
             this.vm = new(@class);
+            this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
             this.DataContext = this.vm;
             this.ApplyPartSettings();
             DialogsManager.ShowWaitCursor(false);
+#endif
         }
         private void ApplyPartSettings()
         {
@@ -159,7 +168,7 @@ namespace Incas.Objects.Views.Windows
 
         private void AddFieldClick(object sender, RoutedEventArgs e)
         {
-            this.vm.Fields.Add(new());
+            this.vm.Fields.Add(new(this.vm));
             //this.AddField();
         }
         private void CopyFieldsFromAnotherClass(object sender, RoutedEventArgs e)
@@ -452,7 +461,7 @@ namespace Incas.Objects.Views.Windows
                 {                 
                     switch (field.Type)
                     {
-                        case FieldType.Number:
+                        case FieldType.Integer:
                             fieldsNames.Add($"{field.Name}=0");
                             fieldsAllocation += $"\t\tself.{field.Name} = {field.Name} # {field.VisibleName}\n";
                             break;
@@ -524,6 +533,43 @@ namespace Incas.Objects.Views.Windows
         private void ComboType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             this.vm.UpdateFieldCollections();
+        }
+
+        private void AddMethod(object sender, RoutedEventArgs e)
+        {
+            this.vm.Methods.Add(new(new()));
+        }
+
+        private void AddControlToCustomFormClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.AddNewControlToCustomForm(
+                new() { 
+                    Name = $"Контейнер {this.vm.ViewControls?.Count+1}", 
+                    Children = [] 
+                }
+                );
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            this.vm.SelectedViewControl = (ViewControlViewModel)e.NewValue;
+        }
+
+        private void AddChildContainerToViewControl(object sender, RoutedEventArgs e)
+        {
+            this.vm.SelectedViewControl.AddChild(new(new() { Name = $"Контейнер {this.vm.SelectedViewControl.Children.Count + 1}", Children = [] }));
+        }
+        private void Vm_OnDrawCalling()
+        {
+            if (this.vm.Validate())
+            {
+                FormDrawingManager.DrawForm(Helpers.CreateObjectByType(this.vm.Source), this.FormPreviewPanel);           
+            }           
+        }
+
+        private void RemoveSelectedElementFromForm(object sender, RoutedEventArgs e)
+        {
+            this.vm.SelectedViewControl?.RemoveFromParent();
         }
     }
 }

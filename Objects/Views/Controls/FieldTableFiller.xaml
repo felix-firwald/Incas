@@ -54,10 +54,10 @@
                 </StackPanel>
             </Button>
         </Grid>
-        <Border MinWidth="80" Background="{DynamicResource Black}" CornerRadius="8,8,0,0" HorizontalAlignment="Right" Margin="0,5,12,-8">
-            <Label Style="{StaticResource LabelElement}" Cursor="Hand" Content="{Binding TableName}" ToolTip="Нажать правой кнопкой мышки для дополнительных функций" ToolTipService.InitialShowDelay="160" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0">
+        <Border MinWidth="80" CornerRadius="8,8,0,0" HorizontalAlignment="Right" Margin="0,5,12,-8">
+            <Label Style="{StaticResource LabelElement}" Cursor="Hand" Content="{Binding TableName}" Foreground="{DynamicResource Light}" ToolTip="Нажать правой кнопкой мышки для дополнительных функций" ToolTipService.InitialShowDelay="160" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0">
                 <Label.ContextMenu>
-                    <ContextMenu FontFamily="Segoe UI" FontWeight="Normal">
+                    <ContextMenu FontFamily="{StaticResource Rubik}" FontWeight="Normal">
                         <MenuItem Header="Скопировать значение в остальные редактируемые объекты" Click="InsertToOther" Tag="Значение этого поля будет скопировано в поля других объектов" />
                         <Separator Background="{DynamicResource LightBlack}"/>
                         <MenuItem Header="Вставить значение из существующего объекта" Click="ObjectCopyRequestClick"/>

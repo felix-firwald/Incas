@@ -6,11 +6,11 @@
         </Border>
     </DataTemplate>
     <DataTemplate x:Key="ButtonSpinnerSpinnerUpContentTemplateMain">
-        <Path Fill="White" Width="8" Stretch="Uniform" Data="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+        <Path Fill="{StaticResource Buttons.Green}" Width="12" Stretch="Uniform" RenderOptions.EdgeMode="Aliased" Data="M460-460H260q-8.5 0-14.25-5.76T240-480.03q0-8.51 5.75-14.24T260-500h200v-200q0-8.5 5.76-14.25t14.27-5.75q8.51 0 14.24 5.75T500-700v200h200q8.5 0 14.25 5.76t5.75 14.27q0 8.51-5.75 14.24T700-460H500v200q0 8.5-5.76 14.25T479.97-240q-8.51 0-14.24-5.75T460-260v-200Z" />
     </DataTemplate>
     
     <DataTemplate x:Key="ButtonSpinnerSpinnerDownContentTemplateMain">
-        <Path Fill="White" Width="8" Stretch="Uniform" Data="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+        <Path Fill="{StaticResource Buttons.Red}" Width="12" Stretch="Uniform" RenderOptions.EdgeMode="Aliased" Data="M260-460q-8.5 0-14.25-5.76T240-480.03q0-8.51 5.75-14.24T260-500h440q8.5 0 14.25 5.76t5.75 14.27q0 8.51-5.75 14.24T700-460H260Z"/>
     </DataTemplate>
     <Style x:Key="RepeatButtonTextBox" TargetType="{x:Type RepeatButton}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -24,7 +24,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                    <Border Name="Border" CornerRadius="8" Background="{StaticResource Dark}" BorderBrush="{StaticResource DarkLight}" BorderThickness="0">
+                    <Border Name="Border" Margin="2" CornerRadius="8" Background="Transparent" BorderBrush="{StaticResource DarkLight}" BorderThickness="0">
                         <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="-5" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         <!--<Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{StaticResource Dark}" Data="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}" />-->
                     </Border>
@@ -33,7 +33,7 @@
                             <Setter TargetName="Border" Property="Background" Value="{StaticResource Element}" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="Border" Property="Background" Value="{StaticResource PrimaryMain}" />
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource Icon}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground" Value="{StaticResource Area}"/>
@@ -46,12 +46,13 @@
     <Style TargetType="{x:Type xctk:MaskedTextBox}">
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
-        <Setter Property="Foreground" Value="{DynamicResource Light}"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+        <Setter Property="FontFamily" Value="{StaticResource Rubik}"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
         <Setter Property="AllowDrop" Value="true"/>
@@ -140,7 +141,7 @@
     <Style x:Key="WatermarkTextBox" TargetType="{x:Type xctk:WatermarkTextBox}">
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
-        <Setter Property="Foreground" Value="{DynamicResource Light}"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="3" />
         <Setter Property="Margin" Value="5"/>
@@ -310,15 +311,17 @@
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Foreground" Value="{DynamicResource Light}"/>
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Cursor" Value="IBeam"/>
         <Setter Property="Focusable" Value="False" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="IsTabStop" Value="True" />
         <Setter Property="Padding" Value="1" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="SpinnerUpContentTemplate" Value="{StaticResource ButtonSpinnerSpinnerUpContentTemplateMain}" />
         <Setter Property="SpinnerDownContentTemplate" Value="{StaticResource ButtonSpinnerSpinnerDownContentTemplateMain}" />
         <!--<Setter Property="SpinnerUpDisabledContentTemplate" Value="{StaticResource IncreaseGlyphDisabledKey}" />
         <Setter Property="SpinnerDownDisabledContentTemplate" Value="{StaticResource DecreaseGlyphDisabledKey}" />-->
+        
         <Setter Property="ContextMenu">
             <Setter.Value>
                 <ContextMenu Foreground="White">
@@ -336,7 +339,7 @@
                                 <ColumnDefinition x:Name="firstContentColumn" Width="*" />
                                 <ColumnDefinition x:Name="secondContentColumn" Width="auto" />
                             </Grid.ColumnDefinitions>
-                            <ContentPresenter x:Name="contentPresenter" Cursor="Hand" Focusable="False" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <ContentPresenter x:Name="contentPresenter" Cursor="Hand" Focusable="False" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Stretch">
                                 <ContentPresenter.ContextMenu>
                                     <ContextMenu Foreground="White">
                                         <MenuItem Header="Вырезать" Command="ApplicationCommands.Cut"/>
@@ -345,16 +348,15 @@
                                 </ContentPresenter.ContextMenu>
                             </ContentPresenter>
 
-                            <Grid x:Name="gridContent" Grid.Column="1" Width="{TemplateBinding SpinnerWidth}" Height="{TemplateBinding SpinnerHeight}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-
-                                <RepeatButton x:Name="PART_IncreaseButton" IsTabStop="{TemplateBinding IsTabStop}" Style="{StaticResource RepeatButtonTextBox}" ContentTemplate="{StaticResource ButtonSpinnerSpinnerUpContentTemplateMain}">
+                            <Grid x:Name="gridContent" Grid.Column="1" MinWidth="80" Width="{TemplateBinding SpinnerWidth}" Height="{TemplateBinding SpinnerHeight}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                <RepeatButton x:Name="PART_IncreaseButton" Grid.Column="1" IsTabStop="{TemplateBinding IsTabStop}" Style="{StaticResource RepeatButtonTextBox}" ContentTemplate="{StaticResource ButtonSpinnerSpinnerUpContentTemplateMain}">
                                 </RepeatButton>
 
-                                <RepeatButton x:Name="PART_DecreaseButton" Grid.Row="1" Style="{StaticResource RepeatButtonTextBox}" IsTabStop="{TemplateBinding IsTabStop}" ContentTemplate="{StaticResource ButtonSpinnerSpinnerDownContentTemplateMain}" >
+                                <RepeatButton x:Name="PART_DecreaseButton" Grid.Column="0" Style="{StaticResource RepeatButtonTextBox}" IsTabStop="{TemplateBinding IsTabStop}" ContentTemplate="{StaticResource ButtonSpinnerSpinnerDownContentTemplateMain}" >
                                 </RepeatButton>
 
                             </Grid>
@@ -371,10 +373,10 @@
                             <Setter Property="Opacity" Value="0.5" />
                         </Trigger>
                         <Trigger SourceName="PART_IncreaseButton" Property="IsEnabled" Value="False">
-                            <Setter TargetName="PART_IncreaseButton" Property="ContentTemplate" Value="{Binding SpinnerUpDisabledContentTemplate, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="PART_IncreaseButton" Property="Opacity" Value="0.5" />
                         </Trigger>
                         <Trigger SourceName="PART_DecreaseButton" Property="IsEnabled" Value="False">
-                            <Setter TargetName="PART_DecreaseButton" Property="ContentTemplate" Value="{Binding SpinnerDownDisabledContentTemplate, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="PART_DecreaseButton" Property="Opacity" Value="0.5" />
                         </Trigger>
                         <Trigger Property="SpinnerLocation" Value="Left">
                             <Setter TargetName="firstContentColumn" Property="Width" Value="Auto" />
@@ -436,10 +438,11 @@
         <Setter Property="MaxHeight" Value="30"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Foreground" Value="White" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="TextAlignment" Value="Right" />
+        <Setter Property="FontFamily" Value="{StaticResource Rubik}"/>
         <Setter Property="ContextMenu">
             <Setter.Value>
                 <ContextMenu Foreground="White">
@@ -454,7 +457,7 @@
                 <ControlTemplate TargetType="Control">
                     <xctk:ButtonSpinner x:Name="PART_Spinner"
                                IsTabStop="False"
-                               HorizontalContentAlignment="Center"
+                               HorizontalContentAlignment="Left" Padding="5"
                                VerticalContentAlignment="Center"
                                AllowSpin="{Binding AllowSpin, RelativeSource={RelativeSource TemplatedParent}}"
                                ShowSpinner="{Binding ShowButtonSpinner, RelativeSource={RelativeSource TemplatedParent}}"
@@ -503,7 +506,9 @@
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="PART_TextBox" Property="FocusManager.FocusedElement" Value="{Binding ElementName=PART_TextBox}" />
+                            
                         </Trigger>
+                        
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

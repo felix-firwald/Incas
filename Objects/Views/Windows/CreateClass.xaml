@@ -13,6 +13,9 @@
             <local1:FieldTypeToVisibleNameConverter x:Key="FieldTypeToVisibleNameConverter"/>
             <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
             <conv:PathDataToGeometryConverter x:Key="PathDataToGeometryConverter"/>
+            <local1:ViewControlTypeToVisibleNameConverter x:Key="ViewControlTypeToVisibleNameConverter"/>
+            <local1:ViewControlTypeToIconConverter x:Key="ViewControlTypeToIconConverter"/>
+            <local1:ViewControlTypeToColorConverter x:Key="ViewControlTypeToColorConverter"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Grid.ColumnSpan="2">
@@ -117,6 +120,28 @@
                                         <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding ListName}" Tag="Наименование списка объектов" MaxLength="75" ToolTip="Наименование списка объектов (во всех вкладках, где показывается список объектов класса)"/>
                                     </StackPanel>
                                 </Border>
+                                <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                                    <StackPanel>
+                                        <Grid Margin="5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Stretch="Uniform" Height="15" Data="m586.92-427.15 101.54-57q7.46-4.23 11.81-12.2 4.35-7.96 4.35-16.65v-115.54q0-8.69-4.35-16.65-4.35-7.96-11.81-12.19l-101.54-57q-7.46-4.24-16.15-4.24-8.69 0-16.15 4.24l-101.54 57q-7.46 4.23-11.81 12.19-4.35 7.96-4.35 16.65V-513q0 8.69 4.35 16.65 4.35 7.97 11.81 12.2l101.54 57q7.46 4.23 16.15 4.23 8.69 0 16.15-4.23ZM366.15-301.54q-27.61 0-46.11-18.5t-18.5-46.11v-409.23q0-27.62 18.5-46.12 18.5-18.5 46.11-18.5h409.23q27.62 0 46.12 18.5Q840-803 840-775.38v409.23q0 27.61-18.5 46.11t-46.12 18.5H366.15Zm0-40h409.23q10.77 0 17.7-6.92 6.92-6.92 6.92-17.69v-409.23q0-10.77-6.92-17.7-6.93-6.92-17.7-6.92H366.15q-10.77 0-17.69 6.92-6.92 6.93-6.92 17.7v409.23q0 10.77 6.92 17.69 6.92 6.92 17.69 6.92Zm204.62-229.23ZM218-164Zm29.23 36.69q-26.85 3.23-47.96-12.92-21.12-16.15-24.35-43l-49.15-388.54q-3.23-26.85 13.54-48.61 16.77-21.77 43.61-24.47l17.39-.77q8.54-.69 15.11 4.77 6.58 5.47 6.58 15 0 7.31-5.12 13.31-5.11 6-12.42 6.69l-15.61.77q-10.77.77-16.93 8.85-6.15 8.08-4.61 18.85l47.84 388.76q1.54 10.77 9.23 16.93 7.7 6.15 18.47 4.61l470.92-58.77q8.54-1.23 15 3.77 6.46 5 7.69 13.54 1.23 8.54-3.77 14.5-5 5.96-13.54 7.19l-471.92 59.54Zm323.54-336.23-93.85-53.23v-108L570.77-678l93.85 53.23v108l-93.85 53.23Z"/>
+                                            <Label Grid.Column="1" Content="Имплементация обобщений:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" />
+                                        </Grid>
+                                        <Button Style="{StaticResource ButtonRectangle}" ToolTip="Добавить новое обобщение" HorizontalAlignment="Left" Grid.Column="2" >
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M8.004,19.3885V9.6135a1.5425,1.5425,0,0,1,.475-1.141A1.573,1.573,0,0,1,9.6252,8.004h9.7633A1.62,1.62,0,0,1,21.004,9.62v6.29a1.5674,1.5674,0,0,1-.1308.6323,1.6576,1.6576,0,0,1-.348.5177L17.06,20.5252a1.6576,1.6576,0,0,1-.5177.348,1.5674,1.5674,0,0,1-.6323.1308H9.62A1.62,1.62,0,0,1,8.004,19.3885ZM3.029,6.6a1.5057,1.5057,0,0,1,.2567-1.2127,1.6084,1.6084,0,0,1,1.06-.6643L13.9655,3.029a1.5057,1.5057,0,0,1,1.2127.2567,1.61,1.61,0,0,1,.6643,1.06L16.054,5.62H9.62a4.0118,4.0118,0,0,0-4,4V17.4a1.6446,1.6446,0,0,1-.5818-.475,1.62,1.62,0,0,1-.3145-.7057ZM14.004,15.004v2.5a.5.5,0,1,0,1,0v-2.5h2.5a.5.5,0,1,0,0-1h-2.5v-2.5a.5.5,0,1,0-1,0v2.5h-2.5a.5.5,0,1,0,0,1Z"/>
+                                                <Label Content="Имплементировать обобщение" Foreground="White"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <ListBox Style="{StaticResource ListBoxMain}" MinHeight="40">
+
+                                        </ListBox>
+                                    </StackPanel>
+
+                                </Border>
                                 <!--TemplateName and Card--> 
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -173,7 +198,7 @@
                                             </Grid.ColumnDefinitions>
                                             <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Data="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-9 8c0 1 1 1 1 1h5v-1a2 2 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693Q8.844 9.002 8 9c-5 0-6 3-6 4m7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
 
-                                            <Label Content="Доступ:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                                            <Label Content="Редактирование:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
 
                                         </Grid>
                                         <CheckBox Style="{StaticResource CheckBoxMain}" Content="Редактирование объекта доступно только автору" IsChecked="{Binding EditByAuthorOnly}"/>
@@ -317,9 +342,7 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            <!--<TabItem Header="Проверка">
-                <ngv:FlowChartView Background="{DynamicResource Black}" DataContext="{Binding FlowChartViewModel}" />
-            </TabItem>-->
+            
             <TabItem Header="Методы" BorderBrush="{DynamicResource LightPurple}">
                 <Grid Background="{DynamicResource Black}">
                     <Grid.ColumnDefinitions>
@@ -341,7 +364,7 @@
                                             <Label Content="Методы:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                         </Grid>
                                         <WrapPanel>
-                                            <Button Style="{StaticResource ButtonRectangle}" ToolTip="Добавить шаблон" HorizontalAlignment="Left" Grid.Column="2" >
+                                            <Button Style="{StaticResource ButtonRectangle}" ToolTip="Добавить новый метод" HorizontalAlignment="Left" Grid.Column="2" Click="AddMethod" >
                                                 <StackPanel Orientation="Horizontal">
                                                     <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M8.004,19.3885V9.6135a1.5425,1.5425,0,0,1,.475-1.141A1.573,1.573,0,0,1,9.6252,8.004h9.7633A1.62,1.62,0,0,1,21.004,9.62v6.29a1.5674,1.5674,0,0,1-.1308.6323,1.6576,1.6576,0,0,1-.348.5177L17.06,20.5252a1.6576,1.6576,0,0,1-.5177.348,1.5674,1.5674,0,0,1-.6323.1308H9.62A1.62,1.62,0,0,1,8.004,19.3885ZM3.029,6.6a1.5057,1.5057,0,0,1,.2567-1.2127,1.6084,1.6084,0,0,1,1.06-.6643L13.9655,3.029a1.5057,1.5057,0,0,1,1.2127.2567,1.61,1.61,0,0,1,.6643,1.06L16.054,5.62H9.62a4.0118,4.0118,0,0,0-4,4V17.4a1.6446,1.6446,0,0,1-.5818-.475,1.62,1.62,0,0,1-.3145-.7057ZM14.004,15.004v2.5a.5.5,0,1,0,1,0v-2.5h2.5a.5.5,0,1,0,0-1h-2.5v-2.5a.5.5,0,1,0-1,0v2.5h-2.5a.5.5,0,1,0,0,1Z"/>
                                                     <Label Content="Добавить метод" Foreground="White"/>
@@ -354,7 +377,7 @@
                                                 </StackPanel>
                                             </Button>
                                         </WrapPanel>
-                                        <ListBox Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemGray}" ItemsSource="{Binding Templates}" SelectedItem="{Binding SelectedTemplate}" MinHeight="30">
+                                        <ListBox Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemGray}" ItemsSource="{Binding Methods}" SelectedItem="{Binding SelectedMethod}" MinHeight="30">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <Label Style="{StaticResource LabelElement}" Margin="0" VerticalAlignment="Center" Content="{Binding Name}" Foreground="{DynamicResource Light}" Grid.Column="1"/>
@@ -375,7 +398,7 @@
                                             <Label Content="Выбранный метод:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                                         </Grid>
                                         <StackPanel >
-                                            <TextBox Style="{StaticResource TextBoxMain}" Text="" Tag="Имя метода"/>
+                                            <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding SelectedMethod.Name}" Tag="Имя метода"/>
                                             
                                             <CheckBox Style="{StaticResource Toggle}" Content="Публичный"/>
                                         </StackPanel>
@@ -384,7 +407,7 @@
                             </StackPanel>
                         </ScrollViewer>
                     </Border>
-                    <avalonEdit:TextEditor x:Name="CodeModule" Grid.Column="1" HorizontalScrollBarVisibility="Disabled" Background="{x:Null}" ShowLineNumbers="True" BorderThickness="0" Document="{Binding CodeModule}" BorderBrush="{DynamicResource Dark}" FontSize="13" FontFamily="{StaticResource JetBrains}" Foreground="White" Margin="10,0,0,0">
+                    <avalonEdit:TextEditor x:Name="CodeModule" Grid.Column="1" HorizontalScrollBarVisibility="Disabled" Background="{x:Null}" ShowLineNumbers="True" BorderThickness="0" Document="{Binding SelectedMethod.CodeModule}" BorderBrush="{DynamicResource Dark}" FontSize="13" FontFamily="{StaticResource JetBrains}" Foreground="White" Margin="10,0,0,0">
                     </avalonEdit:TextEditor>
                 </Grid>
             </TabItem>
@@ -394,6 +417,118 @@
             <TabItem Header="Состояния" BorderBrush="{DynamicResource LightPurple}">
                 
             </TabItem>
+            <TabItem Header="Представление" BorderBrush="{StaticResource LightPurple}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="7*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <Border CornerRadius="8" Margin="5" Background="{DynamicResource Dark}">
+                            <StackPanel>
+                                <WrapPanel>
+                                    <Button Style="{StaticResource ButtonSquare}" ToolTip="Добавить контейнер на форму" Click="AddControlToCustomFormClick">
+                                        <Path Fill="{StaticResource Buttons.Green}" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
+                                    </Button>
+                                    <Button Style="{StaticResource ButtonSquare}" ToolTip="Удалить элемент" Click="RemoveSelectedElementFromForm" >
+                                        <Path Fill="{StaticResource Buttons.Red}" Stretch="Uniform" Height="15" VerticalAlignment="Center" Data="m480-451.69 129.85 129.84q5.61 5.62 13.77 6 8.15.39 14.53-6 6.39-6.38 6.39-14.15 0-7.77-6.39-14.15L508.31-480l129.84-129.85q5.62-5.61 6-13.77.39-8.15-6-14.53-6.38-6.39-14.15-6.39-7.77 0-14.15 6.39L480-508.31 350.15-638.15q-5.61-5.62-13.77-6-8.15-.39-14.53 6-6.39 6.38-6.39 14.15 0 7.77 6.39 14.15L451.69-480 321.85-350.15q-5.62 5.61-6 13.77-.39 8.15 6 14.53 6.38 6.39 14.15 6.39 7.77 0 14.15-6.39L480-451.69Zm.13 331.69q-74.67 0-140.41-28.34-65.73-28.34-114.36-76.92-48.63-48.58-76.99-114.26Q120-405.19 120-479.87q0-74.67 28.34-140.41 28.34-65.73 76.92-114.36 48.58-48.63 114.26-76.99Q405.19-840 479.87-840q74.67 0 140.41 28.34 65.73 28.34 114.36 76.92 48.63 48.58 76.99 114.26Q840-554.81 840-480.13q0 74.67-28.34 140.41-28.34 65.73-76.92 114.36-48.58 48.63-114.26 76.99Q554.81-120 480.13-120Zm-.13-40q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                                    </Button>
+                                </WrapPanel>
+                                <TreeView Style="{StaticResource TreeViewMain}" Margin="5" ItemsSource="{Binding ViewControls}" MaxHeight="250" SelectedItemChanged="TreeView_SelectedItemChanged">
+                                    <TreeView.ItemTemplate>
+                                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Fill="{Binding Type, Converter={StaticResource ViewControlTypeToColorConverter}}" Stretch="Uniform" MaxHeight="10" Data="{Binding Type, Converter={StaticResource ViewControlTypeToIconConverter}}"/>
+                                                <TextBlock Margin="5,0,0,0" Text="{Binding Name}" Foreground="White" />
+                                            </StackPanel>
+
+                                        </HierarchicalDataTemplate>
+                                    </TreeView.ItemTemplate>
+                                </TreeView>
+                            </StackPanel>
+                        </Border>
+                        <Border CornerRadius="8" Margin="5" Background="{DynamicResource Dark}">
+                            <StackPanel>
+                                <TextBox Style="{StaticResource TextBoxMain}" Tag="Имя контейнера" Text="{Binding SelectedViewControl.Name}"/>
+                                
+                                <ComboBox Style="{StaticResource ComboBoxMain}" Visibility="{Binding SelectedViewControl.ContainerSettingsVisibility}" Tag="Имя контейнера" ItemsSource="{Binding AvailableControlTypes}" SelectedItem="{Binding SelectedViewControl.Type}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Fill="{StaticResource LightYellow}" Stretch="Uniform" Height="12" Data="{Binding ., Converter={StaticResource ViewControlTypeToIconConverter}}"/>
+                                                <Label Content="{Binding ., Converter={StaticResource ViewControlTypeToVisibleNameConverter}}" Foreground="White"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <CheckBox Content="Виден на форме" Visibility="{Binding SelectedViewControl.ContainerSettingsVisibility}" />
+                                <CheckBox Content="Доступен для редактирования" Visibility="{Binding SelectedViewControl.ContainerSettingsVisibility}" />
+                                <Button Style="{StaticResource ButtonRectangle}" Visibility="{Binding SelectedViewControl.ContainerSettingsVisibility}" ToolTip="Добавить новый вложенный контейнер" HorizontalAlignment="Left" Grid.Column="2" Click="AddChildContainerToViewControl" >
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M8.004,19.3885V9.6135a1.5425,1.5425,0,0,1,.475-1.141A1.573,1.573,0,0,1,9.6252,8.004h9.7633A1.62,1.62,0,0,1,21.004,9.62v6.29a1.5674,1.5674,0,0,1-.1308.6323,1.6576,1.6576,0,0,1-.348.5177L17.06,20.5252a1.6576,1.6576,0,0,1-.5177.348,1.5674,1.5674,0,0,1-.6323.1308H9.62A1.62,1.62,0,0,1,8.004,19.3885ZM3.029,6.6a1.5057,1.5057,0,0,1,.2567-1.2127,1.6084,1.6084,0,0,1,1.06-.6643L13.9655,3.029a1.5057,1.5057,0,0,1,1.2127.2567,1.61,1.61,0,0,1,.6643,1.06L16.054,5.62H9.62a4.0118,4.0118,0,0,0-4,4V17.4a1.6446,1.6446,0,0,1-.5818-.475,1.62,1.62,0,0,1-.3145-.7057ZM14.004,15.004v2.5a.5.5,0,1,0,1,0v-2.5h2.5a.5.5,0,1,0,0-1h-2.5v-2.5a.5.5,0,1,0-1,0v2.5h-2.5a.5.5,0,1,0,0,1Z"/>
+                                        <Label Content="Добавить вложенный контейнер" Foreground="White"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                        <Border CornerRadius="8" Margin="5" Background="{DynamicResource Dark}">
+                            <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding Fields}" MaxHeight="200">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Name}"/>
+                                            <Button Style="{StaticResource ButtonSquare}" MaxHeight="30" Margin="0" ToolTip="Определить поле в выбранный контейнер" HorizontalAlignment="Left" Grid.Column="2" Command="{Binding AssignToContainer}" >
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M8.004,19.3885V9.6135a1.5425,1.5425,0,0,1,.475-1.141A1.573,1.573,0,0,1,9.6252,8.004h9.7633A1.62,1.62,0,0,1,21.004,9.62v6.29a1.5674,1.5674,0,0,1-.1308.6323,1.6576,1.6576,0,0,1-.348.5177L17.06,20.5252a1.6576,1.6576,0,0,1-.5177.348,1.5674,1.5674,0,0,1-.6323.1308H9.62A1.62,1.62,0,0,1,8.004,19.3885ZM3.029,6.6a1.5057,1.5057,0,0,1,.2567-1.2127,1.6084,1.6084,0,0,1,1.06-.6643L13.9655,3.029a1.5057,1.5057,0,0,1,1.2127.2567,1.61,1.61,0,0,1,.6643,1.06L16.054,5.62H9.62a4.0118,4.0118,0,0,0-4,4V17.4a1.6446,1.6446,0,0,1-.5818-.475,1.62,1.62,0,0,1-.3145-.7057ZM14.004,15.004v2.5a.5.5,0,1,0,1,0v-2.5h2.5a.5.5,0,1,0,0-1h-2.5v-2.5a.5.5,0,1,0-1,0v2.5h-2.5a.5.5,0,1,0,0,1Z"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Border>
+                    </StackPanel>
+                    
+                    
+                    <Border Grid.Column="1" Margin="5" CornerRadius="8" Background="{DynamicResource Dark}" Cursor="" Padding="0,0,0,5">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                                <RowDefinition Height="2"/>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal" Grid.Row="0" >
+                                <CheckBox Style="{StaticResource ExpanderButton}" IsChecked="True" IsEnabled="False"/>
+                                <Rectangle Width="1" Fill="{DynamicResource Area}" Margin="0,5,0,5" Opacity="0.5" />
+                                <TextBox x:Name="ObjectName" Style="{DynamicResource TextBoxTransparent}" IsReadOnly="True" Text="Предварительный просмотр редактора объекта" Margin="5,0,0,0">
+                                    <TextBox.ContextMenu>
+                                        <ContextMenu>
+                                            
+                                        </ContextMenu>
+                                    </TextBox.ContextMenu>
+                                </TextBox>
+                            </StackPanel>
+                            <Rectangle Fill="{DynamicResource Area}" Opacity="0.5" HorizontalAlignment="Left" Grid.Column="1" Width="1" Margin="0,5,0,5"/>
+                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" IsEnabled="False" ToolTip="Удалить объект из очереди редактирования" Grid.Column="1">
+                                <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
+                            </Button>
+
+                            <Rectangle Grid.Row="1" Fill="{DynamicResource Area}" Grid.ColumnSpan="2"/>
+                            <StackPanel x:Name="FormPreviewPanel" Margin="5" Grid.Row="2" Grid.ColumnSpan="2">
+
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            <!--<TabItem Header="Проверка">
+                <ngv:FlowChartView Background="{DynamicResource Black}" DataContext="{Binding FlowChartViewModel}" />
+            </TabItem>-->
         </TabControl>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Margin="5,0,0,0" Orientation="Horizontal">
             <Button Style="{DynamicResource ButtonRectangle}" Background="{StaticResource Dark}" VerticalAlignment="Center"  IsDefault="True" Click="SaveClick" Grid.Row="3">

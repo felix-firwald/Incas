@@ -1,4 +1,6 @@
-﻿using Incas.Core.Classes;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Incas.Core.Classes;
+using Incas.Core.Views.Controls;
 using Incas.Core.Views.Windows;
 using Incas.Objects.Views.Controls;
 using IncasEngine.Core;
@@ -50,33 +52,48 @@ namespace Incas.Objects.Views.Windows
             this.InitializeComponent();
             this.Binding = data;
             this.Class = EngineGlobals.GetClass(this.Binding.BindingClass);
-            this.ClassData = this.Class.GetClassData();            
-            if (this.ClassData is null || this.ClassData.Fields is null)
+            if (!ProgramState.CurrentWorkspace.CurrentGroup.IsComponentInAccess(this.Class.Component))
             {
-                DialogsManager.ShowDatabaseErrorDialog("Не удалось идентифицировать класс и показать карту его объектов. Вероятно, это означает, что класс удален. Обратитесь к администратору рабочего пространства для устранения ошибки.", "Привязка сломана");
-                this.IsEnabled = false;
-                return;
+                this.ShowDisabledComponentMessage();
             }
-            this.Title = this.ClassData.ListName;
-            this.SetFields();
-            this.FillList();
-            this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
-            this.Class.OnRemoved += this.Class_OnRemoved;
+            else
+            {
+                this.ClassData = this.Class.GetClassData();
+                if (this.ClassData is null || this.ClassData.Fields is null)
+                {
+                    DialogsManager.ShowDatabaseErrorDialog("Не удалось идентифицировать класс и показать карту его объектов. Вероятно, это означает, что класс удален. Обратитесь к администратору рабочего пространства для устранения ошибки.", "Привязка сломана");
+                    this.IsEnabled = false;
+                    return;
+                }
+                this.Title = this.ClassData.ListName;
+                this.SetFields();
+                this.FillList();
+                this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
+                this.Class.OnRemoved += this.Class_OnRemoved;
+            }            
         }
 
         private void Class_OnRemoved()
         {
             this.Close();
         }
-
+        private void SetOtherContent(UIElement element)
+        {
+            this.MainGrid.Children.Clear();
+            this.MainGrid.Children.Add(element);
+            System.Windows.Controls.Grid.SetRow(element, 0);
+            System.Windows.Controls.Grid.SetRowSpan(element, 3);
+            System.Windows.Controls.Grid.SetColumn(element, 0);
+        }
         private void EngineEvents_OnUpdateClassRequested()
         {
             ClassUpdatedMessage message = new();
-            this.MainGrid.Children.Clear();
-            this.MainGrid.Children.Add(message);
-            System.Windows.Controls.Grid.SetRow(message, 0);
-            System.Windows.Controls.Grid.SetRowSpan(message, 3);
-            System.Windows.Controls.Grid.SetColumn(message, 0);
+            this.SetOtherContent(message);
+        }
+        private void ShowDisabledComponentMessage()
+        {
+            ComponentNotActive na = new();
+            this.SetOtherContent(na);
         }
         private WhereInstruction GetBaseInstruction()
         {

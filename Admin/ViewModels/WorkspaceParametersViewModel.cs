@@ -117,6 +117,76 @@ namespace Incas.Admin.ViewModels
                 return ProgramState.GetEnumeration(this.SelectedEnumeration.Id);
             }
         }
+        public List<GeneralizatorItem> Generalizators
+        {
+            get
+            {
+                using (Generalizator g = new())
+                {
+                    return g.GetAllGeneralizators();
+                }
+            }
+        }
+        private GeneralizatorItem selectedGeneralizator;
+        public GeneralizatorItem SelectedGeneralizator
+        {
+            get
+            {
+                return this.selectedGeneralizator;
+            }
+            set
+            {
+                this.selectedGeneralizator = value;
+                this.OnPropertyChanged(nameof(this.SelectedGeneralizator));
+            }
+        }
+        public List<StructureItem> Structures
+        {
+            get
+            {
+                using (Structure g = new())
+                {
+                    return g.GetAllStructures();
+                }
+            }
+        }
+        private StructureItem selectedStructure;
+        public StructureItem SelectedStructure
+        {
+            get
+            {
+                return this.selectedStructure;
+            }
+            set
+            {
+                this.selectedStructure = value;
+                this.OnPropertyChanged(nameof(this.SelectedStructure));
+            }
+        }
+        public List<ConverterItem> Converters
+        {
+            get
+            {
+                using (Converter g = new())
+                {
+                    return g.GetAllConverters();
+                }
+            }
+        }
+        private ConverterItem selectedConverter;
+        public ConverterItem SelectedConverter
+        {
+            get
+            {
+                return this.selectedConverter;
+            }
+            set
+            {
+                this.selectedConverter = value;
+                this.OnPropertyChanged(nameof(this.SelectedConverter));
+            }
+        }
+
         public List<WorkspaceComponent> ClassesCategories
         {
             get

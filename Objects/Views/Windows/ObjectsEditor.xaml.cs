@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
+using Incas.Core.Views.Controls;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Pages;
@@ -11,12 +12,12 @@ using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
-using IncasEngine.ObjectiveEngine.Types.Documents;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -39,40 +40,55 @@ namespace Incas.Objects.Views.Windows
         {
             this.InitializeComponent();
             this.Title = source.Name;
-            this.Class = source;         
-            this.ClassData = source.GetClassData();
-            this.PermissionSettings = ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(source.Id);
-            this.RenderButton.Visibility = source.Type == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
-            if (objects != null)
+            this.Class = source;
+            DialogsManager.ShowWaitCursor(false);
+            if (!ProgramState.CurrentWorkspace.CurrentGroup.IsComponentInAccess(source.Component))
             {
-                foreach (IObject obj in objects)
-                {
-                    this.AddObjectCreator(obj);
-                }
+                this.ShowDisabledComponentMessage();
             }
             else
             {
-                this.AddObjectCreator();
-            }
-            DialogsManager.ShowWaitCursor(false);
-            this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
-            this.Class.OnRemoved += this.Class_OnRemoved;
+                this.ClassData = source.GetClassData();
+                this.PermissionSettings = ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(source.Id);
+                this.RenderButton.Visibility = source.Type == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
+                if (objects != null)
+                {
+                    foreach (IObject obj in objects)
+                    {
+                        this.AddObjectCreator(obj);
+                    }
+                }
+                else
+                {
+                    this.AddObjectCreator();
+                }                
+                this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
+                this.Class.OnRemoved += this.Class_OnRemoved;
+            }            
         }
 
         private void Class_OnRemoved()
         {
             this.Close();
         }
-
+        private void SetOtherContent(UIElement element)
+        {
+            this.MainGrid.Children.Clear();
+            this.MainGrid.Children.Add(element);
+            Grid.SetRow(element, 0);
+            Grid.SetRowSpan(element, 2);
+            Grid.SetColumnSpan(element, 2);
+            Grid.SetColumn(element, 0);
+        }
         private void EngineEvents_OnUpdateClassRequested()
         {         
             ClassUpdatedMessage message = new();
-            this.MainGrid.Children.Clear();
-            this.MainGrid.Children.Add(message);
-            Grid.SetRow(message, 0);
-            Grid.SetRowSpan(message, 2);
-            Grid.SetColumnSpan(message, 2);
-            Grid.SetColumn(message, 0);
+            this.SetOtherContent(message);
+        }
+        private void ShowDisabledComponentMessage()
+        {
+            ComponentNotActive na = new();
+            this.SetOtherContent(na);
         }
 
         public ObjectsEditor(IClass source, ClassData data) // dev
@@ -119,11 +135,13 @@ namespace Incas.Objects.Views.Windows
             return true;
         }
 
-        private bool Creator_OnSaveRequested(ObjectCreator creator)
+        private async Task<bool> Creator_OnSaveRequested(ObjectCreator creator)
         {
+            bool result = false;
             try
             {
-                Processor.WriteObjects(this.Class, creator.PullObject());
+                IObject obj = creator.PullObject();
+                result = await Processor.WriteObjects(this.Class, obj);
                 this.OnUpdateRequested?.Invoke();
                 if (this.OnSetNewObjectRequested != null)
                 {
@@ -131,20 +149,25 @@ namespace Incas.Objects.Views.Windows
                 }            
                 return true;
             }
+            catch (FieldDataFailed nnex)
+            {
+                DialogsManager.ShowExclamationDialog(nnex.Message, "Сохранение прервано");
+                return result;
+            }
             catch (NotNullFailed nnex)
             {
                 DialogsManager.ShowExclamationDialog(nnex.Message, "Сохранение прервано");
-                return false;
+                return result;
             }
             catch (AuthorFailed af)
             {
                 DialogsManager.ShowAccessErrorDialog(af.Message);
-                return false;
+                return result;
             }
             catch (Exception ex)
             {
                 DialogsManager.ShowErrorDialog(ex);
-                return false;
+                return result;
             }
         }
 
@@ -257,23 +280,34 @@ namespace Incas.Objects.Views.Windows
                 {
                     objects.Add(c.PullObject());
                 }
-                this.Close();
+                this.Hide();
                 bool result = await Processor.WriteObjects(this.Class, objects);
                 if (result)
                 {
                     this.OnUpdateRequested?.Invoke();
                 }
+                //this.Show();
+                
+                this.Close();
+            }
+            catch (FieldDataFailed fdf)
+            {
+                this.Show();
+                DialogsManager.ShowExclamationDialog(fdf.Message, "Сохранение прервано");
             }
             catch (NotNullFailed nnex)
             {
+                this.Show();
                 DialogsManager.ShowExclamationDialog(nnex.Message, "Сохранение прервано");
             }
             catch (AuthorFailed af)
             {
+                this.Show();
                 DialogsManager.ShowAccessErrorDialog(af.Message);
             }
             catch (Exception ex)
             {
+                this.Show();
                 DialogsManager.ShowErrorDialog(ex);
             }
         }
@@ -281,7 +315,7 @@ namespace Incas.Objects.Views.Windows
         private async void RenderObjectsClick(object sender, RoutedEventArgs e)
         {
             List<IObject> objects = [];
-            Document doc = (this.ContentPanel.Children[0] as ObjectCreator).PullObject() as Document;
+            IncasEngine.ObjectiveEngine.Types.Documents.Document doc = (this.ContentPanel.Children[0] as ObjectCreator).PullObject() as IncasEngine.ObjectiveEngine.Types.Documents.Document;
             
             Template templateFile = new();
             DocumentClassData docData = this.ClassData as DocumentClassData;
@@ -321,6 +355,10 @@ namespace Incas.Objects.Views.Windows
                         this.OnUpdateRequested?.Invoke();
                     }              
                     ProgramState.OpenFolder(path);                    
+                }
+                catch (FieldDataFailed fdf)
+                {
+                    DialogsManager.ShowExclamationDialog(fdf.Message, "Рендеринг прерван");
                 }
                 catch (NotNullFailed nnex)
                 {

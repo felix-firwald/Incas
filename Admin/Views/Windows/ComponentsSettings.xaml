@@ -86,6 +86,7 @@
                 <CheckBox Style="{StaticResource CheckBoxMain}" Content="Активен" IsChecked="{Binding SelectedComponent.IsActive}" ToolTip="Если компонент отмечен как неактивный, его нельзя будет использовать"/>
                 <CheckBox Style="{StaticResource CheckBoxMain}" IsEnabled="{Binding SelectedComponent.StateEditingEnabled}" Content="Публичный компонент" IsChecked="{Binding SelectedComponent.IsVisibleToEveryone}" ToolTip="Другие компоненты рабочего пространства могут использовать этот компонент"/>
                 <CheckBox Style="{StaticResource CheckBoxMain}" IsEnabled="{Binding SelectedComponent.StateEditingEnabled}" Content="Изолированный компонент" IsChecked="{Binding SelectedComponent.IsIsolated}" ToolTip="Изолированный компонент не может иметь внешних зависимостей"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" Content="Блокировать любой доступ к классам, если доступ к компоненту запрещен" IsChecked="{Binding SelectedComponent.ForceBlock}" ToolTip="Даже если доступ к отдельным классам будет разрешен, INCAS будет блокировать к ним доступ, если компонент недоступен группе"/>
             </StackPanel>
         </Border>
         <Border Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8">

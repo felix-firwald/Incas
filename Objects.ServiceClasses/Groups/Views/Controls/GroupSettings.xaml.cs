@@ -16,10 +16,13 @@ namespace Incas.Objects.ServiceClasses.Groups.Views.Controls
         public IObject TargetObject { get; set; }
         public GroupSettings()
         {
-            this.InitializeComponent();            
+#if !E_FREE
+            this.InitializeComponent();     
+#endif
         }
         public IServiceFieldFiller SetUp(IObject obj)
         {
+#if !E_FREE
             this.TargetObject = obj;
             Group group = (Group)this.TargetObject;
             if (obj.Id == Guid.Empty)
@@ -28,6 +31,7 @@ namespace Incas.Objects.ServiceClasses.Groups.Views.Controls
             }
             this.ViewModel = new GroupSettingsViewModel(group.Data);
             this.DataContext = this.ViewModel;
+#endif
             return this;
         }
         public IObject GetResult()

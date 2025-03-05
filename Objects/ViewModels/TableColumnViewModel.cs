@@ -58,19 +58,19 @@ namespace Incas.Objects.ViewModels
             {
                 case "0":
                 default:
-                    return FieldType.Variable;
+                    return FieldType.String;
                 case "1":
                     return FieldType.LocalEnumeration;
                 case "2":
                     return FieldType.GlobalEnumeration;
                 case "3":
-                    return FieldType.Relation;
+                    return FieldType.Object;
                 case "4":
                     return FieldType.Date;
                 case "5":
                     return FieldType.Boolean;
                 case "6":
-                    return FieldType.Number;
+                    return FieldType.Integer;
             }
         }
         public string SerializeToInput(FieldType tot)
@@ -80,10 +80,10 @@ namespace Incas.Objects.ViewModels
                 FieldType.Text => "1",
                 FieldType.LocalEnumeration => "1",
                 FieldType.GlobalEnumeration => "2",
-                FieldType.Relation => "3",
+                FieldType.Object => "3",
                 FieldType.Date => "4",
                 FieldType.Boolean => "5",
-                FieldType.Number => "6",
+                FieldType.Integer => "6",
                 _ => "0",
             };
         }

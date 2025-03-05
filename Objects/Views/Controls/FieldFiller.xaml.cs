@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Xceed.Wpf.Toolkit;
 using static Incas.Objects.Interfaces.IFillerBase;
 
 namespace Incas.Objects.Views.Controls
@@ -41,7 +42,7 @@ namespace Incas.Objects.Views.Controls
         private bool eventChangedEnabled = true;
         private Control control;
         public delegate void CommandScript(string script);
-        public event StringAction OnInsert;
+        public event StringAction OnInsert;  
         public event CommandScript OnScriptRequested;
         public event FillerUpdate OnFillerUpdate;
         public event FillerUpdate OnDatabaseObjectCopyRequested;
@@ -77,25 +78,43 @@ namespace Incas.Objects.Views.Controls
             string description = this.Field.Description;
             switch (type)
             {
-                case FieldType.Variable:
+                case FieldType.String:                  
+                    if (this.Field.Mask is null)
+                    {
+                        System.Windows.Controls.TextBox textBox = new()
+                        {
+                            Text = value,
+                            Tag = description
+                        };
+                        textBox.TextChanged += this.Textbox_TextChanged;
+                        textBox.Style = this.FindResource("TextBoxMain") as Style;
+                        textBox.MaxLength = this.Field.GetMaxLength();
+                        this.PlaceUIControl(textBox);
+                    }
+                    else
+                    {
+                        MaskedTextBox masked = new()
+                        {
+                            Text = value,
+                            Mask = this.Field.Mask,
+                            MaxLength = this.Field.GetMaxLength(),
+                            Watermark = description
+                        };
+                        masked.TextChanged += this.Textbox_TextChanged;
+                        this.PlaceUIControl(masked);
+                    }
+                    
+                    break;
                 case FieldType.Text:
-                    System.Windows.Controls.TextBox textBox = new()
+                    System.Windows.Controls.TextBox textBox2 = new()
                     {
                         Text = value,
                         Tag = description
                     };
-                    textBox.TextChanged += this.Textbox_TextChanged;
-                    if (type == FieldType.Variable)
-                    {
-                        textBox.Style = this.FindResource("TextBoxMain") as Style;
-                        textBox.MaxLength = 120;
-                    }
-                    else
-                    {
-                        textBox.Style = this.FindResource("TextBoxBig") as System.Windows.Style;
-                        textBox.MaxLength = 1200;
-                    }
-                    this.PlaceUIControl(textBox);
+                    textBox2.TextChanged += this.Textbox_TextChanged;
+                    textBox2.Style = this.FindResource("TextBoxBig") as System.Windows.Style;
+                    textBox2.MaxLength = this.Field.GetMaxLength();
+                    this.PlaceUIControl(textBox2);
                     break;
                 case FieldType.LocalEnumeration:
                 case FieldType.GlobalEnumeration:
@@ -109,12 +128,30 @@ namespace Incas.Objects.Views.Controls
                     comboBox.SelectionChanged += this.Combobox_SelectionChanged;
                     this.PlaceUIControl(comboBox);
                     break;
-                case FieldType.Number:
-                    NumericBox numeric = new();
+                case FieldType.Integer:
+                    IntegerUpDown numeric = new();
+                    numeric.Style = this.FindResource("NumericUpDown") as Style;
                     numeric.ToolTip = description;
-                    numeric.OnNumberChanged += this.NumericBox_OnNumberChanged;
-                    numeric.ApplyMinAndMax(this.Field.GetNumberFieldData());
+                    numeric.ValueChanged += this.Numeric_ValueChanged;
+                    numeric.Minimum = this.Field.GetNumberFieldData().MinValue;
+                    numeric.Maximum = this.Field.GetNumberFieldData().MaxValue;
+                    int integerValue = 0;
+                    if (int.TryParse(value, out integerValue))
+                    {
+                        numeric.Value = integerValue;
+                    }                   
                     this.PlaceUIControl(numeric);
+                    break;
+                case FieldType.Float:
+                    DoubleUpDown numericFloat = new();
+                    numericFloat.Style = this.FindResource("NumericUpDown") as Style;
+                    numericFloat.ToolTip = description;
+                    numericFloat.ValueChanged += this.Numeric_ValueChanged;
+                    numericFloat.Minimum = this.Field.GetNumberFieldData().MinValue;
+                    numericFloat.Maximum = this.Field.GetNumberFieldData().MaxValue;
+                    numericFloat.Value = Convert.ToDouble(value);
+                    numericFloat.FormatString = "₽ C";
+                    this.PlaceUIControl(numericFloat);
                     break;
                 case FieldType.LocalConstant:
                 case FieldType.HiddenField:
@@ -126,7 +163,7 @@ namespace Incas.Objects.Views.Controls
                     Guid.TryParse(value.ToString(), out id);
                     this.Field.Value = ProgramState.GetConstant(id);
                     break;
-                case FieldType.Relation:
+                case FieldType.Object:
                     SelectionBox selectionBox = new(this.Field.GetBindingData());
                     selectionBox.OnValueChanged += this.SelectionBox_OnValueChanged;
                     this.PlaceUIControl(selectionBox);
@@ -146,29 +183,39 @@ namespace Incas.Objects.Views.Controls
                 case FieldType.Boolean:
                     CheckBox checkBox = new() {
                         ToolTip = description,
-                        Style = this.FindResource("CheckBoxOnlyMain") as Style
+                        Content = this.Field.VisibleName,
+                        Style = this.FindResource("CheckBoxMain") as Style
                     };
-                    this.PlaceUIControl(checkBox);
-                    break;
-                case FieldType.Generator:
-
+                    this.PlaceUIControl(checkBox, true);
                     break;
             }
         }
 
-        private void PlaceUIControl(Control control)
+        
+
+        private void PlaceUIControl(Control control, bool withoutLabel = false)
         {
             this.Dispatcher.Invoke(() =>
             {
                 this.control = control;
                 this.control.ToolTip = this.Field.Description;
-                this.Grid.Children.Add(control);
-                Grid.SetRow(control, 0);
-                Grid.SetColumn(control, 1);
                 if (this.Field.ReadOnly)
                 {
                     control.IsEnabled = false;
                 }
+                this.Grid.Children.Add(control);
+                if (withoutLabel)
+                {
+                    Grid.SetRow(control, 0);
+                    Grid.SetColumn(control, 0);
+                    Grid.SetRowSpan(control, 1);
+                    this.MainLabel.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    Grid.SetRow(control, 0);
+                    Grid.SetColumn(control, 1);
+                }                
             });            
         }
 
@@ -189,19 +236,26 @@ namespace Incas.Objects.Views.Controls
             this.eventChangedEnabled = false;
             switch (this.GetFillerType())
             {
-                case FieldType.Variable:
+                case FieldType.String:
                 case FieldType.Text:
                 default:
                     ((System.Windows.Controls.TextBox)this.control).Text = value;
                     break;
-                case FieldType.Number:
+                case FieldType.Integer:
                     int digitValue;
                     if (int.TryParse(value, out digitValue))
                     {
-                        ((NumericBox)this.control).Value = digitValue;
+                        ((IntegerUpDown)this.control).Value = digitValue;
                     }
                     break;
-                case FieldType.Relation:
+                case FieldType.Float:
+                    double doubleValue;
+                    if (double.TryParse(value, out doubleValue))
+                    {
+                        ((DoubleUpDown)this.control).Value = doubleValue;
+                    }
+                    break;
+                case FieldType.Object:
                     ((SelectionBox)this.control).SetObject(value);
                     break;
                 case FieldType.LocalConstant:
@@ -217,9 +271,11 @@ namespace Incas.Objects.Views.Controls
                 case FieldType.Date:
                     this.SetDateTimeValue(value);
                     break;
-                case FieldType.Generator:
+#if E_BUSINESS
+                case FieldType.Structure:
                         
                     break;
+#endif
                 case FieldType.Boolean:
                     ((CheckBox)this.control).IsChecked = value == "1";
                     break;
@@ -294,7 +350,7 @@ namespace Incas.Objects.Views.Controls
         {
             switch (this.GetFillerType())
             {
-                case FieldType.Variable:
+                case FieldType.String:
                 default:
                     string value = ((System.Windows.Controls.TextBox)this.control).Text;
                     if (this.Field.NotNull == true && string.IsNullOrEmpty(value))
@@ -306,13 +362,13 @@ namespace Incas.Objects.Views.Controls
                         this.ThrowUniqueFailed();
                     }
                     return value;
-                case FieldType.Number:
-                    return ((NumericBox)this.control).Value.ToString();
+                case FieldType.Integer:
+                    return ((IntegerUpDown)this.control).Value.ToString();
                 case FieldType.LocalConstant:
                 case FieldType.HiddenField:
                 case FieldType.GlobalConstant:
                     return this.Field.Value?.ToString();
-                case FieldType.Relation:
+                case FieldType.Object:
                     return ((SelectionBox)this.control).Value;
                 case FieldType.LocalEnumeration:
                 case FieldType.GlobalEnumeration:
@@ -354,7 +410,7 @@ namespace Incas.Objects.Views.Controls
                         this.ThrowNotNullFailed();
                     }
                     return "";
-                case FieldType.Relation:
+                case FieldType.Object:
                     IObject obj = ((SelectionBox)this.control).SelectedObject;
                     if (this.Field.NotNull == true && obj is null)
                     {
@@ -374,18 +430,18 @@ namespace Incas.Objects.Views.Controls
                         return (DateTime)((DatePicker)this.control).SelectedDate;
                     }
                     return DateTime.MinValue;
-                case FieldType.Relation:
+                case FieldType.Object:
                     IObject obj = ((SelectionBox)this.control).SelectedObject;
                     if (obj is null)
                     {
                         return new List<FieldData>();
                     }
                     return obj?.Fields;
-                case FieldType.Variable:
+                case FieldType.String:
                 default:
                     return ((System.Windows.Controls.TextBox)this.control).Text;
-                case FieldType.Number:
-                    return ((NumericBox)this.control).Value;
+                case FieldType.Integer:
+                    return ((IntegerUpDown)this.control).Value;
                 case FieldType.LocalConstant:
                 case FieldType.HiddenField:
                 case FieldType.GlobalConstant:
@@ -410,7 +466,7 @@ namespace Incas.Objects.Views.Controls
             }
             foreach (FieldData data in obj.Fields)
             {
-                if (data.ClassField.Type == FieldType.Relation)
+                if (data.ClassField.Type == FieldType.Object)
                 {
                     BindingData bd = data.ClassField.GetBindingData();
                     IObject recurObj = Processor.GetObject(EngineGlobals.GetClass(bd.BindingClass), Guid.Parse(data.Value));
@@ -525,7 +581,7 @@ namespace Incas.Objects.Views.Controls
             this.CheckForScriptOnUpdate();
         }
 
-        private void NumericBox_OnNumberChanged(object sender)
+        private void Numeric_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             this.RunUpdateEvent();
             this.CheckForScriptOnUpdate();

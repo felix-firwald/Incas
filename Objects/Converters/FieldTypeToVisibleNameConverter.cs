@@ -18,8 +18,8 @@ namespace Incas.Objects.Converters
             {
                 switch (enumValue)
                 {
-                    case FieldType.Variable:
-                        return "Короткий текст";
+                    case FieldType.String:
+                        return "Строка";
                     case FieldType.Text:
                         return "Многострочный текст";
                     case FieldType.LocalEnumeration:
@@ -28,8 +28,10 @@ namespace Incas.Objects.Converters
                         return "Глобальное перечисление";
                     case FieldType.Date:
                         return "Дата";
-                    case FieldType.Number:
+                    case FieldType.Integer:
                         return "Целочисленное число";
+                    case FieldType.Float:
+                        return "Дробное число";
                     case FieldType.Boolean:
                         return "Логический флаг";
                     case FieldType.LocalConstant:
@@ -38,8 +40,12 @@ namespace Incas.Objects.Converters
                         return "Глобальная константа";
                     case FieldType.HiddenField:
                         return "Скрытое поле";
-                    case FieldType.Relation:
+                    case FieldType.Object:
                         return "Объект";
+#if E_BUSINESS
+                    case FieldType.Structure:
+                        return "Структура";
+#endif
                     case FieldType.Table:
                         return "Таблица";
                 }

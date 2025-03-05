@@ -270,13 +270,14 @@ namespace Incas.Rendering.Components
                 d.PackageProperties.Subject = doc.Class.Component.Name;
                 d.PackageProperties.Title = doc.TargetDocument.Name;
                 d.PackageProperties.Revision = "1";
+                d.PackageProperties.LastPrinted = DateTime.Now;
                 d.PackageProperties.Version = DateTime.Now.ToString("yyMMddHHmm");
                 d.PackageProperties.Created = doc.TargetDocument.CreationDate;
                 d.PackageProperties.Modified = doc.TargetDocument.CreationDate;
                 ObjectReference reference = new(doc.Class.Id, doc.TargetDocument.Id);
                 d.PackageProperties.Identifier = reference.ToString();
                 d.PackageProperties.LastModifiedBy = $"{ProgramState.CurrentWorkspace.CurrentUser.Name} (через INCAS)";
-                d.PackageProperties.Description = "Этот документ создан в программе INCAS";
+                d.PackageProperties.Description = $"Этот документ создан в программе INCAS, версия: {ProgramState.Version}";
             }
         }
         public async static Task<string> GetMetaDataIdentifier(string path)

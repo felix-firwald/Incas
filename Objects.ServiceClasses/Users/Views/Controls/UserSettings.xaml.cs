@@ -16,13 +16,17 @@ namespace Incas.Objects.ServiceClasses.Users.Views.Controls
         public IObject TargetObject { get; set; }
         public UserSettings()
         {
+#if !E_FREE
             this.InitializeComponent();
+#endif
         }
         public IServiceFieldFiller SetUp(IObject obj)
         {
+#if !E_FREE
             this.TargetObject = obj;
             this.ViewModel = new UserSettingsViewModel(((User)this.TargetObject));
             this.DataContext = this.ViewModel;
+#endif
             return this;
         }
         public IObject GetResult()

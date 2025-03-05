@@ -6,6 +6,7 @@ using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
@@ -30,6 +31,8 @@ namespace Incas.Objects.ViewModels
         public ClassMode Mode { get; set; }
         public IClassData SourceData { get; set; }
         public IClass Source;
+        public delegate void DrawCall();
+        public event DrawCall OnDrawCalling;
         public ClassViewModel(Class source)
         {
             this.Mode = ClassMode.Usual;
@@ -38,18 +41,31 @@ namespace Incas.Objects.ViewModels
             this.Fields = new();
             foreach (Field f in this.SourceData.Fields)
             {
-                this.Fields.Add(new(f));
+                this.Fields.Add(new(f, this));
             }
             this.Fields.CollectionChanged += this.Fields_CollectionChanged;
             this.SetCommands();
-            this.textDocument = new()
-            {
-                Text = this.SourceData.Script ?? ""
-            };
-            this.textDocument.TextChanged += this.TextDocument_TextChanged;
+            this.ViewControls = new();
             this.AvailableComponents = new(ProgramState.CurrentWorkspace.CurrentGroup.GetAvailableComponents());
             this.SelectedComponent = this.Source.Component;
+            this.Methods = new();
+            if (this.SourceData.Methods is not null)
+            {
+                foreach (Method method in this.SourceData.Methods)
+                {
+                    MethodViewModel vm = new(method);
+                    this.Methods.Add(vm);
+                }
+            }
+            if (this.SourceData.EditorView is not null)
+            {
+                foreach (ViewControl vc in this.SourceData.EditorView.Controls)
+                {
+                    this.AddNewControlToCustomForm(vc);
+                }
+            }
         }
+#if !E_FREE
         public ClassViewModel(ServiceClass source)
         {
             this.Mode = ClassMode.Service;
@@ -58,19 +74,14 @@ namespace Incas.Objects.ViewModels
             this.Fields = new();
             foreach (Field f in this.SourceData.Fields)
             {
-                this.Fields.Add(new(f));
+                this.Fields.Add(new(f, this));
             }
             this.Fields.CollectionChanged += this.Fields_CollectionChanged;
             this.SetCommands();
-            this.textDocument = new()
-            {
-                Text = this.SourceData.Script ?? ""
-            };
-            this.textDocument.TextChanged += this.TextDocument_TextChanged;
             this.AvailableComponents = new([this.Source.Component]);
             this.SelectedComponent = this.Source.Component;
         }
-
+#endif
         #region Commands
         private void SetCommands()
         {
@@ -138,7 +149,7 @@ namespace Incas.Objects.ViewModels
             string name = $"Настройки поля [{field.Name}]";
             switch (field.Type)
             {
-                case FieldType.Variable:
+                case FieldType.String:
                     TextFieldSettings tf = new(field.Source);
                     tf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
                     break;
@@ -146,11 +157,11 @@ namespace Incas.Objects.ViewModels
                     TextBigFieldSettings tb = new(field.Source);
                     tb.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
                     break;
-                case FieldType.Number:
+                case FieldType.Integer:
                     NumberFieldSettings n = new(field.Source);
                     n.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
-                case FieldType.Relation:
+                case FieldType.Object:
                     BindingData db = new();
                     DialogBinding dialog = new(this, field.Source);
                     dialog.ShowDialog();
@@ -159,6 +170,8 @@ namespace Incas.Objects.ViewModels
                         db.BindingClass = dialog.SelectedClass;
                         db.BindingField = dialog.SelectedField;
                         db.Compliance = dialog.vm.GetConstraintsForSave();
+                        db.OnDeleteCascade = dialog.vm.Cascade;
+                        db.OnDeleteRestrict = dialog.vm.Restrict;
                         //field.Source.Value = JsonConvert.SerializeObject(db);
                         field.Source.SetBindingData(db);
                     }
@@ -194,17 +207,13 @@ namespace Incas.Objects.ViewModels
                         field.Source.Value = JsonConvert.SerializeObject(ts.Data);
                     }
                     break;
-                case FieldType.Generator:
-                    GeneratorFieldSettings gf = new(field.Source);
-                    gf.ShowDialog(name, Icon.Sliders);
-                    break;
             }
         }
         #endregion
 
         private void TextDocument_TextChanged(object sender, System.EventArgs e)
         {
-            this.SourceData.Script = this.textDocument.Text;
+            //this.SourceData.Script = this.textDocument.Text;
         }
 
         public ClassType Type
@@ -320,15 +329,6 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.ShowCard));
             }
         }
-        public bool PresetsEnabled
-        {
-            get => this.SourceData.PresetsEnabled;
-            set
-            {
-                this.SourceData.PresetsEnabled = value;
-                this.OnPropertyChanged(nameof(this.PresetsEnabled));
-            }
-        }
         public bool EditByAuthorOnly
         {
             get => this.SourceData.EditByAuthorOnly;
@@ -354,7 +354,6 @@ namespace Incas.Objects.ViewModels
             set
             {
                 this.textDocument = value;
-                this.SourceData.Script = value.Text;
                 this.OnPropertyChanged(nameof(this.CodeModule));
             }
         }
@@ -397,6 +396,32 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.Fields));                
             }
         }
+        private ObservableCollection<MethodViewModel> methods;
+        public ObservableCollection<MethodViewModel> Methods
+        {
+            get
+            {
+                return this.methods;
+            }
+            set
+            {
+                this.methods = value;
+                this.OnPropertyChanged(nameof(this.Methods));
+            }
+        }
+        private MethodViewModel selectedMethod;
+        public MethodViewModel SelectedMethod
+        {
+            get
+            {
+                return this.selectedMethod;
+            }
+            set
+            {
+                this.selectedMethod = value;
+                this.OnPropertyChanged(nameof(this.SelectedMethod));
+            }
+        }
         private void Fields_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             this.UpdateFieldCollections();
@@ -405,6 +430,70 @@ namespace Incas.Objects.ViewModels
         {
             this.OnPropertyChanged(nameof(this.MapFieldsList));
         }
+        public List<ControlType> AvailableControlTypes
+        {
+            get
+            {
+                return [
+                    ControlType.VerticalStack, 
+                    ControlType.HorizontalStack, 
+                    ControlType.Tab,
+                    ControlType.TabItem,
+                    ControlType.Grid, 
+                    ControlType.Group
+                    ];
+            }
+        }
+        private ObservableCollection<ViewControlViewModel> controls;
+        public ObservableCollection<ViewControlViewModel> ViewControls
+        {
+            get
+            {
+                return this.controls;
+            }
+            set
+            {
+                this.controls = value;
+                this.OnPropertyChanged(nameof(this.ViewControls));
+            }
+        }
+        private ViewControlViewModel selectedViewControl;
+        public ViewControlViewModel SelectedViewControl
+        {
+            get
+            {
+                return this.selectedViewControl;
+            }
+            set
+            {
+                this.selectedViewControl = value;
+                this.OnPropertyChanged(nameof(this.SelectedViewControl));
+            }
+        }
+
+        public void AddNewControlToCustomForm(ViewControl vc)
+        {
+            if (this.ViewControls is null)
+            {
+                this.ViewControls = new();
+            }
+            ViewControlViewModel vm = new(vc);
+            vm.OnDrawCalling += this.Vm_OnDrawCalling;
+            vm.OnRemoveRequested += this.Vm_OnRemoveRequested;
+            this.ViewControls.Add(vm);
+        }
+
+        private void Vm_OnRemoveRequested(ViewControlViewModel vm)
+        {
+            this.ViewControls.Remove(vm);
+            this.OnDrawCalling?.Invoke();
+        }
+
+        private void Vm_OnDrawCalling()
+        {
+            this.OnDrawCalling?.Invoke();
+        }
+
         public ObservableCollection<FieldViewModel> MapFieldsList
         {
             get
@@ -414,10 +503,11 @@ namespace Incas.Objects.ViewModels
                 {
                     switch (field.Type)
                     {
-                        case FieldType.Variable:
+                        case FieldType.String:
                         case FieldType.Text:
-                        case FieldType.Number:
-                        case FieldType.Relation:
+                        case FieldType.Integer:
+                        case FieldType.Float:
+                        case FieldType.Object:
                         case FieldType.Date:
                         case FieldType.Boolean:
                         case FieldType.GlobalEnumeration:
@@ -446,18 +536,22 @@ namespace Incas.Objects.ViewModels
         }
         private static List<FieldType> fieldTypes = new()
         {
-            FieldType.Variable,
-            FieldType.Text, 
-            FieldType.LocalEnumeration, 
-            FieldType.GlobalEnumeration, 
-            FieldType.Date,
-            FieldType.Number,
+            FieldType.String,
+            FieldType.Text,
             FieldType.Boolean,
+            FieldType.Integer,
+            FieldType.Float,
+            FieldType.Date,
+            FieldType.LocalEnumeration, 
+            FieldType.GlobalEnumeration,
+            FieldType.Object,
+#if E_BUSINESS
+            FieldType.Structure,
+#endif
+            FieldType.Table,
             FieldType.LocalConstant,
             FieldType.GlobalConstant, 
-            FieldType.HiddenField,
-            FieldType.Relation,
-            FieldType.Table,
+            FieldType.HiddenField,           
         };
         public List<FieldType> FieldTypes
         {
@@ -499,7 +593,7 @@ namespace Incas.Objects.ViewModels
                 switch (f.Type)
                 {
                     case FieldType.Text:
-                    case FieldType.Variable:
+                    case FieldType.String:
                         break;
                     case FieldType.LocalEnumeration:
                         if (f.GetLocalEnumeration().Count == 0)
@@ -513,7 +607,7 @@ namespace Incas.Objects.ViewModels
                             throw new FieldDataFailed("");
                         }
                         break;
-                    case FieldType.Relation:
+                    case FieldType.Object:
                         BindingData bd = f.GetBindingData();
                         if (bd.BindingClass == Guid.Empty || bd.BindingField == Guid.Empty)
                         {
@@ -525,7 +619,7 @@ namespace Incas.Objects.ViewModels
                         break;
                     case FieldType.HiddenField:
                         break;
-                    case FieldType.Number:
+                    case FieldType.Integer:
                         if (f.GetNumberFieldData() == null)
                         {
                             throw new FieldDataFailed("");
@@ -544,7 +638,7 @@ namespace Incas.Objects.ViewModels
                 throw new FieldDataFailed($"Поле [{f.Name}] (\"{f.VisibleName}\") не настроено. Настройте поле, а затем попробуйте снова.");
             }
         }
-        public bool Save()
+        public bool Validate()
         {
             try
             {
@@ -580,8 +674,15 @@ namespace Incas.Objects.ViewModels
                         field.Source.SetId();
                     }                  
                 }
+                this.SourceData.EditorView = new();
+                foreach (ViewControlViewModel vm in this.ViewControls)
+                {
+                    vm.Save();
+                    this.SourceData.EditorView.Controls.Add(vm.Source);
+                }
+                //DialogsManager.ShowInfoDialog(this.SourceData.EditorView);
                 this.SetData();
-                this.Source.Save();
+                
                 return true;
             }
             catch (FieldDataFailed fd)
@@ -589,6 +690,12 @@ namespace Incas.Objects.ViewModels
                 DialogsManager.ShowExclamationDialog(fd.Message, "Сохранение прервано");
                 return false;
             }
+        }
+        public bool Save()
+        {
+            bool result = this.Validate();
+            this.Source.Save();
+            return result;
         }
     }
 }

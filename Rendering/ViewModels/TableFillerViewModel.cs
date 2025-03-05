@@ -72,7 +72,7 @@ namespace Incas.Rendering.ViewModels
             foreach (TableFieldColumnData tf in this.TableDefinition.Columns)
             {
                 DataColumn dc = new(tf.Name);
-                if (tf.FieldType == FieldType.Variable)
+                if (tf.FieldType == FieldType.String)
                 {
                     dc.DefaultValue = tf.Value;
                 }
@@ -198,7 +198,7 @@ namespace Incas.Rendering.ViewModels
             List<string> values = new();
             switch (target.FieldType)
             {
-                case FieldType.Variable:
+                case FieldType.String:
                     foreach (DataRow row in this.Grid.Rows)
                     {
                         row[targetColumn] = row[souceColumn];

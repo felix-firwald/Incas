@@ -54,10 +54,10 @@
     <Style x:Key="TextBoxBase" TargetType="{x:Type TextBox}">
         <Setter Property="Cursor" Value="IBeam"/>
         <Setter Property="Background" Value="{StaticResource Black}"/>
-        <Setter Property="Foreground" Value="{StaticResource Light}"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="{StaticResource Focus}"/>
         <Setter Property="MinHeight" Value="30"/>
-        <Setter Property="Padding" Value="10 3"/>
+        <Setter Property="Padding" Value="7 5"/>
         <Setter Property="Opacity" Value="1"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="FontFamily" Value="{StaticResource Rubik}"/>

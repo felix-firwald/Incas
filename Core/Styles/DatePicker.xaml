@@ -3,7 +3,7 @@
     
     <Style x:Key="CalendarItemMain" TargetType="{x:Type CalendarItem}">
         <Setter Property="FontFamily" Value="{DynamicResource JetBrains}"/>
-        <Setter Property="Margin" Value="0,3,0,3"/>
+        <Setter Property="Margin" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CalendarItem}">
@@ -26,7 +26,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Border Background="{StaticResource Black}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="8">
+                        <Border Background="{StaticResource Black}" BorderBrush="{StaticResource PrimaryMain}" BorderThickness="1" CornerRadius="0" Padding="4,7,4,4">
                             <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="8">
                                 <Grid>
                                     <Grid.Resources>
@@ -165,7 +165,7 @@
         </Setter>
     </Style>
     <Style x:Key="DatePickerMain" TargetType="{x:Type DatePicker}">
-        <Setter Property="Foreground" Value="#FF333333"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="IsTodayHighlighted" Value="True"/>
         <Setter Property="SelectedDateFormat" Value="Short"/>
         <Setter Property="Background" Value="{StaticResource Black}"/>
@@ -188,38 +188,36 @@
                             <Grid.Resources>
                                 <SolidColorBrush x:Key="DisabledBrush" Color="{StaticResource FocusColor}"/>
                                 <ControlTemplate x:Key="DropDownButtonTemplate" TargetType="{x:Type Button}">
-                                    <Grid FlowDirection="LeftToRight" Cursor="Hand" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="20" Height="20">
+                                    <Border x:Name="border" Opacity="1" CornerRadius="8" Padding="10,3,10,3" Background="Transparent" BorderBrush="{DynamicResource Element}" BorderThickness="0" SnapsToDevicePixels="true">
+                                        <Path x:Name="PART_Icon" Fill="{StaticResource Buttons.Green}" Width="18" Height="18" Stretch="Uniform" Stroke="{StaticResource Black}" StrokeThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center" Data="m460-488.31 120 120q5.62 5.62 6 13.77.38 8.16-6 14.54-6.38 6.38-14.15 6.38-7.77 0-14.16-6.38l-122-122q-5.23-5.23-7.46-10.97-2.23-5.75-2.23-11.88V-660q0-8.5 5.76-14.25t14.27-5.75q8.51 0 14.24 5.75T460-660v171.69Zm260-236.31H620q-8.5 0-14.25-5.75-5.75-5.76-5.75-14.27t5.75-14.24q5.75-5.74 14.25-5.74h100v-100q0-8.5 5.76-14.25t14.27-5.75q8.51 0 14.24 5.75t5.73 14.25v100h100q8.5 0 14.25 5.76t5.75 14.27q0 8.51-5.75 14.24T860-724.62H760v100q0 8.5-5.76 14.25t-14.27 5.75q-8.51 0-14.24-5.75T720-624.62v-100ZM440.11-160q-66.65 0-124.9-24.88T213.38-253.3q-43.58-43.54-68.48-101.75-24.9-58.2-24.9-124.84 0-66.65 24.89-124.9t68.44-101.83q43.56-43.58 101.78-68.48Q373.33-800 440-800q11 0 20.5.5T481-797q8.54.77 14.27 6.37t5.73 13.89q0 8.28-5.73 14.39-5.73 6.12-14.27 5.35-10.23-1.54-19.97-2.27-9.75-.73-21.03-.73-116.46 0-198.23 81.77T160-480q0 116.46 81.77 198.23T440-200q116.46 0 198.23-81.77T720-480q0-8.5 5.76-14.25t14.27-5.75q8.51 0 14.24 5.75T760-480q0 66.67-24.88 124.89T666.7-253.33q-43.54 43.55-101.75 68.44Q506.75-160 440.11-160Z" />
+                                    </Border>
 
-                                        <Path x:Name="PART_Icon" Fill="{StaticResource Icon}" Height="18" Width="16" Stroke="{StaticResource Black}" StrokeThickness="0" HorizontalAlignment="Center" Stretch="Fill" VerticalAlignment="Center" Data="M6.5 0a.5.5 0 0 0 0 1H7v1.07A7.001 7.001 0 0 0 8 16a7 7 0 0 0 5.29-11.584l.013-.012.354-.354.353.354a.5.5 0 1 0 .707-.707l-1.414-1.415a.5.5 0 1 0-.707.707l.354.354-.354.354-.012.012A6.97 6.97 0 0 0 9 2.071V1h.5a.5.5 0 0 0 0-1zm2 5.6V9a.5.5 0 0 1-.5.5H4.5a.5.5 0 0 1 0-1h3V5.6a.5.5 0 1 1 1 0" />
-                                    </Grid>
                                     <ControlTemplate.Triggers>
+
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Trigger.EnterActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="PART_Icon" Storyboard.TargetProperty="Fill.Color"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </Trigger.EnterActions>
-                                            <Trigger.ExitActions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <ColorAnimation Duration="0:0:0.250" To="#60636B" Storyboard.TargetName="PART_Icon" Storyboard.TargetProperty="Fill.Color"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </Trigger.ExitActions>
+                                            <Setter TargetName="border" Property="Background" Value="{StaticResource Element}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="border" Property="Background" Value="{StaticResource Icon}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter TargetName="border" Property="Opacity" Value="0.5"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
+                                    <!--<Button Style="{StaticResource ButtonSquare}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <Path x:Name="PART_Icon" Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Stroke="{StaticResource Black}" StrokeThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center" Data="m460-488.31 120 120q5.62 5.62 6 13.77.38 8.16-6 14.54-6.38 6.38-14.15 6.38-7.77 0-14.16-6.38l-122-122q-5.23-5.23-7.46-10.97-2.23-5.75-2.23-11.88V-660q0-8.5 5.76-14.25t14.27-5.75q8.51 0 14.24 5.75T460-660v171.69Zm260-236.31H620q-8.5 0-14.25-5.75-5.75-5.76-5.75-14.27t5.75-14.24q5.75-5.74 14.25-5.74h100v-100q0-8.5 5.76-14.25t14.27-5.75q8.51 0 14.24 5.75t5.73 14.25v100h100q8.5 0 14.25 5.76t5.75 14.27q0 8.51-5.75 14.24T860-724.62H760v100q0 8.5-5.76 14.25t-14.27 5.75q-8.51 0-14.24-5.75T720-624.62v-100ZM440.11-160q-66.65 0-124.9-24.88T213.38-253.3q-43.58-43.54-68.48-101.75-24.9-58.2-24.9-124.84 0-66.65 24.89-124.9t68.44-101.83q43.56-43.58 101.78-68.48Q373.33-800 440-800q11 0 20.5.5T481-797q8.54.77 14.27 6.37t5.73 13.89q0 8.28-5.73 14.39-5.73 6.12-14.27 5.35-10.23-1.54-19.97-2.27-9.75-.73-21.03-.73-116.46 0-198.23 81.77T160-480q0 116.46 81.77 198.23T440-200q116.46 0 198.23-81.77T720-480q0-8.5 5.76-14.25t14.27-5.75q8.51 0 14.24 5.75T760-480q0 66.67-24.88 124.89T666.7-253.33q-43.54 43.55-101.75 68.44Q506.75-160 440.11-160Z" />
+                                    </Button>-->
+
                                 </ControlTemplate>
                             </Grid.Resources>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="45"/>
 
                             </Grid.ColumnDefinitions>
-                            <Rectangle Margin="0,0,2,0" Width="1" Fill="{StaticResource LightBlack}" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30"/>
-                            <Button x:Name="PART_Button" Grid.Column="1" Focusable="False" HorizontalAlignment="Left" Margin="3,0,3,0" Grid.Row="0" Template="{StaticResource DropDownButtonTemplate}" VerticalAlignment="Center" Width="30" Cursor="Hand"/>
-                            <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" ContextMenu="{TemplateBinding ContextMenu}" HorizontalContentAlignment="Stretch" Grid.Row="0" VerticalContentAlignment="Center" Style="{DynamicResource DatePickerTextBoxStyle1}" Background="{x:Null}" Margin="0,0,0,0" CaretBrush="White" SelectionTextBrush="White"/>
+                            <!--<Rectangle Margin="0,0,2,0" Width="1" Fill="{StaticResource LightBlack}" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30"/>-->
+                            <Button x:Name="PART_Button" Grid.Column="1" Focusable="False" Margin="5,0,0,0" HorizontalAlignment="Right" Grid.Row="0" Template="{StaticResource DropDownButtonTemplate}" VerticalAlignment="Center" Cursor="Hand"/>
+                            <DatePickerTextBox x:Name="PART_TextBox" Grid.Column="0" Focusable="{TemplateBinding Focusable}" FontFamily="{StaticResource Rubik}" ContextMenu="{TemplateBinding ContextMenu}" HorizontalContentAlignment="Stretch" Grid.Row="0" VerticalContentAlignment="Center" Style="{DynamicResource DatePickerTextBoxStyle1}" Background="{x:Null}" Margin="0,0,0,0" CaretBrush="White" SelectionTextBrush="White"/>
                             <Grid x:Name="PART_DisabledVisual" Grid.ColumnSpan="2" Grid.Column="0" IsHitTestVisible="False" Opacity="0" Grid.Row="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -248,8 +246,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
-                    <Border CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}">
-                        <TextBox BorderThickness="0" BorderBrush="{TemplateBinding BorderBrush}" Text="{Binding Path=SelectedDate, StringFormat='dd.MM.yyyy', RelativeSource={RelativeSource AncestorType=DatePicker}}" Foreground="{StaticResource Light}" VerticalContentAlignment="Center" Padding="5,0,5,0" Background="{x:Null}" Margin="2,2,2,2" MinHeight="20" MaxHeight="25" />
+                    <Border  BorderBrush="{TemplateBinding BorderBrush}">
+                        <TextBox BorderThickness="0" BorderBrush="{TemplateBinding BorderBrush}" Text="{Binding Path=SelectedDate, StringFormat='dd.MM.yyyy', RelativeSource={RelativeSource AncestorType=DatePicker}}" CaretBrush="White" Foreground="White" VerticalContentAlignment="Center" Padding="3,0,5,0" Background="{x:Null}" Margin="2,2,2,2" MinHeight="20" MaxHeight="25" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

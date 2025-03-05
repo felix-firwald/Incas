@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Xceed.Wpf.Toolkit;
 
 namespace Incas.DialogSimpleForm.Components
 {
@@ -26,6 +27,8 @@ namespace Incas.DialogSimpleForm.Components
         /// Target object
         /// </summary>
         public AutoUIBase Result;
+
+        private ResourceInstance resourceInstance = new();
         public SimpleFormGenerator(AutoUIBase values, StackPanel container)
         {
             this.Result = values;
@@ -164,9 +167,9 @@ namespace Incas.DialogSimpleForm.Components
         {
 
         }
-        private void NumericBox_OnNumberChanged(object sender)
+        private void Numeric_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-
+            
         }
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -233,14 +236,16 @@ namespace Incas.DialogSimpleForm.Components
 
         private Control GenerateNumericBox(string description, int value)
         {
-            NumericBox control = new()
+            IntegerUpDown numeric = new()
             {
-                Tag = description,
+                Style = this.resourceInstance.FindResource("NumericUpDown") as Style,
+                Watermark = description,
                 Value = value,
+                ToolTip = description
             };
-            control.OnNumberChanged += this.NumericBox_OnNumberChanged;
-            return control;
-        }
+            numeric.ValueChanged += this.Numeric_ValueChanged;
+            return numeric;
+        }        
 
         private Control GenerateDateBox(string description, DateTime value)
         {
@@ -390,7 +395,7 @@ namespace Incas.DialogSimpleForm.Components
                                 field.SetValue(this.Result, resultString);
                                 break;
                             case "Int32":
-                                field.SetValue(this.Result, ((NumericBox)control).Value);
+                                field.SetValue(this.Result, ((IntegerUpDown)control).Value);
                                 break;
                             case "Boolean":
                                 field.SetValue(this.Result, ((CheckBox)control).IsChecked);

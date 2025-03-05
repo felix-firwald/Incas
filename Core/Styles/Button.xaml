@@ -425,11 +425,8 @@
 
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="border" Property="Background" Value="{StaticResource Element}"/>
-                            <!--<Setter TargetName="border" Property="BorderThickness" Value="1"/>
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource Icon}"/>-->
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="White"/>
                             <Setter TargetName="border" Property="Background" Value="{StaticResource Icon}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">

@@ -296,11 +296,6 @@ namespace Incas.Admin.Views.Pages
             });           
         }
 
-        private void AddGeneralizator(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void InheritClassClick(object sender, RoutedEventArgs e)
         {
             Guid id = this.GetSelectedClass();
@@ -334,14 +329,95 @@ namespace Incas.Admin.Views.Pages
 
         private void EditGroupsClick(object sender, RoutedEventArgs e)
         {
+#if !E_FREE
             CreateClass cc = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceGroups);
             cc.ShowDialog();
+#else
+            DialogsManager.ShowLimitedEditionMessage();
+#endif
         }
 
         private void EditUsersClick(object sender, RoutedEventArgs e)
         {
+#if !E_FREE
             CreateClass cc = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers);
             cc.ShowDialog();
+#else
+            DialogsManager.ShowLimitedEditionMessage();
+#endif
+        }
+        private void AddGeneralizator(object sender, RoutedEventArgs e)
+        {
+            GeneralizatorEditor editor = new();
+            editor.ShowDialog();
+        }
+
+        private void EditGeneralizator(object sender, RoutedEventArgs e)
+        {
+            GeneralizatorEditor editor = new(this.vm.SelectedGeneralizator);
+            editor.ShowDialog();
+        }
+
+        private void RemoveGeneralizator(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UpdateGeneralizators(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddStructure(object sender, RoutedEventArgs e)
+        {
+#if E_BUSINESS
+            StructureEditor editor = new();
+            editor.ShowDialog();
+#else
+            DialogsManager.ShowLimitedEditionMessage();
+#endif
+        }
+
+        private void EditStructure(object sender, RoutedEventArgs e)
+        {
+#if E_BUSINESS
+            StructureEditor editor = new(this.vm.SelectedStructure);
+            editor.ShowDialog();
+#else
+            DialogsManager.ShowLimitedEditionMessage();
+#endif
+        }
+
+        private void RemoveStructure(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UpdateStructuresList(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AddConverter(object sender, RoutedEventArgs e)
+        {
+            ConverterEditor editor = new();
+            editor.ShowDialog();
+        }
+
+        private void EditConverter(object sender, RoutedEventArgs e)
+        {
+            ConverterEditor editor = new(this.vm.SelectedConverter);
+            editor.ShowDialog();
+        }
+
+        private void RemoveConverter(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UpdateConvertersList(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 
@@ -159,11 +160,11 @@ namespace Incas.Rendering.Components
             this.workbook.Properties.Subject = doc.Class.Component.Name;
             this.workbook.Properties.Title = doc.TargetDocument.Name;
             this.workbook.Properties.Created = doc.TargetDocument.CreationDate;
-            this.workbook.Properties.Modified = doc.TargetDocument.CreationDate;
+            this.workbook.Properties.Modified = doc.TargetDocument.CreationDate;            
             ObjectReference reference = new(doc.Class.Id, doc.TargetDocument.Id);
             this.workbook.Properties.LastModifiedBy = $"{ProgramState.CurrentWorkspace.CurrentUser.Name} (через INCAS)";
             this.workbook.Properties.Company = ProgramState.CurrentWorkspace.GetDefinition().Name;
-            this.workbook.Properties.Comments = "Этот документ создан в программе INCAS";            
+            this.workbook.Properties.Comments = $"Этот документ создан в программе INCAS, версия: {ProgramState.Version}";            
             this.workbook.CustomProperties.Add(FileTemplator.ObjectReferenceProperty, reference.ToString());
         }
         public async static Task<string> GetObjectReference(string path)

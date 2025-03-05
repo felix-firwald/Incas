@@ -34,20 +34,22 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="2"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
-        <TabControl Style="{StaticResource TabControlMain}" Grid.ColumnSpan="2" Grid.Column="1" Grid.RowSpan="3" Background="{x:Null}">
+        <TabControl Style="{StaticResource TabControlMain}" Grid.ColumnSpan="2" Grid.Column="1" Background="{x:Null}" Grid.RowSpan="2">
             <TabItem Header="Привязка" Style="{StaticResource TabItemMain}" BorderBrush="{DynamicResource LightPurple}">
                 <Border Background="{StaticResource Black}" Margin="5" MaxHeight="400" BorderThickness="0" BorderBrush="{StaticResource Basic}" CornerRadius="8" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="4*"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" CanContentScroll="True" PreviewMouseWheel="ClassesPanel_PreviewMouseWheel">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" CanContentScroll="True" PreviewMouseWheel="ClassesPanel_PreviewMouseWheel" Grid.ColumnSpan="2" Margin="0,0,315,0">
                             <ListBox x:Name="ClassesPanel" BorderThickness="0" ItemsSource="{Binding Source={StaticResource ClassesCVS}}" SelectedItem="{Binding SelectedClass}" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" ScrollViewer.CanContentScroll="False" VirtualizingPanel.ScrollUnit="Pixel" ScrollViewer.VerticalScrollBarVisibility="Disabled" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
                                 <ListBox.GroupStyle>
                                     <GroupStyle>
@@ -71,9 +73,7 @@
                                 </ListBox.ItemTemplate>
                             </ListBox>
                         </ScrollViewer>
-                        
-
-                        <ListBox x:Name="FieldsPanel" Grid.Column="1" ItemsSource="{Binding Fields}" SelectedItem="{Binding BindingField}" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <ListBox x:Name="FieldsPanel" Grid.Column="1" ItemsSource="{Binding Fields}" SelectedItem="{Binding BindingField}" Background="{x:Null}" BorderBrush="{x:Null}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid MaxWidth="280">
@@ -92,6 +92,10 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+                        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                            <CheckBox Content="Включить каскадное удаление объектов этого класса при удалении объекта привязки" IsChecked="{Binding Cascade}"/>
+                            <CheckBox Content="Запретить удаление объекта привязки, если на него ссылается хотя бы один объект этого класса" IsChecked="{Binding Restrict}"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
             </TabItem>
@@ -151,7 +155,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        
+
                     </Grid>
                 </Border>
             </TabItem>

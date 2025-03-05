@@ -11,6 +11,7 @@ using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
@@ -240,7 +241,6 @@ namespace Incas.Objects.Views.Pages
                     e.Column.Header = "Дата создания";
                     e.Column.HeaderStyle = this.ColumnHeaderSpecialStyle;
                     e.Column.MinWidth = 40;
-                    e.Column.MaxWidth = 120;
                     break;
                 case Helpers.StatusField:
                     e.Column.Visibility = Visibility.Hidden;
@@ -434,7 +434,14 @@ namespace Incas.Objects.Views.Pages
                 "Удалить",
                 "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
             {
-                Processor.RemoveObject(this.sourceClass, id);
+                try
+                {
+                    obj.Remove();
+                }
+                catch (AccessException ex)
+                {
+                    DialogsManager.ShowAccessErrorDialog(ex);
+                }
             }
         }
         private void OnMouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

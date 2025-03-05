@@ -14,6 +14,7 @@ using System.Media;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Incas.Core.Classes
@@ -40,6 +41,8 @@ namespace Incas.Core.Classes
 
         #endregion
 
+        public static string Version { get; private set; }
+        public static string Edition { get; private set; }
         
         internal static MainWindowViewModel MainWindowViewModel { get; set; }
         internal static MainWindow MainWindow { get; set; }
@@ -57,6 +60,21 @@ namespace Incas.Core.Classes
         }
         static ProgramState()
         {
+            Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+#if E_FREE
+            Edition = EngineGlobals.EditionFreeMark;
+#elif E_COMMUNITY
+            Edition = EngineGlobals.EditionCommunityMark;
+#elif E_EXTENDED
+            Edition = EngineGlobals.EditionExtendedMark;
+#elif E_BUSINESS
+            Edition = EngineGlobals.EditionBusinessProMark;
+#endif
+            if (Edition != EngineGlobals.Edition)
+            {
+                DialogsManager.ShowCriticalErrorDialog("Редакция IncasEngine не совпадает с редакцией Incas. Запуск программы невозможен.");
+                throw new Exception("IncasEngine edition is incompatible with the Incas edition! The program is compromised.");
+            }
             IncasEngine.Core.EngineEvents.OnUpdateAllRequested += EngineEvents_OnUpdateAllRequested;
         }
 

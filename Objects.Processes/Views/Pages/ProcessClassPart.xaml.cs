@@ -14,7 +14,9 @@ namespace Incas.Objects.Processes.Views.Pages
 
         public ProcessClassPart()
         {
+#if !E_FREE
             this.InitializeComponent();
+#endif
         }     
 
         public IClassPartSettings SetUp(ClassViewModel classViewModel)

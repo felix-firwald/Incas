@@ -1,11 +1,11 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Components;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.Components;
-using IncasEngine.Backups;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -15,15 +15,12 @@ using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Documents;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
-using IronPython.Hosting;
-using Microsoft.Scripting.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Incas.Objects.Views.Pages
@@ -52,12 +49,13 @@ namespace Incas.Objects.Views.Pages
         /// ClassData of target class
         /// </summary>
         public IClassData ClassData { get; set; }
+        public delegate Task<bool> ObjectCreatorDataAsync(ObjectCreator creator);
         public delegate bool ObjectCreatorData(ObjectCreator creator);
         public delegate void FieldCopyAction(Guid id, string text);
         public GroupClassPermissionSettings PermissionSettings { get; set; }
         public event FieldCopyAction OnInsertRequested;
         public event ObjectCreatorData OnUpdated;
-        public event ObjectCreatorData OnSaveRequested;
+        public event ObjectCreatorDataAsync OnSaveRequested;
         public event ObjectCreatorData OnRemoveRequested;
         private bool Locked = false;
         private List<IFillerBase> fillers;
@@ -128,52 +126,16 @@ namespace Incas.Objects.Views.Pages
         }
         private void FillContentPanel()
         {
-            this.fillers = new();
-            this.serviceFiller = Components.ServiceExtensionFieldsManager.GetFillerByType(this.Object);
-            if (this.serviceFiller != null)
+            FormDrawingManager.DrawingOutputArgs args = FormDrawingManager.DrawForm(this.Object, this.ContentPanel);
+
+            this.fillers = args.Fillers;
+            this.serviceFiller = args.ServiceFiller;
+            foreach (IFillerBase ff in this.fillers)
             {
-                this.ContentPanel.Children.Add((UserControl)this.serviceFiller);
-            }
-            foreach (Field f in this.ClassData.Fields)
-            {
-                switch (f.Type)
-                {
-                    default:
-                        FieldFiller ff = new(f)
-                        {
-                            Uid = f.Id.ToString()
-                        };
-                        ff.OnInsert += this.Tf_OnInsert;
-                        ff.OnFillerUpdate += this.Tf_OnFieldUpdate;
-                        ff.OnScriptRequested += this.Ff_OnScriptRequested;
-                        ff.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
-                        this.ContentPanel.Children.Add(ff);
-                        this.fillers.Add(ff);
-                        break;
-                    case FieldType.Table:
-                        FieldTableFiller ft = new(f)
-                        {
-                            Uid = f.Id.ToString()
-                        };
-                        ft.OnInsert += this.Tf_OnInsert;
-                        ft.OnFillerUpdate += this.Tf_OnFieldUpdate;
-                        ft.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
-                        this.ContentPanel.Children.Add(ft);
-                        this.fillers.Add(ft);
-                        break;
-                    case FieldType.Generator:
-                        FieldGeneratorFiller fg = new(f)
-                        {
-                            Uid = f.Id.ToString()
-                        };
-                        fg.OnInsert += this.Tf_OnInsert;
-                        fg.OnFillerUpdate += this.Tf_OnFieldUpdate;
-                        fg.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
-                        this.ContentPanel.Children.Add(fg);
-                        this.fillers.Add(fg);
-                        break;
-                }
-            }         
+                ff.OnInsert += this.Tf_OnInsert;
+                ff.OnFillerUpdate += this.Tf_OnFieldUpdate;
+                ff.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
+            }       
         }
 
         private async void Ff_OnScriptRequested(string script)
@@ -183,42 +145,42 @@ namespace Incas.Objects.Views.Pages
                 Dictionary<Field, object> dict = this.PullObjectForScript();
                 await Task.Run(() =>
                 {
-                    string scriptResult = this.ClassData.Script;
-                    ScriptEngine engine = Python.CreateEngine();
-                    ScriptScope scope = engine.CreateScope();
-                    scriptResult += $"\nmain = {this.Class.Name.Replace(" ", "_")}(";
-                    List<string> args = new();
-                    foreach (KeyValuePair<Field, object> fd in dict)
-                    {
-                        switch (fd.Key.Type)
-                        {
-                            case FieldType.Number:
-                                args.Add($"{fd.Key.Name}={fd.Value}");
-                                break;
-                            case FieldType.Date:
-                                DateTime dt = (DateTime)fd.Value;
-                                args.Add($"{fd.Key.Name}=datetime.date({dt.Year}, {dt.Month}, {dt.Day})");
-                                break;
-                            default:
-                                args.Add($"{fd.Key.Name}='''{fd.Value}'''");
-                                break;
-                        }                       
-                    }
-                    scriptResult += string.Join(", ", args);
-                    scriptResult += $")\nmain.{script}()";
-                    engine.Execute(scriptResult, scope);
+                    //string scriptResult = this.ClassData.Script;
+                    //ScriptEngine engine = Python.CreateEngine();
+                    //ScriptScope scope = engine.CreateScope();
+                    //scriptResult += $"\nmain = {this.Class.Name.Replace(" ", "_")}(";
+                    //List<string> args = new();
+                    //foreach (KeyValuePair<Field, object> fd in dict)
+                    //{
+                    //    switch (fd.Key.Type)
+                    //    {
+                    //        case FieldType.Number:
+                    //            args.Add($"{fd.Key.Name}={fd.Value}");
+                    //            break;
+                    //        case FieldType.Date:
+                    //            DateTime dt = (DateTime)fd.Value;
+                    //            args.Add($"{fd.Key.Name}=datetime.date({dt.Year}, {dt.Month}, {dt.Day})");
+                    //            break;
+                    //        default:
+                    //            args.Add($"{fd.Key.Name}='''{fd.Value}'''");
+                    //            break;
+                    //    }                       
+                    //}
+                    //scriptResult += string.Join(", ", args);
+                    //scriptResult += $")\nmain.{script}()";
+                    //engine.Execute(scriptResult, scope);
 
-                    List<FieldData> fields = new();
-                    dynamic target = scope.GetVariable("main");
-                    foreach (KeyValuePair<Field, object> fd in dict)
-                    {
-                        fields.Add(new()
-                        {
-                            ClassField = fd.Key,
-                            Value = engine.Operations.GetMember(target, fd.Key.Name).ToString()
-                        });
-                    }
-                    this.Object.Fields = fields;
+                    //List<FieldData> fields = new();
+                    //dynamic target = scope.GetVariable("main");
+                    //foreach (KeyValuePair<Field, object> fd in dict)
+                    //{
+                    //    fields.Add(new()
+                    //    {
+                    //        ClassField = fd.Key,
+                    //        Value = engine.Operations.GetMember(target, fd.Key.Name).ToString()
+                    //    });
+                    //}
+                    //this.Object.Fields = fields;
                 });
                 this.ApplyObject(this.Object);
             }
@@ -443,7 +405,6 @@ namespace Incas.Objects.Views.Pages
                     switch (tf.Field.Type)
                     {
                         case FieldType.Table:
-                        case FieldType.Generator:
                             break;
                         default:
                             ISimpleFiller simple = (ISimpleFiller)tf;
@@ -507,7 +468,7 @@ namespace Incas.Objects.Views.Pages
         {
             try
             {
-                if (this.OnSaveRequested?.Invoke(this) == false)
+                if (await this.OnSaveRequested?.Invoke(this) == false)
                 {
                     return;
                 }
@@ -554,7 +515,6 @@ namespace Incas.Objects.Views.Pages
             {
                 switch (tf.Field.Type)
                 {
-                    case FieldType.Generator:
                     case FieldType.Table:
                         break;
                     default:

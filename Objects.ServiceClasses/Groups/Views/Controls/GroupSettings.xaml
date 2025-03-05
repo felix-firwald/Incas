@@ -8,16 +8,22 @@
              d:DesignHeight="850" d:DesignWidth="600" Background="{StaticResource Dark}">
     <TabControl Background="{x:Null}" BorderBrush="{x:Null}" Style="{StaticResource TabControlMain}" ItemContainerStyle="{StaticResource TabItemMain}">
         <TabItem Header="Общие настройки">
-            <StackPanel IsEnabled="{Binding GroupEditable}">
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GeneralSettingsEditing}" Content="Изменение рабочего пространства" ToolTip="Могут ли пользователи этой группы вносить изменения в основные настройки рабочего пространства"/>
+            <UniformGrid IsEnabled="{Binding GroupEditable}" Columns="3">
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GeneralSettingsEditing}" Content="Изменение рабочего пространства" ToolTip="Могут ли пользователи этой группы вносить изменения в основные настройки рабочего пространства (в том числе изменять служебные классы и компоненты)"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GlobalParametersEditing}" Content="Редактирование глобальных параметров" ToolTip="Могут ли пользователи этой группы создавать/редактировать/удалять константы, перечисления, конвертеры и обобщения" />
                 <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding DefaultPermissionType}" Content="Разрешено все, что явно не запрещено" ToolTip="Если да: отсутствие настройки к классу будет трактоваться INCAS как полный доступ, если нет: отсутствие настройки к классу будет трактоваться INCAS как полный запрет на доступ"/>
                 <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding CreatingClasses}" Content="Создание классов" ToolTip="Могут ли пользователи этой группы создавать классы"/>
                 <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UpdatingClasses}" Content="Редактирование классов" ToolTip="Могут ли пользователи этой группы редактировать существующие классы"/>
                 <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding RemovingClasses}" Content="Удаление классов" ToolTip="Могут ли пользователи этой группы удалять существующие классы"/>
-            </StackPanel>
+            </UniformGrid>
         </TabItem>
         <TabItem Header="Компоненты" IsEnabled="{Binding GroupEditable}">
             <ListBox Background="{x:Null}" BorderBrush="{x:Null}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}" ItemsSource="{Binding Components}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding IsActivated}" Content="{Binding Name}" ToolTip="Доступен ли этот компонент для этой группы"/>
@@ -27,24 +33,24 @@
             
         </TabItem>
         <TabItem Header="Группы" IsEnabled="{Binding GroupEditable}">
-            <StackPanel>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsCreateOperations}" Content="Создание" ToolTip="Могут ли пользователи этой группы создавать новые группы"/>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsViewOperations}" Content="Просмотр" ToolTip="Могут ли пользователи этой группы просматривать список групп"/>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsReadOperations}" Content="Чтение" ToolTip="Могут ли пользователи этой группы просматривать группы через интерфейс карточки и редактора"/>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsConfidentialAccess}" Content="Чтение конфиденциальных полей" ToolTip="Могут ли пользователи этой группы просматривать поля, обозначенные как конфиденциальные (если такие есть)"/>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsUpdateOperations}" Content="Изменение" ToolTip="Могут ли пользователи этой группы изменять существующие группы"/>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsDeleteOperations}" Content="Удаление" ToolTip="Могут ли пользователи этой группы удалять существующие группы"/>
-            </StackPanel>
+            <UniformGrid Columns="2">
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsCreateOperations}" Content="Создание групп" ToolTip="Могут ли пользователи этой группы создавать новые группы"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsViewOperations}" Content="Просмотр групп" ToolTip="Могут ли пользователи этой группы просматривать список групп"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsReadOperations}" Content="Чтение групп" ToolTip="Могут ли пользователи этой группы просматривать группы через интерфейс карточки и редактора"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsConfidentialAccess}" Content="Чтение конфиденциальных полей у групп" ToolTip="Могут ли пользователи этой группы просматривать поля, обозначенные как конфиденциальные (если такие есть)"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsUpdateOperations}" Content="Изменение групп" ToolTip="Могут ли пользователи этой группы изменять существующие группы"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding GroupsDeleteOperations}" Content="Удаление групп" ToolTip="Могут ли пользователи этой группы удалять существующие группы"/>
+            </UniformGrid>
         </TabItem>
         <TabItem Header="Пользователи" IsEnabled="{Binding GroupEditable}">
-            <StackPanel>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersCreateOperations}" Content="Создание" ToolTip="Могут ли пользователи этой группы создавать новых пользователей"/>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersViewOperations}" Content="Просмотр" ToolTip="Могут ли пользователи этой группы просматривать список пользователей"/>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersReadOperations}" Content="Чтение" ToolTip="Могут ли пользователи этой группы просматривать пользователей через интерфейс карточки и редактора"/>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersConfidentialAccess}" Content="Чтение конфиденциальных полей" ToolTip="Могут ли пользователи этой группы просматривать поля, обозначенные как конфиденциальные (если такие есть). Примечание: применяется также в отношении пароля."/>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersUpdateOperations}" Content="Изменение" ToolTip="Могут ли пользователи этой группы изменять существующих пользователей"/>
-                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersDeleteOperations}" Content="Удаление" ToolTip="Могут ли пользователи этой группы удалять существующих пользователей"/>
-            </StackPanel>
+            <UniformGrid Columns="2">
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersCreateOperations}" Content="Создание пользователей" ToolTip="Могут ли пользователи этой группы создавать новых пользователей"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersViewOperations}" Content="Просмотр пользователей" ToolTip="Могут ли пользователи этой группы просматривать список пользователей"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersReadOperations}" Content="Чтение пользователей" ToolTip="Могут ли пользователи этой группы просматривать пользователей через интерфейс карточки и редактора"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersConfidentialAccess}" Content="Чтение конфиденциальных полей пользователей" ToolTip="Могут ли пользователи этой группы просматривать поля, обозначенные как конфиденциальные (если такие есть). Примечание: применяется также в отношении пароля."/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersUpdateOperations}" Content="Изменение пользователей" ToolTip="Могут ли пользователи этой группы изменять существующих пользователей"/>
+                <CheckBox Style="{StaticResource CheckBoxMain}" IsChecked="{Binding UsersDeleteOperations}" Content="Удаление пользователей" ToolTip="Могут ли пользователи этой группы удалять существующих пользователей"/>
+            </UniformGrid>
         </TabItem>
         <TabItem Header="Доступ к классам" IsEnabled="{Binding GroupEditable}">
             

@@ -141,16 +141,16 @@ namespace Incas.Admin.ViewModels
                 this.OnPropertyChanged(nameof(this.IsIsolated));
             }
         }
-        public bool ForceLoad
+        public bool ForceBlock
         {
             get
             {
-                return this.Component.ForceLoad;
+                return this.Component.ForceBlock;
             }
             set
             {
-                this.Component.ForceLoad = value;
-                this.OnPropertyChanged(nameof(this.ForceLoad));
+                this.Component.ForceBlock = value;
+                this.OnPropertyChanged(nameof(this.ForceBlock));
             }
         }
         public bool StateEditingEnabled

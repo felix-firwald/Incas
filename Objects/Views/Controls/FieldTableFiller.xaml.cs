@@ -161,7 +161,7 @@ namespace Incas.Objects.Views.Controls
                 {
                     switch (col.FieldType)
                     {
-                        case FieldType.Variable:
+                        case FieldType.String:
                         case FieldType.Text:
                             DataGridTextColumn dgt1 = new();
                             dgt1.Header = col.VisibleName;
@@ -186,7 +186,7 @@ namespace Incas.Objects.Views.Controls
                             }
                             e.Column = dgc;
                             break;
-                        case FieldType.Number:
+                        case FieldType.Integer:
                             DataGridNumericColumn nc = new();
                             nc.Header = col.VisibleName;
                             nc.Binding = new System.Windows.Data.Binding(e.Column.Header.ToString());

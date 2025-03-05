@@ -188,6 +188,8 @@ namespace Incas.Objects.ViewModels
                     }
                 }
             }
+            this.Cascade = data.OnDeleteCascade;
+            this.Restrict = data.OnDeleteRestrict;
             this.Constraints = [];
             if (data.Compliance is not null && data.Compliance.Count > 0)
             {
@@ -229,6 +231,40 @@ namespace Incas.Objects.ViewModels
             {
                 this.selectedField = value;
                 this.OnPropertyChanged(nameof(this.BindingField));
+            }
+        }
+        private bool cascade;
+        public bool Cascade
+        {
+            get
+            {
+                return this.cascade;
+            }
+            set
+            {
+                this.cascade = value;
+                if (value)
+                {
+                    this.Restrict = false;
+                }
+                this.OnPropertyChanged(nameof(this.Cascade));
+            }
+        }
+        private bool restrict;
+        public bool Restrict
+        {
+            get
+            {
+                return this.restrict;
+            }
+            set
+            {
+                this.restrict = value;
+                if (value)
+                {
+                    this.Cascade = false;
+                }
+                this.OnPropertyChanged(nameof(this.Restrict));
             }
         }
         private ObservableCollection<BindingConstraintViewModel> constraints;

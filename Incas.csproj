@@ -1,4 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<Configurations>Debug;Free;Community;Extended;BusinessPro</Configurations>
+	</PropertyGroup>
   <PropertyGroup>
     <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
     <OutputType>WinExe</OutputType>
@@ -60,13 +63,39 @@
     <WarningsNotAsErrors>NU1701;CA1416;CS0067</WarningsNotAsErrors>
     <NoWarn>1701;1702;CA1416</NoWarn>
     <WarningLevel>9999</WarningLevel>
+    <DefineConstants>E_BUSINESS</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>NU1701;CA1416;CS0067</WarningsNotAsErrors>
-    <NoWarn>1701;1702;CA1416;NU1701;SYSLIB0003</NoWarn>
-    <WarningLevel>9999</WarningLevel>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Free|AnyCPU'">
+      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+      <WarningsNotAsErrors>NU1701;CA1416;CS0067</WarningsNotAsErrors>
+      <NoWarn>1701;1702;CA1416;NU1701;SYSLIB0003</NoWarn>
+      <WarningLevel>9999</WarningLevel>
+      <DefineConstants>E_FREE</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Community|AnyCPU'">
+      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+      <WarningsNotAsErrors>NU1701;CA1416;CS0067</WarningsNotAsErrors>
+      <NoWarn>1701;1702;CA1416;NU1701;SYSLIB0003</NoWarn>
+      <WarningLevel>9999</WarningLevel>
+      <DefineConstants>E_COMMUNITY</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Extended|AnyCPU'">
+      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+      <WarningsNotAsErrors>NU1701;CA1416;CS0067</WarningsNotAsErrors>
+      <NoWarn>1701;1702;CA1416;NU1701;SYSLIB0003</NoWarn>
+      <WarningLevel>9999</WarningLevel>
+      <DefineConstants>E_EXTENDED</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BusinessPro|AnyCPU'">
+      <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+      <WarningsNotAsErrors>NU1701;CA1416;CS0067</WarningsNotAsErrors>
+      <NoWarn>1701;1702;CA1416;NU1701;SYSLIB0003</NoWarn>
+      <WarningLevel>9999</WarningLevel>
+      <DefineConstants>E_BUSINESS</DefineConstants>
+    </PropertyGroup>
+  
+  
+  
   <ItemGroup>
     <None Remove="Core\Views\Windows\Logo.png" />
     <None Remove="Static\Coding\IncasPython.xshd" />

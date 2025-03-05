@@ -70,6 +70,18 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
                 this.OnPropertyChanged(nameof(this.GeneralSettingsEditing));
             }
         }
+        public bool GlobalParametersEditing
+        {
+            get
+            {
+                return this.GroupData.GlobalParametersEditing;
+            }
+            set
+            {
+                this.GroupData.GlobalParametersEditing = value;
+                this.OnPropertyChanged(nameof(this.GlobalParametersEditing));
+            }
+        }
         public bool DefaultPermissionType
         {
             get

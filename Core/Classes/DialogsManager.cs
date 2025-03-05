@@ -1,9 +1,12 @@
-﻿using Incas.Core.Views.Windows;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Incas.Core.Views.Windows;
 using Incas.Help.Components;
 using Incas.Help.Windows;
 using Incas.Objects.Views.Pages;
 using Incas.Testing;
 using IncasEngine.Core;
+using IncasEngine.ObjectiveEngine.Exceptions;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -28,7 +31,20 @@ namespace Incas.Core.Classes
                 ShowPageWithGroupBox(oc, "Исправление несоответствий", "FIX:" + field.Id.ToString());
             });
         }
+        public static void ShowLimitedEditionMessage()
+        {
+#if E_FREE
+            string message = "В редакции Free этот функционал недоступен. Попробуйте обновиться до одной из следующих редакций: Community, Extended, Business Pro.";
+            DialogsManager.ShowAccessErrorDialog(message, "Функционал недоступен");
+#elif E_COMMUNITY
+            string message = "В редакции Community этот функционал недоступен. Попробуйте обновиться до одной из следующих редакций: Extended, Business Pro.";
+            DialogsManager.ShowAccessErrorDialog(message, "Функционал недоступен");
+#elif E_EXTENDED
+            string message = "В редакции Extended этот функционал недоступен. Попробуйте обновиться до редакции Business Pro.";
+            DialogsManager.ShowAccessErrorDialog(message, "Функционал недоступен");
+#endif
 
+        }
         private static bool EngineEvents_OnQuestionRequested(string header, string message, string yesButton, string noButton)
         {
             switch (ShowQuestionDialog(message, header, yesButton, noButton))
@@ -183,6 +199,15 @@ namespace Incas.Core.Classes
                 d.ShowDialog();
             });
         }
+        public static void ShowAccessErrorDialog(AccessException message)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                ProgramState.PlaySound("UI-Exclamation");
+                Dialog d = new(message.Message, "Нет доступа", Dialog.DialogIcon.AccessDenied);
+                d.ShowDialog();
+            });
+        }
         public static string ShowClipboardManager(bool autoclose = false)
         {
             Miniservices.Clipboard.Views.Windows.Clipboard c = new(autoclose);
@@ -267,7 +292,7 @@ namespace Incas.Core.Classes
             {
                 ProgramState.PlaySound("UI-Attention");
                 ShowWaitCursor(false);
-                Dialog d = new(message.ToString(), title, Dialog.DialogIcon.Info);
+                Dialog d = new(JsonConvert.SerializeObject(message, Formatting.Indented), title, Dialog.DialogIcon.Info);
                 d.ShowDialog();
             });
         }

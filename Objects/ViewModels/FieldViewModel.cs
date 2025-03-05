@@ -3,23 +3,44 @@ using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Incas.Objects.ViewModels
 {
     public class FieldViewModel : BaseViewModel
     {
         public Field Source;
-        public FieldViewModel(Field field)
+        public ClassViewModel Owner;
+        public FieldViewModel(Field field, ClassViewModel owner)
         {
             this.Source = field;
+            this.AssignToContainer = new Command(this.DoAssignToContainer);
+            this.Owner = owner;
         }
-        public FieldViewModel()
+        public ICommand AssignToContainer { get; set; }
+        public void DoAssignToContainer(object param)
+        {
+            if (this.Owner.SelectedViewControl is not null)
+            {
+                ViewControlViewModel vm = new(
+                    new() { 
+                        Name = this.Name, 
+                        Type = IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms.ControlType.FieldFiller, 
+                        Field = this.Source.Id 
+                    }
+                );
+                this.Owner.SelectedViewControl.AddChild(vm);
+            }
+        }
+        public FieldViewModel(ClassViewModel owner)
         {
             this.Source = new();
             if (this.Source.Id == Guid.Empty)
             {
                 this.Source.Id = Guid.NewGuid();
             }
+            this.AssignToContainer = new Command(this.DoAssignToContainer);
+            this.Owner = owner;
         }
         public string VisibleName
         {

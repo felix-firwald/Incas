@@ -88,7 +88,7 @@ namespace Incas.Core.ViewModels
         public void DoFindObject(object parameter)
         {
             FindObjectByReference fo = new();
-            fo.ShowDialog("Найти объект по ссылке", Icon.Search);
+            fo.ShowDialog("Найти объект по ссылке", Icon.Search, DialogSimpleForm.Components.IconColor.Yellow);
         }
         public void DoOpenClipBoard(object parameter)
         {
@@ -135,7 +135,7 @@ namespace Incas.Core.ViewModels
                 this.OnPropertyChanged(nameof(this.ProcessHandled));
             }
         }
-        public string Version => "Release " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        public string Version => $"{ProgramState.Edition} {ProgramState.Version}";
 
         public string Surname
         {

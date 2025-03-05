@@ -67,7 +67,6 @@ namespace Incas.Objects.ViewModels
                 {
                     this.classData = this.selectedClass.GetClassData();
                     this.OnPropertyChanged(nameof(this.ClassData));
-                    this.OnPropertyChanged(nameof(this.PresetsVisibility));
                     this.OnClassSelected?.Invoke(value);
                 }              
             }
@@ -78,17 +77,6 @@ namespace Incas.Objects.ViewModels
             get
             {
                 return this.classData;
-            }
-        }
-        public Visibility PresetsVisibility
-        {
-            get
-            {
-                if (this.classData is null)
-                {
-                    return Visibility.Collapsed;
-                }
-                return this.ClassData.PresetsEnabled ? Visibility.Visible : Visibility.Collapsed;
             }
         }
         public string SelectedClassName 

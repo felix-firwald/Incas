@@ -62,12 +62,12 @@ namespace Incas.Objects.Views.Windows
         {
             if (this.vm.SelectedClass.Id == Guid.Empty.ToString())
             {
-                DialogsManager.ShowExclamationDialog("Не выбран класс объекта!", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog("Не выбран класс!", "Сохранение прервано");
                 return;
             }
             if (this.vm.BindingField is null)
             {
-                DialogsManager.ShowExclamationDialog("Не выбрано поле у объекта!", "Сохранение прервано");
+                DialogsManager.ShowExclamationDialog("Не выбрано поле!", "Сохранение прервано");
                 return;
             }
             this.SelectedClass = Guid.Parse(this.vm.SelectedClass.Id);

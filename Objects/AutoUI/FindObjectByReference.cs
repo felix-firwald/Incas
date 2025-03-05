@@ -6,6 +6,7 @@ using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.Workspace;
 using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
@@ -48,10 +49,28 @@ namespace Incas.Objects.AutoUI
                 ObjectReference or = ObjectReference.Parse(this.link);
                 if (or.IsCorrect)
                 {
-                    Class @class = EngineGlobals.GetClass(or.Class);
-                    IObject @object = Processor.GetObject(@class, or.Object);
-                    ObjectEditions objViewer = new(@class, @object);
-                    DialogsManager.ShowPageWithGroupBox(objViewer, "Поиск: " + @class.Name, "FIND" + this.link, TabType.Usual);
+                    ObjectEditions objViewer;
+                    IObject @object;
+                    WorkspaceDefinition def = ProgramState.CurrentWorkspace.GetDefinition();
+                    if (def.ServiceGroups.Id == or.Class)
+                    {
+                        @object = Processor.GetObject(def.ServiceGroups, or.Object);
+                        objViewer = new(def.ServiceGroups, @object);
+                        DialogsManager.ShowPageWithGroupBox(objViewer, "Поиск: " + def.ServiceGroups.Name, "FIND" + this.link, TabType.Usual);
+                    }
+                    else if (def.ServiceUsers.Id == or.Class)
+                    {
+                        @object = Processor.GetObject(def.ServiceUsers, or.Object);
+                        objViewer = new(def.ServiceUsers, @object);
+                        DialogsManager.ShowPageWithGroupBox(objViewer, "Поиск: " + def.ServiceUsers.Name, "FIND" + this.link, TabType.Usual);
+                    }
+                    else
+                    {
+                        Class @class = EngineGlobals.GetClass(or.Class);
+                        @object = Processor.GetObject(@class, or.Object);
+                        objViewer = new(@class, @object);
+                        DialogsManager.ShowPageWithGroupBox(objViewer, "Поиск: " + @class.Name, "FIND" + this.link, TabType.Usual);
+                    }                  
                 }
                 else
                 {
@@ -60,7 +79,7 @@ namespace Incas.Objects.AutoUI
             }
             catch
             {
-                DialogsManager.ShowErrorDialog("Не удалось расшифровать ссылку на объект, либо ссылка отсылает на несуществующий класс.");
+                DialogsManager.ShowExclamationDialog("Не удалось расшифровать ссылку на объект, либо ссылка отсылает на несуществующий класс.", "Поиск прерван");
             }
         }
         #endregion

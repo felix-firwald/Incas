@@ -27,11 +27,11 @@ namespace Incas.Objects.AutoUI
             {
                 switch (field.Type)
                 {
-                    case FieldType.Variable:
+                    case FieldType.String:
                     case FieldType.Text:
-                    case FieldType.Number:
+                    case FieldType.Integer:
                     case FieldType.Date:
-                    case FieldType.Relation:
+                    case FieldType.Object:
                         this.Selector.Pairs.Add(field, field.Name);
                         break;
                 }               

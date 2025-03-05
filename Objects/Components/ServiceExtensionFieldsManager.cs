@@ -43,15 +43,19 @@ namespace Incas.Objects.Components
         }
         public static void AppendServiceFieldViewers(IObject obj, StackPanel contentPanel)
         {
+            #if !E_FREE
             if (obj is IncasEngine.ObjectiveEngine.Types.Objects.Object objUsual)
             {
                 ObjectFieldViewer ofAuthor = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers, objUsual.AuthorId, "Автор");
                 contentPanel.Children.Add(ofAuthor);
                 return;
             }
+            #endif
             if (obj is IncasEngine.ObjectiveEngine.Types.Documents.Document objDoc)
             {
+                #if !E_FREE
                 contentPanel.Children.Add(new ObjectFieldViewer(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers, objDoc.AuthorId, "Автор"));
+                #endif
                 contentPanel.Children.Add(new ObjectFieldViewer(objDoc.CreationDate, "Дата создания"));
                 if (objDoc.Terminated)
                 {

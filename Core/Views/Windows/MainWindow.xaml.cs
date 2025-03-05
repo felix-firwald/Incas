@@ -139,6 +139,7 @@ namespace Incas.Core.Views.Windows
             {
                 this.AddPageButton(wc);
             }
+#if !E_FREE
             if (ProgramState.CurrentWorkspace.CurrentGroup.IsUsersSettingsVisible)
             {
                 this.AddAdminPageButton("Пользователи", Classes.Icon.UserGears, Controls.MainWindowButtonTab.UsersSettings, "Страница управления пользователями рабочего пространства");
@@ -147,6 +148,7 @@ namespace Incas.Core.Views.Windows
             {
                 this.AddAdminPageButton("Группы", Classes.Icon.HouseGear, Controls.MainWindowButtonTab.GroupsSettings, "Страница управления группами полномочий рабочего пространства");             
             }
+#endif
             if (ProgramState.CurrentWorkspace.CurrentGroup.IsWorkspaceSettingsVisible)
             {
                 this.AddAdminPageButton("Рабочее пространство", Classes.Icon.GearWide, Controls.MainWindowButtonTab.WorkspaceSettings, "Страница управления рабочим пространством");

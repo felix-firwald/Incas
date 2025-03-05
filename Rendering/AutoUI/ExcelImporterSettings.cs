@@ -32,9 +32,9 @@ namespace Incas.Rendering.AutoUI
             {
                 switch (field.Type)
                 {
-                    case FieldType.Variable:
+                    case FieldType.String:
                     case FieldType.Text:
-                    case FieldType.Number:
+                    case FieldType.Integer:
                     case FieldType.LocalEnumeration:
                     case FieldType.GlobalEnumeration:
                     case FieldType.Date:

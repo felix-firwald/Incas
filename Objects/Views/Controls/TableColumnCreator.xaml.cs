@@ -100,7 +100,7 @@ namespace Incas.Objects.Views.Controls
             string name = $"Настройки колонки [{f.Name}]";
             switch (f.FieldType)
             {
-                case FieldType.Variable:
+                case FieldType.String:
                 case FieldType.Text:
                     TextColumnSettings tc = new(f);
                     tc.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);

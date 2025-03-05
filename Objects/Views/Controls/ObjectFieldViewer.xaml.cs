@@ -24,6 +24,7 @@ namespace Incas.Objects.Views.Controls
         private Guid relationObject;
         private bool isNestedObjectShowed = false;
         private ObjectCard card;
+
         public delegate void FieldDataAction(FieldData data);
         public event FieldDataAction OnFilterRequested;
         public FieldData Data { get; private set; }
@@ -44,33 +45,46 @@ namespace Incas.Objects.Views.Controls
             }
             else
             {
-                if (data.ClassField.Type == FieldType.Relation)
+                switch (data.ClassField.Type)
                 {
-                    try
-                    {
-                        Guid id = Guid.Parse(data.Value);
-                        if (id != Guid.Empty)
+                    case FieldType.Object:
+                        try
                         {
-                            BindingData bd = data.ClassField.GetBindingData();
-                            this.GenerateRelatedField(id, bd);
+                            Guid id = Guid.Parse(data.Value);
+                            if (id != Guid.Empty)
+                            {
+                                BindingData bd = data.ClassField.GetBindingData();
+                                this.GenerateRelatedField(id, bd);
+                            }
                         }
-                    }
-                    catch
-                    {
-                        this.FieldValue.Text = "(объект не выбран)";
-                        this.ColorizeField(200, 0, 90);
+                        catch
+                        {
+                            this.FieldValue.Text = "(объект не выбран)";
+                            this.ColorizeField(200, 0, 90);
+                            this.FilterButton.IsEnabled = false;
+                        }
+                        break;
+                    case FieldType.Table:
+                        this.FieldValue.Text = "(таблица)";
                         this.FilterButton.IsEnabled = false;
-                    }
-                }
-                else if (data.ClassField.Type == FieldType.Table)
-                {
-                    this.FieldValue.Text = "(таблица)";
-                    this.FilterButton.IsEnabled = false;
-                    this.ColorizeField(67, 70, 80);
-                }
-                else
-                {
-                    this.FieldValue.Text = data.Value;
+                        this.ColorizeField(67, 70, 80);
+                        break;
+                    case FieldType.Boolean:
+                        CheckBox box = new();
+                        box.Style = this.FindResource("CheckBoxDataGridUsual") as Style;
+                        box.HorizontalAlignment = HorizontalAlignment.Left;
+                        box.IsChecked = this.Data.Value == "1";
+                        this.MainGrid.Children.Add(box);
+                        Grid.SetColumn(box, 1);
+                        break;
+                    case FieldType.LocalEnumeration:
+                    case FieldType.GlobalEnumeration:
+                        this.FieldValue.Text = data.Value;
+                        this.ColorizeField(255, 251, 0);
+                        break;
+                    default:
+                        this.FieldValue.Text = data.Value;
+                        break;
                 }
             }           
             if (!data.ClassField.ListVisibility)
@@ -165,7 +179,7 @@ namespace Incas.Objects.Views.Controls
         {
             FieldData data = new()
             {
-                Value = this.FieldValue.Text,
+                Value = this.Data.Value,
                 ClassField = this.Data.ClassField
             };
             this.OnFilterRequested?.Invoke(data);
@@ -184,7 +198,7 @@ namespace Incas.Objects.Views.Controls
                             break;
                         case FieldType.Table:
                             break;
-                        case FieldType.Relation:
+                        case FieldType.Object:
                             Clipboard.SetText(this.FieldValue.Text);
                             break;
                     }

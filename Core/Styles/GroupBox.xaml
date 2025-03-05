@@ -64,7 +64,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="GroupBox">
-                    <Border CornerRadius="8" Background="{StaticResource Area}" BorderThickness="0">
+                    <Border CornerRadius="8" Background="Transparent" BorderThickness="1" BorderBrush="{StaticResource Area}" >
 
                         <Grid>
                             <Grid.RowDefinitions>
@@ -72,18 +72,15 @@
                                 <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
 
-                            <Border Grid.Row="0" CornerRadius="8" Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Center" >
-                                <Label x:Name="HeaderLabel" FontSize="12" FontFamily="{StaticResource JetBrains}" FontWeight="ExtraBlack" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource DarkLight}" Margin="0,5,0,0">
+                            <Border Grid.Row="0" CornerRadius="8" BorderThickness="0"  Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                                <Label x:Name="HeaderLabel" FontSize="12" FontFamily="{StaticResource Rubik}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Margin="0,5,0,0">
                                     <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" HorizontalAlignment="Left" >
                                     </ContentPresenter>
                                 </Label>
                             </Border>
 
-
-
-
                             <!--<Rectangle Grid.Row="2" Fill="{StaticResource Area}"  HorizontalAlignment="Stretch" Width="2" Margin="5,-8,0,0"/>-->
-                            <Border Grid.Row="2" BorderThickness="0" CornerRadius="8" BorderBrush="{StaticResource Element}" Margin="5" Background="{DynamicResource Dark}">
+                            <Border Grid.Row="2" BorderThickness="0" BorderBrush="{StaticResource Area}" CornerRadius="8" Margin="5" Background="{DynamicResource Dark}">
                                 <ContentPresenter Margin="4,8,4,4" />
                             </Border>
                             <Popup IsOpen="True" StaysOpen="True">
