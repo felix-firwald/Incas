@@ -74,6 +74,7 @@ namespace Incas.Objects.Views.Controls
                         box.Style = this.FindResource("CheckBoxDataGridUsual") as Style;
                         box.HorizontalAlignment = HorizontalAlignment.Left;
                         box.IsChecked = this.Data.Value == "1";
+                        box.Margin = new Thickness(5);
                         this.MainGrid.Children.Add(box);
                         Grid.SetColumn(box, 1);
                         break;

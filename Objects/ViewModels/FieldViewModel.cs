@@ -29,6 +29,7 @@ namespace Incas.Objects.ViewModels
                         Field = this.Source.Id 
                     }
                 );
+                this.Owner.RemoveFieldControl(this.Source.Id);
                 this.Owner.SelectedViewControl.AddChild(vm);
             }
         }

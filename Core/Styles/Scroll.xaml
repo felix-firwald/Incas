@@ -5,6 +5,7 @@
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="Focusable" Value="false"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
@@ -99,17 +100,17 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <SolidColorBrush x:Key="SliderThumb.Static.Background" Color="{StaticResource PrimaryMainColor}"/>
-    <SolidColorBrush x:Key="SliderThumb.Static.Border" Color="#FFACACAC"/>
-    <SolidColorBrush x:Key="SliderThumb.Static.Foreground" Color="#FFE5E5E5"/>
-    <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="#FFDCECFC"/>
-    <SolidColorBrush x:Key="SliderThumb.MouseOver.Border" Color="#FF7Eb4EA"/>
-    <SolidColorBrush x:Key="SliderThumb.Pressed.Background" Color="#FFDAECFC"/>
-    <SolidColorBrush x:Key="SliderThumb.Pressed.Border" Color="#FF569DE5"/>
-    <SolidColorBrush x:Key="SliderThumb.Disabled.Background" Color="#FFF0F0F0"/>
-    <SolidColorBrush x:Key="SliderThumb.Disabled.Border" Color="#FFD9D9D9"/>
-    <SolidColorBrush x:Key="SliderThumb.Track.Background" Color="{DynamicResource IconColor}"/>
-    <SolidColorBrush x:Key="SliderThumb.Track.Border" Color="{DynamicResource ElementColor}"/>
+    <SolidColorBrush x:Key="SliderThumb.Static.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="SliderThumb.Static.Border" Color="Transparent"/>
+    <SolidColorBrush x:Key="SliderThumb.Static.Foreground" Color="Transparent"/>
+    <SolidColorBrush x:Key="SliderThumb.MouseOver.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="SliderThumb.MouseOver.Border" Color="Transparent"/>
+    <SolidColorBrush x:Key="SliderThumb.Pressed.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="SliderThumb.Pressed.Border" Color="Transparent"/>
+    <SolidColorBrush x:Key="SliderThumb.Disabled.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="SliderThumb.Disabled.Border" Color="Transparent"/>
+    <SolidColorBrush x:Key="SliderThumb.Track.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="SliderThumb.Track.Border" Color="Transparent"/>
     <ControlTemplate x:Key="SliderThumbHorizontalDefault" TargetType="{x:Type Thumb}">
         <Grid HorizontalAlignment="Center" UseLayoutRounding="True" VerticalAlignment="Center">
             <Path x:Name="grip" Data="M 0,0 C0,0 11,0 11,0 11,0 11,18 11,18 11,18 0,18 0,18 0,18 0,0 0,0 z" Fill="{StaticResource Basic}" Stroke="{StaticResource Area}" SnapsToDevicePixels="True" Stretch="Fill" StrokeThickness="1" UseLayoutRounding="True" VerticalAlignment="Center"/>
@@ -211,7 +212,7 @@
                 <Setter Property="Visibility" TargetName="PART_SelectionRange" Value="Visible"/>
             </Trigger>
             <Trigger Property="IsKeyboardFocused" Value="true">
-                <Setter Property="Foreground" TargetName="Thumb" Value="Blue"/>
+                <Setter Property="Foreground" TargetName="Thumb" Value="DodgerBlue"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -327,7 +328,7 @@
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{StaticResource SliderThumb.Static.Foreground}"/>
+        <Setter Property="Foreground" Value="Transparent"/>
         <Setter Property="Template" Value="{StaticResource SliderHorizontal}"/>
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Vertical">
@@ -342,20 +343,20 @@
                 <ColumnDefinition Width="0.00001*"/>
                 <ColumnDefinition MaxWidth="0"/>
             </Grid.ColumnDefinitions>
-            <Border Grid.ColumnSpan="3" CornerRadius="2" Background="Transparent"/>
+            <Border Grid.ColumnSpan="3" CornerRadius="8" Background="Transparent"/>
             <RepeatButton Grid.Column="0"  Style="{StaticResource ScrollBarLineButton}" Width="18" Command="ScrollBar.LineLeftCommand" Content="M 4 0 L 4 8 L 0 4 Z" />
             <Track Name="PART_Track" Grid.Column="1" IsDirectionReversed="False">
-                <Track.DecreaseRepeatButton>
+                <!--<Track.DecreaseRepeatButton>
                     <RepeatButton Style="{StaticResource ScrollBarPageButton}" Visibility="Collapsed" Background="Transparent" Command="ScrollBar.PageLeftCommand" />
-                </Track.DecreaseRepeatButton>
+                </Track.DecreaseRepeatButton>-->
                 <Track.Thumb>
                     <Thumb Style="{StaticResource ScrollBarThumb}" Margin="0,1,0,1" Background="{StaticResource Element}" BorderBrush="{StaticResource LightBlack}" />
                 </Track.Thumb>
-                <Track.IncreaseRepeatButton>
-                    <RepeatButton Style="{StaticResource ScrollBarPageButton}" Visibility="Collapsed" Background="Transparent" Command="ScrollBar.PageRightCommand" />
-                </Track.IncreaseRepeatButton>
+                <!--<Track.IncreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource ScrollBarPageButton}" Visibility="Collapsed" Background="Black" Command="ScrollBar.PageRightCommand" />
+                </Track.IncreaseRepeatButton>-->
             </Track>
-            <RepeatButton Grid.Column="3" Style="{StaticResource ScrollBarLineButton}" Width="18" Command="ScrollBar.LineRightCommand" Content="M 0 0 L 4 4 L 0 8 Z"/>
+            <!--<RepeatButton Grid.Column="3" Style="{StaticResource ScrollBarLineButton}" Background="Black" Width="12" Command="ScrollBar.LineRightCommand" Content="M 0 0 L 4 4 L 0 8 Z"/>-->
         </Grid>
     </ControlTemplate>
     <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">

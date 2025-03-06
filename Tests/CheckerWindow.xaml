@@ -21,7 +21,6 @@
             <Label Style="{StaticResource LabelElement}" Content="Integer TextBox - не сделан" VerticalAlignment="Center"/>
             <xctk:IntegerUpDown Style="{StaticResource NumericUpDown}" Watermark="123">
             </xctk:IntegerUpDown>
-
             <Label Style="{StaticResource LabelElement}" Content="Single TextBox - не сделан" VerticalAlignment="Center"/>
             <xctk:SingleUpDown Style="{StaticResource NumericUpDown}"/>
 

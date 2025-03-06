@@ -22,7 +22,7 @@ namespace Incas.Objects.Converters
                     case ControlType.HorizontalStack:
                         return "Горизонтальный стек";
                     case ControlType.Grid:
-                        return "Таблица";
+                        return "Сетка";
                     case ControlType.Tab:
                         return "Группа вкладок";
                     case ControlType.TabItem:

@@ -23,6 +23,7 @@ using System.Xml;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
+using IncasEngine.Core.ExtensionMethods;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -561,15 +562,38 @@ namespace Incas.Objects.Views.Windows
         }
         private void Vm_OnDrawCalling()
         {
-            if (this.vm.Validate())
-            {
-                FormDrawingManager.DrawForm(Helpers.CreateObjectByType(this.vm.Source), this.FormPreviewPanel);           
-            }           
+            FormDrawingManager.DrawDebugForm(this.vm, this.FormPreviewPanel);                     
         }
 
         private void RemoveSelectedElementFromForm(object sender, RoutedEventArgs e)
         {
             this.vm.SelectedViewControl?.RemoveFromParent();
+        }
+
+        private void MoveUpElementInForm(object sender, RoutedEventArgs e)
+        {
+            if (this.vm.SelectedViewControl is null)
+            {
+                return;
+            }
+            ViewControlViewModel selected = this.vm.SelectedViewControl;
+            this.vm.SelectedViewControl.MoveUp();
+        }
+
+        private void MoveDownElementInForm(object sender, RoutedEventArgs e)
+        {
+            if (this.vm.SelectedViewControl is null)
+            {
+                return;
+            }
+            ViewControlViewModel selected = this.vm.SelectedViewControl;
+            this.vm.SelectedViewControl.MoveDown();
+        }
+
+        private void UpdateFormPreview(object sender, RoutedEventArgs e)
+        {
+            this.Vm_OnDrawCalling();
+            this.ZoomPanel.FitToBounds();
         }
     }
 }

@@ -4,6 +4,7 @@ using Incas.Core.ViewModels;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Views.Windows;
+using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
@@ -76,6 +77,7 @@ namespace Incas.Objects.ViewModels
             {
                 this.Fields.Add(new(f, this));
             }
+            this.ViewControls = new();
             this.Fields.CollectionChanged += this.Fields_CollectionChanged;
             this.SetCommands();
             this.AvailableComponents = new([this.Source.Component]);
@@ -480,7 +482,30 @@ namespace Incas.Objects.ViewModels
             ViewControlViewModel vm = new(vc);
             vm.OnDrawCalling += this.Vm_OnDrawCalling;
             vm.OnRemoveRequested += this.Vm_OnRemoveRequested;
+            vm.OnMoveUpRequested += this.Vm_OnMoveUpRequested;
+            vm.OnMoveDownRequested += this.Vm_OnMoveDownRequested;
             this.ViewControls.Add(vm);
+        }
+        public void RemoveFieldControl(Guid field)
+        {
+            foreach (ViewControlViewModel control in this.ViewControls)
+            {
+                if (control.Source.Field == field)
+                {
+                    this.ViewControls.Remove(control);
+                    return;
+                }
+                control.RemoveField(field);
+            }
+        }
+        private void Vm_OnMoveDownRequested(ViewControlViewModel vm)
+        {
+            this.ViewControls.MoveDown(vm);
+        }
+
+        private void Vm_OnMoveUpRequested(ViewControlViewModel vm)
+        {
+            this.ViewControls.MoveUp(vm);
         }
 
         private void Vm_OnRemoveRequested(ViewControlViewModel vm)
@@ -492,6 +517,19 @@ namespace Incas.Objects.ViewModels
         private void Vm_OnDrawCalling()
         {
             this.OnDrawCalling?.Invoke();
+        }
+        private double previewZoom = 100;
+        public double PreviewFormZoom
+        {
+            get
+            {
+                return this.previewZoom;
+            }
+            set
+            {
+                this.previewZoom = value;
+                this.OnPropertyChanged(nameof(this.PreviewFormZoom));
+            }
         }
 
         public ObservableCollection<FieldViewModel> MapFieldsList
@@ -680,7 +718,6 @@ namespace Incas.Objects.ViewModels
                     vm.Save();
                     this.SourceData.EditorView.Controls.Add(vm.Source);
                 }
-                //DialogsManager.ShowInfoDialog(this.SourceData.EditorView);
                 this.SetData();
                 
                 return true;
@@ -694,6 +731,7 @@ namespace Incas.Objects.ViewModels
         public bool Save()
         {
             bool result = this.Validate();
+            this.SetData();
             this.Source.Save();
             return result;
         }

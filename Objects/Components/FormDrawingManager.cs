@@ -1,6 +1,8 @@
 ﻿using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Interfaces;
+using Incas.Objects.ViewModels;
 using Incas.Objects.Views.Controls;
+using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using IncasEngine.ObjectiveEngine.Interfaces;
@@ -25,59 +27,41 @@ namespace Incas.Objects.Components
             public List<IFillerBase> Fillers { get; set; }
             public IServiceFieldFiller ServiceFiller { get; set; }
         }
-        //private static List<IFillerBase> DrawControls(IObject obj)
-        //{
-        //    List<IFillerBase> fillers = new();
-        //    IServiceFieldFiller serviceFiller = Components.ServiceExtensionFieldsManager.GetFillerByType(obj);
-        //    if (serviceFiller != null)
-        //    {
-        //        root.Children.Add((UserControl)serviceFiller);
-        //    }
-        //    foreach (Field f in obj.Class.GetClassData().Fields)
-        //    {
-        //        switch (f.Type)
-        //        {
-        //            default:
-        //                FieldFiller ff = new(f)
-        //                {
-        //                    Uid = f.Id.ToString()
-        //                };
-        //                //ff.OnInsert += this.Tf_OnInsert;
-        //                //ff.OnFillerUpdate += this.Tf_OnFieldUpdate;
-        //                //ff.OnScriptRequested += this.Ff_OnScriptRequested;
-        //                //ff.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
-        //                root.Children.Add(ff);
-        //                fillers.Add(ff);
-        //                break;
-        //            case FieldType.Table:
-        //                FieldTableFiller ft = new(f)
-        //                {
-        //                    Uid = f.Id.ToString()
-        //                };
-        //                //ft.OnInsert += this.Tf_OnInsert;
-        //                //ft.OnFillerUpdate += this.Tf_OnFieldUpdate;
-        //                //ft.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
-        //                root.Children.Add(ft);
-        //                fillers.Add(ft);
-        //                break;
 
-        //        }
-        //    }
-        //    return fillers;
-        //}
+        public static DrawingOutputArgs DrawDebugForm(ClassViewModel cvm, StackPanel root)
+        {
+            ClassDataBase data = new();
+            data.Fields = new();
+            foreach (FieldViewModel field in cvm.Fields)
+            {
+                data.Fields.Add(field.Source);
+            }
+            data.EditorView = new();
+            
+            foreach (ViewControlViewModel vm in cvm.ViewControls)
+            {
+                vm.Save();
+                data.EditorView.Controls.Add(vm.Source);
+            }
+
+            return DrawFormBase(data, null, root);
+        }
+
         public static DrawingOutputArgs DrawForm(IObject obj, StackPanel root)
+        {            
+            return DrawFormBase(obj.Class.GetClassData(), ServiceExtensionFieldsManager.GetFillerByType(obj), root);
+        }
+        private static DrawingOutputArgs DrawFormBase(IClassData data, IServiceFieldFiller serviceFiller, StackPanel root)
         {
             DrawingOutputArgs result = new();
             root.Children.Clear();
-            IClassData data = obj.Class.GetClassData();
             Dictionary<Guid, IFillerBase> fillersDict = new();
             List<IFillerBase> fillers = new();
-            IServiceFieldFiller serviceFiller = Components.ServiceExtensionFieldsManager.GetFillerByType(obj);
             if (serviceFiller != null)
             {
                 root.Children.Add((UserControl)serviceFiller);
             }
-            foreach (Field f in obj.Class.GetClassData().Fields)
+            foreach (Field f in data.Fields)
             {
                 switch (f.Type)
                 {
@@ -100,7 +84,7 @@ namespace Incas.Objects.Components
 
                 }
             }
-            if (data.EditorView is null || data.EditorView.Controls is null)
+            if (data.EditorView is null || data.EditorView.Controls is null || data.EditorView.Controls.Count == 0)
             {
                 foreach (IFillerBase ff in fillers)
                 {
@@ -113,7 +97,7 @@ namespace Incas.Objects.Components
                 {
                     DrawControl(control, root, fillersDict);
                 }
-            }           
+            }
             result.Fillers = fillers;
             result.ServiceFiller = serviceFiller;
             return result;

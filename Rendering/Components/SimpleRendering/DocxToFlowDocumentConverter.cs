@@ -31,39 +31,10 @@ namespace Incas.Rendering.Components.SimpleRendering
                     PagePadding = new Thickness(20)
                 };
                 flowDoc.Background = Brushes.White;
-
-                //foreach (Xceed.Document.NET.Section element in document.Body.Cont)
-                //{
-                //    switch (element.GetType().Name)
-                //    {
-                //        case "Paragraph":
-                //            flowDocument.Blocks.Add(ConvertParagraph((Paragraph)element));
-                //            break;
-                //        case "Table":
-                //            flowDocument.Blocks.Add(ConvertTable((Table)element));
-                //            break;
-                //        case "Picture":
-                //            flowDocument.Blocks.Add(ConvertPicture((Picture)element));
-                //            break;
-                //        default:
-                //            // Handle other element types as needed.  You might need to add cases for lists, headers, footers, etc.
-                //            break;
-                //    }
-                //}
                 foreach (Xceed.Document.NET.Paragraph docxParagraph in document.Paragraphs)
                 {
                     flowDoc.Blocks.Add(ConvertParagraph(docxParagraph));
                 }
-
-                //foreach (Xceed.Document.NET.Table docxTable in document.Tables)
-                //{
-                //    flowDocument.Blocks.Add(ConvertTable(docxTable));
-                //}
-
-                //foreach (Xceed.Document.NET.Picture docxPicture in document.Pictures)
-                //{
-                //    flowDocument.Blocks.Add(ConvertPicture(docxPicture));
-                //}
 
                 return flowDoc;
             }
@@ -80,57 +51,45 @@ namespace Incas.Rendering.Components.SimpleRendering
             {
                 Margin = new Thickness(0) // remove default margin
             };
-            if (docxParagraph.FollowingTables is not null && docxParagraph.FollowingTables.Count > 0)
+            foreach (Xceed.Document.NET.FormattedText run in docxParagraph.MagicText)
             {
-                foreach (Xceed.Document.NET.Table table in docxParagraph.FollowingTables)
+                Run wpfRun = new()
                 {
-                    Table resultTable = ConvertTable(table);
-                    flowDoc.Blocks.Add(resultTable);
-                    //wpfParagraph.Inlines.Add(resultTable, );
-                }
-            }
-            else
-            {
-                foreach (Xceed.Document.NET.FormattedText run in docxParagraph.MagicText)
+                    Text = run.text
+                };
+                if (run.formatting?.Size is not null and not null)
                 {
-                    Run wpfRun = new()
-                    {
-                        Text = run.text
-                    };
-                    if (run.formatting.Size is not null and not null)
-                    {
-                        wpfRun.FontSize = (double)run.formatting.Size;
-                    }
-                    if (run.formatting.FontFamily is not null and not null)
-                    {
-                        wpfRun.FontFamily = new FontFamily(run.formatting.FontFamily.Name);
-                    }
-                    if (run.formatting.Bold is not null && (bool)run.formatting.Bold)
-                    {
-                        wpfRun.FontWeight = FontWeights.Bold;
-                    }
-
-                    if (run.formatting.Italic is not null && (bool)run.formatting.Italic)
-                    {
-                        wpfRun.FontStyle = FontStyles.Italic;
-                    }
-
-                    if (run.formatting.UnderlineStyle is not null and not UnderlineStyle.none)
-                    {
-                        wpfRun.TextDecorations = TextDecorations.Underline; // Map to WPF underlines
-                    }
-
-                    if (run.formatting.FontColor is not null && run.formatting.FontColor != System.Drawing.Color.Empty)
-                    {
-                        System.Drawing.Color color = (System.Drawing.Color)run.formatting.FontColor;
-                        wpfRun.Foreground = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
-                    }
-                    else
-                    {
-                        wpfRun.Foreground = Brushes.Black;
-                    }
-                    wpfParagraph.Inlines.Add(wpfRun);
+                    wpfRun.FontSize = (double)run.formatting.Size;
                 }
+                if (run.formatting?.FontFamily is not null and not null)
+                {
+                    wpfRun.FontFamily = new FontFamily(run.formatting.FontFamily.Name);
+                }
+                if (run.formatting?.Bold is not null && (bool)run.formatting?.Bold)
+                {
+                    wpfRun.FontWeight = FontWeights.Bold;
+                }
+
+                if (run.formatting?.Italic is not null && (bool)run.formatting?.Italic)
+                {
+                    wpfRun.FontStyle = FontStyles.Italic;
+                }
+
+                if (run.formatting?.UnderlineStyle is not null and not UnderlineStyle.none)
+                {
+                    wpfRun.TextDecorations = TextDecorations.Underline; // Map to WPF underlines
+                }
+
+                if (run.formatting?.FontColor is not null && run.formatting.FontColor != System.Drawing.Color.Empty)
+                {
+                    System.Drawing.Color color = (System.Drawing.Color)run.formatting.FontColor;
+                    wpfRun.Foreground = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.G, color.B));
+                }
+                else
+                {
+                    wpfRun.Foreground = Brushes.Black;
+                }
+                wpfParagraph.Inlines.Add(wpfRun);
             }
             return wpfParagraph;
         }
