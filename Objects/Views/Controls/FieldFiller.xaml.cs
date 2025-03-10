@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
+using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Components;
 using Incas.Objects.Interfaces;
 using IncasEngine.Core;
@@ -87,7 +88,7 @@ namespace Incas.Objects.Views.Controls
                             Tag = description
                         };
                         textBox.TextChanged += this.Textbox_TextChanged;
-                        textBox.Style = this.FindResource("TextBoxMain") as Style;
+                        textBox.Style = ResourceStyleManager.FindStyle(ResourceStyleManager.TextBoxStyle);
                         textBox.MaxLength = this.Field.GetMaxLength();
                         this.PlaceUIControl(textBox);
                     }
@@ -112,7 +113,7 @@ namespace Incas.Objects.Views.Controls
                         Tag = description
                     };
                     textBox2.TextChanged += this.Textbox_TextChanged;
-                    textBox2.Style = this.FindResource("TextBoxBig") as System.Windows.Style;
+                    textBox2.Style = ResourceStyleManager.FindStyle(ResourceStyleManager.TextBoxBigStyle);
                     textBox2.MaxLength = this.Field.GetMaxLength();
                     this.PlaceUIControl(textBox2);
                     break;
@@ -123,18 +124,18 @@ namespace Incas.Objects.Views.Controls
                     {
                         ItemsSource = type == FieldType.LocalEnumeration ? this.Field.GetLocalEnumeration() : ProgramState.GetEnumeration(this.Field.GetGlobalEnumeration().TargetId),
                         SelectedIndex = 0,
-                        Style = this.FindResource("ComboBoxMain") as Style
+                        Style = ResourceStyleManager.FindStyle(ResourceStyleManager.ComboboxStyle)
                     };
                     comboBox.SelectionChanged += this.Combobox_SelectionChanged;
                     this.PlaceUIControl(comboBox);
                     break;
                 case FieldType.Integer:
-                    IntegerUpDown numeric = new();
-                    numeric.Style = this.FindResource("NumericUpDown") as Style;
+                    IntegerUpDown numeric = new();                  
+                    numeric.Style = ResourceStyleManager.FindStyle(ResourceStyleManager.IntegerUpDownStyle);
                     numeric.ToolTip = description;
                     numeric.ValueChanged += this.Numeric_ValueChanged;
                     numeric.Minimum = this.Field.GetNumberFieldData().MinValue;
-                    numeric.Maximum = this.Field.GetNumberFieldData().MaxValue;
+                    numeric.Maximum = this.Field.GetNumberFieldData().GetMaxValue();
                     int integerValue = 0;
                     if (int.TryParse(value, out integerValue))
                     {
@@ -144,13 +145,18 @@ namespace Incas.Objects.Views.Controls
                     break;
                 case FieldType.Float:
                     DoubleUpDown numericFloat = new();
-                    numericFloat.Style = this.FindResource("NumericUpDown") as Style;
+                    numericFloat.Style = ResourceStyleManager.FindStyle(ResourceStyleManager.IntegerUpDownStyle);
                     numericFloat.ToolTip = description;
                     numericFloat.ValueChanged += this.Numeric_ValueChanged;
                     numericFloat.Minimum = this.Field.GetNumberFieldData().MinValue;
-                    numericFloat.Maximum = this.Field.GetNumberFieldData().MaxValue;
-                    numericFloat.Value = Convert.ToDouble(value);
-                    numericFloat.FormatString = "₽ C";
+                    numericFloat.Maximum = this.Field.GetNumberFieldData().GetMaxValue();
+                    numericFloat.Increment = 0.100;
+                    numericFloat.FormatString = "C2";
+                    double doubleValue = 0;
+                    if (double.TryParse(value, out doubleValue))
+                    {
+                        numericFloat.Value = doubleValue;
+                    }
                     this.PlaceUIControl(numericFloat);
                     break;
                 case FieldType.LocalConstant:
@@ -172,7 +178,7 @@ namespace Incas.Objects.Views.Controls
                     DatePicker picker = new()
                     {
                         ToolTip = description,
-                        Style = this.FindResource("DatePickerMain") as Style
+                        Style = ResourceStyleManager.FindStyle(ResourceStyleManager.DatePickerStyle)
                     };
                     DateFieldData df = this.Field.GetDateFieldData();
                     picker.DisplayDateStart = df.StartDate;
@@ -184,15 +190,12 @@ namespace Incas.Objects.Views.Controls
                     CheckBox checkBox = new() {
                         ToolTip = description,
                         Content = this.Field.VisibleName,
-                        Style = this.FindResource("CheckBoxMain") as Style
+                        Style = ResourceStyleManager.FindStyle(ResourceStyleManager.CheckboxStyle)
                     };
                     this.PlaceUIControl(checkBox, true);
                     break;
             }
         }
-
-        
-
         private void PlaceUIControl(Control control, bool withoutLabel = false)
         {
             this.Dispatcher.Invoke(() =>
@@ -364,6 +367,8 @@ namespace Incas.Objects.Views.Controls
                     return value;
                 case FieldType.Integer:
                     return ((IntegerUpDown)this.control).Value.ToString();
+                case FieldType.Float:
+                    return ((DoubleUpDown)this.control).Value.ToString();
                 case FieldType.LocalConstant:
                 case FieldType.HiddenField:
                 case FieldType.GlobalConstant:

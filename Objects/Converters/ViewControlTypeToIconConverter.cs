@@ -1,10 +1,7 @@
-﻿using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
+﻿using Incas.Core.Classes;
+using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -34,6 +31,7 @@ namespace Incas.Objects.Converters
                         return Geometry.Parse("M577.38-311.85 429.23-460H143.08q-8.5 0-14.25-5.76t-5.75-14.27q0-8.51 5.75-14.24t14.25-5.73h286.15l148.15-148.15q9.7-9.7 22.62-9.7 12.92 0 22.62 9.7l145.53 145.53q9.7 9.7 9.7 22.62 0 12.92-9.7 22.62L622.62-311.85q-9.7 9.7-22.62 9.7-12.92 0-22.62-9.7Z");
                 }
             }
+            
             return Geometry.Parse("M184.62-200q-27.62 0-46.12-18.5Q120-237 120-264.62v-430.76q0-27.62 18.5-46.12Q157-760 184.62-760H357q12.92 0 25.12 5.23 12.19 5.23 20.88 13.92L463.85-680h311.53q27.62 0 46.12 18.5Q840-643 840-615.38v350.76q0 27.62-18.5 46.12Q803-200 775.38-200H184.62Z");
         }
 

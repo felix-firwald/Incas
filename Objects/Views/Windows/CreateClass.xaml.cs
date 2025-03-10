@@ -39,7 +39,7 @@ namespace Incas.Objects.Views.Windows
             DialogsManager.ShowWaitCursor();
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
             this.InitializeComponent();
-            this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+            //this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             Class @class = new();
             @class.Name = primary.Name;
             @class.Component = primary.GetComponent();
@@ -61,7 +61,7 @@ namespace Incas.Objects.Views.Windows
             DialogsManager.ShowWaitCursor();
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");        
             this.InitializeComponent();
-            this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+            //this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             if (id == Guid.Empty)
             {
                 this.Title = "(класс не выбран)";
@@ -85,7 +85,7 @@ namespace Incas.Objects.Views.Windows
             DialogsManager.ShowWaitCursor();
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
             this.InitializeComponent();
-            this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+            //this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             this.Title = $"Служебный класс: {@class.Name}";
             this.vm = new(@class);
             this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
@@ -108,6 +108,24 @@ namespace Incas.Objects.Views.Windows
                 this.TabControlMain.Items.Add(item);
             }
         }
+        private void ShowNewTab(Control control, string name)
+        {
+            TabItem item = new()
+            {
+                Content = control,
+                Header = name,
+                Style = this.FindResource("TabItemRemovable") as Style,
+                BorderBrush = this.FindResource("LightPurple") as Brush
+            };
+            item.IsEnabledChanged += this.Item_IsEnabledChanged;
+            this.TabControlMain.Items.Add(item);
+        }
+
+        private void Item_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            this.TabControlMain.Items.Remove(sender);
+        }
+
         private void GetMoreInfoClick(object sender, RoutedEventArgs e)
         {
             //ProgramState.OpenWebPage("https://teletype.in/@incas/classes");
@@ -126,45 +144,6 @@ namespace Incas.Objects.Views.Windows
             //fsv.OnBindingEventRequested += this.Fsv_OnBindingEventRequested;
             //fsv.OnLinkInsertingRequested += this.Fsv_OnLinkInsertingRequested;
             //this.ScriptFieldsPanel.Children.Add(fsv);
-        }
-
-        private void Fsv_OnLinkInsertingRequested(Field field)
-        {
-            this.CodeModule.SelectedText = $"self.{field.Name}";
-        }
-
-        private void Fsv_OnBindingEventRequested(Field field)
-        {
-            try
-            {
-                string searchText = ObjectiveScripting.GetPragmaStartEventsRegion();
-                int position = this.CodeModule.Document.Text.IndexOf(searchText, 1);
-                if (position == -1)
-                {
-                    DialogsManager.ShowExclamationDialog("Невозможно вставить метод в пустой модуль.", "Действие прервано");
-                }
-                string result = $"\n\tdef {field.Name}_changed(self):\n\t\tpass\n";
-                this.CodeModule.Document.Insert(position + searchText.Length, result);
-                this.CodeModule.SelectionStart = position + searchText.Length + result.Length;
-            }
-            catch { }
-        }
-
-        private void Fsv_OnBindingActionRequested(Field field)
-        {
-            try
-            {
-                string searchText = ObjectiveScripting.GetPragmaStartActionsRegion();
-                int position = this.CodeModule.Document.Text.IndexOf(searchText, 1);
-                if (position == -1)
-                {
-                    DialogsManager.ShowExclamationDialog("Невозможно вставить метод в пустой модуль.", "Действие прервано");
-                }
-                string result = $"\n\tdef {field.Name}_action(self):\n\t\tpass\n";
-                this.CodeModule.Document.Insert(position + searchText.Length, result);
-                this.CodeModule.SelectionStart = position + searchText.Length + result.Length;
-            }
-            catch { }
         }
 
         private void AddFieldClick(object sender, RoutedEventArgs e)
@@ -446,54 +425,6 @@ namespace Incas.Objects.Views.Windows
             //{
             //    this.vm.NameTemplate = this.NameTemplate.Text + " " + fn.GetSelectedField();
             //}
-        }
-
-        private void GenerateBaseScriptClick(object sender, RoutedEventArgs e)
-        {
-            string result = $"class {this.vm.Source.Name.Replace(' ', '_')}:\n\tdef __init__(self, ";
-            List<string> fieldsNames = new();
-            string imports = "";
-            string fieldsAllocation = "";
-            List<Field> fields = new();
-            try
-            {
-                fields = this.GetActualFields();
-                foreach (Field field in fields)
-                {                 
-                    switch (field.Type)
-                    {
-                        case FieldType.Integer:
-                            fieldsNames.Add($"{field.Name}=0");
-                            fieldsAllocation += $"\t\tself.{field.Name} = {field.Name} # {field.VisibleName}\n";
-                            break;
-                        case FieldType.Date:
-                            fieldsNames.Add($"{field.Name}=None");
-                            if (!imports.Contains("import datetime"))
-                            {
-                                imports += "import datetime\n";
-                            }
-                            fieldsAllocation += $"\t\tself.{field.Name} = {field.Name} # {field.VisibleName}\n";
-                            //fieldsAllocation += $"\t\tself.{field.Name} = datetime.datetime.strptime({field.Name}, \"%d.%m.%Y %H:%M:%S\") # {field.VisibleName}\n";
-                            break;
-                        default:
-                            fieldsNames.Add($"{field.Name}=None");
-                            fieldsAllocation += $"\t\tself.{field.Name} = {field.Name} # {field.VisibleName}\n";
-                            break;
-                    }                   
-                }
-                result = imports + result;
-                result += string.Join(", ", fieldsNames) + "):\n";
-                result += fieldsAllocation;
-                result += $"\n\n\t{ObjectiveScripting.GetPragmaStartMethodsRegion()}\n\t{ObjectiveScripting.GetPragmaEndMethodsRegion()}";
-                result += $"\n\n\t{ObjectiveScripting.GetPragmaStartEventsRegion()}\n\t{ObjectiveScripting.GetPragmaEndEventsRegion()}";
-                result += $"\n\n\t{ObjectiveScripting.GetPragmaStartActionsRegion()}\n\t{ObjectiveScripting.GetPragmaEndActionsRegion()}";
-            }
-            catch (FieldDataFailed fd)
-            {
-                DialogsManager.ShowExclamationDialog(fd.Message, "Генерация прервана");
-                return;
-            }
-            this.CodeModule.Text = result;         
         }
 
         private void SetPresettingFieldsClick(object sender, RoutedEventArgs e)

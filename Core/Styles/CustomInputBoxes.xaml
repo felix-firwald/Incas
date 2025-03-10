@@ -304,9 +304,10 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
-    <Style TargetType="{x:Type xctk:ButtonSpinner}">
+    <Style x:Name="ButtonSpinnerMain" TargetType="{x:Type xctk:ButtonSpinner}">
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Foreground" Value="{DynamicResource Light}"/>
@@ -319,9 +320,6 @@
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="SpinnerUpContentTemplate" Value="{StaticResource ButtonSpinnerSpinnerUpContentTemplateMain}" />
         <Setter Property="SpinnerDownContentTemplate" Value="{StaticResource ButtonSpinnerSpinnerDownContentTemplateMain}" />
-        <!--<Setter Property="SpinnerUpDisabledContentTemplate" Value="{StaticResource IncreaseGlyphDisabledKey}" />
-        <Setter Property="SpinnerDownDisabledContentTemplate" Value="{StaticResource DecreaseGlyphDisabledKey}" />-->
-        
         <Setter Property="ContextMenu">
             <Setter.Value>
                 <ContextMenu Foreground="White">
@@ -425,8 +423,96 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <ControlTemplate x:Key="ButtonSpinnerGridTemplate" TargetType="{x:Type xctk:ButtonSpinner}">
+        <Border x:Name="Border" SnapsToDevicePixels="True" CornerRadius="0" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="firstContentColumn" Width="*" />
+                    <ColumnDefinition x:Name="secondContentColumn" Width="auto" />
+                </Grid.ColumnDefinitions>
+                <ContentPresenter x:Name="contentPresenter" Cursor="Hand" Focusable="False" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Stretch">
+                    <ContentPresenter.ContextMenu>
+                        <ContextMenu Foreground="White">
+                            <MenuItem Header="Вырезать" Command="ApplicationCommands.Cut"/>
+                            <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                        </ContextMenu>
+                    </ContentPresenter.ContextMenu>
+                </ContentPresenter>
 
+                <Grid x:Name="gridContent" Grid.Column="1" MinWidth="80" Width="{TemplateBinding SpinnerWidth}" Height="{TemplateBinding SpinnerHeight}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+                    <RepeatButton x:Name="PART_IncreaseButton" Grid.Column="1" IsTabStop="{TemplateBinding IsTabStop}" Style="{StaticResource RepeatButtonTextBox}" ContentTemplate="{StaticResource ButtonSpinnerSpinnerUpContentTemplateMain}">
+                    </RepeatButton>
 
+                    <RepeatButton x:Name="PART_DecreaseButton" Grid.Column="0" Style="{StaticResource RepeatButtonTextBox}" IsTabStop="{TemplateBinding IsTabStop}" ContentTemplate="{StaticResource ButtonSpinnerSpinnerDownContentTemplateMain}" >
+                    </RepeatButton>
+
+                </Grid>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="ShowButtonSpinner" Value="False">
+                <Setter Property="Visibility" Value="Collapsed" TargetName="gridContent" />
+            </Trigger>
+            <Trigger Property="ShowSpinner" Value="False">
+                <Setter Property="Visibility" Value="Collapsed" TargetName="gridContent" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.5" />
+            </Trigger>
+            <Trigger SourceName="PART_IncreaseButton" Property="IsEnabled" Value="False">
+                <Setter TargetName="PART_IncreaseButton" Property="Opacity" Value="0.5" />
+            </Trigger>
+            <Trigger SourceName="PART_DecreaseButton" Property="IsEnabled" Value="False">
+                <Setter TargetName="PART_DecreaseButton" Property="Opacity" Value="0.5" />
+            </Trigger>
+            <Trigger Property="SpinnerLocation" Value="Left">
+                <Setter TargetName="firstContentColumn" Property="Width" Value="Auto" />
+                <Setter TargetName="secondContentColumn" Property="Width" Value="*" />
+                <Setter TargetName="contentPresenter" Property="Grid.Column" Value="1" />
+                <Setter TargetName="gridContent" Property="Grid.Column" Value="0" />
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                            <ThicknessAnimation Duration="0:0:0.100" To="2" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:0.250" To="#FF3E414B" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                            <ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:0.100" To="DodgerBlue" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                            <ThicknessAnimation Duration="0:0:0.100" To="2" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:0.250" To="#FF3E414B" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderBrush.Color"/>
+                            <ThicknessAnimation Duration="0:0:0.250" To="1" Storyboard.TargetName="Border" Storyboard.TargetProperty="BorderThickness"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
     <Style TargetType="{x:Type xctk:WatermarkTextBox}" BasedOn="{StaticResource WatermarkTextBox}" />
     
     <Style x:Key="NumericUpDown" TargetType="{x:Type xctk:InputBase}">
@@ -514,7 +600,92 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="NumericUpDownGrid" TargetType="{x:Type xctk:InputBase}">
+        <Setter Property="Background" Value="{x:Null}"/>
+        <Setter Property="BorderBrush" Value="{x:Null}"/>
+        <Setter Property="Foreground" Value="{x:Null}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="MaxHeight" Value="31"/>
+        <Setter Property="Margin" Value="-5,0,-1,0"/>
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Right" />
+        <Setter Property="FontFamily" Value="{StaticResource Rubik}"/>
+        <Setter Property="ContextMenu">
+            <Setter.Value>
+                <ContextMenu Foreground="White">
+                    <MenuItem Header="Вырезать" Command="ApplicationCommands.Cut"/>
+                    <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                </ContextMenu>
+            </Setter.Value>
+        </Setter>
+        <!--<Setter Property="WatermarkTemplate" Value="{StaticResource DefaultWatermarkTemplate}" />-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Control">
+                    <xctk:ButtonSpinner x:Name="PART_Spinner"
+                           IsTabStop="False"
+                           HorizontalContentAlignment="Left" Padding="5"
+                           VerticalContentAlignment="Center"
+                            Template="{StaticResource ButtonSpinnerGridTemplate}"     
+                           AllowSpin="{Binding AllowSpin, RelativeSource={RelativeSource TemplatedParent}}"
+                           ShowSpinner="{Binding ShowButtonSpinner, RelativeSource={RelativeSource TemplatedParent}}"
+                           SpinnerLocation="{Binding ButtonSpinnerLocation, RelativeSource={RelativeSource TemplatedParent}}"
+                           SpinnerWidth="{Binding ButtonSpinnerWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                           SpinnerHeight="{Binding ButtonSpinnerHeight, RelativeSource={RelativeSource TemplatedParent}}" Foreground="White"
+                           >
+                        <xctk:WatermarkTextBox x:Name="PART_TextBox"
+                                Style="{StaticResource WatermarkTextBoxSimple}"
+                                ContextMenu="{TemplateBinding ContextMenu}"
+                                FontFamily="{TemplateBinding FontFamily}"
+                                FontSize="{TemplateBinding FontSize}"
+                                FontStretch="{TemplateBinding FontStretch}"
+                                FontStyle="{TemplateBinding FontStyle}"
+                                FontWeight="{TemplateBinding FontWeight}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                IsUndoEnabled="{Binding IsUndoEnabled, RelativeSource={RelativeSource TemplatedParent}}"
+                                IsTabStop="True"
+                                MinWidth="20"
+                                AcceptsReturn="False"
+                                Margin="-2"
+                                AutoSelectBehavior="{Binding AutoSelectBehavior, RelativeSource={RelativeSource TemplatedParent}}"
+                                AutoMoveFocus="{Binding AutoMoveFocus, RelativeSource={RelativeSource TemplatedParent}}"
+                                TextAlignment="{Binding TextAlignment, RelativeSource={RelativeSource TemplatedParent}}"
+                                TextWrapping="NoWrap"
+                                TabIndex="{TemplateBinding TabIndex}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Watermark="{Binding Watermark, RelativeSource={RelativeSource TemplatedParent}}"
+                                WatermarkTemplate="{Binding WatermarkTemplate, RelativeSource={RelativeSource TemplatedParent}}"
+                                MaxLength="{Binding MaxLength, RelativeSource={RelativeSource TemplatedParent}}">
+                        </xctk:WatermarkTextBox>
+                    </xctk:ButtonSpinner>
+                    <ControlTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsReadOnly, RelativeSource={RelativeSource Self}}" Value="False" />
+                                <Condition Binding="{Binding AllowTextInput, RelativeSource={RelativeSource Self}}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="IsReadOnly" Value="True" TargetName="PART_TextBox" />
+                        </MultiDataTrigger>
+                        <DataTrigger Binding="{Binding IsReadOnly, RelativeSource={RelativeSource Self}}" Value="True">
+                            <Setter Property="IsReadOnly" Value="True" TargetName="PART_TextBox" />
+                        </DataTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.5" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="PART_TextBox" Property="FocusManager.FocusedElement" Value="{Binding ElementName=PART_TextBox}" />
 
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <xctk:InverseBoolConverter x:Key="InverseBoolConverter" />
     <xctk:BorderThicknessConverter x:Key="BorderThicknessConverter" />
 

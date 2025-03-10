@@ -69,4 +69,9 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="ToolBorder" TargetType="{x:Type Border}">
+        <Setter Property="CornerRadius" Value="2"/>
+        <Setter Property="Background" Value="{StaticResource Dark}"/>
+        <Setter Property="Margin" Value="5"/>
+    </Style>
 </ResourceDictionary>

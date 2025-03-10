@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
 
 namespace Incas.Objects.Views.Controls
 {
+    [Obsolete("Use vm!")]
     /// <summary>
     /// Логика взаимодействия для TableColumnCreator.xaml
     /// </summary>
@@ -34,30 +36,30 @@ namespace Incas.Objects.Views.Controls
         }
         public TableFieldColumnData GetField()
         {
-            switch (this.vm.FieldData.FieldType)
+            switch (this.vm.Source.FieldType)
             {
                 case FieldType.LocalEnumeration:
                     try
                     {
-                        List<string> values = JsonConvert.DeserializeObject<List<string>>(this.vm.FieldData.Value);
+                        List<string> values = JsonConvert.DeserializeObject<List<string>>(this.vm.Source.Value);
                     }
                     catch
                     {
-                        throw new FieldDataFailed($"Колонка [{this.vm.FieldData.Name}] (\"{this.vm.FieldData.VisibleName}\") не настроена.");
+                        throw new FieldDataFailed($"Колонка [{this.vm.Source.Name}] (\"{this.vm.Source.VisibleName}\") не настроена.");
                     }
                     break;
                 case FieldType.GlobalEnumeration:
                     try
                     {
-                        Guid id = Guid.Parse(this.vm.FieldData.Value);
+                        Guid id = Guid.Parse(this.vm.Source.Value);
                     }
                     catch
                     {
-                        throw new FieldDataFailed($"Колонка [{this.vm.FieldData.Name}] (\"{this.vm.FieldData.VisibleName}\") не настроена.");
+                        throw new FieldDataFailed($"Колонка [{this.vm.Source.Name}] (\"{this.vm.Source.VisibleName}\") не настроена.");
                     }
                     break;
             }
-            return this.vm.FieldData;
+            return this.vm.Source;
         }
 
         private void RemoveClick(object sender, MouseButtonEventArgs e)
@@ -96,7 +98,7 @@ namespace Incas.Objects.Views.Controls
 
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
         {
-            TableFieldColumnData f = this.vm.FieldData;
+            TableFieldColumnData f = this.vm.Source;
             string name = $"Настройки колонки [{f.Name}]";
             switch (f.FieldType)
             {

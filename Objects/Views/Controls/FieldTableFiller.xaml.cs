@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
+using Incas.DialogSimpleForm.Components;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Interfaces;
@@ -18,8 +19,11 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
+using Xceed.Wpf.Toolkit;
 using static Incas.Objects.Interfaces.IFillerBase;
+using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -106,7 +110,7 @@ namespace Incas.Objects.Views.Controls
         /// </summary>
         /// <returns></returns>
         public DataTable GetValue()
-        {         
+        {
             return this.vm.Grid;
         }
 
@@ -157,59 +161,115 @@ namespace Incas.Objects.Views.Controls
         {
             foreach (TableFieldColumnData col in this.vm.TableDefinition.Columns)
             {
-                if (col.Name == e.Column.Header.ToString())
+                if (col.Name == e.Column.Header.ToString() || col.Id.ToString() == e.Column.Header.ToString())
                 {
                     switch (col.FieldType)
                     {
                         case FieldType.String:
                         case FieldType.Text:
-                            DataGridTextColumn dgt1 = new();
-                            dgt1.Header = col.VisibleName;
-                            dgt1.Binding = new System.Windows.Data.Binding(e.Column.Header.ToString());
-                            dgt1.EditingElementStyle = this.FindResource("TextBoxGrid") as Style;
+                            DataGridTextColumn dgt1 = new()
+                            {
+                                Header = col.VisibleName,
+                                Binding = new System.Windows.Data.Binding(e.Column.Header.ToString()),
+                                EditingElementStyle = this.FindResource("TextBoxGrid") as Style
+                            };
                             e.Column = dgt1;
                             break;
                         case FieldType.LocalEnumeration:
                         case FieldType.GlobalEnumeration:
-                            DataGridComboBoxColumn dgc = new();
-                            dgc.Header = col.VisibleName;
-                            dgc.TextBinding = new System.Windows.Data.Binding(e.Column.Header.ToString());
-                            
-                            dgc.EditingElementStyle = this.FindResource("ComboBoxGrid") as Style;
-                            if (col.FieldType == FieldType.LocalEnumeration)
+                            DataGridComboBoxColumn dgc = new()
                             {
-                                dgc.ItemsSource = JsonConvert.DeserializeObject<List<string>>(col.Value);
-                            }
-                            else
-                            {
-                                dgc.ItemsSource = ProgramState.GetEnumeration(Guid.Parse(col.Value));
-                            }
+                                Header = col.VisibleName,
+                                TextBinding = new System.Windows.Data.Binding(e.Column.Header.ToString()),
+
+                                EditingElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.ComboboxGridStyle)
+                            };
+                            dgc.ItemsSource = col.FieldType == FieldType.LocalEnumeration
+                                ? JsonConvert.DeserializeObject<List<string>>(col.Value)
+                                : (System.Collections.IEnumerable)ProgramState.GetEnumeration(Guid.Parse(col.Value));
                             e.Column = dgc;
                             break;
                         case FieldType.Integer:
-                            DataGridNumericColumn nc = new();
-                            nc.Header = col.VisibleName;
-                            nc.Binding = new System.Windows.Data.Binding(e.Column.Header.ToString());
-                            nc.EditingElementStyle = this.FindResource("TextBoxGrid") as Style;
-                            e.Column = nc;
+                            this.GenerateTemplateColumnInteger(col, e);
+                            break;
+                        case FieldType.Date:
+                            this.GenerateTemplateColumnDateTime(col, e);
                             break;
                         case FieldType.Boolean:
-                            DataGridCheckBoxColumn cbc = new();
-                            cbc.Header = col.VisibleName;
-                            cbc.Binding = new System.Windows.Data.Binding(e.Column.Header.ToString());
-                            cbc.EditingElementStyle = this.FindResource("CheckBoxDataGrid") as Style;
-                            cbc.ElementStyle = this.FindResource("CheckBoxDataGridUsual") as Style;
+                            DataGridCheckBoxColumn cbc = new()
+                            {
+                                Header = col.VisibleName,
+                                Binding = new System.Windows.Data.Binding(e.Column.Header.ToString()),
+                                EditingElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.CheckboxEditingGridStyle),               
+                                ElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.CheckboxNotEditableGridStyle)
+                            };
                             e.Column = cbc;
+                            break;
+                        default:
+                            DialogsManager.ShowErrorDialog($"Не удалось распознать тип данных столбца \"{col.VisibleName}\"");
+                            e.Column.IsReadOnly = true;
                             break;
                     }
                     break;
                 }
             }
         }
+        private void GenerateTemplateColumnInteger(TableFieldColumnData col, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGridTemplateColumn templateInteger = new();
+            templateInteger.Header = col.VisibleName;
+            
+            DataTemplate cellEdit = new();
+            DataTemplate cellUsual = new();
+
+            #region Usual View
+            FrameworkElementFactory textBlock1Factory = new(typeof(TextBlock));
+            cellUsual.VisualTree = textBlock1Factory;
+            textBlock1Factory.SetBinding(TextBlock.TextProperty, new Binding(e.Column.Header.ToString()));
+            #endregion
+            
+            #region Edit View
+            FrameworkElementFactory editFactory = new(typeof(IntegerUpDown));
+            editFactory.SetValue(IntegerUpDown.StyleProperty, this.FindResource(ResourceStyleManager.IntegerUpDownGridStyle) as Style);
+            editFactory.SetBinding(IntegerUpDown.ValueProperty, new Binding(e.Column.Header.ToString()));
+            cellEdit.VisualTree = editFactory;
+            #endregion
+
+            templateInteger.CellTemplate = cellUsual;
+            templateInteger.CellEditingTemplate = cellEdit;
+            e.Column = templateInteger;
+        }
+        private void GenerateTemplateColumnDateTime(TableFieldColumnData col, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGridTemplateColumn templateInteger = new();
+            templateInteger.Header = col.VisibleName;
+
+            DataTemplate cellEdit = new();
+            DataTemplate cellUsual = new();
+
+            #region Usual View
+            FrameworkElementFactory textBlock1Factory = new(typeof(TextBlock));
+            cellUsual.VisualTree = textBlock1Factory;
+            textBlock1Factory.SetBinding(TextBlock.TextProperty, new Binding(e.Column.Header.ToString()));
+            #endregion
+
+            #region Edit View
+            FrameworkElementFactory editFactory = new(typeof(DatePicker));
+            editFactory.SetValue(IntegerUpDown.StyleProperty, this.FindResource(ResourceStyleManager.DatePickerGridStyle) as Style);
+            editFactory.SetBinding(DatePicker.SelectedDateProperty, new Binding(e.Column.Header.ToString()));
+            cellEdit.VisualTree = editFactory;
+            #endregion
+
+            templateInteger.CellTemplate = cellUsual;
+            templateInteger.CellEditingTemplate = cellEdit;
+            e.Column = templateInteger;
+        }
         private MenuItem AddMenuItem(string header)
         {
-            MenuItem mi = new();
-            mi.Header = header;
+            MenuItem mi = new()
+            {
+                Header = header
+            };
             return mi;
         }
 
@@ -338,7 +398,7 @@ namespace Incas.Objects.Views.Controls
             if (selector.ShowDialog("Копирование значений"))
             {
                 this.vm.CopyValueToAllRows(selector.GetTargetColumnName(), selector.OnlyEmptyOnes);
-            }           
+            }
         }
     }
 }

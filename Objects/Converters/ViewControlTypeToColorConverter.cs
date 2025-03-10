@@ -23,7 +23,7 @@ namespace Incas.Objects.Converters
                         return IncasEngine.Core.Color.FromRGB(127, 192, 77).AsBrush();                    
                 }
             }
-            return IncasEngine.Core.Color.FromRGB(245, 166, 35).AsBrush();
+            return IncasEngine.Core.Color.FromRGB(247, 189, 91).AsBrush();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

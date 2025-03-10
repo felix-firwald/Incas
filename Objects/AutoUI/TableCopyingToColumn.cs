@@ -1,10 +1,7 @@
-﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
-using Incas.DialogSimpleForm.Components;
-using Incas.Objects.Components;
+﻿using Incas.DialogSimpleForm.Components;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
+using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
 
 namespace Incas.Objects.AutoUI
 {

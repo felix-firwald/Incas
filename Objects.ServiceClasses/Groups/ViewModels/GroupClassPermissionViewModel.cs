@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Incas.Objects.ServiceClasses.Groups.ViewModels
 {
@@ -28,7 +29,32 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
         public GroupClassPermissionViewModel(ClassItem target)
         {
             this.item = target;
+            this.AcceptAll = new Command(this.DoAcceptAll);
+            this.RejectAll = new Command(this.DoRejectAll);
         }
+
+        private void DoRejectAll(object obj)
+        {
+            this.CreateOperations = false;
+            this.ReadOperations = false;
+            this.ViewOperations = false;
+            this.UpdateOperations = false;
+            this.DeleteOperations = false;
+            this.ConfidentialAccess = false;
+        }
+
+        private void DoAcceptAll(object obj)
+        {
+            this.CreateOperations = true;
+            this.ReadOperations = true;
+            this.ViewOperations = true;
+            this.UpdateOperations = true;
+            this.DeleteOperations = true;
+            this.ConfidentialAccess = true;
+        }
+
+        public ICommand AcceptAll { get; set; }
+        public ICommand RejectAll { get; set; }
         public ClassItem Item
         {
             get

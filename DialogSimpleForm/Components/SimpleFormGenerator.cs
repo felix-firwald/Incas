@@ -28,7 +28,7 @@ namespace Incas.DialogSimpleForm.Components
         /// </summary>
         public AutoUIBase Result;
 
-        private ResourceInstance resourceInstance = new();
+        private ResourceStyleManager resourceInstance = new();
         public SimpleFormGenerator(AutoUIBase values, StackPanel container)
         {
             this.Result = values;

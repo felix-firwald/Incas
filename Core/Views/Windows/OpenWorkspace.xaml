@@ -39,7 +39,7 @@
                 </StackPanel>
             </Button>
         </Grid>
-        <Border CornerRadius="8,0,0,8" Margin="5,5,0,5" Background="{DynamicResource LightBlack}" >
+        <Border CornerRadius="2,0,0,2" Margin="5,5,0,5" Background="{DynamicResource LightBlack}" >
             <ListBox Style="{DynamicResource ListBoxMain}" Background="{DynamicResource LightBlack}" ItemsSource="{Binding Workspaces}" SelectedItem="{Binding SelectedWorkspace}" Cursor="">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -51,7 +51,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Border>
-        <Border CornerRadius="0,8,8,0" Margin="0,5,5,5" Background="{DynamicResource LightBlack}" Grid.Column="1">
+        <Border CornerRadius="0,2,2,0" Margin="0,5,5,5" Background="{DynamicResource LightBlack}" Grid.Column="1">
 
             <StackPanel Orientation="Vertical" Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Center" >
                 <!--<fa:FontAwesome Style="{DynamicResource IconButton}" Icon="PlusCircle" ToolTip="Добавить рабочее пространство в список" MouseDown="AddClick" FontSize="16" />-->

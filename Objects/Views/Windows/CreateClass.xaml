@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Создать класс" Height="750" Width="1000" MinHeight="750" MinWidth="960" WindowStartupLocation="CenterScreen" Style="{StaticResource WindowBase}" Background="{StaticResource Black}">
     <Window.Resources>
-        <ResourceDictionary>
+        <ResourceDictionary>            
             <local1:FieldTypeToColorConverter x:Key="FieldTypeToColorConverter"/>
             <local1:FieldTypeToVisibleNameConverter x:Key="FieldTypeToVisibleNameConverter"/>
             <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
@@ -36,51 +36,18 @@
         </Grid>
 
         <TabControl x:Name="TabControlMain" Style="{StaticResource TabControlMain}" Background="{DynamicResource Black}" Margin="0" ItemContainerStyle="{StaticResource TabItemMain}" Grid.RowSpan="2" Grid.ColumnSpan="2">
-            <TabItem Header="Атрибуты и поля"  BorderBrush="{DynamicResource LightPurple}">
+            <TabItem Header="Атрибуты и члены класса"  BorderBrush="{DynamicResource LightPurple}">
                 <Grid Background="{DynamicResource Black}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="5*" MinWidth="250" />
                         <ColumnDefinition Width="5*" MaxWidth="850"/>
-                        <ColumnDefinition Width="50"/>
                     </Grid.ColumnDefinitions>
-                    <Border Grid.Row="2" Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8">
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
-
-                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="AddFieldClick" ToolTip="Добавить поле">
-                                <Path Fill="{StaticResource Buttons.Green}" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
-                            </Button>
-                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="CopyFieldsFromAnotherClass" ToolTip="Скопировать поля из другого класса">
-                                <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Data="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm4.5 6V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5a.5.5 0 0 1 1 0"/>
-                            </Button>
- 
-                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="AddVirtualFieldsClick" ToolTip="Создать виртуальные поля">
-                                <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Data="{StaticResource Magic}"/>
-                            </Button>
-                            <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-
-                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="MinimizeAllClick" ToolTip="Свернуть все поля">
-                                <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M7.5519,19.8462V16.4385H4.1441v-.923H8.4749v4.3307Zm7.9855,0V15.5155h4.3185v.923H16.4606v3.4077ZM4.1441,8.472V7.549H7.5519V4.1538h.923V8.472Zm11.3933,0V4.1538h.9232V7.549h3.3953v.923Z"/>
-                            </Button>
-                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="MaximizeAllClick" ToolTip="Развернуть все поля">
-                                <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M4.1441,19.8462V15.5155h.9233V18.923H8.4749v.9232Zm11.3933,0V18.923h3.3952V15.5155h.9233v4.3307ZM4.1441,8.472V4.1538H8.4749V5.077H5.0674V8.472Zm14.7885,0V5.077H15.5374V4.1538h4.3185V8.472Z"/>
-                            </Button>
-
-                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="ShowFormClick" ToolTip="Предпросмотр формы">
-                                <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M6.277,21.8462H3.689A1.52,1.52,0,0,1,2.1538,20.311V17.723H3.077v2.5848a.5922.5922,0,0,0,.6153.6152H6.277Zm11.4585,0V20.923h2.5723a.5922.5922,0,0,0,.6152-.6153V17.723h.9232v2.588a1.5194,1.5194,0,0,1-1.5352,1.5352ZM12.0033,17.623A7.9286,7.9286,0,0,1,7.2818,16.14,9.1091,9.1091,0,0,1,4.1345,12a9.1447,9.1447,0,0,1,3.149-4.1462,7.8988,7.8988,0,0,1,4.7133-1.4893A7.9406,7.9406,0,0,1,16.72,7.8538,9.1193,9.1193,0,0,1,19.878,12a9.0867,9.0867,0,0,1-3.16,4.1385A7.9489,7.9489,0,0,1,12.0033,17.623ZM11.997,16.7A6.9637,6.9637,0,0,0,16.04,15.47a8.3206,8.3206,0,0,0,2.82-3.4693,8.37,8.37,0,0,0-2.82-3.4762,6.9357,6.9357,0,0,0-4.0425-1.237,6.9418,6.9418,0,0,0-4.0447,1.237A8.2139,8.2139,0,0,0,5.153,12a8.1829,8.1829,0,0,0,2.7993,3.4678A6.9615,6.9615,0,0,0,11.997,16.7Zm-.0015-1.9088a2.7168,2.7168,0,0,0,1.991-.8095,2.8238,2.8238,0,0,0,0-3.9682,2.8218,2.8218,0,0,0-3.9665,0,2.8321,2.8321,0,0,0-.0017,3.9665A2.6874,2.6874,0,0,0,11.9955,14.7912ZM12,13.8682a1.8826,1.8826,0,0,1-1.3278-3.2027A1.8832,1.8832,0,0,1,13.3345,13.33,1.822,1.822,0,0,1,12,13.8682ZM2.1538,6.2645V3.689A1.5194,1.5194,0,0,1,3.689,2.1538H6.277V3.077H3.6923a.5922.5922,0,0,0-.6153.6152V6.2645Zm18.7692,0V3.6922a.5922.5922,0,0,0-.6152-.6152H17.7355V2.1538H20.311A1.5193,1.5193,0,0,1,21.8462,3.689V6.2645Z"/>
-                            </Button>
-
-                            <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-                            
-                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="GetMoreInfoClick" ToolTip="Открыть справочную информацию">
-                                <Path Fill="#FF78DDFF" VerticalAlignment="Center" Stretch="Uniform" Data="M12.9356,17.9427a.78.78,0,1,0-.5605-.2277A.7589.7589,0,0,0,12.9356,17.9427Zm-.5165-3.3115h.9655a2.7092,2.7092,0,0,1,.245-1.06,4.5017,4.5017,0,0,1,.851-1.04,6.9246,6.9246,0,0,0,.9963-1.199,2.2871,2.2871,0,0,0,.327-1.2265,2.3407,2.3407,0,0,0-.8308-1.8842A2.9485,2.9485,0,0,0,13.0076,7.52a2.89,2.89,0,0,0-1.8317.5865,3.6369,3.6369,0,0,0-1.1028,1.348l.919.3808A2.9346,2.9346,0,0,1,11.68,8.87a1.8167,1.8167,0,0,1,1.2895-.4192A1.7552,1.7552,0,0,1,14.39,8.984a1.7859,1.7859,0,0,1,.448,1.1742,1.5992,1.5992,0,0,1-.2808.9278,4.909,4.909,0,0,1-.7307.8222,5.0884,5.0884,0,0,0-1.1385,1.3595A3.1182,3.1182,0,0,0,12.4191,14.6312Zm.4918,7.0808a8.7726,8.7726,0,0,1-3.51-.7085A8.9859,8.9859,0,0,1,4.6169,16.224a9.0416,9.0416,0,0,1-.0008-7.019,8.9865,8.9865,0,0,1,4.78-4.7838,9.0422,9.0422,0,0,1,7.019-.0007A8.9865,8.9865,0,0,1,21.1984,9.2a9.0422,9.0422,0,0,1,.0007,7.019,8.9859,8.9859,0,0,1-4.78,4.7837A8.7525,8.7525,0,0,1,12.9109,21.712Zm-.0033-1a7.7211,7.7211,0,0,0,5.675-2.325,7.7211,7.7211,0,0,0,2.325-5.675,7.7209,7.7209,0,0,0-2.325-5.675,7.7211,7.7211,0,0,0-5.675-2.325,7.7211,7.7211,0,0,0-5.675,2.325,7.7209,7.7209,0,0,0-2.325,5.675,7.7211,7.7211,0,0,0,2.325,5.675A7.7211,7.7211,0,0,0,12.9076,20.712Z"/>
-                            </Button>
-                        </StackPanel>
-                    </Border>
+                    
                     <Border CornerRadius="8" Margin="5,5,0,5" Background="{DynamicResource Black}" Grid.Row="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                             <StackPanel >
                                 <!--Inheritance-->
-                                <Border Background="{StaticResource Dark}" Visibility="{Binding InheritanceVisibility}" CornerRadius="8" Margin="5">
+                                <Border Style="{StaticResource ToolBorder}" Visibility="{Binding InheritanceVisibility}">
 
                                     <Grid Margin="5">
                                         <Grid.ColumnDefinitions>
@@ -95,7 +62,7 @@
                                     </Grid>
                                 </Border>
                                 <!--Basic Options-->
-                                <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                                <Border Style="{StaticResource ToolBorder}">
                                     <StackPanel>
                                         <Grid Margin="5,5,0,0">
                                             <Grid.ColumnDefinitions>
@@ -120,14 +87,14 @@
                                         <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding ListName}" Tag="Наименование списка объектов" MaxLength="75" ToolTip="Наименование списка объектов (во всех вкладках, где показывается список объектов класса)"/>
                                     </StackPanel>
                                 </Border>
-                                <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                                <Border Style="{StaticResource ToolBorder}">
                                     <StackPanel>
                                         <Grid Margin="5">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="30"/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Stretch="Uniform" Height="15" Data="m586.92-427.15 101.54-57q7.46-4.23 11.81-12.2 4.35-7.96 4.35-16.65v-115.54q0-8.69-4.35-16.65-4.35-7.96-11.81-12.19l-101.54-57q-7.46-4.24-16.15-4.24-8.69 0-16.15 4.24l-101.54 57q-7.46 4.23-11.81 12.19-4.35 7.96-4.35 16.65V-513q0 8.69 4.35 16.65 4.35 7.97 11.81 12.2l101.54 57q7.46 4.23 16.15 4.23 8.69 0 16.15-4.23ZM366.15-301.54q-27.61 0-46.11-18.5t-18.5-46.11v-409.23q0-27.62 18.5-46.12 18.5-18.5 46.11-18.5h409.23q27.62 0 46.12 18.5Q840-803 840-775.38v409.23q0 27.61-18.5 46.11t-46.12 18.5H366.15Zm0-40h409.23q10.77 0 17.7-6.92 6.92-6.92 6.92-17.69v-409.23q0-10.77-6.92-17.7-6.93-6.92-17.7-6.92H366.15q-10.77 0-17.69 6.92-6.92 6.93-6.92 17.7v409.23q0 10.77 6.92 17.69 6.92 6.92 17.69 6.92Zm204.62-229.23ZM218-164Zm29.23 36.69q-26.85 3.23-47.96-12.92-21.12-16.15-24.35-43l-49.15-388.54q-3.23-26.85 13.54-48.61 16.77-21.77 43.61-24.47l17.39-.77q8.54-.69 15.11 4.77 6.58 5.47 6.58 15 0 7.31-5.12 13.31-5.11 6-12.42 6.69l-15.61.77q-10.77.77-16.93 8.85-6.15 8.08-4.61 18.85l47.84 388.76q1.54 10.77 9.23 16.93 7.7 6.15 18.47 4.61l470.92-58.77q8.54-1.23 15 3.77 6.46 5 7.69 13.54 1.23 8.54-3.77 14.5-5 5.96-13.54 7.19l-471.92 59.54Zm323.54-336.23-93.85-53.23v-108L570.77-678l93.85 53.23v108l-93.85 53.23Z"/>
+                                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Stretch="Uniform" Height="15" Data="M247.23-127.31q-26.85 3.46-47.96-12.81-21.12-16.26-24.35-43.11l-49.15-388.54q-3.23-26.85 13.31-48.61 16.54-21.77 43.38-24.24l39.08-2.92v281.39q0 59.84 42.38 102.23 42.39 42.38 102.23 42.38h367.39q.15 14-9.77 24.58-9.92 10.58-24.39 12.81l-452.15 56.84Zm118.92-174.23q-27.61 0-46.11-18.5t-18.5-46.11v-409.23q0-27.62 18.5-46.12 18.5-18.5 46.11-18.5h409.23q27.62 0 46.12 18.5Q840-803 840-775.38v409.23q0 27.61-18.5 46.11t-46.12 18.5H366.15Zm188.47-124.84q7.46 4.23 16.15 4.23 8.69 0 16.15-4.23l101.54-57.77q7.46-4.23 11.81-11.81 4.35-7.58 4.35-16.27v-117.08q0-8.69-4.35-16.27-4.35-7.57-11.81-11.8l-101.54-57.77q-7.46-4.23-16.15-4.23-8.69 0-16.15 4.23l-101.54 57.77q-7.46 4.23-11.81 11.8-4.35 7.58-4.35 16.27v117.08q0 8.69 4.35 16.27t11.81 11.81l101.54 57.77Z"/>
                                             <Label Grid.Column="1" Content="Имплементация обобщений:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" />
                                         </Grid>
                                         <Button Style="{StaticResource ButtonRectangle}" ToolTip="Добавить новое обобщение" HorizontalAlignment="Left" Grid.Column="2" >
@@ -142,13 +109,13 @@
                                     </StackPanel>
 
                                 </Border>
-                                <!--TemplateName and Card--> 
+                                <!--TemplateName and Card-->
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                                    <Border Style="{StaticResource ToolBorder}">
                                         <StackPanel>
                                             <Grid Margin="5,5,0,0">
                                                 <Grid.ColumnDefinitions>
@@ -171,7 +138,7 @@
                                             </TextBox>
                                         </StackPanel>
                                     </Border>
-                                    <Border x:Name="CardArea" Background="{StaticResource Dark}" Grid.Column="1" CornerRadius="8" Margin="5">
+                                    <Border x:Name="CardArea" Style="{StaticResource ToolBorder}" Grid.Column="1">
                                         <StackPanel>
                                             <Grid Margin="5,5,0,0">
                                                 <Grid.ColumnDefinitions>
@@ -187,9 +154,8 @@
                                     </Border>
 
                                 </Grid>
-                                
 
-                                <Border x:Name="AccessArea" Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                                <Border x:Name="AccessArea" Style="{StaticResource ToolBorder}">
                                     <StackPanel>
                                         <Grid Margin="5,5,0,0">
                                             <Grid.ColumnDefinitions>
@@ -205,14 +171,14 @@
                                         <CheckBox Style="{StaticResource CheckBoxMain}" Content="Разрешить переопределение автора и делегирование" IsChecked="{Binding AuthorOverrideEnabled}"/>
                                     </StackPanel>
                                 </Border>
-                                <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5" Grid.Column="1">
+                                <Border Style="{StaticResource ToolBorder}" Grid.Column="1">
                                     <StackPanel>
                                         <Grid Margin="5,5,0,0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="30"/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Data="M5.6535,19.9578A1.58,1.58,0,0,1,4.038,18.3423V5.5733A1.58,1.58,0,0,1,5.6535,3.9578h12.769A1.58,1.58,0,0,1,20.038,5.5733v7.71q-.2442-.1213-.4942-.2308a4.69,4.69,0,0,0-.5058-.1885V8.727h-6.5v4.4635a5.6186,5.6186,0,0,0-.9577.49,5.7709,5.7709,0,0,0-.8693.6807H5.038v3.9808a.5923.5923,0,0,0,.6155.6155H7.9343q.1594.2807.3287.5212t.3405.4788ZM5.038,13.3615h6.5V8.727h-6.5Zm0-5.6345h14V5.5733a.5923.5923,0,0,0-.6155-.6155H5.6535a.5923.5923,0,0,0-.6155.6155Zm11.1345,14a6.4,6.4,0,0,1-3.3825-.9405,7.1506,7.1506,0,0,1-2.4827-2.521A7.1528,7.1528,0,0,1,12.79,15.7443a6.5545,6.5545,0,0,1,6.7653,0,7.1528,7.1528,0,0,1,2.4827,2.5212,7.1506,7.1506,0,0,1-2.4827,2.521A6.4,6.4,0,0,1,16.1725,21.727Zm0-1a5.4144,5.4144,0,0,0,2.62-.6692,6.3123,6.3123,0,0,0,2.0722-1.7923,6.3085,6.3085,0,0,0-2.0722-1.7922,5.4633,5.4633,0,0,0-5.24,0A6.3085,6.3085,0,0,0,11.48,18.2655a6.3123,6.3123,0,0,0,2.0722,1.7923A5.4141,5.4141,0,0,0,16.1725,20.727Zm0-1.4615a1.001,1.001,0,1,1,.7068-.2932A.9629.9629,0,0,1,16.1725,19.2655Z"/>
+                                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Height="15" Margin="0,0,2,0" Data="M600-160q-27.62 0-46.12-18.5-18.5-18.5-18.5-46.12v-510.76q0-27.62 18.5-46.12Q572.38-800 600-800h110.77q27.61 0 46.12 18.5 18.5 18.5 18.5 46.12v510.76q0 27.62-18.5 46.12-18.51 18.5-46.12 18.5H600Zm-350.77 0q-27.61 0-46.11-18.5-18.51-18.5-18.51-46.12v-510.76q0-27.62 18.51-46.12 18.5-18.5 46.11-18.5H360q27.62 0 46.12 18.5 18.5 18.5 18.5 46.12v510.76q0 27.62-18.5 46.12Q387.62-160 360-160H249.23Zm-24.61-575.38v510.76q0 9.24 7.69 16.93Q240-200 249.23-200H360q9.23 0 16.92-7.69 7.7-7.69 7.7-16.93v-510.76q0-9.24-7.7-16.93Q369.23-760 360-760H249.23q-9.23 0-16.92 7.69-7.69 7.69-7.69 16.93Z"/>
 
                                             <Label Content="Список объектов:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
 
@@ -227,14 +193,14 @@
                                         </ListBox>
                                     </StackPanel>
                                 </Border>
-                                <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5" Grid.Column="1">
+                                <Border Style="{StaticResource ToolBorder}" Grid.Column="1">
                                     <StackPanel>
                                         <Grid Margin="5,5,0,0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition MaxWidth="30"/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Margin="0,0,2,0" Data="M15.0068,10.2514v1.5a.5.5,0,1,0,1,0v-1.5h1.5a.5.5,0,1,0,0-1h-1.5v-1.5a.5.5,0,1,0-1,0v1.5h-1.5a.5.5,0,1,0,0,1Zm-1.5,6h4a.5.5,0,1,0,0-1h-4a.5.5,0,1,0,0,1Zm-2.8845,3.5a1.58,1.58,0,0,1-1.6155-1.6155V5.3669a1.58,1.58,0,0,1,1.6155-1.6155h6.2132a1.5673,1.5673,0,0,1,.6323.1307,1.661,1.661,0,0,1,.5177.348L21.528,7.7726a1.6569,1.6569,0,0,1,.348.5178,1.5669,1.5669,0,0,1,.1308.6322v9.2133a1.58,1.58,0,0,1-1.6155,1.6155Zm0-1h9.769a.6617.6617,0,0,0,.6155-.6155V8.7514l-4-4H10.6223a.6613.6613,0,0,0-.6155.6155v12.769a.6615.6615,0,0,0,.6155.6155Zm-4,5a1.58,1.58,0,0,1-1.6155-1.6155V10.2514a.5.5,0,1,1,1,0V22.1359a.6615.6615,0,0,0,.6155.6155h8.8845a.5.5,0,1,1,0,1Zm3.3845-5v0Z"/>
+                                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Height="15" Margin="0,0,2,0" Data="M520-620v60q0 8.5 5.76 14.25t14.27 5.75q8.51 0 14.24-5.75T560-560v-60h60q8.5 0 14.25-5.76t5.75-14.27q0-8.51-5.75-14.24T620-660h-60v-60q0-8.5-5.76-14.25T539.97-740q-8.51 0-14.24 5.75T520-720v60h-60q-8.5 0-14.25 5.76T440-639.97q0 8.51 5.75 14.24T460-620h60Zm-60 240h160q8.5 0 14.25-5.76t5.75-14.27q0-8.51-5.75-14.24T620-420H460q-8.5 0-14.25 5.76T440-399.97q0 8.51 5.75 14.24T460-380ZM344.62-240q-27.62 0-46.12-18.5Q280-277 280-304.62v-510.76q0-27.62 18.5-46.12Q317-880 344.62-880h248.53q13.27 0 25.29 5.23t20.71 13.92l141.7 141.7q8.69 8.69 13.92 20.71 5.23 12.02 5.23 25.29v368.53q0 27.62-18.5 46.12Q763-240 735.38-240H344.62Zm-160 160Q157-80 138.5-98.5 120-117 120-144.62V-620q0-8.5 5.76-14.25t14.27-5.75q8.51 0 14.24 5.75T160-620v475.38q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69H540q8.5 0 14.25 5.76T560-99.97q0 8.51-5.75 14.24T540-80H184.62Z"/>
 
                                             <Label Content="Контроль уникальности:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
 
@@ -251,164 +217,135 @@
                             </StackPanel>
                         </ScrollViewer>
                     </Border>
-                    <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding Fields}" ItemContainerStyle="{StaticResource ListBoxItemUnselectable}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" Grid.Column="1" Margin="0,5,5,5" Background="{StaticResource Black}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border x:Name="MainBorder" Margin="0" CornerRadius="8" Background="{DynamicResource Dark}">
-                                    <Border.Style>
-                                        <Style TargetType="{x:Type Border}">
-                                            <Setter Property="Height" Value="Auto"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ElementName=ExpanderButton, Path=IsChecked}" Value="False">
-                                                    <Setter Property="Height" Value="40"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Border.Style>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="55*"/>
-                                            <ColumnDefinition Width="40" MaxWidth="40"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="40"/>
-                                            <RowDefinition Height="2"/>
-                                            <RowDefinition />
-                                        </Grid.RowDefinitions>
-                                        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-                                            <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" IsChecked="{Binding IsExpanded}" ToolTip="Свернуть / развернуть поле"/>
-                                            <Rectangle Width="1" Fill="{DynamicResource Area}" Margin="0,5,0,5" Opacity="0.5" />
-                                            <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
-                                            <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding BelongsThisClass}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
-                                                <TextBox.ContextMenu>
-                                                    <ContextMenu>
-                                                        <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
-                                                        <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
-                                                    </ContextMenu>
-                                                </TextBox.ContextMenu>
-                                            </TextBox>
-                                            <Label Style="{DynamicResource LabelElement}" Content="]" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
-                                        </StackPanel>
+                    <TabControl Style="{StaticResource TabControlMain}" ItemContainerStyle="{StaticResource TabItemMain}" Grid.Column="1" Background="{x:Null}">
+                        <TabItem Header="Поля" BorderBrush="{DynamicResource DarkYellow}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" MinWidth="250" />
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding Fields}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" Margin="0,5,5,5" Background="{StaticResource Black}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border x:Name="MainBorder" Margin="2" CornerRadius="8" Background="{DynamicResource Dark}">
+                                                <Border.Style>
+                                                    <Style TargetType="{x:Type Border}">
+                                                        <Setter Property="Height" Value="Auto"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ElementName=ExpanderButton, Path=IsChecked}" Value="False">
+                                                                <Setter Property="Height" Value="40"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="55*"/>
+                                                        <ColumnDefinition Width="40" MaxWidth="40"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="40"/>
+                                                        <RowDefinition Height="2"/>
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
+                                                        <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" IsChecked="{Binding IsExpanded}" ToolTip="Свернуть / развернуть поле"/>
+                                                        <Rectangle Width="1" Fill="{DynamicResource Area}" Margin="0,5,0,5" Opacity="0.5" />
+                                                        <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
+                                                        <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding BelongsThisClass}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
+                                                            <TextBox.ContextMenu>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                                                                    <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
+                                                                </ContextMenu>
+                                                            </TextBox.ContextMenu>
+                                                        </TextBox>
+                                                        <Label Style="{DynamicResource LabelElement}" Content="]" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
+                                                    </StackPanel>
 
-                                        <Rectangle Grid.Row="1" Fill="{DynamicResource Area}" Grid.ColumnSpan="2" />
+                                                    <Rectangle Grid.Row="1" Fill="{DynamicResource Area}" Grid.ColumnSpan="2" />
 
-                                        <StackPanel Grid.Row="2" x:Name="ContentPanel" IsEnabled="{Binding BelongsThisClass}">
+                                                    <StackPanel Grid.Row="2" x:Name="ContentPanel" IsEnabled="{Binding BelongsThisClass}">
 
-                                            <TextBox Style="{DynamicResource TextBoxMain}" IsReadOnly="False" Tag="Отображаемое название" Text="{Binding VisibleName, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" TextWrapping="Wrap">
-                                                <TextBox.ContextMenu>
-                                                    <ContextMenu>
-                                                        <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
-                                                        <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
-                                                    </ContextMenu>
-                                                </TextBox.ContextMenu>
-                                            </TextBox>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="40"/>
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding DataContext.FieldTypes, RelativeSource={RelativeSource AncestorType=ListBox}}" SelectedItem="{Binding Type}" SelectionChanged="ComboType_SelectionChanged" Grid.Column="1">
-                                                    <ComboBox.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <StackPanel Orientation="Horizontal">
-                                                                <Ellipse Width="5" Height="5" Fill="{Binding ., Converter={StaticResource FieldTypeToColorConverter}}"/>
-                                                                <Label Content="{Binding ., Converter={StaticResource FieldTypeToVisibleNameConverter}}" Style="{DynamicResource LabelElement}" FontSize="11"/>
-                                                                <!--<Label Content="{Binding ., Converter={StaticResource FieldTypeToVisibleNameConverter}}" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>-->
-                                                            </StackPanel>
-                                                        </DataTemplate>
-                                                    </ComboBox.ItemTemplate>
-                                                </ComboBox>
-                                                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" ToolTip="Открыть настройки поля" Command="{Binding DataContext.OpenFieldSettings, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
-                                                    <Path Fill="White" VerticalAlignment="Center" Data="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
-                                                </Button>
-                                            </Grid>
-                                        </StackPanel>
-                                        <Rectangle Width="1" Fill="{DynamicResource Area}" Grid.Column="1" Visibility="{Binding BelongsVisibility}" HorizontalAlignment="Left"  Margin="-2,5,0,5" Opacity="0.5" />
-                                        <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" Background="{StaticResource Dark}" ToolTip="Удалить поле" Grid.Column="1" Command="{Binding DataContext.RemoveField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
-                                            <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
+                                                        <TextBox Style="{DynamicResource TextBoxMain}" IsReadOnly="False" Tag="Отображаемое название" Text="{Binding VisibleName, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" TextWrapping="Wrap">
+                                                            <TextBox.ContextMenu>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                                                                    <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
+                                                                </ContextMenu>
+                                                            </TextBox.ContextMenu>
+                                                        </TextBox>
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="40"/>
+                                                                <ColumnDefinition />
+                                                            </Grid.ColumnDefinitions>
+                                                            <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding DataContext.FieldTypes, RelativeSource={RelativeSource AncestorType=ListBox}}" SelectedItem="{Binding Type}" SelectionChanged="ComboType_SelectionChanged" Grid.Column="1">
+                                                                <ComboBox.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <Ellipse Width="5" Height="5" Fill="{Binding ., Converter={StaticResource FieldTypeToColorConverter}}"/>
+                                                                            <Label Content="{Binding ., Converter={StaticResource FieldTypeToVisibleNameConverter}}" Style="{DynamicResource LabelElement}" FontSize="11"/>
+                                                                            <!--<Label Content="{Binding ., Converter={StaticResource FieldTypeToVisibleNameConverter}}" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>-->
+                                                                        </StackPanel>
+                                                                    </DataTemplate>
+                                                                </ComboBox.ItemTemplate>
+                                                            </ComboBox>
+                                                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" ToolTip="Открыть настройки поля" Command="{Binding DataContext.OpenFieldSettings, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
+                                                                <Path Fill="White" VerticalAlignment="Center" Data="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
+                                                            </Button>
+                                                        </Grid>
+                                                    </StackPanel>
+                                                    <Rectangle Width="1" Fill="{DynamicResource Area}" Grid.Column="1" Visibility="{Binding BelongsVisibility}" HorizontalAlignment="Left"  Margin="-2,5,0,5" Opacity="0.5" />
+                                                    <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" Background="{StaticResource Dark}" ToolTip="Удалить поле" Grid.Column="1" Command="{Binding DataContext.RemoveField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
+                                                        <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
+                                                    </Button>
+                                                    <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding BelongsVisibility}">
+                                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}"  ToolTip="Поднять выше" Grid.Column="1" Command="{Binding DataContext.MoveUpField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
+                                                            <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Margin="4" Data="M13.04,11.1856l-4.2463,4.246a.5021.5021,0,0,1-.3442.15.4664.4664,0,0,1-.3633-.15.4716.4716,0,0,1,0-.7075l4.3883-4.3885a.7813.7813,0,0,1,1.131,0l4.3882,4.3885a.5024.5024,0,0,1,.15.3443.4662.4662,0,0,1-.15.3632.4714.4714,0,0,1-.7075,0Z"/>
+                                                        </Button>
+                                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}"  ToolTip="Опустить ниже" Grid.Column="1" Command="{Binding DataContext.MoveDownField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
+                                                            <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Margin="4" Data="M -13.04 -11.1856 l 4.2463 -4.246 a 0.5021 0.5021 180 0 1 0.3442 -0.15 a 0.4664 0.4664 180 0 1 0.3633 0.15 a 0.4716 0.4716 180 0 1 0 0.7075 l -4.3883 4.3885 a 0.7813 0.7813 180 0 1 -1.131 0 l -4.3882 -4.3885 a 0.5024 0.5024 180 0 1 -0.15 -0.3443 a 0.4662 0.4662 180 0 1 0.15 -0.3632 a 0.4714 0.4714 180 0 1 0.7075 -0 Z"/>
+                                                        </Button>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Border Grid.Row="2" Grid.Column="3" VerticalAlignment="Top">
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
+
+                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="AddFieldClick" ToolTip="Добавить поле">
+                                            <Path Fill="{StaticResource Buttons.Green}" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
                                         </Button>
-                                        <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding BelongsVisibility}">
-                                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}"  ToolTip="Поднять выше" Grid.Column="1" Command="{Binding DataContext.MoveUpField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
-                                                <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Margin="4" Data="M13.04,11.1856l-4.2463,4.246a.5021.5021,0,0,1-.3442.15.4664.4664,0,0,1-.3633-.15.4716.4716,0,0,1,0-.7075l4.3883-4.3885a.7813.7813,0,0,1,1.131,0l4.3882,4.3885a.5024.5024,0,0,1,.15.3443.4662.4662,0,0,1-.15.3632.4714.4714,0,0,1-.7075,0Z"/>
-                                            </Button>
-                                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}"  ToolTip="Опустить ниже" Grid.Column="1" Command="{Binding DataContext.MoveDownField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
-                                                <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Margin="4" Data="M -13.04 -11.1856 l 4.2463 -4.246 a 0.5021 0.5021 180 0 1 0.3442 -0.15 a 0.4664 0.4664 180 0 1 0.3633 0.15 a 0.4716 0.4716 180 0 1 0 0.7075 l -4.3883 4.3885 a 0.7813 0.7813 180 0 1 -1.131 0 l -4.3882 -4.3885 a 0.5024 0.5024 180 0 1 -0.15 -0.3443 a 0.4662 0.4662 180 0 1 0.15 -0.3632 a 0.4714 0.4714 180 0 1 0.7075 -0 Z"/>
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-            </TabItem>
-            
-            <TabItem Header="Методы" BorderBrush="{DynamicResource LightPurple}">
-                <Grid Background="{DynamicResource Black}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="350" />
-                        <ColumnDefinition Width="5*"/>
-                    </Grid.ColumnDefinitions>
-                    <Border CornerRadius="8" Margin="5,5,0,5" Background="{DynamicResource Black}" Grid.Row="1">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                            <StackPanel>
-                                <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
-                                    <StackPanel>
-                                        <Grid Margin="5,5,0,0">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-                                            <Path Fill="{DynamicResource Yellow}" Stretch="Uniform" Height="15" Width="15" Data="M224.85-140q-35 0-57.62-19.38-22.61-19.39-22.61-50.93 0-22 11.23-35.34Q167.08-259 184.62-259q16.53 0 28.26 11.62 11.74 11.61 11.74 27.92 0 11.15-6.66 19.38-6.65 8.23-16.11 10.16 3.84 3.84 10.77 6.54 6.92 2.69 15.38 2.69 21.15-.23 34.27-18.58 13.11-18.35 21.27-57.88L346.31-580h-98.62q-8.54 0-14.27-5.73T227.69-600q0-8.54 5.73-14.27t14.27-5.73h105.93l19.46-104.77q8.54-46.46 32.11-70.85Q428.77-820 465.38-820q34.77 0 57.39 20.23 22.61 20.23 22.61 51.54 0 21.54-11.23 34.88Q522.92-700 505.38-700q-16.53 0-28.26-11.23-11.74-11.23-11.74-27.77 0-11.15 6.66-19.38 6.65-8.24 16.88-10.16-3.84-4.61-11.92-7.69t-16.54-3.08q-19.08.46-30.92 16-11.85 15.54-17.69 45.85l-17 97.46h157.46q8.54 0 14.27 5.73t5.73 14.27q0 8.08-5.27 13.69-5.27 5.62-13.12 6.08h-37.69l96.08 110 96.07-110h-37.69q-7.84-.46-13.11-6.08-5.27-5.61-5.27-13.69 0-8.54 5.73-14.27t14.27-5.73h120q8.54 0 14.27 5.73t5.73 14.27q0 8.54-5.73 14.27T792.31-580h-31.23L639.15-440l122.7 140h30.46q8.54 0 14.27 5.73t5.73 14.27q0 8.54-5.73 14.27T792.31-260h-120q-8.54 0-14.27-5.73T652.31-280q0-8.08 5.27-13.69 5.27-5.62 13.11-6.08h37.69L612.31-410l-96.08 110.23h37.69q7.85.46 13.12 6.08 5.27 5.61 5.27 13.69 0 8.54-5.73 14.27T552.31-260h-120q-8.54 0-14.27-5.73T412.31-280q0-8.54 5.73-14.27t14.27-5.73h31.23l121.92-140-121.92-140h-76.77l-64 327.85q-11.08 57.3-35.08 84.73-24 27.42-62.84 27.42Z" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0"/>
+                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="CopyFieldsFromAnotherClass" ToolTip="Скопировать поля из другого класса">
+                                            <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Data="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5zm4.5 6V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5a.5.5 0 0 1 1 0"/>
+                                        </Button>
 
-                                            <Label Content="Методы:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
-                                        </Grid>
-                                        <WrapPanel>
-                                            <Button Style="{StaticResource ButtonRectangle}" ToolTip="Добавить новый метод" HorizontalAlignment="Left" Grid.Column="2" Click="AddMethod" >
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M8.004,19.3885V9.6135a1.5425,1.5425,0,0,1,.475-1.141A1.573,1.573,0,0,1,9.6252,8.004h9.7633A1.62,1.62,0,0,1,21.004,9.62v6.29a1.5674,1.5674,0,0,1-.1308.6323,1.6576,1.6576,0,0,1-.348.5177L17.06,20.5252a1.6576,1.6576,0,0,1-.5177.348,1.5674,1.5674,0,0,1-.6323.1308H9.62A1.62,1.62,0,0,1,8.004,19.3885ZM3.029,6.6a1.5057,1.5057,0,0,1,.2567-1.2127,1.6084,1.6084,0,0,1,1.06-.6643L13.9655,3.029a1.5057,1.5057,0,0,1,1.2127.2567,1.61,1.61,0,0,1,.6643,1.06L16.054,5.62H9.62a4.0118,4.0118,0,0,0-4,4V17.4a1.6446,1.6446,0,0,1-.5818-.475,1.62,1.62,0,0,1-.3145-.7057ZM14.004,15.004v2.5a.5.5,0,1,0,1,0v-2.5h2.5a.5.5,0,1,0,0-1h-2.5v-2.5a.5.5,0,1,0-1,0v2.5h-2.5a.5.5,0,1,0,0,1Z"/>
-                                                    <Label Content="Добавить метод" Foreground="White"/>
-                                                </StackPanel>
-                                            </Button>
-                                            <Button Style="{StaticResource ButtonRectangle}" Visibility="{Binding DetailsVisibility}" ToolTip="Удалить шаблон" HorizontalAlignment="Center" >
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Path Fill="{StaticResource Buttons.Red}" VerticalAlignment="Center" Stretch="Uniform" Data="M13.5068,14.4591l-5.2463,5.246a.5021.5021,0,0,1-.3442.15.4665.4665,0,0,1-.3633-.15.4716.4716,0,0,1,0-.7075l5.246-5.2462L7.553,8.5051a.503.503,0,0,1-.15-.3442.4662.4662,0,0,1,.15-.3633.4716.4716,0,0,1,.7075,0l5.2463,5.246,5.2462-5.246a.5024.5024,0,0,1,.3443-.15.4662.4662,0,0,1,.3632.15.4714.4714,0,0,1,0,.7075l-5.246,5.2463,5.246,5.2462a.5024.5024,0,0,1,.15.3443.4662.4662,0,0,1-.15.3632.4714.4714,0,0,1-.7075,0Z"/>
-                                                    <Label Content="Удалить метод" Foreground="White"/>
-                                                </StackPanel>
-                                            </Button>
-                                        </WrapPanel>
-                                        <ListBox Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemGray}" ItemsSource="{Binding Methods}" SelectedItem="{Binding SelectedMethod}" MinHeight="30">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Label Style="{StaticResource LabelElement}" Margin="0" VerticalAlignment="Center" Content="{Binding Name}" Foreground="{DynamicResource Light}" Grid.Column="1"/>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
+                                        <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
+
+                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="MinimizeAllClick" ToolTip="Свернуть все поля">
+                                            <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M7.5519,19.8462V16.4385H4.1441v-.923H8.4749v4.3307Zm7.9855,0V15.5155h4.3185v.923H16.4606v3.4077ZM4.1441,8.472V7.549H7.5519V4.1538h.923V8.472Zm11.3933,0V4.1538h.9232V7.549h3.3953v.923Z"/>
+                                        </Button>
+                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="MaximizeAllClick" ToolTip="Развернуть все поля">
+                                            <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M4.1441,19.8462V15.5155h.9233V18.923H8.4749v.9232Zm11.3933,0V18.923h3.3952V15.5155h.9233v4.3307ZM4.1441,8.472V4.1538H8.4749V5.077H5.0674V8.472Zm14.7885,0V5.077H15.5374V4.1538h4.3185V8.472Z"/>
+                                        </Button>
+
+                                        <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
+
+                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="GetMoreInfoClick" ToolTip="Открыть справочную информацию">
+                                            <Path Fill="#FF78DDFF" VerticalAlignment="Center" Stretch="Uniform" Data="M12.9356,17.9427a.78.78,0,1,0-.5605-.2277A.7589.7589,0,0,0,12.9356,17.9427Zm-.5165-3.3115h.9655a2.7092,2.7092,0,0,1,.245-1.06,4.5017,4.5017,0,0,1,.851-1.04,6.9246,6.9246,0,0,0,.9963-1.199,2.2871,2.2871,0,0,0,.327-1.2265,2.3407,2.3407,0,0,0-.8308-1.8842A2.9485,2.9485,0,0,0,13.0076,7.52a2.89,2.89,0,0,0-1.8317.5865,3.6369,3.6369,0,0,0-1.1028,1.348l.919.3808A2.9346,2.9346,0,0,1,11.68,8.87a1.8167,1.8167,0,0,1,1.2895-.4192A1.7552,1.7552,0,0,1,14.39,8.984a1.7859,1.7859,0,0,1,.448,1.1742,1.5992,1.5992,0,0,1-.2808.9278,4.909,4.909,0,0,1-.7307.8222,5.0884,5.0884,0,0,0-1.1385,1.3595A3.1182,3.1182,0,0,0,12.4191,14.6312Zm.4918,7.0808a8.7726,8.7726,0,0,1-3.51-.7085A8.9859,8.9859,0,0,1,4.6169,16.224a9.0416,9.0416,0,0,1-.0008-7.019,8.9865,8.9865,0,0,1,4.78-4.7838,9.0422,9.0422,0,0,1,7.019-.0007A8.9865,8.9865,0,0,1,21.1984,9.2a9.0422,9.0422,0,0,1,.0007,7.019,8.9859,8.9859,0,0,1-4.78,4.7837A8.7525,8.7525,0,0,1,12.9109,21.712Zm-.0033-1a7.7211,7.7211,0,0,0,5.675-2.325,7.7211,7.7211,0,0,0,2.325-5.675,7.7209,7.7209,0,0,0-2.325-5.675,7.7211,7.7211,0,0,0-5.675-2.325,7.7211,7.7211,0,0,0-5.675,2.325,7.7209,7.7209,0,0,0-2.325,5.675,7.7211,7.7211,0,0,0,2.325,5.675A7.7211,7.7211,0,0,0,12.9076,20.712Z"/>
+                                        </Button>
                                     </StackPanel>
                                 </Border>
-                                <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
-                                    <StackPanel>
-                                        <Grid Margin="5,5,0,0">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="30"/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-                                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" Stretch="Uniform" Height="15" VerticalAlignment="Center" Margin="0,0,2,0" Data="M480-640q-66 0-113 47t-47 113q0 50.38 28.65 91.08 28.66 40.69 75.58 58.61 7.54 3.39 11.35 11.19 3.8 7.81.65 15.35-3.15 7.08-9.85 11-6.69 3.92-13.76.77-59.93-21.54-96.27-72.85Q280-416.15 280-480q0-83.08 58.46-141.54Q396.92-680 480-680q63.31 0 115.12 36.35 51.8 36.34 73.11 95.96 2.92 7.07-1.27 14.15-4.19 7.08-11.27 10-8.31 3.16-15.84-.77-7.54-3.92-10.93-12.23-17.92-46.92-58.61-75.19Q529.62-640 480-640Zm0-160q-134 0-227 93t-93 227q0 133.69 89.92 225.23 89.93 91.54 221.85 94.31 8.54.46 14.5 6.54 5.96 6.07 5.73 14.61-.23 8.54-5.96 14.54-5.73 6-14.27 5.77-74.92-1.15-138.96-31.31-64.04-30.15-111.46-79.65-47.43-49.5-74.39-114.23T120-480q0-74.54 28.42-140.23 28.43-65.69 77.04-114.31 48.62-48.61 114.31-77.04Q405.46-840 480-840q142.38 0 250.04 100.46Q837.69-639.08 841-489q.46 8.31-5.27 14.42-5.73 6.12-14.27 6.35-8.54.23-15.11-6-6.58-6.23-7.04-14.77-3.46-126.15-96.81-218.58Q609.15-800 480-800Zm289.69 650.77L598.46-321l-20.77 63.31q-4.23 11.69-15.92 11.58-11.69-.12-15.15-11.81l-57.93-193q-2.46-9.46 4.23-16.16 6.7-6.69 16.16-4.23l193 57.93q11.69 3.46 11.81 15.15.11 11.69-11.58 15.92L639-361.54l172 171.23q8.54 8.54 8.54 20.54T811-149.23q-8.54 8.54-20.65 8.54-12.12 0-20.66-8.54Z"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Методы" BorderBrush="{DynamicResource DarkYellow}">
 
-                                            <Label Content="Выбранный метод:" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
-                                        </Grid>
-                                        <StackPanel >
-                                            <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding SelectedMethod.Name}" Tag="Имя метода"/>
-                                            
-                                            <CheckBox Style="{StaticResource Toggle}" Content="Публичный"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Border>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </Border>
-                    <avalonEdit:TextEditor x:Name="CodeModule" Grid.Column="1" HorizontalScrollBarVisibility="Disabled" Background="{x:Null}" ShowLineNumbers="True" BorderThickness="0" Document="{Binding SelectedMethod.CodeModule}" BorderBrush="{DynamicResource Dark}" FontSize="13" FontFamily="{StaticResource JetBrains}" Foreground="White" Margin="10,0,0,0">
-                    </avalonEdit:TextEditor>
+                        </TabItem>
+                    </TabControl>
+                    
                 </Grid>
             </TabItem>
             <TabItem Header="Статусы" BorderBrush="{DynamicResource LightPurple}">
@@ -428,7 +365,7 @@
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.RowSpan="2" >
-                        <Border CornerRadius="8"  Margin="5" Background="{DynamicResource Dark}">
+                        <Border Style="{StaticResource ToolBorder}">
                             <StackPanel>
                                 <WrapPanel>
                                     <Button Style="{StaticResource ButtonSquare}" ToolTip="Добавить контейнер на форму" Click="AddControlToCustomFormClick">
@@ -447,12 +384,12 @@
                                         <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M6.1421,15.9157a7.44,7.44,0,0,1-.546-1.5365,7.01,7.01,0,0,1-.1885-1.6172,7.3041,7.3041,0,0,1,2.19-5.3443,7.2049,7.2049,0,0,1,5.31-2.2057h1.3865l-2.1-2.1.7078-.7078L16.21,5.712,12.9019,9.02l-.7078-.7077,2.1-2.1H12.9076A6.2484,6.2484,0,0,0,8.3019,8.1187,6.34,6.34,0,0,0,6.4076,12.762a6.3361,6.3361,0,0,0,.4845,2.4037Zm6.7713,7.104L9.6056,19.712l3.3078-3.3078.7077.7078-2.1,2.1h1.3865a6.2488,6.2488,0,0,0,4.6058-1.9068,6.3406,6.3406,0,0,0,1.8942-4.6432,6.331,6.331,0,0,0-.4845-2.4038l.75-.75a7.44,7.44,0,0,1,.546,1.5365,7.01,7.01,0,0,1,.1885,1.6173,7.3041,7.3041,0,0,1-2.19,5.3442,7.205,7.205,0,0,1-5.3095,2.2058H11.5211l2.1,2.1Z"/>
                                     </Button>
                                 </WrapPanel>
-                                <Grid MaxHeight="250">
+                                <Grid MaxHeight="300">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
-                                    <TreeView Grid.Column="1" Style="{StaticResource TreeViewMain}" Margin="5" MinHeight="40" ItemsSource="{Binding ViewControls}" MaxHeight="250" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectedItemChanged="TreeView_SelectedItemChanged">
+                                    <TreeView Grid.Column="1" Style="{StaticResource TreeViewMain}" Margin="5" MinHeight="40" ItemsSource="{Binding ViewControls}" MaxHeight="300" ScrollViewer.HorizontalScrollBarVisibility="Hidden" SelectedItemChanged="TreeView_SelectedItemChanged">
                                         <TreeView.ItemTemplate>
                                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                                 <StackPanel Orientation="Horizontal">
@@ -467,7 +404,7 @@
                                         <ListBox Style="{StaticResource ListBoxMain}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Fields}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}" MaxWidth="200">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border Background="{StaticResource LightBlack}" CornerRadius="8" Margin="2" ClipToBounds="True">
+                                                    <Border Background="{StaticResource LightBlack}" CornerRadius="2" Margin="2" ClipToBounds="True">
                                                         <Grid MaxHeight="30">
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition MaxWidth="120"/>
@@ -476,7 +413,7 @@
                                                             <TextBlock Margin="5" Text="{Binding Name}" TextTrimming="WordEllipsis" TextWrapping="WrapWithOverflow" VerticalAlignment="Center"/>
                                                             <Button Style="{StaticResource ButtonSquare}" Grid.Column="1" MaxHeight="25" Margin="0" ToolTip="Определить поле в выбранный контейнер" HorizontalAlignment="Left" Command="{Binding AssignToContainer}" >
                                                                 <StackPanel Orientation="Horizontal">
-                                                                    <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Height="12" Data="M264.62-263.08h430.76q7.85 0 13.16 5.3 5.31 5.29 5.31 13.11 0 7.82-5.31 13.17t-13.16 5.35H264.62q-7.85 0-13.16-5.3-5.31-5.29-5.31-13.11 0-7.82 5.31-13.17t13.16-5.35Zm21.15-161.23 167.38-249.21q5.23-7.79 12.04-11.13Q471.99-688 480-688q8.01 0 14.81 3.35 6.81 3.34 12.04 11.13l167.38 249.21q10.92 16.16 1.42 33.31-9.5 17.15-28.5 17.15h-334.3q-19 0-28.5-17.15t1.42-33.31ZM480-410.77Zm-154.92 0h309.84L480-642.15 325.08-410.77Z"/>
+                                                                    <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Height="12" Data="M421.46-480 251.85-649.85q-5.62-5.61-6.12-13.65t6.12-14.65q6.38-6.39 14.15-6.39 7.77 0 14.15 6.39l175.54 175.53q5.23 5.24 7.35 10.7 2.11 5.46 2.11 11.92t-2.11 11.92q-2.12 5.46-7.35 10.7L280.15-281.85q-5.61 5.62-13.65 6.12t-14.65-6.12q-6.39-6.38-6.39-14.15 0-7.77 6.39-14.15L421.46-480Zm244 0L495.85-649.85q-5.62-5.61-6.12-13.65t6.12-14.65q6.38-6.39 14.15-6.39 7.77 0 14.15 6.39l175.54 175.53q5.23 5.24 7.35 10.7 2.11 5.46 2.11 11.92t-2.11 11.92q-2.12 5.46-7.35 10.7L524.15-281.85q-5.61 5.62-13.65 6.12t-14.65-6.12q-6.39-6.38-6.39-14.15 0-7.77 6.39-14.15L665.46-480Z"/>
                                                                 </StackPanel>
                                                             </Button>
                                                         </Grid>
@@ -490,7 +427,7 @@
                                 
                             </StackPanel>
                         </Border>
-                        <Border CornerRadius="8" Margin="5" Background="{DynamicResource Dark}">
+                        <Border Style="{StaticResource ToolBorder}">
                             <StackPanel>
                                 <TextBox Style="{StaticResource TextBoxMain}" Tag="Имя контейнера" Text="{Binding SelectedViewControl.Name}"/>
                                 

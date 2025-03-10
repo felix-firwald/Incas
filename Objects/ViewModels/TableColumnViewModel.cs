@@ -1,92 +1,116 @@
-﻿using Incas.Core.ViewModels;
-using Incas.Objects.Components;
+﻿using Incas.Core.Classes;
+using Incas.Core.ViewModels;
+using Incas.Objects.AutoUI;
 using IncasEngine.ObjectiveEngine.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
+using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
 
 namespace Incas.Objects.ViewModels
 {
     public class TableColumnViewModel : BaseViewModel
     {
-        public TableFieldColumnData FieldData { get; set; }
+        public TableFieldColumnData Source { get; set; }
+        public delegate void Action(TableColumnViewModel vm);
+        public event Action OnMoveDownRequested;
+        public event Action OnMoveUpRequested;
+        public event Action OnRemoveRequested;
         public TableColumnViewModel(TableFieldColumnData fieldData)
         {
-            this.FieldData = fieldData;
+            this.Source = fieldData;
+            this.Source.SetId();
+            this.OpenFieldSettings = new Command(this.DoOpenFieldSettings);
+            this.RemoveField = new Command(this.DoRemoveField);
+            this.MoveUpField = new Command(this.DoMoveUpField);
+            this.MoveDownField = new Command(this.DoMoveDownField);
         }
+        
+        #region Commands
+        public ICommand OpenFieldSettings { get; set; }
+        public ICommand RemoveField { get; set; }
+        public ICommand MoveUpField { get; set; }
+        public ICommand MoveDownField { get; set; }
+        public void DoOpenFieldSettings(object value)
+        {
+            TableFieldColumnData f = this.Source;
+            string name = $"Настройки колонки [{f.Name}]";
+            switch (f.FieldType)
+            {
+                case FieldType.String:
+                case FieldType.Text:
+                    TextColumnSettings tc = new(f);
+                    tc.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
+                    break;
+                case FieldType.LocalEnumeration:
+                    LocalEnumerationColumnSettings le = new(f);
+                    le.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
+                    break;
+                case FieldType.GlobalEnumeration:
+                    GlobalEnumerationColumnSettings ge = new(f);
+                    ge.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
+                    break;
+            }
+        }
+        private void DoRemoveField(object obj)
+        {
+            this.OnRemoveRequested?.Invoke(this);
+        }
+        private void DoMoveUpField(object obj)
+        {
+            this.OnMoveUpRequested?.Invoke(this);
+        }
+        private void DoMoveDownField(object obj)
+        {
+            this.OnMoveDownRequested?.Invoke(this);
+        }
+        #endregion
         public string VisibleName
         {
-            get => this.FieldData.VisibleName;
+            get => this.Source.VisibleName;
             set
             {
-                this.FieldData.VisibleName = value;
+                this.Source.VisibleName = value;
                 this.OnPropertyChanged(nameof(this.VisibleName));
             }
         }
-        public string NameOfField
+        public string InternalName
         {
-            get => this.FieldData.Name;
+            get => this.Source.Name;
             set
             {
-                if (value != this.FieldData.Name)
+                if (value != this.Source.Name)
                 {
-                    this.FieldData.Name = value
+                    this.Source.Name = value
                         .Replace(" ", "_")
                         .Replace(".", "_")
                         .Replace("$", "_");
-                    this.OnPropertyChanged(nameof(this.NameOfField));
+                    this.OnPropertyChanged(nameof(this.InternalName));
                 }
             }
         }
-        public string TypeOfFieldValue
+        private bool expanded = false;
+        public bool IsExpanded
         {
-            get => this.SerializeToInput(this.FieldData.FieldType);
+            get
+            {
+                return this.expanded;
+            }
             set
             {
-                this.FieldData.FieldType = this.SerializeFromInput(value);
-                this.OnPropertyChanged(nameof(this.TypeOfFieldValue));
+                this.expanded = value;
+                this.OnPropertyChanged(nameof(this.IsExpanded));
             }
         }
-
-        // может лучше по selected index?
-        #region Not Standart Properties
-        public FieldType SerializeFromInput(string val)
+        public FieldType Type
         {
-            switch (val)
+            get
             {
-                case "0":
-                default:
-                    return FieldType.String;
-                case "1":
-                    return FieldType.LocalEnumeration;
-                case "2":
-                    return FieldType.GlobalEnumeration;
-                case "3":
-                    return FieldType.Object;
-                case "4":
-                    return FieldType.Date;
-                case "5":
-                    return FieldType.Boolean;
-                case "6":
-                    return FieldType.Integer;
+                return this.Source.FieldType;
+            }
+            set
+            {
+                this.Source.FieldType = value;
+                this.OnPropertyChanged(nameof(this.Type));
             }
         }
-        public string SerializeToInput(FieldType tot)
-        {
-            return tot switch
-            {
-                FieldType.Text => "1",
-                FieldType.LocalEnumeration => "1",
-                FieldType.GlobalEnumeration => "2",
-                FieldType.Object => "3",
-                FieldType.Date => "4",
-                FieldType.Boolean => "5",
-                FieldType.Integer => "6",
-                _ => "0",
-            };
-        }
-        #endregion
     }
 }

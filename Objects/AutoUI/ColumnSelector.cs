@@ -5,6 +5,7 @@ using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Components;
 using System.Collections.Generic;
 using System.ComponentModel;
+using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
 
 namespace Incas.Objects.AutoUI
 {

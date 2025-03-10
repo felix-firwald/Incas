@@ -52,10 +52,10 @@
                 </Button>
             </StackPanel>
         </Border>
-        <Border CornerRadius="8" Margin="5,5,0,5" Background="{DynamicResource Black}" Grid.Row="1">
+        <Border Margin="5,5,0,5" Background="{DynamicResource Black}" Grid.Row="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <StackPanel>
-                    <Border Background="{StaticResource Dark}" CornerRadius="8" Margin="5">
+                    <Border Style="{StaticResource ToolBorder}">
                         <StackPanel>
                             <Grid Margin="5,5,0,0">
                                 <Grid.ColumnDefinitions>
@@ -92,10 +92,10 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
-                            <CheckBox Style="{StaticResource Toggle}" Content="Включать имя шаблона в имя файла при рендеринге" IsChecked="{Binding InsertTemplateName}"/>
+                            <CheckBox Style="{StaticResource CheckBoxMain}" Content="Включать имя шаблона в имя файла при рендеринге" IsChecked="{Binding InsertTemplateName}"/>
                         </StackPanel>
                     </Border>
-                    <Border Background="{StaticResource Dark}" Visibility="{Binding DetailsVisibility}" CornerRadius="8" Margin="5">
+                    <Border Style="{StaticResource ToolBorder}" Visibility="{Binding DetailsVisibility}">
                         <StackPanel>
                             <Grid Margin="5,5,0,0">
                                 <Grid.ColumnDefinitions>
@@ -125,14 +125,14 @@
                                 </Button>
                             </Grid>
 
-                            <CheckBox Style="{StaticResource Toggle}" Content="Поддержка рекурсивной прогрузки (стриминга) объектов" ToolTip="Если опция включена, INCAS будет выгружать привязанные объекты при рендеринге (полностью). Глубина рекурсии составляет 2 этапа" IsChecked="{Binding SelectedTemplate.RecursiveStreamingEnabled}"/>
+                            <CheckBox Style="{StaticResource CheckBoxMain}" Content="Поддержка рекурсивной прогрузки (стриминга) объектов" ToolTip="Если опция включена, INCAS будет выгружать привязанные объекты при рендеринге (полностью). Глубина рекурсии составляет 2 этапа" IsChecked="{Binding SelectedTemplate.RecursiveStreamingEnabled}"/>
                             
                         </StackPanel>
                     </Border>
                 </StackPanel>
             </ScrollViewer>
         </Border>
-        <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding SelectedTemplate.Properties}" ItemContainerStyle="{StaticResource ListBoxItemUnselectable}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" Grid.Column="1" Margin="0,5,5,5" Background="{StaticResource Black}">
+        <ListBox Style="{StaticResource ListBoxMain}" Grid.Column="1" ItemsSource="{Binding SelectedTemplate.Properties}" ItemContainerStyle="{StaticResource ListBoxItemUnselectable}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" Margin="0,5,5,5" Background="{StaticResource Black}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Border x:Name="MainBorder" Margin="0" CornerRadius="8" Background="{DynamicResource Dark}">

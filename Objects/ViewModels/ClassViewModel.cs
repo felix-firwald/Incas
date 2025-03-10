@@ -120,6 +120,7 @@ namespace Incas.Objects.ViewModels
                 else
                 {
                     this.Fields.Remove(field);
+                    this.RemoveFieldControl(field.Source.Id);
                 }
             }           
         }
@@ -203,10 +204,10 @@ namespace Incas.Objects.ViewModels
                     dt.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
                 case FieldType.Table:
-                    TableSettings ts = new(field.Source.Value, field.Source.Name);
+                    TableSettings ts = new(field.Source);
                     if (ts.ShowDialog() == true)
                     {
-                        field.Source.Value = JsonConvert.SerializeObject(ts.Data);
+                        field.Source.TableSettings = ts.vm.Source;
                     }
                     break;
             }
@@ -667,7 +668,7 @@ namespace Incas.Objects.ViewModels
                         f.GetDateFieldData();
                         break;
                     case FieldType.Table:
-                        JsonConvert.DeserializeObject<TableFieldData>(f.Value);
+
                         break;
                 }
             }

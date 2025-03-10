@@ -120,10 +120,10 @@ namespace Incas.Objects.Components
                     element = new UniformGrid();
                     break;
                 case ControlType.Tab:
-                    element = new TabControl() { Style = ResourceInstance.FindStyle("TabControlMain") };                    
+                    element = new TabControl() { Style = ResourceStyleManager.FindStyle("TabControlMain") };                    
                     break;
                 case ControlType.TabItem:
-                    element = new TabItem() { Style = ResourceInstance.FindStyle("TabItemMain"), Header = vc.Name };
+                    element = new TabItem() { Style = ResourceStyleManager.FindStyle("TabItemMain"), Header = vc.Name };
                     break;
                 case ControlType.Group:
                     element = new GroupBox() { Header = vc.Name };

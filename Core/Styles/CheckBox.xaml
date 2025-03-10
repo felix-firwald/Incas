@@ -154,8 +154,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CheckBox}">
                     <Grid x:Name="Root" >
-                        <Border x:Name="Bord" Opacity="1" Grid.Column="0" Margin="0" CornerRadius="4" MinWidth="18" MaxWidth="18" MinHeight="18" MaxHeight="18" BorderBrush="{StaticResource Element}" BorderThickness="1" Background="{StaticResource Black}" >
-                            <Path x:Name="Fa" Fill="{StaticResource PrimaryMain}" Width="11" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Data="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" Stretch="Uniform"/>
+                        <Border x:Name="Bord" Opacity="1" Grid.Column="0" Margin="0" CornerRadius="4" MinWidth="20" MaxWidth="20" MinHeight="20" MaxHeight="20" BorderBrush="{StaticResource Element}" BorderThickness="1" Background="{StaticResource Black}" >
+                            <Path x:Name="Fa" Fill="{StaticResource PrimaryMain}" Width="12" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Data="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" Stretch="Uniform"/>
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>

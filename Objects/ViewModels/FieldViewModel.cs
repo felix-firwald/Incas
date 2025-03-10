@@ -171,7 +171,5 @@ namespace Incas.Objects.ViewModels
                 }
             }
         }
-        #region Not Standart Properties
     }
 }
-#endregion

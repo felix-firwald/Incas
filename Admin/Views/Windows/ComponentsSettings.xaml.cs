@@ -2,6 +2,7 @@
 using Incas.Admin.ViewModels;
 using Incas.Core.Classes;
 using Incas.Core.Views.Windows;
+using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
 using System;
@@ -96,6 +97,16 @@ namespace Incas.Admin.Views.Windows
             {
                 this.vm.SelectedComponent.SelectedIconPath = selector.SelectedIconPath;
             }
+        }
+
+        private void MoveUp(object sender, RoutedEventArgs e)
+        {
+            this.vm.SelectedComponent = this.vm.Components.MoveUp(this.vm.SelectedComponent);
+        }
+
+        private void MoveDown(object sender, RoutedEventArgs e)
+        {
+            this.vm.SelectedComponent = this.vm.Components.MoveDown(this.vm.SelectedComponent);
         }
     }
 }

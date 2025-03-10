@@ -10,7 +10,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TreeView">
-                    <Border Name="Border" CornerRadius="8" Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderThickness="0">
+                    <Border Name="Border" CornerRadius="2" Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}" BorderThickness="0">
                         <ScrollViewer Focusable="False" CanContentScroll="False" Padding="5">
                             <ItemsPresenter/>
                         </ScrollViewer>
@@ -75,7 +75,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="4" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition x:Name="ColumnExpander" MinWidth="20" Width="Auto"/>

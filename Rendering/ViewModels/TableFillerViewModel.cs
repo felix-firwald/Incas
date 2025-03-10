@@ -2,6 +2,7 @@
 using Incas.Core.ViewModels;
 using Incas.Objects.Components;
 using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.FieldComponents;
 using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Input;
+using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
 
 namespace Incas.Rendering.ViewModels
 {
@@ -21,7 +23,7 @@ namespace Incas.Rendering.ViewModels
             this.TableName = t.VisibleName;
             try
             {
-                this.TableDefinition = JsonConvert.DeserializeObject<TableFieldData>(t.Value);
+                this.TableDefinition = t.TableSettings;
                 this.MakeColumns();
             }
             catch
@@ -76,6 +78,7 @@ namespace Incas.Rendering.ViewModels
                 {
                     dc.DefaultValue = tf.Value;
                 }
+                dc.ExtendedProperties.Add(TableFieldColumnData.DataColumnIdKey, tf.Id);
                 this.Grid.Columns.Add(dc);
             }
             this.OnPropertyChanged(nameof(this.Grid));

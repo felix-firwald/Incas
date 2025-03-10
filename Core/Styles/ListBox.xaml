@@ -8,7 +8,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBox">
-                    <Border Name="Border" BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="8">
+                    <Border Name="Border" BorderThickness="0" Background="{TemplateBinding Background}" CornerRadius="2">
                         <ScrollViewer Margin="0" Focusable="False">
                             <StackPanel Margin="2" IsItemsHost="True" />
                         </ScrollViewer>
@@ -36,7 +36,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="Border" MinHeight="{TemplateBinding MinHeight}" Padding="2" CornerRadius="8" BorderThickness="1" SnapsToDevicePixels="true">
+                    <Border x:Name="Border" MinHeight="{TemplateBinding MinHeight}" Padding="2" CornerRadius="2" BorderThickness="1" SnapsToDevicePixels="true">
                         <Border.Background>
                             <SolidColorBrush Color="Transparent" />
                         </Border.Background>
@@ -65,7 +65,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="Border" MinHeight="{TemplateBinding MinHeight}" CornerRadius="8" BorderThickness="1" SnapsToDevicePixels="true">
+                    <Border x:Name="Border" MinHeight="{TemplateBinding MinHeight}" CornerRadius="2" BorderThickness="1" SnapsToDevicePixels="true">
                         <Border.Background>
                             <SolidColorBrush Color="Transparent" />
                         </Border.Background>
@@ -112,7 +112,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="Border" Background="{StaticResource Dark}" MinHeight="{TemplateBinding MinHeight}" Padding="2" CornerRadius="8" BorderThickness="1" SnapsToDevicePixels="true">
+                    <Border x:Name="Border" Background="{StaticResource Dark}" MinHeight="{TemplateBinding MinHeight}" Padding="2" CornerRadius="2" BorderThickness="1" SnapsToDevicePixels="true">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
