@@ -1,7 +1,13 @@
-﻿using Incas.Core.ViewModels;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Incas.Core.Classes;
+using Incas.Core.ViewModels;
+using Incas.Objects.AutoUI;
+using Incas.Objects.Views.Windows;
 using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Models;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 
@@ -11,13 +17,57 @@ namespace Incas.Objects.ViewModels
     {
         public Field Source;
         public ClassViewModel Owner;
-        public FieldViewModel(Field field, ClassViewModel owner)
+        public delegate void Action(FieldViewModel field);
+        public event Action OnRemoveRequested;
+        public event Action OnMoveUpRequested;
+        public event Action OnMoveDownRequested;
+
+        public FieldViewModel(Field field, ClassViewModel owner, bool isExists = false) // new
         {
             this.Source = field;
-            this.AssignToContainer = new Command(this.DoAssignToContainer);
+            this.SetCommands();
+            this.Owner = owner;
+            if (isExists)
+            {
+                this.IsExists = true;
+                this.ExistedType = this.Source.Type;
+            }
+        }
+        public FieldViewModel(Field field, bool isExists = false) // new
+        {
+            this.Source = field;
+            this.SetCommands();
+            if (isExists)
+            {
+                this.IsExists = true;
+                this.ExistedType = this.Source.Type;
+            }
+        }
+        public FieldViewModel(ClassViewModel owner)
+        {
+            this.Source = new();
+            if (this.Source.Id == Guid.Empty)
+            {
+                this.Source.Id = Guid.NewGuid();
+            }
+            this.SetCommands();
             this.Owner = owner;
         }
-        public ICommand AssignToContainer { get; set; }
+        #region Commands
+        
+        private void SetCommands()
+        {
+            this.AssignToContainer = new Command(this.DoAssignToContainer);
+            this.RemoveField = new Command(this.DoRemoveField);
+            this.MoveUpField = new Command(this.DoMoveUpField);
+            this.MoveDownField = new Command(this.DoMoveDownField);
+            this.OpenFieldSettings = new Command(this.DoOpenFieldSettings);
+        }
+        public ICommand AssignToContainer { get; private set; }
+        public ICommand RemoveField { get; private set; }
+        public ICommand MoveUpField { get; private set; }
+        public ICommand MoveDownField { get; private set; }
+        public ICommand OpenFieldSettings { get; private set; }
         public void DoAssignToContainer(object param)
         {
             if (this.Owner.SelectedViewControl is not null)
@@ -33,16 +83,87 @@ namespace Incas.Objects.ViewModels
                 this.Owner.SelectedViewControl.AddChild(vm);
             }
         }
-        public FieldViewModel(ClassViewModel owner)
+        public void DoRemoveField(object param)
         {
-            this.Source = new();
-            if (this.Source.Id == Guid.Empty)
+            if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить поле [{this.Name}]? После сохранения это действие отменить нельзя: это поле будет безвозвратно удалено.", "Удалить поле?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
             {
-                this.Source.Id = Guid.NewGuid();
+                this.OnRemoveRequested?.Invoke(this);
             }
-            this.AssignToContainer = new Command(this.DoAssignToContainer);
-            this.Owner = owner;
         }
+        public void DoMoveUpField(object param)
+        {
+            this.OnMoveUpRequested?.Invoke(this);
+        }
+        public void DoMoveDownField(object param)
+        {
+            this.OnMoveDownRequested?.Invoke(this);
+        }
+        private void DoOpenFieldSettings(object obj)
+        {
+            string name = $"Настройки поля [{this.Name}]";
+            switch (this.Type)
+            {
+                case FieldType.String:
+                    TextFieldSettings tf = new(this.Source);
+                    tf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
+                    break;
+                case FieldType.Text:
+                    TextBigFieldSettings tb = new(this.Source);
+                    tb.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
+                    break;
+                case FieldType.Integer:
+                    NumberFieldSettings n = new(this.Source);
+                    n.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
+                    break;
+                case FieldType.Object:
+                    BindingData db = new();
+                    DialogBinding dialog = new(this.Owner, this.Source);
+                    dialog.ShowDialog();
+                    if (dialog.Result == true)
+                    {
+                        db.BindingClass = dialog.SelectedClass;
+                        db.BindingField = dialog.SelectedField;
+                        db.Compliance = dialog.vm.GetConstraintsForSave();
+                        db.OnDeleteCascade = dialog.vm.Cascade;
+                        db.OnDeleteRestrict = dialog.vm.Restrict;
+                        this.Source.SetBindingData(db);
+                    }
+                    break;
+                case FieldType.LocalEnumeration:
+                    LocalEnumerationFieldSettings le = new(this.Source);
+                    le.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
+                    break;
+                case FieldType.GlobalEnumeration:
+                    GlobalEnumerationFieldSettings ge = new(this.Source);
+                    ge.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
+                    break;
+                case FieldType.LocalConstant:
+                    ConstantFieldSettings cf = new(this.Source);
+                    cf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
+                    break;
+                case FieldType.GlobalConstant:
+                    GlobalConstantFieldSettings gc = new(this.Source);
+                    gc.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
+                    break;
+                case FieldType.HiddenField:
+                    ConstantFieldSettings hf = new(this.Source);
+                    hf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
+                    break;
+                case FieldType.Date:
+                    DateFieldSettings dt = new(this.Source);
+                    dt.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
+                    break;
+                case FieldType.Table:
+                    TableSettings ts = new(this.Source);
+                    if (ts.ShowDialog() == true)
+                    {
+                        this.Source.TableSettings = ts.vm.Source;
+                    }
+                    break;
+            }
+        }
+
+        #endregion
         public string VisibleName
         {
             get => this.Source.VisibleName;
@@ -106,6 +227,32 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.IsExpanded));
             }
         }
+        private bool exists = false;
+        public bool IsExists
+        {
+            get
+            {
+                return this.exists;
+            }
+            set
+            {
+                this.exists = value;
+                this.OnPropertyChanged(nameof(this.IsExists));
+            }
+        }
+        private FieldType existedType;
+        public FieldType ExistedType
+        {
+            get
+            {
+                return this.existedType;
+            }
+            set
+            {
+                this.existedType = value;
+                this.OnPropertyChanged(nameof(this.ExistedType));
+            }
+        }
         public FieldType Type
         {
             get
@@ -114,8 +261,38 @@ namespace Incas.Objects.ViewModels
             }
             set
             {
-                this.Source.Type = value;
-                this.OnPropertyChanged(nameof(this.Type));
+                if (this.IsExists)
+                {
+                    if (!Field.CanChangeTypeTo(this.ExistedType, value))
+                    {
+                        if (DialogsManager.ShowQuestionDialog(
+                            "Изменение типа данных этого поля на выбранный тип не поддерживается INCAS для автоматического преобразования в существующих объектах. Вы уверены, что хотите продолжить?",
+                            "Поменять тип?",
+                            "Да, поменять",
+                            "Оставить текущий"
+                            ) == Core.Views.Windows.DialogStatus.Yes)
+                        {
+                            this.Source.Type = value;
+                            this.OnPropertyChanged(nameof(this.Type));
+                        }
+                        else
+                        {
+                            this.Source.Type = this.ExistedType;
+                            this.OnPropertyChanged(nameof(this.Type));
+                            return;
+                        }                      
+                    }
+                    else
+                    {
+                        this.Source.Type = value;
+                        this.OnPropertyChanged(nameof(this.Type));
+                    }
+                }
+                else
+                {
+                    this.Source.Type = value;
+                    this.OnPropertyChanged(nameof(this.Type));
+                }                
             }
         }
         public bool ListVisibility

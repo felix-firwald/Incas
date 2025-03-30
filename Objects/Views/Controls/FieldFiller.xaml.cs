@@ -353,8 +353,9 @@ namespace Incas.Objects.Views.Controls
         {
             switch (this.GetFillerType())
             {
-                case FieldType.String:
                 default:
+                    return "";
+                case FieldType.String:
                     string value = ((System.Windows.Controls.TextBox)this.control).Text;
                     if (this.Field.NotNull == true && string.IsNullOrEmpty(value))
                     {

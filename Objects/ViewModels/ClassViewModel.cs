@@ -42,7 +42,7 @@ namespace Incas.Objects.ViewModels
             this.Fields = new();
             foreach (Field f in this.SourceData.Fields)
             {
-                this.Fields.Add(new(f, this));
+                this.AddField(f);
             }
             this.Fields.CollectionChanged += this.Fields_CollectionChanged;
             this.SetCommands();
@@ -66,6 +66,15 @@ namespace Incas.Objects.ViewModels
                 }
             }
         }
+
+        public void AddField(Field f)
+        {
+            FieldViewModel vm = new(f, this, true);
+            vm.OnRemoveRequested += this.DoRemoveField;
+            vm.OnMoveUpRequested += this.DoMoveUpField;
+            vm.OnMoveDownRequested += this.DoMoveDownField;
+            this.Fields.Add(vm);
+        }
 #if !E_FREE
         public ClassViewModel(ServiceClass source)
         {
@@ -87,130 +96,39 @@ namespace Incas.Objects.ViewModels
         #region Commands
         private void SetCommands()
         {
-            this.RemoveField = new Command(this.DoRemoveField);
-            this.MoveUpField = new Command(this.DoMoveUpField);
-            this.MoveDownField = new Command(this.DoMoveDownField);
-            this.OpenFieldSettings = new Command(this.DoOpenFieldSettings);
+            
         }
 
-        public ICommand RemoveField { get; private set; }
-        public ICommand MoveUpField { get; private set; }
-        public ICommand MoveDownField { get; private set; }
-        public ICommand OpenFieldSettings { get; private set; }
-        private void DoRemoveField(object obj)
-        {
-            FieldViewModel field = obj as FieldViewModel;
-            if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить поле [{field.Name}] из этого класса? После сохранения класса это действие отменить нельзя: это поле будет безвозвратно удалено во всех объектах.", "Удалить поле?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
+        private void DoRemoveField(FieldViewModel field)
+        {            
+            BindingData data = new()
             {
-                BindingData data = new()
-                {
-                    BindingClass = this.Source.Id,
-                    BindingField = field.Source.Id
-                };
-                if (data.BindingClass == Guid.Empty || data.BindingField == Guid.Empty)
-                {
-                    this.Fields.Remove(field);
-                }
-                using Class cl = new();
-                List<string> list = cl.FindBackReferencesNames(data);
-                if (list.Count > 0)
-                {
-                    DialogsManager.ShowExclamationDialog($"Поле невозможно удалить, поскольку на него ссылаются следующие классы:\n{string.Join(",\n", list)}", "Удаление невозможно");
-                }
-                else
-                {
-                    this.Fields.Remove(field);
-                    this.RemoveFieldControl(field.Source.Id);
-                }
-            }           
-        }
-        private void DoMoveUpField(object obj)
-        {
-            FieldViewModel field = obj as FieldViewModel;
-            int position = this.Fields.IndexOf(field);
-            if (position > 0)
+                BindingClass = this.Source.Id,
+                BindingField = field.Source.Id
+            };
+            if (data.BindingClass == Guid.Empty || data.BindingField == Guid.Empty)
             {
-                position -= 1;
+                this.Fields.Remove(field);
             }
-            this.Fields.Remove(field);
-            this.Fields.Insert(position, field);
-        }
-        private void DoMoveDownField(object obj)
-        {
-            FieldViewModel field = obj as FieldViewModel;
-            int position = this.Fields.IndexOf(field);
-            if (position < this.Fields.Count - 1)
+            using Class cl = new();
+            List<string> list = cl.FindBackReferencesNames(data);
+            if (list.Count > 0)
             {
-                position += 1;
+                DialogsManager.ShowExclamationDialog($"Поле невозможно удалить, поскольку на него ссылаются следующие классы:\n{string.Join(",\n", list)}", "Удаление невозможно");
             }
-            this.Fields.Remove(field);
-            this.Fields.Insert(position, field);
-        }
-        private void DoOpenFieldSettings(object obj)
-        {
-            FieldViewModel field = obj as FieldViewModel;
-            string name = $"Настройки поля [{field.Name}]";
-            switch (field.Type)
+            else
             {
-                case FieldType.String:
-                    TextFieldSettings tf = new(field.Source);
-                    tf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
-                    break;
-                case FieldType.Text:
-                    TextBigFieldSettings tb = new(field.Source);
-                    tb.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Green);
-                    break;
-                case FieldType.Integer:
-                    NumberFieldSettings n = new(field.Source);
-                    n.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
-                    break;
-                case FieldType.Object:
-                    BindingData db = new();
-                    DialogBinding dialog = new(this, field.Source);
-                    dialog.ShowDialog();
-                    if (dialog.Result == true)
-                    {
-                        db.BindingClass = dialog.SelectedClass;
-                        db.BindingField = dialog.SelectedField;
-                        db.Compliance = dialog.vm.GetConstraintsForSave();
-                        db.OnDeleteCascade = dialog.vm.Cascade;
-                        db.OnDeleteRestrict = dialog.vm.Restrict;
-                        //field.Source.Value = JsonConvert.SerializeObject(db);
-                        field.Source.SetBindingData(db);
-                    }
-                    break;
-                case FieldType.LocalEnumeration:
-                    LocalEnumerationFieldSettings le = new(field.Source);
-                    le.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
-                    break;
-                case FieldType.GlobalEnumeration:
-                    GlobalEnumerationFieldSettings ge = new(field.Source);
-                    ge.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
-                    break;
-                case FieldType.LocalConstant:
-                    ConstantFieldSettings cf = new(field.Source);
-                    cf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
-                    break;
-                case FieldType.GlobalConstant:
-                    GlobalConstantFieldSettings gc = new(field.Source);
-                    gc.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
-                    break;
-                case FieldType.HiddenField:
-                    ConstantFieldSettings hf = new(field.Source);
-                    hf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
-                    break;
-                case FieldType.Date:
-                    DateFieldSettings dt = new(field.Source);
-                    dt.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
-                    break;
-                case FieldType.Table:
-                    TableSettings ts = new(field.Source);
-                    if (ts.ShowDialog() == true)
-                    {
-                        field.Source.TableSettings = ts.vm.Source;
-                    }
-                    break;
-            }
+                this.Fields.Remove(field);
+                this.RemoveFieldControl(field.Source.Id);
+            }          
+        }
+        private void DoMoveUpField(FieldViewModel field)
+        {
+            this.Fields.MoveUp(field);
+        }
+        private void DoMoveDownField(FieldViewModel field)
+        {
+            this.Fields.MoveDown(field);
         }
         #endregion
 
@@ -621,62 +539,7 @@ namespace Incas.Objects.ViewModels
             }
             return result;
         }
-        private void CheckField(Field f)
-        {
-            if (string.IsNullOrWhiteSpace(f.Name))
-            {
-                throw new FieldDataFailed($"Одному из полей не присвоено имя. Настройте поле, а затем попробуйте снова.");
-            }
-            try
-            {
-                switch (f.Type)
-                {
-                    case FieldType.Text:
-                    case FieldType.String:
-                        break;
-                    case FieldType.LocalEnumeration:
-                        if (f.GetLocalEnumeration().Count == 0)
-                        {
-                            throw new FieldDataFailed("");
-                        }
-                        break;
-                    case FieldType.GlobalEnumeration:
-                        if (f.GetGlobalEnumeration().TargetId == Guid.Empty)
-                        {
-                            throw new FieldDataFailed("");
-                        }
-                        break;
-                    case FieldType.Object:
-                        BindingData bd = f.GetBindingData();
-                        if (bd.BindingClass == Guid.Empty || bd.BindingField == Guid.Empty)
-                        {
-                            throw new FieldDataFailed($"Не определена привязка у поля [{f.Name}] (\"{f.VisibleName}\"). Настройте поле, а затем попробуйте снова.");
-                        }
-                        break;
-                    case FieldType.GlobalConstant:
-                        //Guid.Parse(f.Value);
-                        break;
-                    case FieldType.HiddenField:
-                        break;
-                    case FieldType.Integer:
-                        if (f.GetNumberFieldData() == null)
-                        {
-                            throw new FieldDataFailed("");
-                        }
-                        break;
-                    case FieldType.Date:
-                        f.GetDateFieldData();
-                        break;
-                    case FieldType.Table:
 
-                        break;
-                }
-            }
-            catch
-            {
-                throw new FieldDataFailed($"Поле [{f.Name}] (\"{f.VisibleName}\") не настроено. Настройте поле, а затем попробуйте снова.");
-            }
-        }
         public bool Validate()
         {
             try
@@ -709,7 +572,7 @@ namespace Incas.Objects.ViewModels
                     
                     if (field.BelongsThisClass)
                     {
-                        this.CheckField(field.Source);
+                        field.Source.Check();
                         field.Source.SetId();
                     }                  
                 }

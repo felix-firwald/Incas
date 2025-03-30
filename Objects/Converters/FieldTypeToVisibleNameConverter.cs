@@ -21,7 +21,7 @@ namespace Incas.Objects.Converters
                     case FieldType.String:
                         return "Строка";
                     case FieldType.Text:
-                        return "Многострочный текст";
+                        return "Текст";
                     case FieldType.LocalEnumeration:
                         return "Перечисление";
                     case FieldType.GlobalEnumeration:

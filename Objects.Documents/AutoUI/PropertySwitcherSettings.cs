@@ -31,7 +31,7 @@ namespace Incas.Objects.Documents.AutoUI
         [MaxLength(400)]
         public string DefaultValue { get; set; }
 
-        [Description("Связка")]
+        [Description("Словарь")]
         public DataTable Cases { get; set; }
 
         #endregion
@@ -51,7 +51,7 @@ namespace Incas.Objects.Documents.AutoUI
             this.Selector = new(pairs);          
             this.Selector.SetSelection(prop.Switcher.TargetField);
             this.DefaultValue = prop.Switcher.Default;
-            this.Cases = prop.Switcher.Cases.ToDataTable("Ожидаемое значение (условие)", "Вернуть значение");
+            this.Cases = prop.Switcher.Cases.ToDataTable("Ожидаемое значение (термин)", "Вернуть определение");
         }
 
         #region Functionality
@@ -72,7 +72,7 @@ namespace Incas.Objects.Documents.AutoUI
         {
             this.property.Switcher.TargetField = (Guid)this.Selector.SelectedObject;
             this.property.Switcher.Default = this.DefaultValue;
-            this.property.Switcher.Cases = this.Cases.ToDictionary<string,string>("Ожидаемое значение (условие)", "Вернуть значение");
+            this.property.Switcher.Cases = this.Cases.ToDictionary<string,string>("Ожидаемое значение (термин)", "Вернуть определение");
         }
         #endregion
     }

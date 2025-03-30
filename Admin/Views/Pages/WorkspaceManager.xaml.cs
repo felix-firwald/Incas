@@ -203,15 +203,37 @@ namespace Incas.Admin.Views.Pages
 
         private void AddClassClick(object sender, RoutedEventArgs e)
         {
-            ClassTypeSettings ct = new();
-            ct.Component.SetSelection(this.vm.SelectedCategory);
-            if (ct.ShowDialog("Первичная настройка", Icon.Lightning))
+            ClassPrimaryCreator pc = new();
+            pc.ViewModel.SelectedComponent = this.vm.SelectedCategory;
+            if (pc.ShowDialog() == true)
             {
-                CreateClass cc = new(ct);
+                CreateClass cc = new(pc.ViewModel.Source);
+                cc.vm.ListName = pc.ViewModel.ListName;
                 cc.ShowDialog();
                 this.vm.UpdateClasses();
             }
         }
+
+        private void InheritClassClick(object sender, RoutedEventArgs e)
+        {
+            Guid id = this.GetSelectedClass();
+            if (id == Guid.Empty)
+            {
+                return;
+            }
+            Class parent = EngineGlobals.GetClass(id);
+            ClassPrimaryCreator pc = new();
+            pc.ViewModel.SelectedComponent = this.vm.SelectedCategory;
+            pc.ViewModel.Source.Parents = parent.GetParentsListForChild();
+            if (pc.ShowDialog() == true)
+            {
+                CreateClass cc = new(pc.ViewModel.Source);
+                cc.vm.ListName = pc.ViewModel.ListName;
+                cc.ShowDialog();
+                this.vm.UpdateClasses();
+            }
+        }
+
         private Guid GetSelectedClass()
         {
             return this.vm.SelectedClass.Id;
@@ -294,25 +316,6 @@ namespace Incas.Admin.Views.Pages
             {
                 Processor.UpdateObjectMap(ProgramState.CurrentWorkspace.CurrentGroup.Class);
             });           
-        }
-
-        private void InheritClassClick(object sender, RoutedEventArgs e)
-        {
-            Guid id = this.GetSelectedClass();
-            if (id == Guid.Empty)
-            {
-                return;
-            }
-            Class parent = EngineGlobals.GetClass(id);
-            ClassTypeSettings ct = new(parent);
-            ct.Component.SetSelection(this.vm.SelectedCategory);
-            if (ct.ShowDialog("Первичная настройка наследника", Icon.Lightning))
-            {
-                CreateClass cc = new(ct);
-                
-                cc.ShowDialog();
-                this.vm.UpdateClasses();
-            }
         }
 
         private void OpenComponentsSettings(object sender, RoutedEventArgs e)

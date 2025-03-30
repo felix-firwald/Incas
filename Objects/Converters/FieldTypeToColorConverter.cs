@@ -38,25 +38,33 @@ namespace Incas.Objects.Converters
                 switch (enumValue)
                 {
                     case FieldType.String:
+                        return new SolidColorBrush(Color.FromRgb(132, 189, 253));
+
                     case FieldType.Text:
-                        return new SolidColorBrush(Color.FromRgb(52, 201, 36));
+                        return new SolidColorBrush(Color.FromRgb(149, 240, 172));
+
                     case FieldType.LocalEnumeration:
                     case FieldType.GlobalEnumeration:
+                    case FieldType.Boolean:
+                        return new SolidColorBrush(Color.FromRgb(250, 174, 122));
+
                     case FieldType.Date:
+
                     case FieldType.Integer:
                     case FieldType.Float:
-                    case FieldType.Boolean:
-                        return new SolidColorBrush(Color.FromRgb(245, 166, 35));
+                        return new SolidColorBrush(Color.FromRgb(132, 189, 253));
+
                     case FieldType.LocalConstant:
                     case FieldType.GlobalConstant:
                     case FieldType.HiddenField:
                         return new SolidColorBrush(Color.FromRgb(255, 0, 51));
+
                     case FieldType.Object:
 #if E_BUSINESS
                     case FieldType.Structure:
 #endif
                     case FieldType.Table:
-                        return new SolidColorBrush(Color.FromRgb(139, 0, 255));
+                        return new SolidColorBrush(Color.FromRgb(183, 153, 241));
                 }
             }
             return Brushes.Black;

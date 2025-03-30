@@ -12,6 +12,7 @@ namespace Incas.Objects.AutoUI
     /// </summary>
     public class TemplateSelection : AutoUIBase
     {
+        protected override string FinishButtonText { get => "Начать рендеринг"; }
         #region Data
         [Description("Шаблон для рендеринга")]
         public Selector Selector { get; set; }

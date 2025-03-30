@@ -15,7 +15,7 @@
         Style="{DynamicResource WindowBase}"
         WindowState="Normal"
         Title="{Binding Title}"
-        Closed="OnClosed" 
+        Closed="OnClosed" AllowDrop="True" Drop="window_Drop"
         MinHeight="700" MinWidth="900" PreviewKeyDown="window_PreviewKeyDown" Background="{StaticResource Black}">
     <Window.Resources>
         <ResourceDictionary>

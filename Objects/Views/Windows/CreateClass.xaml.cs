@@ -24,6 +24,7 @@ using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.Core.ExtensionMethods;
+using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -32,21 +33,14 @@ namespace Incas.Objects.Views.Windows
     /// </summary>
     public partial class CreateClass : Window
     {
-        private ClassViewModel vm;
+        public ClassViewModel vm;
         private IClassPartSettings partSettings;
-        public CreateClass(ClassTypeSettings primary) // init class
+        public CreateClass(Class primary) // init class
         {
             DialogsManager.ShowWaitCursor();
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
             this.InitializeComponent();
-            //this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-            Class @class = new();
-            @class.Name = primary.Name;
-            @class.Component = primary.GetComponent();
-            @class.Type = (ClassType)primary.Selector.SelectedObject;
-            @class.Parents = primary.GetParents();
-
-            this.vm = new(@class);
+            this.vm = new(primary);
             this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
             if (this.vm.Type == ClassType.Document)
             {
@@ -75,9 +69,7 @@ namespace Incas.Objects.Views.Windows
             this.DataContext = this.vm;
             this.ApplyPartSettings();
             DialogsManager.ShowWaitCursor(false);
-        }
-
-        
+        }      
 
         public CreateClass(ServiceClass @class) // edit service class
         {
@@ -132,24 +124,9 @@ namespace Incas.Objects.Views.Windows
             DialogsManager.ShowHelp(Help.Components.HelpType.Classes_General);
         }
 
-        private void AddField(Field data = null)
-        {
-            //Controls.FieldCreator fc = new(this.ContentPanel.Children.Count, data);
-            //fc.OnRemove += this.Fc_OnRemove;
-            //fc.OnMoveDownRequested += this.Fc_OnMoveDownRequested;
-            //fc.OnMoveUpRequested += this.Fc_OnMoveUpRequested;
-            //this.ContentPanel.Children.Add(fc);
-            //Controls.FieldScriptViewer fsv = new(fc.vm);
-            //fsv.OnBindingActionRequested += this.Fsv_OnBindingActionRequested;
-            //fsv.OnBindingEventRequested += this.Fsv_OnBindingEventRequested;
-            //fsv.OnLinkInsertingRequested += this.Fsv_OnLinkInsertingRequested;
-            //this.ScriptFieldsPanel.Children.Add(fsv);
-        }
-
         private void AddFieldClick(object sender, RoutedEventArgs e)
         {
-            this.vm.Fields.Add(new(this.vm));
-            //this.AddField();
+            this.vm.AddField(new());
         }
         private void CopyFieldsFromAnotherClass(object sender, RoutedEventArgs e)
         {
@@ -160,7 +137,7 @@ namespace Incas.Objects.Views.Windows
                 foreach (Field f in cd.Fields)
                 {
                     f.Id = Guid.NewGuid();
-                    this.AddField(f);
+                    this.vm.AddField(f);
                 }
             }
         }
@@ -171,7 +148,7 @@ namespace Incas.Objects.Views.Windows
             {
                 foreach (Field f in appender.GetFields())
                 {
-                    this.AddField(f);
+                    this.vm.AddField(f);
                 }
             }
         }
@@ -294,7 +271,7 @@ namespace Incas.Objects.Views.Windows
                         Name = tagname,
                         VisibleName = tagname.Replace("_", " ")
                     };
-                    this.AddField(tag);
+                    this.vm.AddField(tag);
                 }
             }
             catch (IOException)
@@ -316,66 +293,6 @@ namespace Incas.Objects.Views.Windows
         }
         #endregion
 
-        #region Statuses
-        private void AddStatusClick(object sender, MouseButtonEventArgs e)
-        {
-            //StatusSettings ss = new();
-            //if (ss.ShowDialog("Настройка статуса", Core.Classes.Icon.Tag) == true)
-            //{
-            //    this.vm.SourceData.AddStatus(ss.GetData());
-            //    this.UpdateStatusesList();
-            //}
-        }
-        private void CopyStatusesClick(object sender, MouseButtonEventArgs e)
-        {
-            ClassSelector cs = new();
-            if (cs.ShowDialog("Выбор класса", Core.Classes.Icon.Search))
-            {
-                IClassData cd = cs.GetSelectedClassData();
-                //if (cd.Statuses == null)
-                //{
-                //    return;
-                //}
-                //this.vm.SourceData.Statuses = cd.Statuses;
-                //foreach (StatusData sd in cd.Statuses.Values)
-                //{
-                //    this.vm.SourceData.AddStatus(sd);
-                //}
-            }
-            this.UpdateStatusesList();
-        }
-        private void UpdateStatusesList()
-        {
-            //this.StatusesPanel.Children.Clear();
-            //if (this.vm.SourceData.Statuses is null)
-            //{
-            //    return;
-            //}
-            //int index = 0;
-            //foreach (StatusData data in this.vm.SourceData.Statuses.Values)
-            //{
-            //    index++;
-            //    StatusElement se = new(index, data);
-            //    se.OnEdit += this.Se_OnEdit;
-            //    se.OnRemove += this.Se_OnRemove;
-            //    this.StatusesPanel.Children.Add(se);
-            //}
-        }
-
-        private void Se_OnRemove(int index, StatusData statusData)
-        {
-            //this.vm.SourceData.RemoveStatus(index);
-            //this.UpdateStatusesList();
-        }
-
-        private void Se_OnEdit(int index, StatusData statusData)
-        {
-            //this.vm.SourceData.Statuses[index] = statusData;
-            //this.UpdateStatusesList();
-        }
-
-        #endregion
-
         private void MinimizeAllClick(object sender, RoutedEventArgs e)
         {
             foreach (FieldViewModel f in this.vm.Fields)
@@ -389,27 +306,6 @@ namespace Incas.Objects.Views.Windows
             foreach (FieldViewModel f in this.vm.Fields)
             {
                 f.IsExpanded = true;
-            }
-        }
-
-        private void ShowFormClick(object sender, RoutedEventArgs e)
-        {
-            List<Field> fields = [];
-            try
-            {
-                //foreach (Incas.Objects.Views.Controls.FieldCreator item in this.ContentPanel.Children)
-                //{
-                //    Field f = item.GetField();
-                //    f.SetId();
-                //    fields.Add(f);
-                //}
-                //this.vm.SourceData.Fields = fields;
-                //ObjectsEditor oe = new(this.vm.Source, this.vm.SourceData);
-                //oe.ShowDialog();
-            }
-            catch (FieldDataFailed fd)
-            {
-                DialogsManager.ShowExclamationDialog(fd.Message, "Предпросмотр прерван");
             }
         }
 
@@ -489,7 +385,25 @@ namespace Incas.Objects.Views.Windows
 
         private void AddChildContainerToViewControl(object sender, RoutedEventArgs e)
         {
-            this.vm.SelectedViewControl.AddChild(new(new() { Name = $"Контейнер {this.vm.SelectedViewControl.Children.Count + 1}", Children = [] }));
+            ControlType type = ControlType.VerticalStack;
+            switch (this.vm.SelectedViewControl.Type)
+            {
+                case ControlType.VerticalStack:
+                    type = ControlType.HorizontalStack;
+                    break;
+                case ControlType.HorizontalStack:
+                    type = ControlType.VerticalStack;
+                    break;
+                case ControlType.Tab:
+                    type = ControlType.TabItem;
+                    break;
+                case ControlType.TabItem:
+                case ControlType.Group:
+                    this.vm.SelectedViewControl.Children.Clear();
+                    type = ControlType.VerticalStack;
+                    break;
+            }
+            this.vm.SelectedViewControl.AddChild(new(new() { Name = $"Контейнер {this.vm.SelectedViewControl.Children.Count + 1}", Type = type, Children = [] }));
         }
         private void Vm_OnDrawCalling()
         {

@@ -1,10 +1,6 @@
 ﻿using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Incas.Objects.Documents.Converters
@@ -19,10 +15,12 @@ namespace Incas.Objects.Documents.Converters
                 {
                     case TemplateProperty.CalculationType.Constant:
                         return "Константа";
+                    case TemplateProperty.CalculationType.GlobalConstant:
+                        return "Глобальная константа";
                     case TemplateProperty.CalculationType.Switch:
-                        return "Разветвитель";
+                        return "Словарь сопоставления";
                     case TemplateProperty.CalculationType.Script:
-                        return "Скрипт";
+                        return "Переменная скрипта";
                     case TemplateProperty.CalculationType.Replication:
                         return "Репликация";
                 }

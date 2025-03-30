@@ -11,6 +11,7 @@
         <ResourceDictionary>            
             <local1:FieldTypeToColorConverter x:Key="FieldTypeToColorConverter"/>
             <local1:FieldTypeToVisibleNameConverter x:Key="FieldTypeToVisibleNameConverter"/>
+            <local1:FieldTypeToIconConverter x:Key="FieldTypeToIconConverter"/>
             <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
             <conv:PathDataToGeometryConverter x:Key="PathDataToGeometryConverter"/>
             <local1:ViewControlTypeToVisibleNameConverter x:Key="ViewControlTypeToVisibleNameConverter"/>
@@ -227,7 +228,7 @@
                                 <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding Fields}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" Margin="0,5,5,5" Background="{StaticResource Black}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <Border x:Name="MainBorder" Margin="2" CornerRadius="8" Background="{DynamicResource Dark}">
+                                            <Border x:Name="MainBorder" Margin="2" CornerRadius="2" Background="{DynamicResource Dark}">
                                                 <Border.Style>
                                                     <Style TargetType="{x:Type Border}">
                                                         <Setter Property="Height" Value="Auto"/>
@@ -280,31 +281,31 @@
                                                                 <ColumnDefinition Width="40"/>
                                                                 <ColumnDefinition />
                                                             </Grid.ColumnDefinitions>
-                                                            <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding DataContext.FieldTypes, RelativeSource={RelativeSource AncestorType=ListBox}}" SelectedItem="{Binding Type}" SelectionChanged="ComboType_SelectionChanged" Grid.Column="1">
+                                                            <ComboBox x:Name="ComboType" Style="{DynamicResource ComboBoxMain}" ItemsSource="{Binding DataContext.FieldTypes, RelativeSource={RelativeSource AncestorType=ListBox}}" SelectedItem="{Binding Type, Delay=10}" SelectionChanged="ComboType_SelectionChanged" Grid.Column="1">
                                                                 <ComboBox.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <StackPanel Orientation="Horizontal">
-                                                                            <Ellipse Width="5" Height="5" Fill="{Binding ., Converter={StaticResource FieldTypeToColorConverter}}"/>
-                                                                            <Label Content="{Binding ., Converter={StaticResource FieldTypeToVisibleNameConverter}}" Style="{DynamicResource LabelElement}" FontSize="11"/>
+                                                                            <Path Width="15" Stretch="Uniform" Fill="{Binding ., Converter={StaticResource FieldTypeToColorConverter}}" Data="{Binding ., Converter={StaticResource FieldTypeToIconConverter}}"/>
+                                                                            <Label Margin="5,0,0,0" Content="{Binding ., Converter={StaticResource FieldTypeToVisibleNameConverter}}" Style="{DynamicResource LabelElement}" FontSize="11"/>
                                                                             <!--<Label Content="{Binding ., Converter={StaticResource FieldTypeToVisibleNameConverter}}" Style="{DynamicResource LabelElement}" Foreground="{DynamicResource Icon}" FontSize="10"/>-->
                                                                         </StackPanel>
                                                                     </DataTemplate>
                                                                 </ComboBox.ItemTemplate>
                                                             </ComboBox>
-                                                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" ToolTip="Открыть настройки поля" Command="{Binding DataContext.OpenFieldSettings, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
+                                                            <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" ToolTip="Открыть настройки поля" Command="{Binding OpenFieldSettings}" CommandParameter="{Binding }">
                                                                 <Path Fill="White" VerticalAlignment="Center" Data="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
                                                             </Button>
                                                         </Grid>
                                                     </StackPanel>
-                                                    <Rectangle Width="1" Fill="{DynamicResource Area}" Grid.Column="1" Visibility="{Binding BelongsVisibility}" HorizontalAlignment="Left"  Margin="-2,5,0,5" Opacity="0.5" />
-                                                    <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" Background="{StaticResource Dark}" ToolTip="Удалить поле" Grid.Column="1" Command="{Binding DataContext.RemoveField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
+                                                    <Rectangle Width="1" Fill="{DynamicResource Area}" Grid.Column="1" Visibility="{Binding BelongsVisibility}" HorizontalAlignment="Left" Margin="-2,5,0,5" Opacity="0.5" />
+                                                    <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" Background="{StaticResource Dark}" ToolTip="Удалить поле" Grid.Column="1" Command="{Binding RemoveField}" CommandParameter="{Binding }">
                                                         <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
                                                     </Button>
                                                     <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding BelongsVisibility}">
-                                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}"  ToolTip="Поднять выше" Grid.Column="1" Command="{Binding DataContext.MoveUpField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
+                                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}"  ToolTip="Поднять выше" Grid.Column="1" Command="{Binding MoveUpField}" CommandParameter="{Binding }">
                                                             <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Margin="4" Data="M13.04,11.1856l-4.2463,4.246a.5021.5021,0,0,1-.3442.15.4664.4664,0,0,1-.3633-.15.4716.4716,0,0,1,0-.7075l4.3883-4.3885a.7813.7813,0,0,1,1.131,0l4.3882,4.3885a.5024.5024,0,0,1,.15.3443.4662.4662,0,0,1-.15.3632.4714.4714,0,0,1-.7075,0Z"/>
                                                         </Button>
-                                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}"  ToolTip="Опустить ниже" Grid.Column="1" Command="{Binding DataContext.MoveDownField, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding }">
+                                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}"  ToolTip="Опустить ниже" Grid.Column="1" Command="{Binding MoveDownField}" CommandParameter="{Binding }">
                                                             <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Margin="4" Data="M -13.04 -11.1856 l 4.2463 -4.246 a 0.5021 0.5021 180 0 1 0.3442 -0.15 a 0.4664 0.4664 180 0 1 0.3633 0.15 a 0.4716 0.4716 180 0 1 0 0.7075 l -4.3883 4.3885 a 0.7813 0.7813 180 0 1 -1.131 0 l -4.3882 -4.3885 a 0.5024 0.5024 180 0 1 -0.15 -0.3443 a 0.4662 0.4662 180 0 1 0.15 -0.3632 a 0.4714 0.4714 180 0 1 0.7075 -0 Z"/>
                                                         </Button>
                                                     </StackPanel>

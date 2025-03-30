@@ -1,5 +1,6 @@
 ﻿using Incas.Core.ViewModels;
 using Incas.Objects.Documents.AutoUI;
+using Incas.Objects.Documents.Views.Windows;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
@@ -58,9 +59,17 @@ namespace Incas.Objects.Documents.ViewModels
                     PropertyConstantSettings settings = new(this.Source);
                     settings.ShowDialog($"Настройки свойства [{this.Source.Name}]");
                     break;
+                case TemplateProperty.CalculationType.GlobalConstant:
+                    PropertyGlobalConstantSettings settings3 = new(this.Source);
+                    settings3.ShowDialog($"Настройки свойства [{this.Source.Name}]");
+                    break;
                 case TemplateProperty.CalculationType.Switch:
-                    PropertySwitcherSettings settings2 = new(this.Source, this.OnFieldsRequested?.Invoke());
+                    AutoUI.PropertySwitcherSettings settings2 = new(this.Source, this.OnFieldsRequested?.Invoke());
                     settings2.ShowDialog($"Настройки свойства [{this.Source.Name}]");
+                    break;
+                case TemplateProperty.CalculationType.Replication:
+                    PropertyReplicationSettings settings4 = new(this.Source);
+                    settings4.ShowDialog();
                     break;
             }
         }
@@ -127,7 +136,8 @@ namespace Incas.Objects.Documents.ViewModels
             {
                 return new() 
                 { 
-                    TemplateProperty.CalculationType.Constant, 
+                    TemplateProperty.CalculationType.Constant,
+                    TemplateProperty.CalculationType.GlobalConstant,
                     TemplateProperty.CalculationType.Switch, 
                     TemplateProperty.CalculationType.Script, 
                     TemplateProperty.CalculationType.Replication 

@@ -162,7 +162,11 @@ namespace Incas.Objects.ViewModels
 
         public DialogBindingViewModel(ClassViewModel @class, BindingData data)
         {
-            this.myClassFields = @class.Fields;
+            if (@class is not null)
+            {
+                this.myClassFields = @class.Fields;
+            }
+            
             using (Class cl = new())
             {
                 List<WorkspaceComponent> components = ProgramState.CurrentWorkspace.GetDefinition().GetAvailableComponentsFor(@class.Source.Component);
