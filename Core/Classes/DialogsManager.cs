@@ -4,7 +4,7 @@ using Incas.Help.Components;
 using Incas.Help.Windows;
 using Incas.Objects.Views.Pages;
 using Incas.Testing;
-using IncasEngine.Core;
+using IncasEngine.Core.DatabaseQueries;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using Newtonsoft.Json;
 using System;
@@ -107,7 +107,7 @@ namespace Incas.Core.Classes
             ContainerWindow cw = new(uc, title);
             cw.Show();
         }
-        public static void ShowSQLViewer(Query q)
+        public static void ShowSQLViewer(SQLiteQuery q)
         {
             SQLViewerWindow sqlv = new(q);
             sqlv.ShowDialog();

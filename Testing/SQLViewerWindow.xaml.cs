@@ -1,4 +1,4 @@
-﻿using IncasEngine.Core;
+﻿using IncasEngine.Core.DatabaseQueries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace Incas.Testing
     /// </summary>
     public partial class SQLViewerWindow : Window
     {
-        public SQLViewerWindow(Query query)
+        public SQLViewerWindow(SQLiteQuery query)
         {
             this.InitializeComponent();
             this.QueryText.Text = query.GetResult();
