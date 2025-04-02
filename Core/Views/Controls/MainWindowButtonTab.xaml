@@ -4,21 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incas.Core.Views.Controls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" ToolTipService.InitialShowDelay="200"
              d:DesignHeight="40" MinHeight="40" d:DesignWidth="200" Cursor="">
     <Border x:Name="bbb" CornerRadius="8" Margin="5" Cursor="Hand" MouseDown="Border_MouseDown" MouseUp="bbb_MouseUp">
         <Border.Style>
             <Style TargetType="{x:Type Border}">
-                <Setter Property="RenderTransformOrigin" Value="1,1" />
+                <!--<Setter Property="RenderTransformOrigin" Value="1,1" />
                 <Setter Property="RenderTransform">
                     <Setter.Value>
                         <ScaleTransform />
                     </Setter.Value>
-                </Setter>
+                </Setter>-->
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{StaticResource Basic}"/>
                         <Setter Property="BorderBrush" Value="{StaticResource PrimaryMain}"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Background" Value="{StaticResource LightBlack}"/>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="False">
                         <Setter Property="BorderBrush" Value="White"/>

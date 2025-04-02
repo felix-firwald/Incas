@@ -84,6 +84,19 @@ namespace Incas.Core.Views.Controls
             }
         }
 
+        public void Minimize()
+        {            
+            this.Text.Visibility = System.Windows.Visibility.Collapsed;
+            Grid.SetColumnSpan(this.Icon, 2);
+            ToolTipService.SetInitialShowDelay(this, 100);
+        }
+        public void Maximize()
+        {
+            this.Text.Visibility = System.Windows.Visibility.Visible;
+            Grid.SetColumnSpan(this.Icon, 1);
+            ToolTipService.SetInitialShowDelay(this, 200);
+        }
+
         private void bbb_MouseUp(object sender, MouseButtonEventArgs e)
         {
             

@@ -168,6 +168,30 @@ namespace Incas.Objects.ViewModels
                 return string.Join(", ", this.Source.GetParentClassesNames());
             }
         }
+        public string InternalName
+        {
+            get
+            {
+                return this.Source.InternalName;
+            }
+            set
+            {
+                this.Source.InternalName = value.Replace(' ', '_');
+                this.OnPropertyChanged(nameof(this.InternalName));
+            }
+        }
+        public string Description
+        {
+            get
+            {
+                return this.Source.Description;
+            }
+            set
+            {
+                this.Source.Description = value;
+                this.OnPropertyChanged(nameof(this.Description));
+            }
+        }
         public string NameOfClass
         {
             get => this.Source.Name;
@@ -545,6 +569,11 @@ namespace Incas.Objects.ViewModels
             try
             {
                 this.Source.Component = this.SelectedComponent;
+                if (string.IsNullOrEmpty(this.InternalName))
+                {
+                    DialogsManager.ShowExclamationDialog("Классу не присвоено уникальное имя!", "Сохранение прервано");
+                    return false;
+                }
                 if (string.IsNullOrWhiteSpace(this.NameOfClass))
                 {
                     DialogsManager.ShowExclamationDialog("Классу не присвоено наименование!", "Сохранение прервано");

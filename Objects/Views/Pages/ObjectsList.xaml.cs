@@ -161,33 +161,29 @@ namespace Incas.Objects.Views.Pages
 
         private async void UpdateView()
         {
-            await System.Threading.Tasks.Task.Run(() =>
+            DataTable dt = await Processor.GetObjectsList(this.sourceClass);                
+            if (this.sourceClass.Type == ClassType.Model)
             {
-                DataTable dt = Processor.GetObjectsList(this.sourceClass);
-                
-                if (this.sourceClass.Type == ClassType.Model)
+                this.View = dt.AsDataView();
+                this.View.Sort = $"[{Helpers.NameField}] ASC";
+                this.Dispatcher.Invoke(() =>
                 {
-                    this.View = dt.AsDataView();
-                    this.View.Sort = $"[{Helpers.NameField}] ASC";
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        this.Data.Columns.Clear();
-                        this.Data.ItemsSource = this.View;
-                    });                   
-                }
-                else
+                    this.Data.Columns.Clear();
+                    this.Data.ItemsSource = this.View;
+                });                   
+            }
+            else
+            {
+                this.Dispatcher.Invoke(() =>
                 {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        this.Data.Columns.Clear();
-                        this.Data.ItemsSource = dt.AsDataView();
-                    });                   
-                }             
-            });          
+                    this.Data.Columns.Clear();
+                    this.Data.ItemsSource = dt.AsDataView();
+                });                   
+            }                      
         }
-        public void UpdateViewWithSearch(FieldData data)
+        public async void UpdateViewWithSearch(FieldData data)
         {
-            DataTable dt = Processor.GetObjectsListWhereLike(this.sourceClass, data.ClassField.VisibleName, data.Value);
+            DataTable dt = await Processor.GetObjectsListWhereLike(this.sourceClass, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.sourceClass.Type == ClassType.Model)
@@ -201,9 +197,9 @@ namespace Incas.Objects.Views.Pages
                 this.Data.ItemsSource = dt.AsDataView();
             }
         }
-        public void UpdateViewWithFilter(FieldData data)
+        public async void UpdateViewWithFilter(FieldData data)
         {
-            DataTable dt = Processor.GetObjectsListWhereEqual(this.sourceClass, data.ClassField.VisibleName, data.Value);
+            DataTable dt = await Processor.GetObjectsListWhereEqual(this.sourceClass, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.sourceClass.Type == ClassType.Model)

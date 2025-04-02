@@ -377,13 +377,28 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ToolTip">
-                            <Border CornerRadius="5" BorderBrush="{StaticResource LightBlack}" BorderThickness="1" Background="{DynamicResource Black}" Padding="8,8,8,8">
+                            <Border CornerRadius="2" BorderBrush="{StaticResource LightBlack}" BorderThickness="1" Background="{DynamicResource Black}" Padding="8,8,8,8">
                                 <StackPanel>
                                     <Label Content="Помощь" TextElement.FontFamily="{StaticResource JetBrains}" TextElement.FontSize="11" TextElement.FontWeight="Bold" Foreground="{TemplateBinding Foreground}"/>
                                     <Border CornerRadius="0" Padding="0">
                                         <ContentPresenter TextElement.Foreground="White" MaxWidth="300" TextElement.FontFamily="{StaticResource JetBrains}" TextElement.FontWeight="ExtraLight" TextElement.FontSize="11"/>
                                     </Border>
                                 </StackPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ToolTipCustom" TargetType="ToolTip">
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="HasDropShadow" Value="True" />
+                <Setter Property="Foreground" Value="{DynamicResource LightPurple}"/>
+                <Setter Property="Margin" Value="8"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToolTip">
+                            <Border CornerRadius="2" BorderBrush="{StaticResource LightBlack}" BorderThickness="1" Background="{DynamicResource Black}" Padding="8">
+                                <ContentPresenter TextElement.Foreground="White" MaxWidth="300" TextElement.FontFamily="{StaticResource JetBrains}" TextElement.FontWeight="ExtraLight" TextElement.FontSize="11"/>
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>

@@ -6,6 +6,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Incas", "Incas.csproj", "{5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncasEngine", "..\IncasEngine\IncasEngine.csproj", "{1099D10D-47E3-42CC-ABBA-CAAFB4900393}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncasServer", "..\IncasServer\IncasServer.csproj", "{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BusinessPro|Any CPU = BusinessPro|Any CPU
@@ -35,6 +37,16 @@ Global
 		{1099D10D-47E3-42CC-ABBA-CAAFB4900393}.Extended|Any CPU.Build.0 = Extended|Any CPU
 		{1099D10D-47E3-42CC-ABBA-CAAFB4900393}.Free|Any CPU.ActiveCfg = Free|Any CPU
 		{1099D10D-47E3-42CC-ABBA-CAAFB4900393}.Free|Any CPU.Build.0 = Free|Any CPU
+		{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}.BusinessPro|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}.BusinessPro|Any CPU.Build.0 = Debug|Any CPU
+		{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}.Community|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}.Community|Any CPU.Build.0 = Debug|Any CPU
+		{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}.Extended|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}.Extended|Any CPU.Build.0 = Debug|Any CPU
+		{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}.Free|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2591AEF-84F4-4797-B93E-0CF0E9CB76B1}.Free|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

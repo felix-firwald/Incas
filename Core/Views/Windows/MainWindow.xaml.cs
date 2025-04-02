@@ -13,6 +13,7 @@ using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Media;
 using System.Windows;
@@ -42,6 +43,7 @@ namespace Incas.Core.Views.Windows
             this.DataContext = this.vm;
             this.UpdateTabs();
             this.AddTabItem(new StartPage(), "$START", "Начало", TabType.General);
+            this.FullMenuSwitchButton.IsChecked = true;
         }
         public void PlaceStatusBar(IStatusBar bar)
         {
@@ -76,20 +78,6 @@ namespace Incas.Core.Views.Windows
         private void OnClosed(object sender, EventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
-        }
-
-        private void OnResize(object sender, SizeChangedEventArgs e)
-        {
-            //if (this.StackLeft.RenderSize.Width < 150)
-            //{
-            //    this.LSurname.Visibility = Visibility.Collapsed;
-            //    this.Incubator.Visibility = Visibility.Collapsed;
-            //}
-            //else
-            //{
-            //    this.LSurname.Visibility = Visibility.Visible;
-            //    this.Incubator.Visibility = Visibility.Visible;
-            //}
         }
 
         private void Logo_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -160,7 +148,7 @@ namespace Incas.Core.Views.Windows
             bt.OnNewTabRequested += this.Bt_OnNewTabRequested;
             this.CustomTabs.Children.Add(bt);
         }
-        private void AddAdminPageButton(string name, Icon icon, string path, string description)
+        private void AddAdminPageButton(string name, Classes.Icon icon, string path, string description)
         {
             Controls.MainWindowButtonTab bt = new(name, icon, path, description);
             bt.OnNewTabRequested += this.Bt_OnNewTabRequested;
@@ -298,6 +286,38 @@ namespace Incas.Core.Views.Windows
             this.Hide();
             tw.ShowDialog();
             this.Close();
+        }
+
+        private void FullMenuSwitchButton_Checked(object sender, RoutedEventArgs e)
+        {
+            this.gridSplitter.IsEnabled = true;
+            this.MenuColumn.MinWidth = 160;
+            this.MenuColumn.MaxWidth = 400;
+            this.MicroMenuSwitchButton.Visibility = Visibility.Visible;
+            this.BorderViewSwitchers.MaxWidth = 80;
+            Grid.SetColumnSpan(this.FullMenuSwitchButton, 1);
+            this.TitleBarWorkspace.Visibility = Visibility.Visible;
+            this.TitleBarUser.Visibility = Visibility.Visible;
+            foreach (Controls.MainWindowButtonTab bt in this.CustomTabs.Children)
+            {
+                bt.Maximize();
+            }
+        }
+
+        private void MicroMenuSwitchButton_Checked(object sender, RoutedEventArgs e)
+        {
+            this.gridSplitter.IsEnabled = false;
+            this.MenuColumn.MinWidth = 60;
+            this.MenuColumn.MaxWidth = 60;
+            this.MicroMenuSwitchButton.Visibility = Visibility.Collapsed;
+            this.BorderViewSwitchers.MaxWidth = 50;
+            Grid.SetColumnSpan(this.FullMenuSwitchButton, 2);
+            this.TitleBarWorkspace.Visibility = Visibility.Collapsed;
+            this.TitleBarUser.Visibility = Visibility.Collapsed;
+            foreach (Controls.MainWindowButtonTab bt in this.CustomTabs.Children)
+            {
+                bt.Minimize();
+            }
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
-using IncasEngine.ClientServer.Core;
 using System.ComponentModel;
 
 namespace Incas.Testing.AutoUI
@@ -40,14 +38,14 @@ namespace Incas.Testing.AutoUI
 
         public override void Save()
         {
-            if (string.IsNullOrEmpty(this.ConnectionString))
-            {
-                SocketServer server = new(this.Port);
-            }
-            else
-            {
-                SocketServer server = new(this.ConnectionString);
-            }
+            //if (string.IsNullOrEmpty(this.ConnectionString))
+            //{
+            //    SocketServer server = new(this.Port);
+            //}
+            //else
+            //{
+            //    SocketServer server = new(this.ConnectionString);
+            //}
         }
         #endregion
     }

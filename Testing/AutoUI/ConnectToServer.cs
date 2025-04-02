@@ -1,7 +1,5 @@
 ﻿using Incas.Core.Attributes;
-using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
-using IncasEngine.ClientServer.Core;
 using IncasEngine.Core;
 using System.ComponentModel;
 
@@ -46,17 +44,16 @@ namespace Incas.Testing.AutoUI
 
         public override void Save()
         {
-            if (string.IsNullOrEmpty(this.ConnectionString))
-            {
-                SocketClient client = new($"ws://localhost:{this.Port}/simple_message");
-                EngineGlobals.Client = client;
-            }
-            else
-            {
-                SocketClient client = new(this.ConnectionString);
-                EngineGlobals.Client = client;
-            }
-            
+            //if (string.IsNullOrEmpty(this.ConnectionString))
+            //{
+            //    SocketClient client = new($"ws://localhost:{this.Port}/simple_message");
+            //    EngineGlobals.Client = client;
+            //}
+            //else
+            //{
+            //    SocketClient client = new(this.ConnectionString);
+            //    EngineGlobals.Client = client;
+            //}            
         }
         #endregion
     }

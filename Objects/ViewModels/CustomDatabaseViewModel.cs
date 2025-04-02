@@ -67,8 +67,20 @@ namespace Incas.Objects.ViewModels
                 {
                     this.classData = this.selectedClass.GetClassData();
                     this.OnPropertyChanged(nameof(this.ClassData));
+                    this.OnPropertyChanged(nameof(this.DescriptionVisibility));
                     this.OnClassSelected?.Invoke(value);
                 }              
+            }
+        }
+        public Visibility DescriptionVisibility
+        {
+            get
+            {
+                if (this.SelectedClass is null || string.IsNullOrWhiteSpace(this.SelectedClass.Description))
+                {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
             }
         }
         private IClassData classData;

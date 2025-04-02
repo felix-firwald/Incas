@@ -109,7 +109,7 @@
                 </ColorAnimationUsingKeyFrames>
             </Storyboard>
         </ResourceDictionary>
-        
+
     </Window.Resources>
     <!--<Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
@@ -122,36 +122,52 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" MinWidth="140" MaxWidth="400"/>
+            <ColumnDefinition x:Name="MenuColumn" Width="250" MinWidth="160" MaxWidth="400"/>
             <ColumnDefinition Width="13*" />
             <ColumnDefinition Width="40"/>
         </Grid.ColumnDefinitions>
 
 
-        <Grid x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MinWidth="100" MaxWidth="450" ScrollViewer.VerticalScrollBarVisibility="Visible" Background="#252528" SizeChanged="OnResize" Cursor="">
+        <Grid x:Name="StackLeft" Grid.Row="0" Grid.Column="0" MaxWidth="450" ScrollViewer.VerticalScrollBarVisibility="Visible" Background="{StaticResource LightBlack}" Cursor="">
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="1*"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <StackPanel x:Name="stackPanel2" Orientation="Horizontal" HorizontalAlignment="Center">
+            
+            <StackPanel x:Name="TitleBarWorkspace" Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock x:Name="Incubator" FontFamily="{StaticResource Rubik}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DodgerBlue" Margin="15,25,5,25" Text="{Binding WorkspaceName, FallbackValue=Без имени}" TextWrapping="Wrap"/>
                 <Button Style="{StaticResource ButtonSquare}" ToolTip="Обновить рабочее пространство" Click="RefreshClick">
                     <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M6.1421,15.9157a7.44,7.44,0,0,1-.546-1.5365,7.01,7.01,0,0,1-.1885-1.6172,7.3041,7.3041,0,0,1,2.19-5.3443,7.2049,7.2049,0,0,1,5.31-2.2057h1.3865l-2.1-2.1.7078-.7078L16.21,5.712,12.9019,9.02l-.7078-.7077,2.1-2.1H12.9076A6.2484,6.2484,0,0,0,8.3019,8.1187,6.34,6.34,0,0,0,6.4076,12.762a6.3361,6.3361,0,0,0,.4845,2.4037Zm6.7713,7.104L9.6056,19.712l3.3078-3.3078.7077.7078-2.1,2.1h1.3865a6.2488,6.2488,0,0,0,4.6058-1.9068,6.3406,6.3406,0,0,0,1.8942-4.6432,6.331,6.331,0,0,0-.4845-2.4038l.75-.75a7.44,7.44,0,0,1,.546,1.5365,7.01,7.01,0,0,1,.1885,1.6173,7.3041,7.3041,0,0,1-2.19,5.3442,7.205,7.205,0,0,1-5.3095,2.2058H11.5211l2.1,2.1Z"/>
                 </Button>
             </StackPanel>
-            <StackPanel Grid.Row="1">
+            <StackPanel x:Name="TitleBarUser" Grid.Row="1">
                 <Rectangle Stroke="{DynamicResource Basic}" StrokeThickness="1" Margin="5,0,5,0" />
                 <Path x:Name="Logo" Fill="{StaticResource Element}" MaxHeight="50" MaxWidth="50" Width="auto" Height="auto" Data="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0 M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" HorizontalAlignment="Center" Stretch="UniformToFill" Margin="0,15,0,6"/>
                 <TextBlock Foreground="White" FontFamily="{StaticResource Rubik}" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged, TargetNullValue=Пользователь не определен}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis" Margin="0,5,0,10"/>
                 <TextBlock Foreground="{StaticResource Buttons.Green}" FontFamily="{StaticResource Rubik}" Text="{Binding Group, UpdateSourceTrigger=PropertyChanged, TargetNullValue=Группа не определена}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis" Margin="0,0,0,10"/>
                 <Rectangle Grid.Row="1" Stroke="{DynamicResource Basic}" StrokeThickness="1" Margin="5,0,5,0" Visibility="{Binding ModeratorFunctionVisibility}" />
             </StackPanel>
-            <ScrollViewer Grid.Row="2" >
+            <ScrollViewer Grid.Row="2" Style="{StaticResource ScrollViewerBase}">
                 <StackPanel x:Name="CustomTabs">
 
                 </StackPanel>
             </ScrollViewer>
+            <Border x:Name="BorderViewSwitchers" Grid.Row="3" CornerRadius="2" Background="{StaticResource Black}" MaxHeight="30" MaxWidth="80">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton x:Name="FullMenuSwitchButton" Style="{StaticResource Switcher}" GroupName="MenuMode" Checked="FullMenuSwitchButton_Checked">
+                        <Path Stretch="Uniform" Width="10" Fill="White" Data="M224.62-160q-27.62 0-46.12-18.5Q160-197 160-224.62v-510.76q0-27.62 18.5-46.12Q197-800 224.62-800h510.76q27.62 0 46.12 18.5Q800-763 800-735.38v510.76q0 27.62-18.5 46.12Q763-160 735.38-160H224.62ZM480-200h255.38q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-510.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H480v560Z"/>
+                    </RadioButton>
+                    <RadioButton x:Name="MicroMenuSwitchButton" Style="{StaticResource Switcher}" GroupName="MenuMode" Grid.Column="1" Checked="MicroMenuSwitchButton_Checked">
+                        <Path Stretch="Uniform" Width="10" Fill="White" Data="M224.62-160q-26.85 0-45.74-18.88Q160-197.77 160-224.62v-510.76q0-26.85 18.88-45.74Q197.77-800 224.62-800h510.76q26.85 0 45.74 18.88Q800-762.23 800-735.38v510.76q0 26.85-18.88 45.74Q762.23-160 735.38-160H224.62ZM320-200v-560h-95.38q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v510.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69H320Zm40 0h375.38q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-510.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H360v560Zm-40 0H200h120Z"/>
+                    </RadioButton>
+                </Grid>
+            </Border>
         </Grid>
 
         <GridSplitter x:Name="gridSplitter" Grid.Column="1" HorizontalAlignment="Left" ResizeDirection="Columns" Grid.Row="0" Margin="1,0,0,0" />

@@ -33,6 +33,7 @@
         <TabControl Style="{StaticResource TabControlWizard}" SelectedIndex="{Binding CurrentStepTabIndex, Mode=OneWay}" Grid.Row="1" Grid.Column="1">
             <TabItem Header="Наименование и описание" IsSelected="True">
                 <StackPanel>
+                    <TextBox Style="{StaticResource TextBoxMain}" Tag="Уникальное имя класса" MaxLength="30" Text="{Binding InternalName}"/>
                     <TextBox Style="{StaticResource TextBoxMain}" Tag="Наименование класса" MaxLength="50" Text="{Binding ClassName}"/>
                     <TextBox Style="{StaticResource TextBoxMain}" Tag="Наименование списка объектов" MaxLength="75" Text="{Binding ListName}"/>
                     <TextBox Style="{StaticResource TextBoxBig}" Tag="Описание класса" MaxLength="250" Text="{Binding ClassDescription}"/>

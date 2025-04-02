@@ -101,6 +101,18 @@ namespace Incas.Admin.ViewModels
                 this.OnPropertyChanged(nameof(this.ClassDescription));
             }
         }
+        public string InternalName
+        {
+            get
+            {
+                return this.Source.InternalName;
+            }
+            set
+            {
+                this.Source.InternalName = value.Replace(' ', '_');
+                this.OnPropertyChanged(nameof(this.InternalName));
+            }
+        }
         public List<WorkspaceComponent> Components
         {
             get

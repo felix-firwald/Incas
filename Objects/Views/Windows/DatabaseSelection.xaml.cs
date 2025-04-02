@@ -115,11 +115,11 @@ namespace Incas.Objects.Views.Windows
             }
             return instruction;
         }
-        private void FillList()
+        private async void FillList()
         {
             DataTable dt;
             WhereInstruction instruction = this.GetBaseInstruction();
-            dt = Processor.GetObjectsList(this.Class, instruction);
+            dt = await Processor.GetObjectsList(this.Class, instruction);
             this.UpdateItemsSource(dt.Columns);
             DataView dv = dt.AsDataView();
             if (this.Class.Type == ClassType.Model)
@@ -128,11 +128,11 @@ namespace Incas.Objects.Views.Windows
             }    
             this.Grid.ItemsSource = dv;
         }
-        private void FillList(string field, string value)
+        private async void FillList(string field, string value)
         {
             WhereInstruction instruction = this.GetBaseInstruction();
             instruction.AndWhereEqual(field, value);
-            DataTable dt = Processor.GetObjectsList(this.Class, instruction);
+            DataTable dt = await Processor.GetObjectsList(this.Class, instruction);
             this.UpdateItemsSource(dt.Columns);
             this.Grid.ItemsSource = dt.DefaultView;
         }

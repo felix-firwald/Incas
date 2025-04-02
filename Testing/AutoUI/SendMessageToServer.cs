@@ -37,7 +37,7 @@ namespace Incas.Testing.AutoUI
 
         public override void Save()
         {
-            EngineGlobals.Client.Send(this.Message);
+            //EngineGlobals.Client.Send(this.Message);
         }
         #endregion
     }
