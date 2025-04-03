@@ -183,6 +183,10 @@ namespace Incas.Objects.Views.Controls
                 Value = this.Data.Value,
                 ClassField = this.Data.ClassField
             };
+            if (this.Data.ClassField.Type == FieldType.Object)
+            {
+                data.Value = this.FieldValue.Text;
+            }
             this.OnFilterRequested?.Invoke(data);
         }
 

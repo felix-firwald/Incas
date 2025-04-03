@@ -3,10 +3,12 @@ using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Pages;
+using Incas.Miniservices.UserStatistics;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.Components;
 using Incas.Server.AutoUI;
 using IncasEngine.Core;
+using IncasEngine.Core.Registry;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
@@ -43,7 +45,15 @@ namespace Incas.Core.Views.Windows
             this.DataContext = this.vm;
             this.UpdateTabs();
             this.AddTabItem(new StartPage(), "$START", "Начало", TabType.General);
-            this.FullMenuSwitchButton.IsChecked = true;
+            switch (StatisticsManager.Info.DefaultMenuViewMode)
+            {
+                case StatisticsInfo.DefaultMenuView.Standart:
+                    this.FullMenuSwitchButton.IsChecked = true;
+                    break;
+                case StatisticsInfo.DefaultMenuView.Collapsed:
+                    this.MicroMenuSwitchButton.IsChecked = true;
+                    break;
+            }           
         }
         public void PlaceStatusBar(IStatusBar bar)
         {
@@ -83,10 +93,12 @@ namespace Incas.Core.Views.Windows
         private void Logo_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             this.PlayEasterEgg("Rooster");
-            if (DialogsManager.ShowQuestionDialog("Это действие переведет рабочее пространство в неуправляемый тестовый режим после активации специальной кнопки. Все ваши данные могут быть потеряны. Продолжить?", "Продолжить?", "Продолжай", "Вырубай") == DialogStatus.Yes)
-            {
-                this.vm.TestFunctionVisibility = Visibility.Visible;
-            }            
+            AboutIncas ai = new();
+            ai.ShowDialog();
+            //if (DialogsManager.ShowQuestionDialog("Это действие переведет рабочее пространство в неуправляемый тестовый режим после активации специальной кнопки. Все ваши данные могут быть потеряны. Продолжить?", "Продолжить?", "Продолжай", "Вырубай") == DialogStatus.Yes)
+            //{
+            //    this.vm.TestFunctionVisibility = Visibility.Visible;
+            //}            
         }
 
         private void window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -287,15 +299,12 @@ namespace Incas.Core.Views.Windows
             tw.ShowDialog();
             this.Close();
         }
-
-        private void FullMenuSwitchButton_Checked(object sender, RoutedEventArgs e)
+        private void SetMenuMaximazed()
         {
+            StatisticsManager.Info.DefaultMenuViewMode = StatisticsInfo.DefaultMenuView.Standart;
             this.gridSplitter.IsEnabled = true;
             this.MenuColumn.MinWidth = 160;
             this.MenuColumn.MaxWidth = 400;
-            this.MicroMenuSwitchButton.Visibility = Visibility.Visible;
-            this.BorderViewSwitchers.MaxWidth = 80;
-            Grid.SetColumnSpan(this.FullMenuSwitchButton, 1);
             this.TitleBarWorkspace.Visibility = Visibility.Visible;
             this.TitleBarUser.Visibility = Visibility.Visible;
             foreach (Controls.MainWindowButtonTab bt in this.CustomTabs.Children)
@@ -303,21 +312,27 @@ namespace Incas.Core.Views.Windows
                 bt.Maximize();
             }
         }
-
-        private void MicroMenuSwitchButton_Checked(object sender, RoutedEventArgs e)
+        private void SetMenuMinimized()
         {
+            StatisticsManager.Info.DefaultMenuViewMode = StatisticsInfo.DefaultMenuView.Collapsed;
             this.gridSplitter.IsEnabled = false;
             this.MenuColumn.MinWidth = 60;
             this.MenuColumn.MaxWidth = 60;
-            this.MicroMenuSwitchButton.Visibility = Visibility.Collapsed;
-            this.BorderViewSwitchers.MaxWidth = 50;
-            Grid.SetColumnSpan(this.FullMenuSwitchButton, 2);
             this.TitleBarWorkspace.Visibility = Visibility.Collapsed;
             this.TitleBarUser.Visibility = Visibility.Collapsed;
             foreach (Controls.MainWindowButtonTab bt in this.CustomTabs.Children)
             {
                 bt.Minimize();
             }
+        }
+        private void FullMenuSwitchButton_Checked(object sender, RoutedEventArgs e)
+        {
+            this.SetMenuMaximazed();
+        }
+
+        private void MicroMenuSwitchButton_Checked(object sender, RoutedEventArgs e)
+        {
+            this.SetMenuMinimized();
         }
     }
 }

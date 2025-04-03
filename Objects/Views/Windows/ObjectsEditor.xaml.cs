@@ -1,12 +1,13 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
+using Incas.Miniservices.UserStatistics;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Pages;
 using Incas.Rendering.AutoUI;
 using Incas.Rendering.Components;
-using IncasEngine.Core;
+using IncasEngine.Core.Registry;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Exceptions;
@@ -285,6 +286,7 @@ namespace Incas.Objects.Views.Windows
                 if (result)
                 {
                     this.OnUpdateRequested?.Invoke();
+                    StatisticsManager.AddWorkedObjects(objects);
                 }
                 //this.Show();
                 

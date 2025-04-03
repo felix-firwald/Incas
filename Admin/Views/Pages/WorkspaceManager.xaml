@@ -298,7 +298,7 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <Border Grid.Row="1" Grid.Column="1" Margin="5" CornerRadius="2" Background="{StaticResource Black}">
-                            <TextBlock Text="{Binding SelectedConstant.Value}" TextWrapping="WrapWithOverflow" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding SelectedConstant.Value}" FontFamily="{StaticResource Rubik}" TextWrapping="WrapWithOverflow" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </Grid>
                 </GroupBox>

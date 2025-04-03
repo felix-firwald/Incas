@@ -146,7 +146,10 @@
                 <Rectangle Stroke="{DynamicResource Basic}" StrokeThickness="1" Margin="5,0,5,0" />
                 <Path x:Name="Logo" Fill="{StaticResource Element}" MaxHeight="50" MaxWidth="50" Width="auto" Height="auto" Data="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0 M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" HorizontalAlignment="Center" Stretch="UniformToFill" Margin="0,15,0,6"/>
                 <TextBlock Foreground="White" FontFamily="{StaticResource Rubik}" Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged, TargetNullValue=Пользователь не определен}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis" Margin="0,5,0,10"/>
-                <TextBlock Foreground="{StaticResource Buttons.Green}" FontFamily="{StaticResource Rubik}" Text="{Binding Group, UpdateSourceTrigger=PropertyChanged, TargetNullValue=Группа не определена}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis" Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <Path Visibility="{Binding IsSuperAdminVisibility}" Fill="{StaticResource PrimaryMain}" Margin="0,0,5,0" Stretch="Uniform" Width="10" ToolTipService.InitialShowDelay="120" ToolTip="Этот знак означает, что вы владелец рабочего пространства" Data="m480-330-139 84q-5 2-8.5 1.5T325-247q-4-2-6-6.5t0-9.5l37-157-122-106q-4-3-5.5-7.5t.5-8.5q2-4 5-6.5t8-3.5l161-14 63-149q2-5 5.5-7t8.5-2q5 0 8.5 2t5.5 7l63 149 161 14q5 1 8 3.5t5 6.5q2 4 .5 8.5T726-526L604-420l37 157q2 5 0 9.5t-6 6.5q-4 2-7.5 2.5T619-246l-139-84Z" VerticalAlignment="Center"/>
+                    <TextBlock Foreground="{StaticResource Buttons.Green}" FontFamily="{StaticResource Rubik}" Text="{Binding Group, UpdateSourceTrigger=PropertyChanged, TargetNullValue=Группа не определена}" HorizontalAlignment="Center" VerticalAlignment="Center" AutomationProperties.IsRequiredForForm="True" TextTrimming="WordEllipsis"/>
+                </StackPanel>
                 <Rectangle Grid.Row="1" Stroke="{DynamicResource Basic}" StrokeThickness="1" Margin="5,0,5,0" Visibility="{Binding ModeratorFunctionVisibility}" />
             </StackPanel>
             <ScrollViewer Grid.Row="2" Style="{StaticResource ScrollViewerBase}">
@@ -154,20 +157,7 @@
 
                 </StackPanel>
             </ScrollViewer>
-            <Border x:Name="BorderViewSwitchers" Grid.Row="3" CornerRadius="2" Background="{StaticResource Black}" MaxHeight="30" MaxWidth="80">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <RadioButton x:Name="FullMenuSwitchButton" Style="{StaticResource Switcher}" GroupName="MenuMode" Checked="FullMenuSwitchButton_Checked">
-                        <Path Stretch="Uniform" Width="10" Fill="White" Data="M224.62-160q-27.62 0-46.12-18.5Q160-197 160-224.62v-510.76q0-27.62 18.5-46.12Q197-800 224.62-800h510.76q27.62 0 46.12 18.5Q800-763 800-735.38v510.76q0 27.62-18.5 46.12Q763-160 735.38-160H224.62ZM480-200h255.38q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-510.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H480v560Z"/>
-                    </RadioButton>
-                    <RadioButton x:Name="MicroMenuSwitchButton" Style="{StaticResource Switcher}" GroupName="MenuMode" Grid.Column="1" Checked="MicroMenuSwitchButton_Checked">
-                        <Path Stretch="Uniform" Width="10" Fill="White" Data="M224.62-160q-26.85 0-45.74-18.88Q160-197.77 160-224.62v-510.76q0-26.85 18.88-45.74Q197.77-800 224.62-800h510.76q26.85 0 45.74 18.88Q800-762.23 800-735.38v510.76q0 26.85-18.88 45.74Q762.23-160 735.38-160H224.62ZM320-200v-560h-95.38q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v510.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69H320Zm40 0h375.38q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-510.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H360v560Zm-40 0H200h120Z"/>
-                    </RadioButton>
-                </Grid>
-            </Border>
+            
         </Grid>
 
         <GridSplitter x:Name="gridSplitter" Grid.Column="1" HorizontalAlignment="Left" ResizeDirection="Columns" Grid.Row="0" Margin="1,0,0,0" />
@@ -208,13 +198,32 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </StackPanel.RenderTransform>
-                    <Label Style="{StaticResource LabelElement}" Content="© INCAS 2025" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" VerticalContentAlignment="Center"/>
+                    <!--<Label Style="{StaticResource LabelElement}" Content="© INCAS 2025" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="40" VerticalContentAlignment="Center"/>-->
+                    <Border x:Name="BorderViewSwitchers" Grid.Row="3" CornerRadius="2" Background="{StaticResource Black}" MinWidth="80" MaxHeight="30" MaxWidth="80">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton x:Name="FullMenuSwitchButton" Style="{StaticResource Switcher}" ToolTip="Развернуть меню в стандартный вид" GroupName="MenuMode" Checked="FullMenuSwitchButton_Checked">
+                                <Path Stretch="Uniform" Width="10" Fill="White" Data="M224.62-160q-27.62 0-46.12-18.5Q160-197 160-224.62v-510.76q0-27.62 18.5-46.12Q197-800 224.62-800h510.76q27.62 0 46.12 18.5Q800-763 800-735.38v510.76q0 27.62-18.5 46.12Q763-160 735.38-160H224.62ZM480-200h255.38q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-510.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H480v560Z"/>
+                            </RadioButton>
+                            <RadioButton x:Name="MicroMenuSwitchButton" Style="{StaticResource Switcher}" ToolTip="Свернуть меню в сокращенный вид" GroupName="MenuMode" Grid.Column="1" Checked="MicroMenuSwitchButton_Checked">
+                                <Path Stretch="Uniform" Width="10" Fill="White" Data="M224.62-160q-26.85 0-45.74-18.88Q160-197.77 160-224.62v-510.76q0-26.85 18.88-45.74Q197.77-800 224.62-800h510.76q26.85 0 45.74 18.88Q800-762.23 800-735.38v510.76q0 26.85-18.88 45.74Q762.23-160 735.38-160H224.62ZM320-200v-560h-95.38q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v510.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69H320Zm40 0h375.38q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-510.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H360v560Zm-40 0H200h120Z"/>
+                            </RadioButton>
+                        </Grid>
+                    </Border>
                     <Image Height="30" Width="30" Source="/Core/Views/Windows/Logo.png" UseLayoutRounding="False" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" MouseDown="Logo_MouseDown" Margin="12,0,12,0"/>
 
-                    <Label Style="{StaticResource LabelElement}" Content="{Binding Version}" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                     <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" ToolTip="Информация о лицензии" Click="ShowLicenseClick">
                         <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M480-480q-33.85 0-56.92-23.08Q400-526.15 400-560t23.08-56.92Q446.15-640 480-640t56.92 23.08Q560-593.85 560-560t-23.08 56.92Q513.85-480 480-480Zm0 318.46-158.54 47.39q-15.38 5.46-28.42-4.44Q280-128.5 280-145v-220.15q-38-37.39-59-87.7T200-560q0-117.25 81.34-198.63Q362.68-840 479.88-840q117.2 0 198.66 81.37Q760-677.25 760-560q0 56.84-21 107.15t-59 87.7V-145q0 16.5-13.04 26.41-13.04 9.9-28.42 4.44L480-161.54ZM480-320q100 0 170-70t70-170q0-100-70-170t-170-70q-100 0-170 70t-70 170q0 100 70 170t170 70ZM320-158.23l160-44.85 160 44.85v-173.23q-33.46 24.61-74.51 38.04Q524.43-280 479.83-280q-44.6 0-85.48-13.42-40.89-13.43-74.35-38.04v173.23Zm160-86.62Z"/>
                     </Button>
+                    <ContentControl Visibility="{Binding LicenseWarningMessageVisibility}" Style="{StaticResource MicroBoxWarning}">
+                        <TextBlock Text="Срок лицензии подходит к концу"/>
+                    </ContentControl>
+                    <ContentControl Visibility="{Binding LicenseExpiredMessageVisibility}" Style="{StaticResource MicroBoxError}">
+                        <TextBlock Text="Лицензия истекает завтра"/>
+                    </ContentControl>
                     <Rectangle Fill="{DynamicResource Area}" Width="1" Margin="6"/>
                     <ListBox Background="{x:Null}" BorderThickness="0" BorderBrush="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemsSource="{Binding Commands}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}">
                         <ListBox.ItemsPanel>

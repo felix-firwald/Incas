@@ -1,5 +1,7 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.ViewModels;
 using Incas.Help.Components;
+using Incas.Miniservices.UserStatistics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +24,13 @@ namespace Incas.Core.Views.Pages
     /// </summary>
     public partial class StartPage : UserControl
     {
+        public StartPageViewModel vm { get; set; }
         public StartPage()
         {
             this.InitializeComponent();
             this.SetMainText();
+            this.vm = new();
+            this.DataContext = this.vm;
         }
         public void SetMainText()
         {

@@ -1,4 +1,5 @@
-﻿using Incas.Admin.Views.Pages;
+﻿using Incas.Admin.ViewModels;
+using Incas.Admin.Views.Pages;
 using Incas.Core.Classes;
 using Incas.Core.Extensions;
 using Incas.Objects.Views.Pages;
@@ -23,19 +24,18 @@ namespace Incas.Core.Views.Controls
         public const string ClassCategoryPrefix = "$CLASS:CATEGORY/";
         private string internalPath = "";
         private WorkspaceComponent component;
+        private WorkspaceComponentButtonViewModel vm { get; set; }
         private string name = "(нет имени)";
         public delegate void NewTabAction(Control item, string id, string name);
         public event NewTabAction OnNewTabRequested;
         public MainWindowButtonTab(WorkspaceComponent component)
         {
             this.InitializeComponent();
+            this.vm = new(component);
+            this.DataContext = this.vm;
             this.internalPath = component.Id.ToString();
-            this.Text.Text = component.Name;
             this.name = component.Name;
             this.component = component;
-            this.ToolTip = component.Description;
-            this.Icon.Data = component.Icon.ParseAsGeometry();
-            this.Icon.Fill = component.Color.AsBrush();
             this.Text.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
         }
         public MainWindowButtonTab(string visibleName, Classes.Icon icon, string path, string description)
@@ -45,7 +45,8 @@ namespace Incas.Core.Views.Controls
             this.Text.Text = visibleName;
             this.name = visibleName;
             this.ToolTip = description;
-            this.Icon.Data = IconsManager.GetGeometryIconByName(icon);
+            this.vm = new(visibleName, description, IconsManager.GetIconByName(icon), IncasEngine.Core.Color.FromRGB(255, 255, 255));
+            this.DataContext = this.vm;
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)

@@ -3,18 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Incas.Core.Views.Controls"
+             xmlns:local="clr-namespace:Incas.Core.Views.Controls" xmlns:conv="clr-namespace:Incas.Core.Converters"
              mc:Ignorable="d" ToolTipService.InitialShowDelay="200"
              d:DesignHeight="40" MinHeight="40" d:DesignWidth="200" Cursor="">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
+            <conv:PathDataToGeometryConverter x:Key="PathDataToGeometryConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Border x:Name="bbb" CornerRadius="8" Margin="5" Cursor="Hand" MouseDown="Border_MouseDown" MouseUp="bbb_MouseUp">
         <Border.Style>
             <Style TargetType="{x:Type Border}">
-                <!--<Setter Property="RenderTransformOrigin" Value="1,1" />
-                <Setter Property="RenderTransform">
-                    <Setter.Value>
-                        <ScaleTransform />
-                    </Setter.Value>
-                </Setter>-->
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{StaticResource Basic}"/>
@@ -34,10 +34,22 @@
                 <ColumnDefinition Width="40"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Path x:Name="Icon" Fill="{Binding BorderBrush, ElementName=bbb}" VerticalAlignment="Center" HorizontalAlignment="Center" Height="15" Width="15" Stretch="Uniform">
+            <Path x:Name="Icon" Fill="{Binding Color, Converter={StaticResource IEColorToBrushConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center" Height="15" Width="15" Stretch="Uniform" Data="{Binding Icon, Converter={StaticResource PathDataToGeometryConverter}}">
             </Path>
-            <TextBlock x:Name="Text" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=bbb}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" FontFamily="{StaticResource Rubik}" FontSize="11">
+            <TextBlock x:Name="Text" Grid.Column="1" Foreground="{Binding BorderBrush, ElementName=bbb}" Text="{Binding Name}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" FontFamily="{StaticResource Rubik}" FontSize="11">
             </TextBlock>
         </Grid>
+        <Border.ToolTip>
+            <ToolTip Style="{StaticResource ToolTipCustom}" FontFamily="{StaticResource JetBrains}" FontSize="11">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,5,5">
+                        <Path Margin="0,0,10,0" Fill="{Binding Color, Converter={StaticResource IEColorToBrushConverter}}" Stretch="Uniform" Height="15" Width="15" VerticalAlignment="Center" Data="{Binding Icon, Converter={StaticResource PathDataToGeometryConverter}}"/>
+                        <TextBlock Foreground="White" Text="{Binding Name}" MaxWidth="200"/>
+                    </StackPanel>
+                    <TextBlock Foreground="{StaticResource Icon}" Text="{Binding Description}"/>
+                </StackPanel>
+
+            </ToolTip>
+        </Border.ToolTip>
     </Border>
 </UserControl>

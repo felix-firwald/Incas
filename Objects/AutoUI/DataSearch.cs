@@ -1,7 +1,10 @@
-﻿using Incas.DialogSimpleForm.Components;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using Incas.DialogSimpleForm.Components;
+using Incas.Miniservices.UserStatistics;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using System;
 using System.ComponentModel;
 
 namespace Incas.Objects.AutoUI
@@ -25,17 +28,17 @@ namespace Incas.Objects.AutoUI
         public bool OnlyEqual { get; set; }
         #endregion
 
-        public DataSearch(ClassDataBase data)
+        public DataSearch(IClass cl, ClassDataBase data)
         {
             this.ComboSelector = new([]);
-            //this.ComboSelector.Pairs.Add("Наименование", "Наименование");
-            //if (data.ClassType == Components.ClassType.Document)
-            //{
-            //    this.ComboSelector.Pairs.Add("Дата создания", "Дата создания");
-            //}
+            Guid id = StatisticsManager.GetDefaultFieldForSearch(cl);
             foreach (Field f in data.GetVisibleListFields())
             {
                 this.ComboSelector.Pairs.Add(f, f.VisibleName);
+                if (id == f.Id)
+                {
+                    this.ComboSelector.SetSelection(f);
+                }
             }
         }
 
@@ -48,6 +51,10 @@ namespace Incas.Objects.AutoUI
                 Value = this.Value
             };
             return f;
+        }
+        public override void Save()
+        {
+            
         }
         #endregion
     }

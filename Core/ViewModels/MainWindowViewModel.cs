@@ -5,6 +5,8 @@ using Incas.Objects.AutoUI;
 using Incas.Objects.Views.Pages;
 using Incas.Objects.Views.Windows;
 using IncasEngine.Core;
+using IncasEngine.Core.ExtensionMethods;
+using IncasEngine.Core.Registry;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
@@ -25,6 +27,8 @@ namespace Incas.Core.ViewModels
         {
             this.SetCommands();
             this.LoadInfo();
+            IncasEngine.License.License lic = IncasEngine.License.License.ReadLicense(RegistryData.GetPathToLicense());
+            this.expirationDate = lic.ExpirationDate;
         }
         private void SetCommands()
         {
@@ -135,7 +139,6 @@ namespace Incas.Core.ViewModels
                 this.OnPropertyChanged(nameof(this.ProcessHandled));
             }
         }
-        public string Version => $"{ProgramState.Edition} {ProgramState.Version}";
 
         public string Surname
         {
@@ -144,6 +147,13 @@ namespace Incas.Core.ViewModels
         public string Group
         {
             get => ProgramState.CurrentWorkspace.CurrentGroup.Name;
+        }
+        public Visibility IsSuperAdminVisibility
+        {
+            get
+            {
+                return this.FromBool(ProgramState.CurrentWorkspace.CurrentGroup.Data.Indestructible);
+            }
         }
 
         private bool testFunctionEnabled = false;
@@ -157,6 +167,23 @@ namespace Incas.Core.ViewModels
             {
                 this.testFunctionEnabled = true;
                 this.OnPropertyChanged(nameof(this.TestFunctionVisibility));
+            }
+        }
+        private DateTime expirationDate;
+        public Visibility LicenseWarningMessageVisibility
+        {
+            get
+            {
+                double difference = this.expirationDate.GetDaysDifference(DateTime.Now);
+                return this.FromBool(difference is > 1 and < 7);
+            }
+        }
+        public Visibility LicenseExpiredMessageVisibility
+        {
+            get
+            {
+                double difference = this.expirationDate.GetDaysDifference(DateTime.Now);
+                return this.FromBool(difference is <= 1);
             }
         }
         public string WorkspaceName

@@ -3,6 +3,7 @@ using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
 using Incas.Objects.ViewModels;
 using IncasEngine.Core;
+using IncasEngine.Core.Registry;
 using IncasEngine.Models;
 using IncasEngine.Workspace;
 using Microsoft.Win32;

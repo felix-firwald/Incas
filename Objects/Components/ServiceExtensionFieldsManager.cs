@@ -87,6 +87,24 @@ namespace Incas.Objects.Components
                 contentPanel.Children.Add(new ObjectFieldViewer(ProgramState.CurrentWorkspace.GetDefinition().ServiceGroups, objUser.Group, "Группа"));
                 return;
             }
+            if (obj is IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components.Group objGroup)
+            {
+                string description = "<Описание отсутствует>";
+                if (objGroup.Data.Indestructible)
+                {
+                    description = "Полный доступ к управлению (владельцы).";
+                }
+                else if (objGroup.Data.CanGroupViewingWorkspaceTab())
+                {
+                    description = "Частичный доступ к управлению.";
+                }
+                else
+                {
+                    description = "Стандартный доступ к управлению. Административных полномочий нет.";
+                }
+                contentPanel.Children.Add(new ObjectFieldViewer(description, 67, 70, 80));
+                return;
+            }
             if (obj is IncasEngine.ObjectiveEngine.Types.StaticModels.StaticObject objStatic)
             {
                 contentPanel.Children.Add(new ObjectFieldViewer(objStatic.StartPeriod, "Начало действия"));

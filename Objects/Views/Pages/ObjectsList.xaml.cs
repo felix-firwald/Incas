@@ -2,6 +2,7 @@
 using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.Views.Controls;
+using Incas.Miniservices.UserStatistics;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
@@ -54,7 +55,7 @@ namespace Incas.Objects.Views.Pages
         {
             this.InitializeComponent();
             this.ColumnHeaderSpecialStyle = this.FindResource("ColumnHeaderSpecial") as Style;
-                      
+            StatisticsManager.AddInteractionRead(source);
             DialogsManager.ShowWaitCursor();
             this.ApplyClass(source);
             this.ApplyGroupConstraints();
@@ -183,6 +184,7 @@ namespace Incas.Objects.Views.Pages
         }
         public async void UpdateViewWithSearch(FieldData data)
         {
+            StatisticsManager.AddInteractionSearch(this.sourceClass, data.ClassField);
             DataTable dt = await Processor.GetObjectsListWhereLike(this.sourceClass, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
@@ -199,6 +201,7 @@ namespace Incas.Objects.Views.Pages
         }
         public async void UpdateViewWithFilter(FieldData data)
         {
+            StatisticsManager.AddInteractionSearch(this.sourceClass, data.ClassField);
             DataTable dt = await Processor.GetObjectsListWhereEqual(this.sourceClass, data.ClassField.VisibleName, data.Value);
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
@@ -280,7 +283,7 @@ namespace Incas.Objects.Views.Pages
         }
         private void OpenSearchDialog()
         {
-            DataSearch ds = new(this.ClassData as ClassDataBase);
+            DataSearch ds = new(this.sourceClass, this.ClassData as ClassDataBase);
             if (ds.ShowDialog("Поиск", Icon.Search))
             {
                 if (ds.OnlyEqual)

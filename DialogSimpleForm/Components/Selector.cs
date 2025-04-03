@@ -18,10 +18,7 @@ namespace Incas.DialogSimpleForm.Components
         {
             this.SelectedObject = this.Pairs.FirstOrDefault(x => x.Value == selection).Key;
         }
-        /// <summary>
-        /// НЕ РАБОТАЕТ!
-        /// </summary>
-        /// <param name="selection"></param>
+
         public void SetSelection(object selection)
         {
             try

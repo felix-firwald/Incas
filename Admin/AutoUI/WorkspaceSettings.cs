@@ -15,24 +15,31 @@ namespace Incas.Admin.AutoUI
             set => this.data.Name = value;
         }
 
-        [Description("Рабочее пространство заблокировано")]
-        public bool WorkspaceLocked
-        {
-            get => this.data.IsLocked;
-            set => this.data.IsLocked = value;
-        }
+        [Description("Режим работы")]
+        public Selector WorkspaceMode { get; set; }
+
         [Description("Требовать пароль при существенных изменениях")]
         public bool RequirePassword
         {
             get => this.data.SignificantChangesRequirePassword;
             set => this.data.SignificantChangesRequirePassword = value;
         }
+
         public override void Load()
         {
             this.data = ProgramState.CurrentWorkspace.GetDefinition(true);
+            this.WorkspaceMode = new(new()
+            {
+                { WorkspaceDefinition.WorkspaceMode.DesktopUsual, "Десктоп-клиент (SQLite)" },
+                { WorkspaceDefinition.WorkspaceMode.DesktopWithPostgres, "Десктоп-клиент (PostgreSQL)" },
+                { WorkspaceDefinition.WorkspaceMode.Server, "Клиент-сервер (IncasServer + SQLite)" },
+                { WorkspaceDefinition.WorkspaceMode.ServerWithPostgres, "Клиент-сервер (IncasServer + PostgreSQL)" }
+            });
+            this.WorkspaceMode.SetSelection(this.data.Mode);
         }
         public override void Save()
         {
+            this.data.Mode = (WorkspaceDefinition.WorkspaceMode)this.WorkspaceMode.SelectedObject;
             ProgramState.CurrentWorkspace.UpdateDefinition(this.data);
         }
     }

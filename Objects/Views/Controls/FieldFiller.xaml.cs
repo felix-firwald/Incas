@@ -353,9 +353,8 @@ namespace Incas.Objects.Views.Controls
         {
             switch (this.GetFillerType())
             {
-                default:
-                    return "";
                 case FieldType.String:
+                case FieldType.Text:
                     string value = ((System.Windows.Controls.TextBox)this.control).Text;
                     if (this.Field.NotNull == true && string.IsNullOrEmpty(value))
                     {
@@ -392,8 +391,10 @@ namespace Incas.Objects.Views.Controls
                     return this.GetDateInFormat();
                 case FieldType.Boolean:
                     return (bool)((CheckBox)this.control).IsChecked ? "1" : "0";
-                //case FieldType.Generator:
-                //    return ((GeneratorFiller)this.control).GetText();
+                default:
+                    return "<Критическая ошибка INCAS>";
+                    //case FieldType.Generator:
+                    //    return ((GeneratorFiller)this.control).GetText();
             }
         }
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿using Incas.Core.Classes;
-using IncasEngine.Core;
+using IncasEngine.Core.Registry;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Users.Components;
