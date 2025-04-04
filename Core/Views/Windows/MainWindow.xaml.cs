@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Packaging;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Pages;
@@ -10,12 +9,10 @@ using Incas.Server.AutoUI;
 using IncasEngine.Core;
 using IncasEngine.Core.Registry;
 using IncasEngine.ObjectiveEngine;
-using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Media;
 using System.Windows;
@@ -106,29 +103,28 @@ namespace Incas.Core.Views.Windows
             switch (e.Key)
             {
                 case Key.F1:
-                    this.vm.DoOpenClipBoard("");
+                    this.vm.DoFindObject("");
                     break;
                 case Key.F2:
-                    this.vm.DoOpenTasks("");
+                    
                     break;
                 case Key.F3:
-                    this.vm.DoOpenTextEditor("");
+                    
                     break;
                 case Key.F4:
-                    this.vm.DoOpenFileManager("");
+                    
                     break;
                 case Key.F5:
-                    //this.vm.DoOpenFile("Word");
+                    
                     break;
                 case Key.F6:
-                    //this.vm.DoOpenFile("Excel");
+                    
                     break;
                 case Key.F7:
-                    this.vm.DoOpenWeb("");
+                    
                     break;                    
                 case Key.F12:
-                    TestSignal ts = new();
-                    ts.ShowDialog("345", Classes.Icon.Pin);
+                    
                     break;
             }
         }
@@ -293,11 +289,7 @@ namespace Incas.Core.Views.Windows
 
         private void OpenTestClick(object sender, RoutedEventArgs e)
         {
-            TesterWindow tw = new();
-            Application.Current.MainWindow = tw;
-            this.Hide();
-            tw.ShowDialog();
-            this.Close();
+            
         }
         private void SetMenuMaximazed()
         {

@@ -43,7 +43,7 @@
                         <ColumnDefinition Width="5*" MinWidth="250" />
                         <ColumnDefinition Width="5*" MaxWidth="850"/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <Border CornerRadius="8" Margin="5,5,0,5" Background="{DynamicResource Black}" Grid.Row="1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                             <StackPanel >
@@ -371,14 +371,8 @@
 
                         </TabItem>
                     </TabControl>
-                    
-                </Grid>
-            </TabItem>
-            <TabItem Header="Статусы" BorderBrush="{DynamicResource LightPurple}">
 
-            </TabItem>
-            <TabItem Header="Состояния" BorderBrush="{DynamicResource LightPurple}">
-                
+                </Grid>
             </TabItem>
             <TabItem Header="Представление" BorderBrush="{StaticResource LightPurple}">
                 <Grid>

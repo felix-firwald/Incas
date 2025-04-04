@@ -100,9 +100,9 @@ namespace Incas.Objects.Components
                 }
                 else
                 {
-                    description = "Стандартный доступ к управлению. Административных полномочий нет.";
+                    description = "Административных полномочий нет.";
                 }
-                contentPanel.Children.Add(new ObjectFieldViewer(description, 67, 70, 80));
+                contentPanel.Children.Add(new ObjectFieldViewer(description, 167, 171, 183));
                 return;
             }
             if (obj is IncasEngine.ObjectiveEngine.Types.StaticModels.StaticObject objStatic)

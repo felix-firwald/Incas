@@ -17,30 +17,27 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
-                        <ContentPresenter TextElement.Foreground="{DynamicResource GrayLight}" TextElement.FontFamily="{TemplateBinding FontFamily}" TextElement.FontWeight="Bold" Grid.Column="0" TextElement.FontSize="11" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0"/>
-                        <Border x:Name="Bord" Background="{StaticResource Black}" BorderBrush="{StaticResource Element}" BorderThickness="1" CornerRadius="6" MinHeight="15" MaxHeight="15" MinWidth="40" MaxWidth="40" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
-                        <Ellipse x:Name="Ellipse" Fill="{StaticResource Error}" Stroke="{StaticResource Element}" StrokeThickness="0" Width="18" Height="18" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1" Margin="6,0,0,0"/>
-                        <fa:FontAwesome x:Name="Fa" Foreground="White" Icon="Check" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0" Grid.Column="1"/>
+                        <ContentPresenter TextElement.Foreground="{DynamicResource GrayLight}" TextElement.FontFamily="{TemplateBinding FontFamily}" TextElement.FontWeight="Bold" Grid.Column="0" TextElement.FontSize="11" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                        <Border x:Name="Bord" Background="{StaticResource Black}" BorderBrush="{StaticResource Element}" BorderThickness="1" CornerRadius="4" MinHeight="20" MaxHeight="20" MinWidth="40" MaxWidth="40" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
+                        <Border x:Name="Ellipse" Background="{StaticResource Error}" CornerRadius="4" Width="16" Height="16" Margin="12,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Ellipse" Property="Fill" Value="{DynamicResource Success}"/>
+                            <Setter TargetName="Ellipse" Property="Background" Value="{DynamicResource PrimaryMain}"/>
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="37,0,0,0" Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Margin"/>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="40,0,0,0" Storyboard.TargetName="Fa" Storyboard.TargetProperty="Margin"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="32,0,0,0" Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Margin"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="3,0,0,0" Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Margin"/>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="6,0,0,0" Storyboard.TargetName="Fa" Storyboard.TargetProperty="Margin"/>
+                                        <ThicknessAnimation Duration="0:0:0.100" To="12,0,0,0" Storyboard.TargetName="Ellipse" Storyboard.TargetProperty="Margin"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>

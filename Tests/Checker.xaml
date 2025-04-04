@@ -8,28 +8,8 @@
              d:DesignHeight="450" d:DesignWidth="600">
     <Grid >
         <StackPanel>
-            <Border Margin="5" CornerRadius="8" MinHeight="100" Background="{StaticResource Dark}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Margin="5" Orientation="Horizontal">
-                        <Path Fill="{StaticResource LightPurple}" Data="M10.95,17.7346,8.0923,14.8769l.7192-.7193L10.95,16.2961l4.2385-4.2385.7192.7193ZM5.6155,21.1154A1.58,1.58,0,0,1,4,19.5V6.7309A1.58,1.58,0,0,1,5.6155,5.1154h1.769V2.8846h1.077V5.1154h7.154V2.8846h1V5.1154h1.769A1.58,1.58,0,0,1,20,6.7309V19.5a1.58,1.58,0,0,1-1.6155,1.6155Zm0-1h12.769A.6615.6615,0,0,0,19,19.5v-8.769H5V19.5a.6615.6615,0,0,0,.6155.6155ZM5,9.7306H19v-3a.6613.6613,0,0,0-.6155-.6155H5.6155A.6613.6613,0,0,0,5,6.7309Zm0,0v0Z" VerticalAlignment="Center" Margin="0,-5,0,0"/>
-                        <TextBlock Style="{StaticResource TextBlockMain}" Foreground="{DynamicResource Light}" Text="Binding DateCreated" Grid.ColumnSpan="2" VerticalAlignment="Center" Margin="12,0,0,0"/>
-                    </StackPanel>
-                    <Path Fill="{StaticResource Icon}" Grid.Row="1" Grid.Column="1" Stretch="Uniform" VerticalAlignment="Center" Data="M -120 -480 L -373.85 -226.15 l -28.53 -27.54 L -196.08 -460 l -284.69 -0 l 0 -40 l 285.46 0 l -206.07 -206.31 l 27.53 -27.54 L -120 -480 Z m -440.77 20 l -120 -0 l 0 -40 l 120 0 l -0 40 Z m -200 -0 l -80 -0 l 0 -40 l 80 0 l -0 40 Z"/>
-                    <TextBlock Style="{StaticResource TextBlockMain}" TextDecorations="Strikethrough" Foreground="{DynamicResource Error}" Grid.Row="1" Text="Binding OldValue" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow"/>
-                    <TextBlock Style="{StaticResource TextBlockMain}" Foreground="{DynamicResource Success}" Grid.Row="1" Text="Binding NewValue" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow" Grid.Column="2"/>
-
-                </Grid>
-            </Border>
-            <Label Content="Проверка цвета" Background="#7F34C924" Foreground="{DynamicResource Success}"/>
+            <CheckBox Style="{StaticResource Toggle}" Content="Привет пока привет пока привет пока привет пока привет пока привет пока привет" 
+                      IsChecked="False" HorizontalAlignment="Center"/>
             <ContentControl Style="{StaticResource BoxWarning}">
                 <TextBlock Text="Этот элемент содержит предупреждения"/>
             </ContentControl>

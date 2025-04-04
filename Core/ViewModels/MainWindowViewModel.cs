@@ -198,7 +198,7 @@ namespace Incas.Core.ViewModels
                 }
             }
         }
-        public string Title => "Рабочее пространство: " + this.WorkspaceName;
+        public string Title => this.WorkspaceName;
 
         public void LoadInfo()
         {
