@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d" MouseDown="Window_MouseDown"
-        Title="DialogQuestion" Style="{DynamicResource Dialog}" Height="150" Topmost="True" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
+        Title="DialogQuestion" Style="{DynamicResource WindowBase}" ResizeMode="NoResize" Height="150" Width="450" Topmost="True" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height">
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard>
@@ -18,7 +18,7 @@
         </EventTrigger>
 
     </Window.Triggers>
-    <Grid>
+    <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="19*"/>
             <ColumnDefinition Width="26*"/>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.License.Views.Windows"
         mc:Ignorable="d"
-        Title="Применение лицензии" Style="{StaticResource Dialog}" MouseDown="Window_MouseDown" WindowStartupLocation="CenterScreen" Height="250" Width="450">
+        Title="Применение лицензии" Background="{StaticResource Black}" Style="{StaticResource WindowBase}" ResizeMode="NoResize" MouseDown="Window_MouseDown" WindowStartupLocation="CenterScreen" Height="250" Width="450">
     <Window.Resources>
         <Style x:Key="IconStyle" TargetType="{x:Type Path}">
             <Setter Property="Stretch" Value="UniformToFill"/>
@@ -34,7 +34,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                        <Border x:Name="border" CornerRadius="2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
                             <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -100,14 +100,12 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="2"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
         <Path Style="{DynamicResource IconStyle}" Fill="{DynamicResource Yellow}" Data="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2" VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="30" MinHeight="30" MaxWidth="48" Stretch="Uniform" />
 
-        <Label x:Name="TitleText" Grid.Column="1" Content="Применение лицензии" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource Light}" Height="26" Width="240" FontWeight="Bold" FontFamily="JetBrains Mono" Margin="5,0,0,0"/>
-
-        <Border Style="{StaticResource Border1}" Grid.Row="1" Grid.Column="1" Margin="5" CornerRadius="8" Background="{StaticResource Dark}" Grid.RowSpan="2" AllowDrop="True" Drop="Border_Drop">
+        <Border Style="{StaticResource Border1}" Grid.Column="1" Margin="8" CornerRadius="2" Background="{StaticResource Dark}" Grid.RowSpan="5" AllowDrop="True" Drop="Border_Drop">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
@@ -119,15 +117,19 @@
                         <Label Style="{StaticResource LabelElement}" Content="Выберите файл или перетащите в это окно" Foreground="{StaticResource GrayLight}"/>
                     </StackPanel>
                 </Button>
-                <TextBlock Grid.Row="1" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Grid.Row="1" FontFamily="{StaticResource JetBrains}" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Run Foreground="{DynamicResource Icon}">Если лицензионного файла у вас еще нет, вы можете</Run>
                     <Hyperlink Click="Hyperlink_Click">запросить его получение</Hyperlink>
-                    <Run Foreground="{DynamicResource Icon}">.</Run>
                 </TextBlock>
             </Grid>
         </Border>
         <!--<Rectangle Fill="{DynamicResource LightBlack}" Grid.Row="3" Grid.ColumnSpan="2" Grid.RowSpan="2"/>-->
-        <Button x:Name="Yes" Style="{DynamicResource ButtonMain}" Content="Завершить работу с лицензией" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="YesClick" Margin="5,0,5,0" IsDefault="True"/>
-
+        <!--<Button x:Name="Yes" Style="{DynamicResource ButtonRectangle}" Content="Завершить работу с лицензией" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="YesClick" Margin="5,0,5,0" IsDefault="True" HorizontalAlignment="Left"/>-->
+        <!--<Button x:Name="Yes" Style="{DynamicResource ButtonRectangle}" Background="{StaticResource Dark}" HorizontalAlignment="Left" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" Click="YesClick" Margin="5,0,5,0" IsDefault="True">
+            <StackPanel Orientation="Horizontal">
+                <Path Fill="{StaticResource Buttons.Green}" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" VerticalAlignment="Center"/>
+                <Label x:Name="FinishText" Foreground="White" Content="Завершить работу с лицензией"/>
+            </StackPanel>
+        </Button>-->
     </Grid>
 </Window>

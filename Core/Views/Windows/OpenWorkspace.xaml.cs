@@ -41,8 +41,7 @@ namespace Incas.Core.Views.Windows
             {
                 DialogsManager.ShowWaitCursor();
                 if (ProgramState.CurrentWorkspace.LogIn(this.pwd.Password))
-                {
-                    DialogsManager.ShowWaitCursor(false);
+                {                    
                     if (await ProgramState.CurrentWorkspace.Enter())
                     {
                         this.DialogResult = true;
@@ -53,6 +52,7 @@ namespace Incas.Core.Views.Windows
                         this.DialogResult = false;
                         this.Close();
                     }
+                    DialogsManager.ShowWaitCursor(false);
                 }
                 else
                 {

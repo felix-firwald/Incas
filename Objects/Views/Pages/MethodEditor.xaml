@@ -3,22 +3,130 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Incas.Objects.Views.Pages" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:local="clr-namespace:Incas.Objects.Views.Pages" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" xmlns:local1="clr-namespace:Incas.Objects.Converters" xmlns:conv="clr-namespace:Incas.Core.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <local1:FieldTypeToColorConverter x:Key="FieldTypeToColorConverter"/>
+            <local1:FieldTypeToVisibleNameConverter x:Key="FieldTypeToVisibleNameConverter"/>
+            <local1:FieldTypeToIconConverter x:Key="FieldTypeToIconConverter"/>
+            <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
+            <conv:PathDataToGeometryConverter x:Key="PathDataToGeometryConverter"/>
+            <local1:ViewControlTypeToVisibleNameConverter x:Key="ViewControlTypeToVisibleNameConverter"/>
+            <local1:ViewControlTypeToIconConverter x:Key="ViewControlTypeToIconConverter"/>
+            <local1:ViewControlTypeToColorConverter x:Key="ViewControlTypeToColorConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="51*"/>
+            <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="109*"/>
         </Grid.ColumnDefinitions>
         <Border>
-            <!--<xctk:PropertyGrid AutoGenerateProperties="False" SelectedObject="{Binding Source}">
-                <xctk:PropertyGrid.PropertyDefinitions>
-                    <xctk:PropertyDefinition TargetProperties="FirstName" DisplayName="First" DisplayOrder="1" Description="Hello" IsExpandable="True" />
-                    <xctk:PropertyDefinition TargetProperties="FavoriteColor" />
-                    <xctk:PropertyDefinition TargetProperties="PetNames" />
-                </xctk:PropertyGrid.PropertyDefinitions>
-            </xctk:PropertyGrid>-->
+            <StackPanel>
+                <Border Style="{StaticResource ToolBorder}">
+                    <StackPanel>
+                        <Grid Margin="5,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Data="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
+
+                            <Label Content="Наименование метода:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                        </Grid>
+                        <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding Name}" Tag="Наименование метода" MaxLength="50" ToolTip="Наименование метода"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource ToolBorder}">
+                    <StackPanel>
+                        <Grid Margin="5,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Stretch="Uniform" Width="14" Data="M499.23-160q-8.54 0-14.27-5.73T479.23-180q0-8.54 5.73-14.27t14.27-5.73h236.15q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-510.76q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H499.23q-8.54 0-14.27-5.73T479.23-780q0-8.54 5.73-14.27t14.27-5.73h236.15q27.62 0 46.12 18.5Q800-763 800-735.38v510.76q0 27.62-18.5 46.12Q763-160 735.38-160H499.23Zm16.23-300H180q-8.54 0-14.27-5.73T160-480q0-8.54 5.73-14.27T180-500h335.46l-78.85-78.85q-5.61-5.61-6-13.53-.38-7.93 6-14.54 6.39-6.62 14.16-6.73 7.77-.12 14.38 6.5l104.54 104.53q9.69 9.7 9.69 22.62 0 12.92-9.69 22.62L465.15-352.85q-5.84 5.85-13.88 6.12-8.04.27-14.66-6.35-6.38-6.61-6.26-14.27.11-7.65 6.5-14.03L515.46-460Z"/>
+
+                            <Label Content="Входные параметры:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource ToolBorder}">
+                    <StackPanel>
+                        <Grid Margin="5,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Stretch="Uniform" Width="14" Data="M224.62-160q-27.62 0-46.12-18.5Q160-197 160-224.62v-510.76q0-27.62 18.5-46.12Q197-800 224.62-800h236.15q8.54 0 14.27 5.73t5.73 14.27q0 8.54-5.73 14.27T460.77-760H224.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v510.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69h236.15q8.54 0 14.27 5.73t5.73 14.27q0 8.54-5.73 14.27T460.77-160H224.62Zm497.76-300H387.69q-8.54 0-14.27-5.73T367.69-480q0-8.54 5.73-14.27t14.27-5.73h334.69l-78.84-78.85q-5.62-5.61-6-13.53-.39-7.93 6-14.54 6.38-6.62 14.15-6.73 7.77-.12 14.39 6.5l104.54 104.53q9.69 9.7 9.69 22.62 0 12.92-9.69 22.62L672.08-352.85q-5.85 5.85-13.89 6.12-8.04.27-14.65-6.35-6.39-6.61-6.27-14.27.11-7.65 6.5-14.03L722.38-460Z"/>
+
+                            <Label Content="Возврат:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                            
+                        </Grid>
+                        <CheckBox IsChecked="{Binding IsReturns}" Content="Возвращает значение" ToolTip="Возвращает ли этот метод значение после исполнения? Если да: Incas будет перехватывать инструкции return и отдавать возвращаемое значение. Если нет: инструкции return будут выполняться, но возвращаемые значения будут проигнорированы."/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource ToolBorder}">
+                    <StackPanel>
+                        <Grid Margin="5,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Stretch="Uniform" Width="14" Data="M355.38-380q-91.53 0-155.76-64.23-64.24-64.23-64.24-155.77 0-13.08 1.85-26.54 1.85-13.46 5.23-26.08 2.69-8.46 8.27-12.3 5.58-3.85 13.04-5.85 7.46-2 14.65.12 7.2 2.11 12.89 7.8l108.07 106.54 99.7-99.69-105.77-106.54q-5.69-5.69-7.81-13.27-2.12-7.57-.12-15.04 2-7.46 6.24-13.03 4.23-5.58 11.92-8.27 12.61-4.16 25.69-6 13.08-1.85 26.15-1.85 91.54 0 155.77 64.23T575.38-600q0 27.62-5.53 50.81-5.54 23.19-16.62 43.96L786-272.92q21.31 21.3 21.31 51.77 0 30.46-21.31 51.77-21.31 21.3-51.77 21.3-30.46 0-51.77-21.54L450.15-402.15q-22.3 10.3-45.5 16.23-23.19 5.92-49.27 5.92Z"/>
+
+                            <Label Content="Контекст:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+
+                        </Grid>
+                        <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding Owner.Fields}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" Margin="5" Background="{StaticResource Black}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border x:Name="MainBorder" Margin="2" CornerRadius="2" Background="{DynamicResource Dark}">
+                                        <Border.Style>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Setter Property="Height" Value="Auto"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=ExpanderButton, Path=IsChecked}" Value="False">
+                                                        <Setter Property="Height" Value="40"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="55*"/>
+                                                <ColumnDefinition Width="40" MaxWidth="40"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="40"/>
+                                                <RowDefinition Height="2"/>
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
+                                                <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" IsChecked="{Binding IsExpanded}" ToolTip="Свернуть / развернуть поле"/>
+                                                <Rectangle Width="1" Fill="{DynamicResource Area}" Margin="0,5,0,5" Opacity="0.5" />
+                                                <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
+                                                <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding BelongsThisClass}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
+                                                    <TextBox.ContextMenu>
+                                                        <ContextMenu>
+                                                            <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                                                            <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
+                                                        </ContextMenu>
+                                                    </TextBox.ContextMenu>
+                                                </TextBox>
+                                                <Label Style="{DynamicResource LabelElement}" Content="]" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
         </Border>
+        <avalonedit:TextEditor x:Name="Code" FontFamily="{StaticResource JetBrains}" Grid.Column="1" Foreground="White" Background="{DynamicResource Black}" LineNumbersForeground="{DynamicResource Element}" ShowLineNumbers="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,5,0,0" TextChanged="CodeChanged" />
     </Grid>
 </UserControl>

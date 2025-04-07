@@ -6,6 +6,7 @@ using Incas.Miniservices.UserStatistics;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.Components;
 using Incas.Server.AutoUI;
+using Incas.Tests.AutoUI;
 using IncasEngine.Core;
 using IncasEngine.Core.Registry;
 using IncasEngine.ObjectiveEngine;
@@ -37,20 +38,27 @@ namespace Incas.Core.Views.Windows
                 return;
             }
             ProgramState.MainWindow = this;
-            this.vm = new MainWindowViewModel();
-            ProgramState.MainWindowViewModel = this.vm;
-            this.DataContext = this.vm;
-            this.UpdateTabs();
-            this.AddTabItem(new StartPage(), "$START", "Начало", TabType.General);
-            switch (StatisticsManager.Info.DefaultMenuViewMode)
+            try
             {
-                case StatisticsInfo.DefaultMenuView.Standart:
-                    this.FullMenuSwitchButton.IsChecked = true;
-                    break;
-                case StatisticsInfo.DefaultMenuView.Collapsed:
-                    this.MicroMenuSwitchButton.IsChecked = true;
-                    break;
-            }           
+                this.vm = new MainWindowViewModel();
+                ProgramState.MainWindowViewModel = this.vm;
+                this.DataContext = this.vm;
+                this.UpdateTabs();
+                this.AddTabItem(new StartPage(), "$START", "Начало", TabType.General);
+                switch (StatisticsManager.Info.DefaultMenuViewMode)
+                {
+                    case StatisticsInfo.DefaultMenuView.Standart:
+                        this.FullMenuSwitchButton.IsChecked = true;
+                        break;
+                    case StatisticsInfo.DefaultMenuView.Collapsed:
+                        this.MicroMenuSwitchButton.IsChecked = true;
+                        break;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                this.IsEnabled = false;
+            }
         }
         public void PlaceStatusBar(IStatusBar bar)
         {
@@ -106,7 +114,8 @@ namespace Incas.Core.Views.Windows
                     this.vm.DoFindObject("");
                     break;
                 case Key.F2:
-                    
+                    MailResponse response = new();
+                    response.ShowDialog("Отправка письма");
                     break;
                 case Key.F3:
                     

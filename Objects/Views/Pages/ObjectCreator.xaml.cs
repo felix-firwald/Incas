@@ -60,6 +60,8 @@ namespace Incas.Objects.Views.Pages
         private bool Locked = false;
         private List<IFillerBase> fillers;
         private IServiceFieldFiller serviceFiller;
+        private Dictionary<Button, Method> buttons;
+
         public ObjectCreator(IClass source, IObject obj = null)
         {
             this.InitializeComponent();
@@ -126,68 +128,29 @@ namespace Incas.Objects.Views.Pages
         }
         private void FillContentPanel()
         {
-            FormDrawingManager.DrawingOutputArgs args = FormDrawingManager.DrawForm(this.Object, this.ContentPanel);
+            FormDrawingManager.DrawingOutputArgs args = FormDrawingManager.Start().DrawForm(this.Object, this.ContentPanel);
 
             this.fillers = args.Fillers;
             this.serviceFiller = args.ServiceFiller;
+            this.buttons = args.Buttons;
             foreach (IFillerBase ff in this.fillers)
             {
                 ff.OnInsert += this.Tf_OnInsert;
                 ff.OnFillerUpdate += this.Tf_OnFieldUpdate;
                 ff.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
-            }       
+            }
+            foreach (KeyValuePair<Button, Method> pair in args.Buttons)
+            {
+                pair.Key.Click += this.ButtonWithMethodClicked;
+            }
         }
 
-        private async void Ff_OnScriptRequested(string script)
+        private void ButtonWithMethodClicked(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                Dictionary<Field, object> dict = this.PullObjectForScript();
-                await Task.Run(() =>
-                {
-                    //string scriptResult = this.ClassData.Script;
-                    //ScriptEngine engine = Python.CreateEngine();
-                    //ScriptScope scope = engine.CreateScope();
-                    //scriptResult += $"\nmain = {this.Class.Name.Replace(" ", "_")}(";
-                    //List<string> args = new();
-                    //foreach (KeyValuePair<Field, object> fd in dict)
-                    //{
-                    //    switch (fd.Key.Type)
-                    //    {
-                    //        case FieldType.Number:
-                    //            args.Add($"{fd.Key.Name}={fd.Value}");
-                    //            break;
-                    //        case FieldType.Date:
-                    //            DateTime dt = (DateTime)fd.Value;
-                    //            args.Add($"{fd.Key.Name}=datetime.date({dt.Year}, {dt.Month}, {dt.Day})");
-                    //            break;
-                    //        default:
-                    //            args.Add($"{fd.Key.Name}='''{fd.Value}'''");
-                    //            break;
-                    //    }                       
-                    //}
-                    //scriptResult += string.Join(", ", args);
-                    //scriptResult += $")\nmain.{script}()";
-                    //engine.Execute(scriptResult, scope);
-
-                    //List<FieldData> fields = new();
-                    //dynamic target = scope.GetVariable("main");
-                    //foreach (KeyValuePair<Field, object> fd in dict)
-                    //{
-                    //    fields.Add(new()
-                    //    {
-                    //        ClassField = fd.Key,
-                    //        Value = engine.Operations.GetMember(target, fd.Key.Name).ToString()
-                    //    });
-                    //}
-                    //this.Object.Fields = fields;
-                });
-                this.ApplyObject(this.Object);
-            }
-            catch(Exception ex)
-            {
-                DialogsManager.ShowErrorDialog("При обработке скрипта возникла ошибка:\n" + ex.Message, "Ошибка скрипта");
-            }
+            Method method = this.buttons[(Button)sender];
+            IObject obj = this.PullObjectForScript();
+            obj.RunMethod(method);
+            this.ApplyObject(obj);
         }
 
         private void Tf_OnDatabaseObjectCopyRequested(IFillerBase sender)
@@ -208,7 +171,7 @@ namespace Incas.Objects.Views.Pages
             {
                 if (field.ClassField.Id == sender.Field.Id)
                 {
-                    sender.SetValue(field.Value);
+                    sender.SetValue(field.Value.ToString());
                     return;
                 }
             }
@@ -241,25 +204,33 @@ namespace Incas.Objects.Views.Pages
                 {
                     if (filler.Field.Id == data.ClassField.Id)
                     {                     
-                        filler.SetValue(data.Value);         
+                        filler.SetValue(data.Value.ToString());         
                         break;
                     }
                 }
             }      
         }
-        public Dictionary<Field, object> PullObjectForScript()
+        public IObject PullObjectForScript()
         {
             if (this.Object.Fields == null)
             {
                 this.Object.Fields = [];
             }
             this.Object.Fields.Clear();
-            Dictionary<Field, object> pairs = new();
-            foreach (IFillerBase tf in this.ContentPanel.Children)
+            if (this.serviceFiller is not null)
             {
-                pairs.Add(tf.Field, tf.GetDataForScript());
+                this.Object = this.serviceFiller.GetResult();
             }
-            return pairs;
+            foreach (IFillerBase tf in this.fillers)
+            {
+                FieldData data = new()
+                {
+                    ClassField = tf.Field,
+                    Value = tf.GetDataForScript()
+                };
+                this.Object.Fields.Add(data);
+            }
+            return this.Object;
         }
         public IObject PullObject()
         {

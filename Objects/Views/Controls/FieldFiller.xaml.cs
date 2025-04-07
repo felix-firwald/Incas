@@ -190,6 +190,7 @@ namespace Incas.Objects.Views.Controls
                     CheckBox checkBox = new() {
                         ToolTip = description,
                         Content = this.Field.VisibleName,
+                        IsThreeState = false,
                         Style = ResourceStyleManager.FindStyle(ResourceStyleManager.CheckboxStyle)
                     };
                     this.PlaceUIControl(checkBox, true);
@@ -280,7 +281,11 @@ namespace Incas.Objects.Views.Controls
                     break;
 #endif
                 case FieldType.Boolean:
-                    ((CheckBox)this.control).IsChecked = value == "1";
+                    bool resultBool = false;
+                    if (bool.TryParse(value, out resultBool))
+                    {
+                        ((CheckBox)this.control).IsChecked = resultBool;
+                    }                   
                     break;
             }     
         }
@@ -390,7 +395,7 @@ namespace Incas.Objects.Views.Controls
                 case FieldType.Date:
                     return this.GetDateInFormat();
                 case FieldType.Boolean:
-                    return (bool)((CheckBox)this.control).IsChecked ? "1" : "0";
+                    return ((CheckBox)this.control).IsChecked.ToString();
                 default:
                     return "<Критическая ошибка INCAS>";
                     //case FieldType.Generator:
@@ -449,6 +454,8 @@ namespace Incas.Objects.Views.Controls
                     return ((System.Windows.Controls.TextBox)this.control).Text;
                 case FieldType.Integer:
                     return ((IntegerUpDown)this.control).Value;
+                case FieldType.Boolean:
+                    return (bool)(((CheckBox)this.control).IsChecked);
                 case FieldType.LocalConstant:
                 case FieldType.HiddenField:
                 case FieldType.GlobalConstant:
@@ -476,19 +483,19 @@ namespace Incas.Objects.Views.Controls
                 if (data.ClassField.Type == FieldType.Object)
                 {
                     BindingData bd = data.ClassField.GetBindingData();
-                    IObject recurObj = Processor.GetObject(EngineGlobals.GetClass(bd.BindingClass), Guid.Parse(data.Value));
+                    IObject recurObj = Processor.GetObject(EngineGlobals.GetClass(bd.BindingClass), Guid.Parse(data.Value.ToString()));
                     foreach (FieldData recdata in recurObj.Fields)
                     {
                         if (recdata.ClassField.Id == bd.BindingField)
                         {
-                            result.Add($"{this.Field.Name}.{data.ClassField.Name}", recdata.Value);
+                            result.Add($"{this.Field.Name}.{data.ClassField.Name}", recdata.Value.ToString());
                         }
-                        result.Add($"{this.Field.Name}.{data.ClassField.Name}.{recdata.ClassField.Name}", recdata.Value);
+                        result.Add($"{this.Field.Name}.{data.ClassField.Name}.{recdata.ClassField.Name}", recdata.Value.ToString());
                     }
                 }
                 else
                 {
-                    result.Add($"{this.Field.Name}.{data.ClassField.Name}", data.Value);
+                    result.Add($"{this.Field.Name}.{data.ClassField.Name}", data.Value.ToString());
                 }              
             }
             return result;

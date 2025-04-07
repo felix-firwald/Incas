@@ -2,8 +2,8 @@
 using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.Objects.AutoUI;
-using Incas.Objects.Components;
-using Incas.Objects.Views.Windows;
+using Incas.Objects.Interfaces;
+using Incas.Objects.Views.Pages;
 using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -13,12 +13,10 @@ using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using IncasEngine.Workspace;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Input;
 
 namespace Incas.Objects.ViewModels
 {
@@ -34,6 +32,8 @@ namespace Incas.Objects.ViewModels
         public IClass Source;
         public delegate void DrawCall();
         public event DrawCall OnDrawCalling;
+        public delegate void OpenAdditionalSettings(IClassDetailsSettings settings);
+        public event OpenAdditionalSettings OnAdditionalSettingsOpenRequested;
         public ClassViewModel(Class source)
         {
             this.Mode = ClassMode.Usual;
@@ -54,8 +54,15 @@ namespace Incas.Objects.ViewModels
             {
                 foreach (Method method in this.SourceData.Methods)
                 {
-                    MethodViewModel vm = new(method);
-                    this.Methods.Add(vm);
+                    this.AddMethod(method);
+                }
+            }
+            this.Tables = new();
+            if (this.SourceData.Tables is not null)
+            {
+                foreach (Table table in this.SourceData.Tables)
+                {
+                    this.AddTable(table);
                 }
             }
             if (this.SourceData.EditorView is not null)
@@ -74,6 +81,37 @@ namespace Incas.Objects.ViewModels
             vm.OnMoveUpRequested += this.DoMoveUpField;
             vm.OnMoveDownRequested += this.DoMoveDownField;
             this.Fields.Add(vm);
+        }
+        public void AddTable(Table f)
+        {
+            TableViewModel vm = new(f);
+            vm.OnOpenTableRequested += this.DoOpenDetails;
+            vm.OnRemoveRequested += this.DoRemoveTable;
+            this.Tables.Add(vm);
+        }
+
+        private void DoRemoveTable(TableViewModel table)
+        {
+            this.Tables.Remove(table);
+        }
+
+        public void AddMethod(Method m)
+        {
+            MethodViewModel vm = new(m, this);
+            vm.OnOpenMethodRequested += this.DoOpenDetails;
+            vm.OnRemoveRequested += this.DoRemoveMethod;
+            this.Methods.Add(vm);
+        }
+
+        private void DoRemoveMethod(MethodViewModel field)
+        {
+            this.Methods.Remove(field);
+        }
+
+        private void DoOpenDetails(IClassDetailsSettings settings)
+        {
+            settings.SetUpContext(this);
+            this.OnAdditionalSettingsOpenRequested?.Invoke(settings);
         }
 #if !E_FREE
         public ClassViewModel(ServiceClass source)
@@ -302,32 +340,7 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.CodeModule));
             }
         }
-        public Visibility DocumentClassVisibility
-        {
-            get
-            {
-                switch (this.Source.Type)
-                {
-                    case ClassType.Document:
-                        return Visibility.Visible;
-                    default:
-                        return Visibility.Collapsed;
-                }
-            }
-        }
-        public Visibility ProcessClassVisibility
-        {
-            get
-            {
-                switch (this.Source.Type)
-                {
-                    case ClassType.Process:
-                        return Visibility.Visible;
-                    default:
-                        return Visibility.Collapsed;
-                }
-            }
-        }
+
         private ObservableCollection<FieldViewModel> fields;
         public ObservableCollection<FieldViewModel> Fields
         {
@@ -354,6 +367,20 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.Methods));
             }
         }
+        private ObservableCollection<TableViewModel> tables;
+        public ObservableCollection<TableViewModel> Tables
+        {
+            get
+            {
+                return this.tables;
+            }
+            set
+            {
+                this.tables = value;
+                this.OnPropertyChanged(nameof(this.Tables));
+            }
+        }
+        
         private MethodViewModel selectedMethod;
         public MethodViewModel SelectedMethod
         {
@@ -552,6 +579,14 @@ namespace Incas.Objects.ViewModels
                     this.SourceData.Fields.Add(field.Source);
                 }              
             }
+            this.SourceData.Methods = new();
+            foreach (MethodViewModel method in this.Methods)
+            {
+                if (method.BelongsThisClass)
+                {
+                    this.SourceData.Methods.Add(method.Source);
+                }
+            }
             this.Source.SetClassData(this.SourceData);
         }
         public List<Field> GetFields()
@@ -597,13 +632,19 @@ namespace Incas.Objects.ViewModels
                     }
                 }
                 foreach (FieldViewModel field in this.Fields)
-                {
-                    
+                {                    
                     if (field.BelongsThisClass)
                     {
                         field.Source.Check();
                         field.Source.SetId();
                     }                  
+                }
+                foreach (MethodViewModel method in this.Methods)
+                {
+                    if (method.BelongsThisClass)
+                    {
+                        method.Source.SetId();
+                    }
                 }
                 this.SourceData.EditorView = new();
                 foreach (ViewControlViewModel vm in this.ViewControls)
@@ -621,6 +662,10 @@ namespace Incas.Objects.ViewModels
                 return false;
             }
         }
+        /// <summary>
+        /// походу SetData выполняется ДВАЖДЫ!
+        /// </summary>
+        /// <returns></returns>
         public bool Save()
         {
             bool result = this.Validate();

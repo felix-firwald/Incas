@@ -82,6 +82,9 @@
 			<Word>import</Word>
 			<Word>with</Word>
 		</Keywords>
+		<Keywords fontWeight="bold" foreground="#1E90FF">
+			<Word>incas</Word>
+		</Keywords>
 		<Keywords fontWeight="bold" foreground="#3dff43">
 			<Word>True</Word>
 			<Word>__init__</Word>

@@ -13,6 +13,7 @@ namespace Incas.Core.Views.Windows
         public DialogQuestion(string text, string title = "Выполнить действие?", string yesText = "Да", string noText = "Нет")
         {
             this.InitializeComponent();
+            this.Title = "";
             this.TitleText.Content = title;
             this.Description.Text = text;
             this.Yes.Content = yesText;

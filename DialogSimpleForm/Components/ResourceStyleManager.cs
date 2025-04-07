@@ -21,6 +21,7 @@ namespace Incas.DialogSimpleForm.Components
         public const string CheckboxStyle = "CheckBoxMain";
         public const string CheckboxEditingGridStyle = "CheckBoxDataGrid";
         public const string CheckboxNotEditableGridStyle = "CheckBoxDataGridUsual";
+        public const string ButtonRectangle = "ButtonRectangle";
         private static Dictionary<string, Style> cache = new();
         public static Style FindStyle(string name)
         {

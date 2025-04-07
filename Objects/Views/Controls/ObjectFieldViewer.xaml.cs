@@ -50,7 +50,7 @@ namespace Incas.Objects.Views.Controls
                     case FieldType.Object:
                         try
                         {
-                            Guid id = Guid.Parse(data.Value);
+                            Guid id = Guid.Parse(data.Value.ToString());
                             if (id != Guid.Empty)
                             {
                                 BindingData bd = data.ClassField.GetBindingData();
@@ -73,18 +73,18 @@ namespace Incas.Objects.Views.Controls
                         CheckBox box = new();
                         box.Style = this.FindResource("CheckBoxDataGridUsual") as Style;
                         box.HorizontalAlignment = HorizontalAlignment.Left;
-                        box.IsChecked = this.Data.Value == "1";
+                        box.IsChecked = this.Data.Value.ToString() == "1";
                         box.Margin = new Thickness(5);
                         this.MainGrid.Children.Add(box);
                         Grid.SetColumn(box, 1);
                         break;
                     case FieldType.LocalEnumeration:
                     case FieldType.GlobalEnumeration:
-                        this.FieldValue.Text = data.Value;
+                        this.FieldValue.Text = data.Value.ToString();
                         this.ColorizeField(255, 251, 0);
                         break;
                     default:
-                        this.FieldValue.Text = data.Value;
+                        this.FieldValue.Text = data.Value.ToString();
                         break;
                 }
             }           
@@ -199,7 +199,7 @@ namespace Incas.Objects.Views.Controls
                     switch (this.Data.ClassField.Type)
                     {
                         default:
-                            Clipboard.SetText(this.Data.Value);
+                            Clipboard.SetText(this.Data.Value.ToString());
                             break;
                         case FieldType.Table:
                             break;

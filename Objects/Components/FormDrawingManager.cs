@@ -2,61 +2,70 @@
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using Incas.Objects.Views.Controls;
-using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
-using Org.BouncyCastle.Asn1.Mozilla;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 namespace Incas.Objects.Components
 {
-    public static class FormDrawingManager
+    public class FormDrawingManager
     {
         public struct DrawingOutputArgs
         {
             public List<IFillerBase> Fillers { get; set; }
             public IServiceFieldFiller ServiceFiller { get; set; }
+            public Dictionary<Button, Method> Buttons { get; set; }
         }
+        private DrawingOutputArgs drawingOutputArgs = new();
+        private IClassData classData;
 
-        public static DrawingOutputArgs DrawDebugForm(ClassViewModel cvm, StackPanel root)
+        public static FormDrawingManager Start()
         {
-            ClassDataBase data = new();
-            data.Fields = new();
+            return new();
+        }
+        public DrawingOutputArgs DrawDebugForm(ClassViewModel cvm, StackPanel root)
+        {
+            ClassDataBase data = new()
+            {
+                Fields = [], Methods = []
+            };
             foreach (FieldViewModel field in cvm.Fields)
             {
                 data.Fields.Add(field.Source);
             }
+            foreach (MethodViewModel field in cvm.Methods)
+            {
+                data.Methods.Add(field.Source);
+            }
             data.EditorView = new();
-            
+
             foreach (ViewControlViewModel vm in cvm.ViewControls)
             {
                 vm.Save();
                 data.EditorView.Controls.Add(vm.Source);
             }
 
-            return DrawFormBase(data, null, root);
+            return this.DrawFormBase(data, null, root);
         }
 
-        public static DrawingOutputArgs DrawForm(IObject obj, StackPanel root)
-        {            
-            return DrawFormBase(obj.Class.GetClassData(), ServiceExtensionFieldsManager.GetFillerByType(obj), root);
-        }
-        private static DrawingOutputArgs DrawFormBase(IClassData data, IServiceFieldFiller serviceFiller, StackPanel root)
+        public DrawingOutputArgs DrawForm(IObject obj, StackPanel root)
         {
-            DrawingOutputArgs result = new();
+            return this.DrawFormBase(obj.Class.GetClassData(), ServiceExtensionFieldsManager.GetFillerByType(obj), root);
+        }
+        private DrawingOutputArgs DrawFormBase(IClassData data, IServiceFieldFiller serviceFiller, StackPanel root)
+        {
             root.Children.Clear();
-            Dictionary<Guid, IFillerBase> fillersDict = new();
-            List<IFillerBase> fillers = new();
+            this.classData = data;
+            this.drawingOutputArgs = new();
+            Dictionary<Guid, IFillerBase> fillersDict = [];
+            this.drawingOutputArgs.Buttons = new();
+            List<IFillerBase> fillers = [];
             if (serviceFiller != null)
             {
                 root.Children.Add((UserControl)serviceFiller);
@@ -84,6 +93,7 @@ namespace Incas.Objects.Components
 
                 }
             }
+
             if (data.EditorView is null || data.EditorView.Controls is null || data.EditorView.Controls.Count == 0)
             {
                 foreach (IFillerBase ff in fillers)
@@ -95,20 +105,36 @@ namespace Incas.Objects.Components
             {
                 foreach (ViewControl control in data.EditorView.Controls)
                 {
-                    DrawControl(control, root, fillersDict);
+                    this.DrawControl(control, root, fillersDict);
                 }
             }
-            result.Fillers = fillers;
-            result.ServiceFiller = serviceFiller;
-            return result;
+            drawingOutputArgs.Fillers = fillers;
+            drawingOutputArgs.ServiceFiller = serviceFiller;
+            return drawingOutputArgs;
         }
-        private static void DrawControl(ViewControl vc, FrameworkElement currentParent, Dictionary<Guid, IFillerBase> fillers)
+        private void DrawControl(ViewControl vc, FrameworkElement currentParent, Dictionary<Guid, IFillerBase> fillers)
         {
             FrameworkElement element = null;
             switch (vc.Type)
             {
                 case ControlType.FieldFiller:
-                    AddChild(currentParent, (FrameworkElement)fillers[vc.Field]);
+                    this.AddChild(currentParent, (FrameworkElement)fillers[vc.Field]);
+                    return;
+                case ControlType.Button:
+                    Button btn = new()
+                    {
+                        Content = vc.Name,
+                        Style = ResourceStyleManager.FindStyle(ResourceStyleManager.ButtonRectangle)
+                    };
+                    foreach (Method m in this.classData.Methods)
+                    {
+                        if (m.Id == vc.RunMethod)
+                        {
+                            drawingOutputArgs.Buttons.Add(btn, m);
+                            this.AddChild(currentParent, btn);
+                            break;
+                        }
+                    }                  
                     return;
                 case ControlType.VerticalStack:
                     element = new StackPanel() { Orientation = Orientation.Vertical };
@@ -120,7 +146,7 @@ namespace Incas.Objects.Components
                     element = new UniformGrid();
                     break;
                 case ControlType.Tab:
-                    element = new TabControl() { Style = ResourceStyleManager.FindStyle("TabControlMain") };                    
+                    element = new TabControl() { Style = ResourceStyleManager.FindStyle("TabControlMain") };
                     break;
                 case ControlType.TabItem:
                     element = new TabItem() { Style = ResourceStyleManager.FindStyle("TabItemMain"), Header = vc.Name };
@@ -128,24 +154,18 @@ namespace Incas.Objects.Components
                 case ControlType.Group:
                     element = new GroupBox() { Header = vc.Name };
                     break;
-            } 
-            AddChild(currentParent, element);
+            }
+            this.AddChild(currentParent, element);
             if (vc.Children is not null)
             {
                 foreach (ViewControl control in vc.Children)
                 {
-                    DrawControl(control, element, fillers);
+                    this.DrawControl(control, element, fillers);
                 }
             }
         }
-        private static void AddChild(FrameworkElement container, FrameworkElement child)
+        private void AddChild(FrameworkElement container, FrameworkElement child)
         {
-            //if (container is TabControl tab)
-            //{
-            //    TabItem ti = new();
-            //    ti.Content = child;
-            //    tab.Items.Add(ti);
-            //}
             if (container is ContentControl control)
             {
                 control.Content = child;

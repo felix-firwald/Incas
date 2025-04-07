@@ -185,7 +185,7 @@ namespace Incas.Objects.Views.Pages
         public async void UpdateViewWithSearch(FieldData data)
         {
             StatisticsManager.AddInteractionSearch(this.sourceClass, data.ClassField);
-            DataTable dt = await Processor.GetObjectsListWhereLike(this.sourceClass, data.ClassField.VisibleName, data.Value);
+            DataTable dt = await Processor.GetObjectsListWhereLike(this.sourceClass, data.ClassField.VisibleName, data.Value.ToString());
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.sourceClass.Type == ClassType.Model)
@@ -202,7 +202,7 @@ namespace Incas.Objects.Views.Pages
         public async void UpdateViewWithFilter(FieldData data)
         {
             StatisticsManager.AddInteractionSearch(this.sourceClass, data.ClassField);
-            DataTable dt = await Processor.GetObjectsListWhereEqual(this.sourceClass, data.ClassField.VisibleName, data.Value);
+            DataTable dt = await Processor.GetObjectsListWhereEqual(this.sourceClass, data.ClassField.VisibleName, data.Value.ToString());
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.sourceClass.Type == ClassType.Model)

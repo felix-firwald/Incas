@@ -4,6 +4,7 @@ using Incas.Miniservices.UserStatistics;
 using Incas.Tests;
 using IncasEngine.Backups;
 using IncasEngine.Core;
+using IncasEngine.License;
 using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using System;
@@ -32,7 +33,7 @@ namespace Incas
                 License.Views.Windows.LicenseDialog ld = new();
                 if (ld.ShowDialog() != true)
                 {
-                    System.Windows.Application.Current.Shutdown();
+                    throw new LicenseShutdownException();
                 }
             }
             else
@@ -70,12 +71,19 @@ namespace Incas
             if (!this.criticalErrorOccured)
             {
                 this.criticalErrorOccured = true;
-                ProgramState.OpenWebPage(FormError + "?version=" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "&description=" + e.Exception.Message);
-                StatisticsManager.SaveStatistics();
-                DialogsManager.ShowCriticalErrorDialog($"Возникла ошибка, не позволяющая INCAS продолжать свою работу.\n" +
-                    $"Описание: {e.Exception.Message}\nПриложение будет немедленно закрыто.");
-                BackupProcessor.WriteBackup(e.Exception);                
-                this.Shutdown();
+                if (e.Exception is LicenseShutdownException)
+                {
+                    this.Shutdown();
+                }
+                else
+                {
+                    ProgramState.OpenWebPage(FormError + "?version=" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "&description=" + e.Exception.Message);
+                    StatisticsManager.SaveStatistics();
+                    DialogsManager.ShowCriticalErrorDialog($"Возникла ошибка, не позволяющая INCAS продолжать свою работу.\n" +
+                        $"Описание: {e.Exception.Message}\nПриложение будет немедленно закрыто.");
+                    BackupProcessor.WriteBackup(e.Exception);
+                    this.Shutdown();
+                }               
             }           
         }
 

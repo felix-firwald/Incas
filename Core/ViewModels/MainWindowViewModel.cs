@@ -202,6 +202,10 @@ namespace Incas.Core.ViewModels
 
         public void LoadInfo()
         {
+            if (ProgramState.CurrentWorkspace == null)
+            {
+                throw new ArgumentNullException();
+            }
             this.WorkspaceName = ProgramState.CurrentWorkspace.GetDefinition(true).Name;
             this.OnPropertyChanged(nameof(this.Surname));
         }

@@ -38,9 +38,9 @@ namespace Incas.Objects.Views.Windows
         public CreateClass(Class primary) // init class
         {
             DialogsManager.ShowWaitCursor();
-            XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
             this.InitializeComponent();
             this.vm = new(primary);
+            this.vm.OnAdditionalSettingsOpenRequested += this.Vm_OnAdditionalSettingsOpenRequested;
             this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
             if (this.vm.Type == ClassType.Document)
             {
@@ -50,12 +50,38 @@ namespace Incas.Objects.Views.Windows
             this.ApplyPartSettings();
             DialogsManager.ShowWaitCursor(false);
         }
+
+        private void Vm_OnAdditionalSettingsOpenRequested(IClassDetailsSettings settings)
+        {
+            foreach (TabItem tabitem in this.TabControlMain.Items)
+            {
+                if (tabitem.Header.ToString() == settings.ItemName)
+                {
+                    tabitem.IsSelected = true;
+                    return;
+                }
+            }
+            TabItem item = new()
+            {
+                Content = settings,
+                Header = settings.ItemName,
+                Style = this.FindResource("TabItemRemovable") as Style,
+                BorderBrush = this.FindResource("LightPurple") as Brush
+            };
+            item.IsSelected = true;
+            item.IsEnabledChanged += this.Item_IsEnabledChanged1;
+            this.TabControlMain.Items.Add(item);
+        }
+
+        private void Item_IsEnabledChanged1(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            this.TabControlMain.Items.Remove(sender);
+        }
+
         public CreateClass(Guid id) // edit class
         {
-            DialogsManager.ShowWaitCursor();
-            XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");        
+            DialogsManager.ShowWaitCursor();      
             this.InitializeComponent();
-            //this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             if (id == Guid.Empty)
             {
                 this.Title = "(класс не выбран)";
@@ -65,6 +91,7 @@ namespace Incas.Objects.Views.Windows
             this.Title = "Редактирование класса";
             Class cl = EngineGlobals.GetClass(id);
             this.vm = new(cl);
+            this.vm.OnAdditionalSettingsOpenRequested += this.Vm_OnAdditionalSettingsOpenRequested;
             this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
             this.DataContext = this.vm;
             this.ApplyPartSettings();
@@ -365,7 +392,7 @@ namespace Incas.Objects.Views.Windows
 
         private void AddMethod(object sender, RoutedEventArgs e)
         {
-            this.vm.Methods.Add(new(new()));
+            this.vm.AddMethod(new());
         }
 
         private void AddControlToCustomFormClick(object sender, RoutedEventArgs e)
@@ -407,7 +434,7 @@ namespace Incas.Objects.Views.Windows
         }
         private void Vm_OnDrawCalling()
         {
-            FormDrawingManager.DrawDebugForm(this.vm, this.FormPreviewPanel);                     
+            FormDrawingManager.Start().DrawDebugForm(this.vm, this.FormPreviewPanel);                     
         }
 
         private void RemoveSelectedElementFromForm(object sender, RoutedEventArgs e)
@@ -439,6 +466,16 @@ namespace Incas.Objects.Views.Windows
         {
             this.Vm_OnDrawCalling();
             this.ZoomPanel.FitToBounds();
+        }
+
+        private void AddMethodClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.AddMethod(new());
+        }
+
+        private void AddTableClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.AddTable(new());
         }
     }
 }

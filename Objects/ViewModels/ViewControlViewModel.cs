@@ -111,6 +111,17 @@ namespace Incas.Objects.ViewModels
                 return Visibility.Visible;
             }
         }
+        public Visibility FieldSettingsVisibility
+        {
+            get
+            {
+                if (this.Type == ControlType.FieldFiller)
+                {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
         public void AddChild(ViewControlViewModel vc)
         {
             if (this.Type is ControlType.FieldFiller)
