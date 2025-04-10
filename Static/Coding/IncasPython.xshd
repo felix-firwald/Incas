@@ -69,7 +69,7 @@
 				</Span>
 			</RuleSet>
 		</Span>
-		<Keywords foreground="#4ca2ff">
+		<Keywords foreground="#6495ed">
 			<Word>if</Word>
 			<Word>elif</Word>
 			<Word>else</Word>
@@ -84,6 +84,7 @@
 		</Keywords>
 		<Keywords fontWeight="bold" foreground="#1E90FF">
 			<Word>incas</Word>
+			<Word>this</Word>
 		</Keywords>
 		<Keywords fontWeight="bold" foreground="#3dff43">
 			<Word>True</Word>
@@ -130,6 +131,8 @@
 			<Word>)</Word>
 			<Word>:</Word>
 			<Word>!</Word>
+			<Word>[</Word>
+			<Word>]</Word>
 			<Word>pass</Word>
 		</Keywords>
 		<Rule foreground="#b9abff">

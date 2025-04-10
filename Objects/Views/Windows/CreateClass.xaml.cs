@@ -168,17 +168,6 @@ namespace Incas.Objects.Views.Windows
                 }
             }
         }
-        private void AddVirtualFieldsClick(object sender, RoutedEventArgs e)
-        {
-            VirtualFieldsAppender appender = new();
-            if (appender.ShowDialog("Настройка виртуальных полей", Core.Classes.Icon.Magic))
-            {
-                foreach (Field f in appender.GetFields())
-                {
-                    this.vm.AddField(f);
-                }
-            }
-        }
         private List<Field> GetActualFields()
         {
             List<Field> fields = [];
@@ -350,23 +339,6 @@ namespace Incas.Objects.Views.Windows
             //}
         }
 
-        private void SetPresettingFieldsClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ClassFieldsPresetting cfp = new(this.GetActualFields(), this.vm.SourceData.RestrictFullView);
-                if (cfp.ShowDialog("Настройка пресетов", Core.Classes.Icon.Puzzle))
-                {
-                    this.vm.SourceData.RestrictFullView = cfp.Constraint;
-                }
-            }
-            catch (FieldDataFailed fd)
-            {
-                DialogsManager.ShowExclamationDialog(fd.Message, "Действие прервано");
-                return;
-            }
-        }
-
         #region Fields Logics
 
         private void OpenSettingsClick(object sender, RoutedEventArgs e)
@@ -476,6 +448,11 @@ namespace Incas.Objects.Views.Windows
         private void AddTableClick(object sender, RoutedEventArgs e)
         {
             this.vm.AddTable(new());
+        }
+
+        private void AddStateClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.AddState(new());
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace Incas.Objects.ViewModels
 {
-    public class MethodViewModel : BaseViewModel
+    public class MethodViewModel : BaseViewModel, IClassMemberViewModel
     {
         public delegate void OpenMethod(IClassDetailsSettings settings);
         public event OpenMethod OnOpenMethodRequested;
@@ -111,5 +111,15 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.CodeModule));
             }
         }
+
+        public Guid Id
+        {
+            get
+            {
+                return this.Source.Id;
+            }
+        }
+
+        public IClassMemberViewModel.MemberType ClassMemberType => IClassMemberViewModel.MemberType.Method;
     }
 }

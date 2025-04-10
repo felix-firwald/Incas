@@ -20,7 +20,7 @@
                 <!--кнопка создания файла или печати-->
 
             </Grid.RowDefinitions>
-            <Border x:Name="ToolBar" Grid.Row="0" Grid.Column="2" Margin="5,-3,5,5" Background="{StaticResource Black}" CornerRadius="8">
+            <Border x:Name="ToolBar" Grid.Row="0" Grid.Column="2" Margin="5,-3,5,5" Background="{StaticResource Black}" CornerRadius="2">
                 <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,0,0" >
                     <!--<fa:FontAwesome Style="{StaticResource IconButton}" Icon="PlusCircle" Grid.Column="1" Grid.Row="1" MouseDown="AddClick" ToolTip="Добавить ещё один объект" />-->
                     <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="AddClick" ToolTip="Добавить ещё один объект">
@@ -53,7 +53,7 @@
                     <Rectangle Fill="{StaticResource LightBlack}" Height="1" Margin="4,2,4,2"/>-->
                 </StackPanel>
             </Border>
-            <Border Grid.Row="0" CornerRadius="8" Margin="5,5,5,5" Background="{StaticResource Black}" BorderThickness="1" BorderBrush="{StaticResource Dark}">
+            <Border Grid.Row="0" CornerRadius="2" Margin="5,5,5,5" Background="{StaticResource Black}" BorderThickness="1" BorderBrush="{StaticResource Dark}">
                 <ScrollViewer Cursor="" VerticalScrollBarVisibility="Auto">
                     <StackPanel x:Name="ContentPanel" ScrollViewer.CanContentScroll="True"/>
                 </ScrollViewer>

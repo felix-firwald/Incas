@@ -22,6 +22,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Xceed.Wpf.Toolkit;
 using static Incas.Objects.Interfaces.IFillerBase;
+using static IncasEngine.ObjectiveEngine.Models.State;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -41,6 +42,7 @@ namespace Incas.Objects.Views.Controls
         //private bool validated = true;
         private bool unique = true;
         private bool eventChangedEnabled = true;
+        private bool isRequired;
         private Control control;
         public delegate void CommandScript(string script);
         public event StringAction OnInsert;  
@@ -159,16 +161,6 @@ namespace Incas.Objects.Views.Controls
                     }
                     this.PlaceUIControl(numericFloat);
                     break;
-                case FieldType.LocalConstant:
-                case FieldType.HiddenField:
-                    this.Visibility = Visibility.Collapsed;
-                    break;
-                case FieldType.GlobalConstant:
-                    this.Visibility = Visibility.Collapsed;
-                    Guid id;
-                    Guid.TryParse(value.ToString(), out id);
-                    this.Field.Value = ProgramState.GetConstant(id);
-                    break;
                 case FieldType.Object:
                     SelectionBox selectionBox = new(this.Field.GetBindingData());
                     selectionBox.OnValueChanged += this.SelectionBox_OnValueChanged;
@@ -203,10 +195,6 @@ namespace Incas.Objects.Views.Controls
             {
                 this.control = control;
                 this.control.ToolTip = this.Field.Description;
-                if (this.Field.ReadOnly)
-                {
-                    control.IsEnabled = false;
-                }
                 this.Grid.Children.Add(control);
                 if (withoutLabel)
                 {
@@ -261,12 +249,6 @@ namespace Incas.Objects.Views.Controls
                     break;
                 case FieldType.Object:
                     ((SelectionBox)this.control).SetObject(value);
-                    break;
-                case FieldType.LocalConstant:
-                case FieldType.GlobalConstant:
-                    return;
-                case FieldType.HiddenField:
-                    this.Field.Value = value;
                     break;
                 case FieldType.LocalEnumeration:
                 case FieldType.GlobalEnumeration:
@@ -331,7 +313,7 @@ namespace Incas.Objects.Views.Controls
             DatePicker picker = ((DatePicker)this.control);
             if (picker.SelectedDate is null)
             {
-                if (this.Field.NotNull == true)
+                if (this.isRequired == true)
                 {
                     this.ThrowNotNullFailed();
                 }
@@ -361,7 +343,7 @@ namespace Incas.Objects.Views.Controls
                 case FieldType.String:
                 case FieldType.Text:
                     string value = ((System.Windows.Controls.TextBox)this.control).Text;
-                    if (this.Field.NotNull == true && string.IsNullOrEmpty(value))
+                    if (this.isRequired == true && string.IsNullOrEmpty(value))
                     {
                         this.ThrowNotNullFailed();
                     }
@@ -374,10 +356,6 @@ namespace Incas.Objects.Views.Controls
                     return ((IntegerUpDown)this.control).Value.ToString();
                 case FieldType.Float:
                     return ((DoubleUpDown)this.control).Value.ToString();
-                case FieldType.LocalConstant:
-                case FieldType.HiddenField:
-                case FieldType.GlobalConstant:
-                    return this.Field.Value?.ToString();
                 case FieldType.Object:
                     return ((SelectionBox)this.control).Value;
                 case FieldType.LocalEnumeration:
@@ -387,7 +365,7 @@ namespace Incas.Objects.Views.Controls
                     {
                         return cb.Items.GetItemAt(cb.SelectedIndex).ToString();
                     }
-                    if (this.Field.NotNull == true)
+                    if (this.isRequired == true)
                     {
                         this.ThrowNotNullFailed();
                     }
@@ -417,14 +395,14 @@ namespace Incas.Objects.Views.Controls
                     {
                         return ((DateTime)((DatePicker)this.control).SelectedDate).ToString("dd.MM.yyyy");
                     }
-                    else if (this.Field.NotNull == true)
+                    else if (this.isRequired == true)
                     {
                         this.ThrowNotNullFailed();
                     }
                     return "";
                 case FieldType.Object:
                     IObject obj = ((SelectionBox)this.control).SelectedObject;
-                    if (this.Field.NotNull == true && obj is null)
+                    if (this.isRequired == true && obj is null)
                     {
                         this.ThrowNotNullFailed();
                     }
@@ -456,10 +434,6 @@ namespace Incas.Objects.Views.Controls
                     return ((IntegerUpDown)this.control).Value;
                 case FieldType.Boolean:
                     return (bool)(((CheckBox)this.control).IsChecked);
-                case FieldType.LocalConstant:
-                case FieldType.HiddenField:
-                case FieldType.GlobalConstant:
-                    return this.Field.Value?.ToString();
                 case FieldType.LocalEnumeration:
                 case FieldType.GlobalEnumeration:
                     ComboBox cb = (ComboBox)this.control;
@@ -613,6 +587,21 @@ namespace Incas.Objects.Views.Controls
         private void ObjectCopyRequestClick(object sender, RoutedEventArgs e)
         {
             this.OnDatabaseObjectCopyRequested?.Invoke(this);
+        }
+
+        public void ApplyState(State state)
+        {
+            MemberState source = state.Settings[this.Field.Id];
+            if (source.EditorVisibility)
+            {
+                this.Visibility = Visibility.Visible;
+                this.IsEnabled = source.IsEnabled;
+                this.isRequired = source.IsRequired;
+            }
+            else
+            {
+                this.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

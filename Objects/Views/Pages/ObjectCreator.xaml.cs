@@ -6,6 +6,7 @@ using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.Components;
+using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -15,13 +16,16 @@ using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Documents;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
+using IncasEngine.Scripting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static System.Windows.Forms.AxHost;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -58,7 +62,7 @@ namespace Incas.Objects.Views.Pages
         public event ObjectCreatorDataAsync OnSaveRequested;
         public event ObjectCreatorData OnRemoveRequested;
         private bool Locked = false;
-        private List<IFillerBase> fillers;
+        private Dictionary<Field, IFillerBase> fillers;
         private IServiceFieldFiller serviceFiller;
         private Dictionary<Button, Method> buttons;
 
@@ -72,7 +76,7 @@ namespace Incas.Objects.Views.Pages
             if (obj != null)
             {
                 this.FillContentPanel();
-                this.ApplyObject(obj);
+                this.ApplyObject(obj, true);
             }
             else
             {
@@ -133,11 +137,11 @@ namespace Incas.Objects.Views.Pages
             this.fillers = args.Fillers;
             this.serviceFiller = args.ServiceFiller;
             this.buttons = args.Buttons;
-            foreach (IFillerBase ff in this.fillers)
+            foreach (KeyValuePair<Field, IFillerBase> ff in this.fillers)
             {
-                ff.OnInsert += this.Tf_OnInsert;
-                ff.OnFillerUpdate += this.Tf_OnFieldUpdate;
-                ff.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
+                ff.Value.OnInsert += this.Tf_OnInsert;
+                ff.Value.OnFillerUpdate += this.Tf_OnFieldUpdate;
+                ff.Value.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
             }
             foreach (KeyValuePair<Button, Method> pair in args.Buttons)
             {
@@ -149,8 +153,22 @@ namespace Incas.Objects.Views.Pages
         {
             Method method = this.buttons[(Button)sender];
             IObject obj = this.PullObjectForScript();
-            obj.RunMethod(method);
-            this.ApplyObject(obj);
+            CodeOutputArgs output = obj.RunMethod(method);
+            this.ApplyObject(obj, output.StateUpdated);
+        }
+        private void ApplyState()
+        {
+            foreach (IncasEngine.ObjectiveEngine.Models.State state in this.ClassData.States)
+            {
+                if (state.Id == this.Object.State)
+                {
+                    foreach (KeyValuePair<Field, IFillerBase> filler in this.fillers)
+                    {
+                        filler.Value.ApplyState(state);
+                    }
+                    break;
+                }
+            }
         }
 
         private void Tf_OnDatabaseObjectCopyRequested(IFillerBase sender)
@@ -195,20 +213,29 @@ namespace Incas.Objects.Views.Pages
                 }
             }
         }
-        public void ApplyObject(IObject obj)
+        public void ApplyObject(IObject obj, bool updateState)
         {
+            Stopwatch stopwatch = new();
+            stopwatch.Start();
             this.ObjectName.Text = obj.Name;
             foreach (FieldData data in obj.Fields)
             {
-                foreach (IFillerBase filler in this.fillers)
-                {
-                    if (filler.Field.Id == data.ClassField.Id)
-                    {                     
-                        filler.SetValue(data.Value.ToString());         
-                        break;
-                    }
-                }
-            }      
+                this.fillers[data.ClassField].SetValue(data.Value.ToString());
+                //foreach (IFillerBase filler in this.fillers)
+                //{
+                //    if (filler.Field.Id == data.ClassField.Id)
+                //    {                     
+                //        filler.SetValue();         
+                //        break;
+                //    }
+                //}
+            }
+            stopwatch.Stop();
+            DialogsManager.ShowInfoDialog(stopwatch.GetTextResult());
+            if (updateState)
+            {
+                this.ApplyState();
+            }          
         }
         public IObject PullObjectForScript()
         {
@@ -221,12 +248,12 @@ namespace Incas.Objects.Views.Pages
             {
                 this.Object = this.serviceFiller.GetResult();
             }
-            foreach (IFillerBase tf in this.fillers)
+            foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
             {
                 FieldData data = new()
                 {
-                    ClassField = tf.Field,
-                    Value = tf.GetDataForScript()
+                    ClassField = tf.Key,
+                    Value = tf.Value.GetDataForScript()
                 };
                 this.Object.Fields.Add(data);
             }
@@ -257,12 +284,12 @@ namespace Incas.Objects.Views.Pages
             {
                 this.Object = this.serviceFiller.GetResult();
             }
-            foreach (IFillerBase tf in this.fillers)
+            foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
             {
                 FieldData data = new()
                 {
-                    ClassField = tf.Field,
-                    Value = tf.GetData()
+                    ClassField = tf.Key,
+                    Value = tf.Value.GetData()
                 };
                 this.Object.Fields.Add(data);
             }
@@ -371,14 +398,14 @@ namespace Incas.Objects.Views.Pages
             if (this.ClassData.NameTemplate is not null)
             {
                 name = this.ClassData.NameTemplate;
-                foreach (IFillerBase tf in this.fillers)
+                foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
                 {
-                    switch (tf.Field.Type)
+                    switch (tf.Key.Type)
                     {
                         case FieldType.Table:
                             break;
                         default:
-                            ISimpleFiller simple = (ISimpleFiller)tf;
+                            ISimpleFiller simple = (ISimpleFiller)tf.Value;
                             string val = simple.GetValue();
                             if (val != null)
                             {
@@ -403,11 +430,11 @@ namespace Incas.Objects.Views.Pages
         }
         public void InsertToField(Guid id, string data)
         {
-            foreach (IFillerBase tf in this.ContentPanel.Children)
+            foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
             {
-                if (tf.Field.Id == id)
+                if (tf.Key.Id == id)
                 {
-                    tf.SetValue(data);
+                    tf.Value.SetValue(data);
                     return;
                 }
             }
@@ -482,14 +509,14 @@ namespace Incas.Objects.Views.Pages
         public List<string> GetExcelRow()
         {
             List<string> output = [];
-            foreach (IFillerBase tf in this.ContentPanel.Children)
+            foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
             {
-                switch (tf.Field.Type)
+                switch (tf.Key.Type)
                 {
                     case FieldType.Table:
                         break;
                     default:
-                        output.Add(((ISimpleFiller)tf).GetValue());
+                        output.Add(((ISimpleFiller)tf.Value).GetValue());
                         break;                   
                 }             
             }

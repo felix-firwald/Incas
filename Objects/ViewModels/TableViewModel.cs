@@ -16,7 +16,7 @@ namespace Incas.Objects.ViewModels
     /// Класс ViewModel.
     /// Метод Save вызывается после применения изменений на форме и подтверждает сохранение изменений из ViewModel в Model.
     /// </summary>
-    public class TableViewModel : BaseViewModel
+    public class TableViewModel : BaseViewModel, IClassMemberViewModel
     {
         public delegate void OpenMethod(IClassDetailsSettings settings);
         public event OpenMethod OnOpenTableRequested;
@@ -61,6 +61,13 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.Name));
             }
         }
+        public bool BelongsThisClass
+        {
+            get
+            {
+                return this.Source.Owner is null;
+            }
+        }
         /// <summary>
         /// Сохраняет изменения в Model
         /// </summary>
@@ -68,5 +75,14 @@ namespace Incas.Objects.ViewModels
         //{
 
         //}
+        public Guid Id
+        {
+            get
+            {
+                return this.Source.Id;
+            }
+        }
+
+        public IClassMemberViewModel.MemberType ClassMemberType => IClassMemberViewModel.MemberType.Table;
     }
 }

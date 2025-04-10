@@ -1,4 +1,5 @@
-﻿using Incas.DialogSimpleForm.Components;
+﻿using ClosedXML.Excel;
+using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using Incas.Objects.Views.Controls;
@@ -18,7 +19,7 @@ namespace Incas.Objects.Components
     {
         public struct DrawingOutputArgs
         {
-            public List<IFillerBase> Fillers { get; set; }
+            public Dictionary<Field, IFillerBase> Fillers { get; set; }
             public IServiceFieldFiller ServiceFiller { get; set; }
             public Dictionary<Button, Method> Buttons { get; set; }
         }
@@ -65,7 +66,7 @@ namespace Incas.Objects.Components
             this.drawingOutputArgs = new();
             Dictionary<Guid, IFillerBase> fillersDict = [];
             this.drawingOutputArgs.Buttons = new();
-            List<IFillerBase> fillers = [];
+            this.drawingOutputArgs.Fillers = new();
             if (serviceFiller != null)
             {
                 root.Children.Add((UserControl)serviceFiller);
@@ -79,7 +80,7 @@ namespace Incas.Objects.Components
                         {
                             Uid = f.Id.ToString()
                         };
-                        fillers.Add(ff);
+                        this.drawingOutputArgs.Fillers.Add(f, ff);
                         fillersDict.Add(f.Id, ff);
                         break;
                     case FieldType.Table:
@@ -87,7 +88,7 @@ namespace Incas.Objects.Components
                         {
                             Uid = f.Id.ToString()
                         };
-                        fillers.Add(ft);
+                        this.drawingOutputArgs.Fillers.Add(f, ft);
                         fillersDict.Add(f.Id, ft);
                         break;
 
@@ -96,9 +97,9 @@ namespace Incas.Objects.Components
 
             if (data.EditorView is null || data.EditorView.Controls is null || data.EditorView.Controls.Count == 0)
             {
-                foreach (IFillerBase ff in fillers)
+                foreach (KeyValuePair<Field, IFillerBase> ff in this.drawingOutputArgs.Fillers)
                 {
-                    root.Children.Add((UIElement)ff);
+                    root.Children.Add((UIElement)ff.Value);
                 }
             }
             else
@@ -108,7 +109,6 @@ namespace Incas.Objects.Components
                     this.DrawControl(control, root, fillersDict);
                 }
             }
-            drawingOutputArgs.Fillers = fillers;
             drawingOutputArgs.ServiceFiller = serviceFiller;
             return drawingOutputArgs;
         }

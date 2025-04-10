@@ -24,6 +24,7 @@ using System.Windows.Media;
 using Xceed.Wpf.Toolkit;
 using static Incas.Objects.Interfaces.IFillerBase;
 using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
+using static IncasEngine.ObjectiveEngine.Models.State;
 
 namespace Incas.Objects.Views.Controls
 {
@@ -398,6 +399,20 @@ namespace Incas.Objects.Views.Controls
             if (selector.ShowDialog("Копирование значений"))
             {
                 this.vm.CopyValueToAllRows(selector.GetTargetColumnName(), selector.OnlyEmptyOnes);
+            }
+        }
+
+        public void ApplyState(State state)
+        {
+            MemberState source = state.Settings[this.Field.Id];
+            if (source.EditorVisibility)
+            {
+                this.Visibility = Visibility.Visible;
+                this.IsEnabled = source.IsEnabled;
+            }
+            else
+            {
+                this.Visibility = Visibility.Collapsed;
             }
         }
     }

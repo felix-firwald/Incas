@@ -24,10 +24,6 @@ namespace Incas.Objects.Converters
             { FieldType.Integer, new(new() {R=245, G=166, B=35}) },
             { FieldType.Boolean, new(new() {R=245, G=166, B=35}) },
 
-            { FieldType.LocalConstant, new(new() {R=255, G=0, B=51}) },
-            { FieldType.GlobalConstant, new(new() {R=255, G=0, B=51}) },
-            { FieldType.HiddenField, new(new() {R=255, G=0, B=51}) },
-
             { FieldType.Object, new(new() {R=139, G=0, B=255}) },
             { FieldType.Table, new(new() {R=139, G=0, B=255}) }
         };
@@ -53,11 +49,6 @@ namespace Incas.Objects.Converters
                     case FieldType.Integer:
                     case FieldType.Float:
                         return new SolidColorBrush(Color.FromRgb(132, 189, 253));
-
-                    case FieldType.LocalConstant:
-                    case FieldType.GlobalConstant:
-                    case FieldType.HiddenField:
-                        return new SolidColorBrush(Color.FromRgb(255, 0, 51));
 
                     case FieldType.Object:
 #if E_BUSINESS

@@ -13,10 +13,10 @@
             </Grid.ColumnDefinitions>
             <Border Grid.ColumnSpan="3" Name="Border"
               BorderBrush="{StaticResource Focus}" 
-              CornerRadius="8" BorderThickness="1" UseLayoutRounding="True"
+              CornerRadius="2" BorderThickness="1" UseLayoutRounding="True"
               Background="{StaticResource Black}" />
             
-            <Border Grid.Column="2" Margin="1" BorderBrush="#444" Name="ButtonBorder" CornerRadius="8" BorderThickness="0"  Background="{StaticResource Black}" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border Grid.Column="2" Margin="1" BorderBrush="#444" Name="ButtonBorder" CornerRadius="2" BorderThickness="0"  Background="{StaticResource Black}" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Path Name="Arrow" Data="m -6.354 -2.354 a 0.5 0.5 0 0 1 0.708 0 l 5.646 5.647 l 5.646 -5.647 a 0.5 0.5 0 0 1 0.708 0.708 l -6 6 a 0.5 0.5 0 0 1 -0.708 0 l -6 -6 a 0.5 0.5 0 0 1 0 -0.708" HorizontalAlignment="Center" Fill="{DynamicResource Area}" VerticalAlignment="Center" Margin="0,4,0,0">
                     <Path.RenderTransform>
                         <RotateTransform Angle="0" x:Name="ArrowRotate"/>
@@ -122,13 +122,13 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                    <Border x:Name="Border" Padding="7,3,4,3" MinHeight="20" CornerRadius="8" BorderThickness="0" BorderBrush="{StaticResource Area}" Background="{StaticResource Black}">
+                    <Border x:Name="Border" Padding="7,4,4,4" MinHeight="20" CornerRadius="2" BorderThickness="0" BorderBrush="{StaticResource Area}" Background="{StaticResource Black}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
-                            <ContentPresenter/>
+                            <ContentPresenter VerticalAlignment="Center"/>
                             <Path x:Name="Pointer" Grid.Column="1" Margin="2,2,2,4" Fill="{StaticResource Success}" Visibility="Hidden" Data="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
@@ -168,6 +168,7 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
+        <Setter Property="MinWidth" Value="80"/>
         <Setter Property="Margin" Value="5,5,5,5"/>
         <Setter Property="Padding" Value="10 3"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -207,7 +208,7 @@
                             <Grid Name="DropDown" SnapsToDevicePixels="True"
                                 MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
                                 MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
-                                <Border Name="DropDownBorder" Background="{StaticResource Black}" Margin="0, 1, 0, 0" CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource LightBlack}">
+                                <Border Name="DropDownBorder" Background="{StaticResource Black}" Margin="0, 1, 0, 0" CornerRadius="2" BorderThickness="1" BorderBrush="{StaticResource LightBlack}">
                                     <!--<Border.Effect>
                                         <DropShadowEffect Color="#1d1d1f" BlurRadius="2" ShadowDepth="5" Opacity="0.5"/>
                                     </Border.Effect>-->

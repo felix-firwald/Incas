@@ -38,17 +38,21 @@ namespace Incas.Objects.ViewModels
         {
             this.Mode = ClassMode.Usual;
             this.Source = source;
-            this.SourceData = this.Source.GetClassData();
+            this.SourceData = this.Source.GetClassData();         
+            this.SetCommands();
+            this.ViewControls = new();
+            this.AvailableComponents = new(ProgramState.CurrentWorkspace.CurrentGroup.GetAvailableComponents());
+            this.SelectedComponent = this.Source.Component;
+            this.SetMembers();
+            this.Fields.CollectionChanged += this.Fields_CollectionChanged;
+        }
+        private void SetMembers()
+        {
             this.Fields = new();
             foreach (Field f in this.SourceData.Fields)
             {
                 this.AddField(f);
             }
-            this.Fields.CollectionChanged += this.Fields_CollectionChanged;
-            this.SetCommands();
-            this.ViewControls = new();
-            this.AvailableComponents = new(ProgramState.CurrentWorkspace.CurrentGroup.GetAvailableComponents());
-            this.SelectedComponent = this.Source.Component;
             this.Methods = new();
             if (this.SourceData.Methods is not null)
             {
@@ -63,6 +67,14 @@ namespace Incas.Objects.ViewModels
                 foreach (Table table in this.SourceData.Tables)
                 {
                     this.AddTable(table);
+                }
+            }
+            this.States = new();
+            if (this.SourceData.States is not null)
+            {
+                foreach (State state in this.SourceData.States)
+                {
+                    this.AddState(state);
                 }
             }
             if (this.SourceData.EditorView is not null)
@@ -103,6 +115,18 @@ namespace Incas.Objects.ViewModels
             this.Methods.Add(vm);
         }
 
+        public void AddState(State m)
+        {
+            if (m.Settings is null)
+            {
+                m.Settings = new();
+            }
+            StateViewModel vm = new(m, this);
+            //vm.OnOpenMethodRequested += this.DoOpenDetails;
+            //vm.OnRemoveRequested += this.DoRemoveMethod;
+            this.States.Add(vm);
+        }
+
         private void DoRemoveMethod(MethodViewModel field)
         {
             this.Methods.Remove(field);
@@ -119,16 +143,12 @@ namespace Incas.Objects.ViewModels
             this.Mode = ClassMode.Service;
             this.Source = source;
             this.SourceData = this.Source.GetClassData();
-            this.Fields = new();
-            foreach (Field f in this.SourceData.Fields)
-            {
-                this.Fields.Add(new(f, this));
-            }
-            this.ViewControls = new();
-            this.Fields.CollectionChanged += this.Fields_CollectionChanged;
+            this.ViewControls = new();          
             this.SetCommands();
             this.AvailableComponents = new([this.Source.Component]);
             this.SelectedComponent = this.Source.Component;
+            this.SetMembers();
+            this.Fields.CollectionChanged += this.Fields_CollectionChanged;
         }
 #endif
         #region Commands
@@ -380,7 +400,52 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.Tables));
             }
         }
-        
+        private ObservableCollection<StateViewModel> states;
+        public ObservableCollection<StateViewModel> States
+        {
+            get
+            {
+                return this.states;
+            }
+            set
+            {
+                this.states = value;
+                this.OnPropertyChanged(nameof(this.States));
+            }
+        }
+        public ObservableCollection<IClassMemberViewModel> Members
+        {
+            get
+            {
+                ObservableCollection<IClassMemberViewModel> result = new();
+                foreach (IClassMemberViewModel member in this.Fields)
+                {
+                    result.Add(member);
+                }
+                foreach (IClassMemberViewModel member in this.Methods)
+                {
+                    result.Add(member);
+                }
+                foreach (IClassMemberViewModel member in this.Tables)
+                {
+                    result.Add(member);
+                }
+                return result;
+            }
+        }
+        private StateViewModel selectedState;
+        public StateViewModel SelectedState
+        {
+            get
+            {
+                return this.selectedState;
+            }
+            set
+            {
+                this.selectedState = value;
+                this.OnPropertyChanged(nameof(this.SelectedState));
+            }
+        }
         private MethodViewModel selectedMethod;
         public MethodViewModel SelectedMethod
         {
@@ -556,10 +621,7 @@ namespace Incas.Objects.ViewModels
 #if E_BUSINESS
             FieldType.Structure,
 #endif
-            FieldType.Table,
-            FieldType.LocalConstant,
-            FieldType.GlobalConstant, 
-            FieldType.HiddenField,           
+            FieldType.Table,         
         };
         public List<FieldType> FieldTypes
         {
@@ -586,6 +648,20 @@ namespace Incas.Objects.ViewModels
                 {
                     this.SourceData.Methods.Add(method.Source);
                 }
+            }
+            this.SourceData.Tables = new();
+            foreach (TableViewModel table in this.Tables)
+            {
+                if (table.BelongsThisClass)
+                {
+                    this.SourceData.Tables.Add(table.Source);
+                }
+            }
+            this.SourceData.States = new();
+            foreach (StateViewModel state in this.States)
+            {
+                state.Save();
+                this.SourceData.States.Add(state.Source);               
             }
             this.Source.SetClassData(this.SourceData);
         }

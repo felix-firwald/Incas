@@ -22,25 +22,15 @@ namespace Incas.Objects.AutoUI
         [Description("Описание поля (для форм)")]
         public string Description { get; set; }
 
-        [Description("Обязательно для заполнения")]
-        public bool NotNull { get; set; }
-
-        [Description("Только чтение")]
-        public bool ReadOnly { get; set; }
-
         #endregion
 
         #region Functionality
         protected void GetBaseData()
         {
-            this.NotNull = this.Source.NotNull;
-            this.ReadOnly = this.Source.ReadOnly;
             this.Description = this.Source.Description;
         }
         protected void SaveBaseData()
         {
-            this.Source.NotNull = this.NotNull;
-            this.Source.ReadOnly = this.ReadOnly;
             this.Source.Description = this.Description;
         }
         #endregion

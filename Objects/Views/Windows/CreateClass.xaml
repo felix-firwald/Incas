@@ -17,6 +17,7 @@
             <local1:ViewControlTypeToVisibleNameConverter x:Key="ViewControlTypeToVisibleNameConverter"/>
             <local1:ViewControlTypeToIconConverter x:Key="ViewControlTypeToIconConverter"/>
             <local1:ViewControlTypeToColorConverter x:Key="ViewControlTypeToColorConverter"/>
+            <local1:MemberTypeToIconConverter x:Key="MemberTypeToIconConverter"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Grid.ColumnSpan="2">
@@ -465,6 +466,145 @@
                             </Grid>
                         </TabItem>
                     </TabControl>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Состояния" BorderBrush="{StaticResource LightPurple}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="250" />
+                        <ColumnDefinition Width="5*" MaxWidth="850"/>
+                    </Grid.ColumnDefinitions>
+                    <Border CornerRadius="8" Margin="5,5,0,5" Background="{DynamicResource Black}" Grid.Row="1">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <StackPanel >
+                                <!--Basic Options-->
+                                <Border Style="{StaticResource ToolBorder}">
+                                    <StackPanel>
+                                        <Grid Margin="5,5,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Path Fill="{DynamicResource Yellow}" Stretch="Uniform" Width="14" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Data="M184.62-160q-27.62 0-46.12-18.5Q120-197 120-224.62v-510.76q0-27.62 18.5-46.12Q157-800 184.62-800h183.07q27.62 0 46.12 18.5 18.5 18.5 18.5 46.12v510.76q0 27.62-18.5 46.12-18.5 18.5-46.12 18.5H184.62Zm407.69 0q-27.62 0-46.12-18.5-18.5-18.5-18.5-46.12v-510.76q0-27.62 18.5-46.12 18.5-18.5 46.12-18.5h183.07q27.62 0 46.12 18.5Q840-763 840-735.38v510.76q0 27.62-18.5 46.12Q803-160 775.38-160H592.31Zm-407.69-40h183.07q10.77 0 17.69-6.92 6.93-6.93 6.93-17.7v-510.76q0-10.77-6.93-17.7-6.92-6.92-17.69-6.92H184.62q-10.77 0-17.7 6.92-6.92 6.93-6.92 17.7v510.76q0 10.77 6.92 17.7 6.93 6.92 17.7 6.92Zm407.69 0h183.07q10.77 0 17.7-6.92 6.92-6.93 6.92-17.7v-510.76q0-10.77-6.92-17.7-6.93-6.92-17.7-6.92H592.31q-10.77 0-17.69 6.92-6.93 6.93-6.93 17.7v510.76q0 10.77 6.93 17.7 6.92 6.92 17.69 6.92ZM335.38-404.62q0-8.53-5.73-14.26-5.73-5.74-14.27-5.74h-80q-8.53 0-14.26 5.74-5.74 5.73-5.74 14.26 0 8.54 5.74 14.27 5.73 5.73 14.26 5.73h80q8.54 0 14.27-5.73t5.73-14.27Zm409.24 0q0-8.53-5.74-14.26-5.73-5.74-14.26-5.74h-80.77q-8.54 0-13.89 5.74-5.34 5.73-5.34 14.26 0 8.54 5.73 14.27t14.27 5.73h80q8.53 0 14.26-5.73 5.74-5.73 5.74-14.27Zm-409.24-112.3q0-8.54-5.73-14.27t-14.27-5.73h-80q-8.53 0-14.26 5.73-5.74 5.73-5.74 14.27t5.74 14.27q5.73 5.73 14.26 5.73h80q8.54 0 14.27-5.73t5.73-14.27Zm409.24 0q0-8.54-5.74-14.27-5.73-5.73-14.26-5.73h-80.77q-8.54 0-13.89 5.73-5.34 5.73-5.34 14.27t5.73 14.27q5.73 5.73 14.27 5.73h80q8.53 0 14.26-5.73 5.74-5.73 5.74-14.27ZM335.38-630q0-8.54-5.73-14.27T315.38-650h-80q-8.53 0-14.26 5.73-5.74 5.73-5.74 14.27t5.74 14.27q5.73 5.73 14.26 5.73h80q8.54 0 14.27-5.73t5.73-14.27Zm409.24 0q0-8.54-5.74-14.27-5.73-5.73-14.26-5.73h-80.77q-8.54 0-13.89 5.73-5.34 5.73-5.34 14.27t5.73 14.27q5.73 5.73 14.27 5.73h80q8.53 0 14.26-5.73 5.74-5.73 5.74-14.27Zm-560 430H160h232.31-207.69Zm407.69 0h-24.62H800 592.31Z"/>
+
+                                            <Label Content="Машина состояний:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                                        </Grid>
+                                        <WrapPanel>
+                                            <Button Style="{StaticResource ButtonRectangle}" ToolTip="Добавить новое состояние для объектов этого класса" Click="AddStateClick" HorizontalAlignment="Left" Grid.Column="2" >
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M8.004,19.3885V9.6135a1.5425,1.5425,0,0,1,.475-1.141A1.573,1.573,0,0,1,9.6252,8.004h9.7633A1.62,1.62,0,0,1,21.004,9.62v6.29a1.5674,1.5674,0,0,1-.1308.6323,1.6576,1.6576,0,0,1-.348.5177L17.06,20.5252a1.6576,1.6576,0,0,1-.5177.348,1.5674,1.5674,0,0,1-.6323.1308H9.62A1.62,1.62,0,0,1,8.004,19.3885ZM3.029,6.6a1.5057,1.5057,0,0,1,.2567-1.2127,1.6084,1.6084,0,0,1,1.06-.6643L13.9655,3.029a1.5057,1.5057,0,0,1,1.2127.2567,1.61,1.61,0,0,1,.6643,1.06L16.054,5.62H9.62a4.0118,4.0118,0,0,0-4,4V17.4a1.6446,1.6446,0,0,1-.5818-.475,1.62,1.62,0,0,1-.3145-.7057ZM14.004,15.004v2.5a.5.5,0,1,0,1,0v-2.5h2.5a.5.5,0,1,0,0-1h-2.5v-2.5a.5.5,0,1,0-1,0v2.5h-2.5a.5.5,0,1,0,0,1Z"/>
+                                                    <Label Content="Добавить состояние" Foreground="White"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Style="{StaticResource ButtonRectangle}" ToolTip="Удалить выбранное состояние для объектов этого класса"  HorizontalAlignment="Center" >
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Path Fill="{StaticResource Buttons.Red}" VerticalAlignment="Center" Stretch="Uniform" Data="M13.5068,14.4591l-5.2463,5.246a.5021.5021,0,0,1-.3442.15.4665.4665,0,0,1-.3633-.15.4716.4716,0,0,1,0-.7075l5.246-5.2462L7.553,8.5051a.503.503,0,0,1-.15-.3442.4662.4662,0,0,1,.15-.3633.4716.4716,0,0,1,.7075,0l5.2463,5.246,5.2462-5.246a.5024.5024,0,0,1,.3443-.15.4662.4662,0,0,1,.3632.15.4714.4714,0,0,1,0,.7075l-5.246,5.2463,5.246,5.2462a.5024.5024,0,0,1,.15.3443.4662.4662,0,0,1-.15.3632.4714.4714,0,0,1-.7075,0Z"/>
+                                                    <Label Content="Удалить состояние" Foreground="White"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </WrapPanel>
+                                        <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding States}" SelectedItem="{Binding SelectedState}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Path Fill="{DynamicResource Buttons.Green}" Stretch="Uniform" Width="14" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Data="M620-181.54V-260h-95.38q-26.85 0-45.74-18.88Q460-297.77 460-324.62V-660H340v78.46q0 17.62-11.96 29.58Q316.08-540 298.46-540H141.54q-17.62 0-29.58-11.96Q100-563.92 100-581.54v-196.92q0-17.62 11.96-29.58Q123.92-820 141.54-820h156.92q17.62 0 29.58 11.96Q340-796.08 340-778.46V-700h280v-78.46q0-17.62 11.96-29.58Q643.92-820 661.54-820h156.92q17.62 0 29.58 11.96Q860-796.08 860-778.46v196.92q0 17.62-11.96 29.58Q836.08-540 818.46-540H661.54q-17.62 0-29.58-11.96Q620-563.92 620-581.54V-660H500v335.38q0 10.77 6.92 17.7 6.93 6.92 17.7 6.92H620v-78.46q0-17.62 11.96-29.58Q643.92-420 661.54-420h156.92q17.62 0 29.58 11.96Q860-396.08 860-378.46v196.92q0 17.62-11.96 29.58Q836.08-140 818.46-140H661.54q-17.62 0-29.58-11.96Q620-163.92 620-181.54Z"/>
+                                                        <Label Foreground="White" Content="{Binding Name}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        
+                                    </StackPanel>
+                                </Border>
+                                <Border Style="{StaticResource ToolBorder}">
+                                    <StackPanel>
+                                        <Grid Margin="5,5,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Path Fill="{DynamicResource Yellow}" Stretch="Uniform" Width="14" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,2,0" Data="M620-181.54V-260h-95.38q-26.85 0-45.74-18.88Q460-297.77 460-324.62V-660H340v78.46q0 17.62-11.96 29.58Q316.08-540 298.46-540H141.54q-17.62 0-29.58-11.96Q100-563.92 100-581.54v-196.92q0-17.62 11.96-29.58Q123.92-820 141.54-820h156.92q17.62 0 29.58 11.96Q340-796.08 340-778.46V-700h280v-78.46q0-17.62 11.96-29.58Q643.92-820 661.54-820h156.92q17.62 0 29.58 11.96Q860-796.08 860-778.46v196.92q0 17.62-11.96 29.58Q836.08-540 818.46-540H661.54q-17.62 0-29.58-11.96Q620-563.92 620-581.54V-660H500v335.38q0 10.77 6.92 17.7 6.93 6.92 17.7 6.92H620v-78.46q0-17.62 11.96-29.58Q643.92-420 661.54-420h156.92q17.62 0 29.58 11.96Q860-396.08 860-378.46v196.92q0 17.62-11.96 29.58Q836.08-140 818.46-140H661.54q-17.62 0-29.58-11.96Q620-163.92 620-181.54Z"/>
+
+                                            <Label Content="Выбранное состояние:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
+                                        </Grid>
+
+                                        <TextBox Style="{StaticResource TextBoxMain}" Tag="Наименование состояния" Text="{Binding SelectedState.Name}"/>
+
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                    <DataGrid Style="{StaticResource DataGridMain}" Margin="10" ItemsSource="{Binding SelectedState.Members}" VirtualizingPanel.IsVirtualizing="True" EnableRowVirtualization="True" EnableColumnVirtualization="True" AutoGenerateColumns="False" Grid.Column="1">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Член класса" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Height="15" Width="15" VerticalAlignment="Center" Data="{Binding ClassMemberType, Converter={StaticResource MemberTypeToIconConverter}}"/>
+                                            <TextBlock Foreground="White" Text="{Binding Name}" TextWrapping="WrapWithOverflow" FontWeight="Bold" FontSize="10" TextTrimming="CharacterEllipsis" Margin="5,0,0,0">
+                                                <TextBlock.ContextMenu>
+                                                    <ContextMenu>
+                                                       
+                                                    </ContextMenu>
+                                                </TextBlock.ContextMenu>
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Видимость в редакторе" MaxWidth="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding EditorVisibility, Mode=TwoWay}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsChecked="{Binding EditorVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Видимость в карточке" MaxWidth="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding CardVisibility, Mode=TwoWay}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsChecked="{Binding CardVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Доступность" MaxWidth="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding IsEnabled, Mode=TwoWay}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Обязательность" MaxWidth="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding IsRequired, Mode=TwoWay}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsEnabled="{Binding CanBeRequired}" IsChecked="{Binding IsRequired, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
                 </Grid>
             </TabItem>

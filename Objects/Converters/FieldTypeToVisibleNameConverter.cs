@@ -34,12 +34,6 @@ namespace Incas.Objects.Converters
                         return "Дробное число";
                     case FieldType.Boolean:
                         return "Логический флаг";
-                    case FieldType.LocalConstant:
-                        return "Константа";
-                    case FieldType.GlobalConstant:
-                        return "Глобальная константа";
-                    case FieldType.HiddenField:
-                        return "Скрытое поле";
                     case FieldType.Object:
                         return "Объект";
 #if E_BUSINESS

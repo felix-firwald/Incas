@@ -2,6 +2,7 @@
 using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Windows;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -13,7 +14,7 @@ using System.Windows.Input;
 
 namespace Incas.Objects.ViewModels
 {
-    public class FieldViewModel : BaseViewModel
+    public class FieldViewModel : BaseViewModel, IClassMemberViewModel
     {
         public Field Source;
         public ClassViewModel Owner;
@@ -136,18 +137,6 @@ namespace Incas.Objects.ViewModels
                 case FieldType.GlobalEnumeration:
                     GlobalEnumerationFieldSettings ge = new(this.Source);
                     ge.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
-                    break;
-                case FieldType.LocalConstant:
-                    ConstantFieldSettings cf = new(this.Source);
-                    cf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
-                    break;
-                case FieldType.GlobalConstant:
-                    GlobalConstantFieldSettings gc = new(this.Source);
-                    gc.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
-                    break;
-                case FieldType.HiddenField:
-                    ConstantFieldSettings hf = new(this.Source);
-                    hf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Red);
                     break;
                 case FieldType.Date:
                     DateFieldSettings dt = new(this.Source);
@@ -323,30 +312,24 @@ namespace Incas.Objects.ViewModels
         {
             get
             {
-                switch (this.Source.Type)
-                {
-                    case FieldType.LocalConstant:
-                    case FieldType.GlobalConstant:
-                    case FieldType.HiddenField:
-                        return false;
-                    default:
-                        return true;
-                }
+                return true;
             }
         }
         public bool EventBindingEnabled
         {
             get
             {
-                switch (this.Source.Type)
-                {
-                    case FieldType.LocalConstant:
-                    case FieldType.GlobalConstant:
-                        return false;
-                    default:
-                        return true;
-                }
+                return true;
             }
         }
+        public Guid Id
+        {
+            get
+            {
+                return this.Source.Id;
+            }
+        }
+
+        public IClassMemberViewModel.MemberType ClassMemberType => IClassMemberViewModel.MemberType.Field;
     }
 }

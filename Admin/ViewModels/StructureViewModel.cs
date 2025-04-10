@@ -57,10 +57,7 @@ namespace Incas.Admin.ViewModels
             FieldType.Float,
             FieldType.Date,
             FieldType.LocalEnumeration,
-            FieldType.GlobalEnumeration,        
-            FieldType.LocalConstant,
-            FieldType.GlobalConstant,
-            FieldType.HiddenField,
+            FieldType.GlobalEnumeration,
         };
         public List<FieldType> FieldTypes
         {

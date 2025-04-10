@@ -48,10 +48,6 @@ namespace Incas.Objects.AutoUI
         #region Functionality
         public override void Validate()
         {
-            if (this.Source.IsUnique && this.NotNull == false)
-            {
-                throw new SimpleFormFailed("Поле не может быть пустым, поскольку оно помечено как уникальное.");
-            }
             if (this.MinLength < 0 || this.MaxLength < 0)
             {
                 throw new SimpleFormFailed("Длина поля не может быть меньше нуля.");

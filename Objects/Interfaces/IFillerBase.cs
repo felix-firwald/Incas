@@ -65,5 +65,10 @@ namespace Incas.Objects.Interfaces
         /// Marks filler in null
         /// </summary>
         public void MarkAsValidated();
+
+        /// <summary>
+        /// Applies state of filler by State of object
+        /// </summary>
+        public void ApplyState(State state);
     }
 }
