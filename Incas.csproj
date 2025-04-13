@@ -22,7 +22,7 @@
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>True</UseWindowsForms>
+    <UseWindowsForms>False</UseWindowsForms>
     <UseWPF>True</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
@@ -71,6 +71,7 @@
       <NoWarn>1701;1702;CA1416;NU1701;SYSLIB0003</NoWarn>
       <WarningLevel>9999</WarningLevel>
       <DefineConstants>E_FREE</DefineConstants>
+      <Optimize>True</Optimize>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Community|AnyCPU'">
       <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -78,6 +79,7 @@
       <NoWarn>1701;1702;CA1416;NU1701;SYSLIB0003</NoWarn>
       <WarningLevel>9999</WarningLevel>
       <DefineConstants>E_COMMUNITY</DefineConstants>
+      <Optimize>True</Optimize>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Extended|AnyCPU'">
       <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -85,6 +87,7 @@
       <NoWarn>1701;1702;CA1416;NU1701;SYSLIB0003</NoWarn>
       <WarningLevel>9999</WarningLevel>
       <DefineConstants>E_EXTENDED</DefineConstants>
+      <Optimize>True</Optimize>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BusinessPro|AnyCPU'">
       <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -92,6 +95,7 @@
       <NoWarn>1701;1702;CA1416;NU1701;SYSLIB0003</NoWarn>
       <WarningLevel>9999</WarningLevel>
       <DefineConstants>E_BUSINESS</DefineConstants>
+      <Optimize>True</Optimize>
     </PropertyGroup>
   
   
@@ -370,6 +374,10 @@
     <Folder Include="Miniservices\Tasks\Views\Controls\" />
     <Folder Include="Miniservices\Tasks\Views\Windows\" />
     <Folder Include="Objects.Documents\Views\Controls\" />
+    <Folder Include="Objects.Events\AutoUI\" />
+    <Folder Include="Objects.Events\Converters\" />
+    <Folder Include="Objects.Events\Views\Controls\" />
+    <Folder Include="Objects.Events\Views\Windows\" />
     <Folder Include="Objects.Processes\Views\Controls\" />
     <Folder Include="Objects.Processes\Views\Windows\" />
     <Folder Include="Objects.Processes\AutoUI\" />

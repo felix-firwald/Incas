@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
+using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
 using Org.BouncyCastle.Asn1.Mozilla;
@@ -130,6 +131,30 @@ namespace Incas.Admin.ViewModels
             {
                 this.Source.Component = value;
                 this.OnPropertyChanged(nameof(this.SelectedComponent));
+            }
+        }
+        public List<ClassType> ClassTypes
+        {
+            get
+            {
+                return [
+                    ClassType.Model,
+                    ClassType.Document,
+                    ClassType.Event,
+                    ClassType.Process
+                ];
+            }
+        }
+        public ClassType SelectedClassType
+        {
+            get
+            {
+                return this.Source.Type;
+            }
+            set
+            {
+                this.Source.Type = value;
+                this.OnPropertyChanged(nameof(this.SelectedClassType));
             }
         }
         private int currentStep = 1;

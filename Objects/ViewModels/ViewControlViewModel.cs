@@ -124,7 +124,7 @@ namespace Incas.Objects.ViewModels
         }
         public void AddChild(ViewControlViewModel vc)
         {
-            if (this.Type is ControlType.FieldFiller)
+            if (this.Type is ControlType.FieldFiller or ControlType.Button or ControlType.Table)
             {
                 return;
             }
@@ -194,6 +194,36 @@ namespace Incas.Objects.ViewModels
                     vm.RemoveField(field);
                 }
             }            
+        }
+        public void RemoveMethod(Guid method)
+        {
+            if (this.Children is not null)
+            {
+                foreach (ViewControlViewModel vm in this.Children)
+                {
+                    if (vm.Source.RunMethod == method)
+                    {
+                        this.children.Remove(vm);
+                        return;
+                    }
+                    vm.RemoveField(method);
+                }
+            }
+        }
+        public void RemoveTable(Guid table)
+        {
+            if (this.Children is not null)
+            {
+                foreach (ViewControlViewModel vm in this.Children)
+                {
+                    if (vm.Source.Table == table)
+                    {
+                        this.children.Remove(vm);
+                        return;
+                    }
+                    vm.RemoveField(table);
+                }
+            }
         }
         public void MoveDown()
         {

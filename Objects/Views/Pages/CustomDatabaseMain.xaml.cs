@@ -36,8 +36,8 @@ namespace Incas.Objects.Views.Pages
             {
                 SelectedCategory = component
             };
-            this.CategoriesList.IsEnabled = false;
-            this.CategoriesList.Visibility = System.Windows.Visibility.Collapsed;
+            //this.CategoriesList.IsEnabled = false;
+            //this.CategoriesList.Visibility = System.Windows.Visibility.Collapsed;
             this.vm.OnClassSelected += this.OnClassSelected;
             this.DataContext = this.vm;
             

@@ -68,6 +68,8 @@ namespace Incas.Objects.ViewModels
                     this.classData = this.selectedClass.GetClassData();
                     this.OnPropertyChanged(nameof(this.ClassData));
                     this.OnPropertyChanged(nameof(this.DescriptionVisibility));
+                    this.OnPropertyChanged(nameof(this.AdditionalTablesVisibility));
+                    this.OnPropertyChanged(nameof(this.Tables));
                     this.OnClassSelected?.Invoke(value);
                 }              
             }
@@ -81,6 +83,28 @@ namespace Incas.Objects.ViewModels
                     return Visibility.Collapsed;
                 }
                 return Visibility.Visible;
+            }
+        }
+        public Visibility AdditionalTablesVisibility
+        {
+            get
+            {
+                if (this.SelectedClass is null || this.ClassData.Tables is null || this.ClassData.Tables.Count == 0)
+                {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
+        public List<Table> Tables
+        {
+            get
+            {
+                if (this.ClassData is not null)
+                {
+                    return this.ClassData.Tables;
+                }        
+                return null;
             }
         }
         private IClassData classData;

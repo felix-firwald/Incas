@@ -13,20 +13,6 @@ namespace Incas.Objects.Converters
 {
     public class FieldTypeToColorConverter : IValueConverter
     {
-        public static Dictionary<FieldType, SolidColorBrush> Dictionary = new()
-        {
-            { FieldType.String, new(new() {R=52, G=201, B=36}) },
-            { FieldType.Text, new(new() {R=52, G=201, B=36}) },
-
-            { FieldType.LocalEnumeration, new(new() {R=245, G=166, B=35}) },
-            { FieldType.GlobalEnumeration, new(new() {R=245, G=166, B=35}) },
-            { FieldType.Date, new(new() {R=245, G=166, B=35}) },
-            { FieldType.Integer, new(new() {R=245, G=166, B=35}) },
-            { FieldType.Boolean, new(new() {R=245, G=166, B=35}) },
-
-            { FieldType.Object, new(new() {R=139, G=0, B=255}) },
-            { FieldType.Table, new(new() {R=139, G=0, B=255}) }
-        };
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is FieldType enumValue)

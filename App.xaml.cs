@@ -23,6 +23,7 @@ namespace Incas
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            EngineGlobals.ApplicationLogicType = EngineGlobals.ApplicationType.IncasClient;
             SplashScreen splashScreen = new("Static\\Splash.png");
             splashScreen.Show(false, true);
             EngineGlobals.CheckUMIExists();

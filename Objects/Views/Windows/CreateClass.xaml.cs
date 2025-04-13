@@ -1,30 +1,25 @@
-﻿using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using Incas.Rendering.Components;
+using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine.Classes;
-using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
-using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
-using IncasEngine.Core;
-using IncasEngine.ObjectiveEngine;
-using IncasEngine.Core.ExtensionMethods;
-using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -151,10 +146,6 @@ namespace Incas.Objects.Views.Windows
             DialogsManager.ShowHelp(Help.Components.HelpType.Classes_General);
         }
 
-        private void AddFieldClick(object sender, RoutedEventArgs e)
-        {
-            this.vm.AddField(new());
-        }
         private void CopyFieldsFromAnotherClass(object sender, RoutedEventArgs e)
         {
             ClassSelector cs = new();
@@ -440,19 +431,36 @@ namespace Incas.Objects.Views.Windows
             this.ZoomPanel.FitToBounds();
         }
 
+        private void AddFieldClick(object sender, RoutedEventArgs e)
+        {
+            Field f = new();
+            f.SetId();
+            f.Name = $"Поле_{this.vm.Fields.Count + 1}";            
+            this.vm.AddField(f);
+        }
+
         private void AddMethodClick(object sender, RoutedEventArgs e)
         {
-            this.vm.AddMethod(new());
+            Method m = new();
+            m.SetId();
+            m.Name = $"Метод_{this.vm.Methods.Count + 1}";
+            this.vm.AddMethod(m);
         }
 
         private void AddTableClick(object sender, RoutedEventArgs e)
         {
-            this.vm.AddTable(new());
+            Table t = new();
+            t.SetId();
+            t.Name = $"Таблица_{this.vm.Tables.Count + 1}";
+            this.vm.AddTable(t);
         }
 
         private void AddStateClick(object sender, RoutedEventArgs e)
         {
-            this.vm.AddState(new());
+            State s = new();
+            s.SetId();
+            s.Name = $"Состояние_{this.vm.States.Count + 1}";
+            this.vm.AddState(s);
         }
     }
 }

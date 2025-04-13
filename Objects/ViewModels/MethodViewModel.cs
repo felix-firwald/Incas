@@ -1,4 +1,5 @@
 ﻿using AvaloniaEdit.Document;
+using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Pages;
@@ -58,7 +59,10 @@ namespace Incas.Objects.ViewModels
 
         private void DoRemoveMethod(object obj)
         {
-            this.OnRemoveRequested?.Invoke(this);
+            if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить метод [{this.Name}]? После сохранения это действие отменить нельзя: этот метод будет безвозвратно удален.", "Удалить метод?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
+            {
+                this.OnRemoveRequested?.Invoke(this);
+            }
         }
 
         private void DoOpenMethod(object obj)

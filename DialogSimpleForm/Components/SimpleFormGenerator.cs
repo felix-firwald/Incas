@@ -137,7 +137,7 @@ namespace Incas.DialogSimpleForm.Components
                     break;
             }
             control.Uid = field.Name;
-            if (field.SetMethod.IsPrivate)
+            if (field.SetMethod is null || field.SetMethod.IsPrivate)
             {
                 control.IsEnabled = false;
             }
@@ -392,7 +392,10 @@ namespace Incas.DialogSimpleForm.Components
                                     DialogsManager.ShowExclamationDialog($"Поле \"{descript}\" не заполнено!", "Сохранение прервано");
                                     return false;
                                 }
-                                field.SetValue(this.Result, resultString);
+                                if (field.SetMethod is not null)
+                                {
+                                    field.SetValue(this.Result, resultString);
+                                }                             
                                 break;
                             case "Int32":
                                 field.SetValue(this.Result, ((IntegerUpDown)control).Value);

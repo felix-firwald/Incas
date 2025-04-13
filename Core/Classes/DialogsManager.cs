@@ -88,11 +88,11 @@ namespace Incas.Core.Classes
         }
         public static bool ShowSaveFileDialog(ref string file, string filter)
         {
-            SaveFileDialog saveFileDialog = new()
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new()
             {
                 Filter = filter
             };
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.ShowDialog() == true)
             {
                 file = saveFileDialog.FileName;
                 return true;
@@ -133,12 +133,12 @@ namespace Incas.Core.Classes
         }
         public static bool ShowOpenFileDialog(ref string file, string filter, string root)
         {
-            OpenFileDialog fd = new()
+            Microsoft.Win32.OpenFileDialog fd = new()
             {
                 Filter = filter,
                 InitialDirectory = root
             };
-            if (fd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (fd.ShowDialog() == true)
             {
                 file = fd.FileName;
                 return true;

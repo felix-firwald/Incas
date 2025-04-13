@@ -2,12 +2,10 @@
 using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
 using Incas.Objects.AutoUI;
-using Incas.Objects.Components;
 using Incas.Objects.Interfaces;
 using Incas.Rendering.Components;
 using Incas.Rendering.ViewModels;
 using IncasEngine.ObjectiveEngine.Classes;
-using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Models;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
@@ -22,8 +20,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using Xceed.Wpf.Toolkit;
-using static Incas.Objects.Interfaces.IFillerBase;
-using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
 using static IncasEngine.ObjectiveEngine.Models.State;
 
 namespace Incas.Objects.Views.Controls
@@ -34,16 +30,16 @@ namespace Incas.Objects.Views.Controls
     public partial class FieldTableFiller : System.Windows.Controls.UserControl, ITableFiller
     {
         private TableFillerViewModel vm;
-        public Field Field { get; set; }
+        public Table ClassTable { get; set; }
+        public delegate void FillerUpdate(FieldTableFiller filler);
         public event FillerUpdate OnFillerUpdate;
-        public event StringAction OnInsert;
-        public event FillerUpdate OnDatabaseObjectCopyRequested;
-        public FieldTableFiller(Field f)
+        //public event StringAction OnInsert;
+        //public event FillerUpdate OnDatabaseObjectCopyRequested;
+        public FieldTableFiller(Table tab)
         {
             this.InitializeComponent();
-            this.Field = f;
-            this.vm = new TableFillerViewModel(f);
-
+            this.ClassTable = tab;
+            this.vm = new TableFillerViewModel(tab);
             this.vm.AddRow();
             this.DataContext = this.vm;
         }
@@ -89,21 +85,21 @@ namespace Incas.Objects.Views.Controls
         }
         public void CheckData()
         {
-            foreach (TableFieldColumnData tf in this.vm.TableDefinition.Columns)
+            foreach (Field tf in this.vm.TableDefinition.Fields)
             {
-                if (tf.NotNull == true)
-                {
-                    int row = 1;
-                    foreach (DataRow dr in this.vm.Grid.Rows)
-                    {
-                        if (string.IsNullOrWhiteSpace(dr[tf.Name].ToString()))
-                        {
-                            this.MarkAsNotValidated();
-                            throw new NotNullFailed($"Колонка \"{tf.VisibleName}\" у таблицы \"{this.vm.TableName}\" является обязательной, однако в ряду под номером {row} значение отсутствует.");
-                        }
-                        row++;
-                    }
-                }
+                //if (tf.NotNull == true)
+                //{
+                //    int row = 1;
+                //    foreach (DataRow dr in this.vm.Grid.Rows)
+                //    {
+                //        if (string.IsNullOrWhiteSpace(dr[tf.Name].ToString()))
+                //        {
+                //            this.MarkAsNotValidated();
+                //            throw new NotNullFailed($"Колонка \"{tf.VisibleName}\" у таблицы \"{this.vm.TableName}\" является обязательной, однако в ряду под номером {row} значение отсутствует.");
+                //        }
+                //        row++;
+                //    }
+                //}
             }
         }
         /// <summary>
@@ -119,7 +115,7 @@ namespace Incas.Objects.Views.Controls
         {
             SGeneratedTag result = new()
             {
-                tag = this.Field.Id,
+                tag = this.ClassTable.Id,
                 value = this.GetData()
             };
             return result;
@@ -160,11 +156,11 @@ namespace Incas.Objects.Views.Controls
 
         private void ColumnGenerating(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
-            foreach (TableFieldColumnData col in this.vm.TableDefinition.Columns)
+            foreach (Field col in this.vm.TableDefinition.Fields)
             {
                 if (col.Name == e.Column.Header.ToString() || col.Id.ToString() == e.Column.Header.ToString())
                 {
-                    switch (col.FieldType)
+                    switch (col.Type)
                     {
                         case FieldType.String:
                         case FieldType.Text:
@@ -185,9 +181,9 @@ namespace Incas.Objects.Views.Controls
 
                                 EditingElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.ComboboxGridStyle)
                             };
-                            dgc.ItemsSource = col.FieldType == FieldType.LocalEnumeration
-                                ? JsonConvert.DeserializeObject<List<string>>(col.Value)
-                                : (System.Collections.IEnumerable)ProgramState.GetEnumeration(Guid.Parse(col.Value));
+                            dgc.ItemsSource = col.Type == FieldType.LocalEnumeration
+                                ? col.GetLocalEnumeration()
+                                : (System.Collections.IEnumerable)ProgramState.GetEnumeration(col.GetGlobalEnumeration().TargetId);
                             e.Column = dgc;
                             break;
                         case FieldType.Integer:
@@ -215,7 +211,7 @@ namespace Incas.Objects.Views.Controls
                 }
             }
         }
-        private void GenerateTemplateColumnInteger(TableFieldColumnData col, DataGridAutoGeneratingColumnEventArgs e)
+        private void GenerateTemplateColumnInteger(Field col, DataGridAutoGeneratingColumnEventArgs e)
         {
             DataGridTemplateColumn templateInteger = new();
             templateInteger.Header = col.VisibleName;
@@ -240,7 +236,7 @@ namespace Incas.Objects.Views.Controls
             templateInteger.CellEditingTemplate = cellEdit;
             e.Column = templateInteger;
         }
-        private void GenerateTemplateColumnDateTime(TableFieldColumnData col, DataGridAutoGeneratingColumnEventArgs e)
+        private void GenerateTemplateColumnDateTime(Field col, DataGridAutoGeneratingColumnEventArgs e)
         {
             DataGridTemplateColumn templateInteger = new();
             templateInteger.Header = col.VisibleName;
@@ -365,18 +361,18 @@ namespace Incas.Objects.Views.Controls
         }
         private void ObjectCopyRequestClick(object sender, RoutedEventArgs e)
         {
-            this.OnDatabaseObjectCopyRequested?.Invoke(this);
+            //this.OnDatabaseObjectCopyRequested?.Invoke(this);
         }
         private void InsertToOther(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                OnInsert?.Invoke(this.Field.Id, this.GetData());
-            }
-            catch (NotNullFailed)
-            {
-                DialogsManager.ShowExclamationDialog("Поле является обязательным, необходимо сначала присвоить ему значение.", "Переназначение прервано");
-            }
+            //try
+            //{
+            //    OnInsert?.Invoke(this.ClassTable.Id, this.GetData());
+            //}
+            //catch (NotNullFailed)
+            //{
+            //    DialogsManager.ShowExclamationDialog("Поле является обязательным, необходимо сначала присвоить ему значение.", "Переназначение прервано");
+            //}
         }
         private void ColumnHeaderClick(object sender, RoutedEventArgs e)
         {
@@ -386,7 +382,7 @@ namespace Incas.Objects.Views.Controls
 
         private void CopyColumnClick(object sender, RoutedEventArgs e)
         {
-            TableCopyingToColumn tc = new(this.vm.TableDefinition.Columns);
+            TableCopyingToColumn tc = new(this.vm.TableDefinition.Fields);
             if (tc.ShowDialog("Копирование колонки"))
             {
                 this.vm.CopyColumnValuesToAnother(tc.GetSourceColumnName(), tc.GetTargetColumnName());
@@ -395,7 +391,7 @@ namespace Incas.Objects.Views.Controls
 
         private void CopyValueToAllRowsClick(object sender, RoutedEventArgs e)
         {
-            ColumnSelector selector = new(this.vm.TableDefinition.Columns);
+            ColumnSelector selector = new(this.vm.TableDefinition.Fields);
             if (selector.ShowDialog("Копирование значений"))
             {
                 this.vm.CopyValueToAllRows(selector.GetTargetColumnName(), selector.OnlyEmptyOnes);
@@ -404,7 +400,7 @@ namespace Incas.Objects.Views.Controls
 
         public void ApplyState(State state)
         {
-            MemberState source = state.Settings[this.Field.Id];
+            MemberState source = state.Settings[this.ClassTable.Id];
             if (source.EditorVisibility)
             {
                 this.Visibility = Visibility.Visible;

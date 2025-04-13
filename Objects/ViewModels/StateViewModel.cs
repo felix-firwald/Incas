@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Bibliography;
+using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ServiceClasses.Groups.ViewModels;
@@ -24,6 +25,9 @@ namespace Incas.Objects.ViewModels
         /// </summary>
         public State Source { get; set; }
 
+        public delegate void Action(StateViewModel state);
+        public event Action OnRemoveRequested;
+
         public ClassViewModel Owner { get; set; }
 
         public StateViewModel(State source, ClassViewModel owner)
@@ -36,9 +40,17 @@ namespace Incas.Objects.ViewModels
             this.Owner.Tables.CollectionChanged += this.Members_CollectionChanged;
             this.ApplyCollection();
         }
-        private void ApplyCollection()
+
+        private void DoRemoveState(object obj)
         {
-            
+            if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить состояние [{this.Name}]? После сохранения это действие отменить нельзя: это состояние будет безвозвратно удалено (к существующим объектам применится состояние по-умолчанию).", "Удалить состояние?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
+            {
+                this.OnRemoveRequested?.Invoke(this);
+            }
+        }
+
+        private void ApplyCollection()
+        {           
             foreach (IClassMemberViewModel item in this.Owner.Members)
             {                
                 State.MemberState memberState = new();

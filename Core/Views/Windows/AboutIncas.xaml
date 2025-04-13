@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:Incas.Core.Views.Windows"
         mc:Ignorable="d"
         Title="О программе" Height="400" Width="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource WindowBase}" Background="{StaticResource Black}" >
-    <Grid VerticalAlignment="Center">
+    <Grid VerticalAlignment="Center" Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="150"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="285*"/>
         </Grid.RowDefinitions>
-        <Image Height="100" Width="100" Source="/Core/Views/Windows/Logo.png" UseLayoutRounding="False" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" />
+        <Image Height="100" Width="100" Source="/Core/Views/Windows/Logo.png" UseLayoutRounding="False" RenderOptions.BitmapScalingMode="Fant" Stretch="UniformToFill" MouseDown="LogoMouseDown" />
         <TextBlock FontFamily="{StaticResource Rubik}" Foreground="White" Grid.Row="1" HorizontalAlignment="Center" FontSize="20">
             <Run Text="Это"/>
             <Run FontFamily="{StaticResource JetBrains}" Text="INCAS"/>
@@ -20,5 +20,34 @@
         <TextBlock FontFamily="{StaticResource Rubik}" Foreground="White" Grid.Row="2" HorizontalAlignment="Center" FontSize="15">
             <Run x:Name="VersionText" Text="Версия неизвестна, редакция неизвестна"/>
         </TextBlock>
+        <Grid x:Name="SecretMenu" Background="{StaticResource Black}" Grid.RowSpan="4" Visibility="Collapsed">
+            <Border>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock FontFamily="{StaticResource Rubik}" VerticalAlignment="Center" ToolTip="Dirty handjob options" Foreground="White" Grid.Row="2" HorizontalAlignment="Center" FontSize="20">
+                            <Run Text="DHj options"/>
+                        </TextBlock>
+                        <Button Style="{StaticResource ButtonSquare}" VerticalAlignment="Center" ToolTip="Закрыть это меню и вернуться к стандартному виду этого окна" Click="CloseMenu">
+                            <Path Fill="{StaticResource PrimaryMain}" Margin="2" Stretch="Uniform" Data="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5 M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" VerticalAlignment="Center"/>
+                        </Button>
+                    </StackPanel>
+                    
+                    <Rectangle Height="1" Fill="{StaticResource Dark}" Margin="5"/>
+                    <ContentControl Style="{StaticResource BoxWarning}" Content="Внимание! Использование этих опций запрещается лицензионным соглашением и может использоваться только специалистами по внедрению INCAS на предприятие. INCAS оставляет за собой право аннулировать лицензию в случае, если об использовании этого меню станет известно."/>
+                    <UniformGrid Rows="3" Columns="3">
+                        <Button Style="{StaticResource ButtonMain}" Content="Экспорт РП" ToolTip="Экспорт шаблона рабочего пространства" Click="ExportWSClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Экспорт компонента" ToolTip="Выбрать и экспортировать отдельный компонент" Click="ExportComponentClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Импорт компонента" ToolTip="Импортировать в рабочее пространство новый компонент" Click="ImportComponentClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Integrity проверка" ToolTip="Полная проверка классов РП на все виды ошибок. Внимание: это тяжелая операция." Click="IntegrityCheckClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="GlobalFix классов" ToolTip="Запуск функции исправления карты объектов для всех классов РП, включая служебные" Click="MassiveFixOMClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Открыть ObjMap" ToolTip="Открывает выбранную карту объектов для класса" Click="OpenOMClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Миграция V1 -> V2" ToolTip="Автоматизация процесса миграции на 2.0"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="См. LCInfo" ToolTip="Открыть последнее изменение в настройках РП"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="SQL транзакция" ToolTip="Написать и выполнить кастомную транзакцию к service.incas"/>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+            
+        </Grid>
     </Grid>
 </Window>

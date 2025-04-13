@@ -3,13 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Incas.Admin.Views.Windows" xmlns:conv="clr-namespace:Incas.Core.Converters"
+        xmlns:local="clr-namespace:Incas.Admin.Views.Windows" 
+        xmlns:conv="clr-namespace:Incas.Core.Converters"
+        xmlns:conv2="clr-namespace:Incas.Admin.Converters"
         mc:Ignorable="d"
         Title="Новый класс" Height="450" Width="600" ResizeMode="NoResize" Background="{StaticResource Black}" WindowStartupLocation="CenterScreen" Style="{StaticResource WindowBase}">
     <Window.Resources>
         <ResourceDictionary>
+            
             <conv:PathDataToGeometryConverter x:Key="PathDataToGeometryConverter"/>
             <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
+            <conv2:ClassTypeToDescriptionConverter x:Key="ClassTypeToDescriptionConverter"/>
+            <conv2:ClassTypeToVisibleNameConverter x:Key="ClassTypeToVisibleNameConverter"/>
+            <conv2:ClassTypeToIconConverter x:Key="ClassTypeToIconConverter"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -65,7 +71,29 @@
                 </ListBox>
             </TabItem>
             <TabItem Header="Наследование">
+                <ListBox Style="{StaticResource ListBoxMain}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding ClassTypes}" SelectedItem="{Binding SelectedClassType}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Path Grid.RowSpan="2" Fill="White" Stretch="Uniform" Height="20" Width="20" Data="{Binding ., Converter={StaticResource ClassTypeToIconConverter}}"/>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <Label Foreground="White" FontFamily="{StaticResource Rubik}" FontSize="13" FontWeight="Bold" Content="{Binding ., Converter={StaticResource ClassTypeToVisibleNameConverter}}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Row="1" Margin="5,0,5,5" Grid.Column="1" Foreground="White" FontWeight="ExtraLight" FontFamily="{StaticResource Rubik}" Text="{Binding ., Converter={StaticResource ClassTypeToDescriptionConverter}}"/>
 
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </TabItem>
             <TabItem Header="Обобщения">
 

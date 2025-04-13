@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Office2010.Excel;
 using Incas.Core.Classes;
+using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Pages;
 using IncasEngine.Core;
@@ -24,7 +25,7 @@ namespace Incas.Objects.Views.Controls
         private Guid relationObject;
         private bool isNestedObjectShowed = false;
         private ObjectCard card;
-
+        private UIElement placedElement;
         public delegate void FieldDataAction(FieldData data);
         public event FieldDataAction OnFilterRequested;
         public FieldData Data { get; private set; }
@@ -68,6 +69,10 @@ namespace Incas.Objects.Views.Controls
                         this.FieldValue.Text = "(таблица)";
                         this.FilterButton.IsEnabled = false;
                         this.ColorizeField(67, 70, 80);
+                        break;
+                    case FieldType.Date:
+                        this.FieldValue.Text = data.Value.ToString();
+                        this.GenerateDateTimeField();
                         break;
                     case FieldType.Boolean:
                         CheckBox box = new();
@@ -119,8 +124,8 @@ namespace Incas.Objects.Views.Controls
         {
             this.InitializeComponent();
             this.FieldName.Text = name + ":";
-            this.FieldValue.Text = date.ToString("f");
-            this.ColorizeField(74, 243, 170);
+            this.FieldValue.Text = date.ToString();
+            this.GenerateDateTimeField();
             this.FilterButton.Visibility = Visibility.Collapsed;
         }
         public ObjectFieldViewer(string value, byte r, byte g, byte b) // custom
@@ -142,6 +147,48 @@ namespace Incas.Objects.Views.Controls
             this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
             this.FieldValue.MouseDown += this.FieldValue_MouseDown;
             this.FieldValue.ToolTip = "Кликнуть для просмотра объекта";
+        }
+        private void GenerateDateTimeField()
+        {           
+            this.ColorizeField(74, 243, 170);
+            this.FieldValue.Cursor = System.Windows.Input.Cursors.Hand;
+            this.FieldValue.MouseDown += this.FieldValue_MouseDownToDateTime;
+            this.FieldValue.ToolTip = "Кликнуть для просмотра календаря";
+        }
+
+        private void FieldValue_MouseDownToDateTime(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (this.isNestedObjectShowed == false)
+            {
+                this.isNestedObjectShowed = true;
+                try
+                {
+                    Calendar c = new();
+                    DateTime dt = DateTime.Parse(this.FieldValue.Text);
+                    c.SelectedDate = dt;
+                    c.DisplayDate = dt;
+                    c.Style = ResourceStyleManager.FindStyle("CalendarMain");
+                    this.placedElement = c;
+                    this.MainGrid.Children.Add(c);
+                    Grid.SetRow(c, 1);
+                    Grid.SetColumnSpan(c, 3);
+                }
+                catch
+                {
+                    ContentControl cc = new();
+                    cc.Style = ResourceStyleManager.FindStyle("BoxError");
+                    cc.Content = "Не удалось распознать дату.";
+                    this.placedElement = cc;
+                    this.MainGrid.Children.Add(cc);
+                    Grid.SetRow(cc, 1);
+                    Grid.SetColumnSpan(cc, 3);
+                }
+            }
+            else
+            {
+                this.isNestedObjectShowed = false;
+                this.MainGrid.Children.Remove(this.placedElement);
+            }
         }
 
         private void FieldValue_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

@@ -22,6 +22,7 @@ namespace Incas.Objects.Components
             public Dictionary<Field, IFillerBase> Fillers { get; set; }
             public IServiceFieldFiller ServiceFiller { get; set; }
             public Dictionary<Button, Method> Buttons { get; set; }
+            public Dictionary<Table, FieldTableFiller> Tables { get; set; }
         }
         private DrawingOutputArgs drawingOutputArgs = new();
         private IClassData classData;
@@ -34,15 +35,20 @@ namespace Incas.Objects.Components
         {
             ClassDataBase data = new()
             {
-                Fields = [], Methods = []
+                Fields = [], Methods = [], Tables = []
             };
             foreach (FieldViewModel field in cvm.Fields)
             {
                 data.Fields.Add(field.Source);
             }
-            foreach (MethodViewModel field in cvm.Methods)
+            foreach (MethodViewModel method in cvm.Methods)
             {
-                data.Methods.Add(field.Source);
+                data.Methods.Add(method.Source);
+            }
+            foreach (TableViewModel table in cvm.Tables)
+            {
+                table.Save();
+                data.Tables.Add(table.Source);
             }
             data.EditorView = new();
 
@@ -64,9 +70,10 @@ namespace Incas.Objects.Components
             root.Children.Clear();
             this.classData = data;
             this.drawingOutputArgs = new();
-            Dictionary<Guid, IFillerBase> fillersDict = [];
+            Dictionary<Guid, FrameworkElement> fillersDict = [];
             this.drawingOutputArgs.Buttons = new();
             this.drawingOutputArgs.Fillers = new();
+            this.drawingOutputArgs.Tables = new();
             if (serviceFiller != null)
             {
                 root.Children.Add((UserControl)serviceFiller);
@@ -83,23 +90,32 @@ namespace Incas.Objects.Components
                         this.drawingOutputArgs.Fillers.Add(f, ff);
                         fillersDict.Add(f.Id, ff);
                         break;
-                    case FieldType.Table:
-                        FieldTableFiller ft = new(f)
-                        {
-                            Uid = f.Id.ToString()
-                        };
-                        this.drawingOutputArgs.Fillers.Add(f, ft);
-                        fillersDict.Add(f.Id, ft);
-                        break;
 
                 }
             }
+            if (data.Tables is not null)
+            {
+                foreach (Table table in data.Tables)
+                {
+                    FieldTableFiller ft = new(table)
+                    {
+                        Uid = table.Id.ToString()
+                    };
+                    this.drawingOutputArgs.Tables.Add(table, ft);
+                    fillersDict.Add(table.Id, ft);
+                    break;
+                }
+            }            
 
             if (data.EditorView is null || data.EditorView.Controls is null || data.EditorView.Controls.Count == 0)
             {
                 foreach (KeyValuePair<Field, IFillerBase> ff in this.drawingOutputArgs.Fillers)
                 {
                     root.Children.Add((UIElement)ff.Value);
+                }
+                foreach (KeyValuePair<Table, FieldTableFiller> ff in this.drawingOutputArgs.Tables)
+                {
+                    root.Children.Add(ff.Value);
                 }
             }
             else
@@ -112,13 +128,16 @@ namespace Incas.Objects.Components
             drawingOutputArgs.ServiceFiller = serviceFiller;
             return drawingOutputArgs;
         }
-        private void DrawControl(ViewControl vc, FrameworkElement currentParent, Dictionary<Guid, IFillerBase> fillers)
+        private void DrawControl(ViewControl vc, FrameworkElement currentParent, Dictionary<Guid, FrameworkElement> fillers)
         {
             FrameworkElement element = null;
             switch (vc.Type)
             {
                 case ControlType.FieldFiller:
-                    this.AddChild(currentParent, (FrameworkElement)fillers[vc.Field]);
+                    this.AddChild(currentParent, fillers[vc.Field]);
+                    return;
+                case ControlType.Table:
+                    this.AddChild(currentParent, fillers[vc.Table]);
                     return;
                 case ControlType.Button:
                     Button btn = new()

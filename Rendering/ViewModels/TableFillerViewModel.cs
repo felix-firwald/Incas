@@ -17,13 +17,13 @@ namespace Incas.Rendering.ViewModels
     internal class TableFillerViewModel : BaseViewModel
     {
         private DataTable _data;
-        public TableFieldData TableDefinition;
-        public TableFillerViewModel(Field t)
+        public Table TableDefinition;
+        public TableFillerViewModel(Table t)
         {
             this.TableName = t.VisibleName;
             try
             {
-                this.TableDefinition = t.TableSettings;
+                this.TableDefinition = t;
                 this.MakeColumns();
             }
             catch
@@ -71,10 +71,10 @@ namespace Incas.Rendering.ViewModels
         private void MakeColumns()
         {
             this.Grid = new();
-            foreach (TableFieldColumnData tf in this.TableDefinition.Columns)
+            foreach (Field tf in this.TableDefinition.Fields)
             {
                 DataColumn dc = new(tf.Name);
-                if (tf.FieldType == FieldType.String)
+                if (tf.Type == FieldType.String)
                 {
                     dc.DefaultValue = tf.Value;
                 }
@@ -189,8 +189,8 @@ namespace Incas.Rendering.ViewModels
         }
         public void CopyColumnValuesToAnother(string souceColumn, string targetColumn)
         {
-            TableFieldColumnData target = null;
-            foreach (TableFieldColumnData tf in this.TableDefinition.Columns)
+            Field target = null;
+            foreach (Field tf in this.TableDefinition.Fields)
             {
                 if (tf.Name == targetColumn)
                 {
@@ -199,9 +199,12 @@ namespace Incas.Rendering.ViewModels
                 }
             }
             List<string> values = new();
-            switch (target.FieldType)
+            switch (target.Type)
             {
                 case FieldType.String:
+                case FieldType.Integer:
+                case FieldType.Float:
+                case FieldType.Boolean:
                     foreach (DataRow row in this.Grid.Rows)
                     {
                         row[targetColumn] = row[souceColumn];
@@ -226,7 +229,7 @@ namespace Incas.Rendering.ViewModels
         public void SortByColumn(string visiblename)
         {
             string name = "";
-            foreach (TableFieldColumnData tf in this.TableDefinition.Columns)
+            foreach (Field tf in this.TableDefinition.Fields)
             {
                 if (tf.VisibleName == visiblename)
                 {

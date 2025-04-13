@@ -1,5 +1,6 @@
 ﻿using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
+using IncasEngine.ObjectiveEngine.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Incas.Objects.Views.Pages
         public TableEditor(TableViewModel vm)
         {
             this.InitializeComponent();
-            this.ItemName = $"Настройка таблицы [{vm.Name}]";
+            this.ItemName = $"Таблица [{vm.Name}]";
             this.vm = vm;
             this.DataContext = this.vm;
         }
@@ -35,6 +36,29 @@ namespace Incas.Objects.Views.Pages
         public void SetUpContext(ClassViewModel vm)
         {
             
+        }
+
+        private void AddFieldClick(object sender, RoutedEventArgs e)
+        {
+            Field field = new();
+            field.SetId();
+            field.Name = $"Колонка_{this.vm.Fields.Count+1}";
+            this.vm.AddField(field);
+        }
+        private void MinimizeAllClick(object sender, RoutedEventArgs e)
+        {
+            foreach (FieldViewModel f in this.vm.Fields)
+            {
+                f.IsExpanded = false;
+            }
+        }
+
+        private void MaximizeAllClick(object sender, RoutedEventArgs e)
+        {
+            foreach (FieldViewModel f in this.vm.Fields)
+            {
+                f.IsExpanded = true;
+            }
         }
     }
 }

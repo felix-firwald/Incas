@@ -2,7 +2,7 @@
 
 namespace Incas.Objects.Interfaces
 {
-    public interface ITableFiller : IFillerBase
+    public interface ITableFiller
     {
         public DataTable GetValue();
     }

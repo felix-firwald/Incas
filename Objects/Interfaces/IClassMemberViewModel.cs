@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Incas.Objects.Interfaces
 {
@@ -18,5 +19,6 @@ namespace Incas.Objects.Interfaces
         public string Name { get; set; }
         public MemberType ClassMemberType { get; }
         public bool BelongsThisClass { get; }
+        public ICommand AssignToContainer { get; }
     }
 }

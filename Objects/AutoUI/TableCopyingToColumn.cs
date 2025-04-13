@@ -1,4 +1,5 @@
 ﻿using Incas.DialogSimpleForm.Components;
+using IncasEngine.ObjectiveEngine.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
@@ -21,11 +22,11 @@ namespace Incas.Objects.AutoUI
         public Selector Target { get; set; }
         #endregion
 
-        public TableCopyingToColumn(List<TableFieldColumnData> columns)
+        public TableCopyingToColumn(List<Field> columns)
         {
             this.Source = new(new());
             this.Target = new(new());
-            foreach (TableFieldColumnData dc in columns)
+            foreach (Field dc in columns)
             {
                 this.Source.Pairs.Add(dc, dc.VisibleName);
                 this.Target.Pairs.Add(dc, dc.VisibleName);
@@ -35,11 +36,11 @@ namespace Incas.Objects.AutoUI
         #region Functionality
         public string GetSourceColumnName()
         {
-            return ((TableFieldColumnData)this.Source.SelectedObject).Name;
+            return ((Field)this.Source.SelectedObject).Name;
         }
         public string GetTargetColumnName()
         {
-            return ((TableFieldColumnData)this.Target.SelectedObject).Name;
+            return ((Field)this.Target.SelectedObject).Name;
         }
         public override void Load()
         {

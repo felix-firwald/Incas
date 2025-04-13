@@ -78,9 +78,9 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Border Margin="5" CornerRadius="8" Background="{Binding SelectedComponent.Color, Converter={StaticResource IEColorToBrushConverter}}" Grid.RowSpan="3"/>
-                    <Slider Margin="5" Grid.Column="1" Grid.Row="0" IsSelectionRangeEnabled="True" Minimum="90" Maximum="255" Value="{Binding SelectedComponent.ColorR}"/>
-                    <Slider Margin="5" Grid.Column="1" Grid.Row="1" Minimum="90" Maximum="255" Value="{Binding SelectedComponent.ColorG}" />
-                    <Slider Margin="5" Grid.Column="1" Grid.Row="2" Minimum="90" Maximum="255" Value="{Binding SelectedComponent.ColorB}" />
+                    <Slider Margin="5" Grid.Column="1" Grid.Row="0" IsSelectionRangeEnabled="True" Minimum="30" Maximum="255" Value="{Binding SelectedComponent.ColorR}"/>
+                    <Slider Margin="5" Grid.Column="1" Grid.Row="1" Minimum="30" Maximum="255" Value="{Binding SelectedComponent.ColorG}" />
+                    <Slider Margin="5" Grid.Column="1" Grid.Row="2" Minimum="30" Maximum="255" Value="{Binding SelectedComponent.ColorB}" />
                     <Label Grid.Column="2" Grid.Row="0" Content="{Binding SelectedComponent.ColorR}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource Buttons.Red}"  />
                     <Label Grid.Column="2" Grid.Row="1" Content="{Binding SelectedComponent.ColorG}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource Buttons.Green}"  />
                     <Label Grid.Column="2" Grid.Row="2" Content="{Binding SelectedComponent.ColorB}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource PrimaryMain}" />

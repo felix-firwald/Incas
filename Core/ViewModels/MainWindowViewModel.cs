@@ -29,7 +29,20 @@ namespace Incas.Core.ViewModels
             this.LoadInfo();
             IncasEngine.License.License lic = IncasEngine.License.License.ReadLicense(RegistryData.GetPathToLicense());
             this.expirationDate = lic.ExpirationDate;
+            ProgramState.CurrentWorkspace.CurrentUser.OnUserUpdated += this.CurrentUser_OnUserUpdated;
+            ProgramState.CurrentWorkspace.CurrentGroup.OnGroupUpdated += this.CurrentGroup_OnGroupUpdated;
         }
+
+        private void CurrentGroup_OnGroupUpdated()
+        {
+            this.OnPropertyChanged(nameof(this.Group));
+        }
+
+        private void CurrentUser_OnUserUpdated()
+        {
+            this.OnPropertyChanged(nameof(this.Surname));
+        }
+
         private void SetCommands()
         {
             this.FindObject = new Command(this.DoFindObject);

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Incas.Core.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="500">
-    <Border CornerRadius="8" Margin="5" MinWidth="40" MinHeight="30" MaxHeight="30" Background="{DynamicResource Black}" BorderBrush="{DynamicResource Element}" BorderThickness="1">
+    <Border CornerRadius="2" Margin="5" MinWidth="40" MinHeight="30" MaxHeight="30" Background="{DynamicResource Black}" BorderBrush="{DynamicResource Element}" BorderThickness="1">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>

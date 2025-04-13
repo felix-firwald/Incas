@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Objects.Documents.Views.Pages;
+using Incas.Objects.Events.Views.Pages;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Processes.Views.Pages;
 using Incas.Objects.ServiceClasses.Groups.Views.Controls;
@@ -24,6 +25,8 @@ namespace Incas.Objects.Components
             {
                 case IncasEngine.ObjectiveEngine.Classes.ClassType.Document:
                     return new DocumentClassPart().SetUp(classViewModel);
+                case IncasEngine.ObjectiveEngine.Classes.ClassType.Event:
+                    return new EventClassPart().SetUp(classViewModel);
                 case IncasEngine.ObjectiveEngine.Classes.ClassType.Process:
                     return new ProcessClassPart().SetUp(classViewModel);
             }
@@ -48,14 +51,10 @@ namespace Incas.Objects.Components
             {
                 ObjectFieldViewer ofAuthor = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers, objUsual.AuthorId, "Автор");
                 contentPanel.Children.Add(ofAuthor);
-                return;
             }
             #endif
             if (obj is IncasEngine.ObjectiveEngine.Types.Documents.Document objDoc)
             {
-                #if !E_FREE
-                contentPanel.Children.Add(new ObjectFieldViewer(ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers, objDoc.AuthorId, "Автор"));
-                #endif
                 contentPanel.Children.Add(new ObjectFieldViewer(objDoc.CreationDate, "Дата создания"));
                 if (objDoc.Terminated)
                 {

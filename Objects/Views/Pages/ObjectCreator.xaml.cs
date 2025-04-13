@@ -158,6 +158,10 @@ namespace Incas.Objects.Views.Pages
         }
         private void ApplyState()
         {
+            if (this.ClassData.States is null)
+            {
+                return;
+            }
             foreach (IncasEngine.ObjectiveEngine.Models.State state in this.ClassData.States)
             {
                 if (state.Id == this.Object.State)
@@ -215,23 +219,11 @@ namespace Incas.Objects.Views.Pages
         }
         public void ApplyObject(IObject obj, bool updateState)
         {
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
             this.ObjectName.Text = obj.Name;
             foreach (FieldData data in obj.Fields)
             {
                 this.fillers[data.ClassField].SetValue(data.Value.ToString());
-                //foreach (IFillerBase filler in this.fillers)
-                //{
-                //    if (filler.Field.Id == data.ClassField.Id)
-                //    {                     
-                //        filler.SetValue();         
-                //        break;
-                //    }
-                //}
             }
-            stopwatch.Stop();
-            DialogsManager.ShowInfoDialog(stopwatch.GetTextResult());
             if (updateState)
             {
                 this.ApplyState();

@@ -49,10 +49,13 @@ namespace Incas.Objects.ViewModels
         private void SetMembers()
         {
             this.Fields = new();
-            foreach (Field f in this.SourceData.Fields)
+            if (this.SourceData.Fields is not null)
             {
-                this.AddField(f);
-            }
+                foreach (Field f in this.SourceData.Fields)
+                {
+                    this.AddField(f);
+                }
+            }           
             this.Methods = new();
             if (this.SourceData.Methods is not null)
             {
@@ -96,7 +99,7 @@ namespace Incas.Objects.ViewModels
         }
         public void AddTable(Table f)
         {
-            TableViewModel vm = new(f);
+            TableViewModel vm = new(this, f);
             vm.OnOpenTableRequested += this.DoOpenDetails;
             vm.OnRemoveRequested += this.DoRemoveTable;
             this.Tables.Add(vm);
@@ -105,6 +108,7 @@ namespace Incas.Objects.ViewModels
         private void DoRemoveTable(TableViewModel table)
         {
             this.Tables.Remove(table);
+            this.RemoveTableControl(table.Source.Id);
         }
 
         public void AddMethod(Method m)
@@ -130,6 +134,7 @@ namespace Incas.Objects.ViewModels
         private void DoRemoveMethod(MethodViewModel field)
         {
             this.Methods.Remove(field);
+            this.RemoveMethodControl(field.Source.Id);
         }
 
         private void DoOpenDetails(IClassDetailsSettings settings)
@@ -533,6 +538,30 @@ namespace Incas.Objects.ViewModels
                 control.RemoveField(field);
             }
         }
+        public void RemoveMethodControl(Guid method)
+        {
+            foreach (ViewControlViewModel control in this.ViewControls)
+            {
+                if (control.Source.RunMethod == method)
+                {
+                    this.ViewControls.Remove(control);
+                    return;
+                }
+                control.RemoveMethod(method);
+            }
+        }
+        public void RemoveTableControl(Guid table)
+        {
+            foreach (ViewControlViewModel control in this.ViewControls)
+            {
+                if (control.Source.Table == table)
+                {
+                    this.ViewControls.Remove(control);
+                    return;
+                }
+                control.RemoveTable(table);
+            }
+        }
         private void Vm_OnMoveDownRequested(ViewControlViewModel vm)
         {
             this.ViewControls.MoveDown(vm);
@@ -714,6 +743,13 @@ namespace Incas.Objects.ViewModels
                         field.Source.Check();
                         field.Source.SetId();
                     }                  
+                }
+                foreach (TableViewModel table in this.Tables)
+                {
+                    if (table.BelongsThisClass)
+                    {
+                        table.Save();
+                    }
                 }
                 foreach (MethodViewModel method in this.Methods)
                 {
