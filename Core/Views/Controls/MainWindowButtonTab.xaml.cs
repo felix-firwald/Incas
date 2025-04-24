@@ -2,6 +2,7 @@
 using Incas.Admin.Views.Pages;
 using Incas.Core.Classes;
 using Incas.Core.Extensions;
+using Incas.Objects.Files.Views.Pages;
 using Incas.Objects.Views.Pages;
 using IncasEngine.Workspace;
 using System.Windows.Controls;
@@ -16,6 +17,7 @@ namespace Incas.Core.Views.Controls
     public partial class MainWindowButtonTab : UserControl
     {
         public const string CustomDatabase = "$DATABASE";
+        public const string Files = "$FILES";
         public const string WorkspaceSettings = "$WORKSPACE";
         public const string GroupsSettings = "$GROUPS";
         public const string UsersSettings = "$USERS";
@@ -51,7 +53,9 @@ namespace Incas.Core.Views.Controls
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            DialogsManager.ShowWaitCursor();
             this.OnNewTabRequested?.Invoke(this.GenerateControl(), this.internalPath, this.name);
+            DialogsManager.ShowWaitCursor(false);
         }
         private Control GenerateControl()
         {
@@ -64,6 +68,11 @@ namespace Incas.Core.Views.Controls
             {
                 case CustomDatabase:
                     return new CustomDatabaseMain();
+                case Files:
+                    FilesList fl = new();
+                    gb.Content = fl;
+                    gb.Header = "Каталог файлов";
+                    return gb;
                 case GroupsSettings:
                     ObjectsList listGroup = new(ProgramState.CurrentWorkspace.GetDefinition().ServiceGroups);
                     listGroup.OpenInNewTabButton.Visibility = System.Windows.Visibility.Collapsed;

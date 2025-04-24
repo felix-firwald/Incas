@@ -12,6 +12,9 @@ namespace Incas.Objects.Interfaces
 {
     public interface IClassPartSettings
     {
+        public delegate void OpenAdditionalSettings(IClassDetailsSettings settings);
+        public event OpenAdditionalSettings OnAdditionalSettingsOpenRequested;
+
         /// <summary>
         /// Visible name for tab item
         /// </summary>

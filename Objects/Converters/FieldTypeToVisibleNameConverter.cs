@@ -40,8 +40,6 @@ namespace Incas.Objects.Converters
                     case FieldType.Structure:
                         return "Структура";
 #endif
-                    case FieldType.Table:
-                        return "Таблица";
                 }
             }
             return "Неизвестно";

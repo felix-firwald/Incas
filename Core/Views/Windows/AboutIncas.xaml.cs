@@ -3,6 +3,7 @@ using Incas.Objects.AutoUI;
 using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.RuntimeCompilation;
 using IncasEngine.Workspace.WorkspaceTemplates;
 using System;
 using System.Collections.Generic;
@@ -100,6 +101,18 @@ namespace Incas.Core.Views.Windows
                 string path = EngineGlobals.CurrentWorkspace.ObjectsPath + $"\\{cl.Id}.objinc";
                 Process.Start("explorer.exe", string.Format("/select,\"{0}\"", path));
             }
+        }
+
+        private void DLLExportClick(object sender, RoutedEventArgs e)
+        {
+            //FinalAssembler fa = new();
+            //string path = "";
+            //if (DialogsManager.ShowSaveFileDialog(ref path, "DLL библиотеки|.dll"))
+            //{
+            //    DialogsManager.ShowWaitCursor();
+            //    fa.CompileWorkspace(path);
+            //    DialogsManager.ShowWaitCursor(false);
+            //}           
         }
     }
 }

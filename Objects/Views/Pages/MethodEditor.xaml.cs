@@ -1,6 +1,7 @@
 ﻿using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Incas.Core.Views.Windows;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using System.Text.RegularExpressions;
@@ -74,32 +75,32 @@ namespace Incas.Objects.Views.Pages
         {
             ContextMenu contextMenu = new();
 
-            switch (textBeforeDot)
-            {
-                case "Декан":
-                    // Добавляем пункты меню для MyObject
-                    MenuItem item1 = new() { Header = "Property1" };
-                    item1.Click += (sender, e) => this.InsertText("MyObject.Property1");
+            //switch (textBeforeDot)
+            //{
+            //    case "Декан":
+            //        // Добавляем пункты меню для MyObject
+            //        MenuItem item1 = new() { Header = "Property1" };
+            //        item1.Click += (sender, e) => this.InsertText("MyObject.Property1");
 
-                    MenuItem item2 = new() { Header = "Method1()" };
-                    item2.Click += (sender, e) => this.InsertText("MyObject.Method1()");
+            //        MenuItem item2 = new() { Header = "Method1()" };
+            //        item2.Click += (sender, e) => this.InsertText("MyObject.Method1()");
 
-                    contextMenu.Items.Add(item1);
-                    contextMenu.Items.Add(item2);
-                    break;
+            //        contextMenu.Items.Add(item1);
+            //        contextMenu.Items.Add(item2);
+            //        break;
 
-                case "AnotherObject":
-                    // Добавляем пункты меню для AnotherObject
-                    MenuItem item3 = new() { Header = "PropertyA" };
-                    item3.Click += (sender, e) => this.InsertText("AnotherObject.PropertyA");
+            //    case "AnotherObject":
+            //        // Добавляем пункты меню для AnotherObject
+            //        MenuItem item3 = new() { Header = "PropertyA" };
+            //        item3.Click += (sender, e) => this.InsertText("AnotherObject.PropertyA");
 
-                    contextMenu.Items.Add(item3);
-                    break;
+            //        contextMenu.Items.Add(item3);
+            //        break;
 
-                default:
-                    // Не показывать меню, если контекст не распознан
-                    return null;
-            }
+            //    default:
+            //        // Не показывать меню, если контекст не распознан
+            //        return null;
+            //}
 
             return contextMenu;
         }
@@ -134,6 +135,16 @@ namespace Incas.Objects.Views.Pages
         private void CodeChanged(object sender, System.EventArgs e)
         {
             this.vm.Code = this.Code.Text;
+        }
+
+        private void ChooseIconClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            IconSelector selector = new();
+            selector.ShowDialog();
+            if (selector.IsSelected)
+            {
+                this.vm.Icon = selector.SelectedIconPath;
+            }
         }
     }
 }

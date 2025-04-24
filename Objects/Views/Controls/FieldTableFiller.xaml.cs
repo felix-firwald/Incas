@@ -1,10 +1,13 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
+using Incas.Core.Views.Controls;
 using Incas.DialogSimpleForm.Components;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Interfaces;
+using Incas.Objects.ViewModels;
 using Incas.Rendering.Components;
 using Incas.Rendering.ViewModels;
+using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
 using Microsoft.Scripting.Hosting;
@@ -35,6 +38,10 @@ namespace Incas.Objects.Views.Controls
         public event FillerUpdate OnFillerUpdate;
         //public event StringAction OnInsert;
         //public event FillerUpdate OnDatabaseObjectCopyRequested;
+        private Dictionary<object, Guid> map = new();
+        private State currentState;
+
+        public event RoutedEventHandler OnCustomButtonClicked;
         public FieldTableFiller(Table tab)
         {
             this.InitializeComponent();
@@ -62,6 +69,15 @@ namespace Incas.Objects.Views.Controls
 
             }
         }
+        public void AddButton(Button btn)
+        {
+            btn.Click += (sender, e) =>
+            {
+                this.OnCustomButtonClicked?.Invoke(sender, e);
+            };
+            this.CustomButtons.Children.Add(btn);
+        }
+
         /// <summary>
         /// Internal using
         /// </summary>
@@ -85,22 +101,7 @@ namespace Incas.Objects.Views.Controls
         }
         public void CheckData()
         {
-            foreach (Field tf in this.vm.TableDefinition.Fields)
-            {
-                //if (tf.NotNull == true)
-                //{
-                //    int row = 1;
-                //    foreach (DataRow dr in this.vm.Grid.Rows)
-                //    {
-                //        if (string.IsNullOrWhiteSpace(dr[tf.Name].ToString()))
-                //        {
-                //            this.MarkAsNotValidated();
-                //            throw new NotNullFailed($"Колонка \"{tf.VisibleName}\" у таблицы \"{this.vm.TableName}\" является обязательной, однако в ряду под номером {row} значение отсутствует.");
-                //        }
-                //        row++;
-                //    }
-                //}
-            }
+            
         }
         /// <summary>
         /// Template & forms using
@@ -108,7 +109,9 @@ namespace Incas.Objects.Views.Controls
         /// <returns></returns>
         public DataTable GetValue()
         {
-            return this.vm.Grid;
+            DataTable result = this.vm.Grid;
+            result.ExtendedProperties[Helpers.TableExtendedPropRemovedRows] = this.vm.RemovedRows;
+            return result;
         }
 
         public SGeneratedTag GetAsGeneratedTag()
@@ -156,10 +159,16 @@ namespace Incas.Objects.Views.Controls
 
         private void ColumnGenerating(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
+            string colHeader = e.Column.Header.ToString();
+            if (colHeader is Helpers.IdField or Helpers.TargetObjectField)
+            {
+                e.Column.Visibility = Visibility.Collapsed;
+            }
             foreach (Field col in this.vm.TableDefinition.Fields)
             {
-                if (col.Name == e.Column.Header.ToString() || col.Id.ToString() == e.Column.Header.ToString())
+                if (col.Name == colHeader || col.Id.ToString() == colHeader)
                 {
+                    this.map.TryAdd(col.VisibleName, col.Id);
                     switch (col.Type)
                     {
                         case FieldType.String:
@@ -167,7 +176,7 @@ namespace Incas.Objects.Views.Controls
                             DataGridTextColumn dgt1 = new()
                             {
                                 Header = col.VisibleName,
-                                Binding = new System.Windows.Data.Binding(e.Column.Header.ToString()),
+                                Binding = new System.Windows.Data.Binding(colHeader),
                                 EditingElementStyle = this.FindResource("TextBoxGrid") as Style
                             };
                             e.Column = dgt1;
@@ -177,8 +186,8 @@ namespace Incas.Objects.Views.Controls
                             DataGridComboBoxColumn dgc = new()
                             {
                                 Header = col.VisibleName,
-                                TextBinding = new System.Windows.Data.Binding(e.Column.Header.ToString()),
-
+                                TextBinding = new System.Windows.Data.Binding(colHeader),
+                                
                                 EditingElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.ComboboxGridStyle)
                             };
                             dgc.ItemsSource = col.Type == FieldType.LocalEnumeration
@@ -196,18 +205,26 @@ namespace Incas.Objects.Views.Controls
                             DataGridCheckBoxColumn cbc = new()
                             {
                                 Header = col.VisibleName,
-                                Binding = new System.Windows.Data.Binding(e.Column.Header.ToString()),
+                                Binding = new System.Windows.Data.Binding(colHeader),
                                 EditingElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.CheckboxEditingGridStyle),               
                                 ElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.CheckboxNotEditableGridStyle)
                             };
                             e.Column = cbc;
+                            break;
+                        case FieldType.Object:
+                            this.GenerateTemplateColumnObject(col, e);
                             break;
                         default:
                             DialogsManager.ShowErrorDialog($"Не удалось распознать тип данных столбца \"{col.VisibleName}\"");
                             e.Column.IsReadOnly = true;
                             break;
                     }
-                    break;
+                    ColumnConfiguration columnConfig = this.vm.Configurations[col.Id];
+                    Binding isEnabledBinding = new("IsReadOnly") { Source = columnConfig, Mode = BindingMode.TwoWay };
+                    BindingOperations.SetBinding(e.Column, DataGridColumn.IsReadOnlyProperty, isEnabledBinding);
+
+                    Binding visibilityBinding = new("Visibility") { Source = columnConfig, Mode = BindingMode.TwoWay };
+                    BindingOperations.SetBinding(e.Column, DataGridColumn.VisibilityProperty, visibilityBinding);
                 }
             }
         }
@@ -228,6 +245,8 @@ namespace Incas.Objects.Views.Controls
             #region Edit View
             FrameworkElementFactory editFactory = new(typeof(IntegerUpDown));
             editFactory.SetValue(IntegerUpDown.StyleProperty, this.FindResource(ResourceStyleManager.IntegerUpDownGridStyle) as Style);
+            editFactory.SetValue(IntegerUpDown.MaximumProperty, col.NumberSettings.MaxValue);
+            editFactory.SetValue(IntegerUpDown.MinimumProperty, col.NumberSettings.MinValue);
             editFactory.SetBinding(IntegerUpDown.ValueProperty, new Binding(e.Column.Header.ToString()));
             cellEdit.VisualTree = editFactory;
             #endregion
@@ -254,6 +273,30 @@ namespace Incas.Objects.Views.Controls
             FrameworkElementFactory editFactory = new(typeof(DatePicker));
             editFactory.SetValue(IntegerUpDown.StyleProperty, this.FindResource(ResourceStyleManager.DatePickerGridStyle) as Style);
             editFactory.SetBinding(DatePicker.SelectedDateProperty, new Binding(e.Column.Header.ToString()));
+            cellEdit.VisualTree = editFactory;
+            #endregion
+
+            templateInteger.CellTemplate = cellUsual;
+            templateInteger.CellEditingTemplate = cellEdit;
+            e.Column = templateInteger;
+        }
+        private void GenerateTemplateColumnObject(Field col, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGridTemplateColumn templateInteger = new();
+            templateInteger.Header = col.VisibleName;
+            DataTemplate cellEdit = new();
+            DataTemplate cellUsual = new();
+
+            #region Usual View
+            FrameworkElementFactory textBlock1Factory = new(typeof(TextBlock));
+            cellUsual.VisualTree = textBlock1Factory;
+            textBlock1Factory.SetBinding(TextBlock.TextProperty, new Binding(e.Column.Header.ToString()));
+            #endregion
+
+            #region Edit View
+            FrameworkElementFactory editFactory = new(typeof(SelectionBoxGrid));
+            editFactory.SetBinding(SelectionBoxGrid.SelectedObjectProperty, new Binding(e.Column.Header.ToString()));
+            editFactory.SetValue(SelectionBoxGrid.TargetFieldProperty, col.BindingSettings);
             cellEdit.VisualTree = editFactory;
             #endregion
 
@@ -361,23 +404,17 @@ namespace Incas.Objects.Views.Controls
         }
         private void ObjectCopyRequestClick(object sender, RoutedEventArgs e)
         {
-            //this.OnDatabaseObjectCopyRequested?.Invoke(this);
+            
         }
         private void InsertToOther(object sender, RoutedEventArgs e)
         {
-            //try
-            //{
-            //    OnInsert?.Invoke(this.ClassTable.Id, this.GetData());
-            //}
-            //catch (NotNullFailed)
-            //{
-            //    DialogsManager.ShowExclamationDialog("Поле является обязательным, необходимо сначала присвоить ему значение.", "Переназначение прервано");
-            //}
+
         }
         private void ColumnHeaderClick(object sender, RoutedEventArgs e)
         {
             string columnname = ((System.Windows.Controls.Primitives.DataGridColumnHeader)sender).Content.ToString();
             this.vm.SortByColumn(columnname);
+            this.ApplyState(this.currentState);
         }
 
         private void CopyColumnClick(object sender, RoutedEventArgs e)
@@ -400,11 +437,23 @@ namespace Incas.Objects.Views.Controls
 
         public void ApplyState(State state)
         {
+            if (state is null)
+            {
+                return;
+            }
+            this.currentState = state;
             MemberState source = state.Settings[this.ClassTable.Id];
             if (source.EditorVisibility)
             {
                 this.Visibility = Visibility.Visible;
-                this.IsEnabled = source.IsEnabled;
+                this.vm.IsEnabled = source.IsEnabled;
+
+                foreach (KeyValuePair<Guid, ColumnConfiguration> col in this.vm.Configurations)
+                {
+                    col.Value.Apply(source.NestedMembers[col.Key]);                    
+                }
+                this.vm.InsertEnabled = source.InsertEnabled;
+                this.vm.RemoveEnabled = source.RemoveEnabled;
             }
             else
             {

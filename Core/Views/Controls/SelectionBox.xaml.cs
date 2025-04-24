@@ -46,6 +46,7 @@ namespace Incas.Core.Views.Controls
             }
             catch { }
         }
+
         public async void SetObject(Guid id)
         {
             try

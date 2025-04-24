@@ -88,6 +88,18 @@ namespace Incas.Objects.Documents.ViewModels
                 this.OnPropertyChanged(nameof(this.TemplatePathSelected));
             }
         }
+        public string Code
+        {
+            get
+            {
+                return this.Source.Script;
+            }
+            set
+            {
+                this.Source.Script = value;
+                this.OnPropertyChanged(nameof(this.Code));
+            }
+        }
         public bool TemplatePathSelected
         {
             get

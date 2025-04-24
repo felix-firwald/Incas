@@ -95,18 +95,17 @@ namespace Incas.Objects.Views.Windows
 
         public CreateClass(ServiceClass @class) // edit service class
         {
-#if !E_FREE
             DialogsManager.ShowWaitCursor();
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
             this.InitializeComponent();
             //this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             this.Title = $"Служебный класс: {@class.Name}";
             this.vm = new(@class);
+            this.vm.OnAdditionalSettingsOpenRequested += this.Vm_OnAdditionalSettingsOpenRequested;
             this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
             this.DataContext = this.vm;
             this.ApplyPartSettings();
             DialogsManager.ShowWaitCursor(false);
-#endif
         }
         private void ApplyPartSettings()
         {
@@ -120,7 +119,8 @@ namespace Incas.Objects.Views.Windows
                     BorderBrush = this.FindResource("LightPurple") as Brush
                 };
                 this.TabControlMain.Items.Add(item);
-            }
+                this.partSettings.OnAdditionalSettingsOpenRequested += this.Vm_OnAdditionalSettingsOpenRequested;
+            }            
         }
         private void ShowNewTab(Control control, string name)
         {

@@ -132,7 +132,7 @@ namespace Incas.Core.ViewModels
         {
             get
             {
-                if (ProgramState.CurrentWorkspace.CurrentUser is null)
+                if (ProgramState.CurrentWorkspace?.CurrentUser is null)
                 {
                     return new();
                 }

@@ -142,13 +142,6 @@ namespace Incas.Objects.ViewModels
                     DateFieldSettings dt = new(this.Source);
                     dt.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
-                case FieldType.Table:
-                    TableSettings ts = new(this.Source);
-                    if (ts.ShowDialog() == true)
-                    {
-                        this.Source.TableSettings = ts.vm.Source;
-                    }
-                    break;
             }
         }
 
@@ -254,22 +247,22 @@ namespace Incas.Objects.ViewModels
                 {
                     if (!Field.CanChangeTypeTo(this.ExistedType, value))
                     {
-                        if (DialogsManager.ShowQuestionDialog(
-                            "Изменение типа данных этого поля на выбранный тип не поддерживается INCAS для автоматического преобразования в существующих объектах. Вы уверены, что хотите продолжить?",
-                            "Поменять тип?",
-                            "Да, поменять",
-                            "Оставить текущий"
-                            ) == Core.Views.Windows.DialogStatus.Yes)
-                        {
+                        //if (DialogsManager.ShowQuestionDialog(
+                        //    "Изменение типа данных этого поля на выбранный тип не поддерживается INCAS для автоматического преобразования в существующих объектах. Вы уверены, что хотите продолжить?",
+                        //    "Поменять тип?",
+                        //    "Да, поменять",
+                        //    "Оставить текущий"
+                        //    ) == Core.Views.Windows.DialogStatus.Yes)
+                        //{
                             this.Source.Type = value;
                             this.OnPropertyChanged(nameof(this.Type));
-                        }
-                        else
-                        {
-                            this.Source.Type = this.ExistedType;
-                            this.OnPropertyChanged(nameof(this.Type));
-                            return;
-                        }                      
+                        //}
+                        //else
+                        //{
+                        //    this.Source.Type = this.ExistedType;
+                        //    this.OnPropertyChanged(nameof(this.Type));
+                        //    return;
+                        //}                      
                     }
                     else
                     {

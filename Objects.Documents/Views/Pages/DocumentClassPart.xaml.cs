@@ -27,6 +27,8 @@ namespace Incas.Objects.Documents.Views.Pages
             this.InitializeComponent();
         }
 
+        public event IClassPartSettings.OpenAdditionalSettings OnAdditionalSettingsOpenRequested;
+
         public IClassPartSettings SetUp(ClassViewModel classViewModel)
         {
             this.vm = new(classViewModel);
@@ -176,6 +178,13 @@ namespace Incas.Objects.Documents.Views.Pages
         private void RemoveSelectedTemplate(object sender, System.Windows.RoutedEventArgs e)
         {
             this.vm.Templates.Remove(this.vm.SelectedTemplate);
+        }
+
+        private void OpenScriptClicked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DocumentTemplateScriptSettings scriptSettings = new(this.vm.SelectedTemplate);
+            scriptSettings.SetUpContext(this.vm.BaseViewModel);
+            this.OnAdditionalSettingsOpenRequested?.Invoke(scriptSettings);
         }
     }
 }

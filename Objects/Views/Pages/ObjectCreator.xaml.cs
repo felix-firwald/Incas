@@ -19,12 +19,14 @@ using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using IncasEngine.Scripting;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static IncasEngine.ObjectiveEngine.Models.State;
 using static System.Windows.Forms.AxHost;
 
 namespace Incas.Objects.Views.Pages
@@ -65,6 +67,7 @@ namespace Incas.Objects.Views.Pages
         private Dictionary<Field, IFillerBase> fillers;
         private IServiceFieldFiller serviceFiller;
         private Dictionary<Button, Method> buttons;
+        public Dictionary<Table, FieldTableFiller> tables;
 
         public ObjectCreator(IClass source, IObject obj = null)
         {
@@ -80,8 +83,9 @@ namespace Incas.Objects.Views.Pages
             }
             else
             {
-                this.Object = Helpers.CreateObjectByType(source);
-                this.FillContentPanel();             
+                this.Object = Helpers.CreateObjectByType(source);               
+                this.FillContentPanel();
+                this.ApplyObject(this.Object, true);
             }
             if (this.Class.Type != ClassType.Document)
             {
@@ -137,11 +141,16 @@ namespace Incas.Objects.Views.Pages
             this.fillers = args.Fillers;
             this.serviceFiller = args.ServiceFiller;
             this.buttons = args.Buttons;
+            this.tables = args.Tables;
             foreach (KeyValuePair<Field, IFillerBase> ff in this.fillers)
             {
                 ff.Value.OnInsert += this.Tf_OnInsert;
                 ff.Value.OnFillerUpdate += this.Tf_OnFieldUpdate;
                 ff.Value.OnDatabaseObjectCopyRequested += this.Tf_OnDatabaseObjectCopyRequested;
+                if (ff.Value is ITableFiller tableFiller)
+                {
+                    tableFiller.OnCustomButtonClicked += this.ButtonWithMethodClicked;
+                }
             }
             foreach (KeyValuePair<Button, Method> pair in args.Buttons)
             {
@@ -169,6 +178,16 @@ namespace Incas.Objects.Views.Pages
                     foreach (KeyValuePair<Field, IFillerBase> filler in this.fillers)
                     {
                         filler.Value.ApplyState(state);
+                    }
+                    foreach (KeyValuePair<Table, FieldTableFiller> filler in this.tables)
+                    {
+                        filler.Value.ApplyState(state);
+                    }
+                    foreach (KeyValuePair<Button, Method> button in this.buttons)
+                    {
+                        MemberState memberState = state.Settings[button.Value.Id];
+                        button.Key.IsEnabled = memberState.IsEnabled;
+                        button.Key.Visibility = memberState.EditorVisibility == true ? Visibility.Visible : Visibility.Collapsed;
                     }
                     break;
                 }
@@ -222,8 +241,18 @@ namespace Incas.Objects.Views.Pages
             this.ObjectName.Text = obj.Name;
             foreach (FieldData data in obj.Fields)
             {
-                this.fillers[data.ClassField].SetValue(data.Value.ToString());
+                if (data.Value is not null)
+                {
+                    this.fillers[data.ClassField].SetValue(data.Value?.ToString());
+                }
             }
+            if (obj.Tables is not null)
+            {
+                foreach (KeyValuePair<Table, DataTable> dt in obj.Tables)
+                {
+                    this.tables[dt.Key].SetData(dt.Value);
+                }
+            }           
             if (updateState)
             {
                 this.ApplyState();
@@ -285,6 +314,14 @@ namespace Incas.Objects.Views.Pages
                 };
                 this.Object.Fields.Add(data);
             }
+            if (this.Object.Tables is not null)
+            {
+                this.Object.Tables.Clear();
+                foreach (KeyValuePair<Table, FieldTableFiller> tablePair in this.tables)
+                {
+                    this.Object.Tables.Add(tablePair.Key, tablePair.Value.GetValue());
+                }
+            }          
             return this.Object;
         }
         private string RemoveUnresolvedChars(string input)
@@ -391,20 +428,14 @@ namespace Incas.Objects.Views.Pages
             {
                 name = this.ClassData.NameTemplate;
                 foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
-                {
-                    switch (tf.Key.Type)
+                {                    
+                    ISimpleFiller simple = (ISimpleFiller)tf.Value;
+                    string val = simple.GetValue();
+                    if (val != null)
                     {
-                        case FieldType.Table:
-                            break;
-                        default:
-                            ISimpleFiller simple = (ISimpleFiller)tf.Value;
-                            string val = simple.GetValue();
-                            if (val != null)
-                            {
-                                name = name.Replace("[" + simple.GetTagName() + "]", val);
-                            }
-                            break;
+                        name = name.Replace("[" + simple.GetTagName() + "]", val);
                     }
+                    break;                   
                 }
             }
             else
@@ -502,15 +533,9 @@ namespace Incas.Objects.Views.Pages
         {
             List<string> output = [];
             foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
-            {
-                switch (tf.Key.Type)
-                {
-                    case FieldType.Table:
-                        break;
-                    default:
-                        output.Add(((ISimpleFiller)tf.Value).GetValue());
-                        break;                   
-                }             
+            {              
+                output.Add(((ISimpleFiller)tf.Value).GetValue());
+                break;                                
             }
             return output;
         }

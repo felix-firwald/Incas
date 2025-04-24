@@ -171,9 +171,9 @@ namespace Incas.Miniservices.UserStatistics
                     classInfo.Clamp(15);
                 }
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
-                DialogsManager.ShowErrorDialog(ex);
+                //DialogsManager.ShowErrorDialog(ex);
             }
             return info;
         }

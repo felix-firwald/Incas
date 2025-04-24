@@ -8,12 +8,11 @@ using Incas.Objects.ServiceClasses.Users.Views.Controls;
 using Incas.Objects.ViewModels;
 using Incas.Objects.Views.Controls;
 using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Types.Processes;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Users.Components;
 using System;
-using System.Collections.Generic;
 using System.Windows.Controls;
-using System.Windows.Documents;
 
 namespace Incas.Objects.Components
 {
@@ -41,6 +40,10 @@ namespace Incas.Objects.Components
             else if (obj is User objUser)
             {
                 return new UserSettings().SetUp(objUser);
+            }
+            else if (obj is Process objProc)
+            {
+                return new ProcessSettings().SetUp(objProc);
             }
             return null;
         }

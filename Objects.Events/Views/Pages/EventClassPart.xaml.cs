@@ -23,6 +23,7 @@ namespace Incas.Objects.Events.Views.Pages
     /// </summary>
     public partial class EventClassPart : UserControl, IClassPartSettings
     {
+        public event IClassPartSettings.OpenAdditionalSettings OnAdditionalSettingsOpenRequested;
         public EventClassPartViewModel vm { get; set; }
         public EventClassPart()
         {

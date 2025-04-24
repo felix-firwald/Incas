@@ -20,6 +20,7 @@ namespace Incas.Objects.Converters
                 switch (enumValue)
                 {
                     case ControlType.FieldFiller:
+                    case ControlType.Table:
                         return IncasEngine.Core.Color.FromRGB(127, 192, 77).AsBrush();
                     case ControlType.Button:
                         return IncasEngine.Core.Color.FromRGB(191, 77, 166).AsBrush();

@@ -35,12 +35,6 @@
                             <Label Foreground="White" Content="Добавить класс"/>
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource ButtonRectangle}" Visibility="{Binding CreatingClassVisibility}" ToolTip="Унаследовать новый класс от выбранного" Click="InheritClassClick">
-                        <StackPanel Orientation="Horizontal">
-                            <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M5.3872,20.9029a1.997,1.997,0,0,1-2.0045-2A1.9048,1.9048,0,0,1,3.81,17.6684a2.0138,2.0138,0,0,1,1.0723-.7V8.3816A2.0082,2.0082,0,0,1,3.81,7.6789a1.9167,1.9167,0,0,1-.4277-1.2375,1.9912,1.9912,0,0,1,2-2A1.9167,1.9167,0,0,1,6.62,4.8691a2.0082,2.0082,0,0,1,.7027,1.0723H12L10.01,3.97a.45.45,0,0,1-.1655-.345.5038.5038,0,0,1,.1655-.3625.4669.4669,0,0,1,.7132,0l2.6135,2.6133a.78.78,0,0,1,0,1.1307L10.7172,9.6259a.5067.5067,0,0,1-.3443.1557.47.47,0,0,1-.3632-.1557.467.467,0,0,1,0-.7133L12,6.9414H7.3229a2.0326,2.0326,0,0,1-1.44,1.44v8.581a2.0068,2.0068,0,0,1,1.072.7028,1.9967,1.9967,0,0,1-1.5675,3.2375ZM17.84,4.4414a1.9394,1.9394,0,0,1,1.418.582,1.9169,1.9169,0,0,1,.5865,1.4135,1.9394,1.9394,0,0,1-.582,1.418,1.917,1.917,0,0,1-1.4135.5865,1.9392,1.9392,0,0,1-1.418-.582,1.917,1.917,0,0,1-.5865-1.4135,1.9392,1.9392,0,0,1,.582-1.418A1.9169,1.9169,0,0,1,17.84,4.4414ZM5.3827,19.9029A1,1,0,1,0,4.67,18.19a1,1,0,0,0,.7125,1.7125Zm0-12.4615a1.0077,1.0077,0,0,0,.7125-1.7125,1.0266,1.0266,0,0,0-1.425,0,1,1,0,0,0,.7125,1.7125Zm12.4615,0a1.0077,1.0077,0,0,0,.7125-1.7125,1.0077,1.0077,0,0,0-1.425,1.425A.9676.9676,0,0,0,17.8442,7.4414Z M15.6155,17.29v1.731a.3845.3845,0,0,0,.769,0V17.29h1.731a.3845.3845,0,0,0,0-.7689h-1.731V14.79a.3845.3845,0,0,0-.769,0v1.731h-1.731a.3845.3845,0,0,0,0,.769ZM16,20.9057a3.9761,3.9761,0,0,1-4-4,3.9761,3.9761,0,0,1,4-4,3.9761,3.9761,0,0,1,4,4,3.9761,3.9761,0,0,1-4,4Z"/>
-                            <Label Foreground="White" Content="Унаследовать"/>
-                        </StackPanel>
-                    </Button>
                     <Button Style="{StaticResource ButtonRectangle}" Click="EditClassClick" Visibility="{Binding UpdatingClassVisibility}" ToolTip="Редактировать выбранный класс">
                         <StackPanel Orientation="Horizontal">
                             <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
@@ -131,7 +125,7 @@
                                 <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Uniform" Grid.RowSpan="2" Data="M7.068.727c.243-.97 1.62-.97 1.864 0l.071.286a.96.96 0 0 0 1.622.434l.205-.211c.695-.719 1.888-.03 1.613.931l-.08.284a.96.96 0 0 0 1.187 1.187l.283-.081c.96-.275 1.65.918.931 1.613l-.211.205a.96.96 0 0 0 .434 1.622l.286.071c.97.243.97 1.62 0 1.864l-.286.071a.96.96 0 0 0-.434 1.622l.211.205c.719.695.03 1.888-.931 1.613l-.284-.08a.96.96 0 0 0-1.187 1.187l.081.283c.275.96-.918 1.65-1.613.931l-.205-.211a.96.96 0 0 0-1.622.434l-.071.286c-.243.97-1.62.97-1.864 0l-.071-.286a.96.96 0 0 0-1.622-.434l-.205.211c-.695.719-1.888.03-1.613-.931l.08-.284a.96.96 0 0 0-1.186-1.187l-.284.081c-.96.275-1.65-.918-.931-1.613l.211-.205a.96.96 0 0 0-.434-1.622l-.286-.071c-.97-.243-.97-1.62 0-1.864l.286-.071a.96.96 0 0 0 .434-1.622l-.211-.205c-.719-.695-.03-1.888.931-1.613l.284.08a.96.96 0 0 0 1.187-1.186l-.081-.284c-.275-.96.918-1.65 1.613-.931l.205.211a.96.96 0 0 0 1.622-.434zM12.973 8.5H8.25l-2.834 3.779A4.998 4.998 0 0 0 12.973 8.5m0-1a4.998 4.998 0 0 0-7.557-3.779l2.834 3.78zM5.048 3.967l-.087.065zm-.431.355A4.98 4.98 0 0 0 3.002 8c0 1.455.622 2.765 1.615 3.678L7.375 8zm.344 7.646.087.065z"/>
                                 <TextBlock Grid.Column="1" Foreground="White" VerticalAlignment="Bottom">Рабочее пространство</TextBlock>
                                 <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" Margin="0,0,5,5">
-                                    <Run>Чтобы открыть основные настройки рабочего пространства, </Run>
+                                    <Run>Чтобы открыть информацию о рабочем пространстве, </Run>
                                     <Hyperlink Click="OpenSettingsClick" IsEnabled="{Binding EditingWorkspaceEnabled}">нажмите сюда.</Hyperlink>
                                 </TextBlock>
                             </Grid>
@@ -214,7 +208,7 @@
                                 </TextBlock>
                             </Grid>
                         </Border>
-                        <Border Visibility="{Binding EditingWorkspaceVisibility}" Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
+                        <Border Visibility="{Binding EditingWorkspaceVisibility}" IsEnabled="False" Margin="5" CornerRadius="8" MinWidth="100" BorderThickness="1" BorderBrush="#7F1E90FF" Background="#331E90FF">
                             <Grid MinHeight="60">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60"/>

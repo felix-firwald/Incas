@@ -39,9 +39,8 @@ namespace Incas.Objects.Converters
                     case FieldType.Object:
 #if E_BUSINESS
                     case FieldType.Structure:
+                        return new SolidColorBrush(Color.FromRgb(132, 189, 253));
 #endif
-                    case FieldType.Table:
-                        return new SolidColorBrush(Color.FromRgb(183, 153, 241));
                 }
             }
             return Brushes.Black;

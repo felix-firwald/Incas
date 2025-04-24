@@ -1,16 +1,10 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.Objects.Interfaces;
-using Incas.Objects.ServiceClasses.Groups.ViewModels;
 using IncasEngine.ObjectiveEngine.Models;
-using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace Incas.Objects.ViewModels
 {
@@ -63,7 +57,14 @@ namespace Incas.Objects.ViewModels
                         EditorVisibility = true
                     };
                 }
-                this.Members.Add(new(item, memberState));
+                if (item.ClassMemberType == IClassMemberViewModel.MemberType.Table)
+                {
+                    this.Members.Add(new(item, memberState, (item as TableViewModel).Fields));
+                }
+                else
+                {
+                    this.Members.Add(new(item, memberState));
+                }               
             }
         }
 
@@ -87,12 +88,27 @@ namespace Incas.Objects.ViewModels
             }
         }
         public ObservableCollection<StateMemberViewModel> Members { get; set; }
+        private StateMemberViewModel selectedMember;
+        public StateMemberViewModel SelectedMember
+        {
+            get
+            {
+                return this.selectedMember;
+            }
+            set
+            {
+                this.selectedMember = value;
+                this.OnPropertyChanged(nameof(this.SelectedMember));
+            }
+        }
+
         public void Save()
         {
             this.Source.Settings = new();
             this.Source.SetId();
             foreach (StateMemberViewModel item in this.Members)
             {
+                item.Save();
                 this.Source.Settings.Add(item.Source.Id, item.State);
             }
         }

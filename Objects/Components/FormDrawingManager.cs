@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using Incas.Core.Extensions;
 using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
@@ -12,6 +13,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Incas.Objects.Components
 {
@@ -80,18 +83,12 @@ namespace Incas.Objects.Components
             }
             foreach (Field f in data.Fields)
             {
-                switch (f.Type)
+                FieldFiller ff = new(f)
                 {
-                    default:
-                        FieldFiller ff = new(f)
-                        {
-                            Uid = f.Id.ToString()
-                        };
-                        this.drawingOutputArgs.Fillers.Add(f, ff);
-                        fillersDict.Add(f.Id, ff);
-                        break;
-
-                }
+                    Uid = f.Id.ToString()
+                };
+                this.drawingOutputArgs.Fillers.Add(f, ff);
+                fillersDict.Add(f.Id, ff);
             }
             if (data.Tables is not null)
             {
@@ -103,7 +100,6 @@ namespace Incas.Objects.Components
                     };
                     this.drawingOutputArgs.Tables.Add(table, ft);
                     fillersDict.Add(table.Id, ft);
-                    break;
                 }
             }            
 
@@ -138,22 +134,23 @@ namespace Incas.Objects.Components
                     return;
                 case ControlType.Table:
                     this.AddChild(currentParent, fillers[vc.Table]);
+                    if (vc.Children is not null)
+                    {
+                        foreach (ViewControl control in vc.Children)
+                        {
+                            this.DrawControl(control, fillers[vc.Table], fillers);
+                        }
+                    }
                     return;
                 case ControlType.Button:
-                    Button btn = new()
+                    if (currentParent is FieldTableFiller fieldTableFiller)
                     {
-                        Content = vc.Name,
-                        Style = ResourceStyleManager.FindStyle(ResourceStyleManager.ButtonRectangle)
-                    };
-                    foreach (Method m in this.classData.Methods)
+                        this.PlaceButton(vc, fieldTableFiller);
+                    }
+                    else
                     {
-                        if (m.Id == vc.RunMethod)
-                        {
-                            drawingOutputArgs.Buttons.Add(btn, m);
-                            this.AddChild(currentParent, btn);
-                            break;
-                        }
-                    }                  
+                        this.PlaceButton(vc, currentParent);
+                    }                   
                     return;
                 case ControlType.VerticalStack:
                     element = new StackPanel() { Orientation = Orientation.Vertical };
@@ -183,6 +180,56 @@ namespace Incas.Objects.Components
                 }
             }
         }
+        private void PlaceButton(ViewControl vc, FrameworkElement currentParent)
+        {           
+            this.AddChild(currentParent, this.MakeButton(vc));
+        }
+        private void PlaceButton(ViewControl vc, FieldTableFiller currentParent)
+        {
+            currentParent.AddButton(this.MakeButton(vc));
+        }
+        private Button MakeButton(ViewControl vc)
+        {
+            Method targetMethod = new();
+            foreach (Method m in this.classData.Methods)
+            {
+                if (m.Id == vc.RunMethod)
+                {
+                    targetMethod = m;
+                    break;
+                }
+            }
+            StackPanel sp = new()
+            {
+                Orientation = Orientation.Horizontal
+            };
+            Label l = new()
+            {
+                Content = vc.Name,
+                Foreground = new SolidColorBrush(System.Windows.Media.Colors.White),
+                FontFamily = ResourceStyleManager.FindFontFamily(ResourceStyleManager.FontRubik),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            Path p = new();
+            if (targetMethod.Icon != null)
+            {
+                p.Data = Geometry.Parse(targetMethod.Icon);
+            }            
+            p.Fill = targetMethod.Color.AsBrush();
+            p.VerticalAlignment = VerticalAlignment.Center;
+            p.Stretch = Stretch.Uniform;
+            p.Height = 14;
+            sp.Children.Add(p);
+            sp.Children.Add(l);
+            Button btn = new()
+            {
+                Content = sp,
+                Style = ResourceStyleManager.FindStyle(ResourceStyleManager.ButtonRectangle)
+            };
+            drawingOutputArgs.Buttons.Add(btn, targetMethod);
+            return btn;           
+        }
+
         private void AddChild(FrameworkElement container, FrameworkElement child)
         {
             if (container is ContentControl control)

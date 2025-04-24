@@ -1,17 +1,22 @@
 ﻿using Incas.Objects.Interfaces;
+using Incas.Objects.Processes.AutoUI;
+using Incas.Objects.Processes.ViewModels;
 using Incas.Objects.ViewModels;
 using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using System.Windows.Controls;
 
 namespace Incas.Objects.Processes.Views.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для ProcessClassPart.xaml
+    /// CLASS SETTINGS ONLY! Логика взаимодействия для ProcessClassPart.xaml
     /// </summary>
     public partial class ProcessClassPart : UserControl, IClassPartSettings
     {
-        public string ItemName => "Настройка процессов";
 
+        public event IClassPartSettings.OpenAdditionalSettings OnAdditionalSettingsOpenRequested;
+        public string ItemName => "Настройка процессов";
+        public ProcessPartViewModel vm { get; set; }
         public ProcessClassPart()
         {
 #if !E_FREE
@@ -21,12 +26,29 @@ namespace Incas.Objects.Processes.Views.Pages
 
         public IClassPartSettings SetUp(ClassViewModel classViewModel)
         {
+            this.vm = new(classViewModel);
+            this.DataContext = this.vm;
             return this;
         }
 
         public void Save()
         {
-            throw new System.NotImplementedException();
+            this.vm.Save();
+        }
+
+        private void AddDocument(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DocumentSelectorAutoUI doc = new();
+            if (doc.ShowDialog("Выбор модели документа"))
+            {
+                ClassItem item = doc.GetSelectedDocument();
+                this.vm.AddDocument(item);
+            }
+        }
+
+        private void RemoveDocument(object sender, System.Windows.RoutedEventArgs e)
+        {
+
         }
     }
 }

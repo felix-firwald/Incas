@@ -65,11 +65,6 @@ namespace Incas.Objects.Views.Controls
                             this.FilterButton.IsEnabled = false;
                         }
                         break;
-                    case FieldType.Table:
-                        this.FieldValue.Text = "(таблица)";
-                        this.FilterButton.IsEnabled = false;
-                        this.ColorizeField(67, 70, 80);
-                        break;
                     case FieldType.Date:
                         this.FieldValue.Text = data.Value.ToString();
                         this.GenerateDateTimeField();
@@ -78,7 +73,7 @@ namespace Incas.Objects.Views.Controls
                         CheckBox box = new();
                         box.Style = this.FindResource("CheckBoxDataGridUsual") as Style;
                         box.HorizontalAlignment = HorizontalAlignment.Left;
-                        box.IsChecked = this.Data.Value.ToString() == "1";
+                        box.IsChecked = this.Data.Value.ToString() == bool.TrueString;
                         box.Margin = new Thickness(5);
                         this.MainGrid.Children.Add(box);
                         Grid.SetColumn(box, 1);
@@ -247,8 +242,6 @@ namespace Incas.Objects.Views.Controls
                     {
                         default:
                             Clipboard.SetText(this.Data.Value.ToString());
-                            break;
-                        case FieldType.Table:
                             break;
                         case FieldType.Object:
                             Clipboard.SetText(this.FieldValue.Text);

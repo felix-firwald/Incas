@@ -92,6 +92,80 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.Name));
             }
         }
+        public string VisibleName
+        {
+            get
+            {
+                return this.Source.VisibleName;
+            }
+            set
+            {
+                this.Source.VisibleName = value;
+                this.OnPropertyChanged(nameof(this.VisibleName));
+            }
+        }
+        public string Icon
+        {
+            get
+            {
+                return this.Source.Icon;
+            }
+            set
+            {
+                this.Source.Icon = value;
+                this.OnPropertyChanged(nameof(this.Icon));
+            }
+        }
+        public IncasEngine.Core.Color Color
+        {
+            get
+            {
+                return this.Source.Color;
+            }
+        }
+        public byte ColorR
+        {
+            get
+            {
+                return this.Source.Color.R;
+            }
+            set
+            {
+                IncasEngine.Core.Color color = IncasEngine.Core.Color.FromRGB(value, this.Source.Color.G, this.Source.Color.B);
+                this.OnPropertyChanged(nameof(this.ColorR));             
+                this.Source.Color = color;
+                this.OnPropertyChanged(nameof(this.Color));
+            }
+        }
+        public byte ColorG
+        {
+            get
+            {
+                return this.Source.Color.G;
+            }
+            set
+            {
+                IncasEngine.Core.Color color = IncasEngine.Core.Color.FromRGB(this.Source.Color.R, value, this.Source.Color.B);
+                this.OnPropertyChanged(nameof(this.ColorG));
+                this.Source.Color = color;
+                this.OnPropertyChanged(nameof(this.Color));
+            }
+        }
+        public byte ColorB
+        {
+            get
+            {
+                return this.Source.Color.B;
+            }
+            set
+            {
+                IncasEngine.Core.Color color = IncasEngine.Core.Color.FromRGB(this.Source.Color.R, this.Source.Color.G, value);
+                this.OnPropertyChanged(nameof(this.ColorB));
+                this.Source.Color = color;
+                this.OnPropertyChanged(nameof(this.Color));
+            }
+        }
+
         public string Code
         {
             get

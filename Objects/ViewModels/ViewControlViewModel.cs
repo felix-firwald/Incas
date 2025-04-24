@@ -94,6 +94,7 @@ namespace Incas.Objects.ViewModels
                     case ControlType.HorizontalStack:
                     case ControlType.Grid:
                     case ControlType.Tab:
+                    case ControlType.Table:
                         return true;
                 }
                 return false;
@@ -104,9 +105,12 @@ namespace Incas.Objects.ViewModels
         {
             get
             {
-                if (this.Type == ControlType.FieldFiller)
+                switch (this.Type)
                 {
-                    return Visibility.Collapsed;
+                    case ControlType.Table:
+                    case ControlType.FieldFiller:
+                    case ControlType.Button:
+                        return Visibility.Collapsed;
                 }
                 return Visibility.Visible;
             }
@@ -124,13 +128,21 @@ namespace Incas.Objects.ViewModels
         }
         public void AddChild(ViewControlViewModel vc)
         {
-            if (this.Type is ControlType.FieldFiller or ControlType.Button or ControlType.Table)
+            if (this.Type is ControlType.FieldFiller or ControlType.Button)
+            {
+                return;
+            }
+            if (this.Type is ControlType.Table && vc.Type is not ControlType.Button)
             {
                 return;
             }
             if (!this.SupportsMultipleChildren)
             {
-                this.Children.Clear();
+                this.Children?.Clear();
+            }
+            if (this.Children is null)
+            {
+                this.Children = new();
             }
             this.Children.Add(vc);
             vc.OnDrawCalling += this.Vc_OnDrawCalling;

@@ -38,14 +38,14 @@ namespace Incas.Objects.AutoUI
             try
             {
                 DateFieldData df = field.GetDateFieldData();
-                this.StartDate = df.StartDate;
-                this.EndDate = df.EndDate;
+                this.StartDate = df.StartDate == DateTime.MinValue? DateTime.Today : df.StartDate;
+                this.EndDate = df.EndDate == DateTime.MinValue ? DateTime.Today.AddYears(10) : df.EndDate;
                 this.Format.SetSelection(df.Format);
             }
             catch
             {
                 this.StartDate = DateTime.Today.AddYears(-1);
-                this.EndDate = DateTime.MaxValue;
+                this.EndDate = DateTime.Today.AddYears(10);
             }
         }
 

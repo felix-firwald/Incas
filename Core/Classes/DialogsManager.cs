@@ -7,6 +7,7 @@ using IncasEngine.ObjectiveEngine.Exceptions;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -115,8 +116,9 @@ namespace Incas.Core.Classes
         {
             ProgramState.MainWindow.AddTabItem(control, id, name, tt);
         }
-        public static void ShowPageWithGroupBox(System.Windows.Controls.Control control, string name, string id, TabType tt = TabType.Usual)
+        public static TabItem ShowPageWithGroupBox(System.Windows.Controls.Control control, string name, string id, TabType tt = TabType.Usual)
         {
+            TabItem returning = null;
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 System.Windows.Controls.GroupBox result = new()
@@ -124,8 +126,9 @@ namespace Incas.Core.Classes
                     Header = name,
                     Content = control
                 };
-                ProgramState.MainWindow.AddTabItem(result, id, name, tt);
+                returning = ProgramState.MainWindow.AddTabItem(result, id, name, tt);
             });
+            return returning;
         }
         public static bool ShowOpenFileDialog(ref string file, string filter)
         {

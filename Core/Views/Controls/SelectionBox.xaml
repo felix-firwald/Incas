@@ -50,19 +50,19 @@
                 </Border>
 
             </Popup>
-            <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="1" Height="24" VerticalAlignment="Center"/>
+            <!--<Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="1" Height="24" VerticalAlignment="Center"/>-->
             <!--<fa:FontAwesome x:Name="EditIcon" Visibility="Collapsed" Icon="Pencil" Grid.Column="2" Style="{DynamicResource IconButton}" ToolTip="Отредактировать объект" MouseDown="EditClick"/>-->
             <!--<fa:FontAwesome x:Name="AddIcon" Icon="PlusCircle" Grid.Column="2" Style="{DynamicResource IconButton}" ToolTip="Создать объект и присвоить в поле" MouseDown="AddClick" />-->
-            <Button x:Name="EditIcon" Style="{DynamicResource ButtonSquare}" Visibility="Collapsed" Margin="-5" Click="EditClick" ToolTip="Отредактировать объект" Grid.Column="2" MinHeight="25" MaxHeight="25" >
+            <Button x:Name="EditIcon" Style="{DynamicResource ButtonSquareGrid}" Visibility="Collapsed" Margin="-5" Click="EditClick" ToolTip="Отредактировать объект" Grid.Column="2" MinHeight="25" MaxHeight="25" >
                 <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Margin="0" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
             </Button>
-            <Button x:Name="AddIcon" Style="{DynamicResource ButtonSquare}" Margin="-5" Click="AddClick" ToolTip="Создать объект и присвоить в поле" Grid.Column="2" MinHeight="25" MaxHeight="25">
+            <Button x:Name="AddIcon" Style="{DynamicResource ButtonSquareGrid}" Margin="-5" Click="AddClick" ToolTip="Создать объект и присвоить в поле" Grid.Column="2" MinHeight="25" MaxHeight="25">
                 <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center"  Stretch="Uniform" Margin="0" Data="M460-460v140q0 8.5 5.76 14.25t14.27 5.75q8.51 0 14.24-5.75T500-320v-140h140q8.5 0 14.25-5.76t5.75-14.27q0-8.51-5.75-14.24T640-500H500v-140q0-8.5-5.76-14.25T479.97-660q-8.51 0-14.24 5.75T460-640v140H320q-8.5 0-14.25 5.76T300-479.97q0 8.51 5.75 14.24T320-460h140Zm20.13 340q-74.67 0-140.41-28.34-65.73-28.34-114.36-76.92-48.63-48.58-76.99-114.26Q120-405.19 120-479.87q0-74.67 28.34-140.41 28.34-65.73 76.92-114.36 48.58-48.63 114.26-76.99Q405.19-840 479.87-840q74.67 0 140.41 28.34 65.73 28.34 114.36 76.92 48.63 48.58 76.99 114.26Q840-554.81 840-480.13q0 74.67-28.34 140.41-28.34 65.73-76.92 114.36-48.58 48.63-114.26 76.99Q554.81-120 480.13-120Z"/>
             </Button>
 
-            <Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="3" Height="24" VerticalAlignment="Center"/>
-            <Button x:Name="EyeButton" Style="{StaticResource ButtonSquare}" Margin="-5" Background="{StaticResource Black}" Grid.Column="4" Click="ButtonClick" ToolTip="Выбрать объект" MinHeight="25" MaxHeight="25">
-                <Path Fill="{StaticResource LightPurple}" VerticalAlignment="Center" Margin="2" Stretch="Uniform" Data="{StaticResource ThreeDots}"/>
+            <!--<Rectangle Fill="{DynamicResource LightBlack}" Grid.Column="3" Height="24" VerticalAlignment="Center"/>-->
+            <Button x:Name="EyeButton" Style="{StaticResource ButtonSquareGrid}" Margin="-5" Background="{StaticResource Black}" Grid.Column="4" Click="ButtonClick" ToolTip="Выбрать объект" MinHeight="25" MaxHeight="25">
+                <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Margin="2" Stretch="Uniform" Data="{StaticResource ThreeDots}"/>
             </Button>
             <!--<fa:FontAwesome Icon="EllipsisH" Grid.Column="4" Style="{DynamicResource IconButton}" MouseDown="ButtonClick" ToolTip="Выбрать запись"/>-->
             <!--<Path Grid.Column="2" Style="{DynamicResource PathMain}" VerticalAlignment="Center" HorizontalAlignment="Center" MouseDown="ButtonClick" ToolTip="Выбрать запись" Data="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" Stretch="Uniform" Margin="12,12,12,12" />-->

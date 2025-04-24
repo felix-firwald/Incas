@@ -70,7 +70,7 @@ namespace Incas.Objects.ViewModels
 
         public void AddField(Field f)
         {
-            FieldViewModel vm = new(f, true);
+            FieldViewModel vm = new(f, this.Owner, true);
             vm.OnRemoveRequested += this.DoRemoveField;
             vm.OnMoveUpRequested += this.DoMoveUpField;
             vm.OnMoveDownRequested += this.DoMoveDownField;
@@ -122,6 +122,30 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.Name));
             }
         }
+        public string VisibleName
+        {
+            get
+            {
+                return this.Source.VisibleName;
+            }
+            set
+            {
+                this.Source.VisibleName = value.Replace('_', ' ');
+                this.OnPropertyChanged(nameof(this.VisibleName));
+            }
+        }
+        public string ConsolidatedName
+        {
+            get
+            {
+                return this.Source.ConsolidatedName;
+            }
+            set
+            {
+                this.Source.ConsolidatedName = value;
+                this.OnPropertyChanged(nameof(this.ConsolidatedName));
+            }
+        }
         public bool BelongsThisClass
         {
             get
@@ -139,7 +163,7 @@ namespace Incas.Objects.ViewModels
             FieldType.Date,
             FieldType.LocalEnumeration,
             FieldType.GlobalEnumeration,
-            FieldType.Object,
+            //FieldType.Object,
         };
         public List<FieldType> FieldTypes
         {

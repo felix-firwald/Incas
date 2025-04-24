@@ -26,10 +26,10 @@
         <Setter Property="UseLayoutRounding" Value="True"/>
     </Style>
     <Style x:Key="LabelElement" TargetType="{x:Type Label}">
-        <Setter Property="TextElement.FontFamily" Value="{StaticResource JetBrains}"/>
+        <Setter Property="TextElement.FontFamily" Value="{StaticResource Rubik}"/>
         <Setter Property="TextElement.FontWeight" Value="ExtraLight"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
-        <Setter Property="Foreground" Value="{StaticResource GrayLight}"/>
+        <Setter Property="Foreground" Value="{StaticResource Light}"/>
     </Style>
     <Style x:Key="LabelElementSpecial" TargetType="{x:Type Label}" BasedOn="{StaticResource LabelElement}">
         <Setter Property="Foreground" Value="{StaticResource LightPurple}"/>

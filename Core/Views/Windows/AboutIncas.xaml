@@ -44,6 +44,7 @@
                         <Button Style="{StaticResource ButtonMain}" Content="Миграция V1 -> V2" ToolTip="Автоматизация процесса миграции на 2.0"/>
                         <Button Style="{StaticResource ButtonMain}" Content="См. LCInfo" ToolTip="Открыть последнее изменение в настройках РП"/>
                         <Button Style="{StaticResource ButtonMain}" Content="SQL транзакция" ToolTip="Написать и выполнить кастомную транзакцию к service.incas"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Тестовый .dll" ToolTip="Компиляция service.incas в .dll библиотеку" Click="DLLExportClick"/>
                     </UniformGrid>
                 </StackPanel>
             </Border>

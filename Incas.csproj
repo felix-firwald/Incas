@@ -378,9 +378,10 @@
     <Folder Include="Objects.Events\Converters\" />
     <Folder Include="Objects.Events\Views\Controls\" />
     <Folder Include="Objects.Events\Views\Windows\" />
+    <Folder Include="Objects.Files\Views\Controls\" />
+    <Folder Include="Objects.Files\Views\Windows\" />
     <Folder Include="Objects.Processes\Views\Controls\" />
     <Folder Include="Objects.Processes\Views\Windows\" />
-    <Folder Include="Objects.Processes\AutoUI\" />
     <Folder Include="Objects.ServiceClasses\Groups\Components\" />
     <Folder Include="Objects.ServiceClasses\Users\Components\" />
     <Folder Include="Objects.StaticModels\Components\" />

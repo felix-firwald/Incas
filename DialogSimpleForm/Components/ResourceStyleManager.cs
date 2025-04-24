@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Incas.DialogSimpleForm.Components
 {
@@ -22,7 +23,10 @@ namespace Incas.DialogSimpleForm.Components
         public const string CheckboxEditingGridStyle = "CheckBoxDataGrid";
         public const string CheckboxNotEditableGridStyle = "CheckBoxDataGridUsual";
         public const string ButtonRectangle = "ButtonRectangle";
+        public const string FontRubik = "Rubik";
+        public const string FontJetBrains = "JetBrains";
         private static Dictionary<string, Style> cache = new();
+        private static Dictionary<string, FontFamily> cacheFonts = new();
         public static Style FindStyle(string name)
         {
             if (cache.ContainsKey(name))
@@ -32,6 +36,16 @@ namespace Incas.DialogSimpleForm.Components
             ResourceStyleManager inst = new();
             cache[name] = inst.FindResource(name) as Style;
             return cache[name];
+        }
+        public static FontFamily FindFontFamily(string name)
+        {
+            if (cacheFonts.ContainsKey(name))
+            {
+                return cacheFonts[name];
+            }
+            ResourceStyleManager inst = new();
+            cacheFonts[name] = inst.FindResource(name) as FontFamily;
+            return cacheFonts[name];
         }
     }
 }

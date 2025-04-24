@@ -49,6 +49,7 @@ namespace Incas.Objects.ViewModels
         private void SetMembers()
         {
             this.Fields = new();
+            this.Fields.CollectionChanged += this.Members_CollectionChanged;
             if (this.SourceData.Fields is not null)
             {
                 foreach (Field f in this.SourceData.Fields)
@@ -57,6 +58,7 @@ namespace Incas.Objects.ViewModels
                 }
             }           
             this.Methods = new();
+            this.Methods.CollectionChanged += this.Members_CollectionChanged;
             if (this.SourceData.Methods is not null)
             {
                 foreach (Method method in this.SourceData.Methods)
@@ -65,6 +67,7 @@ namespace Incas.Objects.ViewModels
                 }
             }
             this.Tables = new();
+            this.Tables.CollectionChanged += this.Members_CollectionChanged;
             if (this.SourceData.Tables is not null)
             {
                 foreach (Table table in this.SourceData.Tables)
@@ -87,6 +90,11 @@ namespace Incas.Objects.ViewModels
                     this.AddNewControlToCustomForm(vc);
                 }
             }
+        }
+
+        private void Members_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            this.OnPropertyChanged(nameof(this.Members));
         }
 
         public void AddField(Field f)
@@ -270,6 +278,18 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.NameOfClass));
             }
         }
+        public bool PreferPage
+        {
+            get
+            {
+                return this.SourceData.PreferPage;
+            }
+            set
+            {
+                this.SourceData.PreferPage = value;
+                this.OnPropertyChanged(nameof(this.PreferPage));
+            }
+        }
         private ObservableCollection<WorkspaceComponent> components;
         public ObservableCollection<WorkspaceComponent> AvailableComponents
         {
@@ -376,7 +396,7 @@ namespace Incas.Objects.ViewModels
             set
             {
                 this.fields = value;
-                this.OnPropertyChanged(nameof(this.Fields));                
+                this.OnPropertyChanged(nameof(this.Fields));
             }
         }
         private ObservableCollection<MethodViewModel> methods;
@@ -427,11 +447,11 @@ namespace Incas.Objects.ViewModels
                 {
                     result.Add(member);
                 }
-                foreach (IClassMemberViewModel member in this.Methods)
+                foreach (IClassMemberViewModel member in this.Tables)
                 {
                     result.Add(member);
                 }
-                foreach (IClassMemberViewModel member in this.Tables)
+                foreach (IClassMemberViewModel member in this.Methods)
                 {
                     result.Add(member);
                 }
@@ -648,9 +668,9 @@ namespace Incas.Objects.ViewModels
             FieldType.GlobalEnumeration,
             FieldType.Object,
 #if E_BUSINESS
-            FieldType.Structure,
+            //FieldType.Structure,
 #endif
-            FieldType.Table,         
+            //FieldType.Table,         
         };
         public List<FieldType> FieldTypes
         {
@@ -780,10 +800,13 @@ namespace Incas.Objects.ViewModels
         /// <returns></returns>
         public bool Save()
         {
-            bool result = this.Validate();
-            this.SetData();
-            this.Source.Save();
-            return result;
+            if (this.Validate())
+            {
+                this.SetData();
+                this.Source.Save();
+                return true;
+            }
+            return false;
         }
     }
 }

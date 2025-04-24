@@ -41,8 +41,7 @@ namespace Incas.Objects.Views.Windows
         {
             this.InitializeComponent();
             this.Title = source.Name;
-            this.Class = source;
-            DialogsManager.ShowWaitCursor(false);
+            this.Class = source;           
             if (!ProgramState.CurrentWorkspace.CurrentGroup.IsComponentInAccess(source.Component))
             {
                 this.ShowDisabledComponentMessage();
@@ -65,7 +64,8 @@ namespace Incas.Objects.Views.Windows
                 }                
                 this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
                 this.Class.OnRemoved += this.Class_OnRemoved;
-            }            
+            }
+            DialogsManager.ShowWaitCursor(false);
         }
 
         private void Class_OnRemoved()

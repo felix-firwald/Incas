@@ -8,6 +8,7 @@ using IncasEngine.License;
 using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Windows;
 
 namespace Incas
@@ -18,11 +19,15 @@ namespace Incas
 
     public partial class App : System.Windows.Application
     {
+        private const string WorkspaceArg = "ws";
+        private const string UserArg = "user";
+        private const string PasswordArg = "pwd";
         private const string FormError = "https://forms.yandex.ru/cloud/66fa578c505690e91c121ddc/";
         private bool criticalErrorOccured = false;
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            
             EngineGlobals.ApplicationLogicType = EngineGlobals.ApplicationType.IncasClient;
             SplashScreen splashScreen = new("Static\\Splash.png");
             splashScreen.Show(false, true);
@@ -45,26 +50,25 @@ namespace Incas
             //this.RunTest();
 #endif
             ProgramState.CheckoutWorkspaces();
-            
+
             OpenWorkspace ow = new();
             if (ow.ShowDialog() == true)
             {
-                //Core.Views.Windows.MainWindow mw = new Core.Views.Windows.MainWindow();
-                //mw.Show();
-            }           
+                
+            }                
         }
         private void RunTest()
         {
             CheckerWindow cw = new();
             cw.ShowDialog();
         }
-        private void ShowCI()
+
+        private void FastEnter(string[] args)
         {
-            ComputerInfo ci = new();
-            string info = JsonConvert.SerializeObject(ci, Formatting.Indented);
-            DialogsManager.ShowInfoDialog(info);
-            DialogsManager.ShowInfoDialog(Environment.MachineName);
-            DialogsManager.ShowInfoDialog(Environment.UserDomainName);
+            //string workspace = 
+            //string user = "";
+            //string password = "";
+            //ProgramState.CurrentWorkspace.LogIn(args[PasswordArg]);
         }
 
         private void Unhandled(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)

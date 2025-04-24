@@ -48,6 +48,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource Element}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CaretBrush" Value="White"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
         <Setter Property="Margin" Value="5"/>
@@ -522,6 +523,7 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="30"/>
+        <Setter Property="CaretBrush" Value="White"/>
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Foreground" Value="White" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -607,6 +609,7 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="MaxHeight" Value="31"/>
+        <Setter Property="CaretBrush" Value="White"/>
         <Setter Property="Margin" Value="-5,0,-1,0"/>
         <Setter Property="Foreground" Value="White" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />

@@ -144,6 +144,7 @@ namespace Incas.Core.Views.Windows
             {
                 this.AddPageButton(wc);
             }
+            this.AddAdminPageButton("Файлы", Classes.Icon.Zip, Controls.MainWindowButtonTab.Files, "Каталог файлов рабочего пространства");
 #if !E_FREE
             if (ProgramState.CurrentWorkspace.CurrentGroup.IsUsersSettingsVisible)
             {
@@ -183,14 +184,14 @@ namespace Incas.Core.Views.Windows
                 this.AddTabItem(item, id, name, TabType.Usual);
             }
         }
-        public void AddTabItem(Control item, string id, string name, TabType tabType)
+        public TabItem AddTabItem(Control item, string id, string name, TabType tabType)
         {
             foreach (Control c in this.TabMain.Items)
             {
                 if (c.Uid == id)
                 {
                     ((TabItem)c).IsSelected = true;
-                    return;
+                    return (TabItem)c;
                 }
             }
             TabItem ti = new()
@@ -211,6 +212,7 @@ namespace Incas.Core.Views.Windows
             }
             ti.IsEnabledChanged += this.TabItem_IsEnabledChanged;
             this.TabMain.Items.Add(ti);
+            return ti;
         }
         public void AddTabItem(ITabItem item, string id, string name, TabType tabType)
         {

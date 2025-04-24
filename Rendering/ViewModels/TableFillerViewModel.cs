@@ -1,20 +1,20 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
-using Incas.Objects.Components;
+using Incas.Objects.ViewModels;
+using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
-using IncasEngine.ObjectiveEngine.FieldComponents;
 using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
-using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
 
 namespace Incas.Rendering.ViewModels
 {
-    internal class TableFillerViewModel : BaseViewModel
+    public class TableFillerViewModel : BaseViewModel
     {
         private DataTable _data;
         public Table TableDefinition;
@@ -24,14 +24,19 @@ namespace Incas.Rendering.ViewModels
             try
             {
                 this.TableDefinition = t;
-                this.MakeColumns();
+                this.configurations = new();
+                foreach (Field field in t.Fields)
+                {
+                    this.Configurations.Add(field.Id, new());
+                }
+                //this.MakeColumns();
             }
             catch
             {
                 DialogsManager.ShowErrorDialog("Не удалось получить определение таблицы.");
             }
             this._data = new DataTable();
-            this.MakeColumns();
+            //this.MakeColumns();
             this.SetCommands();
         }
         #region Commands
@@ -46,6 +51,76 @@ namespace Incas.Rendering.ViewModels
         public ICommand InsertToLeft { get; private set; }
         public ICommand InsertToTop { get; private set; }
         public ICommand InsertToBottom { get; private set; }
+
+        private bool isEnabled = true;
+        public bool IsEnabled
+        {
+            get
+            {
+                return this.isEnabled;
+            }
+            set
+            {
+                this.isEnabled = value;
+                this.OnPropertyChanged(nameof(this.IsEnabled));
+                this.OnPropertyChanged(nameof(this.IsReadOnly));
+                this.OnPropertyChanged(nameof(this.EditVisibility));
+            }
+        }
+        public bool IsReadOnly
+        {
+            get
+            {
+                return !this.IsEnabled;
+            }
+        }
+        private bool insertEnabled = true;
+        public bool InsertEnabled
+        {
+            get
+            {
+                return this.insertEnabled;
+            }
+            set
+            {
+                this.insertEnabled = value;
+                this.OnPropertyChanged(nameof(this.InsertEnabled));
+            }
+        }
+        private bool removeEnabled = true;
+        public bool RemoveEnabled
+        {
+            get
+            {
+                return this.removeEnabled;
+            }
+            set
+            {
+                this.removeEnabled = value;
+                this.OnPropertyChanged(nameof(this.RemoveEnabled));
+            }
+        }
+
+        public Visibility EditVisibility
+        {
+            get
+            {
+                return this.FromBool(this.IsEnabled);
+            }
+        }
+        private Dictionary<Guid, ColumnConfiguration> configurations;
+        public Dictionary<Guid, ColumnConfiguration> Configurations
+        {
+            get
+            {
+                return this.configurations;
+            }
+            set
+            {
+                this.configurations = value;
+                this.OnPropertyChanged(nameof(this.Configurations));
+            }
+        }
 
         public void DoInsertToRight(object parameter)
         {
@@ -78,18 +153,14 @@ namespace Incas.Rendering.ViewModels
                 {
                     dc.DefaultValue = tf.Value;
                 }
-                dc.ExtendedProperties.Add(TableFieldColumnData.DataColumnIdKey, tf.Id);
+                dc.ExtendedProperties.Add(Helpers.TableColumnIdKey, tf.Id);
                 this.Grid.Columns.Add(dc);
             }
             this.OnPropertyChanged(nameof(this.Grid));
         }
         public void ApplyData(DataTable data)
         {
-            this.Grid.Clear();
-            foreach (DataRow dc in data.Rows)
-            {
-                this.Grid.ImportRow(dc);
-            }
+            this.Grid = data;
         }
         
         public void AddRow()
@@ -144,16 +215,30 @@ namespace Incas.Rendering.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedItem));
             }
         }
+        private List<string> removed = new();
+        public List<string> RemovedRows
+        {
+            get
+            {
+                return this.removed;
+            }
+        }
         public void RemoveSelectedRow()
         {
             int counter = this.SelectedRow;
-            this.Grid.Rows.Remove(this.Grid.Rows[counter]);
+            DataRow dr = this.Grid.Rows[counter];
+            string id = dr[Helpers.IdField].ToString();
+            if (!string.IsNullOrEmpty(id))
+            {
+                this.RemovedRows.Add(id);
+            }
+            this.Grid.Rows.Remove(dr);
             this.OnPropertyChanged(nameof(this.Grid));
             if (counter > 0)
             {
                 counter--;
                 this.SelectedRow = counter;
-            }      
+            }                     
         }
         public void MoveUpSelectedRow()
         {

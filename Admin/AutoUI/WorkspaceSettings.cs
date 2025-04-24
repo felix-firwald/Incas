@@ -36,6 +36,19 @@ namespace Incas.Admin.AutoUI
             }
         }
 
+        [Description("Версия IncasEngine")]
+        public string FrameworkVersion
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.data.FrameworkVersion))
+                {
+                    return "-";
+                }
+                return this.data.FrameworkVersion;
+            }
+        }
+
         [Description("Режим работы")]
         public Selector WorkspaceMode { get; set; }
 

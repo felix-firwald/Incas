@@ -2,8 +2,10 @@
 using Incas.Core.Classes;
 using Incas.Core.Interfaces;
 using Incas.Core.Views.Controls;
+using Incas.DialogSimpleForm.Components;
 using Incas.Miniservices.UserStatistics;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Processes.Views.Pages;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.AutoUI;
@@ -15,6 +17,7 @@ using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.Processes;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using System;
 using System.Collections;
@@ -248,6 +251,24 @@ namespace Incas.Objects.Views.Pages
                 case Helpers.TargetObjectField:
                     e.Column.Visibility = Visibility.Hidden;
                     break;
+                default:
+                    string colHeader = e.Column.Header.ToString();
+                    foreach (Field f in this.ClassData.Fields)
+                    {
+                        if (f.Type is FieldType.Boolean && colHeader == f.VisibleName)
+                        {
+                            DataGridCheckBoxColumn cbc = new()
+                            {
+                                Header = f.VisibleName,
+                                Binding = new System.Windows.Data.Binding(colHeader),
+                                EditingElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.CheckboxEditingGridStyle),
+                                ElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.CheckboxNotEditableGridStyle)
+                            };
+                            e.Column = cbc;
+                            break;
+                        }
+                    }
+                    break;
             }
         }
 
@@ -346,19 +367,23 @@ namespace Incas.Objects.Views.Pages
                     return;
                 }
                 IObject obj = Processor.GetObject(this.sourceClass, id);
-                if (obj is IHierarchical objHierarchical && objHierarchical.Child != Guid.Empty)
+                switch (obj.Class.Type)
                 {
-                    ObjectsEditor oc = new(EngineGlobals.GetClass(objHierarchical.Child), [obj]);
-                    oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-                    oc.Show();
-                }
-                else
-                {
-                    ObjectsEditor oc = new(this.sourceClass, [obj]);
-                    oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-                    oc.Show();
-                }
-                
+                    case ClassType.Model:
+                    case ClassType.Document:
+                    case ClassType.Event:
+                    case ClassType.ServiceClassGroup:
+                    case ClassType.ServiceClassUser:
+                    case ClassType.ServiceClassTask:
+                        ObjectsEditor oc = new(this.sourceClass, [obj]);
+                        oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+                        oc.Show();
+                        break;
+                    case ClassType.Process:
+                        ProcessViewer pv = new(this.sourceClass as Class, obj as Process);
+                        DialogsManager.ShowPageWithGroupBox(pv, obj.Name, obj.Id.ToString());
+                        break;
+                }                                 
             }
             catch (Exception ex)
             {
