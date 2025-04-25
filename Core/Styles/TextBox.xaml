@@ -98,7 +98,7 @@
                             <Setter TargetName="Border" Property="BorderBrush" Value="DodgerBlue"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Border" Property="Opacity" Value="0.5"/>
+                            <Setter TargetName="Border" Property="Opacity" Value="0.75"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -212,7 +212,7 @@
                             <Setter TargetName="Border" Property="BorderBrush" Value="DodgerBlue"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Border" Property="Opacity" Value="0.5"/>
+                            <Setter TargetName="Border" Property="Opacity" Value="0.75"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -367,7 +367,7 @@
                             </Trigger.ExitActions>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.5"/>
+                            <Setter Property="Opacity" Value="0.75"/>
                         </Trigger>
                         <Trigger Property="Validation.HasError" Value="True">
                             <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource Error}"/>

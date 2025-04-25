@@ -36,13 +36,26 @@ namespace Incas.Objects.ViewModels
             this.State = state;
             this.NestedMembers = new();
             nested.CollectionChanged += this.Nested_CollectionChanged;
-            this.ApplyNestedCollection(nested);
+            this.ApplyNestedCollection(nested, false);
         }
-        private void ApplyNestedCollection(ObservableCollection<FieldViewModel> nested)
+        private void ApplyNestedCollection(ObservableCollection<FieldViewModel> nested, bool preSave = false)
         {
             if (this.State.NestedMembers is null)
             {
                 this.State.NestedMembers = new();
+            }
+            else
+            {
+                if (preSave)
+                {
+                    this.State.NestedMembers.Clear();
+                    foreach (StateMemberViewModel item in this.NestedMembers)
+                    {
+                        item.Save();
+                        this.State.NestedMembers.TryAdd(item.Source.Id, item.State);
+                    }
+                    this.NestedMembers.Clear();
+                }
             }
             foreach (IClassMemberViewModel item in nested)
             {
@@ -54,13 +67,18 @@ namespace Incas.Objects.ViewModels
                         IsEnabled = true,
                         EditorVisibility = true
                     };
+                    if (item.ClassMemberType == IClassMemberViewModel.MemberType.Table)
+                    {
+                        memberState.InsertEnabled = true;
+                        memberState.RemoveEnabled = true;
+                    }
                 }
                 this.NestedMembers.Add(new(item, memberState));
             }
         }
         private void Nested_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            this.ApplyNestedCollection(sender as ObservableCollection<FieldViewModel>);
+            this.ApplyNestedCollection(sender as ObservableCollection<FieldViewModel>, true);
         }
 
         public string Name

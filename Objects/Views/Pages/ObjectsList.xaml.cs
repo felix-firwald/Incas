@@ -289,9 +289,17 @@ namespace Incas.Objects.Views.Pages
                 DialogsManager.ShowAccessErrorDialog("Вы не вправе создавать объекты этого класса.");
                 return;
             }
-            ObjectsEditor oc = new(this.sourceClass);
-            oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-            oc.Show();
+            if (this.ClassData.PreferPage)
+            {
+                ObjectPage page = new(this.sourceClass);
+                DialogsManager.ShowPageWithGroupBox(page, "Новый объект", "NEWOBJECT" + this.sourceClass.Id.ToString());
+            }
+            else
+            {
+                ObjectsEditor oc = new(this.sourceClass);
+                oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+                oc.Show();
+            }           
         }
         private void CopyClick(object sender, RoutedEventArgs e)
         {
@@ -367,23 +375,31 @@ namespace Incas.Objects.Views.Pages
                     return;
                 }
                 IObject obj = Processor.GetObject(this.sourceClass, id);
-                switch (obj.Class.Type)
+                if (this.ClassData.PreferPage)
                 {
-                    case ClassType.Model:
-                    case ClassType.Document:
-                    case ClassType.Event:
-                    case ClassType.ServiceClassGroup:
-                    case ClassType.ServiceClassUser:
-                    case ClassType.ServiceClassTask:
-                        ObjectsEditor oc = new(this.sourceClass, [obj]);
-                        oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-                        oc.Show();
-                        break;
-                    case ClassType.Process:
-                        ProcessViewer pv = new(this.sourceClass as Class, obj as Process);
-                        DialogsManager.ShowPageWithGroupBox(pv, obj.Name, obj.Id.ToString());
-                        break;
-                }                                 
+                    ObjectPage page = new(this.sourceClass, obj);
+                    DialogsManager.ShowPageWithGroupBox(page, obj.Name, "EDITOR" + obj.Id.ToString());
+                }
+                else
+                {
+                    switch (obj.Class.Type)
+                    {
+                        case ClassType.Model:
+                        case ClassType.Document:
+                        case ClassType.Event:
+                        case ClassType.ServiceClassGroup:
+                        case ClassType.ServiceClassUser:
+                        case ClassType.ServiceClassTask:
+                            ObjectsEditor oc = new(this.sourceClass, [obj]);
+                            oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
+                            oc.Show();
+                            break;
+                        case ClassType.Process:
+                            ProcessViewer pv = new(this.sourceClass as Class, obj as Process);
+                            DialogsManager.ShowPageWithGroupBox(pv, obj.Name, obj.Id.ToString());
+                            break;
+                    }
+                }                                                  
             }
             catch (Exception ex)
             {

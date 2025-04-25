@@ -55,12 +55,14 @@ namespace Incas.Objects.Views.Windows
                 {
                     foreach (IObject obj in objects)
                     {
+
                         this.AddObjectCreator(obj);
                     }
                 }
                 else
                 {
                     this.AddObjectCreator();
+
                 }                
                 this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
                 this.Class.OnRemoved += this.Class_OnRemoved;

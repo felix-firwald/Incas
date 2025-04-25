@@ -190,9 +190,13 @@ namespace Incas.Rendering.Components
                     doc.Tables[table].InsertRow(doc.Tables[table].Rows[row], row, true);
                     foreach (DataColumn dc in dt.Columns)
                     {
-                        string value = dr[dc.ColumnName].ToString();
-                        doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value, columnsFormatting[dc.ColumnName]);
-                        doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Alignment = columnsAlignments[dc.ColumnName];
+                        try
+                        {
+                            string value = dr[dc.ColumnName].ToString();
+                            doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Append(value, columnsFormatting[dc.ColumnName]);
+                            doc.Tables[table].Rows[row].Cells[columns[dc.ColumnName]].Paragraphs[0].Alignment = columnsAlignments[dc.ColumnName];
+                        }
+                        catch { }
                     }
                     row += 1;
                 }

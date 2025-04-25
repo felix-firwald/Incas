@@ -226,8 +226,7 @@
                             <Setter Property="FrameworkElement.MinHeight" TargetName="DropDownBorder" Value="95"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="ContentSite" Property="Opacity" Value="0.5"/>
-                            <Setter TargetName="PART_EditableTextBox" Property="Opacity" Value="0.5"/>
+                            <Setter Property="Opacity" Value="0.75"/>
                         </Trigger>
                         <Trigger Property="ItemsControl.IsGrouping" Value="True">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
@@ -304,8 +303,7 @@
                             <Setter Property="FrameworkElement.MinHeight" TargetName="DropDownBorder" Value="95"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="ContentSite" Property="Opacity" Value="0.5"/>
-                            <Setter TargetName="PART_EditableTextBox" Property="Opacity" Value="0.5"/>
+                            <Setter Property="Opacity" Value="0.75"/>
                         </Trigger>
                         <Trigger Property="ItemsControl.IsGrouping" Value="True">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>

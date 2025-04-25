@@ -226,6 +226,10 @@ namespace Incas.Rendering.ViewModels
         public void RemoveSelectedRow()
         {
             int counter = this.SelectedRow;
+            if (counter < 0)
+            {
+                return;
+            }
             DataRow dr = this.Grid.Rows[counter];
             string id = dr[Helpers.IdField].ToString();
             if (!string.IsNullOrEmpty(id))

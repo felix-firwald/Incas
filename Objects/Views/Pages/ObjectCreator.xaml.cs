@@ -107,6 +107,15 @@ namespace Incas.Objects.Views.Pages
             this.DocumentTools.Visibility = Visibility.Collapsed;
             this.RemoveButton.Visibility = Visibility.Collapsed;
         }
+        public void HideNCA()
+        {
+            this.DocumentTools.Visibility = Visibility.Collapsed;
+            this.RemoveButtonRect.Visibility = Visibility.Collapsed;
+            this.RemoveButton.Visibility = Visibility.Collapsed;
+            this.Separator.Visibility = Visibility.Collapsed;
+            Grid.SetRow(this.ContentPanel, 0);
+            Grid.SetRowSpan(this.ContentPanel, 3);
+        }
         private void ApplyTerminated()
         {
             if (Helpers.IsObjectTerminated(this.Object))

@@ -35,9 +35,6 @@
                         <Trigger Property="IsPressed" Value="true">
                             <Setter TargetName="Border" Property="Background" Value="{StaticResource Icon}" />
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="{StaticResource Area}"/>
-                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -368,9 +365,9 @@
                         <Trigger Property="ShowSpinner" Value="False">
                             <Setter Property="Visibility" Value="Collapsed" TargetName="gridContent" />
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
+                        <!--<Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="0.5" />
-                        </Trigger>
+                        </Trigger>-->
                         <Trigger SourceName="PART_IncreaseButton" Property="IsEnabled" Value="False">
                             <Setter TargetName="PART_IncreaseButton" Property="Opacity" Value="0.5" />
                         </Trigger>
@@ -590,7 +587,7 @@
                             <Setter Property="IsReadOnly" Value="True" TargetName="PART_TextBox" />
                         </DataTrigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.5" />
+                            <Setter Property="Opacity" Value="0.75" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="PART_TextBox" Property="FocusManager.FocusedElement" Value="{Binding ElementName=PART_TextBox}" />
@@ -677,7 +674,7 @@
                             <Setter Property="IsReadOnly" Value="True" TargetName="PART_TextBox" />
                         </DataTrigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.5" />
+                            <Setter Property="Opacity" Value="0.75" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="PART_TextBox" Property="FocusManager.FocusedElement" Value="{Binding ElementName=PART_TextBox}" />
