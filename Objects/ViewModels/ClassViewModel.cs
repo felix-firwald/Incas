@@ -471,6 +471,10 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedState));
             }
         }
+        public void RemoveSelectedState()
+        {
+            this.States.Remove(this.SelectedState);
+        }
         private MethodViewModel selectedMethod;
         public MethodViewModel SelectedMethod
         {

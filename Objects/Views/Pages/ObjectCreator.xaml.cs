@@ -302,9 +302,7 @@ namespace Incas.Objects.Views.Pages
             else if (this.Object.Id != Guid.Empty && !this.PermissionSettings.UpdateOperations)// if already exists
             {
                 throw new AuthorFailed($"Вы не можете редактировать объекты этого класса.");
-            }
-            this.UpdateName();
-            this.Object.Name = this.ObjectName.Text;
+            }                       
             if (this.Object.Fields == null)
             {
                 this.Object.Fields = [];
@@ -323,6 +321,7 @@ namespace Incas.Objects.Views.Pages
                 };
                 this.Object.Fields.Add(data);
             }
+            this.ObjectName.Text = this.UpdateName();
             if (this.Object.Tables is not null)
             {
                 this.Object.Tables.Clear();
@@ -436,15 +435,12 @@ namespace Incas.Objects.Views.Pages
             if (this.ClassData.NameTemplate is not null)
             {
                 name = this.ClassData.NameTemplate;
-                foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
-                {                    
-                    ISimpleFiller simple = (ISimpleFiller)tf.Value;
-                    string val = simple.GetValue();
-                    if (val != null)
+                foreach (FieldData tf in this.Object.Fields)
+                {
+                    if (tf.Value != null)
                     {
-                        name = name.Replace("[" + simple.GetTagName() + "]", val);
-                    }
-                    break;                   
+                        name = name.Replace("[" + tf.ClassField.Name + "]", tf.Value.ToString());
+                    }                 
                 }
             }
             else
@@ -452,7 +448,7 @@ namespace Incas.Objects.Views.Pages
                 return this.ObjectName.Text;
             }
            
-            this.ObjectName.Text = name;
+            this.Object.Name = name;
             return name;
         }
 

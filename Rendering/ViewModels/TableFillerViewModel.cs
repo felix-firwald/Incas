@@ -29,14 +29,12 @@ namespace Incas.Rendering.ViewModels
                 {
                     this.Configurations.Add(field.Id, new());
                 }
-                //this.MakeColumns();
             }
             catch
             {
                 DialogsManager.ShowErrorDialog("Не удалось получить определение таблицы.");
             }
             this._data = new DataTable();
-            //this.MakeColumns();
             this.SetCommands();
         }
         #region Commands
@@ -176,6 +174,7 @@ namespace Incas.Rendering.ViewModels
                 this.OnPropertyChanged(nameof(this.Grid));
             }
         }
+
         private string tableName;
         public string TableName
         {
@@ -226,7 +225,7 @@ namespace Incas.Rendering.ViewModels
         public void RemoveSelectedRow()
         {
             int counter = this.SelectedRow;
-            if (counter < 0)
+            if (counter < 0 || this.Grid.Rows.Count == 0)
             {
                 return;
             }

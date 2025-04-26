@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Incas.Core.Views.Windows
 {
@@ -20,7 +21,12 @@ namespace Incas.Core.Views.Windows
         {
             get
             {
-                return this.vm.SelectedIcon.Value;
+                switch (this.vm.Mode)
+                {
+                    case IconSelectorViewModel.SelectorMode.PredefinedIcons:
+                        return this.vm.SelectedIcon.Value;
+                }
+                return this.vm.CustomSelectedIcon;
             }
         }
         private bool isSelected = false;
@@ -41,13 +47,39 @@ namespace Incas.Core.Views.Windows
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            if (this.vm.SelectedIcon.Value is null)
+            switch (this.vm.Mode)
             {
-                DialogsManager.ShowExclamationDialog("Иконка не выбрана!", "Действие невозможно");
+                case IconSelectorViewModel.SelectorMode.PredefinedIcons:
+                    if (this.vm.SelectedIcon.Value is null)
+                    {
+                        DialogsManager.ShowExclamationDialog("Иконка не выбрана!", "Действие невозможно");
+                        return;
+                    }
+                    this.isSelected = true;
+                    this.Close();
+                    break;
+                case IconSelectorViewModel.SelectorMode.CustomIcon:
+                    if (this.vm.CustomSelectedIcon is null)
+                    {
+                        DialogsManager.ShowExclamationDialog("Иконка не выбрана!", "Действие невозможно");
+                        return;
+                    }
+                    this.isSelected = true;
+                    this.Close();
+                    break;
+            }            
+        }
+
+        private void LoadFromClipboard(object sender, RoutedEventArgs e)
+        {
+            string geo = ViewExtensions.TryGetGeometryFromSvgPath(Clipboard.GetText());
+            if (geo == null)
+            {
+                DialogsManager.ShowExclamationDialog("Не удалось распознать SVG-путь иконки.", "Ошибка парсинга");
                 return;
             }
-            this.isSelected = true;
-            this.Close();
+            this.vm.CustomSelectedIcon = geo;
+            this.vm.Mode = IconSelectorViewModel.SelectorMode.CustomIcon;            
         }
     }
 }

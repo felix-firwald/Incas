@@ -245,8 +245,8 @@ namespace Incas.Objects.Views.Controls
             #region Edit View
             FrameworkElementFactory editFactory = new(typeof(IntegerUpDown));
             editFactory.SetValue(IntegerUpDown.StyleProperty, this.FindResource(ResourceStyleManager.IntegerUpDownGridStyle) as Style);
-            editFactory.SetValue(IntegerUpDown.MaximumProperty, col.NumberSettings.MaxValue);
-            editFactory.SetValue(IntegerUpDown.MinimumProperty, col.NumberSettings.MinValue);
+            editFactory.SetValue(IntegerUpDown.MaximumProperty, col.NumberSettings?.MaxValue);
+            editFactory.SetValue(IntegerUpDown.MinimumProperty, col.NumberSettings?.MinValue);
             editFactory.SetBinding(IntegerUpDown.ValueProperty, new Binding(e.Column.Header.ToString()));
             cellEdit.VisualTree = editFactory;
             #endregion

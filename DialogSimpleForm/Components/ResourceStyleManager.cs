@@ -23,6 +23,7 @@ namespace Incas.DialogSimpleForm.Components
         public const string CheckboxEditingGridStyle = "CheckBoxDataGrid";
         public const string CheckboxNotEditableGridStyle = "CheckBoxDataGridUsual";
         public const string ButtonRectangle = "ButtonRectangle";
+        public const string ButtonSquare = "ButtonSquare";
         public const string FontRubik = "Rubik";
         public const string FontJetBrains = "JetBrains";
         private static Dictionary<string, Style> cache = new();

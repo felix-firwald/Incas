@@ -314,8 +314,7 @@ namespace Incas.DialogSimpleForm.Components
             {
                 Content = description,
                 Tag = description,
-                IsChecked = value,
-                Style = this.Container.FindResource("Toggle") as Style
+                IsChecked = value
             };
             control.Checked += this.CheckBox_OnChanged;
             control.Unchecked += this.CheckBox_OnChanged;

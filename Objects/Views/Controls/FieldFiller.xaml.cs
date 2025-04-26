@@ -426,10 +426,7 @@ namespace Incas.Objects.Views.Controls
                     {
                         return new List<FieldData>();
                     }
-                    return obj?.Fields;
-                case FieldType.String:
-                default:
-                    return ((System.Windows.Controls.TextBox)this.control).Text;
+                    return obj?.Fields;               
                 case FieldType.Integer:
                     return ((IntegerUpDown)this.control).Value;
                 case FieldType.Boolean:
@@ -442,6 +439,9 @@ namespace Incas.Objects.Views.Controls
                         return cb.Items.GetItemAt(cb.SelectedIndex).ToString();
                     }
                     return "";
+                case FieldType.String:
+                default:
+                    return ((System.Windows.Controls.TextBox)this.control).Text;
             }
         }
         public Dictionary<string, string> GetDataFromObjectRelation()

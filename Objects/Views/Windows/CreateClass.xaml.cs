@@ -462,5 +462,10 @@ namespace Incas.Objects.Views.Windows
             s.Name = $"Состояние_{this.vm.States.Count + 1}";
             this.vm.AddState(s);
         }
+
+        private void RemoveSelectedStateClick(object sender, RoutedEventArgs e)
+        {
+            this.vm.RemoveSelectedState();
+        }
     }
 }

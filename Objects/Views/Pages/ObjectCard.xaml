@@ -41,42 +41,12 @@
                     <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M5.077,18.923H6.1135L16.827,8.2125l-1.04-1.04L5.077,17.89Zm-.9232.9233v-2.35L17.2115,4.4125a1.0387,1.0387,0,0,1,.3053-.1913.9393.9393,0,0,1,.356-.0675,1.0646,1.0646,0,0,1,.36.062,1.0336,1.0336,0,0,1,.3338.2025l1.0212,1.024a.8678.8678,0,0,1,.2.321,1.0808,1.0808,0,0,1,.0592.3508,1.03,1.03,0,0,1-.0645.3625.854.854,0,0,1-.196.307L6.5038,19.8463ZM18.9422,6.1105,17.89,5.0578ZM16.299,7.701l-.5115-.528,1.04,1.04Z"/>
                 </Button>
             </Grid>
-            <Border x:Name="StatusBorder" Visibility="Collapsed" Margin="0,10,0,0" Grid.Row="1">
-                <StackPanel VerticalAlignment="Center" Grid.Column="1"  >
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,5" VerticalAlignment="Center">
-                        <fa:FontAwesome x:Name="StatusBackButton" Style="{StaticResource IconButton}" Icon="ArrowLeft" ToolTip="Переместить статус на предыдущую позицию" MouseDown="GoBackStatusClick" VerticalAlignment="Top" />
-                        <Border x:Name="StatusBackground" CornerRadius="12" VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <TextBox x:Name="StatusText" IsReadOnly="True" Margin="5" Style="{StaticResource TextBoxEmpty}" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="JetBrains Mono" />
-                        </Border>
-                        <fa:FontAwesome x:Name="StatusForwardButton" Style="{StaticResource IconButton}" Icon="ArrowRight" ToolTip="Переместить статус на следующую позицию" Grid.Column="2" MouseDown="GoForwardStatusClick" VerticalAlignment="Top" />
-                    </StackPanel>
-                    <ProgressBar x:Name="Progress" Minimum="0" MinWidth="250" MinHeight="3" MaxHeight="3" BorderThickness="2" Background="{DynamicResource Element}" BorderBrush="{DynamicResource Element}" Foreground="{DynamicResource PrimaryMain}" />
-                    <TextBox x:Name="StatusDescription" Margin="5" IsReadOnly="True" FontFamily="JetBrains Mono" Style="{StaticResource TextBoxEmpty}" Foreground="{StaticResource Icon}" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" />
-                </StackPanel>
+            <Border x:Name="StatusBorder" Visibility="Collapsed" HorizontalAlignment="Center" Margin="10" Grid.Row="1">
+                <WrapPanel x:Name="ButtonsPanel" Grid.Column="1"  >
+
+                </WrapPanel>
             </Border>
             <ScrollViewer AllowDrop="True" Grid.Row="2" Margin="0,5,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Drop="OnFilesDrop">
-                <!--<ScrollViewer.Style>
-                    <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource ScrollViewerBase}">
-                        <Style.Triggers>
-                            <EventTrigger RoutedEvent="DragEnter">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.100" To="#2D3B50" Storyboard.TargetProperty="Background.Color"/>
-                                        <ThicknessAnimation Duration="0:0:0.05" To="2" Storyboard.TargetProperty="BorderThickness"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                            <EventTrigger RoutedEvent="DragLeave">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <ColorAnimation Duration="0:0:0.100" To="#FF2F323C" Storyboard.TargetProperty="Background.Color"/>
-                                        <ThicknessAnimation Duration="0:0:0.100" To="0" Storyboard.TargetProperty="BorderThickness"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ScrollViewer.Style>-->
                 <StackPanel x:Name="FieldsContentPanel" >
 
                 </StackPanel>

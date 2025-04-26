@@ -17,7 +17,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <ListBox ItemsSource="{Binding Icons}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="{x:Null}" BorderThickness="0" SelectedItem="{Binding SelectedIcon}">
+        <ListBox ItemsSource="{Binding Icons}" Visibility="{Binding PredefinedVisibility}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="{x:Null}" BorderThickness="0" SelectedItem="{Binding SelectedIcon}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel IsItemsHost="True" Orientation="Horizontal" ItemWidth="40" />
@@ -32,6 +32,13 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Border Visibility="{Binding CustomVisibility}">
+            <StackPanel VerticalAlignment="Center">
+                <Path Fill="White" Stretch="Uniform" Margin="10" Height="60" Width="60" Data="{Binding CustomSelectedIcon, Converter={StaticResource PathDataToGeometryConverter}}" ToolTip="{Binding Key}" ToolTipService.InitialShowDelay="160"/>
+                <Label Foreground="White" FontFamily="{StaticResource Rubik}" Content="Готово!" HorizontalAlignment="Center"/>
+                <Label Foreground="White" FontFamily="{StaticResource Rubik}" Content="Вот ваша иконка." HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Margin="5,0,0,0" Orientation="Horizontal">
             <Button Style="{DynamicResource ButtonRectangle}" Background="{StaticResource Dark}" VerticalAlignment="Center"  IsDefault="True" Grid.Row="3" Click="SaveClick">
                 <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
@@ -39,6 +46,9 @@
                     <Label Foreground="White" Content="Выбрать иконку"/>
                 </StackPanel>
             </Button>
+            <TextBlock FontFamily="{StaticResource Rubik}" Margin="10" VerticalAlignment="Center">
+                <Hyperlink ToolTip="Вставить свою SVG-иконку из буфера обмена" Click="LoadFromClipboard">Вставить из буфера обмена</Hyperlink>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </Window>

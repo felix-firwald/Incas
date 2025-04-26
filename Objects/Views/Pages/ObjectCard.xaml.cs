@@ -1,5 +1,7 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Extensions;
 using Incas.Core.Views.Controls;
+using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Components;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
@@ -10,11 +12,14 @@ using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
+using IncasEngine.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
+using static IncasEngine.ObjectiveEngine.Models.State;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -27,6 +32,8 @@ namespace Incas.Objects.Views.Pages
         private IClassData ClassData { get; set; }
         private bool first;
         private Guid id;
+        private Dictionary<Guid, UIElement> elements;
+        private Dictionary<Button, Method> buttons;
         //private byte status;
         private GroupClassPermissionSettings permissionSettings { get; set; }
         public delegate void FieldDataAction(FieldData data);
@@ -34,7 +41,9 @@ namespace Incas.Objects.Views.Pages
         public ObjectCard(IClass source, bool first = true)
         {
             this.InitializeComponent();
+            this.elements = new();
             this.first = first;
+            this.buttons = new();
             if (!first)
             {
                 this.ObjectName.FontSize = 12;
@@ -71,6 +80,46 @@ namespace Incas.Objects.Views.Pages
         private SolidColorBrush GetColor(IncasEngine.Core.Color color, byte a = 255)
         {
             return new SolidColorBrush(System.Windows.Media.Color.FromArgb(a, color.R, color.G, color.B));
+        }
+        private void SetButtonsByClass()
+        {
+            this.ButtonsPanel.Children.Clear();
+            this.buttons.Clear();
+            if (this.ClassData.Methods is null)
+            {
+                return;
+            }
+            foreach (Method targetMethod in this.ClassData.Methods)
+            {
+                Path p = new();
+                if (targetMethod.Icon != null)
+                {
+                    p.Data = Geometry.Parse(targetMethod.Icon);
+                }
+                p.Fill = targetMethod.Color.AsBrush();
+                p.VerticalAlignment = VerticalAlignment.Center;
+                p.Stretch = Stretch.Uniform;
+                p.Height = 16;
+                Button btn = new()
+                {
+                    Content = p,
+                    ToolTip = targetMethod.Description,
+                    Style = ResourceStyleManager.FindStyle(ResourceStyleManager.ButtonSquare)
+                };
+                btn.Click += this.ButtonWithMethodClicked;
+                this.ButtonsPanel.Children.Add(btn);
+                this.elements.Add(targetMethod.Id, btn);
+                this.buttons.Add(btn, targetMethod);
+            }
+        }
+
+        private async void ButtonWithMethodClicked(object sender, RoutedEventArgs e)
+        {
+            Method method = this.buttons[(Button)sender];
+            IObject obj = Processor.GetObject(this.Class, this.id);
+            CodeOutputArgs output = obj.RunMethod(method);
+            await Processor.WriteObjects(this.Class, obj);
+            this.UpdateFor(obj);
         }
 
         public void SetEmpty()
@@ -175,20 +224,17 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             this.Dispatcher.Invoke(() =>
-            {
+            {             
                 this.LinkIcon.Visibility = Visibility.Visible;
                 if (this.ClassData.EditByAuthorOnly == true && !this.CheckAuthor(obj))
                 {
-                    this.StatusBorder.IsEnabled = false;
                     this.EditIcon.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
-                    this.StatusBorder.IsEnabled = true;
                     this.EditIcon.Visibility = Visibility.Visible;
-                    this.StatusBackButton.IsEnabled = true;
-                    this.StatusForwardButton.IsEnabled = true;
                 }
+                this.StatusBorder.Visibility = Visibility.Visible;
                 this.FieldsContentPanel.Children.Clear();
                 this.ObjectName.Text = obj.Name;
                 this.id = obj.Id;
@@ -197,14 +243,39 @@ namespace Incas.Objects.Views.Pages
                 {
                     return;
                 }
+                this.elements = new();
+                this.SetButtonsByClass();
                 foreach (FieldData field in obj.Fields)
                 {
-                    ObjectFieldViewer of = new(field, this.first);
+                    ObjectFieldViewer of = new(field, this.first);                   
                     of.OnFilterRequested += this.Of_OnFilterRequested;
                     this.FieldsContentPanel.Children.Add(of);
+                    this.elements.Add(field.ClassField.Id, of);
                 }
                 ((IObjectFieldViewer)this.FieldsContentPanel.Children[^1]).HideSeparator();
+                this.ApplyState(obj);
             });         
+        }
+
+        public void ApplyState(IObject obj)
+        {
+            if (this.ClassData.States is null)
+            {
+                return;
+            }
+            foreach (IncasEngine.ObjectiveEngine.Models.State state in this.ClassData.States)
+            {
+                if (state.Id == obj.State)
+                {
+                    foreach (KeyValuePair<Guid, UIElement> element in this.elements)
+                    {
+                        MemberState memberState = state.Settings[element.Key];
+                        element.Value.IsEnabled = memberState.IsEnabled;
+                        element.Value.Visibility = memberState.CardVisibility? Visibility.Visible : Visibility.Collapsed;
+                    }
+                    break;
+                }
+            }
         }
 
         private void Box_OnTerminateRequested()

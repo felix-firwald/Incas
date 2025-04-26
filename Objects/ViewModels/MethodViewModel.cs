@@ -104,6 +104,18 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.VisibleName));
             }
         }
+        public string Description
+        {
+            get
+            {
+                return this.Source.Description;
+            }
+            set
+            {
+                this.Source.Description = value;
+                this.OnPropertyChanged(nameof(this.Description));
+            }
+        }
         public string Icon
         {
             get

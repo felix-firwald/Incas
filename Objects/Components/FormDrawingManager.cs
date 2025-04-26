@@ -218,12 +218,13 @@ namespace Incas.Objects.Components
             p.Fill = targetMethod.Color.AsBrush();
             p.VerticalAlignment = VerticalAlignment.Center;
             p.Stretch = Stretch.Uniform;
-            p.Height = 14;
+            p.Height = 15;
             sp.Children.Add(p);
             sp.Children.Add(l);
             Button btn = new()
             {
                 Content = sp,
+                ToolTip = targetMethod.Description,
                 Style = ResourceStyleManager.FindStyle(ResourceStyleManager.ButtonRectangle)
             };
             drawingOutputArgs.Buttons.Add(btn, targetMethod);

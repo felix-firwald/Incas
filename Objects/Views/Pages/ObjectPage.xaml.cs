@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.ViewModels;
 using Incas.Objects.AutoUI;
 using IncasEngine.Core.Registry;
 using IncasEngine.ObjectiveEngine;
@@ -23,6 +24,26 @@ using System.Windows.Shapes;
 
 namespace Incas.Objects.Views.Pages
 {
+    public class ObjectPageViewModel : BaseViewModel
+    {
+        private IObject source;
+        public IObject Source
+        {
+            get
+            {
+                return this.source;
+            }
+            set
+            {
+                this.source = value;
+                this.OnPropertyChanged(nameof(this.Source));
+            }
+        }
+        public void SetUpdated()
+        {
+            this.OnPropertyChanged(nameof(this.Source));
+        }
+    }
     /// <summary>
     /// Логика взаимодействия для ObjectPage.xaml
     /// </summary>
@@ -31,12 +52,16 @@ namespace Incas.Objects.Views.Pages
         public readonly IClass Class;
         public readonly IClassData ClassData;
         public ObjectCreator Creator { get; set; }
+        public ObjectPageViewModel vm { get; set; }
         public GroupClassPermissionSettings PermissionSettings { get; set; }
         public ObjectPage(IClass source, IObject obj)
         {
             this.InitializeComponent();
             this.Class = source;
             this.ClassData = source.GetClassData();
+            this.vm = new();
+            this.DataContext = this.vm;
+            this.vm.Source = obj;
             this.PermissionSettings = ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(source.Id);
             this.AddObjectCreator(obj);
             DialogsManager.ShowWaitCursor(false);
@@ -46,6 +71,8 @@ namespace Incas.Objects.Views.Pages
             this.InitializeComponent();
             this.Class = source;
             this.ClassData = source.GetClassData();
+            this.vm = new();
+            this.DataContext = this.vm;
             this.PermissionSettings = ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(source.Id);
             this.AddObjectCreator();
             DialogsManager.ShowWaitCursor(false);
@@ -60,14 +87,15 @@ namespace Incas.Objects.Views.Pages
             {
                 this.Creator.ApplyObject(obj, true);
             }
-            this.ContentPanel.Children.Add(this.Creator);        
-            
+            this.ContentPanel.Children.Add(this.Creator);
+            this.vm.Source = this.Creator.Object;
             return this.Creator;
         }
 
         private async void CreateObjectsClick(object sender, RoutedEventArgs e)
         {
             await Processor.WriteObjects(this.Class, this.Creator.PullObject());
+            this.vm.SetUpdated();
         }
 
         private async void RenderObjectsClick(object sender, RoutedEventArgs e)

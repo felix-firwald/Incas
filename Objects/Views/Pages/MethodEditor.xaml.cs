@@ -1,9 +1,12 @@
-﻿using ICSharpCode.AvalonEdit.Document;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Incas.Core.Views.Windows;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
+using IncasEngine.Scripting;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,6 +21,7 @@ namespace Incas.Objects.Views.Pages
     public partial class MethodEditor : UserControl, IClassDetailsSettings
     {
         public MethodViewModel vm { get; set; }
+        public ClassViewModel Class { get; set; }
         public string ItemName { get; private set; }
 
         public MethodEditor(MethodViewModel method)
@@ -33,22 +37,24 @@ namespace Incas.Objects.Views.Pages
 
         public void SetUpContext(ClassViewModel vm)
         {
+            this.Class = vm;
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
             ICSharpCode.AvalonEdit.Highlighting.IHighlightingDefinition highlightingDefinition = HighlightingLoader.Load(reader, ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance);
             ICSharpCode.AvalonEdit.Highlighting.HighlightingRuleSet ruleSet = highlightingDefinition.MainRuleSet;
 
             foreach (FieldViewModel field in vm.Fields)
             {
+                string pattern = @"\b" + Regex.Escape(field.Name) + @"\b";
                 ICSharpCode.AvalonEdit.Highlighting.HighlightingRule rule = new()
                 {
-                    Regex = new System.Text.RegularExpressions.Regex(@"\b" + System.Text.RegularExpressions.Regex.Escape(field.Name) + @"\b")
+                    Regex = new System.Text.RegularExpressions.Regex(pattern)
                 };
                 HighlightingColor color = new()
                 {
-                    Foreground = new SimpleHighlightingBrush(Color.FromRgb(191, 255, 76))
+                    Foreground = new SimpleHighlightingBrush(System.Windows.Media.Color.FromRgb(191, 255, 76))
                 };
                 rule.Color = color;
-                color.Background = new SimpleHighlightingBrush(Color.FromRgb(47, 52, 34));
+                color.Background = new SimpleHighlightingBrush(System.Windows.Media.Color.FromRgb(47, 52, 34));
                 ruleSet.Rules.Add(rule);
             }
 
@@ -74,33 +80,39 @@ namespace Incas.Objects.Views.Pages
         private ContextMenu CreateContextMenu(string textBeforeDot)
         {
             ContextMenu contextMenu = new();
+            switch (textBeforeDot)
+            {
+                case "this":
+                    foreach (IClassMemberViewModel member in this.Class.Members)
+                    {
+                        MenuItem item1 = new() { Header = member.Name };
 
-            //switch (textBeforeDot)
-            //{
-            //    case "Декан":
-            //        // Добавляем пункты меню для MyObject
-            //        MenuItem item1 = new() { Header = "Property1" };
-            //        item1.Click += (sender, e) => this.InsertText("MyObject.Property1");
+                        item1.Click += (sender, e) => this.InsertText(member.Name);
+                        contextMenu.Items.Add(item1);
+                    }
+                    break;
 
-            //        MenuItem item2 = new() { Header = "Method1()" };
-            //        item2.Click += (sender, e) => this.InsertText("MyObject.Method1()");
+                case "incas":
+                    foreach (MethodInfo mi in typeof(IncasPythonCommonTools).GetMethods())
+                    {
+                        if (mi.IsPublic)
+                        {
+                            MenuItem item1 = new() { Header = mi.Name };
+                            item1.Click += (sender, e) => this.InsertText(mi.Name);
+                            contextMenu.Items.Add(item1);
+                        }
+                    }
+                    //// Добавляем пункты меню для AnotherObject
+                    //MenuItem item3 = new() { Header = "PropertyA" };
+                    //item3.Click += (sender, e) => this.InsertText("AnotherObject.PropertyA");
 
-            //        contextMenu.Items.Add(item1);
-            //        contextMenu.Items.Add(item2);
-            //        break;
+                    //contextMenu.Items.Add(item3);
+                    break;
 
-            //    case "AnotherObject":
-            //        // Добавляем пункты меню для AnotherObject
-            //        MenuItem item3 = new() { Header = "PropertyA" };
-            //        item3.Click += (sender, e) => this.InsertText("AnotherObject.PropertyA");
-
-            //        contextMenu.Items.Add(item3);
-            //        break;
-
-            //    default:
-            //        // Не показывать меню, если контекст не распознан
-            //        return null;
-            //}
+                default:
+                    // Не показывать меню, если контекст не распознан
+                    return null;
+            }
 
             return contextMenu;
         }

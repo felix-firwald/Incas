@@ -95,12 +95,18 @@ namespace Incas.Objects.Documents.Views.Pages
 
         private void MinimizeAllClick(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            foreach (PropertyViewModel pvm in this.vm.SelectedTemplate?.Properties)
+            {
+                pvm.IsExpanded = false;
+            }
         }
 
         private void MaximizeAllClick(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            foreach (PropertyViewModel pvm in this.vm.SelectedTemplate?.Properties)
+            {
+                pvm.IsExpanded = true;
+            }
         }
 
         private void GetMoreInfoClick(object sender, System.Windows.RoutedEventArgs e)

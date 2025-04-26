@@ -67,6 +67,7 @@
                             <Label Grid.Column="2" Grid.Row="1" Content="{Binding ColorG}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource Buttons.Green}"  />
                             <Label Grid.Column="2" Grid.Row="2" Content="{Binding ColorB}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource PrimaryMain}" />
                         </Grid>
+                        <TextBox Style="{StaticResource TextBoxBig}" Tag="Описание метода" Text="{Binding Description}"/>
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource ToolBorder}">

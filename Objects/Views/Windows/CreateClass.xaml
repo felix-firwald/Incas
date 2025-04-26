@@ -496,7 +496,7 @@
                                                     <Label Content="Добавить состояние" Foreground="White"/>
                                                 </StackPanel>
                                             </Button>
-                                            <Button Style="{StaticResource ButtonRectangle}" ToolTip="Удалить выбранное состояние для объектов этого класса"  HorizontalAlignment="Center" >
+                                            <Button Style="{StaticResource ButtonRectangle}" ToolTip="Удалить выбранное состояние для объектов этого класса" HorizontalAlignment="Center" Click="RemoveSelectedStateClick" >
                                                 <StackPanel Orientation="Horizontal">
                                                     <Path Fill="{StaticResource Buttons.Red}" VerticalAlignment="Center" Stretch="Uniform" Data="M13.5068,14.4591l-5.2463,5.246a.5021.5021,0,0,1-.3442.15.4665.4665,0,0,1-.3633-.15.4716.4716,0,0,1,0-.7075l5.246-5.2462L7.553,8.5051a.503.503,0,0,1-.15-.3442.4662.4662,0,0,1,.15-.3633.4716.4716,0,0,1,.7075,0l5.2463,5.246,5.2462-5.246a.5024.5024,0,0,1,.3443-.15.4662.4662,0,0,1,.3632.15.4714.4714,0,0,1,0,.7075l-5.246,5.2463,5.246,5.2462a.5024.5024,0,0,1,.15.3443.4662.4662,0,0,1-.15.3632.4714.4714,0,0,1-.7075,0Z"/>
                                                     <Label Content="Удалить состояние" Foreground="White"/>
