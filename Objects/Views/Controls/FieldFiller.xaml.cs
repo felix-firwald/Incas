@@ -429,6 +429,8 @@ namespace Incas.Objects.Views.Controls
                     return obj?.Fields;               
                 case FieldType.Integer:
                     return ((IntegerUpDown)this.control).Value;
+                case FieldType.Float:
+                    return ((DoubleUpDown)this.control).Value;
                 case FieldType.Boolean:
                     return (bool)(((CheckBox)this.control).IsChecked);
                 case FieldType.LocalEnumeration:

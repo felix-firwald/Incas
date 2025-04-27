@@ -198,6 +198,9 @@ namespace Incas.Objects.Views.Controls
                         case FieldType.Integer:
                             this.GenerateTemplateColumnInteger(col, e);
                             break;
+                        case FieldType.Float:
+                            this.GenerateTemplateColumnFloat(col, e);
+                            break;
                         case FieldType.Date:
                             this.GenerateTemplateColumnDateTime(col, e);
                             break;
@@ -248,6 +251,33 @@ namespace Incas.Objects.Views.Controls
             editFactory.SetValue(IntegerUpDown.MaximumProperty, col.NumberSettings?.MaxValue);
             editFactory.SetValue(IntegerUpDown.MinimumProperty, col.NumberSettings?.MinValue);
             editFactory.SetBinding(IntegerUpDown.ValueProperty, new Binding(e.Column.Header.ToString()));
+            cellEdit.VisualTree = editFactory;
+            #endregion
+
+            templateInteger.CellTemplate = cellUsual;
+            templateInteger.CellEditingTemplate = cellEdit;
+            e.Column = templateInteger;
+        }
+        private void GenerateTemplateColumnFloat(Field col, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGridTemplateColumn templateInteger = new();
+            templateInteger.Header = col.VisibleName;
+
+            DataTemplate cellEdit = new();
+            DataTemplate cellUsual = new();
+
+            #region Usual View
+            FrameworkElementFactory textBlock1Factory = new(typeof(TextBlock));
+            cellUsual.VisualTree = textBlock1Factory;
+            textBlock1Factory.SetBinding(TextBlock.TextProperty, new Binding(e.Column.Header.ToString()));
+            #endregion
+
+            #region Edit View
+            FrameworkElementFactory editFactory = new(typeof(DoubleUpDown));
+            editFactory.SetValue(DoubleUpDown.StyleProperty, this.FindResource(ResourceStyleManager.IntegerUpDownGridStyle) as Style);
+            editFactory.SetValue(DoubleUpDown.MaximumProperty, col.NumberSettings?.MaxValue);
+            editFactory.SetValue(DoubleUpDown.MinimumProperty, col.NumberSettings?.MinValue);
+            editFactory.SetBinding(DoubleUpDown.ValueProperty, new Binding(e.Column.Header.ToString()));
             cellEdit.VisualTree = editFactory;
             #endregion
 

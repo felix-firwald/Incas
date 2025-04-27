@@ -152,6 +152,20 @@ namespace Incas.Core.Classes
         {
             DialogsManager.ShowWebViewer("Просмотр", path, autoremove);
         }
+        public static void ShowWebPage(string path)
+        {
+            try
+            {
+                System.Diagnostics.Process proc = new();
+                proc.StartInfo.UseShellExecute = true;
+                proc.StartInfo.FileName = path;
+                proc.Start();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+            }
+        }
         public static void ShowWebViewer(string name, string path, bool autoremove)
         {
             try

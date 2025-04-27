@@ -7,6 +7,7 @@
     <OutputType>WinExe</OutputType>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>D:\Dev\1. BUILDS\Incubator 2\</PublishUrl>
+	<NeutralLanguage>ru</NeutralLanguage>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>

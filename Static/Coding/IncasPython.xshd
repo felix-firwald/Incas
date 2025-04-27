@@ -108,6 +108,7 @@
 			<Word>return</Word>
 			<Word>yield</Word>
 			<Word>int</Word>
+			<Word>float</Word>
 			<Word>str</Word>
 			<Word>bool</Word>
 			<Word>list</Word>

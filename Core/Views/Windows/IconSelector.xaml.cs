@@ -1,6 +1,8 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
+using Incas.Tests.AutoUI;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Incas.Core.Views.Windows
@@ -80,6 +82,16 @@ namespace Incas.Core.Views.Windows
             }
             this.vm.CustomSelectedIcon = geo;
             this.vm.Mode = IconSelectorViewModel.SelectorMode.CustomIcon;            
+        }
+
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.F1:
+                    DialogsManager.ShowWebPage("https://fonts.google.com/icons?icon.style=Rounded");
+                    break;
+            }
         }
     }
 }
