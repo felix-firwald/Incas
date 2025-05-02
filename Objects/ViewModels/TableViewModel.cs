@@ -161,6 +161,7 @@ namespace Incas.Objects.ViewModels
             FieldType.Integer,
             FieldType.Float,
             FieldType.Date,
+            FieldType.Time,
             FieldType.LocalEnumeration,
             FieldType.GlobalEnumeration,
             //FieldType.Object,

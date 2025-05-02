@@ -28,6 +28,8 @@ namespace Incas.Objects.Converters
                         return "Глобальное перечисление";
                     case FieldType.Date:
                         return "Дата";
+                    case FieldType.Time:
+                        return "Время";
                     case FieldType.Integer:
                         return "Целочисленное число";
                     case FieldType.Float:

@@ -139,7 +139,8 @@ namespace Incas.Objects.Documents.ViewModels
                     TemplateProperty.CalculationType.Constant,
                     TemplateProperty.CalculationType.GlobalConstant,
                     TemplateProperty.CalculationType.Switch, 
-                    TemplateProperty.CalculationType.Script, 
+                    TemplateProperty.CalculationType.Script,
+                    TemplateProperty.CalculationType.ScriptTable,
                     TemplateProperty.CalculationType.Replication 
                 };
             }

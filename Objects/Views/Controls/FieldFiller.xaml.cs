@@ -11,6 +11,7 @@ using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.FieldComponents;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.Scripting;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -426,7 +427,7 @@ namespace Incas.Objects.Views.Controls
                     {
                         return new List<FieldData>();
                     }
-                    return obj?.Fields;               
+                    return IncasPythonCommonTools.GetDynamic(obj);              
                 case FieldType.Integer:
                     return ((IntegerUpDown)this.control).Value;
                 case FieldType.Float:

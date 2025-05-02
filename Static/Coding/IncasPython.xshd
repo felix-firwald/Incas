@@ -93,6 +93,7 @@
 		</Keywords>
 		<Keywords fontWeight="bold" foreground="#ff3d3d">
 			<Word>False</Word>
+			<Word>break</Word>
 			<Word>None</Word>
 			<Word>not</Word>
 			<Word>raise</Word>
@@ -113,7 +114,7 @@
 			<Word>bool</Word>
 			<Word>list</Word>
 			<Word>dict</Word>
-			<Word>datetime</Word>
+			<Word>DateTime</Word>
 			<Word>tuple</Word>
 			<Word>min</Word>
 			<Word>max</Word>

@@ -20,7 +20,9 @@ namespace Incas.Objects.Documents.Converters
                     case TemplateProperty.CalculationType.Switch:
                         return "Словарь сопоставления";
                     case TemplateProperty.CalculationType.Script:
-                        return "Переменная скрипта";
+                        return "Переменная скрипта (текст)";
+                    case TemplateProperty.CalculationType.ScriptTable:
+                        return "Переменная скрипта (таблица)";
                     case TemplateProperty.CalculationType.Replication:
                         return "Репликация";
                 }

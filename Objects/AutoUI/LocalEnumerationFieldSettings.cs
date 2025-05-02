@@ -33,6 +33,10 @@ namespace Incas.Objects.AutoUI
                 DialogsManager.ShowErrorDialog(ex);
                 this.Values = [];
             }
+            if (this.Values.Count == 0)
+            {
+                this.Values.Add("");
+            }
         }
 
         #region Functionality

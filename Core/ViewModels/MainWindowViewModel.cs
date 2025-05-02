@@ -57,37 +57,8 @@ namespace Incas.Core.ViewModels
 
         private void DoUserCommand(object obj)
         {
-            MenuCommand command = obj as MenuCommand;
-            switch (command.Type)
-            {
-                case MenuCommand.CommandType.Add:
-                    Class cl = EngineGlobals.GetClass(command.TargetClass);
-                    ObjectsEditor editor = new(cl);
-                    editor.Show();
-                    break;
-                case MenuCommand.CommandType.Parse:
-                    break;
-                case MenuCommand.CommandType.Find:
-                    Class classFind = EngineGlobals.GetClass(command.TargetClass);
-                    IClassData cd = classFind.GetClassData();
-                    DataSearchPredefined search = new(cd, command.TargetField);
-                    if (search.ShowDialog(command.Name))
-                    {
-                        ObjectsList ol = new(classFind);
-                        if (search.OnlyEqual)
-                        {
-                            ol.UpdateViewWithSearch(search.GetData());
-                        }
-                        else
-                        {
-                            ol.UpdateViewWithFilter(search.GetData());
-                        }
-                        DialogsManager.ShowPageWithGroupBox(ol, "Результат поиска", command.TargetField.ToString());
-                    }
-                    break;
-                case MenuCommand.CommandType.FindAndOpen:
-                    break;
-            }
+            WorkspaceMenuCommand command = obj as WorkspaceMenuCommand;
+            
         }
 
         #region ICommands
@@ -136,12 +107,16 @@ namespace Incas.Core.ViewModels
         }
 
         #endregion
-        public List<MenuCommand> Commands
+        public List<WorkspaceMenuCommand> Commands
         {
             get
             {
                 return ProgramState.CurrentWorkspace.GetDefinition().Commands;
             }
+        }
+        public void UpdateCommands()
+        {
+            this.OnPropertyChanged(nameof(this.Commands));
         }
         public bool ProcessHandled
         {

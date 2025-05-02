@@ -1,13 +1,4 @@
-﻿using Avalonia.Controls;
-using Incas.Core.Classes;
-using IncasEngine.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
 namespace Incas.Core.Extensions
 {

@@ -3,7 +3,9 @@ using Incas.Core.Attributes;
 using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Components;
+using Incas.Objects.ViewModels;
 using IncasEngine.ObjectiveEngine.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using static IncasEngine.ObjectiveEngine.FieldComponents.TableFieldData;
@@ -27,13 +29,17 @@ namespace Incas.Objects.AutoUI
         public bool OnlyEmptyOnes { get; set; }
         #endregion
 
-        public ColumnSelector(List<Field> columns)
+        public ColumnSelector(List<Field> columns, Dictionary<Guid, ColumnConfiguration> conf)
         {
             this.OnlyEmptyOnes = true;
             this.Target = new(new());
             foreach (Field dc in columns)
             {
-                this.Target.Pairs.Add(dc, dc.VisibleName);
+                ColumnConfiguration cc = conf[dc.Id];
+                if (!cc.IsReadOnly || cc.Visibility == System.Windows.Visibility.Visible)
+                {
+                    this.Target.Pairs.Add(dc, dc.VisibleName);
+                }               
             }
         }
 

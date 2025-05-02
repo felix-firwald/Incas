@@ -1,10 +1,16 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Extensions;
 using Incas.Core.ViewModels;
+using Incas.DialogSimpleForm.Components;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Interfaces;
+using Incas.Objects.Views.Controls;
 using IncasEngine.Core.Registry;
 using IncasEngine.ObjectiveEngine;
+using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
+using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using System;
@@ -21,6 +27,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static Incas.Objects.Components.FormDrawingManager;
+using static IncasEngine.ObjectiveEngine.Models.State;
+using static System.Windows.Forms.AxHost;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -54,6 +63,7 @@ namespace Incas.Objects.Views.Pages
         public ObjectCreator Creator { get; set; }
         public ObjectPageViewModel vm { get; set; }
         public GroupClassPermissionSettings PermissionSettings { get; set; }
+        private Dictionary<Button, Method> buttons;
         public ObjectPage(IClass source, IObject obj)
         {
             this.InitializeComponent();
@@ -62,9 +72,13 @@ namespace Incas.Objects.Views.Pages
             this.vm = new();
             this.DataContext = this.vm;
             this.vm.Source = obj;
+            this.buttons = new();
+            this.PlaceButtons();
             this.PermissionSettings = ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(source.Id);
             this.AddObjectCreator(obj);
+            
             DialogsManager.ShowWaitCursor(false);
+            this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
         }
         public ObjectPage(IClass source)
         {
@@ -73,9 +87,21 @@ namespace Incas.Objects.Views.Pages
             this.ClassData = source.GetClassData();
             this.vm = new();
             this.DataContext = this.vm;
+            this.buttons = new();
+            this.PlaceButtons();
             this.PermissionSettings = ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(source.Id);
             this.AddObjectCreator();
+            
             DialogsManager.ShowWaitCursor(false);
+        }
+
+        private void EngineEvents_OnUpdateClassRequested()
+        {
+            ClassUpdatedMessage cum = new();
+            this.MainGrid.Children.Clear();
+            this.MainGrid.Children.Add(cum);
+            Grid.SetColumnSpan(cum, 3);
+            Grid.SetRowSpan(cum, 3);
         }
 
         private ObjectCreator AddObjectCreator(IObject obj = null)
@@ -83,10 +109,6 @@ namespace Incas.Objects.Views.Pages
             this.Creator = new(this.Class, obj);
             this.Creator.PermissionSettings = this.PermissionSettings;
             this.Creator.HideNCA();
-            if (obj is not null)
-            {
-                this.Creator.ApplyObject(obj, true);
-            }
             this.ContentPanel.Children.Add(this.Creator);
             this.vm.Source = this.Creator.Object;
             return this.Creator;
@@ -96,6 +118,88 @@ namespace Incas.Objects.Views.Pages
         {
             await Processor.WriteObjects(this.Class, this.Creator.PullObject());
             this.vm.SetUpdated();
+        }
+
+        private void PlaceButtons()
+        {
+            if (this.Creator is null)
+            {
+                return;
+            }
+            this.AllButtonsPanel.Items.Clear();
+            IncasEngine.ObjectiveEngine.Models.State stateTarget = null;
+            foreach (IncasEngine.ObjectiveEngine.Models.State state in this.ClassData.States)
+            {
+                if (state.Id == this.Creator.Object.State)
+                {
+                    stateTarget = state;
+                    break;
+                }
+            }
+            if (stateTarget is null)
+            {
+                this.Creator.PullObjectForScript();
+                StateUndefinedMessage sum = new(this.Creator.Object);
+                this.MainGrid.Children.Clear();
+                this.MainGrid.Children.Add(sum);
+                Grid.SetRowSpan(sum, 3);
+                Grid.SetColumnSpan(sum, 3);
+                return;
+            }
+            foreach (Method m in this.ClassData.Methods)
+            {
+                MemberState memberState = stateTarget.Settings[m.Id];
+                if (memberState.EditorVisibility)
+                {
+                    Button btn = this.MakeButton(m);
+                    btn.IsEnabled = memberState.IsEnabled;
+                    this.AllButtonsPanel.Items.Add(btn);
+                }                              
+            }            
+        }
+        private Button MakeButton(Method targetMethod)
+        {
+            Grid grid = new();
+            grid.ColumnDefinitions.Add(new() { Width = new(30) });
+            grid.ColumnDefinitions.Add(new());
+            Label l = new()
+            {
+                Content = targetMethod.VisibleName,
+                Foreground = new SolidColorBrush(System.Windows.Media.Colors.White),
+                FontFamily = ResourceStyleManager.FindFontFamily(ResourceStyleManager.FontRubik),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            Grid.SetColumn(l, 1);
+            Path p = new();
+            if (targetMethod.Icon != null)
+            {
+                p.Data = Geometry.Parse(targetMethod.Icon);
+            }
+            p.Fill = targetMethod.Color.AsBrush();
+            p.VerticalAlignment = VerticalAlignment.Center;
+            p.Stretch = Stretch.Uniform;
+            p.Height = 15;
+            p.Width = 15;
+            grid.Children.Add(p);
+            grid.Children.Add(l);
+            Button btn = new()
+            {
+                Content = grid,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+                Margin = new(0),
+                ToolTip = targetMethod.Description,
+                Style = ResourceStyleManager.FindStyle(ResourceStyleManager.ButtonRectangle)
+            };
+            btn.Click += this.Btn_Click;
+            this.buttons.Add(btn, targetMethod);
+            return btn;
+        }
+
+        private void Btn_Click(object sender, RoutedEventArgs e)
+        {
+            this.ExternalOptions.IsOpen = false;
+            this.Creator.ApplyMethod(this.buttons[sender as Button]);
         }
 
         private async void RenderObjectsClick(object sender, RoutedEventArgs e)
@@ -136,10 +240,6 @@ namespace Incas.Objects.Views.Pages
                     }
                     ProgramStatusBar.Hide();
                     bool result = await Processor.WriteObjects(this.Class, objects);
-                    //if (result)
-                    //{
-                    //    this.OnUpdateRequested?.Invoke();
-                    //}
                     ProgramState.OpenFolder(path);
                 }
                 catch (FieldDataFailed fdf)
@@ -159,6 +259,11 @@ namespace Incas.Objects.Views.Pages
                     DialogsManager.ShowErrorDialog(ex);
                 }
             }
+        }
+
+        private void ExternalOptions_Opened(object sender, RoutedEventArgs e)
+        {
+            this.PlaceButtons();
         }
     }
 }

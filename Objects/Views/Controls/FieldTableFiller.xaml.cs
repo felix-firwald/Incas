@@ -123,29 +123,6 @@ namespace Incas.Objects.Views.Controls
             };
             return result;
         }
-        private void RunScript()
-        {
-            try
-            {
-                string json = JsonConvert.SerializeObject(this.vm.Grid);
-                List<Dictionary<string, string>> data = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(json);
-                ScriptScope scope = ScriptManager.GetEngine().CreateScope();
-                scope.SetVariable("input_data", data);
-                //ScriptManager.Execute(this.command.Script, scope);
-                List<Dictionary<string, string>> result = scope.GetVariable("output");
-                DataTable dt = JsonConvert.DeserializeObject<DataTable>(JsonConvert.SerializeObject(result));
-                this.SetData(dt);
-            }
-            catch (Exception ex)
-            {
-                DialogsManager.ShowErrorDialog("При обработке скрипта произошла ошибка:\n" + ex.Message);
-            }
-        }
-
-        private void CommandClick(object sender, RoutedEventArgs e)
-        {
-            this.RunScript();
-        }
 
         private void AddClick(object sender, RoutedEventArgs e)
         {
@@ -177,7 +154,7 @@ namespace Incas.Objects.Views.Controls
                             {
                                 Header = col.VisibleName,
                                 Binding = new System.Windows.Data.Binding(colHeader),
-                                EditingElementStyle = this.FindResource("TextBoxGrid") as Style
+                                EditingElementStyle = this.FindResource("TextBoxGrid") as Style,
                             };
                             e.Column = dgt1;
                             break;
@@ -203,6 +180,9 @@ namespace Incas.Objects.Views.Controls
                             break;
                         case FieldType.Date:
                             this.GenerateTemplateColumnDateTime(col, e);
+                            break;
+                        case FieldType.Time:
+                            this.GenerateTemplateColumnTime(col, e);
                             break;
                         case FieldType.Boolean:
                             DataGridCheckBoxColumn cbc = new()
@@ -269,16 +249,21 @@ namespace Incas.Objects.Views.Controls
             #region Usual View
             FrameworkElementFactory textBlock1Factory = new(typeof(TextBlock));
             cellUsual.VisualTree = textBlock1Factory;
-            textBlock1Factory.SetBinding(TextBlock.TextProperty, new Binding(e.Column.Header.ToString()));
+            Binding bind = new(e.Column.Header.ToString());
+            bind.StringFormat = "F1";
+            textBlock1Factory.SetBinding(TextBlock.TextProperty, bind);
             #endregion
 
             #region Edit View
-            FrameworkElementFactory editFactory = new(typeof(DoubleUpDown));
-            editFactory.SetValue(DoubleUpDown.StyleProperty, this.FindResource(ResourceStyleManager.IntegerUpDownGridStyle) as Style);
-            editFactory.SetValue(DoubleUpDown.MaximumProperty, col.NumberSettings?.MaxValue);
-            editFactory.SetValue(DoubleUpDown.MinimumProperty, col.NumberSettings?.MinValue);
-            editFactory.SetBinding(DoubleUpDown.ValueProperty, new Binding(e.Column.Header.ToString()));
+            FrameworkElementFactory editFactory = new(typeof(DecimalUpDown));
+            editFactory.SetValue(DecimalUpDown.StyleProperty, this.FindResource(ResourceStyleManager.IntegerUpDownGridStyle) as Style);
+            editFactory.SetValue(DecimalUpDown.MaximumProperty, (decimal)col.NumberSettings?.MaxValue);
+            editFactory.SetValue(DecimalUpDown.MinimumProperty, (decimal)col.NumberSettings?.MinValue);
+            editFactory.SetBinding(DecimalUpDown.ValueProperty, new Binding(e.Column.Header.ToString()));
+            editFactory.SetValue(DecimalUpDown.FormatStringProperty, "F1");
+            editFactory.SetValue(DecimalUpDown.IncrementProperty, 0.1m);
             cellEdit.VisualTree = editFactory;
+            //numericFloat.Increment = 0.100;
             #endregion
 
             templateInteger.CellTemplate = cellUsual;
@@ -303,6 +288,31 @@ namespace Incas.Objects.Views.Controls
             FrameworkElementFactory editFactory = new(typeof(DatePicker));
             editFactory.SetValue(IntegerUpDown.StyleProperty, this.FindResource(ResourceStyleManager.DatePickerGridStyle) as Style);
             editFactory.SetBinding(DatePicker.SelectedDateProperty, new Binding(e.Column.Header.ToString()));
+            cellEdit.VisualTree = editFactory;
+            #endregion
+
+            templateInteger.CellTemplate = cellUsual;
+            templateInteger.CellEditingTemplate = cellEdit;
+            e.Column = templateInteger;
+        }
+        private void GenerateTemplateColumnTime(Field col, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGridTemplateColumn templateInteger = new();
+            templateInteger.Header = col.VisibleName;
+
+            DataTemplate cellEdit = new();
+            DataTemplate cellUsual = new();
+
+            #region Usual View
+            FrameworkElementFactory textBlock1Factory = new(typeof(TextBlock));
+            cellUsual.VisualTree = textBlock1Factory;
+            textBlock1Factory.SetBinding(TextBlock.TextProperty, new Binding(e.Column.Header.ToString()));
+            #endregion
+
+            #region Edit View
+            FrameworkElementFactory editFactory = new(typeof(TimePicker));
+            //editFactory.SetValue(TimePicker.StyleProperty, this.FindResource(ResourceStyleManager.DatePickerGridStyle) as Style);
+            editFactory.SetBinding(TimePicker.TextProperty, new Binding(e.Column.Header.ToString()));
             cellEdit.VisualTree = editFactory;
             #endregion
 
@@ -458,7 +468,7 @@ namespace Incas.Objects.Views.Controls
 
         private void CopyValueToAllRowsClick(object sender, RoutedEventArgs e)
         {
-            ColumnSelector selector = new(this.vm.TableDefinition.Fields);
+            ColumnSelector selector = new(this.vm.TableDefinition.Fields, this.vm.Configurations);
             if (selector.ShowDialog("Копирование значений"))
             {
                 this.vm.CopyValueToAllRows(selector.GetTargetColumnName(), selector.OnlyEmptyOnes);

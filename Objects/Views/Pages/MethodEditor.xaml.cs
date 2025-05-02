@@ -6,6 +6,7 @@ using Incas.Core.Views.Windows;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using IncasEngine.Scripting;
+using System;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
@@ -42,7 +43,7 @@ namespace Incas.Objects.Views.Pages
             ICSharpCode.AvalonEdit.Highlighting.IHighlightingDefinition highlightingDefinition = HighlightingLoader.Load(reader, ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance);
             ICSharpCode.AvalonEdit.Highlighting.HighlightingRuleSet ruleSet = highlightingDefinition.MainRuleSet;
 
-            foreach (FieldViewModel field in vm.Fields)
+            foreach (IClassMemberViewModel field in vm.Members)
             {
                 string pattern = @"\b" + Regex.Escape(field.Name) + @"\b";
                 ICSharpCode.AvalonEdit.Highlighting.HighlightingRule rule = new()
@@ -86,8 +87,14 @@ namespace Incas.Objects.Views.Pages
                     foreach (IClassMemberViewModel member in this.Class.Members)
                     {
                         MenuItem item1 = new() { Header = member.Name };
-
-                        item1.Click += (sender, e) => this.InsertText(member.Name);
+                        if (member.ClassMemberType == IClassMemberViewModel.MemberType.Method)
+                        {
+                            item1.Click += (sender, e) => this.InsertText(member.Name + "()");
+                        }
+                        else
+                        {
+                            item1.Click += (sender, e) => this.InsertText(member.Name);
+                        }                       
                         contextMenu.Items.Add(item1);
                     }
                     break;
@@ -102,13 +109,24 @@ namespace Incas.Objects.Views.Pages
                             contextMenu.Items.Add(item1);
                         }
                     }
-                    //// Добавляем пункты меню для AnotherObject
-                    //MenuItem item3 = new() { Header = "PropertyA" };
-                    //item3.Click += (sender, e) => this.InsertText("AnotherObject.PropertyA");
-
-                    //contextMenu.Items.Add(item3);
                     break;
-
+                case "DateTime":
+                    foreach (PropertyInfo mi in typeof(DateTime).GetProperties())
+                    {
+                        MenuItem item1 = new() { Header = mi.Name };
+                        item1.Click += (sender, e) => this.InsertText(mi.Name);
+                        contextMenu.Items.Add(item1);
+                    }
+                    foreach (MethodInfo mi in typeof(DateTime).GetMethods())
+                    {
+                        if (mi.IsPublic)
+                        {
+                            MenuItem item1 = new() { Header = mi.Name };
+                            item1.Click += (sender, e) => this.InsertText(mi.Name + "()");
+                            contextMenu.Items.Add(item1);
+                        }
+                    }                    
+                    break;
                 default:
                     // Не показывать меню, если контекст не распознан
                     return null;

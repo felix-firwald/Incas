@@ -89,6 +89,10 @@ namespace Incas.Core.Views.Windows
             }
             catch { }
         }
+        public void UpdateCommands()
+        {
+            this.vm.UpdateCommands();
+        }
 
         private void OnClosed(object sender, EventArgs e)
         {
@@ -99,11 +103,7 @@ namespace Incas.Core.Views.Windows
         {
             this.PlayEasterEgg("Rooster");
             AboutIncas ai = new();
-            ai.ShowDialog();
-            //if (DialogsManager.ShowQuestionDialog("Это действие переведет рабочее пространство в неуправляемый тестовый режим после активации специальной кнопки. Все ваши данные могут быть потеряны. Продолжить?", "Продолжить?", "Продолжай", "Вырубай") == DialogStatus.Yes)
-            //{
-            //    this.vm.TestFunctionVisibility = Visibility.Visible;
-            //}            
+            ai.ShowDialog();           
         }
 
         private void window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)

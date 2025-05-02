@@ -21,8 +21,6 @@ namespace Incas.Admin.Converters
                         return "Класс, позволяющий настроить автоматические оповещения о событиях, происходящих в рабочем пространства";
                     case ClassType.Process:
                         return "Класс, позволяющий создавать бизнес-процессы";
-                    case ClassType.StaticModel:
-                        return "Класс, позволяющий хранить структурированные данные в одном экземпляре в разрезе периода времени";
                     case ClassType.ServiceClassTask:
                         return "Модель задачи";
                     case ClassType.ServiceClassUser:

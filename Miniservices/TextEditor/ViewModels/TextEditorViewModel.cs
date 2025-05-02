@@ -1,12 +1,5 @@
-﻿using Avalonia.Media;
-using Incas.Core.Classes;
-using Incas.Core.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Incas.Core.ViewModels;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Incas.Miniservices.TextEditor.ViewModels
 {

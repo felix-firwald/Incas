@@ -376,6 +376,10 @@ namespace Incas.Objects.Views.Windows
         private void AddChildContainerToViewControl(object sender, RoutedEventArgs e)
         {
             ControlType type = ControlType.VerticalStack;
+            if (this.vm.SelectedViewControl is null)
+            {
+                return;
+            }
             switch (this.vm.SelectedViewControl.Type)
             {
                 case ControlType.VerticalStack:
@@ -435,7 +439,7 @@ namespace Incas.Objects.Views.Windows
         {
             Field f = new();
             f.SetId();
-            f.Name = $"Поле_{this.vm.Fields.Count + 1}";            
+            f.ListVisibility = true;
             this.vm.AddField(f);
         }
 
@@ -443,7 +447,8 @@ namespace Incas.Objects.Views.Windows
         {
             Method m = new();
             m.SetId();
-            m.Name = $"Метод_{this.vm.Methods.Count + 1}";
+            m.Icon = "M340-302.23v-355.54q0-15.84 10.87-26 10.87-10.15 25.37-10.15 4.53 0 9.5 1.31 4.97 1.3 9.49 3.92l279.84 178.15q8.24 5.62 12.35 13.46 4.12 7.85 4.12 17.08 0 9.23-4.12 17.08-4.11 7.84-12.35 13.46L395.23-271.31q-4.53 2.62-9.52 3.92-4.98 1.31-9.51 1.31-14.51 0-25.35-10.15-10.85-10.16-10.85-26Z";
+            m.Color = new() { R = 255, G = 255, B = 255 };
             this.vm.AddMethod(m);
         }
 
@@ -451,7 +456,6 @@ namespace Incas.Objects.Views.Windows
         {
             Table t = new();
             t.SetId();
-            t.Name = $"Таблица_{this.vm.Tables.Count + 1}";
             this.vm.AddTable(t);
         }
 
@@ -466,6 +470,19 @@ namespace Incas.Objects.Views.Windows
         private void RemoveSelectedStateClick(object sender, RoutedEventArgs e)
         {
             this.vm.RemoveSelectedState();
+        }
+
+        private void AddFieldsFromStringSourceClick(object sender, RoutedEventArgs e)
+        {
+            ClassFieldsString source = new();
+            if (source.ShowDialog("Вставка полей"))
+            {
+                List<Field> fields = source.GetFields();
+                foreach (Field f in fields)
+                {
+                    this.vm.AddField(f);
+                }
+            }
         }
     }
 }

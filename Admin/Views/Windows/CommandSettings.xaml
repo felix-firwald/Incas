@@ -3,12 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Incas.Admin.Views.Windows"
+        xmlns:local="clr-namespace:Incas.Admin.Views.Windows" xmlns:conv="clr-namespace:Incas.Core.Converters"
         mc:Ignorable="d"
-        Title="Настройки команд" Height="450" Width="600"
+        Title="Настройки команд" Height="450" Width="800"
         Style="{StaticResource WindowBase}" WindowStartupLocation="CenterScreen" Background="{StaticResource Black}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <conv:PathDataToGeometryConverter x:Key="PathDataToGeometryConverter"/>
+            <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
@@ -16,22 +23,83 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+        <ListBox Style="{StaticResource ListBoxMain}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Commands}" SelectedItem="{Binding SelectedCommand}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Path Grid.RowSpan="2" Fill="White" Stretch="Uniform" Height="20" Width="20" Data="{Binding SelectedIconPath, Converter={StaticResource PathDataToGeometryConverter}}"/>
+                        <Label Grid.Column="1" Foreground="White" FontFamily="{StaticResource Rubik}" FontSize="13" FontWeight="Bold" Content="{Binding Name}"/>
+                        <TextBlock Grid.Row="1" Margin="5,0,5,5" Grid.Column="1" Foreground="White" FontWeight="ExtraLight" FontFamily="{StaticResource Rubik}" Text="{Binding Description}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Border Grid.Column="1" Style="{StaticResource ToolBorder}">
+            <StackPanel Margin="5">
+                <TextBox Style="{StaticResource TextBoxMain}" Tag="Наименование команды" MaxLength="30" ToolTip="Наименование команды" Text="{Binding SelectedCommand.Name}"/>
+                <TextBox Style="{StaticResource TextBoxBig}" Tag="Описание команды" MaxLength="160" ToolTip="Описание команды" Text="{Binding SelectedCommand.Description}"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Выбранная иконка:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource Light}" Grid.ColumnSpan="3" VerticalAlignment="Center"/>
+                    <Path Grid.Column="1" Stretch="Uniform" Height="15" Width="15" Fill="White" Data="{Binding SelectedCommand.SelectedIconPath, Converter={StaticResource PathDataToGeometryConverter}}" HorizontalAlignment="Left"/>
+                    <Button Style="{StaticResource ButtonSquare}" ToolTip="Сменить иконку" Grid.Column="2" Click="ResetIconClick">
+                        <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M330.77-569.23H192.31q-13.93 0-23.12-9.19-9.19-9.2-9.19-23.12V-740q0-8.54 5.73-14.27T180-760q8.54 0 14.27 5.73T200-740v109.38q40-75.84 114.04-122.61Q388.08-800 480-800q100.54 0 179.5 55.31t114.65 142.54q3.39 7.07.66 14.61-2.73 7.54-9.81 10.92-7.08 3.39-15.12.66-8.03-2.73-11.42-9.81-30.84-77.15-100.38-125.69Q568.54-760 480-760q-80.85 0-145.58 41.77-64.73 41.77-98.11 109h94.46q8.54 0 14.27 5.73t5.73 14.27q0 8.54-5.73 14.27t-14.27 5.73ZM332.31-260h301.54q9.69 0 14.15-8.69 4.46-8.69-1.23-17.16L566-394.38q-5.23-6.47-12.92-6.47-7.7 0-12.93 6.47l-91.69 115.92-57.08-69q-5.23-5.69-12.53-5.69-7.31 0-12.54 6.46l-46.16 60.84q-6.46 8.47-2 17.16 4.47 8.69 14.16 8.69ZM224.62-120q-26.85 0-45.74-18.88Q160-157.77 160-184.62v-250.76q0-8.54 5.73-14.27t14.27-5.73q8.54 0 14.27 5.73t5.73 14.27v250.76q0 10.77 6.92 17.7 6.93 6.92 17.7 6.92h510.76q10.77 0 17.7-6.92 6.92-6.93 6.92-17.7v-250.76q0-8.54 5.73-14.27t14.27-5.73q8.54 0 14.27 5.73t5.73 14.27v250.76q0 26.85-18.88 45.74Q762.23-120 735.38-120H224.62Z"/>
+                    </Button>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border Margin="5" CornerRadius="8" Background="{Binding SelectedCommand.Color, Converter={StaticResource IEColorToBrushConverter}}" Grid.RowSpan="3"/>
+                    <Slider Margin="5" Grid.Column="1" Grid.Row="0" IsSelectionRangeEnabled="True" Minimum="30" Maximum="255" Value="{Binding SelectedCommand.ColorR}"/>
+                    <Slider Margin="5" Grid.Column="1" Grid.Row="1" Minimum="30" Maximum="255" Value="{Binding SelectedCommand.ColorG}" />
+                    <Slider Margin="5" Grid.Column="1" Grid.Row="2" Minimum="30" Maximum="255" Value="{Binding SelectedCommand.ColorB}" />
+                    <Label Grid.Column="2" Grid.Row="0" Content="{Binding SelectedCommand.ColorR}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource Buttons.Red}"  />
+                    <Label Grid.Column="2" Grid.Row="1" Content="{Binding SelectedCommand.ColorG}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource Buttons.Green}"  />
+                    <Label Grid.Column="2" Grid.Row="2" Content="{Binding SelectedCommand.ColorB}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource PrimaryMain}" />
+                </Grid>
+                
+            </StackPanel>
+        </Border>
         <Border Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
-                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" ToolTip="Добавить компонент" Click="AddCommandClick">
+                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" ToolTip="Добавить команду" Click="AddCommandClick">
                     <Path Fill="{StaticResource Buttons.Green}" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
                 </Button>
-                <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" ToolTip="Свернуть все компоненты" Click="MinimizeAllClick">
-                    <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M7.5519,19.8462V16.4385H4.1441v-.923H8.4749v4.3307Zm7.9855,0V15.5155h4.3185v.923H16.4606v3.4077ZM4.1441,8.472V7.549H7.5519V4.1538h.923V8.472Zm11.3933,0V4.1538h.9232V7.549h3.3953v.923Z"/>
+                <Button Style="{StaticResource ButtonSquare}" ToolTip="Удалить выбранную команду" Grid.Column="1" Click="RemoveCommandClick" >
+                    <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
                 </Button>
-                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" ToolTip="Развернуть все компоненты" Click="MaximizeAllClick">
-                    <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Data="M4.1441,19.8462V15.5155h.9233V18.923H8.4749v.9232Zm11.3933,0V18.923h3.3952V15.5155h.9233v4.3307ZM4.1441,8.472V4.1538H8.4749V5.077H5.0674V8.472Zm14.7885,0V5.077H15.5374V4.1538h4.3185V8.472Z"/>
-                </Button>
-
                 <Rectangle Height="1" Fill="{DynamicResource LightBlack}" Margin="4,2,4,2"/>
-
-                <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" ToolTip="Открыть справочную информацию" Click="GetMoreInfoClick">
+                <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" VerticalAlignment="Center" >
+                    <Button Style="{StaticResource ButtonSquare}" ToolTip="Поднять выбранную команду выше" Grid.Column="1" Click="MoveUp" >
+                        <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Margin="4" Data="M13.04,11.1856l-4.2463,4.246a.5021.5021,0,0,1-.3442.15.4664.4664,0,0,1-.3633-.15.4716.4716,0,0,1,0-.7075l4.3883-4.3885a.7813.7813,0,0,1,1.131,0l4.3882,4.3885a.5024.5024,0,0,1,.15.3443.4662.4662,0,0,1-.15.3632.4714.4714,0,0,1-.7075,0Z"/>
+                    </Button>
+                    <Button Style="{StaticResource ButtonSquare}" ToolTip="Опустить выбранную команду ниже" Grid.Column="1" Click="MoveDown" >
+                        <Path Fill="DodgerBlue" VerticalAlignment="Center" Stretch="Uniform" Margin="4" Data="M -13.04 -11.1856 l 4.2463 -4.246 a 0.5021 0.5021 180 0 1 0.3442 -0.15 a 0.4664 0.4664 180 0 1 0.3633 0.15 a 0.4716 0.4716 180 0 1 0 0.7075 l -4.3883 4.3885 a 0.7813 0.7813 180 0 1 -1.131 0 l -4.3882 -4.3885 a 0.5024 0.5024 180 0 1 -0.15 -0.3443 a 0.4662 0.4662 180 0 1 0.15 -0.3632 a 0.4714 0.4714 180 0 1 0.7075 -0 Z"/>
+                    </Button>
+                </StackPanel>
+                <Button Style="{StaticResource ButtonSquare}" Visibility="Collapsed" Background="{StaticResource Black}" ToolTip="Открыть справочную информацию" Click="GetMoreInfoClick">
                     <Path Fill="#FF78DDFF" VerticalAlignment="Center" Stretch="Uniform" Data="M12.9356,17.9427a.78.78,0,1,0-.5605-.2277A.7589.7589,0,0,0,12.9356,17.9427Zm-.5165-3.3115h.9655a2.7092,2.7092,0,0,1,.245-1.06,4.5017,4.5017,0,0,1,.851-1.04,6.9246,6.9246,0,0,0,.9963-1.199,2.2871,2.2871,0,0,0,.327-1.2265,2.3407,2.3407,0,0,0-.8308-1.8842A2.9485,2.9485,0,0,0,13.0076,7.52a2.89,2.89,0,0,0-1.8317.5865,3.6369,3.6369,0,0,0-1.1028,1.348l.919.3808A2.9346,2.9346,0,0,1,11.68,8.87a1.8167,1.8167,0,0,1,1.2895-.4192A1.7552,1.7552,0,0,1,14.39,8.984a1.7859,1.7859,0,0,1,.448,1.1742,1.5992,1.5992,0,0,1-.2808.9278,4.909,4.909,0,0,1-.7307.8222,5.0884,5.0884,0,0,0-1.1385,1.3595A3.1182,3.1182,0,0,0,12.4191,14.6312Zm.4918,7.0808a8.7726,8.7726,0,0,1-3.51-.7085A8.9859,8.9859,0,0,1,4.6169,16.224a9.0416,9.0416,0,0,1-.0008-7.019,8.9865,8.9865,0,0,1,4.78-4.7838,9.0422,9.0422,0,0,1,7.019-.0007A8.9865,8.9865,0,0,1,21.1984,9.2a9.0422,9.0422,0,0,1,.0007,7.019,8.9859,8.9859,0,0,1-4.78,4.7837A8.7525,8.7525,0,0,1,12.9109,21.712Zm-.0033-1a7.7211,7.7211,0,0,0,5.675-2.325,7.7211,7.7211,0,0,0,2.325-5.675,7.7209,7.7209,0,0,0-2.325-5.675,7.7211,7.7211,0,0,0-5.675-2.325,7.7211,7.7211,0,0,0-5.675,2.325,7.7209,7.7209,0,0,0-2.325,5.675,7.7211,7.7211,0,0,0,2.325,5.675A7.7211,7.7211,0,0,0,12.9076,20.712Z"/>
                 </Button>
             </StackPanel>

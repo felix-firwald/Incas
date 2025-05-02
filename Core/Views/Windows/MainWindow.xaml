@@ -19,8 +19,8 @@
         MinHeight="700" MinWidth="900" PreviewKeyDown="window_PreviewKeyDown" Background="{StaticResource Black}">
     <Window.Resources>
         <ResourceDictionary>
-            <conv:CommandTypeToColorConverter x:Key="CommandTypeToColorConverter"/>
-            <conv:CommandTypeToIconConverter x:Key="CommandTypeToIconConverter"/>
+            <conv:IEColorToBrushConverter x:Key="CommandTypeToColorConverter"/>
+            <conv:PathDataToGeometryConverter x:Key="CommandTypeToIconConverter"/>
             <Style x:Key="FocusVisual">
                 <Setter Property="Control.Template">
                     <Setter.Value>
@@ -241,8 +241,8 @@
                             <DataTemplate>
                                 <Button Style="{StaticResource ButtonRectangle}" HorizontalContentAlignment="Stretch" ToolTip="{Binding Description}" Command="{Binding DataContext.UserCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding .}">
                                     <StackPanel Orientation="Horizontal">
-                                        <Path Fill="{Binding Type,Converter={StaticResource CommandTypeToColorConverter}}" MaxHeight="15" Stretch="Uniform" Data="{Binding Type,Converter={StaticResource CommandTypeToIconConverter}}" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding Name}" FontFamily="{StaticResource Rubik}" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
+                                        <Path Fill="{Binding Color,Converter={StaticResource CommandTypeToColorConverter}}" MaxHeight="15" Stretch="Uniform" Data="{Binding Icon,Converter={StaticResource CommandTypeToIconConverter}}" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding Name}" FontFamily="{StaticResource Rubik}" FontSize="12" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
                                     </StackPanel>
                                 </Button>
                             </DataTemplate>

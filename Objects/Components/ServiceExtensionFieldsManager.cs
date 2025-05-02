@@ -107,12 +107,6 @@ namespace Incas.Objects.Components
                 contentPanel.Children.Add(new ObjectFieldViewer(description, 167, 171, 183));
                 return;
             }
-            if (obj is IncasEngine.ObjectiveEngine.Types.StaticModels.StaticObject objStatic)
-            {
-                contentPanel.Children.Add(new ObjectFieldViewer(objStatic.StartPeriod, "Начало действия"));
-                contentPanel.Children.Add(new ObjectFieldViewer(objStatic.EndPeriod, "Конец действия"));
-                return;
-            }
         }
         public static void AppendServiceFieldViewers(IObjectEdition edit, StackPanel contentPanel)
         {

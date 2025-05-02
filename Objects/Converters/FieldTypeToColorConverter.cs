@@ -31,7 +31,7 @@ namespace Incas.Objects.Converters
                         return new SolidColorBrush(Color.FromRgb(250, 174, 122));
 
                     case FieldType.Date:
-
+                    case FieldType.Time:
                     case FieldType.Integer:
                     case FieldType.Float:
                         return new SolidColorBrush(Color.FromRgb(132, 189, 253));

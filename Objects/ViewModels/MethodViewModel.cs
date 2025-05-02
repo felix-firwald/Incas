@@ -1,4 +1,4 @@
-﻿using AvaloniaEdit.Document;
+﻿using ICSharpCode.AvalonEdit.Document;
 using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.Objects.Interfaces;
@@ -39,7 +39,7 @@ namespace Incas.Objects.ViewModels
                 ViewControlViewModel vm = new(
                     new()
                     {
-                        Name = this.Name,
+                        Name = this.VisibleName,
                         Type = IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms.ControlType.Button,
                         RunMethod = this.Source.Id
                     }

@@ -37,6 +37,7 @@
                             <Label Content="Наименование метода:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                         </Grid>
                         <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding Name}" Tag="Наименование метода" MaxLength="50" ToolTip="Наименование метода"/>
+                        <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding VisibleName}" Tag="Видимое название метода" MaxLength="50" ToolTip="Видимое название метода"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
@@ -70,7 +71,7 @@
                         <TextBox Style="{StaticResource TextBoxBig}" Tag="Описание метода" Text="{Binding Description}"/>
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource ToolBorder}">
+                <!--<Border Style="{StaticResource ToolBorder}">
                     <StackPanel>
                         <Grid Margin="5,5,0,0">
                             <Grid.ColumnDefinitions>
@@ -155,7 +156,7 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                     </StackPanel>
-                </Border>
+                </Border>-->
             </StackPanel>
         </Border>
         <avalonedit:TextEditor x:Name="Code" FontFamily="{StaticResource JetBrains}" Grid.Column="1" Foreground="White" Background="{DynamicResource Black}" LineNumbersForeground="{DynamicResource Element}" ShowLineNumbers="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,5,0,0" TextChanged="CodeChanged" />

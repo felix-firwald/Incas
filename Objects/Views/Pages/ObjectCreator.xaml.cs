@@ -6,7 +6,6 @@ using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using Incas.Rendering.Components;
-using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -20,14 +19,12 @@ using IncasEngine.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using static IncasEngine.ObjectiveEngine.Models.State;
-using static System.Windows.Forms.AxHost;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -58,9 +55,11 @@ namespace Incas.Objects.Views.Pages
         public delegate Task<bool> ObjectCreatorDataAsync(ObjectCreator creator);
         public delegate bool ObjectCreatorData(ObjectCreator creator);
         public delegate void FieldCopyAction(Guid id, string text);
+        public delegate void ObjectState(State state);
         public GroupClassPermissionSettings PermissionSettings { get; set; }
         public event FieldCopyAction OnInsertRequested;
         public event ObjectCreatorData OnUpdated;
+        public event ObjectState OnStateUpdated;
         public event ObjectCreatorDataAsync OnSaveRequested;
         public event ObjectCreatorData OnRemoveRequested;
         private bool Locked = false;
@@ -166,13 +165,18 @@ namespace Incas.Objects.Views.Pages
                 pair.Key.Click += this.ButtonWithMethodClicked;
             }
         }
-
-        private void ButtonWithMethodClicked(object sender, RoutedEventArgs e)
+        public void ApplyMethod(Method method)
         {
-            Method method = this.buttons[(Button)sender];
+            DialogsManager.ShowWaitCursor();
             IObject obj = this.PullObjectForScript();
             CodeOutputArgs output = obj.RunMethod(method);
             this.ApplyObject(obj, output.StateUpdated);
+            DialogsManager.ShowWaitCursor(false);
+        }
+        private void ButtonWithMethodClicked(object sender, RoutedEventArgs e)
+        {           
+            Method method = this.buttons[(Button)sender];
+            this.ApplyMethod(method);
         }
         private void ApplyState()
         {
@@ -180,29 +184,53 @@ namespace Incas.Objects.Views.Pages
             {
                 return;
             }
-            foreach (IncasEngine.ObjectiveEngine.Models.State state in this.ClassData.States)
-            {
-                if (state.Id == this.Object.State)
+            try
+            {                
+                foreach (IncasEngine.ObjectiveEngine.Models.State state in this.ClassData.States)
                 {
-                    foreach (KeyValuePair<Field, IFillerBase> filler in this.fillers)
+                    if (state.Id == this.Object.State)
                     {
-                        filler.Value.ApplyState(state);
+                        this.OnStateUpdated?.Invoke(state);
+                        foreach (KeyValuePair<Field, IFillerBase> filler in this.fillers)
+                        {
+                            filler.Value.ApplyState(state);
+                        }
+                        foreach (KeyValuePair<Table, FieldTableFiller> filler in this.tables)
+                        {
+                            filler.Value.ApplyState(state);
+                        }
+                        foreach (KeyValuePair<Button, Method> button in this.buttons)
+                        {
+                            try
+                            {
+                                MemberState memberState = state.Settings[button.Value.Id];
+                                button.Key.IsEnabled = memberState.IsEnabled;
+                                button.Key.Visibility = memberState.EditorVisibility == true ? Visibility.Visible : Visibility.Collapsed;
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                        return;
                     }
-                    foreach (KeyValuePair<Table, FieldTableFiller> filler in this.tables)
-                    {
-                        filler.Value.ApplyState(state);
-                    }
-                    foreach (KeyValuePair<Button, Method> button in this.buttons)
-                    {
-                        MemberState memberState = state.Settings[button.Value.Id];
-                        button.Key.IsEnabled = memberState.IsEnabled;
-                        button.Key.Visibility = memberState.EditorVisibility == true ? Visibility.Visible : Visibility.Collapsed;
-                    }
-                    break;
                 }
+                this.SetUndefinedState();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
             }
         }
-
+        public void SetUndefinedState()
+        {
+            this.PullObjectForScript();
+            StateUndefinedMessage sum = new(this.Object);
+            this.MainGrid.Children.Clear();
+            this.MainGrid.Children.Add(sum);
+            Grid.SetRowSpan(sum, 3);
+            Grid.SetColumnSpan(sum, 3);
+        }
         private void Tf_OnDatabaseObjectCopyRequested(IFillerBase sender)
         {
             BindingData bd = new()
@@ -511,7 +539,6 @@ namespace Incas.Objects.Views.Pages
                     DialogsManager.ShowWaitCursor(true);
                     string name = await this.GenerateDocument(docData.Documents[0], path, true);
                     DialogsManager.ShowWebViewer($"Предварительный просмотр ({this.Class.Name})", WordTemplator.ReplaceToPDF(name), true);
-
                 }
                 else if (docData.Documents?.Count > 1)
                 {

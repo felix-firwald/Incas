@@ -21,8 +21,6 @@ namespace Incas.Admin.Converters
                         return "Модель события";
                     case ClassType.Process:
                         return "Модель процесса";
-                    case ClassType.StaticModel:
-                        return "Статическая модель данных";
                     case ClassType.ServiceClassTask:
                         return "Модель задачи";
                     case ClassType.ServiceClassUser:

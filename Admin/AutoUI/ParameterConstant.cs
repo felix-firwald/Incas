@@ -1,6 +1,7 @@
 ﻿using Incas.DialogSimpleForm.Components;
 using IncasEngine.Models;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Incas.Admin.AutoUI
 {
@@ -15,6 +16,7 @@ namespace Incas.Admin.AutoUI
         public string Name { get; set; }
 
         [Description("Значение константы")]
+        [StringLength(1200)]
         public string Value { get; set; }
 
         public ParameterConstant(bool isEdit = false)
