@@ -131,6 +131,13 @@ namespace Incas.Objects.Components
             {
                 case ControlType.FieldFiller:
                     this.AddChild(currentParent, fillers[vc.Field]);
+                    if (vc.Children is not null)
+                    {
+                        foreach (ViewControl control in vc.Children)
+                        {
+                            this.DrawControl(control, fillers[vc.Field], fillers);
+                        }
+                    }
                     return;
                 case ControlType.Table:
                     this.AddChild(currentParent, fillers[vc.Table]);
@@ -147,10 +154,17 @@ namespace Incas.Objects.Components
                     {
                         this.PlaceButton(vc, fieldTableFiller);
                     }
+                    else if (currentParent is FieldFiller fieldFiller)
+                    {
+                        this.PlaceButton(vc, fieldFiller);
+                    }
                     else
                     {
                         this.PlaceButton(vc, currentParent);
                     }                   
+                    return;
+                case ControlType.Text:
+                    element = this.MakeText(vc.TextSettings);
                     return;
                 case ControlType.VerticalStack:
                     element = new StackPanel() { Orientation = Orientation.Vertical };
@@ -185,6 +199,10 @@ namespace Incas.Objects.Components
             this.AddChild(currentParent, this.MakeButton(vc));
         }
         private void PlaceButton(ViewControl vc, FieldTableFiller currentParent)
+        {
+            currentParent.AddButton(this.MakeButton(vc));
+        }
+        private void PlaceButton(ViewControl vc, FieldFiller currentParent)
         {
             currentParent.AddButton(this.MakeButton(vc));
         }
@@ -229,6 +247,39 @@ namespace Incas.Objects.Components
             };
             drawingOutputArgs.Buttons.Add(btn, targetMethod);
             return btn;           
+        }
+
+        private TextBlock MakeText(ViewControl.ViewControlTextSettings settings)
+        {
+            TextBlock tb = new();
+            if (settings is null)
+            {
+                return tb;
+            }
+            tb.Text = settings.Text;
+            if (settings.Bold)
+            {
+                tb.FontWeight = FontWeights.Bold;
+            }
+            if (settings.Italic)
+            {
+                tb.FontStyle = FontStyles.Italic;
+            }
+            switch (settings.Size)
+            {
+                case ViewControl.ViewControlTextSettings.TextSettingsSize.Small:
+                    tb.FontSize = 12;
+                    break;
+                case ViewControl.ViewControlTextSettings.TextSettingsSize.Medium:
+                    tb.FontSize = 14;
+                    break;
+                case ViewControl.ViewControlTextSettings.TextSettingsSize.Large:
+                    tb.FontSize = 16;
+                    break;
+            }
+            tb.Foreground = settings.Color.AsBrush();
+            tb.FontFamily = ResourceStyleManager.FindFontFamily(ResourceStyleManager.FontRubik);
+            return tb;
         }
 
         private void AddChild(FrameworkElement container, FrameworkElement child)

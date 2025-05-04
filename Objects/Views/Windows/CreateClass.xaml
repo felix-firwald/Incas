@@ -18,6 +18,8 @@
             <local1:ViewControlTypeToIconConverter x:Key="ViewControlTypeToIconConverter"/>
             <local1:ViewControlTypeToColorConverter x:Key="ViewControlTypeToColorConverter"/>
             <local1:MemberTypeToIconConverter x:Key="MemberTypeToIconConverter"/>
+            <local1:MethodTypeToPathConverter x:Key="MethodTypeToPathConverter"/>
+            <local1:MethodTypeToToolTipConverter x:Key="MethodTypeToToolTipConverter"/>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -463,6 +465,56 @@
                                 </Border>
                             </Grid>
                         </TabItem>
+                        <TabItem Header="Статические методы" BorderBrush="{DynamicResource DarkYellow}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" MinWidth="250" />
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+                                <ListBox Style="{StaticResource ListBoxMain}" ItemsSource="{Binding StaticMethods}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.ScrollUnit="Pixel" Margin="0,5,5,5" Background="{StaticResource Black}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border x:Name="MainBorder" Margin="2" Height="40" CornerRadius="2" Background="{DynamicResource Dark}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="55*"/>
+                                                        <ColumnDefinition Width="40" MaxWidth="40"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
+                                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Dark}" ToolTip="Открыть вкладку статического метода" Command="{Binding OpenMethodSettings}" CommandParameter="{Binding }">
+                                                            <Path Fill="White" VerticalAlignment="Center" Stretch="Uniform" Width="14" Data="M184.62-200q-27.62 0-46.12-18.5Q120-237 120-264.62v-430.76q0-27.62 18.5-46.12Q157-760 184.62-760h590.76q27.62 0 46.12 18.5Q840-723 840-695.38v430.76q0 27.62-18.5 46.12Q803-200 775.38-200H184.62Zm0-40h590.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93V-640H160v375.38q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69Zm190.84-200-89.84-89.85q-5.85-5.84-6.12-14.15-.27-8.31 6.35-14.15 5.84-5.62 14.15-5.35 8.31.27 14.15 6.12l94.77 94.76q9.7 9.7 9.7 22.62 0 12.92-9.7 22.62l-95.54 95.53q-5.61 5.62-13.65 5.35-8.04-.27-13.88-6.12-5.62-5.61-5.62-13.38 0-7.77 5.62-13.38L375.46-440ZM520-300q-8.54 0-14.27-5.73T500-320q0-8.54 5.73-14.27T520-340h160q8.54 0 14.27 5.73T700-320q0 8.54-5.73 14.27T680-300H520Z"/>
+                                                        </Button>
+
+                                                        <Rectangle Width="1" Fill="{DynamicResource Area}" Margin="0,5,0,5" Opacity="0.5" />
+                                                        <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
+                                                        <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding BelongsThisClass}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
+                                                            <TextBox.ContextMenu>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
+                                                                    <MenuItem Header="Вставить" Command="ApplicationCommands.Paste"/>
+                                                                </ContextMenu>
+                                                            </TextBox.ContextMenu>
+                                                        </TextBox>
+                                                        <Label Style="{DynamicResource LabelElement}" Content="]" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
+                                                    </StackPanel>
+                                                    <Rectangle Width="1" Fill="{DynamicResource Area}" Grid.Column="1" Visibility="{Binding BelongsVisibility}" HorizontalAlignment="Left" Margin="-2,5,0,5" Opacity="0.5" />
+                                                    <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" Background="{StaticResource Dark}" ToolTip="Удалить метод" Grid.Column="1" Command="{Binding RemoveMethod}" CommandParameter="{Binding }">
+                                                        <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
+                                                    </Button>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Border Grid.Row="2" Grid.Column="3" VerticalAlignment="Top">
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,0" Cursor="" >
+                                        <Button Style="{StaticResource ButtonSquare}" Background="{StaticResource Black}" Click="AddStaticMethodClick" ToolTip="Добавить статический метод">
+                                            <Path Fill="{StaticResource Buttons.Green}" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
+                                        </Button>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </TabItem>
                     </TabControl>
 
                 </Grid>
@@ -679,7 +731,7 @@
             <TabItem Header="Представление" BorderBrush="{StaticResource LightPurple}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="4*" MinWidth="500"/>
+                        <ColumnDefinition Width="4*" MinWidth="550"/>
                         <ColumnDefinition Width="7*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -692,14 +744,17 @@
                                 <StackPanel>
                                     <CheckBox IsChecked="{Binding PreferPage}" Content="Использовать страницу объекта как основной редактор"/>
                                     <WrapPanel>
-                                        <Button Style="{StaticResource ButtonSquare}" ToolTip="Добавить контейнер на форму" Click="AddControlToCustomFormClick">
+                                        <Button Style="{StaticResource ButtonSquare}" Visibility="{Binding AddControlToRootVisibility}" ToolTip="Добавить контейнер на форму" Click="AddControlToCustomFormClick">
                                             <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Height="20" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" VerticalAlignment="Center"/>
                                         </Button>
-                                        <Button Style="{StaticResource ButtonRectangle}" Visibility="{Binding SelectedViewControl.ContainerSettingsVisibility, TargetNullValue=Visibility.Collapsed}" ToolTip="Добавить новый вложенный контейнер" HorizontalAlignment="Left" Grid.Column="2" Click="AddChildContainerToViewControl" >
-                                            <StackPanel Orientation="Horizontal">
-                                                <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Height="20" Data="M8.004,19.3885V9.6135a1.5425,1.5425,0,0,1,.475-1.141A1.573,1.573,0,0,1,9.6252,8.004h9.7633A1.62,1.62,0,0,1,21.004,9.62v6.29a1.5674,1.5674,0,0,1-.1308.6323,1.6576,1.6576,0,0,1-.348.5177L17.06,20.5252a1.6576,1.6576,0,0,1-.5177.348,1.5674,1.5674,0,0,1-.6323.1308H9.62A1.62,1.62,0,0,1,8.004,19.3885ZM3.029,6.6a1.5057,1.5057,0,0,1,.2567-1.2127,1.6084,1.6084,0,0,1,1.06-.6643L13.9655,3.029a1.5057,1.5057,0,0,1,1.2127.2567,1.61,1.61,0,0,1,.6643,1.06L16.054,5.62H9.62a4.0118,4.0118,0,0,0-4,4V17.4a1.6446,1.6446,0,0,1-.5818-.475,1.62,1.62,0,0,1-.3145-.7057ZM14.004,15.004v2.5a.5.5,0,1,0,1,0v-2.5h2.5a.5.5,0,1,0,0-1h-2.5v-2.5a.5.5,0,1,0-1,0v2.5h-2.5a.5.5,0,1,0,0,1Z"/>
-                                                <Label Content="Вложить контейнер" Foreground="White"/>
-                                            </StackPanel>
+                                        <Button Style="{StaticResource ButtonSquare}" Visibility="{Binding SelectedViewControl.ContainerSettingsVisibility, TargetNullValue=Visibility.Collapsed}" ToolTip="Вложить новый контейнер в выбранный контейнер" HorizontalAlignment="Left" Grid.Column="2" Click="AddChildContainerToViewControl" >
+                                            <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Height="20" Data="M200-200h98.46q12.75 0 21.38 8.63 8.62 8.63 8.62 21.38 0 12.76-8.62 21.37-8.63 8.62-21.38 8.62h-122.3q-15.37 0-25.76-10.4-10.4-10.39-10.4-25.76v-122.3q0-12.75 8.63-21.38 8.63-8.62 21.38-8.62 12.76 0 21.37 8.62 8.62 8.63 8.62 21.38V-200Zm560.38 0v-98.46q0-12.75 8.63-21.38 8.63-8.62 21.39-8.62 12.75 0 21.37 8.62 8.61 8.63 8.61 21.38v122.3q0 15.37-10.39 25.76-10.4 10.4-25.76 10.4H661.92q-12.75 0-21.37-8.63-8.63-8.63-8.63-21.38 0-12.76 8.63-21.37 8.62-8.62 21.37-8.62h98.46ZM200-760v98.46q0 12.75-8.63 21.38-8.63 8.62-21.38 8.62-12.76 0-21.37-8.62-8.62-8.63-8.62-21.38v-122.3q0-15.37 10.4-25.76 10.39-10.4 25.76-10.4h122.3q12.75 0 21.38 8.63 8.62 8.63 8.62 21.38 0 12.76-8.62 21.37-8.63 8.62-21.38 8.62H200Zm560.38 0h-98.46q-12.75 0-21.37-8.63-8.63-8.63-8.63-21.38 0-12.76 8.63-21.37 8.62-8.62 21.37-8.62h122.31q15.36 0 25.76 10.4 10.39 10.39 10.39 25.76v122.3q0 12.75-8.63 21.38-8.62 8.62-21.38 8.62T769-640.16q-8.62-8.63-8.62-21.38V-760Z M450-450H250q-12.75 0-21.37-8.63-8.63-8.63-8.63-21.38 0-12.76 8.63-21.37Q237.25-510 250-510h200v-200q0-12.75 8.63-21.37 8.63-8.63 21.38-8.63 12.76 0 21.37 8.63Q510-722.75 510-710v200h200q12.75 0 21.37 8.63 8.63 8.63 8.63 21.38 0 12.76-8.63 21.37Q722.75-450 710-450H510v200q0 12.75-8.63 21.37-8.63 8.63-21.38 8.63-12.76 0-21.37-8.63Q450-237.25 450-250v-200Z"/>
+                                        </Button>
+                                        <Button Style="{StaticResource ButtonSquare}" ToolTip="Вложить выбранный контейнер/контрол в новый контейнер" HorizontalAlignment="Left" Grid.Column="2" Click="WrapViewControlClick" >
+                                            <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Height="20" Data="M268.46-268.46H170q-12.75 0-21.37-8.63-8.63-8.63-8.63-21.39 0-12.75 8.63-21.37 8.62-8.61 21.37-8.61h122.31q15.36 0 25.76 10.39 10.39 10.4 10.39 25.76V-170q0 12.75-8.63 21.37-8.63 8.63-21.38 8.63-12.76 0-21.37-8.63-8.62-8.62-8.62-21.37v-98.46Zm423.46 0V-170q0 12.75-8.63 21.37-8.63 8.63-21.38 8.63-12.76 0-21.37-8.63-8.62-8.62-8.62-21.37v-122.31q0-15.36 10.4-25.76 10.39-10.39 25.76-10.39h122.3q12.75 0 21.38 8.63 8.62 8.63 8.62 21.38 0 12.76-8.62 21.37-8.63 8.62-21.38 8.62h-98.46ZM268.46-691.54V-790q0-12.75 8.63-21.37 8.63-8.63 21.39-8.63 12.75 0 21.37 8.63 8.61 8.62 8.61 21.37v122.31q0 15.36-10.39 25.76-10.4 10.39-25.76 10.39H170q-12.75 0-21.37-8.63-8.63-8.63-8.63-21.38 0-12.76 8.63-21.37 8.62-8.62 21.37-8.62h98.46Zm423.46 0h98.46q12.75 0 21.38 8.63 8.62 8.63 8.62 21.39 0 12.75-8.62 21.37-8.63 8.61-21.38 8.61h-122.3q-15.37 0-25.76-10.39-10.4-10.4-10.4-25.76V-790q0-12.75 8.63-21.37 8.63-8.63 21.39-8.63 12.75 0 21.37 8.63 8.61 8.62 8.61 21.37v98.46Z M450-450H250q-12.75 0-21.37-8.63-8.63-8.63-8.63-21.38 0-12.76 8.63-21.37Q237.25-510 250-510h200v-200q0-12.75 8.63-21.37 8.63-8.63 21.38-8.63 12.76 0 21.37 8.63Q510-722.75 510-710v200h200q12.75 0 21.37 8.63 8.63 8.63 8.63 21.38 0 12.76-8.63 21.37Q722.75-450 710-450H510v200q0 12.75-8.63 21.37-8.63 8.63-21.38 8.63-12.76 0-21.37-8.63Q450-237.25 450-250v-200Z"/>
+                                        </Button>
+                                        <Button Style="{StaticResource ButtonSquare}" Visibility="{Binding SelectedViewControl.ContainerSettingsVisibility, TargetNullValue=Visibility.Collapsed}"  ToolTip="Вложить текстовую метку в выбранный контейнер" HorizontalAlignment="Left" Grid.Column="2" Click="AddTextLabelToFormClick" >
+                                            <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Height="20" Data="m177.38-354.15-46.77 122.84q-3.84 10.16-11.76 15.73-7.93 5.58-18.43 5.58-17.27 0-27.11-14.31-9.85-14.31-3.77-30.54l186-474.38q3.46-9.38 11.7-15.08 8.23-5.69 17.84-5.69h25.14q10.47 0 18.32 5.69 7.84 5.7 11.3 15.08l186.24 473.85q6.07 16.61-4.02 30.99Q511.97-210 494.77-210q-10.46 0-19.44-5.95-8.97-5.95-12.71-16.36l-46.16-121.84H177.38Zm21.7-59.85h195.69l-95.2-252h-4.65l-95.84 252Zm528.61-36h-90q-12.75 0-21.37-8.63-8.63-8.63-8.63-21.38 0-12.76 8.63-21.37 8.62-8.62 21.37-8.62h90v-90q0-12.75 8.63-21.37 8.63-8.63 21.39-8.63 12.75 0 21.37 8.63 8.61 8.62 8.61 21.37v90h90q12.75 0 21.38 8.63 8.62 8.63 8.62 21.38 0 12.76-8.62 21.37-8.63 8.62-21.38 8.62h-90v90q0 12.75-8.63 21.37-8.63 8.63-21.38 8.63-12.76 0-21.37-8.63-8.62-8.62-8.62-21.37v-90Z"/>
                                         </Button>
                                         <Button Style="{StaticResource ButtonSquare}" ToolTip="Удалить элемент" Click="RemoveSelectedElementFromForm" >
                                             <Path Fill="{StaticResource Buttons.Red}" Stretch="Uniform" Height="20" VerticalAlignment="Center" Data="m480-437.85 122.92 122.93q8.31 8.3 20.89 8.5 12.57.19 21.27-8.5 8.69-8.7 8.69-21.08 0-12.38-8.69-21.08L522.15-480l122.93-122.92q8.3-8.31 8.5-20.89.19-12.57-8.5-21.27-8.7-8.69-21.08-8.69-12.38 0-21.08 8.69L480-522.15 357.08-645.08q-8.31-8.3-20.89-8.5-12.57-.19-21.27 8.5-8.69 8.7-8.69 21.08 0 12.38 8.69 21.08L437.85-480 314.92-357.08q-8.3 8.31-8.5 20.89-.19 12.57 8.5 21.27 8.7 8.69 21.08 8.69 12.38 0 21.08-8.69L480-437.85Zm.07 337.85q-78.84 0-148.21-29.92t-120.68-81.21q-51.31-51.29-81.25-120.63Q100-401.1 100-479.93q0-78.84 29.92-148.21t81.21-120.68q51.29-51.31 120.63-81.25Q401.1-860 479.93-860q78.84 0 148.21 29.92t120.68 81.21q51.31 51.29 81.25 120.63Q860-558.9 860-480.07q0 78.84-29.92 148.21t-81.21 120.68q-51.29 51.31-120.63 81.25Q558.9-100 480.07-100Z"/>
@@ -758,10 +813,20 @@
                                 </StackPanel>
                             </Border>
                             <Border Style="{StaticResource ToolBorder}">
-                                <StackPanel>
-                                    <TextBox Style="{StaticResource TextBoxMain}" Tag="Имя контейнера" Text="{Binding SelectedViewControl.Name}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Button Style="{StaticResource ButtonSquare}" Visibility="{Binding SelectedViewControl.ButtonSettingsVisibility, TargetNullValue=Visibility.Collapsed}" Margin="0" ToolTip="Настроить элемент" HorizontalAlignment="Left" Command="{Binding AssignToContainer}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Fill="White" VerticalAlignment="Center" Stretch="Uniform" Height="15" Data="M435.69-100q-20.46 0-35.34-13.58-14.89-13.57-18.12-33.42l-9.77-74.85q-16.07-5.38-32.96-15.07-16.88-9.7-30.19-20.77L240-228.23q-18.85 8.31-37.88 1.61-19.04-6.69-29.58-24.3l-45.08-78.16q-10.54-17.61-6.07-37.27 4.46-19.65 20.46-32.42l59.92-45q-1.38-8.92-1.96-17.92-.58-9-.58-17.93 0-8.53.58-17.34t1.96-19.27l-59.92-45q-16-12.77-20.27-32.62-4.27-19.84 6.27-37.46l44.69-77q10.54-17.23 29.58-24.11 19.03-6.89 37.88 1.42l68.92 29.08q14.47-11.46 30.89-20.96t32.27-15.27L382.23-813q3.23-19.85 18.12-33.42Q415.23-860 435.69-860h88.62q20.46 0 35.34 13.58 14.89 13.57 18.12 33.42l9.77 75.23q18 6.54 32.57 15.27 14.58 8.73 29.43 20.58L720.39-731q18.84-8.31 37.88-1.42 19.04 6.88 29.57 24.11l44.7 77.39q10.54 17.61 6.07 37.27-4.46 19.65-20.46 32.42l-61.46 46.15q2.15 9.69 2.35 18.12.19 8.42.19 16.96 0 8.15-.39 16.58-.38 8.42-2.76 19.27l60.3 45.38q16 12.77 20.66 32.42 4.65 19.66-5.89 37.27l-45.31 77.77q-10.53 17.62-29.76 24.31-19.23 6.69-38.08-1.62l-68.46-29.46q-14.85 11.85-30.31 20.96-15.46 9.12-31.69 14.89L577.77-147q-3.23 19.85-18.12 33.42Q544.77-100 524.31-100h-88.62Zm44.77-260q49.92 0 84.96-35.04 35.04-35.04 35.04-84.96 0-49.92-35.04-84.96Q530.38-600 480.46-600q-50.54 0-85.27 35.04T360.46-480q0 49.92 34.73 84.96Q429.92-360 480.46-360Z"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <TextBox Style="{StaticResource TextBoxMain}" Tag="Имя контейнера" Text="{Binding SelectedViewControl.Name}" Grid.Column="1"/>
 
-                                    <ComboBox Style="{StaticResource ComboBoxMain}" Visibility="{Binding SelectedViewControl.ContainerSettingsVisibility}" Tag="Имя контейнера" ItemsSource="{Binding AvailableControlTypes}" SelectedItem="{Binding SelectedViewControl.Type}">
+                                    <ComboBox Style="{StaticResource ComboBoxMain}" MinWidth="200" Visibility="{Binding SelectedViewControl.ContainerSettingsVisibility}" Tag="Имя контейнера" ItemsSource="{Binding AvailableControlTypes}" SelectedItem="{Binding SelectedViewControl.Type}" Grid.Column="2">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
@@ -773,7 +838,7 @@
                                     </ComboBox>
                                     
 
-                                </StackPanel>
+                                </Grid>
                             </Border>
 
                         </StackPanel>

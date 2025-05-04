@@ -66,6 +66,14 @@ namespace Incas.Objects.ViewModels
                     this.AddMethod(method);
                 }
             }
+            this.StaticMethods = new();
+            if (this.SourceData.StaticMethods is not null)
+            {
+                foreach (Method method in this.SourceData.StaticMethods)
+                {
+                    this.AddStaticMethod(method);
+                }
+            }
             this.Tables = new();
             this.Tables.CollectionChanged += this.Members_CollectionChanged;
             if (this.SourceData.Tables is not null)
@@ -125,6 +133,13 @@ namespace Incas.Objects.ViewModels
             vm.OnOpenMethodRequested += this.DoOpenDetails;
             vm.OnRemoveRequested += this.DoRemoveMethod;
             this.Methods.Add(vm);
+        }
+        public void AddStaticMethod(Method m)
+        {
+            MethodViewModel vm = new(m, this);
+            vm.OnOpenMethodRequested += this.DoOpenDetails;
+            vm.OnRemoveRequested += this.DoRemoveMethod;
+            this.StaticMethods.Add(vm);
         }
 
         public void AddState(State m)
@@ -290,6 +305,7 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.PreferPage));
             }
         }
+
         private ObservableCollection<WorkspaceComponent> components;
         public ObservableCollection<WorkspaceComponent> AvailableComponents
         {
@@ -412,6 +428,19 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.Methods));
             }
         }
+        private ObservableCollection<MethodViewModel> staticMethods;
+        public ObservableCollection<MethodViewModel> StaticMethods
+        {
+            get
+            {
+                return this.staticMethods;
+            }
+            set
+            {
+                this.staticMethods = value;
+                this.OnPropertyChanged(nameof(this.StaticMethods));
+            }
+        }
         private ObservableCollection<TableViewModel> tables;
         public ObservableCollection<TableViewModel> Tables
         {
@@ -521,6 +550,7 @@ namespace Incas.Objects.ViewModels
             {
                 this.controls = value;
                 this.OnPropertyChanged(nameof(this.ViewControls));
+                this.OnPropertyChanged(nameof(this.AddControlToRootVisibility));
             }
         }
         private ViewControlViewModel selectedViewControl;
@@ -535,6 +565,25 @@ namespace Incas.Objects.ViewModels
                 this.selectedViewControl = value;
                 this.OnPropertyChanged(nameof(this.SelectedViewControl));
             }
+        }
+        public Visibility AddControlToRootVisibility
+        {
+            get
+            {
+                return this.ViewControls.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+        public ViewControlViewModel FindParent(ViewControlViewModel vc)
+        {
+            foreach (ViewControlViewModel vm in this.ViewControls)
+            {
+                ViewControlViewModel result = vm.FindParent(vc);
+                if (result is not null)
+                {
+                    return result;
+                }
+            }
+            return null;
         }
 
         public void AddNewControlToCustomForm(ViewControl vc)
@@ -701,6 +750,11 @@ namespace Incas.Objects.ViewModels
                 {
                     this.SourceData.Methods.Add(method.Source);
                 }
+            }
+            this.SourceData.StaticMethods = new();
+            foreach (MethodViewModel method in this.StaticMethods)
+            {              
+                this.SourceData.StaticMethods.Add(method.Source);               
             }
             this.SourceData.Tables = new();
             foreach (TableViewModel table in this.Tables)

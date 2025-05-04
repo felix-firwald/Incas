@@ -177,7 +177,6 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.Color));
             }
         }
-
         public string Code
         {
             get

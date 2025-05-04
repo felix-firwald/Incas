@@ -36,6 +36,11 @@
             <TextBlock Text="Все функции"/>
             <xctk:DropDownButton.DropDownContent>
                 <ListBox x:Name="AllButtonsPanel" Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemUnselectableButtons}">
+                    <ListBox.Resources>
+                        <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
+
+                        </Style>
+                    </ListBox.Resources>
                 </ListBox>
             </xctk:DropDownButton.DropDownContent>
         </xctk:DropDownButton>

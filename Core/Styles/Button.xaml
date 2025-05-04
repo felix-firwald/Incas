@@ -611,6 +611,7 @@
                             <Setter Property="Background" Value="{StaticResource Element}"/>
                         </Trigger>
                         <Trigger SourceName="PART_DropDownButton" Property="IsChecked" Value="True">
+                            <Setter TargetName="Arrow" Property="Fill" Value="{StaticResource PrimaryMain}"/>
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>

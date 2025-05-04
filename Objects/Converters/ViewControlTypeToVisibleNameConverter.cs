@@ -27,6 +27,8 @@ namespace Incas.Objects.Converters
                         return "Группа";
                     case ControlType.FieldFiller:
                         return "Поле";
+                    case ControlType.Text:
+                        return "Текст";
                 }
             }
             return "Авто";

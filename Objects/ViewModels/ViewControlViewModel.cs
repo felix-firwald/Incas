@@ -1,4 +1,6 @@
-﻿using Incas.Core.ViewModels;
+﻿using Incas.Core.Classes;
+using Incas.Core.ViewModels;
+using Incas.Core.Views.Windows;
 using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using System;
@@ -110,6 +112,7 @@ namespace Incas.Objects.ViewModels
                     case ControlType.Table:
                     case ControlType.FieldFiller:
                     case ControlType.Button:
+                    case ControlType.Text:
                         return Visibility.Collapsed;
                 }
                 return Visibility.Visible;
@@ -126,9 +129,21 @@ namespace Incas.Objects.ViewModels
                 return Visibility.Collapsed;
             }
         }
+        public Visibility ButtonSettingsVisibility
+        {
+            get
+            {
+                switch (this.Type)
+                {
+                    case ControlType.Text:
+                        return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
         public void AddChild(ViewControlViewModel vc)
         {
-            if (this.Type is ControlType.FieldFiller or ControlType.Button)
+            if (this.Type is ControlType.Button)
             {
                 return;
             }
@@ -137,7 +152,7 @@ namespace Incas.Objects.ViewModels
                 return;
             }
             if (!this.SupportsMultipleChildren)
-            {
+            { 
                 this.Children?.Clear();
             }
             if (this.Children is null)
@@ -236,6 +251,28 @@ namespace Incas.Objects.ViewModels
                     vm.RemoveField(table);
                 }
             }
+        }
+        public ViewControlViewModel FindParent(ViewControlViewModel vc)
+        {
+            foreach (ViewControlViewModel vm in this.Children)
+            {
+                if (vm.Children is not null)
+                {
+                    if (vm.Children.Contains(vc))
+                    {
+                        return vm;
+                    }
+                    else
+                    {
+                        ViewControlViewModel result = vm.FindParent(vc);
+                        if (result is not null)
+                        {
+                            return result;
+                        }
+                    }
+                }
+            }
+            return null;
         }
         public void MoveDown()
         {

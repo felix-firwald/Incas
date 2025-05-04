@@ -40,6 +40,8 @@ namespace Incas.Objects.Views.Controls
     public partial class FieldFiller : UserControl, ISimpleFiller
     {
         public Field Field { get; set; }
+        public event RoutedEventHandler OnCustomButtonClicked;
+
         //private bool validated = true;
         private bool unique = true;
         private bool eventChangedEnabled = true;
@@ -231,7 +233,6 @@ namespace Incas.Objects.Views.Controls
             {
                 case FieldType.String:
                 case FieldType.Text:
-                default:
                     ((System.Windows.Controls.TextBox)this.control).Text = value;
                     break;
                 case FieldType.Integer:
@@ -598,13 +599,21 @@ namespace Incas.Objects.Views.Controls
             if (source.EditorVisibility)
             {
                 this.Visibility = Visibility.Visible;
-                this.IsEnabled = source.IsEnabled;
+                this.control.IsEnabled = source.IsEnabled;
                 this.isRequired = source.IsRequired;
             }
             else
             {
                 this.Visibility = Visibility.Collapsed;
             }
+        }
+        public void AddButton(Button btn)
+        {
+            btn.Click += (sender, e) =>
+            {
+                this.OnCustomButtonClicked?.Invoke(sender, e);
+            };
+            this.CustomButtons.Children.Add(btn);
         }
     }
 }

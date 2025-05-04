@@ -24,6 +24,8 @@ namespace Incas.Objects.Converters
                         return IncasEngine.Core.Color.FromRGB(127, 192, 77).AsBrush();
                     case ControlType.Button:
                         return IncasEngine.Core.Color.FromRGB(191, 77, 166).AsBrush();
+                    case ControlType.Text:
+                        return IncasEngine.Core.Color.FromRGB(119, 221, 231).AsBrush();
                 }
             }
             return IncasEngine.Core.Color.FromRGB(247, 189, 91).AsBrush();

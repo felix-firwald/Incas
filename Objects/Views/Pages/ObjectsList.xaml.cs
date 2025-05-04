@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Bibliography;
 using Incas.Core.Classes;
+using Incas.Core.Extensions;
 using Incas.Core.Interfaces;
 using Incas.Core.Views.Controls;
 using Incas.DialogSimpleForm.Components;
@@ -25,7 +26,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using static Incas.Core.Interfaces.ITabItem;
+using static IncasEngine.ObjectiveEngine.Models.State;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -51,6 +55,8 @@ namespace Incas.Objects.Views.Pages
         private DataView View { get; set; }
 
         private ObjectsListLoading loading;
+        private Dictionary<Button, Method> buttons = new();
+
         public delegate void ObjectsListAction(IClass source);
         public event ObjectsListAction OnPresetsViewRequested;
 
@@ -75,6 +81,7 @@ namespace Incas.Objects.Views.Pages
             {
                 this.PlaceCard();
             }
+            this.ExternalOptions.Visibility = this.ClassData.StaticMethods?.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
             this.UpdateView();
         }
 
@@ -693,6 +700,66 @@ namespace Incas.Objects.Views.Pages
                 DialogsManager.ShowPageWithGroupBox(oc, "Поиск наследника", target.Id.ToString());
                 oc.TrySelectObject(target.Id);
             }
+        }
+        private void PlaceExternalButtons()
+        {
+            this.AllButtonsPanel.Items.Clear();
+            if (this.ClassData.StaticMethods is null)
+            {
+                return;
+            }
+            foreach (Method m in this.ClassData.StaticMethods)
+            {                
+                this.AllButtonsPanel.Items.Add(this.MakeButton(m));
+            }
+        }
+        private Button MakeButton(Method targetMethod)
+        {
+            Grid grid = new();
+            grid.ColumnDefinitions.Add(new() { Width = new(30) });
+            grid.ColumnDefinitions.Add(new());
+            Label l = new()
+            {
+                Content = targetMethod.VisibleName,
+                Foreground = new SolidColorBrush(System.Windows.Media.Colors.White),
+                FontFamily = ResourceStyleManager.FindFontFamily(ResourceStyleManager.FontRubik),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            Grid.SetColumn(l, 1);
+            Path p = new();
+            if (targetMethod.Icon != null)
+            {
+                p.Data = Geometry.Parse(targetMethod.Icon);
+            }
+            p.Fill = targetMethod.Color.AsBrush();
+            p.VerticalAlignment = VerticalAlignment.Center;
+            p.Stretch = Stretch.Uniform;
+            p.Height = 15;
+            p.Width = 15;
+            grid.Children.Add(p);
+            grid.Children.Add(l);
+            Button btn = new()
+            {
+                Content = grid,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                HorizontalContentAlignment = HorizontalAlignment.Left,
+                Margin = new(0),
+                ToolTip = targetMethod.Description,
+                Style = ResourceStyleManager.FindStyle(ResourceStyleManager.ButtonRectangle)
+            };
+            btn.Click += this.Btn_Click;
+            this.buttons.Add(btn, targetMethod);
+            return btn;
+        }
+
+        private void Btn_Click(object sender, RoutedEventArgs e)
+        {
+            Method m = this.buttons[sender as Button];
+        }
+
+        private void ExternalOptions_Opened(object sender, RoutedEventArgs e)
+        {
+            this.PlaceExternalButtons();
         }
     }
 }
