@@ -58,5 +58,10 @@ namespace Incas.Admin.Views.Windows
                 this.Close();
             }
         }
+
+        private void AddMethodClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
+using Incas.Objects.AutoUI;
 using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using System;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Incas.Objects.ViewModels
 {
@@ -32,8 +34,25 @@ namespace Incas.Objects.ViewModels
                 {
                     this.AddChild(new(vc));
                 }
-            }           
+            }
+            this.OpenSettings = new Command(this.DoOpenSettings);
         }
+
+        private void DoOpenSettings(object obj)
+        {
+            switch (this.Type)
+            {
+                case ControlType.Text:
+                    ViewControlTextSettings ts = new(this.Source.TextSettings);
+                    if (ts.ShowDialog("Настройки текста"))
+                    {
+                        this.Source.TextSettings = ts.GetResult();
+                    }
+                    break;
+            }
+        }
+
+        public ICommand OpenSettings { get; set; }
         private bool selected;
         public bool IsSelected
         {

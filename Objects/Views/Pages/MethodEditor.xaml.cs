@@ -1,17 +1,17 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using ICSharpCode.AvalonEdit.Document;
+﻿using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Incas.Admin.ViewModels;
 using Incas.Core.Views.Windows;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using IncasEngine.Scripting;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Xml;
 
 namespace Incas.Objects.Views.Pages
@@ -23,6 +23,7 @@ namespace Incas.Objects.Views.Pages
     {
         public MethodViewModel vm { get; set; }
         public ClassViewModel Class { get; set; }
+        public GeneralizatorViewModel Generalizator { get; set; }
         public string ItemName { get; private set; }
 
         public MethodEditor(MethodViewModel method)
@@ -42,7 +43,6 @@ namespace Incas.Objects.Views.Pages
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
             ICSharpCode.AvalonEdit.Highlighting.IHighlightingDefinition highlightingDefinition = HighlightingLoader.Load(reader, ICSharpCode.AvalonEdit.Highlighting.HighlightingManager.Instance);
             ICSharpCode.AvalonEdit.Highlighting.HighlightingRuleSet ruleSet = highlightingDefinition.MainRuleSet;
-
             foreach (IClassMemberViewModel field in vm.Members)
             {
                 string pattern = @"\b" + Regex.Escape(field.Name) + @"\b";
@@ -55,11 +55,30 @@ namespace Incas.Objects.Views.Pages
                     Foreground = new SimpleHighlightingBrush(System.Windows.Media.Color.FromRgb(191, 255, 76))
                 };
                 rule.Color = color;
-                color.Background = new SimpleHighlightingBrush(System.Windows.Media.Color.FromRgb(47, 52, 34));
                 ruleSet.Rules.Add(rule);
             }
-
+            List<string> keywords = ObjectScriptManager.GetKeywordsLibraries();
+            keywords.Add("this");
+            foreach (string keyword in keywords)
+            {
+                string thisPattern = $@"\b{Regex.Escape(keyword)}\b";
+                ICSharpCode.AvalonEdit.Highlighting.HighlightingRule thisRule = new()
+                {
+                    Regex = new System.Text.RegularExpressions.Regex(thisPattern)
+                };
+                HighlightingColor thisColor = new()
+                {
+                    Foreground = new SimpleHighlightingBrush(System.Windows.Media.Color.FromRgb(30, 144, 255))
+                };
+                thisRule.Color = thisColor;
+                ruleSet.Rules.Add(thisRule);
+            }
+            
             this.Code.SyntaxHighlighting = highlightingDefinition;
+        }
+        public void SetUpContext(GeneralizatorViewModel vm)
+        {
+            throw new NotImplementedException();
         }
 
         private void TextArea_TextEntered(object sender, TextCompositionEventArgs e)

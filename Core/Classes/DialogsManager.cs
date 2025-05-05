@@ -1,11 +1,16 @@
 ﻿using Incas.Core.Views.Windows;
 using Incas.Help.Components;
 using Incas.Help.Windows;
+using Incas.Objects.Processes.Views.Pages;
 using Incas.Objects.Views.Pages;
+using Incas.Objects.Views.Windows;
 using IncasEngine.Core.DatabaseQueries;
+using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Exceptions;
+using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -20,6 +25,41 @@ namespace Incas.Core.Classes
             IncasEngine.Core.EngineEvents.OnMessageRequested += EngineEvents_OnMessageRequested;
             IncasEngine.Core.EngineEvents.OnQuestionRequested += EngineEvents_OnQuestionRequested;
             IncasEngine.Core.EngineEvents.OnShowTabRequested += EngineEvents_OnShowTabRequested;
+            IncasEngine.Core.EngineEvents.OnFileDialogRequested += EngineEvents_OnFileDialogRequested;
+            IncasEngine.Core.EngineEvents.OnEditorRequested += EngineEvents_OnEditorRequested;
+        }
+
+        private static void EngineEvents_OnEditorRequested(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, IncasEngine.ObjectiveEngine.Interfaces.IObject obj)
+        {
+            if (cl.GetClassData().PreferPage)
+            {
+                ObjectPage page = new(cl, obj);
+                DialogsManager.ShowPageWithGroupBox(page, obj.Name, "EDITOR" + obj.Id.ToString());
+            }
+            else
+            {
+                switch (obj.Class.Type)
+                {
+                    case ClassType.Model:
+                    case ClassType.Document:
+                    case ClassType.Event:
+                    case ClassType.ServiceClassGroup:
+                    case ClassType.ServiceClassUser:
+                    case ClassType.ServiceClassTask:
+                        ObjectsEditor oc = new(cl, [obj]);
+                        oc.Show();
+                        break;
+                    case ClassType.Process:
+                        ProcessViewer pv = new(cl as Class, obj as IncasEngine.ObjectiveEngine.Types.Processes.Process);
+                        DialogsManager.ShowPageWithGroupBox(pv, obj.Name, obj.Id.ToString());
+                        break;
+                }
+            }
+        }
+
+        private static bool EngineEvents_OnFileDialogRequested(ref string file, string filter, string root)
+        {
+            return DialogsManager.ShowOpenFileDialog(ref file, filter, root);
         }
 
         private static void EngineEvents_OnShowTabRequested(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, System.Collections.Generic.List<Guid> list, IncasEngine.ObjectiveEngine.Models.Field field)

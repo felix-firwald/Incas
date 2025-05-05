@@ -79,7 +79,9 @@
                     <Label Grid.Column="2" Grid.Row="1" Content="{Binding SelectedCommand.ColorG}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource Buttons.Green}"  />
                     <Label Grid.Column="2" Grid.Row="2" Content="{Binding SelectedCommand.ColorB}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource PrimaryMain}" />
                 </Grid>
-                
+                <TextBlock HorizontalAlignment="Center" Margin="10">
+                    <Hyperlink Click="OpenScriptClick" >Открыть скрипт</Hyperlink>
+                </TextBlock>
             </StackPanel>
         </Border>
         <Border Grid.Column="3" Margin="5" Background="{DynamicResource Black}" CornerRadius="8">

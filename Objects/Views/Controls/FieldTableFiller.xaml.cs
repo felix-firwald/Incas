@@ -257,8 +257,11 @@ namespace Incas.Objects.Views.Controls
             #region Edit View
             FrameworkElementFactory editFactory = new(typeof(DecimalUpDown));
             editFactory.SetValue(DecimalUpDown.StyleProperty, this.FindResource(ResourceStyleManager.IntegerUpDownGridStyle) as Style);
-            editFactory.SetValue(DecimalUpDown.MaximumProperty, (decimal)col.NumberSettings?.MaxValue);
-            editFactory.SetValue(DecimalUpDown.MinimumProperty, (decimal)col.NumberSettings?.MinValue);
+            if (col.NumberSettings is not null)
+            {
+                editFactory.SetValue(DecimalUpDown.MaximumProperty, (decimal)col.NumberSettings?.MaxValue);
+                editFactory.SetValue(DecimalUpDown.MinimumProperty, (decimal)col.NumberSettings?.MinValue);
+            }           
             editFactory.SetBinding(DecimalUpDown.ValueProperty, new Binding(e.Column.Header.ToString()));
             editFactory.SetValue(DecimalUpDown.FormatStringProperty, "F1");
             editFactory.SetValue(DecimalUpDown.IncrementProperty, 0.1m);

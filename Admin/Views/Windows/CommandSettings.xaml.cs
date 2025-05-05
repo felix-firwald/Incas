@@ -112,5 +112,16 @@ namespace Incas.Admin.Views.Windows
             this.vm.Commands.MoveDown(selected);
             this.vm.SelectedCommand = selected;
         }
+
+        private void OpenScriptClick(object sender, RoutedEventArgs e)
+        {
+            if (this.vm.SelectedCommand is null)
+            {
+                return;
+            }
+            CommandScript cs = new(this.vm.SelectedCommand.Name, this.vm.SelectedCommand.Script);
+            cs.ShowDialog();
+            this.vm.SelectedCommand.Script = cs.Code.Text;
+        }
     }
 }

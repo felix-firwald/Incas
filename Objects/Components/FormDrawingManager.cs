@@ -164,7 +164,7 @@ namespace Incas.Objects.Components
                     }                   
                     return;
                 case ControlType.Text:
-                    element = this.MakeText(vc.TextSettings);
+                    this.MakeText(currentParent, vc.TextSettings);
                     return;
                 case ControlType.VerticalStack:
                     element = new StackPanel() { Orientation = Orientation.Vertical };
@@ -249,7 +249,7 @@ namespace Incas.Objects.Components
             return btn;           
         }
 
-        private TextBlock MakeText(ViewControl.ViewControlTextSettings settings)
+        private TextBlock MakeText(FrameworkElement currentParent, ViewControl.ViewControlTextSettings settings)
         {
             TextBlock tb = new();
             if (settings is null)
@@ -257,6 +257,7 @@ namespace Incas.Objects.Components
                 return tb;
             }
             tb.Text = settings.Text;
+            tb.Margin = new Thickness(10);
             if (settings.Bold)
             {
                 tb.FontWeight = FontWeights.Bold;
@@ -279,6 +280,7 @@ namespace Incas.Objects.Components
             }
             tb.Foreground = settings.Color.AsBrush();
             tb.FontFamily = ResourceStyleManager.FindFontFamily(ResourceStyleManager.FontRubik);
+            this.AddChild(currentParent, tb);
             return tb;
         }
 

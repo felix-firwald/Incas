@@ -1,4 +1,5 @@
-﻿using Incas.Objects.ViewModels;
+﻿using Incas.Admin.ViewModels;
+using Incas.Objects.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Incas.Objects.Interfaces
     {
         public string ItemName { get; }
         public void SetUpContext(ClassViewModel vm);
+        public void SetUpContext(GeneralizatorViewModel vm);
     }
 }

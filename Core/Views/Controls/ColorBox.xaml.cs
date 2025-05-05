@@ -30,5 +30,10 @@ namespace Incas.Core.Views.Controls
             this.vm = new(0, 0, 0);
             this.DataContext = this.vm;
         }
+
+        private void Border_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            this.vm.Apply(((SolidColorBrush)((Border)sender).Background).Color);
+        }
     }
 }

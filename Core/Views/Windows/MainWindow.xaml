@@ -239,7 +239,7 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Button Style="{StaticResource ButtonRectangle}" HorizontalContentAlignment="Stretch" ToolTip="{Binding Description}" Command="{Binding DataContext.UserCommand, RelativeSource={RelativeSource AncestorType=ListBox}}" CommandParameter="{Binding .}">
+                                <Button Style="{StaticResource ButtonRectangle}" HorizontalContentAlignment="Stretch" ToolTip="{Binding Description}" Command="{Binding UserCommand}">
                                     <StackPanel Orientation="Horizontal">
                                         <Path Fill="{Binding Color,Converter={StaticResource CommandTypeToColorConverter}}" MaxHeight="15" Stretch="Uniform" Data="{Binding Icon,Converter={StaticResource CommandTypeToIconConverter}}" VerticalAlignment="Center"/>
                                         <Label Content="{Binding Name}" FontFamily="{StaticResource Rubik}" FontSize="12" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>

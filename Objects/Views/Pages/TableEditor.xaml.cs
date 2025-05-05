@@ -1,4 +1,5 @@
-﻿using Incas.Objects.Interfaces;
+﻿using Incas.Admin.ViewModels;
+using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using IncasEngine.ObjectiveEngine.Models;
 using System;
@@ -59,6 +60,11 @@ namespace Incas.Objects.Views.Pages
             {
                 f.IsExpanded = true;
             }
+        }
+
+        public void SetUpContext(GeneralizatorViewModel vm)
+        {
+            throw new NotImplementedException();
         }
     }
 }

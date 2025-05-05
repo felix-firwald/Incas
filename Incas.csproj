@@ -319,8 +319,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
-    <PackageReference Include="ClosedXML" Version="0.102.1" />
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
     <PackageReference Include="DocX" Version="3.0.0" />
     <PackageReference Include="ExcelNumberFormat" Version="1.1.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25103.5738" />

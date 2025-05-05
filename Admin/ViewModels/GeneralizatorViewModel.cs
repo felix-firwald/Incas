@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
+using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.Models;
@@ -14,6 +15,8 @@ namespace Incas.Admin.ViewModels
 {
     public class GeneralizatorViewModel : BaseViewModel
     {
+        public delegate void OpenAdditionalSettings(IClassDetailsSettings settings);
+        public event OpenAdditionalSettings OnAdditionalSettingsOpenRequested;
         public Generalizator Source { get; set; }
         public GeneralizatorViewModel()
         {
@@ -48,6 +51,24 @@ namespace Incas.Admin.ViewModels
             field.OnMoveUpRequested += this.Field_OnMoveUpRequested;
             field.OnRemoveRequested += this.Field_OnRemoveRequested;
             this.Fields.Add(field);
+        }
+        public void AddMethod(Method m)
+        {
+            MethodViewModel vm = new(m);
+            vm.OnOpenMethodRequested += this.DoOpenDetails;
+            vm.OnRemoveRequested += this.DoRemoveMethod;
+            this.Methods.Add(vm);
+        }
+
+        private void DoRemoveMethod(MethodViewModel field)
+        {
+            this.Methods.Remove(field);
+        }
+
+        private void DoOpenDetails(IClassDetailsSettings settings)
+        {
+            settings.SetUpContext(this);
+            this.OnAdditionalSettingsOpenRequested?.Invoke(settings);
         }
 
         private void Field_OnRemoveRequested(FieldViewModel field)
@@ -103,7 +124,6 @@ namespace Incas.Admin.ViewModels
             FieldType.GlobalEnumeration,
             FieldType.Object,
 #if E_BUSINESS
-            FieldType.Structure,
 #endif
         };
         public List<FieldType> FieldTypes

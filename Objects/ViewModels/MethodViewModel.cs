@@ -30,6 +30,18 @@ namespace Incas.Objects.ViewModels
             this.RemoveMethod = new Command(this.DoRemoveMethod);
             this.AssignToContainer = new Command(this.DoAssignToContainer);
         }
+        public MethodViewModel(Method method)
+        {
+            this.Source = method;
+            this.textDocument = new()
+            {
+                Text = this.Source.Code ?? "\n\n\n\n\n"
+            };
+            this.textDocument.TextChanged += this.TextDocument_TextChanged;
+            this.OpenMethodSettings = new Command(this.DoOpenMethod);
+            this.RemoveMethod = new Command(this.DoRemoveMethod);
+            this.AssignToContainer = new Command(this.DoAssignToContainer);
+        }
 
         private void DoAssignToContainer(object obj)
         {

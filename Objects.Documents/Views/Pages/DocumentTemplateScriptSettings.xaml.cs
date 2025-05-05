@@ -1,5 +1,6 @@
 ﻿using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Incas.Admin.ViewModels;
 using Incas.Objects.Documents.ViewModels;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
@@ -81,6 +82,11 @@ namespace Incas.Objects.Documents.Views.Pages
         private void CodeChanged(object sender, EventArgs e)
         {
             this.SourceTemplate.Code = this.Code.Text;
+        }
+
+        public void SetUpContext(GeneralizatorViewModel vm)
+        {
+            throw new NotImplementedException();
         }
     }
 }

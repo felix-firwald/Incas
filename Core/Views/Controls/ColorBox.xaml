@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Incas.Core.Views.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="120" d:DesignWidth="400">
+             d:DesignHeight="170" d:DesignWidth="400">
     <UserControl.Resources>
         <Style x:Key="RepeatButtonTransparent" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -250,9 +250,10 @@
         </Style>
     </UserControl.Resources>
 
-    <Border CornerRadius="8" BorderThickness="1" Margin="5" BorderBrush="{StaticResource Element}">
+    <Border CornerRadius="2" BorderThickness="1" Margin="5" BorderBrush="{StaticResource Element}">
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
@@ -263,7 +264,7 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <Border Grid.RowSpan="2" Margin="5" CornerRadius="8" Background="{Binding Color}">
+            <Border Grid.RowSpan="2" Margin="5" CornerRadius="2" Background="{Binding Color}">
                 
             </Border>
             <Label Style="{StaticResource LabelElement}" Content="R" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFFF3E3E"/>
@@ -275,6 +276,17 @@
             <Label Style="{StaticResource LabelElement}" Content="{Binding R}" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Right"/>
             <Label Style="{StaticResource LabelElement}" Content="{Binding G}" Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Right"/>
             <Label Style="{StaticResource LabelElement}" Content="{Binding B}" Grid.Column="3" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Right"/>
+            <UniformGrid Grid.Row="2" Grid.RowSpan="2" Margin="5" Rows="3" Columns="3">
+                <Border CornerRadius="2" Margin="5" MaxHeight="15" MaxWidth="15" Background="{StaticResource Icon}" Cursor="Hand" ToolTip="Нажать, чтобы установить цвет" MouseDown="Border_MouseDown"/>
+                <Border CornerRadius="2" Margin="5" MaxHeight="15" MaxWidth="15" Background="{StaticResource DarkLight}" Cursor="Hand" ToolTip="Нажать, чтобы установить цвет" MouseDown="Border_MouseDown"/>
+                <Border CornerRadius="2" Margin="5" MaxHeight="15" MaxWidth="15" Background="{StaticResource GrayLight}" Cursor="Hand" ToolTip="Нажать, чтобы установить цвет" MouseDown="Border_MouseDown"/>
+                <Border CornerRadius="2" Margin="5" MaxHeight="15" MaxWidth="15" Background="{StaticResource LightPurple}" Cursor="Hand" ToolTip="Нажать, чтобы установить цвет" MouseDown="Border_MouseDown"/>
+                <Border CornerRadius="2" Margin="5" MaxHeight="15" MaxWidth="15" Background="{StaticResource LightYellow}" Cursor="Hand" ToolTip="Нажать, чтобы установить цвет" MouseDown="Border_MouseDown"/>
+                <Border CornerRadius="2" Margin="5" MaxHeight="15" MaxWidth="15" Background="{StaticResource Buttons.Green}" Cursor="Hand" ToolTip="Нажать, чтобы установить цвет" MouseDown="Border_MouseDown"/>
+                <Border CornerRadius="2" Margin="5" MaxHeight="15" MaxWidth="15" Background="{StaticResource Buttons.Red}" Cursor="Hand" ToolTip="Нажать, чтобы установить цвет" MouseDown="Border_MouseDown"/>
+                <Border CornerRadius="2" Margin="5" MaxHeight="15" MaxWidth="15" Background="{StaticResource PrimaryMain}" Cursor="Hand" ToolTip="Нажать, чтобы установить цвет" MouseDown="Border_MouseDown"/>
+                <Border CornerRadius="2" Margin="5" MaxHeight="15" MaxWidth="15" Background="{StaticResource PrimaryMainUp}" Cursor="Hand" ToolTip="Нажать, чтобы установить цвет" MouseDown="Border_MouseDown"/>
+            </UniformGrid>
         </Grid>
     </Border>
 </UserControl>

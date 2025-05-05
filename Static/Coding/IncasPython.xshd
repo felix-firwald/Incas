@@ -85,7 +85,6 @@
 		</Keywords>
 		<Keywords fontWeight="bold" foreground="#1E90FF">
 			<Word>incas</Word>
-			<Word>this</Word>
 		</Keywords>
 		<Keywords fontWeight="bold" foreground="#3dff43">
 			<Word>True</Word>
@@ -101,6 +100,7 @@
 		<Keywords foreground="#bfff4c" background="">
 			<Word>class</Word>
 			<Word>def</Word>
+			<Word>global</Word>
 		</Keywords>
 		<Keywords foreground="#d761ff">
 			<Word>try</Word>
@@ -120,6 +120,7 @@
 			<Word>max</Word>
 			<Word>len</Word>
 			<Word>range</Word>
+			<Word>type</Word>
 		</Keywords>
 		<Keywords foreground="#4cfff8">
 			<Word>self</Word>
@@ -136,6 +137,11 @@
 			<Word>!</Word>
 			<Word>[</Word>
 			<Word>]</Word>
+			<Word>/</Word>
+			<Word>%</Word>
+			<Word>*</Word>
+			<Word>&lt;</Word>
+			<Word>&gt;</Word>
 			<Word>pass</Word>
 		</Keywords>
 		<Rule foreground="#b9abff">

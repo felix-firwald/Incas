@@ -59,6 +59,17 @@ namespace Incas.Admin.ViewModels
                 this.OnPropertyChanged(nameof(this.Description));
             }
         }
+        public string Script
+        {
+            get
+            {
+                return this.Source.Script;
+            }
+            set
+            {
+                this.Source.Script = value;
+            }
+        }
         public IncasEngine.Core.Color Color
         {
             get
@@ -110,6 +121,7 @@ namespace Incas.Admin.ViewModels
                 this.Color = color;
             }
         }
+
         /// <summary>
         /// Сохраняет изменения в Model
         /// </summary>

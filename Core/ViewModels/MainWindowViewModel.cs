@@ -107,11 +107,16 @@ namespace Incas.Core.ViewModels
         }
 
         #endregion
-        public List<WorkspaceMenuCommand> Commands
+        public List<WorkspaceMenuCommandViewModel> Commands
         {
             get
             {
-                return ProgramState.CurrentWorkspace.GetDefinition().Commands;
+                List<WorkspaceMenuCommandViewModel> result = new();
+                foreach (WorkspaceMenuCommand c in ProgramState.CurrentWorkspace.GetDefinition().Commands)
+                {
+                    result.Add(new(c));
+                }
+                return result;
             }
         }
         public void UpdateCommands()

@@ -20,6 +20,7 @@ using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Processes;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
+using IncasEngine.Scripting;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -406,7 +407,7 @@ namespace Incas.Objects.Views.Pages
                             DialogsManager.ShowPageWithGroupBox(pv, obj.Name, obj.Id.ToString());
                             break;
                     }
-                }                                                  
+                }                                   
             }
             catch (Exception ex)
             {
@@ -754,7 +755,9 @@ namespace Incas.Objects.Views.Pages
 
         private void Btn_Click(object sender, RoutedEventArgs e)
         {
+            this.ExternalOptions.IsOpen = false;
             Method m = this.buttons[sender as Button];
+            ObjectScriptManager.RunStaticCode(m);
         }
 
         private void ExternalOptions_Opened(object sender, RoutedEventArgs e)
