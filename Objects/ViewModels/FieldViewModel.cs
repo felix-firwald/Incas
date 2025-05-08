@@ -84,6 +84,13 @@ namespace Incas.Objects.ViewModels
                 this.Owner.SelectedViewControl.AddChild(vm);
             }
         }
+        public bool EditingEnabled
+        {
+            get
+            {
+                return this.Source.TargetGeneralizator == Guid.Empty;
+            }
+        }
         public void DoRemoveField(object param)
         {
             if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить поле [{this.Name}]? После сохранения это действие отменить нельзя: это поле будет безвозвратно удалено.", "Удалить поле?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.Yes)
@@ -151,8 +158,11 @@ namespace Incas.Objects.ViewModels
             get => this.Source.VisibleName;
             set
             {
-                this.Source.VisibleName = value;
-                this.OnPropertyChanged(nameof(this.VisibleName));
+                if (value != this.Source.VisibleName)
+                {
+                    this.Source.VisibleName = ClassDataBase.HandleVisibleName(value);
+                    this.OnPropertyChanged(nameof(this.VisibleName));
+                }
             }
         }
         public bool BelongsThisClass
@@ -187,11 +197,7 @@ namespace Incas.Objects.ViewModels
             {
                 if (value != this.Source.Name)
                 {
-                    this.Source.Name = value
-                        .Replace(" ", "_")
-                        .Replace(".", "_")
-                        .Replace(":", "_")
-                        .Replace("$", "_");
+                    this.Source.Name = ClassDataBase.HandleName(value);
                     this.OnPropertyChanged(nameof(this.Name));
                 }
             }

@@ -5,6 +5,7 @@ using Incas.Objects.AutoUI;
 using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Pages;
 using IncasEngine.Core.ExtensionMethods;
+using IncasEngine.Models;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
 using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
@@ -20,7 +21,7 @@ using System.Windows;
 
 namespace Incas.Objects.ViewModels
 {
-    public class ClassViewModel : BaseViewModel
+    public class ClassViewModel : BaseViewModel, IMembersContainerViewModel
     {
         public enum ClassMode
         {
@@ -34,6 +35,19 @@ namespace Incas.Objects.ViewModels
         public event DrawCall OnDrawCalling;
         public delegate void OpenAdditionalSettings(IClassDetailsSettings settings);
         public event OpenAdditionalSettings OnAdditionalSettingsOpenRequested;
+
+        public static ClassViewModel Init(IClass cl)
+        {
+            switch (cl.Type)
+            {
+                case ClassType.Model:
+                case ClassType.Document:
+                case ClassType.Process:
+                case ClassType.Event:
+                    return new(cl as Class);
+            }
+            return new(cl as ServiceClass);
+        }
         public ClassViewModel(Class source)
         {
             this.Mode = ClassMode.Usual;
@@ -46,8 +60,30 @@ namespace Incas.Objects.ViewModels
             this.SetMembers();
             this.Fields.CollectionChanged += this.Fields_CollectionChanged;
         }
+#if !E_FREE
+        public ClassViewModel(ServiceClass source)
+        {
+            this.Mode = ClassMode.Service;
+            this.Source = source;
+            this.SourceData = this.Source.GetClassData();
+            this.ViewControls = new();
+            this.SetCommands();
+            this.AvailableComponents = new([this.Source.Component]);
+            this.SelectedComponent = this.Source.Component;
+            this.SetMembers();
+            this.Fields.CollectionChanged += this.Fields_CollectionChanged;
+        }
+#endif
         private void SetMembers()
         {
+            this.IncludedGeneralizators = new();
+            if (this.Source.Generalizators is not null && this.Source.Generalizators.Count > 0)
+            {
+                using (Generalizator g = new())
+                {
+                    this.IncludedGeneralizators = new(g.GetGeneralizators(this.Source.Generalizators));
+                }
+            }
             this.Fields = new();
             this.Fields.CollectionChanged += this.Members_CollectionChanged;
             if (this.SourceData.Fields is not null)
@@ -103,6 +139,20 @@ namespace Incas.Objects.ViewModels
         private void Members_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             this.OnPropertyChanged(nameof(this.Members));
+        }
+
+        private ObservableCollection<Generalizator> includedGeneralizators;
+        public ObservableCollection<Generalizator> IncludedGeneralizators
+        {
+            get
+            {
+                return this.includedGeneralizators;
+            }
+            set
+            {
+                this.includedGeneralizators = value;
+                this.OnPropertyChanged(nameof(this.IncludedGeneralizators));
+            }
         }
 
         public void AddField(Field f)
@@ -165,20 +215,7 @@ namespace Incas.Objects.ViewModels
             settings.SetUpContext(this);
             this.OnAdditionalSettingsOpenRequested?.Invoke(settings);
         }
-#if !E_FREE
-        public ClassViewModel(ServiceClass source)
-        {
-            this.Mode = ClassMode.Service;
-            this.Source = source;
-            this.SourceData = this.Source.GetClassData();
-            this.ViewControls = new();          
-            this.SetCommands();
-            this.AvailableComponents = new([this.Source.Component]);
-            this.SelectedComponent = this.Source.Component;
-            this.SetMembers();
-            this.Fields.CollectionChanged += this.Fields_CollectionChanged;
-        }
-#endif
+
         #region Commands
         private void SetCommands()
         {
@@ -230,6 +267,19 @@ namespace Incas.Objects.ViewModels
             {
                 this.Source.Type = value;
                 this.OnPropertyChanged(nameof(this.Type));
+            }
+        }
+        private bool editingEnabled = true;
+        public bool IsEditingEnabled
+        {
+            get
+            {
+                return this.editingEnabled;
+            }
+            set
+            {
+                this.editingEnabled = value;
+                this.OnPropertyChanged(nameof(this.IsEditingEnabled));
             }
         }
         public Visibility InheritanceVisibility
@@ -733,8 +783,12 @@ namespace Incas.Objects.ViewModels
             }
         }
 
-        public void SetData()
+        public IClassData GetData()
         {
+            if (string.IsNullOrEmpty(this.ListName))
+            {
+                this.ListName = $"Список объектов: {this.NameOfClass}";
+            }
             this.SourceData.Fields = new();
             foreach (FieldViewModel field in this.Fields)
             {
@@ -761,6 +815,7 @@ namespace Incas.Objects.ViewModels
             {
                 if (table.BelongsThisClass)
                 {
+                    table.Save();
                     this.SourceData.Tables.Add(table.Source);
                 }
             }
@@ -770,7 +825,7 @@ namespace Incas.Objects.ViewModels
                 state.Save();
                 this.SourceData.States.Add(state.Source);               
             }
-            this.Source.SetClassData(this.SourceData);
+            return this.SourceData;
         }
         public List<Field> GetFields()
         {
@@ -782,89 +837,97 @@ namespace Incas.Objects.ViewModels
             return result;
         }
 
-        public bool Validate()
+        public void Validate()
         {
-            try
+            this.Source.Component = this.SelectedComponent;
+            if (this.SelectedComponent is null)
             {
-                this.Source.Component = this.SelectedComponent;
-                if (string.IsNullOrEmpty(this.InternalName))
-                {
-                    DialogsManager.ShowExclamationDialog("Классу не присвоено уникальное имя!", "Сохранение прервано");
-                    return false;
-                }
-                if (string.IsNullOrWhiteSpace(this.NameOfClass))
-                {
-                    DialogsManager.ShowExclamationDialog("Классу не присвоено наименование!", "Сохранение прервано");
-                    return false;
-                }
-                if (this.Fields.Count == 0)
-                {
-                    DialogsManager.ShowExclamationDialog("Класс не может не содержать полей.", "Сохранение прервано");
-                    return false;
-                }
-                if (string.IsNullOrWhiteSpace(this.NameTemplate))
-                {
-                    FieldNameInsertor fn = new(new(this.Fields));
-                    if (fn.ShowDialog("Поле для наименования объектов", Core.Classes.Icon.Subscript))
-                    {
-                        this.NameTemplate = $"{this.NameOfClass} {fn.GetSelectedField()}";
-                    }
-                    else
-                    {
-                        this.NameTemplate = $"{this.NameOfClass} [{this.fields[0].Name}]";
-                    }
-                }
-                foreach (FieldViewModel field in this.Fields)
-                {                    
-                    if (field.BelongsThisClass)
-                    {
-                        field.Source.Check();
-                        field.Source.SetId();
-                    }                  
-                }
-                foreach (TableViewModel table in this.Tables)
-                {
-                    if (table.BelongsThisClass)
-                    {
-                        table.Save();
-                    }
-                }
-                foreach (MethodViewModel method in this.Methods)
-                {
-                    if (method.BelongsThisClass)
-                    {
-                        method.Source.SetId();
-                    }
-                }
-                this.SourceData.EditorView = new();
-                foreach (ViewControlViewModel vm in this.ViewControls)
-                {
-                    vm.Save();
-                    this.SourceData.EditorView.Controls.Add(vm.Source);
-                }
-                this.SetData();
-                
-                return true;
+                throw new FieldDataFailed("Класс не привязан к компоненту!");
             }
-            catch (FieldDataFailed fd)
+            if (string.IsNullOrEmpty(this.InternalName))
             {
-                DialogsManager.ShowExclamationDialog(fd.Message, "Сохранение прервано");
-                return false;
+                throw new FieldDataFailed("Классу не присвоено уникальное имя!");
+            }
+            if (string.IsNullOrWhiteSpace(this.NameOfClass))
+            {
+                throw new FieldDataFailed("Классу не присвоено наименование!");
+            }
+            if (this.Fields.Count == 0)
+            {
+                throw new FieldDataFailed("Класс не может не содержать полей.");
+            }
+            if (string.IsNullOrWhiteSpace(this.NameTemplate))
+            {
+                FieldNameInsertor fn = new(new(this.Fields));
+                if (fn.ShowDialog("Поле для наименования объектов", Core.Classes.Icon.Subscript))
+                {
+                    this.NameTemplate = $"{this.NameOfClass} {fn.GetSelectedField()}";
+                }
+                else
+                {
+                    this.NameTemplate = $"{this.NameOfClass} [{this.fields[0].Name}]";
+                }
+            }
+            HashSet<string> names = new();
+            foreach (FieldViewModel field in this.Fields)
+            {          
+                if (names.Contains(field.Name))
+                {
+                    throw new FieldDataFailed($"Внутреннее имя [{field.Name}] уже существует в классе. Пожалуйста, проверьте уникальность всех его элементов.");
+                }
+                else
+                {
+                    names.Add(field.Name);
+                }
+                if (field.BelongsThisClass)
+                {
+                    field.Source.Check();
+                    field.Source.SetId();
+                }                  
+            }
+            foreach (TableViewModel table in this.Tables)
+            {
+                if (names.Contains(table.Name))
+                {
+                    throw new FieldDataFailed($"Внутреннее имя [{table.Name}] уже существует в классе. Пожалуйста, проверьте уникальность всех его элементов.");
+                }
+                else
+                {
+                    names.Add(table.Name);
+                }
+                table.Validate();
+            }
+            foreach (MethodViewModel method in this.Methods)
+            {
+                if (names.Contains(method.Name))
+                {
+                    throw new FieldDataFailed($"Внутреннее имя [{method.Name}] уже существует в классе. Пожалуйста, проверьте уникальность всех его элементов.");
+                }
+                else
+                {
+                    names.Add(method.Name);
+                }
+                if (method.BelongsThisClass)
+                {
+                    method.Source.SetId();
+                }
+            }
+            this.SourceData.EditorView = new();
+            foreach (ViewControlViewModel vm in this.ViewControls)
+            {
+                vm.Save();
+                this.SourceData.EditorView.Controls.Add(vm.Source);
             }
         }
         /// <summary>
         /// походу SetData выполняется ДВАЖДЫ!
         /// </summary>
         /// <returns></returns>
-        public bool Save()
+        public void Save()
         {
-            if (this.Validate())
-            {
-                this.SetData();
-                this.Source.Save();
-                return true;
-            }
-            return false;
+            this.Validate();
+            this.Source.SetClassData(this.GetData());
+            this.Source.Save();
         }
     }
 }

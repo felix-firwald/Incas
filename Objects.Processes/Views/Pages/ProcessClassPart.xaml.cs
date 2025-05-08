@@ -24,9 +24,9 @@ namespace Incas.Objects.Processes.Views.Pages
 #endif
         }     
 
-        public IClassPartSettings SetUp(ClassViewModel classViewModel)
+        public IClassPartSettings SetUp(IMembersContainerViewModel classViewModel)
         {
-            this.vm = new(classViewModel);
+            this.vm = new(classViewModel as ClassViewModel);
             this.DataContext = this.vm;
             return this;
         }
@@ -49,6 +49,11 @@ namespace Incas.Objects.Processes.Views.Pages
         private void RemoveDocument(object sender, System.Windows.RoutedEventArgs e)
         {
 
+        }
+
+        public void Validate()
+        {
+            
         }
     }
 }

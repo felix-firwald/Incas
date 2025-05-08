@@ -289,5 +289,9 @@ namespace Incas.Admin.ViewModels
         {
             this.OnPropertyChanged(nameof(this.Enumerations));
         }
+        public void UpdateGeneralizators()
+        {
+            this.OnPropertyChanged(nameof(this.Generalizators));
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Incas.Core.ViewModels;
+using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ namespace Incas.Objects.Events.ViewModels
         /// <summary>
         /// Model
         /// </summary>
-        public ClassViewModel Source { get; set; }
+        public IMembersContainerViewModel Source { get; set; }
 
-        public EventClassPartViewModel(ClassViewModel source)
+        public EventClassPartViewModel(IMembersContainerViewModel source)
         {
             this.Source = source;
         }

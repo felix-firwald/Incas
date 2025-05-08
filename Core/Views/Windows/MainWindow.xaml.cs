@@ -259,6 +259,7 @@ namespace Incas.Core.Views.Windows
         {
             this.vm.LoadInfo();
             this.UpdateTabs();
+            EngineGlobals.ClearClassesCache();
         }
 
         private async void window_Drop(object sender, DragEventArgs e)

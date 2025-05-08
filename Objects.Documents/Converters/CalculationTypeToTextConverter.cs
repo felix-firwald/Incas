@@ -23,6 +23,8 @@ namespace Incas.Objects.Documents.Converters
                         return "Переменная скрипта (текст)";
                     case TemplateProperty.CalculationType.ScriptTable:
                         return "Переменная скрипта (таблица)";
+                    case TemplateProperty.CalculationType.ScriptPattern:
+                        return "Переменная скрипта (коллекция паттернов)";
                     case TemplateProperty.CalculationType.Replication:
                         return "Репликация";
                 }

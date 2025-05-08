@@ -353,6 +353,7 @@ namespace Incas.Admin.Views.Pages
         {
             GeneralizatorEditor editor = new();
             editor.ShowDialog();
+            this.vm.UpdateGeneralizators();
         }
 
         private void EditGeneralizator(object sender, RoutedEventArgs e)
@@ -363,12 +364,28 @@ namespace Incas.Admin.Views.Pages
 
         private void RemoveGeneralizator(object sender, RoutedEventArgs e)
         {
-
+            if (this.vm.SelectedGeneralizator.Id == Guid.Empty)
+            {
+                return;
+            }
+            using (Class cl = new())
+            {
+                if (cl.GetClassesCountByGeneralizator(this.vm.SelectedGeneralizator) > 0)
+                {
+                    DialogsManager.ShowExclamationDialog("Это обобщение используется в классах, в связи с чем его удаление невозможно.", "Действие невозможно");
+                    return;
+                }
+                using (Generalizator g = new(this.vm.SelectedGeneralizator))
+                {
+                    g.RemoveGeneralizator();
+                    this.vm.UpdateGeneralizators();
+                }
+            }
         }
 
         private void UpdateGeneralizators(object sender, RoutedEventArgs e)
         {
-
+            this.vm.UpdateGeneralizators();
         }
 
         private void AddStructure(object sender, RoutedEventArgs e)

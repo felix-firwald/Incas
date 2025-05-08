@@ -28,7 +28,7 @@ namespace Incas.Objects.Documents.Views.Pages
     /// </summary>
     public partial class DocumentTemplateScriptSettings : UserControl, IClassDetailsSettings
     {
-        public ClassViewModel Source { get; set; }
+        public IMembersContainerViewModel Source { get; set; }
         public TemplateViewModel SourceTemplate { get; set; }
         public DocumentTemplateScriptSettings(TemplateViewModel templ)
         {
@@ -40,7 +40,7 @@ namespace Incas.Objects.Documents.Views.Pages
 
         public string ItemName => $"Скрипт [{this.SourceTemplate.Name}]";
 
-        public void SetUpContext(ClassViewModel vm)
+        public void SetUpContext(IMembersContainerViewModel vm)
         {
             this.Source = vm;
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");

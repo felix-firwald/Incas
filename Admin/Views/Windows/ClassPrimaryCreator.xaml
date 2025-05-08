@@ -96,7 +96,29 @@
                 </ListBox>
             </TabItem>
             <TabItem Header="Обобщения">
+                <ListBox Style="{StaticResource ListBoxMain}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding IncludedGeneralizators}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <CheckBox Grid.RowSpan="2" IsChecked="{Binding IsIncluding}"/>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <Label Foreground="White" FontFamily="{StaticResource Rubik}" FontSize="13" FontWeight="Bold" Content="{Binding Name}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Row="1" Margin="5,0,5,5" Grid.Column="1" Foreground="White" FontWeight="ExtraLight" FontFamily="{StaticResource Rubik}" Text="{Binding Description}"/>
 
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </TabItem>
         </TabControl>
         <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.Column="1" Grid.ColumnSpan="1">

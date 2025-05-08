@@ -169,7 +169,16 @@ namespace Incas.Objects.ViewModels
             
             using (Class cl = new())
             {
-                List<WorkspaceComponent> components = ProgramState.CurrentWorkspace.GetDefinition().GetAvailableComponentsFor(@class.Source.Component);
+                List<WorkspaceComponent> components = new();
+                if (@class is null) // if gen
+                {
+                    components = ProgramState.CurrentWorkspace.GetDefinition().Components;
+                }
+                else
+                {
+                    components = ProgramState.CurrentWorkspace.GetDefinition().GetAvailableComponentsFor(@class.Source.Component);
+                }
+                
                 this.classes = new(cl.GetGroupedItems(components));
             }
             foreach (ClassGroupedItem cl in this.Classes)

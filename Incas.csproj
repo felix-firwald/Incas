@@ -362,7 +362,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Admin\Models\" />
-    <Folder Include="Admin\Components\" />
     <Folder Include="Admin\Views\Controls\" />
     <Folder Include="License\Views\Controls\" />
     <Folder Include="Miniservices\Tasks\AutoUI\" />

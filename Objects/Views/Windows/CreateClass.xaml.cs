@@ -1,16 +1,21 @@
-﻿using Incas.Core.Classes;
+﻿using DIaLOGIKa.b2xtranslator.OfficeGraph;
+using Incas.Admin.Components.ExternalFunctionality;
+using Incas.Core.Classes;
 using Incas.Objects.AutoUI;
 using Incas.Objects.Components;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using Incas.Rendering.Components;
 using IncasEngine.Core;
+using IncasEngine.Models;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
+using IncasEngine.ObjectiveEngine.Types.Events.ClassComponents;
+using IncasEngine.ObjectiveEngine.Types.Processes.ClassComponents;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using System;
 using System.Collections.Generic;
@@ -28,15 +33,26 @@ namespace Incas.Objects.Views.Windows
     /// </summary>
     public partial class CreateClass : Window
     {
+        private const string part_settings_tag = "PART_SETTINGS";
+        private bool _isClosingProgrammatically = false;
         public ClassViewModel vm;
         private IClassPartSettings partSettings;
+
         public CreateClass(Class primary) // init class
         {
             DialogsManager.ShowWaitCursor();
             this.InitializeComponent();
+            this.ApplyDraftButton.IsEnabled = false;
+            this.SaveDraftButton.IsEnabled = false;
             this.vm = new(primary);
-            this.vm.OnAdditionalSettingsOpenRequested += this.Vm_OnAdditionalSettingsOpenRequested;
-            this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
+            if (primary.Generalizators is not null && primary.Generalizators.Count > 0)
+            {
+                using (Generalizator g = new())
+                {
+                    this.ApplyGeneralizators(g.GetGeneralizators(primary.Generalizators));
+                }
+            }
+            this.ApplyViewModelEvents();
             if (this.vm.Type == ClassType.Document)
             {
                 this.vm.ShowCard = true;
@@ -45,7 +61,60 @@ namespace Incas.Objects.Views.Windows
             this.ApplyPartSettings();
             DialogsManager.ShowWaitCursor(false);
         }
+        public CreateClass(Guid id) // edit class
+        {
+            DialogsManager.ShowWaitCursor();
+            this.InitializeComponent();
+            if (id == Guid.Empty)
+            {
+                this.Title = "(класс не выбран)";
+                this.IsEnabled = false;
+                return;
+            }
+            this.Title = "Редактирование класса";
+            Class cl = EngineGlobals.GetClass(id);
+            this.vm = new(cl);
+            this.ApplyViewModelEvents();
+            this.DataContext = this.vm;
+            this.ApplyPartSettings();
+            DialogsManager.ShowWaitCursor(false);
+        }
 
+        public CreateClass(ServiceClass @class) // edit service class
+        {
+            DialogsManager.ShowWaitCursor();
+            XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
+            this.InitializeComponent();
+            //this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+            this.Title = $"Служебный класс: {@class.Name}";
+            this.vm = new(@class);
+            this.ApplyViewModelEvents();
+            this.DataContext = this.vm;
+            this.ApplyPartSettings();
+            DialogsManager.ShowWaitCursor(false);
+        }
+        private void ApplyGeneralizators(List<Generalizator> gens)
+        {
+            foreach (Generalizator g in gens)
+            {
+                foreach (Field f in g.Data.Fields)
+                {
+                    this.vm.AddField(f);
+                }
+                foreach (Method f in g.Data.Methods)
+                {
+                    this.vm.AddMethod(f);
+                }
+                foreach (Method f in g.Data.StaticMethods)
+                {
+                    this.vm.AddStaticMethod(f);
+                }
+                foreach (Table f in g.Data.Tables)
+                {
+                    this.vm.AddTable(f);
+                }
+            }
+        }
         private void Vm_OnAdditionalSettingsOpenRequested(IClassDetailsSettings settings)
         {
             foreach (TabItem tabitem in this.TabControlMain.Items)
@@ -60,6 +129,7 @@ namespace Incas.Objects.Views.Windows
             {
                 Content = settings,
                 Header = settings.ItemName,
+                Tag = part_settings_tag,
                 Style = this.FindResource("TabItemRemovable") as Style,
                 BorderBrush = this.FindResource("LightPurple") as Brush
             };
@@ -68,47 +138,31 @@ namespace Incas.Objects.Views.Windows
             this.TabControlMain.Items.Add(item);
         }
 
+        private void ApplyViewModelEvents()
+        {
+            this.vm.OnAdditionalSettingsOpenRequested += this.Vm_OnAdditionalSettingsOpenRequested;
+            this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
+        }
+
         private void Item_IsEnabledChanged1(object sender, DependencyPropertyChangedEventArgs e)
         {
             this.TabControlMain.Items.Remove(sender);
         }
 
-        public CreateClass(Guid id) // edit class
-        {
-            DialogsManager.ShowWaitCursor();      
-            this.InitializeComponent();
-            if (id == Guid.Empty)
-            {
-                this.Title = "(класс не выбран)";
-                this.IsEnabled = false;
-                return;
-            }
-            this.Title = "Редактирование класса";
-            Class cl = EngineGlobals.GetClass(id);
-            this.vm = new(cl);
-            this.vm.OnAdditionalSettingsOpenRequested += this.Vm_OnAdditionalSettingsOpenRequested;
-            this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
-            this.DataContext = this.vm;
-            this.ApplyPartSettings();
-            DialogsManager.ShowWaitCursor(false);
-        }      
-
-        public CreateClass(ServiceClass @class) // edit service class
-        {
-            DialogsManager.ShowWaitCursor();
-            XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
-            this.InitializeComponent();
-            //this.CodeModule.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-            this.Title = $"Служебный класс: {@class.Name}";
-            this.vm = new(@class);
-            this.vm.OnAdditionalSettingsOpenRequested += this.Vm_OnAdditionalSettingsOpenRequested;
-            this.vm.OnDrawCalling += this.Vm_OnDrawCalling;
-            this.DataContext = this.vm;
-            this.ApplyPartSettings();
-            DialogsManager.ShowWaitCursor(false);
-        }
         private void ApplyPartSettings()
         {
+            List<TabItem> itemsToRemove = new();
+            foreach (TabItem ti in this.TabControlMain.Items)
+            {
+                if (ti.Tag?.ToString() == part_settings_tag)
+                {
+                    itemsToRemove.Add(ti);
+                }
+            }
+            foreach (TabItem item in itemsToRemove)
+            {
+                this.TabControlMain.Items.Remove(item);
+            }
             this.partSettings = ServiceExtensionFieldsManager.GetPartSettingsByType(this.vm);
             if (this.partSettings is not null)
             {
@@ -116,6 +170,7 @@ namespace Incas.Objects.Views.Windows
                 {
                     Content = this.partSettings,
                     Header = this.partSettings.ItemName,
+                    Tag = part_settings_tag,
                     BorderBrush = this.FindResource("LightPurple") as Brush
                 };
                 this.TabControlMain.Items.Add(item);
@@ -134,10 +189,17 @@ namespace Incas.Objects.Views.Windows
             item.IsEnabledChanged += this.Item_IsEnabledChanged;
             this.TabControlMain.Items.Add(item);
         }
-
+        private void LockUI()
+        {
+            this.vm.IsEditingEnabled = false;
+        }
+        private void UnlockUI()
+        {
+            this.vm.IsEditingEnabled = true;       
+        }
         private void Item_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            this.TabControlMain.Items.Remove(sender);
+            this.TabControlMain.Items.Remove(sender);           
         }
 
         private void GetMoreInfoClick(object sender, RoutedEventArgs e)
@@ -179,27 +241,7 @@ namespace Incas.Objects.Views.Windows
             //}
             return fields;
         }
-        private void SaveClick(object sender, RoutedEventArgs e)
-        {
-            DialogsManager.ShowWaitCursor();
-            try
-            {
-                this.partSettings?.Save();
-                if (this.vm.Save())
-                {
-                    DialogsManager.ShowWaitCursor(false);
-                    this.Close();
-                }
-            }
-            catch (FieldDataFailed ex)
-            {
-                DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
-            }
-            catch (Exception ex)
-            {
-                DialogsManager.ShowErrorDialog(ex);
-            }           
-        }
+
         #region Templates
         private void AddTemplateClick(object sender, MouseButtonEventArgs e)
         {
@@ -521,6 +563,140 @@ namespace Incas.Objects.Views.Windows
             }
             ViewControlViewModel result = new(new() { Type = ControlType.Text, Name = "Текст" });
             this.vm.SelectedViewControl.AddChild(result);
+        }
+        private void CloseProgrammatically()
+        {
+            this._isClosingProgrammatically = true;
+            this.Close();
+            _isClosingProgrammatically = false;
+        }
+        private void SaveClick(object sender, RoutedEventArgs e)
+        {
+            DialogsManager.ShowWaitCursor();
+            this.LockUI();
+            try
+            {
+                this.partSettings?.Validate();
+                this.partSettings?.Save();
+                this.vm.Save();
+                DialogsManager.ShowWaitCursor(false);
+                this.CloseProgrammatically();
+            }
+            catch (FieldDataFailed ex)
+            {
+                DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
+                this.UnlockUI();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+                this.UnlockUI();
+            }
+        }
+        private void SaveDraft(object sender, RoutedEventArgs e)
+        {
+            if (this.vm.Source.Id == Guid.Empty)
+            {
+                DialogsManager.ShowExclamationDialog("Сохранять черновик станет возможным только после первого сохранения класса.", "Действие невозможно");
+                return;
+            }
+            DialogsManager.ShowWaitCursor();
+            this.LockUI();
+            try
+            {
+                this.partSettings?.Save();
+                IClassData cd = this.vm.GetData();
+                ClassHelpers.ClassDraft draft = new();
+                draft.Name = this.vm.Source.Name;
+                draft.InternalName = this.vm.Source.InternalName;
+                draft.Description = this.vm.Source.Description;
+                switch (this.vm.Source.Type)
+                {
+                    case ClassType.Model:
+                    case ClassType.ServiceClassGroup:
+                    case ClassType.ServiceClassUser:
+                        draft.ClassData = cd as ClassData;
+                        break;
+                    case ClassType.Document:
+                        draft.DocumentClassData = cd as DocumentClassData;
+                        break;
+                    case ClassType.Process:
+                        draft.ProcessClassData = cd as ProcessClassData;
+                        break;
+                    case ClassType.Event:
+                        draft.EventClassData = cd as EventClassData;
+                        break;
+                }
+                ClassHelpers.SaveClassDraft(this.vm.Source, draft);
+                DialogsManager.ShowWaitCursor(false);
+                this.UnlockUI();
+            }
+            catch (FieldDataFailed ex)
+            {
+                DialogsManager.ShowExclamationDialog(ex.Message, "Сохранение прервано");
+                this.UnlockUI();
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+                this.UnlockUI();
+            }
+        }
+
+        private void LoadDraft(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ClassHelpers.ClassDraft draft = ClassHelpers.LoadClassDraft(this.vm.Source);
+                if (!draft.IsRealRecord)
+                {
+                    DialogsManager.ShowExclamationDialog("Не удалось найти на этом устройстве сохраненный черновик этого класса, либо же его данные повреждены.", "Действие невозможно");
+                    return;
+                }
+                if (DialogsManager.ShowQuestionDialog($"Вы уверены, что хотите загрузить черновик, созданный {draft.DateSaved}? Обратите внимание, что все текущие изменения (если они были) будут потеряны.", "Загрузить черновик?", "Загрузить", "Не загружать") == Core.Views.Windows.DialogStatus.Yes)
+                {
+                    this.vm.Source.Name = draft.Name;
+                    this.vm.Source.InternalName = draft.InternalName;
+                    this.vm.Source.Description = draft.Description;
+                    switch (this.vm.Type)
+                    {
+                        case ClassType.Model:
+                        case ClassType.ServiceClassUser:
+                        case ClassType.ServiceClassGroup:
+                            this.vm.Source.SetClassData(draft.ClassData);
+                            break;
+                        case ClassType.Document:
+                            this.vm.Source.SetClassData(draft.DocumentClassData);
+                            break;
+                        case ClassType.Process:
+                            this.vm.Source.SetClassData(draft.ProcessClassData);
+                            break;
+                        case ClassType.Event:
+                            this.vm.Source.SetClassData(draft.EventClassData);
+                            break;
+                    }
+                    this.vm = ClassViewModel.Init(this.vm.Source);
+                    this.ApplyViewModelEvents();
+                    this.DataContext = this.vm;
+                    this.ApplyPartSettings();
+                }                
+            }
+            catch
+            {
+                DialogsManager.ShowExclamationDialog("Не удалось найти на этом устройстве сохраненный черновик этого класса, либо же его данные повреждены.", "Действие невозможно");
+                return;
+            }
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            // Проверяем, закрывается ли окно программно
+            if (!_isClosingProgrammatically)
+            {
+                EngineGlobals.ClearClassFromCache(this.vm.Source);
+            }
+
+            base.OnClosing(e);
         }
     }
 }

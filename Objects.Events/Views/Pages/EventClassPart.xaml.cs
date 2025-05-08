@@ -37,11 +37,16 @@ namespace Incas.Objects.Events.Views.Pages
             throw new NotImplementedException();
         }
 
-        public IClassPartSettings SetUp(ClassViewModel classViewModel)
+        public IClassPartSettings SetUp(IMembersContainerViewModel classViewModel)
         {
             this.vm = new(classViewModel);
             this.DataContext = this.vm;
             return this;
+        }
+
+        public void Validate()
+        {
+            throw new NotImplementedException();
         }
     }
 }

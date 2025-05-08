@@ -46,12 +46,20 @@ namespace Incas.Objects.Documents.AutoUI
             Dictionary<object, string> pairs = new();
             foreach (Field field in fields)
             {
-                pairs.Add(field.Id, field.Name);
+                switch (field.Type)
+                {
+                    case IncasEngine.ObjectiveEngine.Classes.FieldType.Integer:
+                    case IncasEngine.ObjectiveEngine.Classes.FieldType.Boolean:
+                    case IncasEngine.ObjectiveEngine.Classes.FieldType.LocalEnumeration:
+                    case IncasEngine.ObjectiveEngine.Classes.FieldType.GlobalEnumeration:
+                        pairs.Add(field.Id, field.Name);
+                        break;
+                }               
             }
             this.Selector = new(pairs);          
             this.Selector.SetSelection(prop.Switcher.TargetField);
             this.DefaultValue = prop.Switcher.Default;
-            this.Cases = prop.Switcher.Cases.ToDataTable("Ожидаемое значение (термин)", "Вернуть определение");
+            this.Cases = prop.Switcher.Cases.ToDataTable("Ожидаемый термин", "Вернуть определение");
         }
 
         #region Functionality
@@ -72,7 +80,7 @@ namespace Incas.Objects.Documents.AutoUI
         {
             this.property.Switcher.TargetField = (Guid)this.Selector.SelectedObject;
             this.property.Switcher.Default = this.DefaultValue;
-            this.property.Switcher.Cases = this.Cases.ToDictionary<string,string>("Ожидаемое значение (термин)", "Вернуть определение");
+            this.property.Switcher.Cases = this.Cases.ToDictionary<string,string>("Ожидаемый термин", "Вернуть определение");
         }
         #endregion
     }

@@ -29,11 +29,17 @@ namespace Incas.Objects.Documents.Views.Pages
 
         public event IClassPartSettings.OpenAdditionalSettings OnAdditionalSettingsOpenRequested;
 
-        public IClassPartSettings SetUp(ClassViewModel classViewModel)
+        public IClassPartSettings SetUp(IMembersContainerViewModel classViewModel)
         {
-            this.vm = new(classViewModel);
+
+            this.vm = new(classViewModel as ClassViewModel);
             this.DataContext = this.vm;
             return this;
+        }
+
+        public void Validate()
+        {
+            this.vm.Validate();
         }
 
         public void Save()
@@ -84,7 +90,7 @@ namespace Incas.Objects.Documents.Views.Pages
                     {
                         Name = tagname,
                     };
-                    this.vm.SelectedTemplate.Properties.Add(new(prop));
+                    this.vm.SelectedTemplate.AddProperty(prop);
                 }
             }
             catch (IOException ex)

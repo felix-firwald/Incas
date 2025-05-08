@@ -22,6 +22,7 @@ namespace Incas.Objects.Documents.Converters
                         return IncasEngine.Core.Color.FromRGB(255, 0, 51).AsBrush();
                     case CalculationType.Script:
                     case CalculationType.ScriptTable:
+                    case CalculationType.ScriptPattern:
                     case CalculationType.Switch:
                     case CalculationType.Replication:
                         return IncasEngine.Core.Color.FromRGB(51, 255, 0).AsBrush();

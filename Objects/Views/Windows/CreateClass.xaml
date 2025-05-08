@@ -6,7 +6,7 @@
         xmlns:conv="clr-namespace:Incas.Core.Converters" xmlns:extended="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:Incas.Objects.Views.Windows" xmlns:fa="http://schemas.fontawesome.io/icons/" xmlns:local1="clr-namespace:Incas.Objects.Converters" xmlns:classes="clr-namespace:Incas.Objects.Views.Controls" xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit" xmlns:system="clr-namespace:System;assembly=mscorlib" xmlns:ngv="clr-namespace:NodeGraph.View;assembly=NodeGraph"
         mc:Ignorable="d"
-        Title="Создать класс" Height="750" Width="1000" MinHeight="750" MinWidth="960" WindowStartupLocation="CenterScreen" Style="{StaticResource WindowBase}" Background="{StaticResource Black}">
+        Title="Создать класс" Height="750" Width="1000" MinHeight="750" MinWidth="960" WindowStartupLocation="CenterScreen" Style="{StaticResource WindowBase}" Background="{StaticResource Black}" >
     <Window.Resources>
         <ResourceDictionary>
             <local1:FieldTypeToColorConverter x:Key="FieldTypeToColorConverter"/>
@@ -118,16 +118,23 @@
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
                                             <Path Fill="{DynamicResource Yellow}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Stretch="Uniform" Height="15" Data="M247.23-127.31q-26.85 3.46-47.96-12.81-21.12-16.26-24.35-43.11l-49.15-388.54q-3.23-26.85 13.31-48.61 16.54-21.77 43.38-24.24l39.08-2.92v281.39q0 59.84 42.38 102.23 42.39 42.38 102.23 42.38h367.39q.15 14-9.77 24.58-9.92 10.58-24.39 12.81l-452.15 56.84Zm118.92-174.23q-27.61 0-46.11-18.5t-18.5-46.11v-409.23q0-27.62 18.5-46.12 18.5-18.5 46.11-18.5h409.23q27.62 0 46.12 18.5Q840-803 840-775.38v409.23q0 27.61-18.5 46.11t-46.12 18.5H366.15Zm188.47-124.84q7.46 4.23 16.15 4.23 8.69 0 16.15-4.23l101.54-57.77q7.46-4.23 11.81-11.81 4.35-7.58 4.35-16.27v-117.08q0-8.69-4.35-16.27-4.35-7.57-11.81-11.8l-101.54-57.77q-7.46-4.23-16.15-4.23-8.69 0-16.15 4.23l-101.54 57.77q-7.46 4.23-11.81 11.8-4.35 7.58-4.35 16.27v117.08q0 8.69 4.35 16.27t11.81 11.81l101.54 57.77Z"/>
-                                            <Label Grid.Column="1" Content="Имплементация обобщений:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" />
+                                            <Label Grid.Column="1" Content="Используемые обобщения:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" />
                                         </Grid>
-                                        <Button Style="{StaticResource ButtonRectangle}" ToolTip="Добавить новое обобщение" HorizontalAlignment="Left" Grid.Column="2" >
+                                        <!--<Button Style="{StaticResource ButtonRectangle}" ToolTip="Добавить новое обобщение" HorizontalAlignment="Left" Grid.Column="2" >
                                             <StackPanel Orientation="Horizontal">
                                                 <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M8.004,19.3885V9.6135a1.5425,1.5425,0,0,1,.475-1.141A1.573,1.573,0,0,1,9.6252,8.004h9.7633A1.62,1.62,0,0,1,21.004,9.62v6.29a1.5674,1.5674,0,0,1-.1308.6323,1.6576,1.6576,0,0,1-.348.5177L17.06,20.5252a1.6576,1.6576,0,0,1-.5177.348,1.5674,1.5674,0,0,1-.6323.1308H9.62A1.62,1.62,0,0,1,8.004,19.3885ZM3.029,6.6a1.5057,1.5057,0,0,1,.2567-1.2127,1.6084,1.6084,0,0,1,1.06-.6643L13.9655,3.029a1.5057,1.5057,0,0,1,1.2127.2567,1.61,1.61,0,0,1,.6643,1.06L16.054,5.62H9.62a4.0118,4.0118,0,0,0-4,4V17.4a1.6446,1.6446,0,0,1-.5818-.475,1.62,1.62,0,0,1-.3145-.7057ZM14.004,15.004v2.5a.5.5,0,1,0,1,0v-2.5h2.5a.5.5,0,1,0,0-1h-2.5v-2.5a.5.5,0,1,0-1,0v2.5h-2.5a.5.5,0,1,0,0,1Z"/>
                                                 <Label Content="Имплементировать обобщение" Foreground="White"/>
                                             </StackPanel>
-                                        </Button>
-                                        <ListBox Style="{StaticResource ListBoxMain}" MinHeight="40">
-
+                                        </Button>-->
+                                        <ListBox Style="{StaticResource ListBoxMain}" MinHeight="35" ItemsSource="{Binding IncludedGeneralizators}" >
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Path Fill="{StaticResource Buttons.Green}" Margin="0,0,10,0" Stretch="Uniform" Height="15" Width="15" Data="m586.92-427.15 101.54-57q7.46-4.23 11.81-12.2 4.35-7.96 4.35-16.65v-115.54q0-8.69-4.35-16.65-4.35-7.96-11.81-12.19l-101.54-57q-7.46-4.24-16.15-4.24-8.69 0-16.15 4.24l-101.54 57q-7.46 4.23-11.81 12.19-4.35 7.96-4.35 16.65V-513q0 8.69 4.35 16.65 4.35 7.97 11.81 12.2l101.54 57q7.46 4.23 16.15 4.23 8.69 0 16.15-4.23ZM366.15-301.54q-27.61 0-46.11-18.5t-18.5-46.11v-409.23q0-27.62 18.5-46.12 18.5-18.5 46.11-18.5h409.23q27.62 0 46.12 18.5Q840-803 840-775.38v409.23q0 27.61-18.5 46.11t-46.12 18.5H366.15Zm0-40h409.23q10.77 0 17.7-6.92 6.92-6.92 6.92-17.69v-409.23q0-10.77-6.92-17.7-6.93-6.92-17.7-6.92H366.15q-10.77 0-17.69 6.92-6.92 6.93-6.92 17.7v409.23q0 10.77 6.92 17.69 6.92 6.92 17.69 6.92Zm204.62-229.23ZM218-164Zm29.23 36.69q-26.85 3.23-47.96-12.92-21.12-16.15-24.35-43l-49.15-388.54q-3.23-26.85 13.54-48.61 16.77-21.77 43.61-24.47l17.39-.77q8.54-.69 15.11 4.77 6.58 5.47 6.58 15 0 7.31-5.12 13.31-5.11 6-12.42 6.69l-15.61.77q-10.77.77-16.93 8.85-6.15 8.08-4.61 18.85l47.84 388.76q1.54 10.77 9.23 16.93 7.7 6.15 18.47 4.61l470.92-58.77q8.54-1.23 15 3.77 6.46 5 7.69 13.54 1.23 8.54-3.77 14.5-5 5.96-13.54 7.19l-471.92 59.54Zm323.54-336.23-93.85-53.23v-108L570.77-678l93.85 53.23v108l-93.85 53.23Z"/>
+                                                        <TextBlock Text="{Binding Name}" TextElement.FontWeight="Bold"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
                                         </ListBox>
                                     </StackPanel>
 
@@ -242,7 +249,7 @@
                     </Border>
                     <TabControl Style="{StaticResource TabControlMain}" ItemContainerStyle="{StaticResource TabItemMain}" Grid.Column="1" Background="{x:Null}">
                         <TabItem Header="Поля" BorderBrush="{DynamicResource DarkYellow}">
-                            <Grid>
+                            <Grid IsEnabled="{Binding IsEditingEnabled}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" MinWidth="250" />
                                     <ColumnDefinition Width="50"/>
@@ -275,7 +282,7 @@
                                                         <CheckBox x:Name="ExpanderButton" Style="{StaticResource ExpanderButton}" IsChecked="{Binding IsExpanded}" ToolTip="Свернуть / развернуть поле"/>
                                                         <Rectangle Width="1" Fill="{DynamicResource Area}" Margin="0,5,0,5" Opacity="0.5" />
                                                         <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
-                                                        <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding BelongsThisClass}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
+                                                        <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding EditingEnabled}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
                                                             <TextBox.ContextMenu>
                                                                 <ContextMenu>
                                                                     <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -288,7 +295,7 @@
 
                                                     <Rectangle Grid.Row="1" Fill="{DynamicResource Area}" Grid.ColumnSpan="2" />
 
-                                                    <StackPanel Grid.Row="2" x:Name="ContentPanel" IsEnabled="{Binding BelongsThisClass}">
+                                                    <StackPanel Grid.Row="2" x:Name="ContentPanel" IsEnabled="{Binding EditingEnabled}">
 
                                                         <TextBox Style="{DynamicResource TextBoxMain}" IsReadOnly="False" Tag="Отображаемое название" Text="{Binding VisibleName, UpdateSourceTrigger=PropertyChanged}" MaxLength="50" TextWrapping="Wrap">
                                                             <TextBox.ContextMenu>
@@ -320,7 +327,7 @@
                                                         </Grid>
                                                     </StackPanel>
                                                     <Rectangle Width="1" Fill="{DynamicResource Area}" Grid.Column="1" Visibility="{Binding BelongsVisibility}" HorizontalAlignment="Left" Margin="-2,5,0,5" Opacity="0.5" />
-                                                    <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" Background="{StaticResource Dark}" ToolTip="Удалить поле" Grid.Column="1" Command="{Binding RemoveField}" CommandParameter="{Binding }">
+                                                    <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" IsEnabled="{Binding EditingEnabled}" Background="{StaticResource Dark}" ToolTip="Удалить поле" Grid.Column="1" Command="{Binding RemoveField}" CommandParameter="{Binding }">
                                                         <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
                                                     </Button>
                                                     <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Visibility="{Binding BelongsVisibility}">
@@ -367,7 +374,7 @@
                             </Grid>
                         </TabItem>
                         <TabItem Header="Таблицы" BorderBrush="{DynamicResource DarkYellow}">
-                            <Grid>
+                            <Grid IsEnabled="{Binding IsEditingEnabled}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" MinWidth="250" />
                                     <ColumnDefinition Width="50"/>
@@ -387,7 +394,7 @@
                                                         </Button>
                                                         <Rectangle Width="1" Fill="{DynamicResource Area}" Margin="0,5,0,5" Opacity="0.5" />
                                                         <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
-                                                        <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding BelongsThisClass}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
+                                                        <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding EditingEnabled}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
                                                             <TextBox.ContextMenu>
                                                                 <ContextMenu>
                                                                     <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -398,7 +405,7 @@
                                                         <Label Style="{DynamicResource LabelElement}" Content="]" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
                                                     </StackPanel>
                                                     <Rectangle Width="1" Fill="{DynamicResource Area}" Grid.Column="1" Visibility="{Binding BelongsVisibility}" HorizontalAlignment="Left" Margin="-2,5,0,5" Opacity="0.5" />
-                                                    <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" Background="{StaticResource Dark}" ToolTip="Удалить таблицу" Grid.Column="1" Command="{Binding RemoveTable}" CommandParameter="{Binding }">
+                                                    <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" Background="{StaticResource Dark}" IsEnabled="{Binding EditingEnabled}" ToolTip="Удалить таблицу" Grid.Column="1" Command="{Binding RemoveTable}" CommandParameter="{Binding }">
                                                         <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
                                                     </Button>
                                                 </Grid>
@@ -416,7 +423,7 @@
                             </Grid>
                         </TabItem>
                         <TabItem Header="Методы" BorderBrush="{DynamicResource DarkYellow}">
-                            <Grid>
+                            <Grid IsEnabled="{Binding IsEditingEnabled}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" MinWidth="250" />
                                     <ColumnDefinition Width="50"/>
@@ -437,7 +444,7 @@
 
                                                         <Rectangle Width="1" Fill="{DynamicResource Area}" Margin="0,5,0,5" Opacity="0.5" />
                                                         <Label Style="{DynamicResource LabelElement}" Content="[" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
-                                                        <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding BelongsThisClass}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
+                                                        <TextBox Style="{DynamicResource TextBoxTransparent}" IsEnabled="{Binding EditingEnabled}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MaxLength="30">
                                                             <TextBox.ContextMenu>
                                                                 <ContextMenu>
                                                                     <MenuItem Header="Копировать" Command="ApplicationCommands.Copy"/>
@@ -448,7 +455,7 @@
                                                         <Label Style="{DynamicResource LabelElement}" Content="]" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{DynamicResource DarkLight}"/>
                                                     </StackPanel>
                                                     <Rectangle Width="1" Fill="{DynamicResource Area}" Grid.Column="1" Visibility="{Binding BelongsVisibility}" HorizontalAlignment="Left" Margin="-2,5,0,5" Opacity="0.5" />
-                                                    <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" Background="{StaticResource Dark}" ToolTip="Удалить метод" Grid.Column="1" Command="{Binding RemoveMethod}" CommandParameter="{Binding }">
+                                                    <Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Visibility="{Binding BelongsVisibility}" IsEnabled="{Binding EditingEnabled}" Background="{StaticResource Dark}" ToolTip="Удалить метод" Grid.Column="1" Command="{Binding RemoveMethod}" CommandParameter="{Binding }">
                                                         <Path Fill="#FFFF7878" VerticalAlignment="Center" Stretch="Uniform" Margin="2" Data="M9.1182,16.61,12.6875,13.04,16.2568,16.61l.6462-.6462L13.3337,12.394,16.903,8.8248l-.6462-.6463-3.5693,3.5693L9.1182,8.1785l-.6462.6463,3.5692,3.5692L8.472,15.9633ZM12.692,21.24a8.6206,8.6206,0,0,1-3.4515-.6973,8.8354,8.8354,0,0,1-4.704-4.6995,8.8864,8.8864,0,0,1,.002-6.8965,8.8363,8.8363,0,0,1,4.7-4.704,8.8876,8.8876,0,0,1,6.8965.002,8.8363,8.8363,0,0,1,4.704,4.7,8.8864,8.8864,0,0,1-.002,6.8965,8.8354,8.8354,0,0,1-4.6995,4.704A8.6053,8.6053,0,0,1,12.692,21.24Zm-.0053-.9233A7.6448,7.6448,0,0,0,18.3025,18.01a7.6411,7.6411,0,0,0,2.308-5.6147A7.6453,7.6453,0,0,0,18.303,6.779a7.6416,7.6416,0,0,0-5.6148-2.308A7.645,7.645,0,0,0,7.0725,6.7785a7.6414,7.6414,0,0,0-2.308,5.6148A7.645,7.645,0,0,0,7.072,18.009,7.6411,7.6411,0,0,0,12.6867,20.317Z"/>
                                                     </Button>
                                                 </Grid>
@@ -466,7 +473,7 @@
                             </Grid>
                         </TabItem>
                         <TabItem Header="Статические методы" BorderBrush="{DynamicResource DarkYellow}">
-                            <Grid>
+                            <Grid IsEnabled="{Binding IsEditingEnabled}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" MinWidth="250" />
                                     <ColumnDefinition Width="50"/>
@@ -520,7 +527,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Состояния" BorderBrush="{StaticResource LightPurple}">
-                <Grid>
+                <Grid IsEnabled="{Binding IsEditingEnabled}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="auto"/>
@@ -729,7 +736,7 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Представление" BorderBrush="{StaticResource LightPurple}">
-                <Grid>
+                <Grid IsEnabled="{Binding IsEditingEnabled}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4*" MinWidth="550"/>
                         <ColumnDefinition Width="7*"/>
@@ -836,7 +843,7 @@
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
-                                    
+
 
                                 </Grid>
                             </Border>
@@ -884,30 +891,26 @@
                     <!--<Slider Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" MinWidth="200" HorizontalAlignment="Center" Minimum="0.1" Maximum="100" Value="{Binding PreviewFormZoom}"/>-->
                 </Grid>
             </TabItem>
-            <!--<TabItem Header="Проверка">
-                <ngv:FlowChartView Background="{DynamicResource Black}" DataContext="{Binding FlowChartViewModel}" />
-            </TabItem>-->
         </TabControl>
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Margin="5,0,0,0" Orientation="Horizontal">
-            <Button Style="{DynamicResource ButtonRectangle}" Background="{StaticResource Dark}" VerticalAlignment="Center"  IsDefault="True" Click="SaveClick" Grid.Row="3">
+        <StackPanel IsEnabled="{Binding IsEditingEnabled}" Grid.Row="2" Grid.ColumnSpan="3" Margin="5,0,0,0" Orientation="Horizontal">
+            <Button Style="{DynamicResource ButtonRectangle}" Background="{StaticResource Dark}" VerticalAlignment="Center"  IsDefault="True" Click="SaveClick" Grid.Row="3" ToolTip="Сохранить класс и закрыть">
                 <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
                     <Path Fill="{StaticResource Buttons.Green}" Data="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" VerticalAlignment="Center"/>
                     <Label Foreground="White" Content="Сохранить класс"/>
                 </StackPanel>
             </Button>
+            <Button x:Name="SaveDraftButton" Style="{DynamicResource ButtonRectangle}" Background="{StaticResource Dark}" VerticalAlignment="Center" Click="SaveDraft" Grid.Row="3" ToolTip="Сохранить все изменения как черновик класса">
+                <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
+                    <Path Fill="{StaticResource Buttons.Green}" Height="15" Stretch="Uniform" VerticalAlignment="Center" Data="m698.77-684.54 119.92-120.3q8.92-9.31 21.19-9.31 12.27 0 21.58 9.31 9.31 9.3 9.31 21.38 0 12.08-9.31 21.38L724.08-625.31q-10.85 10.85-25.31 10.85-14.46 0-25.31-10.85l-52.77-52.77q-8.31-8.3-8.31-20.57t8.31-21.19q8.92-9.31 21.39-9.12 12.46.19 21.38 9.12l35.31 35.3ZM480-261.54l-158.77 68.15q-36.15 15.46-68.69-5.92Q220-220.69 220-259.46v-488.23q0-29.92 21.19-51.12Q262.39-820 292.31-820h213.84q16.47 0 24.5 14.27 8.04 14.27 1.2 29.73-6.23 15.85-9.04 31.69Q520-728.46 520-710q0 70.85 45.88 123.73 45.89 52.89 114.12 63.42 7.38 1.23 13.23 1.54 5.85.31 11.38.31 14.7.38 25.04 9.92Q740-501.54 740-487.46v228q0 38.77-32.54 60.15-32.54 21.38-68.69 5.92L480-261.54Z"/>
+                    <Label Foreground="White" Content="Сохранить черновик"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="ApplyDraftButton" Style="{DynamicResource ButtonRectangle}" Background="{StaticResource Dark}" VerticalAlignment="Center" Click="LoadDraft" Grid.Row="3" ToolTip="Отменить все текущие изменения и вернуться к последнему сохраненному черновику класса">
+                <StackPanel Orientation="Horizontal" Margin="5,0,5,0">
+                    <Path Fill="{StaticResource Buttons.Red}" Height="15" Stretch="Uniform" VerticalAlignment="Center" Data="M479.23-140q-120.61 0-212.61-73.62-92-73.61-117.93-188.38-3.23-11.92 3.89-21.92 7.11-10 20.15-11.62 12.27-1.61 22 4.85t13.58 19Q231.15-319 306.73-259.5t172.5 59.5q117 0 198.5-81.5t81.5-198.5q0-117-81.5-198.5T479.23-760q-65.54 0-122.84 29.12-57.31 29.11-98.7 80.11h74.62q12.75 0 21.37 8.63 8.63 8.63 8.63 21.38 0 12.76-8.63 21.37-8.62 8.62-21.37 8.62H195.39q-15.37 0-25.76-10.4-10.4-10.39-10.4-25.76v-136.92q0-12.75 8.63-21.37 8.63-8.63 21.39-8.63 12.75 0 21.37 8.63 8.61 8.62 8.61 21.37v64.77q48.69-57.46 116.62-89.19Q403.77-820 479.23-820q70.8 0 132.63 26.77t107.83 72.77q46 46 72.77 107.82 26.77 61.83 26.77 132.62t-26.77 132.63q-26.77 61.85-72.77 107.85-46 46-107.83 72.77Q550.03-140 479.23-140Zm31.15-352.15 110 110q8.31 8.3 8.5 20.88.2 12.58-8.5 21.27-8.69 8.69-21.07 8.69-12.39 0-21.08-8.69l-117-117q-5.61-5.62-8.23-12.24-2.61-6.62-2.61-13.68V-650q0-12.75 8.62-21.38 8.63-8.62 21.39-8.62 12.75 0 21.37 8.62 8.61 8.63 8.61 21.38v157.85Z"/>
+                    <Label Foreground="White" Content="Вернуться к черновику"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
-        <!--<Rectangle Name="BackgroundOverlay" Canvas.Left="0" Canvas.Top="0" Width="{Binding ActualWidth, ElementName=MyCanvas}" Height="{Binding ActualHeight, ElementName=MyCanvas}" Visibility="{Binding IsMenuOpen, Converter={StaticResource BooleanToVisibilityConverter}}" IsHitTestVisible="{Binding IsMenuOpen}" Grid.RowSpan="2" Grid.ColumnSpan="2" Fill="#7F1D1D1F"/>
-        <Border Grid.ColumnSpan="2" Width="400" Grid.RowSpan="2" HorizontalAlignment="Right" Background="{DynamicResource Black}" BorderBrush="{DynamicResource Basic}" BorderThickness="1">
-            <Grid Margin="5">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="1"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Label FontFamily="{StaticResource Rubik}" Foreground="White" FontSize="16" Content="Ошибки и предупреждения" VerticalAlignment="Center"/>
-                <Rectangle Fill="{StaticResource Basic}" Grid.Row="1"/>
-                
-            </Grid>
-        </Border>-->
     </Grid>
 </Window>

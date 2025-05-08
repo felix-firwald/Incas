@@ -20,5 +20,6 @@ namespace Incas.Objects.Interfaces
         public MemberType ClassMemberType { get; }
         public bool BelongsThisClass { get; }
         public ICommand AssignToContainer { get; }
+        public bool EditingEnabled { get; }
     }
 }

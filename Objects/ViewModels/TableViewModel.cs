@@ -50,6 +50,21 @@ namespace Incas.Objects.ViewModels
                 }
             }          
         }
+        public TableViewModel(Table source)
+        {
+            this.Source = source;
+            this.OpenTableSettings = new Command(this.DoOpenTableSettings);
+            this.RemoveTable = new Command(this.DoRemoveTable);
+            this.AssignToContainer = new Command(this.DoAssignToContainer);
+            this.Fields = new();
+            if (this.Source.Fields is not null)
+            {
+                foreach (Field f in source.Fields)
+                {
+                    this.AddField(f);
+                }
+            }
+        }
 
         private void DoAssignToContainer(object obj)
         {
@@ -65,6 +80,14 @@ namespace Incas.Objects.ViewModels
                 );
                 this.Owner.RemoveTableControl(this.Source.Id);
                 this.Owner.SelectedViewControl.AddChild(vm);
+            }
+        }
+
+        public bool EditingEnabled
+        {
+            get
+            {
+                return this.Source.TargetGeneralizator == Guid.Empty;
             }
         }
 
@@ -102,6 +125,10 @@ namespace Incas.Objects.ViewModels
 
         private void DoOpenTableSettings(object obj)
         {
+            if (string.IsNullOrEmpty(this.Name))
+            {
+                this.Name = "новая_таблица";
+            }
             TableEditor editor = new(this);
             this.OnOpenTableRequested?.Invoke(editor);
         }
@@ -118,7 +145,7 @@ namespace Incas.Objects.ViewModels
             }
             set
             {
-                this.Source.Name = value.Replace(' ', '_');
+                this.Source.Name = ClassDataBase.HandleName(value);
                 this.OnPropertyChanged(nameof(this.Name));
             }
         }
@@ -130,8 +157,11 @@ namespace Incas.Objects.ViewModels
             }
             set
             {
-                this.Source.VisibleName = value.Replace('_', ' ');
-                this.OnPropertyChanged(nameof(this.VisibleName));
+                if (value != this.Source.VisibleName)
+                {
+                    this.Source.VisibleName = ClassDataBase.HandleVisibleName(value);
+                    this.OnPropertyChanged(nameof(this.VisibleName));
+                }
             }
         }
         public string ConsolidatedName
@@ -173,11 +203,7 @@ namespace Incas.Objects.ViewModels
                 return fieldTypes;
             }
         }
-
-        /// <summary>
-        /// Сохраняет изменения в Model
-        /// </summary>
-        public bool Save()
+        public void Validate()
         {
             if (string.IsNullOrEmpty(this.Name))
             {
@@ -187,10 +213,20 @@ namespace Incas.Objects.ViewModels
             {
                 throw new FieldDataFailed($"Таблица [{this.Name}] не содержит ни одного поля.");
             }
-            this.Source.Fields = new();
             foreach (FieldViewModel field in this.Fields)
             {
                 field.Source.Check();
+            }
+        }
+
+        /// <summary>
+        /// Сохраняет изменения в Model
+        /// </summary>
+        public bool Save()
+        {           
+            this.Source.Fields = new();
+            foreach (FieldViewModel field in this.Fields)
+            {
                 if (string.IsNullOrEmpty(field.VisibleName))
                 {
                     field.VisibleName = field.Name;

@@ -30,7 +30,7 @@ namespace Incas.Objects.Documents.ViewModels
         }
         public TemplateViewModel AddTemplate()
         {
-            return this.AddTemplate(new Template());
+            return this.AddTemplate(new Template() { Name = "Новый шаблон" });
         }
         public TemplateViewModel AddTemplate(Template doc)
         {
@@ -103,6 +103,13 @@ namespace Incas.Objects.Documents.ViewModels
         public void MaximizeAll()
         {
 
+        }
+        public void Validate()
+        {
+            foreach (TemplateViewModel template in this.Templates)
+            {
+                template.Save();
+            }
         }
         public void Save()
         {

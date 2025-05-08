@@ -350,52 +350,6 @@
                     </Grid>
                 </GroupBox>
             </TabItem>
-            <TabItem Header="Конвертеры" BorderBrush="{DynamicResource LightPurple}">
-                <GroupBox Header="Конвертеры">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="40"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
-                            <Button Style="{StaticResource ButtonRectangle}" Padding="0" HorizontalAlignment="Left" Click="AddConverter">
-                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
-                                    <Label Foreground="White" Content="Добавить конвертер"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="EditConverter" >
-                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                    <Label Foreground="White" Content="Редактировать"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="RemoveConverter" >
-                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="{StaticResource Buttons.Red}" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center" />
-                                    <Label Foreground="White" Content="Удалить"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="UpdateConvertersList" >
-                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
-                                    <Path Fill="DodgerBlue" Stretch="Uniform" Data="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9 M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" VerticalAlignment="Center"/>
-                                    <Label Foreground="White" Content="Обновить"/>
-                                </StackPanel>
-                            </Button>
-                        </WrapPanel>
-                        <ListBox Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemGray}" ItemsSource="{Binding Conversions}" SelectedItem="{Binding SelectedConversion}" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Path Fill="{StaticResource DarkYellow}" RenderOptions.BitmapScalingMode="NearestNeighbor" Margin="0,0,10,0" Data="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-                                        <TextBlock Text="{Binding Name}" TextElement.FontWeight="Bold"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </Grid>
-                </GroupBox>
-            </TabItem>
             <TabItem Header="Обобщения" BorderBrush="{DynamicResource LightPurple}">
                 <GroupBox Header="Обобщения">
                     <Grid>
@@ -442,7 +396,54 @@
                     </Grid>
                 </GroupBox>
             </TabItem>
-            <TabItem Header="Структуры" BorderBrush="{DynamicResource LightPurple}">
+            <TabItem Header="Конвертеры" IsEnabled="False" BorderBrush="{DynamicResource LightPurple}">
+                <GroupBox Header="Конвертеры">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2">
+                            <Button Style="{StaticResource ButtonRectangle}" Padding="0" HorizontalAlignment="Left" Click="AddConverter">
+                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                                    <Path Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Data="M11 13a5 5 0 1 0-4.975-5.5H4A1.5 1.5 0 0 0 2.5 6h-1A1.5 1.5 0 0 0 0 7.5v1A1.5 1.5 0 0 0 1.5 10h1A1.5 1.5 0 0 0 4 8.5h2.025A5 5 0 0 0 11 13m.5-7.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2a.5.5 0 0 1 1 0" VerticalAlignment="Center"/>
+                                    <Label Foreground="White" Content="Добавить конвертер"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="EditConverter" >
+                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                                    <Path Fill="{StaticResource Buttons.Green}" VerticalAlignment="Center" Stretch="Uniform" Data="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <Label Foreground="White" Content="Редактировать"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="RemoveConverter" >
+                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                                    <Path Fill="{StaticResource Buttons.Red}" Stretch="Uniform" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center" />
+                                    <Label Foreground="White" Content="Удалить"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource ButtonRectangle}" Padding="0" Click="UpdateConvertersList" >
+                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0">
+                                    <Path Fill="DodgerBlue" Stretch="Uniform" Data="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9 M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z" VerticalAlignment="Center"/>
+                                    <Label Foreground="White" Content="Обновить"/>
+                                </StackPanel>
+                            </Button>
+                        </WrapPanel>
+                        <ListBox Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemGray}" ItemsSource="{Binding Conversions}" SelectedItem="{Binding SelectedConversion}" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Fill="{StaticResource DarkYellow}" RenderOptions.BitmapScalingMode="NearestNeighbor" Margin="0,0,10,0" Data="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                                        <TextBlock Text="{Binding Name}" TextElement.FontWeight="Bold"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </GroupBox>
+            </TabItem>
+            
+            <TabItem Header="Структуры" IsEnabled="False" BorderBrush="{DynamicResource LightPurple}">
                 <GroupBox Header="Структуры">
                     <Grid>
                         <Grid.RowDefinitions>

@@ -34,7 +34,7 @@ namespace Incas.Objects.Views.Pages
             this.DataContext = this.vm;
         }
 
-        public void SetUpContext(ClassViewModel vm)
+        public void SetUpContext(IMembersContainerViewModel vm)
         {
             
         }

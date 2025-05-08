@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows" MouseDown="Window_MouseDown"
         mc:Ignorable="d" Style="{DynamicResource WindowBase}" ResizeMode="NoResize" Background="{StaticResource Black}"
-        Title="Вход в рабочее пространство" Height="512" Width="512" WindowStartupLocation="CenterScreen" Closed="OnClosed">
+        Title="Вход в рабочее пространство" Height="420" Width="512" WindowStartupLocation="CenterScreen" Closed="OnClosed">
     <Grid FocusManager.FocusedElement="{Binding ElementName=pwd}" Margin="10" MaxHeight="312">
         <Grid.RowDefinitions>
             <RowDefinition Height="8*"/>

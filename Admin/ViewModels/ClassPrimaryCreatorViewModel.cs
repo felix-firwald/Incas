@@ -1,11 +1,13 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.ViewModels;
+using IncasEngine.Models;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
 using Org.BouncyCastle.Asn1.Mozilla;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,8 +31,34 @@ namespace Incas.Admin.ViewModels
         public ClassPrimaryCreatorViewModel()
         {
             this.Source = new();
+            this.Source.Generalizators = new();
             this.GoBack = new Command(this.DoGoBack);
             this.GoNext = new Command(this.DoGoNext);
+            this.IncludedGeneralizators = new();
+            using (Generalizator g = new())
+            {
+                foreach (GeneralizatorItem gi in g.GetAllGeneralizators())
+                {
+                    GeneralizatorIncludingViewModel item = new(gi);
+                    item.OnIncluded += this.Item_OnIncluded;
+                    item.OnRemoved += this.Item_OnRemoved;
+                    this.IncludedGeneralizators.Add(item);
+                }
+            }
+        }
+
+        private void Item_OnRemoved(Guid item)
+        {
+            try
+            {
+                this.Source.Generalizators.Remove(item);
+            }
+            catch { }
+        }
+
+        private void Item_OnIncluded(Guid item)
+        {
+            this.Source.Generalizators.Add(item);
         }
 
         private void DoGoNext(object obj)
@@ -131,6 +159,19 @@ namespace Incas.Admin.ViewModels
             {
                 this.Source.Component = value;
                 this.OnPropertyChanged(nameof(this.SelectedComponent));
+            }
+        }
+        private ObservableCollection<GeneralizatorIncludingViewModel> includedGeneralizators;
+        public ObservableCollection<GeneralizatorIncludingViewModel> IncludedGeneralizators
+        {
+            get
+            {
+                return this.includedGeneralizators;
+            }
+            set
+            {
+                this.includedGeneralizators = value;
+                this.OnPropertyChanged(nameof(this.IncludedGeneralizators));
             }
         }
         public List<ClassType> ClassTypes

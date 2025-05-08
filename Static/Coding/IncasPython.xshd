@@ -76,9 +76,6 @@
 			<Word>else</Word>
 			<Word>while</Word>
 			<Word>for</Word>
-			<Word>in</Word>
-			<Word>or</Word>
-			<Word>and</Word>
 			<Word>from</Word>
 			<Word>import</Word>
 			<Word>with</Word>
@@ -93,13 +90,17 @@
 		<Keywords fontWeight="bold" foreground="#ff3d3d">
 			<Word>False</Word>
 			<Word>break</Word>
+			<Word>continue</Word>
 			<Word>None</Word>
 			<Word>not</Word>
+			<Word>del</Word>
 			<Word>raise</Word>
 		</Keywords>
 		<Keywords foreground="#bfff4c" background="">
 			<Word>class</Word>
 			<Word>def</Word>
+			<Word>lambda</Word>
+			<Word>nonlocal</Word>
 			<Word>global</Word>
 		</Keywords>
 		<Keywords foreground="#d761ff">
@@ -122,8 +123,12 @@
 			<Word>range</Word>
 			<Word>type</Word>
 		</Keywords>
-		<Keywords foreground="#4cfff8">
+		<Keywords foreground="#F3DA0B">
 			<Word>self</Word>
+			<Word>is</Word>
+			<Word>in</Word>
+			<Word>or</Word>
+			<Word>and</Word>
 		</Keywords>
 		<Keywords foreground="#7a7a8f">
 			<Word>=</Word>

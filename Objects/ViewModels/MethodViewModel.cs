@@ -20,6 +20,7 @@ namespace Incas.Objects.ViewModels
         public MethodViewModel(Method method, ClassViewModel cvm)
         {
             this.Source = method;
+            this.Source.SetId();
             this.textDocument = new()
             {
                 Text = this.Source.Code ?? "\n\n\n\n\n"
@@ -33,6 +34,7 @@ namespace Incas.Objects.ViewModels
         public MethodViewModel(Method method)
         {
             this.Source = method;
+            this.Source.SetId();
             this.textDocument = new()
             {
                 Text = this.Source.Code ?? "\n\n\n\n\n"
@@ -68,6 +70,13 @@ namespace Incas.Objects.ViewModels
                 return this.Source.Owner is null;
             }
         }
+        public bool EditingEnabled
+        {
+            get
+            {
+                return this.Source.TargetGeneralizator == Guid.Empty;
+            }
+        }
 
         private void DoRemoveMethod(object obj)
         {
@@ -79,6 +88,10 @@ namespace Incas.Objects.ViewModels
 
         private void DoOpenMethod(object obj)
         {
+            if (string.IsNullOrEmpty(this.Name))
+            {
+                this.Name = "новый_метод";
+            }
             MethodEditor editor = new(this);
             this.OnOpenMethodRequested?.Invoke(editor);
         }
@@ -100,8 +113,11 @@ namespace Incas.Objects.ViewModels
             }
             set
             {
-                this.Source.Name = value.Replace(' ', '_').Replace('.', '_');
-                this.OnPropertyChanged(nameof(this.Name));
+                if (value != this.Source.Name)
+                {
+                    this.Source.Name = ClassDataBase.HandleName(value);
+                    this.OnPropertyChanged(nameof(this.Name));
+                }
             }
         }
         public string VisibleName
@@ -112,8 +128,11 @@ namespace Incas.Objects.ViewModels
             }
             set
             {
-                this.Source.VisibleName = value;
-                this.OnPropertyChanged(nameof(this.VisibleName));
+                if (value != this.Source.VisibleName)
+                {
+                    this.Source.VisibleName = ClassDataBase.HandleVisibleName(value);
+                    this.OnPropertyChanged(nameof(this.VisibleName));
+                }
             }
         }
         public string Description

@@ -90,7 +90,7 @@ namespace Incas.Objects.Documents.ViewModels
             }
             set
             {
-                this.Source.Name = value;
+                this.Source.Name = ClassDataBase.HandleName(value);
                 this.OnPropertyChanged(nameof(this.PropertyName));
             }
         }
@@ -141,6 +141,7 @@ namespace Incas.Objects.Documents.ViewModels
                     TemplateProperty.CalculationType.Switch, 
                     TemplateProperty.CalculationType.Script,
                     TemplateProperty.CalculationType.ScriptTable,
+                    TemplateProperty.CalculationType.ScriptPattern,
                     TemplateProperty.CalculationType.Replication 
                 };
             }

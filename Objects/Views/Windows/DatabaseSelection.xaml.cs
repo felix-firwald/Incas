@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using Incas.Core.Views.Windows;
+using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Views.Controls;
 using IncasEngine.Core;
 using IncasEngine.Core.DatabaseQueries.RequestsUtils.Where;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Incas.Objects.Views.Windows
 {
@@ -184,6 +186,24 @@ namespace Incas.Objects.Views.Windows
                 case Helpers.TargetClassField:
                 case Helpers.TargetObjectField:
                     e.Column.Visibility = Visibility.Hidden;
+                    break;
+                default:
+                    string colHeader = e.Column.Header.ToString();
+                    foreach (Field f in this.ClassData.Fields)
+                    {
+                        if (f.Type is FieldType.Boolean && colHeader == f.VisibleName)
+                        {
+                            DataGridCheckBoxColumn cbc = new()
+                            {
+                                Header = f.VisibleName,
+                                Binding = new System.Windows.Data.Binding(colHeader),
+                                EditingElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.CheckboxEditingGridStyle),
+                                ElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.CheckboxNotEditableGridStyle)
+                            };
+                            e.Column = cbc;
+                            break;
+                        }
+                    }
                     break;
             }
         }

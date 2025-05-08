@@ -11,7 +11,6 @@ namespace Incas.Objects.Interfaces
     public interface IClassDetailsSettings
     {
         public string ItemName { get; }
-        public void SetUpContext(ClassViewModel vm);
-        public void SetUpContext(GeneralizatorViewModel vm);
+        public void SetUpContext(IMembersContainerViewModel vm);
     }
 }

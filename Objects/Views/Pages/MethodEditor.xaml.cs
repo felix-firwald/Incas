@@ -6,6 +6,7 @@ using Incas.Core.Views.Windows;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using IncasEngine.Scripting;
+using Microsoft.Scripting.Utils;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -22,7 +23,7 @@ namespace Incas.Objects.Views.Pages
     public partial class MethodEditor : UserControl, IClassDetailsSettings
     {
         public MethodViewModel vm { get; set; }
-        public ClassViewModel Class { get; set; }
+        public IMembersContainerViewModel Class { get; set; }
         public GeneralizatorViewModel Generalizator { get; set; }
         public string ItemName { get; private set; }
 
@@ -37,7 +38,7 @@ namespace Incas.Objects.Views.Pages
             this.Code.TextArea.TextEntered += this.TextArea_TextEntered;
         }
 
-        public void SetUpContext(ClassViewModel vm)
+        public void SetUpContext(IMembersContainerViewModel vm)
         {
             this.Class = vm;
             XmlReader reader = XmlReader.Create("Static\\Coding\\IncasPython.xshd");
@@ -76,13 +77,10 @@ namespace Incas.Objects.Views.Pages
             
             this.Code.SyntaxHighlighting = highlightingDefinition;
         }
-        public void SetUpContext(GeneralizatorViewModel vm)
-        {
-            throw new NotImplementedException();
-        }
 
         private void TextArea_TextEntered(object sender, TextCompositionEventArgs e)
         {
+            this.MenuPanel.Children.Clear();
             if (e.Text == ".")
             {
                 // Получаем позицию курсора
@@ -100,6 +98,7 @@ namespace Incas.Objects.Views.Pages
         private ContextMenu CreateContextMenu(string textBeforeDot)
         {
             ContextMenu contextMenu = new();
+            this.MenuPanel.Children.Clear();
             switch (textBeforeDot)
             {
                 case "this":
@@ -117,36 +116,39 @@ namespace Incas.Objects.Views.Pages
                         contextMenu.Items.Add(item1);
                     }
                     break;
-
-                case "incas":
-                    foreach (MethodInfo mi in typeof(IncasPythonCommonTools).GetMethods())
+                default:
+                    Dictionary<string, Type> types = ObjectScriptManager.GetNETLibraries();
+                    if (types.ContainsKey(textBeforeDot))
                     {
-                        if (mi.IsPublic)
+                        Type t = types[textBeforeDot];
+                        foreach (PropertyInfo mi in t.GetProperties())
                         {
                             MenuItem item1 = new() { Header = mi.Name };
                             item1.Click += (sender, e) => this.InsertText(mi.Name);
-                            contextMenu.Items.Add(item1);
+                            this.MenuPanel.Children.Add(item1);
                         }
-                    }
-                    break;
-                case "DateTime":
-                    foreach (PropertyInfo mi in typeof(DateTime).GetProperties())
-                    {
-                        MenuItem item1 = new() { Header = mi.Name };
-                        item1.Click += (sender, e) => this.InsertText(mi.Name);
-                        contextMenu.Items.Add(item1);
-                    }
-                    foreach (MethodInfo mi in typeof(DateTime).GetMethods())
-                    {
-                        if (mi.IsPublic)
+                        foreach (FieldInfo fi in t.GetFields())
                         {
-                            MenuItem item1 = new() { Header = mi.Name };
-                            item1.Click += (sender, e) => this.InsertText(mi.Name + "()");
-                            contextMenu.Items.Add(item1);
+                            MenuItem item1 = new() { Header = fi.Name };
+                            item1.Click += (sender, e) => this.InsertText(fi.Name);
+                            this.MenuPanel.Children.Add(item1);
                         }
-                    }                    
-                    break;
-                default:
+                        foreach (MethodInfo mi in t.GetMethods())
+                        {
+                            if (mi.IsPublic)
+                            {
+                                string paramsText = "";
+                                foreach (ParameterInfo pi in mi.GetParameters())
+                                {
+                                    paramsText += $"{pi.Name} - {pi.ParameterType} (optional: {pi.IsOptional})\n";
+                                }
+                                MenuItem item1 = new() { Header = mi.Name };
+                                item1.Click += (sender, e) => this.InsertText(mi.Name + "()");
+                                item1.ToolTip = paramsText;
+                                this.MenuPanel.Children.Add(item1);
+                            }
+                        }
+                    }
                     // Не показывать меню, если контекст не распознан
                     return null;
             }

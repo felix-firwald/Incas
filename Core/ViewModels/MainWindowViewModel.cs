@@ -2,18 +2,12 @@
 using Incas.Core.Views.Windows;
 using Incas.Miniservices.TextEditor.Views.Pages;
 using Incas.Objects.AutoUI;
-using Incas.Objects.Views.Pages;
-using Incas.Objects.Views.Windows;
-using IncasEngine.Core;
 using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.Core.Registry;
-using IncasEngine.ObjectiveEngine.Interfaces;
-using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.Workspace;
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace Incas.Core.ViewModels

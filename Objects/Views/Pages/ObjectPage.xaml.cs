@@ -76,7 +76,14 @@ namespace Incas.Objects.Views.Pages
             this.PlaceButtons();
             this.PermissionSettings = ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(source.Id);
             this.AddObjectCreator(obj);
-            
+            if (source.Type == IncasEngine.ObjectiveEngine.Classes.ClassType.Document)
+            {
+                this.RenderButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                this.RenderButton.Visibility = Visibility.Collapsed;
+            }
             DialogsManager.ShowWaitCursor(false);
             this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
         }

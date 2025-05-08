@@ -25,7 +25,12 @@ namespace Incas.Objects.Interfaces
         /// <para>Please set View-Model here!</para>
         /// </summary>
         /// <param name="obj"></param>
-        public IClassPartSettings SetUp(ClassViewModel classViewModel);
+        public IClassPartSettings SetUp(IMembersContainerViewModel classViewModel);
+
+        /// <summary>
+        /// Incas calls this method when class window is going to save all class data and close itself
+        /// </summary>
+        public void Validate();
 
         /// <summary>
         /// Incas calls this method when class window is going to save all class data and close itself
