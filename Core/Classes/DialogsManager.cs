@@ -27,6 +27,13 @@ namespace Incas.Core.Classes
             IncasEngine.Core.EngineEvents.OnShowTabRequested += EngineEvents_OnShowTabRequested;
             IncasEngine.Core.EngineEvents.OnFileDialogRequested += EngineEvents_OnFileDialogRequested;
             IncasEngine.Core.EngineEvents.OnEditorRequested += EngineEvents_OnEditorRequested;
+            IncasEngine.Core.EngineEvents.OnTableViewerRequested += EngineEvents_OnTableViewerRequested;
+        }
+
+        private static void EngineEvents_OnTableViewerRequested(IncasEngine.AdditionalFunctionality.TableViewerSettings viewer)
+        {
+            TableViewer tv = new(viewer);
+            tv.Show();
         }
 
         private static void EngineEvents_OnEditorRequested(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, IncasEngine.ObjectiveEngine.Interfaces.IObject obj)
