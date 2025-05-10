@@ -255,9 +255,15 @@ namespace Incas.Objects.Views.Pages
             }
         }
 
-        private void Tf_OnFieldUpdate(IFillerBase sender)
+        private void Tf_OnFieldUpdate(Guid sender)
         {
-            this.OnUpdated?.Invoke(this);
+            foreach (Method m in this.ClassData.Methods)
+            {
+                if (m.Id == sender)
+                {
+                    this.ApplyMethod(m);
+                }              
+            }
         }
         public void ApplyFromExcel(Dictionary<string, string> pairs)
         {

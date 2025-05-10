@@ -92,10 +92,10 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                        <!--<StackPanel Grid.Row="1" Grid.ColumnSpan="2">
                             <CheckBox Content="Включить каскадное удаление объектов этого класса при удалении объекта привязки" IsChecked="{Binding Cascade}"/>
                             <CheckBox Content="Запретить удаление объекта привязки, если на него ссылается хотя бы один объект этого класса" IsChecked="{Binding Restrict}"/>
-                        </StackPanel>
+                        </StackPanel>-->
                     </Grid>
                 </Border>
             </TabItem>

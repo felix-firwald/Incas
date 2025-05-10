@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using static IncasEngine.ObjectiveEngine.Models.State;
 
 namespace Incas.Objects.ViewModels
@@ -28,6 +29,7 @@ namespace Incas.Objects.ViewModels
         {
             this.Source = member;
             this.State = state;
+            this.SetCommands();
         }
         // if table
         public StateMemberViewModel(IClassMemberViewModel member, MemberState state, ObservableCollection<FieldViewModel> nested)
@@ -37,7 +39,31 @@ namespace Incas.Objects.ViewModels
             this.NestedMembers = new();
             nested.CollectionChanged += this.Nested_CollectionChanged;
             this.ApplyNestedCollection(nested, false);
+            this.SetCommands();
         }
+        private void SetCommands()
+        {
+            this.AcceptAll = new Command(this.DoAcceptAll);
+            this.RejectAll = new Command(this.DoRejectAll);
+        }
+
+        private void DoRejectAll(object obj)
+        {
+            this.CardVisibility = false;
+            this.EditorVisibility = false;
+            this.IsEnabled = false;
+        }
+
+        private void DoAcceptAll(object obj)
+        {
+            this.CardVisibility = true;
+            this.EditorVisibility = true;
+            this.IsEnabled = true;
+        }
+
+        public ICommand AcceptAll { get; set; }
+        public ICommand RejectAll { get; set; }
+
         private void ApplyNestedCollection(ObservableCollection<FieldViewModel> nested, bool preSave = false)
         {
             if (this.State.NestedMembers is null)

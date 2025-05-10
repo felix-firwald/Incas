@@ -1,4 +1,5 @@
 ﻿using Incas.DialogSimpleForm.Components;
+using Incas.Objects.Interfaces;
 using IncasEngine.Models;
 using IncasEngine.ObjectiveEngine.FieldComponents;
 using IncasEngine.ObjectiveEngine.Models;

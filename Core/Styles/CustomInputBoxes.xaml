@@ -813,13 +813,6 @@
         <Setter Property="HorizontalContentAlignment" Value="Right" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="TextAlignment" Value="Right" />
-        <!--<Setter Property="WatermarkTemplate" Value="{StaticResource DefaultWatermarkTemplate}" />
-        <Setter Property="ButtonSpinnerUpContentTemplate" Value="{StaticResource IncreaseGlyphNormalKey}" />
-        <Setter Property="ButtonSpinnerDownContentTemplate" Value="{StaticResource DecreaseGlyphNormalKey}" />
-        <Setter Property="ButtonSpinnerUpDisabledContentTemplate" Value="{StaticResource IncreaseGlyphDisabledKey}" />
-        <Setter Property="ButtonSpinnerDownDisabledContentTemplate" Value="{StaticResource DecreaseGlyphDisabledKey}" />
-        <Setter Property="DropDownButtonContent" Value="{StaticResource DropDownArrowGlyph}" />
-        <Setter Property="DropDownButtonDisabledContent" Value="{StaticResource DropDownDisabledArrowGlyph}" />-->
         <Setter Property="TimeListItemsStyle" Value="{StaticResource TimeItemStyle}" />
         <Setter Property="Template">
             <Setter.Value>

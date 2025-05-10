@@ -132,8 +132,6 @@ namespace Incas.Objects.ViewModels
                         db.BindingClass = dialog.SelectedClass;
                         db.BindingField = dialog.SelectedField;
                         db.Compliance = dialog.vm.GetConstraintsForSave();
-                        db.OnDeleteCascade = dialog.vm.Cascade;
-                        db.OnDeleteRestrict = dialog.vm.Restrict;
                         this.Source.SetBindingData(db);
                     }
                     break;
@@ -149,6 +147,7 @@ namespace Incas.Objects.ViewModels
                     DateFieldSettings dt = new(this.Source);
                     dt.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
+                
             }
         }
 

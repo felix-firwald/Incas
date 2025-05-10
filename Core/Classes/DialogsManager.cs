@@ -4,13 +4,11 @@ using Incas.Help.Windows;
 using Incas.Objects.Processes.Views.Pages;
 using Incas.Objects.Views.Pages;
 using Incas.Objects.Views.Windows;
-using IncasEngine.Core.DatabaseQueries;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -28,6 +26,18 @@ namespace Incas.Core.Classes
             IncasEngine.Core.EngineEvents.OnFileDialogRequested += EngineEvents_OnFileDialogRequested;
             IncasEngine.Core.EngineEvents.OnEditorRequested += EngineEvents_OnEditorRequested;
             IncasEngine.Core.EngineEvents.OnTableViewerRequested += EngineEvents_OnTableViewerRequested;
+            IncasEngine.Core.EngineEvents.OnClipboardGetTextRequested += EngineEvents_OnClipboardGetTextRequested;
+            IncasEngine.Core.EngineEvents.OnClipboardSetTextRequested += EngineEvents_OnClipboardSetTextRequested;
+        }
+
+        private static void EngineEvents_OnClipboardSetTextRequested(string text)
+        {
+            System.Windows.Clipboard.SetText(text);
+        }
+
+        private static string EngineEvents_OnClipboardGetTextRequested()
+        {
+            return System.Windows.Clipboard.GetText();
         }
 
         private static void EngineEvents_OnTableViewerRequested(IncasEngine.AdditionalFunctionality.TableViewerSettings viewer)

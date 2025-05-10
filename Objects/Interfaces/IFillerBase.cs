@@ -10,6 +10,7 @@ namespace Incas.Objects.Interfaces
         /// </summary>
         /// <param name="filler"></param>
         public delegate void FillerUpdate(IFillerBase filler);
+        public delegate void AutoRunMethod(Guid method);
 
         /// <summary>
         /// For the inserting
@@ -21,7 +22,7 @@ namespace Incas.Objects.Interfaces
         /// <summary>
         /// Calling every time the controls contained within it are updated
         /// </summary>
-        public event FillerUpdate OnFillerUpdate;
+        public event AutoRunMethod OnFillerUpdate;
 
         /// <summary>
         /// Calling when a filler requests a copy for itself from the custom database (objects map)

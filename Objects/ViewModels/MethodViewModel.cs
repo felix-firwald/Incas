@@ -77,7 +77,19 @@ namespace Incas.Objects.ViewModels
                 return this.Source.TargetGeneralizator == Guid.Empty;
             }
         }
-
+        private int fontSize = 12;
+        public int FontSize
+        {
+            get
+            {
+                return this.fontSize;
+            }
+            set
+            {
+                this.fontSize = value;
+                this.OnPropertyChanged(nameof(this.FontSize));
+            }
+        }
         private void DoRemoveMethod(object obj)
         {
             if (DialogsManager.ShowQuestionDialog($"Вы действительно хотите удалить метод [{this.Name}]? После сохранения это действие отменить нельзя: этот метод будет безвозвратно удален.", "Удалить метод?", "Удалить", "Не удалять") == Core.Views.Windows.DialogStatus.Yes)

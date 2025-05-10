@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Windows.ApplicationModel.Background;
 using Xceed.Wpf.Toolkit;
 using static Incas.Objects.Interfaces.IFillerBase;
 using static IncasEngine.ObjectiveEngine.Models.State;
@@ -41,16 +42,13 @@ namespace Incas.Objects.Views.Controls
     {
         public Field Field { get; set; }
         public event RoutedEventHandler OnCustomButtonClicked;
-
-        //private bool validated = true;
         private bool unique = true;
-        private bool eventChangedEnabled = true;
         private bool isRequired;
         private Control control;
         public delegate void CommandScript(string script);
         public event StringAction OnInsert;  
         public event CommandScript OnScriptRequested;
-        public event FillerUpdate OnFillerUpdate;
+        public event AutoRunMethod OnFillerUpdate;
         public event FillerUpdate OnDatabaseObjectCopyRequested;
         public FieldFiller(Field f)
         {
@@ -181,6 +179,14 @@ namespace Incas.Objects.Views.Controls
                     picker.SelectedDateChanged += this.DatePicker_SelectedDateChanged;
                     this.PlaceUIControl(picker);
                     break;
+                case FieldType.Time:
+                    TimePicker tPicker = new()
+                    {
+                        ToolTip = description,
+                        Margin = new Thickness(5)
+                    };
+                    this.PlaceUIControl(tPicker);
+                    break;
                 case FieldType.Boolean:
                     CheckBox checkBox = new() {
                         ToolTip = description,
@@ -228,7 +234,6 @@ namespace Incas.Objects.Views.Controls
 
         public void SetValue(string value)
         {
-            this.eventChangedEnabled = false;
             switch (this.GetFillerType())
             {
                 case FieldType.String:
@@ -258,6 +263,9 @@ namespace Incas.Objects.Views.Controls
                     break;
                 case FieldType.Date:
                     this.SetDateTimeValue(value);
+                    break;
+                case FieldType.Time:
+                    ((TimePicker)this.control).Text = value;
                     break;
 #if E_BUSINESS
                 case FieldType.Structure:
@@ -374,6 +382,9 @@ namespace Incas.Objects.Views.Controls
                     return "";
                 case FieldType.Date:
                     return this.GetDateInFormat();
+                case FieldType.Time:
+                    TimePicker tp = this.control as TimePicker;
+                    return tp.Text;
                 case FieldType.Boolean:
                     return ((CheckBox)this.control).IsChecked.ToString();
                 default:
@@ -422,11 +433,14 @@ namespace Incas.Objects.Views.Controls
                         return (DateTime)((DatePicker)this.control).SelectedDate;
                     }
                     return DateTime.MinValue;
+                case FieldType.Time:
+                    TimePicker tp = this.control as TimePicker;                    
+                    return tp.Text;
                 case FieldType.Object:
                     IObject obj = ((SelectionBox)this.control).SelectedObject;
                     if (obj is null)
                     {
-                        return new List<FieldData>();
+                        return null;
                     }
                     return IncasPythonCommonTools.GetDynamic(obj);              
                 case FieldType.Integer:
@@ -515,20 +529,6 @@ namespace Incas.Objects.Views.Controls
         {
 
         }
-        private void PlayScript(string command)
-        {
-            if (this.eventChangedEnabled)
-            {
-                if (!string.IsNullOrEmpty(command))
-                {
-                    OnScriptRequested?.Invoke(command);
-                }
-            }
-            else
-            {
-                this.eventChangedEnabled = true;
-            }
-        }
         private void CommandClick(object sender, RoutedEventArgs e)
         {
             //this.PlayScript();
@@ -540,7 +540,11 @@ namespace Incas.Objects.Views.Controls
         private void RunUpdateEvent()
         {
             this.MarkAsValidated();
-            this.OnFillerUpdate?.Invoke(this);
+            if (this.Field.OnUpdated != Guid.Empty)
+            {
+                
+                this.OnFillerUpdate?.Invoke(this.Field.OnUpdated);
+            }            
         }
 
         private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -562,12 +566,6 @@ namespace Incas.Objects.Views.Controls
         }
 
         private void SelectionBox_OnValueChanged(object sender, TextChangedEventArgs e)
-        {
-            this.RunUpdateEvent();
-            this.CheckForScriptOnUpdate();
-        }
-
-        private void Generator_OnValueChanged(object sender)
         {
             this.RunUpdateEvent();
             this.CheckForScriptOnUpdate();

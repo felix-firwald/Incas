@@ -269,7 +269,7 @@ namespace Incas.Rendering.Components
             string path = this.Path;
             using (WordprocessingDocument d = WordprocessingDocument.Open(path, true))
             {
-                d.PackageProperties.Creator = $"{doc.Author.Name} (через INCAS)";
+                d.PackageProperties.Creator = doc.Author.Name;
                 d.PackageProperties.Category = doc.Class.Name;
                 d.PackageProperties.Subject = doc.Class.Component.Name;
                 d.PackageProperties.Title = doc.TargetDocument.Name;
@@ -280,8 +280,8 @@ namespace Incas.Rendering.Components
                 d.PackageProperties.Modified = doc.TargetDocument.CreationDate;
                 ObjectReference reference = new(doc.Class.Id, doc.TargetDocument.Id);
                 d.PackageProperties.Identifier = reference.ToString();
-                d.PackageProperties.LastModifiedBy = $"{ProgramState.CurrentWorkspace.CurrentUser.Name} (через INCAS)";
-                d.PackageProperties.Description = $"Этот документ создан в программе INCAS, версия: {ProgramState.Version}";
+                d.PackageProperties.LastModifiedBy = $"{ProgramState.CurrentWorkspace.CurrentUser.Name} (через Incas)";
+                d.PackageProperties.Description = $"Этот документ создан с использованием программы Incas {ProgramState.Edition}, версия: {ProgramState.Version}.\nРазработчик программы: ";
             }
         }
         public async static Task<string> GetMetaDataIdentifier(string path)

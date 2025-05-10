@@ -96,7 +96,7 @@ namespace Incas.Admin.ViewModels
             }
             set
             {
-                this.Source.Name = value;
+                this.Source.Name = ClassDataBase.HandleClassName(value);
                 this.OnPropertyChanged(nameof(this.ClassName));
                 this.OnPropertyChanged(nameof(this.ListName));
             }
@@ -138,7 +138,8 @@ namespace Incas.Admin.ViewModels
             }
             set
             {
-                this.Source.InternalName = value.Replace(' ', '_');
+                this.Source.InternalName = ClassDataBase.HandleInternalClassName(value);
+                this.ClassName = value;
                 this.OnPropertyChanged(nameof(this.InternalName));
             }
         }

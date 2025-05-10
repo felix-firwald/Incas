@@ -36,8 +36,8 @@
 
                             <Label Content="Наименование таблицы:" FontFamily="{StaticResource Rubik}" Foreground="{DynamicResource GrayLight}" Grid.Column="1"/>
                         </Grid>
-                        <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding Name}" Tag="Внутреннее наименование" MaxLength="50" ToolTip="Наименование таблицы (внутреннее)"/>
-                        <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding VisibleName}" Tag="Видимое наименование" MaxLength="75" ToolTip="Наименование таблицы (внутреннее)"/>
+                        <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Tag="Внутреннее наименование" MaxLength="50" ToolTip="Наименование таблицы (внутреннее)"/>
+                        <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding VisibleName, UpdateSourceTrigger=PropertyChanged}" Tag="Видимое наименование" MaxLength="75" ToolTip="Наименование таблицы (внутреннее)"/>
                         <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding ConsolidatedName}" Tag="Наименование сводной таблицы" MaxLength="75" ToolTip="Наименование таблицы (внутреннее)"/>
                     </StackPanel>
                 </Border>

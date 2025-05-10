@@ -312,7 +312,7 @@ namespace Incas.Objects.ViewModels
             }
             set
             {
-                this.Source.InternalName = value.Replace(' ', '_');
+                this.Source.InternalName = ClassDataBase.HandleInternalClassName(value);
                 this.OnPropertyChanged(nameof(this.InternalName));
             }
         }
@@ -333,13 +333,7 @@ namespace Incas.Objects.ViewModels
             get => this.Source.Name;
             set
             {
-                this.Source.Name = value
-                    .Replace(":", "")
-                    .Replace("#", "")
-                    .Replace("$", "")
-                    .Replace("\\", "")
-                    .Replace("/", "")
-                    .Replace("!", "");
+                this.Source.Name = ClassDataBase.HandleClassName(value);
                 this.OnPropertyChanged(nameof(this.NameOfClass));
             }
         }
@@ -734,6 +728,7 @@ namespace Incas.Objects.ViewModels
                         case FieldType.Float:
                         case FieldType.Object:
                         case FieldType.Date:
+                        case FieldType.Time:
                         case FieldType.Boolean:
                         case FieldType.GlobalEnumeration:
                         case FieldType.LocalEnumeration:
@@ -767,6 +762,7 @@ namespace Incas.Objects.ViewModels
             FieldType.Integer,
             FieldType.Float,
             FieldType.Date,
+            FieldType.Time,
             FieldType.LocalEnumeration, 
             FieldType.GlobalEnumeration,
             FieldType.Object,

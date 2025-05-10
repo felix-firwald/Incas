@@ -222,6 +222,11 @@ namespace Incas.DialogSimpleForm.Components
             //{
             //    DialogsManager.ShowInfoDialog(selector.SelectedValue);
             //}
+            if (selector is null)
+            {
+                DialogsManager.ShowExclamationDialog("При отрисовке combobox возникла ошибка: selector был null", "Ошибка отрисовки");
+                return new ComboBox();
+            }
             ComboBox control = new()
             {
                 Tag = description,

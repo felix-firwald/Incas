@@ -105,7 +105,7 @@
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
-                                        <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding NameOfClass}" IsEnabled="{Binding InCustomClassEnabledOnly}" Tag="Наименование класса" MaxLength="50" ToolTip="Наименование класса (везде)"/>
+                                        <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding NameOfClass, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding InCustomClassEnabledOnly}" Tag="Наименование класса" MaxLength="50" ToolTip="Наименование класса (везде)"/>
                                         <TextBox Style="{StaticResource TextBoxMain}" Text="{Binding ListName}" Tag="Наименование списка объектов" MaxLength="75" ToolTip="Наименование списка объектов (во всех вкладках, где показывается список объектов класса)"/>
                                         <TextBox Style="{StaticResource TextBoxBig}" Text="{Binding Description}" Tag="Описание класса" MaxLength="200" ToolTip="Описание класса (функциональность)"/>
                                     </StackPanel>
@@ -599,7 +599,7 @@
                     </Border>
                     <DataGrid Style="{StaticResource DataGridMain}" Margin="10" ItemsSource="{Binding SelectedState.Members}" SelectedItem="{Binding SelectedState.SelectedMember}" VirtualizingPanel.IsVirtualizing="True" EnableRowVirtualization="True" EnableColumnVirtualization="True" AutoGenerateColumns="False" Grid.Column="1">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Член класса" IsReadOnly="True">
+                            <DataGridTemplateColumn Header="Элемент класса" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -613,6 +613,23 @@
                                             </TextBlock>
                                         </StackPanel>
 
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn IsReadOnly="True" MinWidth="70" MaxWidth="70">
+                                <DataGridTemplateColumn.Header>
+                                    <Path Fill="{StaticResource Icon}" Stretch="Uniform" MinWidth="60" Height="15" HorizontalAlignment="Center" VerticalAlignment="Center" Data="m637.69-279.38 37.54-37.54q5.23-5.16 5.23-12.05 0-6.88-5.23-12.11L523.08-493.46q6.3-11.77 9.46-25.46 3.15-13.7 3.15-30 0-52.87-37.79-90.44-37.79-37.56-90.98-37.56-8.81 0-16.83 1-8.01 1-15.99 3.46-7.18 2.46-8.79 10.15-1.62 7.69 3.84 13.16L437-580.54l-62.15 62.16L305.46-587q-5.46-5.46-13.15-3.85-7.69 1.62-10.46 9.02-2.08 8.23-3.12 16.45-1.04 8.23-1.04 16.92 0 53.19 37.79 90.98 37.79 37.79 90.98 37.79 15.22 0 28.69-3.54t26.77-9.08l152.39 152.16q5.23 5.23 11.69 5.61 6.46.39 11.69-4.84ZM480.13-120q-74.67 0-140.41-28.34-65.73-28.34-114.36-76.92-48.63-48.58-76.99-114.26Q120-405.19 120-479.87q0-74.67 28.34-140.41 28.34-65.73 76.92-114.36 48.58-48.63 114.26-76.99Q405.19-840 479.87-840q74.67 0 140.41 28.34 65.73 28.34 114.36 76.92 48.63 48.58 76.99 114.26Q840-554.81 840-480.13q0 74.67-28.34 140.41-28.34 65.73-76.92 114.36-48.58 48.63-114.26 76.99Q554.81-120 480.13-120Z"/>
+                                </DataGridTemplateColumn.Header>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Style="{StaticResource ButtonSquareGrid}" ToolTip="Включить всё" Command="{Binding AcceptAll}">
+                                                <Path Fill="{StaticResource Success}" Stretch="Uniform" Height="12" VerticalAlignment="Center" Data="m422.46-380.31-99.84-99.84q-5.62-5.62-13.77-6-8.16-.39-14.54 6-6.39 6.38-6.39 14.15 0 7.77 6.39 14.15l105.54 105.54q9.69 9.69 22.61 9.69t22.62-9.69l219.07-219.07q5.62-5.62 6-13.77.39-8.16-6-14.54-6.38-6.39-14.15-6.39-7.77 0-14.15 6.39L422.46-380.31ZM480.13-120q-74.67 0-140.41-28.34-65.73-28.34-114.36-76.92-48.63-48.58-76.99-114.26Q120-405.19 120-479.87q0-74.67 28.34-140.41 28.34-65.73 76.92-114.36 48.58-48.63 114.26-76.99Q405.19-840 479.87-840q74.67 0 140.41 28.34 65.73 28.34 114.36 76.92 48.63 48.58 76.99 114.26Q840-554.81 840-480.13q0 74.67-28.34 140.41-28.34 65.73-76.92 114.36-48.58 48.63-114.26 76.99Q554.81-120 480.13-120Z"/>
+                                            </Button>
+                                            <Button Style="{StaticResource ButtonSquareGrid}" ToolTip="Отключить всё" Command="{Binding RejectAll}">
+                                                <Path Fill="{StaticResource Error}" Stretch="Uniform" Height="12" VerticalAlignment="Center" Data="m480-451.69 129.85 129.84q5.61 5.62 13.77 6 8.15.39 14.53-6 6.39-6.38 6.39-14.15 0-7.77-6.39-14.15L508.31-480l129.84-129.85q5.62-5.61 6-13.77.39-8.15-6-14.53-6.38-6.39-14.15-6.39-7.77 0-14.15 6.39L480-508.31 350.15-638.15q-5.61-5.62-13.77-6-8.15-.39-14.53 6-6.39 6.38-6.39 14.15 0 7.77 6.39 14.15L451.69-480 321.85-350.15q-5.62 5.61-6 13.77-.39 8.15 6 14.53 6.38 6.39 14.15 6.39 7.77 0 14.15-6.39L480-451.69Zm.13 331.69q-74.67 0-140.41-28.34-65.73-28.34-114.36-76.92-48.63-48.58-76.99-114.26Q120-405.19 120-479.87q0-74.67 28.34-140.41 28.34-65.73 76.92-114.36 48.58-48.63 114.26-76.99Q405.19-840 479.87-840q74.67 0 140.41 28.34 65.73 28.34 114.36 76.92 48.63 48.58 76.99 114.26Q840-554.81 840-480.13q0 74.67-28.34 140.41-28.34 65.73-76.92 114.36-48.58 48.63-114.26 76.99Q554.81-120 480.13-120Z"/>
+                                            </Button>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
