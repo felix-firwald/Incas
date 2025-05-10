@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using static Incas.Core.Interfaces.ITabItem;
@@ -177,11 +178,14 @@ namespace Incas.Objects.Views.Pages
             if (this.sourceClass.Type == ClassType.Model)
             {
                 this.View = dt.AsDataView();
+                CollectionViewSource source = new();
+                source.Source = dt.DefaultView;
+                source.GroupDescriptions.Add(new PropertyGroupDescription("Группа"));
                 this.View.Sort = $"[{Helpers.NameField}] ASC";
                 this.Dispatcher.Invoke(() =>
                 {
                     this.Data.Columns.Clear();
-                    this.Data.ItemsSource = this.View;
+                    this.Data.ItemsSource = source.View;
                 });                   
             }
             else
