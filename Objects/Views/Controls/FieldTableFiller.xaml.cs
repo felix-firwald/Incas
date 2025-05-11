@@ -9,6 +9,7 @@ using Incas.Rendering.Components;
 using Incas.Rendering.ViewModels;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
+using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using IncasEngine.ObjectiveEngine.Models;
 using Microsoft.Scripting.Hosting;
 using Newtonsoft.Json;
@@ -76,6 +77,16 @@ namespace Incas.Objects.Views.Controls
                 this.OnCustomButtonClicked?.Invoke(sender, e);
             };
             this.CustomButtons.Children.Add(btn);
+        }
+        public void ApplySettings(ViewControl.ViewControlTableSettings settings)
+        {
+            if (settings == null)
+            {
+                return;
+            }
+            this.Table.MinHeight = settings.MinHeight;
+            this.Table.Height = settings.Height;
+            this.Table.MaxHeight = settings.MaxHeight;
         }
 
         /// <summary>

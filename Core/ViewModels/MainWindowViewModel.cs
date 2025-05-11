@@ -74,7 +74,7 @@ namespace Incas.Core.ViewModels
         }
         public void DoOpenClipBoard(object parameter)
         {
-            DialogsManager.ShowClipboardManager();
+            
         }
         public void DoOpenTextEditor(object parameter)
         {

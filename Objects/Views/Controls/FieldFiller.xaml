@@ -22,7 +22,6 @@
                 <ContextMenu FontFamily="Segoe UI" FontWeight="Normal">
                     <MenuItem Header="Скопировать значение в остальные редактируемые объекты" Click="InsertToOther" Tag="Значение этого поля будет скопировано в поля других объектов" />
                     <Separator Background="{DynamicResource LightBlack}"/>
-                    <MenuItem Header="Вставить значение из буфера обмена" Click="CopyFromIncasClipboard" Tag="Будет показано окно пользовательского буфера обмена" />
                     <MenuItem Header="Вставить значение из существующего объекта" Click="ObjectCopyRequestClick"/>
                 </ContextMenu>
             </TextBlock.ContextMenu>

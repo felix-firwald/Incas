@@ -57,7 +57,15 @@ namespace Incas.Objects.ViewModels
                         this.Source.TableSettings = tabSettings.GetResult();
                     }
                     break;
+                case ControlType.Grid:
+                    ViewControlGridSettings gridSettings = new(this.Source.GridSettings);
+                    if (gridSettings.ShowDialog("Настройки сетки"))
+                    {
+                        this.Source.GridSettings = gridSettings.GetResult();
+                    }
+                    break;
             }
+            this.OnDrawCalling?.Invoke();
         }
 
         public ICommand OpenSettings { get; set; }
@@ -164,6 +172,7 @@ namespace Incas.Objects.ViewModels
                 {
                     case ControlType.Text:
                     case ControlType.Table:
+                    case ControlType.Grid:
                         return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -176,6 +185,10 @@ namespace Incas.Objects.ViewModels
                 return;
             }
             if (this.Type is ControlType.Table && vc.Type is not ControlType.Button)
+            {
+                return;
+            }
+            if (this.Type is ControlType.FieldFiller && vc.Type is not ControlType.Button)
             {
                 return;
             }

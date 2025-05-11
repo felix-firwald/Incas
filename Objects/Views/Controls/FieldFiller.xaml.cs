@@ -577,15 +577,6 @@ namespace Incas.Objects.Views.Controls
             this.CheckForScriptOnUpdate();
         }
 
-        private void CopyFromIncasClipboard(object sender, RoutedEventArgs e)
-        {
-            string value = DialogsManager.ShowClipboardManager(true);
-            if (!string.IsNullOrEmpty(value))
-            {
-                this.SetValue(value);
-            }
-        }
-
         private void ObjectCopyRequestClick(object sender, RoutedEventArgs e)
         {
             this.OnDatabaseObjectCopyRequested?.Invoke(this);

@@ -57,7 +57,9 @@ namespace Incas.Objects.AutoUI
 
         public override void Save()
         {
-            
+            this.source.MinHeight = this.MinHeight;
+            this.source.Height = this.Height;
+            this.source.MaxHeight = this.MaxHeight;
         }
         public ViewControl.ViewControlTableSettings GetResult()
         {

@@ -140,7 +140,9 @@ namespace Incas.Objects.Components
                     }
                     return;
                 case ControlType.Table:
-                    this.AddChild(currentParent, fillers[vc.Table]);
+                    FieldTableFiller filler = (FieldTableFiller)fillers[vc.Table];
+                    filler.ApplySettings(vc.TableSettings);
+                    this.AddChild(currentParent, filler);
                     if (vc.Children is not null)
                     {
                         foreach (ViewControl control in vc.Children)
@@ -176,7 +178,13 @@ namespace Incas.Objects.Components
                     element = new WrapPanel();
                     break;
                 case ControlType.Grid:
-                    element = new UniformGrid();
+                    UniformGrid ug = new();
+                    if (vc.GridSettings is not null)
+                    {
+                        ug.Rows = vc.GridSettings.RowsCount;
+                        ug.Columns = vc.GridSettings.ColumnsCount;
+                    }                    
+                    element = ug;
                     break;
                 case ControlType.Tab:
                     element = new TabControl() { Style = ResourceStyleManager.FindStyle("TabControlMain") };

@@ -170,7 +170,7 @@ namespace Incas.DialogSimpleForm.Components
             Control control = new();
             Label label = new()
             {
-                Content = description + ":",
+                Content = field.VisibleName + ":",
                 FontSize = 11,
                 Style = this.Container.FindResource("LabelPrimary") as Style
             };

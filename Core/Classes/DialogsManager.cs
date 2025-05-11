@@ -284,12 +284,7 @@ namespace Incas.Core.Classes
                 d.ShowDialog();
             });
         }
-        public static string ShowClipboardManager(bool autoclose = false)
-        {
-            Miniservices.Clipboard.Views.Windows.Clipboard c = new(autoclose);
-            c.ShowDialog();
-            return c.SelectedText;
-        }
+
         public static void ShowTasksManager()
         {
             //Taskboard t = new();
