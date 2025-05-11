@@ -15,7 +15,7 @@ namespace Incas.Objects.ServiceClasses.Users.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class PasswordChanger : AutoUIBase
+    public class PasswordChanger : StaticAutoUIBase
     {
         private List<string> unprotectedSequences = [
             "1234",

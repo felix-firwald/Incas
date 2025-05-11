@@ -12,7 +12,7 @@ namespace Incas.Rendering.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class ParseSettings : AutoUIBase
+    public class ParseSettings : StaticAutoUIBase
     {
         #region Data
         [Description("Паттерн")]

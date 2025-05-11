@@ -11,7 +11,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class TextColumnSettings : AutoUIBase
+    public class TextColumnSettings : StaticAutoUIBase
     {
         #region Data
         private TableFieldColumnData Source;

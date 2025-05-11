@@ -163,6 +163,9 @@ namespace Incas.Objects.Components
                         this.PlaceButton(vc, currentParent);
                     }                   
                     return;
+                case ControlType.Splitter:
+                    this.MakeRectangle(currentParent);
+                    return;
                 case ControlType.Text:
                     this.MakeText(currentParent, vc.TextSettings);
                     return;
@@ -194,6 +197,29 @@ namespace Incas.Objects.Components
                 }
             }
         }
+
+        private void MakeRectangle(FrameworkElement currentParent)
+        {
+            Rectangle rect = new()
+            {
+                Fill = new SolidColorBrush(Color.FromRgb(67, 70, 80)),
+                Margin = new Thickness(5)
+            };
+            if (currentParent is StackPanel)
+            {
+                rect.Height = 1;
+            }
+            else if (currentParent is WrapPanel)
+            {
+                rect.Width = 1;
+            }
+            else
+            {
+                return;
+            }
+            this.AddChild(currentParent, rect);
+        }
+
         private void PlaceButton(ViewControl vc, FrameworkElement currentParent)
         {           
             this.AddChild(currentParent, this.MakeButton(vc));

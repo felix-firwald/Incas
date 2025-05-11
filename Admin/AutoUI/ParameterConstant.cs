@@ -8,7 +8,7 @@ namespace Incas.Admin.AutoUI
     /// <summary>
     /// Логика взаимодействия для WorkspaceManager.xaml
     /// </summary>
-    public class ParameterConstant : AutoUIBase
+    public class ParameterConstant : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Сохранить константу"; }
         private bool isEdit = false;

@@ -10,7 +10,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class TemplateSelection : AutoUIBase
+    public class TemplateSelection : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Начать рендеринг"; }
         #region Data

@@ -13,7 +13,7 @@ namespace Incas.Objects.Documents.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class PropertyConstantSettings : AutoUIBase
+    public class PropertyConstantSettings : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Сохранить значение"; set => base.FinishButtonText = value; }
         #region Data

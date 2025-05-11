@@ -12,7 +12,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class TableCopyingToColumn : AutoUIBase
+    public class TableCopyingToColumn : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Скопировать"; }
         #region Data

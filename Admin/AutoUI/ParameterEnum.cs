@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace Incas.Admin.AutoUI
 {
-    public class ParameterEnum : AutoUIBase
+    public class ParameterEnum : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Сохранить перечисление"; }
 

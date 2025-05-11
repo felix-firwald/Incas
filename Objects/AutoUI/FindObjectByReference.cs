@@ -17,7 +17,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class FindObjectByReference : AutoUIBase
+    public class FindObjectByReference : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Найти объект"; }
         #region Data

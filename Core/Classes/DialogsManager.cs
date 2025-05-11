@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Views.Windows;
+using Incas.DialogSimpleForm.Views.Windows;
 using Incas.Help.Components;
 using Incas.Help.Windows;
 using Incas.Objects.Processes.Views.Pages;
@@ -28,6 +29,13 @@ namespace Incas.Core.Classes
             IncasEngine.Core.EngineEvents.OnTableViewerRequested += EngineEvents_OnTableViewerRequested;
             IncasEngine.Core.EngineEvents.OnClipboardGetTextRequested += EngineEvents_OnClipboardGetTextRequested;
             IncasEngine.Core.EngineEvents.OnClipboardSetTextRequested += EngineEvents_OnClipboardSetTextRequested;
+            IncasEngine.Core.EngineEvents.OnDynamicAutoUIFormRequested += EngineEvents_OnDynamicAutoUIFormRequested;
+        }
+
+        private static bool EngineEvents_OnDynamicAutoUIFormRequested(IncasEngine.AdditionalFunctionality.DynamicAutoUIForm request)
+        {
+            DialogSimpleForm.Views.Windows.DialogSimpleForm form = new(request);
+            return (bool)form.ShowDialog();
         }
 
         private static void EngineEvents_OnClipboardSetTextRequested(string text)

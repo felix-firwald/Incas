@@ -1,5 +1,6 @@
 ﻿using Incas.Core.Classes;
 using Incas.DialogSimpleForm.Components;
+using IncasEngine.AdditionalFunctionality;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -18,15 +19,31 @@ namespace Incas.DialogSimpleForm.Views.Windows
         /// <summary>
         /// Target object
         /// </summary>
-        public AutoUIBase Result;
+        public StaticAutoUIBase Result;
+
+        /// <summary>
+        /// Target object
+        /// </summary>
+        public DynamicAutoUIForm DynamicResult;
+
+        public enum DSFMode
+        {
+            Static,
+            Dynamic
+        }
+        /// <summary>
+        /// Mode is how to get-set data, without changes for drawing system
+        /// </summary>
+        private DSFMode Mode;
         /// <summary>
         /// Base InitializeComponent method for constructors
         /// </summary>
         /// <param name="values"></param>
         /// <param name="title"></param>
-        private void Initialize(AutoUIBase values, string title)
+        private void Initialize(StaticAutoUIBase values, string title)
         {
             this.InitializeComponent();
+            this.Mode = DSFMode.Static;
             this.SimpleForm = new(values, this.Fields);
             this.Result = values;
             this.FinishText.Content = values.GetFinishButtonText();
@@ -34,12 +51,23 @@ namespace Incas.DialogSimpleForm.Views.Windows
             this.Title = title;
             DialogsManager.ShowWaitCursor(false);
         }
+        private void Initialize(DynamicAutoUIForm form)
+        {
+            this.InitializeComponent();
+            this.Mode = DSFMode.Dynamic;
+            this.SimpleForm = new(form, this.Fields);
+            this.DynamicResult = form;
+            this.FinishText.Content = form.FinishButtonText;
+            this.No.Content = form.CancelButtonText;
+            this.Title = form.Name;
+            DialogsManager.ShowWaitCursor(false);
+        }
         /// <summary>
         /// Initialize Window with the default icon and color
         /// </summary>
         /// <param name="values"></param>
         /// <param name="title"></param>
-        public DialogSimpleForm(AutoUIBase values, string title)
+        public DialogSimpleForm(StaticAutoUIBase values, string title)
         {
             this.Initialize(values, title);
         }
@@ -49,7 +77,7 @@ namespace Incas.DialogSimpleForm.Views.Windows
         /// <param name="values"></param>
         /// <param name="title"></param>
         /// <param name="pathIcon"></param>
-        public DialogSimpleForm(AutoUIBase values, string title, Icon pathIcon)
+        public DialogSimpleForm(StaticAutoUIBase values, string title, Icon pathIcon)
         {
             this.Initialize(values, title);
             this.PathIcon.Data = Geometry.Parse(IconsManager.GetIconByName(pathIcon));
@@ -61,20 +89,36 @@ namespace Incas.DialogSimpleForm.Views.Windows
         /// <param name="title"></param>
         /// <param name="pathIcon"></param>
         /// <param name="color"></param>
-        public DialogSimpleForm(AutoUIBase values, string title, Icon pathIcon, IconColor color)
+        public DialogSimpleForm(StaticAutoUIBase values, string title, Icon pathIcon, IconColor color)
         {
             this.Initialize(values, title);
             this.PathIcon.Data = Geometry.Parse(IconsManager.GetIconByName(pathIcon));
             this.PathIcon.Fill = ColorManager.GetColor(color);
         }
+        public DialogSimpleForm(DynamicAutoUIForm form)
+        {
+            this.Initialize(form);
+        }
 
         private void FinishClick(object sender, RoutedEventArgs e)
         {
-            if (this.SimpleForm.Save())
+            switch (this.Mode)
             {
-                this.DialogResult = true;
-                this.Close();
-            }
+                case DSFMode.Static:
+                    if (this.SimpleForm.Save())
+                    {
+                        this.DialogResult = true;
+                        this.Close();
+                    }
+                    break;
+                case DSFMode.Dynamic:
+                    if (this.SimpleForm.SaveDynamic())
+                    {
+                        this.DialogResult = true;
+                        this.Close();
+                    }
+                    break;
+            }           
         }
 
         private void CancelClick(object sender, RoutedEventArgs e)

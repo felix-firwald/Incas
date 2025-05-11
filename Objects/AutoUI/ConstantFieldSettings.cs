@@ -10,7 +10,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class ConstantFieldSettings : AutoUIBase
+    public class ConstantFieldSettings : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Применить настройки"; }
         #region Data

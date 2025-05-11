@@ -13,7 +13,7 @@ namespace Incas.Rendering.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class ExcelImporterSettings : AutoUIBase
+    public class ExcelImporterSettings : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Начать анализ"; set => base.FinishButtonText = value; }
         private const string columnField = "Поле";

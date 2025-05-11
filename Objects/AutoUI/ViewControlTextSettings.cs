@@ -16,7 +16,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class ViewControlTextSettings : AutoUIBase
+    public class ViewControlTextSettings : StaticAutoUIBase
     {
         #region Data
         private ViewControl.ViewControlTextSettings result;

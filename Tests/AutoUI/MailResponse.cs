@@ -14,7 +14,7 @@ namespace Incas.Tests.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class MailResponse : AutoUIBase
+    public class MailResponse : StaticAutoUIBase
     {
         protected override string FinishButtonText => "Отправить письмо";
         #region Data

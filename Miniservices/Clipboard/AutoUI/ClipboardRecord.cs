@@ -10,7 +10,7 @@ namespace Incas.Miniservices.Clipboard.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class ClipboardRecord : AutoUIBase
+    public class ClipboardRecord : StaticAutoUIBase
     {
         #region Data
         private ClipboardRecordOld old = new();

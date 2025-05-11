@@ -13,7 +13,7 @@ namespace Incas.Objects.Processes.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class DocumentSelectorAutoUI : AutoUIBase
+    public class DocumentSelectorAutoUI : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Добавить документ"; }
         #region Data

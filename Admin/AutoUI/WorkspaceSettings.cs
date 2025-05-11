@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace Incas.Admin.AutoUI
 {
-    public class WorkspaceSettings : AutoUIBase
+    public class WorkspaceSettings : StaticAutoUIBase
     {
         private WorkspaceDefinition data;
         [Description("Имя рабочего пространства")]

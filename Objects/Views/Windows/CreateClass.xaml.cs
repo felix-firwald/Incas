@@ -448,6 +448,7 @@ namespace Incas.Objects.Views.Windows
         private void RemoveSelectedElementFromForm(object sender, RoutedEventArgs e)
         {
             this.vm.SelectedViewControl?.RemoveFromParent();
+            this.vm.UpdateAddControlToRootVisibility();
         }
 
         private void MoveUpElementInForm(object sender, RoutedEventArgs e)
@@ -561,6 +562,15 @@ namespace Incas.Objects.Views.Windows
                 return;
             }
             ViewControlViewModel result = new(new() { Type = ControlType.Text, Name = "Текст" });
+            this.vm.SelectedViewControl.AddChild(result);
+        }
+        private void AddSplitterToFormClick(object sender, RoutedEventArgs e)
+        {
+            if (this.vm.SelectedViewControl is null)
+            {
+                return;
+            }
+            ViewControlViewModel result = new(new() { Type = ControlType.Splitter, Name = "Разделитель" });
             this.vm.SelectedViewControl.AddChild(result);
         }
         private void CloseProgrammatically()

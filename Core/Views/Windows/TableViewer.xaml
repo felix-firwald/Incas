@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows"
         mc:Ignorable="d"
-        Title="TableViewer" Height="650" Width="800" Style="{StaticResource WindowBase}" WindowStartupLocation="CenterScreen" Background="{StaticResource Black}">
+        Title="TableViewer" Height="650" Width="800" Style="{StaticResource WindowBase}" Topmost="True" WindowStartupLocation="CenterScreen" Background="{StaticResource Black}">
     <Grid>
         <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" EnableColumnVirtualization="True" EnableRowVirtualization="True" RowHeight="30" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="true" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1" >
             <DataGrid.RowStyle>

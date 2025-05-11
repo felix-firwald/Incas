@@ -15,7 +15,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class ClassTypeSettings : AutoUIBase
+    public class ClassTypeSettings : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Далее"; }
         protected override string CancelButtonText { get => "Отменить создание класса"; }

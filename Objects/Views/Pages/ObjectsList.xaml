@@ -3,10 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Incas.Objects.Views.Pages" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:local="clr-namespace:Incas.Objects.Views.Pages" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:converters="clr-namespace:Incas.Core.Converters"
              mc:Ignorable="d" Background="{StaticResource Dark}"
              d:DesignHeight="550" d:DesignWidth="800" >
-
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:BooleanToExpandIconConverter x:Key="BooleanToExpandIconConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" MinHeight="40"/>
@@ -84,8 +88,8 @@
                 </Button>
             </WrapPanel>
         </Border>
-        
-        <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" EnableColumnVirtualization="True" EnableRowVirtualization="True" RowHeight="30" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="true" SelectionChanged="Data_SelectionChanged" PreviewKeyDown="Data_PreviewKeyDown" LoadingRow="Data_LoadingRow" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1" >
+
+        <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" EnableColumnVirtualization="True" EnableRowVirtualization="True" RowHeight="30" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="true" VirtualizingPanel.IsVirtualizingWhenGrouping="True" SelectionChanged="Data_SelectionChanged" PreviewKeyDown="Data_PreviewKeyDown" LoadingRow="Data_LoadingRow" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="1" >
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RowMain}">
                     <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"/>
@@ -99,6 +103,48 @@
                     </Setter>-->
                 </Style>
             </DataGrid.RowStyle>
+            <!--<DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="False" >
+                                            <Expander.HeaderTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Path x:Name="ExpandIndicator" Fill="{StaticResource Icon}"
+                                                           Data="{Binding RelativeSource={RelativeSource AncestorType=Expander}, 
+                                                                      Path=IsExpanded, 
+                                                                      Converter={StaticResource BooleanToExpandIconConverter}}"
+                                                           Width="16" Height="16" Margin="0,0,5,0"/>
+                                                        <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=Expander}, Path=Header}"
+                                                            VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Expander}, Path=IsMouseOver}" Value="True">
+                                                            <Setter TargetName="ExpandIndicator" Property="Opacity" Value="0.8"/>
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </Expander.HeaderTemplate>
+                                            <Expander.Header>
+                                                <DockPanel>
+                                                    <TextBlock FontWeight="Bold" MinHeight="30" VerticalAlignment="Center" Foreground="{StaticResource DarkYellow}" Text="{Binding Path=Name}" />
+                                                </DockPanel>
+                                            </Expander.Header>
+                                            <Expander.Content>
+                                                <ItemsPresenter />
+                                            </Expander.Content>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>-->
         </DataGrid>
 
         <StackPanel x:Name="RightPanel" Grid.Row="1" Grid.Column="1">

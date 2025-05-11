@@ -278,13 +278,6 @@ namespace Incas.Objects.Views.Pages
             }
         }
 
-        private void Box_OnTerminateRequested()
-        {
-            this.StatusBorder.IsEnabled = false;
-            this.EditIcon.Visibility = Visibility.Collapsed;
-            Processor.SetObjectAsTerminated(this.Class, (ITerminable)Processor.GetObject(this.Class, this.id));
-        }
-
         private void Of_OnFilterRequested(FieldData data)
         {
             this.OnFilterRequested?.Invoke(data);

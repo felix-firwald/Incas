@@ -12,7 +12,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class GlobalEnumerationColumnSettings : AutoUIBase
+    public class GlobalEnumerationColumnSettings : StaticAutoUIBase
     {
         #region Data
         private TableFieldColumnData Source;

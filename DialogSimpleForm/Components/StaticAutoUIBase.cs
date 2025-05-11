@@ -3,7 +3,7 @@ using Incas.DialogSimpleForm.Views.Windows;
 
 namespace Incas.DialogSimpleForm.Components
 {
-    public abstract class AutoUIBase
+    public abstract class StaticAutoUIBase
     {
         private const string DefaultFinishButtonText = "Сохранить";
         private const string DefaultCancelButtonText = "Отменить";

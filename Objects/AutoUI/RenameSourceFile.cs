@@ -10,7 +10,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class RenameSourceFile : AutoUIBase
+    public class RenameSourceFile : StaticAutoUIBase
     {
         #region Data
         private string result { get; set; }

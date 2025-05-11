@@ -11,7 +11,7 @@ namespace Incas.Core.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    internal class CreateWorkspace : AutoUIBase, IWorkspaceCreationData
+    internal class CreateWorkspace : StaticAutoUIBase, IWorkspaceCreationData
     {
         #region Data     
         [Description("Наименование рабочего пространства")]

@@ -12,7 +12,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class ClassSelector : AutoUIBase
+    public class ClassSelector : StaticAutoUIBase
     {
         #region Data
         [Description("Выбор класса")]

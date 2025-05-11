@@ -9,7 +9,7 @@ namespace Incas.Core.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    internal class SetPassword : AutoUIBase
+    internal class SetPassword : StaticAutoUIBase
     {
         #region Data
         [Description("Пароль для входа")]

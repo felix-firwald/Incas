@@ -13,7 +13,7 @@ namespace Incas.Server.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class TestSignal : AutoUIBase
+    public class TestSignal : StaticAutoUIBase
     {
         #region Data
         [Description("IP адрес")]

@@ -2,6 +2,7 @@
 using Incas.Core.ViewModels;
 using Incas.Core.Views.Windows;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Views.Windows;
 using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.ObjectiveEngine.Common.FunctionalityUtils.CustomForms;
 using System;
@@ -43,10 +44,17 @@ namespace Incas.Objects.ViewModels
             switch (this.Type)
             {
                 case ControlType.Text:
-                    ViewControlTextSettings ts = new(this.Source.TextSettings);
-                    if (ts.ShowDialog("Настройки текста"))
+                    ViewControlTextSettings textSettings = new(this.Source.TextSettings);
+                    if (textSettings.ShowDialog("Настройки текста"))
                     {
-                        this.Source.TextSettings = ts.GetResult();
+                        this.Source.TextSettings = textSettings.GetResult();
+                    }
+                    break;
+                case ControlType.Table:
+                    ViewControlTableSettings tabSettings = new(this.Source.TableSettings);
+                    if (tabSettings.ShowDialog("Настройки таблицы"))
+                    {
+                        this.Source.TableSettings = tabSettings.GetResult();
                     }
                     break;
             }
@@ -155,6 +163,7 @@ namespace Incas.Objects.ViewModels
                 switch (this.Type)
                 {
                     case ControlType.Text:
+                    case ControlType.Table:
                         return Visibility.Visible;
                 }
                 return Visibility.Collapsed;

@@ -10,7 +10,7 @@ namespace Incas.Core.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    internal class DefineExistingWorkspace : AutoUIBase
+    internal class DefineExistingWorkspace : StaticAutoUIBase
     {
         #region Data
         [Description("Имя в списке")]

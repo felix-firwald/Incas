@@ -14,7 +14,7 @@ namespace Incas.Objects.AutoUI
     /// Метод Load вызывается перед генерацией формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class DataSearch : AutoUIBase
+    public class DataSearch : StaticAutoUIBase
     {
         protected override string FinishButtonText { get => "Найти"; }
         #region Data

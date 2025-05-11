@@ -31,7 +31,7 @@
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="1*"/>

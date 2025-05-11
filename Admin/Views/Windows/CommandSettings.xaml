@@ -13,7 +13,7 @@
             <conv:IEColorToBrushConverter x:Key="IEColorToBrushConverter"/>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="1*"/>

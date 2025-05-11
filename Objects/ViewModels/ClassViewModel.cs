@@ -347,9 +347,44 @@ namespace Incas.Objects.ViewModels
             {
                 this.SourceData.PreferPage = value;
                 this.OnPropertyChanged(nameof(this.PreferPage));
+                this.OnPropertyChanged(nameof(this.PreviewerWidth));
+                this.OnPropertyChanged(nameof(this.EditorToolbarVisibility));
+                this.OnPropertyChanged(nameof(this.PageToolbarVisibility));
             }
         }
-
+        public int PreviewerWidth
+        {
+            get
+            {
+                if (this.PreferPage)
+                {
+                    return 1400;
+                }
+                return 600;
+            }
+        }
+        public Visibility EditorToolbarVisibility
+        {
+            get
+            {
+                if (this.PreferPage)
+                {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
+        public Visibility PageToolbarVisibility
+        {
+            get
+            {
+                if (!this.PreferPage)
+                {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
         private ObservableCollection<WorkspaceComponent> components;
         public ObservableCollection<WorkspaceComponent> AvailableComponents
         {
@@ -616,6 +651,10 @@ namespace Incas.Objects.ViewModels
             {
                 return this.ViewControls.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
             }
+        }
+        public void UpdateAddControlToRootVisibility()
+        {
+            this.OnPropertyChanged(nameof(this.AddControlToRootVisibility));
         }
         public ViewControlViewModel FindParent(ViewControlViewModel vc)
         {

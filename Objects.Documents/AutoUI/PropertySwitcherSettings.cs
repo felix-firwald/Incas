@@ -19,7 +19,7 @@ namespace Incas.Objects.Documents.AutoUI
     /// Метод Validate вызывается перед сохранением формы.
     /// Метод Save вызывается после применения изменений на форме.
     /// </summary>
-    public class PropertySwitcherSettings : AutoUIBase
+    public class PropertySwitcherSettings : StaticAutoUIBase
     {
         #region Data
         private TemplateProperty property { get; set; }

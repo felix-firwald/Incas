@@ -178,14 +178,14 @@ namespace Incas.Objects.Views.Pages
             if (this.sourceClass.Type == ClassType.Model)
             {
                 this.View = dt.AsDataView();
-                CollectionViewSource source = new();
-                source.Source = dt.DefaultView;
-                source.GroupDescriptions.Add(new PropertyGroupDescription("Группа"));
+                //CollectionViewSource source = new();
+                //source.Source = dt.DefaultView;
+                //source.GroupDescriptions.Add(new PropertyGroupDescription("Группа"));
                 this.View.Sort = $"[{Helpers.NameField}] ASC";
                 this.Dispatcher.Invoke(() =>
                 {
                     this.Data.Columns.Clear();
-                    this.Data.ItemsSource = source.View;
+                    this.Data.ItemsSource = this.View;
                 });                   
             }
             else

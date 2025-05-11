@@ -4,6 +4,7 @@ using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using Incas.DialogSimpleForm.Attributes;
 using Incas.DialogSimpleForm.Views.Controls;
+using IncasEngine.AdditionalFunctionality;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,18 +24,33 @@ namespace Incas.DialogSimpleForm.Components
         /// Container where the generated controls will be placed
         /// </summary>
         public StackPanel Container;
+
         /// <summary>
         /// Target object
         /// </summary>
-        public AutoUIBase Result;
+        public StaticAutoUIBase Result;
+
+        /// <summary>
+        /// Target object
+        /// </summary>
+        public DynamicAutoUIForm DynamicResult;
 
         private ResourceStyleManager resourceInstance = new();
-        public SimpleFormGenerator(AutoUIBase values, StackPanel container)
+        public SimpleFormGenerator(StaticAutoUIBase values, StackPanel container)
         {
             this.Result = values;
             this.SafetyCallMethod("Load");
             this.Container = container;
             foreach (PropertyInfo field in values.GetType().GetProperties())
+            {
+                this.AddField(field);
+            }
+        }
+        public SimpleFormGenerator(DynamicAutoUIForm form, StackPanel container)
+        {
+            this.DynamicResult = form;
+            this.Container = container;
+            foreach (DynamicAutoUIMember field in form.GetAllMembers())
             {
                 this.AddField(field);
             }
@@ -138,6 +154,60 @@ namespace Incas.DialogSimpleForm.Components
             }
             control.Uid = field.Name;
             if (field.SetMethod is null || field.SetMethod.IsPrivate)
+            {
+                control.IsEnabled = false;
+            }
+            this.Container.Children.Add(control);
+        }
+
+        /// <summary>
+        /// Gets a dynamic member and turns it into a control
+        /// </summary>
+        /// <param name="field"></param>
+        private void AddField(DynamicAutoUIMember field)
+        {
+            string description = field.Description;
+            Control control = new();
+            Label label = new()
+            {
+                Content = description + ":",
+                FontSize = 11,
+                Style = this.Container.FindResource("LabelPrimary") as Style
+            };
+            switch (field.Type)
+            {
+                case DynamicAutoUIMemberType.String:
+                    control = this.GenerateTextBox(description, (string)this.DynamicResult[field], 120);
+                    this.Container.Children.Add(label);
+                    break;
+                case DynamicAutoUIMemberType.Text:
+                    control = this.GenerateTextBox(description, (string)this.DynamicResult[field], 1200);
+                    this.Container.Children.Add(label);
+                    break;
+                case DynamicAutoUIMemberType.Int:
+                    control = this.GenerateNumericBox(description, (int)this.DynamicResult[field]);
+                    this.Container.Children.Add(label);
+                    break;
+                case DynamicAutoUIMemberType.Bool:
+                    control = this.GenerateCheckBox(description, (bool)this.DynamicResult[field]);
+                    break;
+                case DynamicAutoUIMemberType.DateTime:
+                    control = this.GenerateDateBox(description, (DateTime)this.DynamicResult[field]);
+                    this.Container.Children.Add(label);
+                    break;
+                //case "DataTable":
+                //    control = this.GenerateDataGrid(description, (DataTable)this.DynamicResult[field]);
+                //    this.Container.Children.Add(label);
+                //    break;
+                case DynamicAutoUIMemberType.Enumeration:
+                    control = this.GenerateComboBox(description, (Selector)this.DynamicResult[field]);
+                    this.Container.Children.Add(label);
+                    break;
+                default:
+                    return;
+            }
+            control.Uid = field.Name;
+            if (field.IsReadOnly)
             {
                 control.IsEnabled = false;
             }
@@ -468,6 +538,68 @@ namespace Incas.DialogSimpleForm.Components
                 return false;
             }
             this.SafetyCallMethod("Save");
+            return true;
+        }
+        public bool SaveDynamic()
+        {
+            try
+            {
+                foreach (DynamicAutoUIMember field in this.DynamicResult.GetAllMembers())
+                {
+                    foreach (Control control in this.Container.Children)
+                    {
+                        string descript = field.VisibleName;
+                        if (control.Uid == field.Name)
+                        {
+                            switch (field.Type)
+                            {
+                                case DynamicAutoUIMemberType.String:
+                                case DynamicAutoUIMemberType.Text:
+                                    string resultString = "";
+                                    resultString = ((TextBox)control).Text;
+                                    if (string.IsNullOrEmpty(resultString) && field.IsCanBeNull == false)
+                                    {
+                                        DialogsManager.ShowExclamationDialog($"Поле \"{descript}\" не заполнено!", "Сохранение прервано");
+                                        return false;
+                                    }
+                                    if (!field.IsReadOnly)
+                                    {
+                                        this.DynamicResult[field.Name] = resultString;
+                                    }
+                                    break;
+                                case DynamicAutoUIMemberType.Int:
+                                    this.DynamicResult[field.Name] = ((IntegerUpDown)control).Value;
+                                    break;
+                                case DynamicAutoUIMemberType.Bool:
+                                    this.DynamicResult[field.Name] = (bool)((CheckBox)control).IsChecked;
+                                    break;
+                                case DynamicAutoUIMemberType.DateTime:
+                                    this.DynamicResult[field.Name] = ((DatePicker)control).SelectedDate;
+                                    break;
+                                //case "DataTable":
+                                //    field.SetValue(this.Result, ((DataGridWithButtons)control).DataTable);
+                                //    break;
+                                case DynamicAutoUIMemberType.Enumeration:
+                                    if (((ComboBox)control).SelectedValue is null)
+                                    {
+                                        DialogsManager.ShowExclamationDialog("Одно из полей не заполнено.", "Сохранение прервано");
+                                        return false;
+                                    }
+                                    ((Selector)this.DynamicResult[field.Name]).SetSelectionByIndex(((ComboBox)control).SelectedIndex);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowExclamationDialog(ex.InnerException.Message, "Сохранение прервано");
+                return false;
+            }
             return true;
         }
     }
