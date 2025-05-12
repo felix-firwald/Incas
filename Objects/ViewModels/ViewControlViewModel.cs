@@ -64,6 +64,13 @@ namespace Incas.Objects.ViewModels
                         this.Source.GridSettings = gridSettings.GetResult();
                     }
                     break;
+                case ControlType.FieldFiller:
+                    ViewControlFieldSettings fieldSettings = new(this.Source);
+                    if (fieldSettings.ShowDialog("Настройки сетки"))
+                    {
+                        this.Source.TextHidden = fieldSettings.HiddenText;
+                    }
+                    break;
             }
             this.OnDrawCalling?.Invoke();
         }
@@ -173,6 +180,7 @@ namespace Incas.Objects.ViewModels
                     case ControlType.Text:
                     case ControlType.Table:
                     case ControlType.Grid:
+                    case ControlType.FieldFiller:
                         return Visibility.Visible;
                 }
                 return Visibility.Collapsed;

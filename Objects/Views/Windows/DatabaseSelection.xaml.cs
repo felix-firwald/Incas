@@ -87,8 +87,11 @@ namespace Incas.Objects.Views.Windows
         }
         private void EngineEvents_OnUpdateClassRequested()
         {
-            ClassUpdatedMessage message = new();
-            this.SetOtherContent(message);
+            this.Dispatcher.Invoke(() =>
+            {
+                ClassUpdatedMessage message = new();
+                this.SetOtherContent(message);
+            });
         }
         private void ShowDisabledComponentMessage()
         {

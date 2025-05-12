@@ -207,10 +207,7 @@ namespace Incas.Objects.Views.Controls
                 this.Grid.Children.Add(control);
                 if (withoutLabel)
                 {
-                    Grid.SetRow(control, 0);
-                    Grid.SetColumn(control, 0);
-                    Grid.SetRowSpan(control, 1);
-                    this.MainLabel.Visibility = Visibility.Collapsed;
+                    this.HideLabel();
                 }
                 else
                 {
@@ -218,6 +215,13 @@ namespace Incas.Objects.Views.Controls
                     Grid.SetColumn(control, 1);
                 }                
             });            
+        }
+        public void HideLabel()
+        {
+            Grid.SetRow(control, 0);
+            Grid.SetColumn(control, 0);
+            Grid.SetRowSpan(control, 1);
+            this.MainLabel.Visibility = Visibility.Collapsed;
         }
 
         private void MakeButton()

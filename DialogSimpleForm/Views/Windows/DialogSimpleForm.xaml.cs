@@ -118,7 +118,7 @@ namespace Incas.DialogSimpleForm.Views.Windows
                         this.Close();
                     }
                     break;
-            }           
+            }
         }
 
         private void CancelClick(object sender, RoutedEventArgs e)

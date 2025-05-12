@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -200,7 +201,9 @@ namespace Incas.DialogSimpleForm.Components
                 //    this.Container.Children.Add(label);
                 //    break;
                 case DynamicAutoUIMemberType.Enumeration:
-                    control = this.GenerateComboBox(description, (Selector)this.DynamicResult[field]);
+                    Selector s = new(field.Values);
+                    s.SetSelection(this.DynamicResult[field]);
+                    control = this.GenerateComboBox(description, s);
                     this.Container.Children.Add(label);
                     break;
                 default:
@@ -288,10 +291,6 @@ namespace Incas.DialogSimpleForm.Components
         }
         private Control GenerateComboBox(string description, Selector selector)
         {
-            //if (selector.SelectedValue is not null)
-            //{
-            //    DialogsManager.ShowInfoDialog(selector.SelectedValue);
-            //}
             if (selector is null)
             {
                 DialogsManager.ShowExclamationDialog("При отрисовке combobox возникла ошибка: selector был null", "Ошибка отрисовки");
@@ -304,7 +303,6 @@ namespace Incas.DialogSimpleForm.Components
                 SelectedValue = selector.SelectedValue,
                 Style = this.Container.FindResource("ComboBoxMain") as Style
             };
-            //DialogsManager.ShowInfoDialog(selector.SelectedObject);
             control.SelectionChanged += this.ComboBox_SelectionChanged;
             return control;
         }
@@ -585,7 +583,8 @@ namespace Incas.DialogSimpleForm.Components
                                         DialogsManager.ShowExclamationDialog("Одно из полей не заполнено.", "Сохранение прервано");
                                         return false;
                                     }
-                                    ((Selector)this.DynamicResult[field.Name]).SetSelectionByIndex(((ComboBox)control).SelectedIndex);
+                                    int index = ((ComboBox)control).SelectedIndex;
+                                    this.DynamicResult[field.Name] = field.Values.Keys.ToList()[index];
                                     break;
                                 default:
                                     break;

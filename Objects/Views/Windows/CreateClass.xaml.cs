@@ -98,18 +98,22 @@ namespace Incas.Objects.Views.Windows
             {
                 foreach (Field f in g.Data.Fields)
                 {
+                    f.TargetGeneralizator = g.Id;
                     this.vm.AddField(f);
                 }
                 foreach (Method f in g.Data.Methods)
                 {
+                    f.TargetGeneralizator = g.Id;
                     this.vm.AddMethod(f);
                 }
                 foreach (Method f in g.Data.StaticMethods)
                 {
+                    f.TargetGeneralizator = g.Id;
                     this.vm.AddStaticMethod(f);
                 }
                 foreach (Table f in g.Data.Tables)
                 {
+                    f.TargetGeneralizator = g.Id;
                     this.vm.AddTable(f);
                 }
             }

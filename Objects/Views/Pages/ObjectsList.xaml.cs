@@ -89,12 +89,15 @@ namespace Incas.Objects.Views.Pages
 
         private void EngineEvents_OnUpdateClassRequested()
         {
-            ClassUpdatedMessage message = new();
-            this.MainGrid.Children.Clear();
-            this.MainGrid.Children.Add(message);
-            Grid.SetRow(message, 1);
-            Grid.SetRowSpan(message, 2);
-            Grid.SetColumn(message, 0);
+            this.Dispatcher.Invoke(() =>
+            {
+                ClassUpdatedMessage message = new();
+                this.MainGrid.Children.Clear();
+                this.MainGrid.Children.Add(message);
+                Grid.SetRow(message, 1);
+                Grid.SetRowSpan(message, 2);
+                Grid.SetColumn(message, 0);
+            });
         }
         
         private GroupClassPermissionSettings GetPermissionSettings()

@@ -36,15 +36,15 @@
                     <ContentControl Style="{StaticResource BoxWarning}" Content="Внимание! Использование этих опций запрещается лицензионным соглашением и может использоваться только специалистами по внедрению INCAS на предприятие. INCAS оставляет за собой право аннулировать лицензию в случае, если об использовании этого меню станет известно."/>
                     <UniformGrid Rows="3" Columns="3">
                         <Button Style="{StaticResource ButtonMain}" Content="Экспорт РП" ToolTip="Экспорт шаблона рабочего пространства" Click="ExportWSClick"/>
-                        <Button Style="{StaticResource ButtonMain}" Content="Экспорт компонента" ToolTip="Выбрать и экспортировать отдельный компонент" Click="ExportComponentClick"/>
-                        <Button Style="{StaticResource ButtonMain}" Content="Импорт компонента" ToolTip="Импортировать в рабочее пространство новый компонент" Click="ImportComponentClick"/>
-                        <Button Style="{StaticResource ButtonMain}" Content="Integrity проверка" ToolTip="Полная проверка классов РП на все виды ошибок. Внимание: это тяжелая операция." Click="IntegrityCheckClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Экспорт компонента" IsEnabled="False" ToolTip="Выбрать и экспортировать отдельный компонент" Click="ExportComponentClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Импорт компонента" IsEnabled="False" ToolTip="Импортировать в рабочее пространство новый компонент" Click="ImportComponentClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Integrity проверка" IsEnabled="False" ToolTip="Полная проверка классов РП на все виды ошибок. Внимание: это тяжелая операция." Click="IntegrityCheckClick"/>
                         <Button Style="{StaticResource ButtonMain}" Content="GlobalFix классов" ToolTip="Запуск функции исправления карты объектов для всех классов РП, включая служебные" Click="MassiveFixOMClick"/>
                         <Button Style="{StaticResource ButtonMain}" Content="Открыть ObjMap" ToolTip="Открывает выбранную карту объектов для класса" Click="OpenOMClick"/>
-                        <Button Style="{StaticResource ButtonMain}" Content="Миграция V1 -> V2" ToolTip="Автоматизация процесса миграции на 2.0"/>
-                        <Button Style="{StaticResource ButtonMain}" Content="См. LCInfo" ToolTip="Открыть последнее изменение в настройках РП"/>
-                        <Button Style="{StaticResource ButtonMain}" Content="SQL транзакция" ToolTip="Написать и выполнить кастомную транзакцию к service.incas"/>
-                        <Button Style="{StaticResource ButtonMain}" Content="Тестовый .dll" ToolTip="Компиляция service.incas в .dll библиотеку" Click="DLLExportClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Открыть service" ToolTip="Открыть service.incas" Click="OpenServiceClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Исправление инициализации" ToolTip="Запуск проверки инициализации служебных классов рабочего пространства" Click="CheckInitDefinitionClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="SQL транзакция" IsEnabled="False" ToolTip="Написать и выполнить кастомную транзакцию к service.incas"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Тестовый .dll" IsEnabled="False" ToolTip="Компиляция service.incas в .dll библиотеку" Click="DLLExportClick"/>
                     </UniformGrid>
                 </StackPanel>
             </Border>

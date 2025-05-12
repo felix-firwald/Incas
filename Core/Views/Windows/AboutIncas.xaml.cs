@@ -3,7 +3,9 @@ using Incas.Objects.AutoUI;
 using IncasEngine.Core;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Models;
+using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Components;
 using IncasEngine.RuntimeCompilation;
+using IncasEngine.Workspace;
 using IncasEngine.Workspace.WorkspaceTemplates;
 using System;
 using System.Collections.Generic;
@@ -113,6 +115,46 @@ namespace Incas.Core.Views.Windows
             //    fa.CompileWorkspace(path);
             //    DialogsManager.ShowWaitCursor(false);
             //}           
+        }
+
+        private void CheckInitDefinitionClick(object sender, RoutedEventArgs e)
+        {
+            WorkspaceDefinition def = ProgramState.CurrentWorkspace.GetDefinition(true);
+            string text = $"Было обнаружено, что в определении рабочего пространства отсутствует следующий обязательный служебный класс: ";
+            int errors = 0;
+            if (def.ServiceBackgroundActions is null)
+            {
+                DialogsManager.ShowExclamationDialog(text + "ServiceBackgroundActions");
+                def.ServiceBackgroundActions = InitializationManager.InitializeBackgroundActionsClass();
+                errors++;
+            }
+            if (def.ServiceStorage is null)
+            {
+                DialogsManager.ShowExclamationDialog(text + "ServiceStorage");
+                def.ServiceStorage = InitializationManager.InitializeStorageClass();
+                errors++;
+            }
+            if (def.ServiceTasks is null)
+            {
+                DialogsManager.ShowExclamationDialog(text + "ServiceTasks");
+                def.ServiceTasks = InitializationManager.InitializeTasksClass();
+                errors++;
+            }
+            if (errors > 0)
+            {
+                ProgramState.CurrentWorkspace.UpdateDefinition(def);
+                DialogsManager.ShowInfoDialog("Ошибки исправлены. Окно можно закрыть.", "Результат проверки");
+            }
+            else
+            {
+                DialogsManager.ShowInfoDialog("Ошибок обнаружено не было. Окно можно закрыть.", "Результат проверки");
+            }
+        }
+
+        private void OpenServiceClick(object sender, RoutedEventArgs e)
+        {
+            string path = ProgramState.CurrentWorkspace.ServiceDatabasePath;
+            Process.Start("explorer.exe", string.Format("/select,\"{0}\"", path));
         }
     }
 }

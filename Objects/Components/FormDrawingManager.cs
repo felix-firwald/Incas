@@ -130,7 +130,12 @@ namespace Incas.Objects.Components
             switch (vc.Type)
             {
                 case ControlType.FieldFiller:
-                    this.AddChild(currentParent, fillers[vc.Field]);
+                    FieldFiller filler = (FieldFiller)fillers[vc.Field];
+                    if (vc.TextHidden)
+                    {
+                        filler.HideLabel();
+                    }
+                    this.AddChild(currentParent, filler);
                     if (vc.Children is not null)
                     {
                         foreach (ViewControl control in vc.Children)
@@ -140,14 +145,14 @@ namespace Incas.Objects.Components
                     }
                     return;
                 case ControlType.Table:
-                    FieldTableFiller filler = (FieldTableFiller)fillers[vc.Table];
-                    filler.ApplySettings(vc.TableSettings);
-                    this.AddChild(currentParent, filler);
+                    FieldTableFiller tablefiller = (FieldTableFiller)fillers[vc.Table];
+                    tablefiller.ApplySettings(vc.TableSettings);
+                    this.AddChild(currentParent, tablefiller);
                     if (vc.Children is not null)
                     {
                         foreach (ViewControl control in vc.Children)
                         {
-                            this.DrawControl(control, fillers[vc.Table], fillers);
+                            this.DrawControl(control, tablefiller, fillers);
                         }
                     }
                     return;
