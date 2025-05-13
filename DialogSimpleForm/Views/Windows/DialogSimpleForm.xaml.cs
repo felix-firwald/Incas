@@ -4,6 +4,7 @@ using IncasEngine.AdditionalFunctionality;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Windows.Storage;
 
 namespace Incas.DialogSimpleForm.Views.Windows
 {
@@ -98,6 +99,8 @@ namespace Incas.DialogSimpleForm.Views.Windows
         public DialogSimpleForm(DynamicAutoUIForm form)
         {
             this.Initialize(form);
+            this.PathIcon.Fill = ColorManager.GetColor(IconColor.Yellow);
+            this.PathIcon.Data = Geometry.Parse(IconsManager.GetIconByName(Core.Classes.Icon.Lightning));
         }
 
         private void FinishClick(object sender, RoutedEventArgs e)

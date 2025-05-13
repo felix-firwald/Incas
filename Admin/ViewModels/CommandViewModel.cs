@@ -70,6 +70,30 @@ namespace Incas.Admin.ViewModels
                 this.Source.Script = value;
             }
         }
+        public bool IsHidden
+        {
+            get
+            {
+                return this.Source.Hidden;
+            }
+            set
+            {
+                this.Source.Hidden = value;
+                this.OnPropertyChanged(nameof(this.IsHidden));
+            }
+        }
+        public bool AutoRun
+        {
+            get
+            {
+                return this.Source.AutoRun;
+            }
+            set
+            {
+                this.Source.AutoRun = value;
+                this.OnPropertyChanged(nameof(this.AutoRun));
+            }
+        }
         public IncasEngine.Core.Color Color
         {
             get

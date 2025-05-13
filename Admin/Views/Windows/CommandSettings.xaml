@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Admin.Views.Windows" xmlns:conv="clr-namespace:Incas.Core.Converters"
         mc:Ignorable="d"
-        Title="Настройки команд" Height="450" Width="800"
+        Title="Настройки команд" Height="500" Width="800"
         Style="{StaticResource WindowBase}" WindowStartupLocation="CenterScreen" Background="{StaticResource Black}">
     <Window.Resources>
         <ResourceDictionary>
@@ -79,6 +79,8 @@
                     <Label Grid.Column="2" Grid.Row="1" Content="{Binding SelectedCommand.ColorG}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource Buttons.Green}"  />
                     <Label Grid.Column="2" Grid.Row="2" Content="{Binding SelectedCommand.ColorB}" HorizontalAlignment="Center" FontFamily="{StaticResource JetBrains}" Foreground="{StaticResource PrimaryMain}" />
                 </Grid>
+                <CheckBox Content="Вызывать автоматически при входе" IsChecked="{Binding SelectedCommand.AutoRun}"/>
+                <CheckBox Content="Скрытый" IsChecked="{Binding SelectedCommand.IsHidden}"/>
                 <TextBlock HorizontalAlignment="Center" Margin="10">
                     <Hyperlink Click="OpenScriptClick" >Открыть скрипт</Hyperlink>
                 </TextBlock>

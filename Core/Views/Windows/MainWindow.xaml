@@ -231,7 +231,7 @@
                             <Label Content="Найти" FontFamily="{StaticResource Rubik}" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>
                         </StackPanel>
                     </Button>
-                    <ListBox Background="{x:Null}" BorderThickness="0" BorderBrush="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemsSource="{Binding Commands}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}">
+                    <ListBox Background="{x:Null}" BorderThickness="0" BorderBrush="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemsSource="{Binding Commands}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}" >
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Horizontal"/>
@@ -239,7 +239,7 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Button Style="{StaticResource ButtonRectangle}" HorizontalContentAlignment="Stretch" ToolTip="{Binding Description}" Command="{Binding UserCommand}">
+                                <Button Style="{StaticResource ButtonRectangle}" Visibility="{Binding ButtonVisibility}" HorizontalContentAlignment="Stretch" ToolTip="{Binding Description}" Command="{Binding UserCommand}">
                                     <StackPanel Orientation="Horizontal">
                                         <Path Fill="{Binding Color,Converter={StaticResource CommandTypeToColorConverter}}" MaxHeight="15" Stretch="Uniform" Data="{Binding Icon,Converter={StaticResource CommandTypeToIconConverter}}" VerticalAlignment="Center"/>
                                         <Label Content="{Binding Name}" FontFamily="{StaticResource Rubik}" FontSize="12" VerticalAlignment="Center" Padding="5,0,5,0" Foreground="White"/>

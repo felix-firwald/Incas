@@ -77,6 +77,21 @@ namespace Incas.Objects.ViewModels
                 return this.Source.TargetGeneralizator == Guid.Empty;
             }
         }
+        public bool AutoSave
+        {
+            get
+            {
+                return this.Source.AutoSave;
+            }
+            set
+            {
+                if (this.Source.AutoSave != value)
+                {
+                    this.Source.AutoSave = value;
+                    this.OnPropertyChanged(nameof(this.AutoSave));
+                }               
+            }
+        }
         private int fontSize = 12;
         public int FontSize
         {

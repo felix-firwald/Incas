@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Incas.Core.ViewModels
@@ -25,6 +26,10 @@ namespace Incas.Core.ViewModels
         {
             this.Source = source;
             this.UserCommand = new Command(this.DoUserCommand);
+            if (source.AutoRun)
+            {
+                this.DoUserCommand(0);
+            }
         }
 
         private void DoUserCommand(object obj)
@@ -46,6 +51,13 @@ namespace Incas.Core.ViewModels
             get
             {
                 return this.Source.Icon;
+            }
+        }
+        public Visibility ButtonVisibility
+        {
+            get
+            {
+                return this.FromBool(!this.Source.Hidden);
             }
         }
 

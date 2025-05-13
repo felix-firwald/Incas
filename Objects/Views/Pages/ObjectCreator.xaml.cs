@@ -171,6 +171,10 @@ namespace Incas.Objects.Views.Pages
             IObject obj = this.PullObjectForScript();
             CodeOutputArgs output = obj.RunMethod(method);
             this.ApplyObject(obj, output.StateUpdated);
+            if (method.AutoSave)
+            {
+                this.OnSaveRequested?.Invoke(this);
+            }
             DialogsManager.ShowWaitCursor(false);
         }
         private void ButtonWithMethodClicked(object sender, RoutedEventArgs e)
@@ -346,16 +350,19 @@ namespace Incas.Objects.Views.Pages
             {
                 this.Object = this.serviceFiller.GetResult();
             }
+            this.ObjectName.Text = this.ClassData.NameTemplate;
             foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
             {
+                string value = tf.Value.GetData();
                 FieldData data = new()
                 {
                     ClassField = tf.Key,
-                    Value = tf.Value.GetData()
+                    Value = value
                 };
+                this.ObjectName.Text.Replace("[" + tf.Key.Name + "]", value);
                 this.Object.Fields.Add(data);
             }
-            this.ObjectName.Text = this.UpdateName();
+            //this.ObjectName.Text = this.UpdateName();
             if (this.Object.Tables is not null)
             {
                 this.Object.Tables.Clear();
@@ -462,28 +469,6 @@ namespace Incas.Objects.Views.Pages
                 DialogsManager.ShowErrorDialog($"При рендеринге документа возникла неизвестная ошибка: {e.Message}.");
                 return "";
             }
-        }
-        private string UpdateName()
-        {
-            string name = "";
-            if (this.ClassData.NameTemplate is not null)
-            {
-                name = this.ClassData.NameTemplate;
-                foreach (FieldData tf in this.Object.Fields)
-                {
-                    if (tf.Value != null)
-                    {
-                        name = name.Replace("[" + tf.ClassField.Name + "]", tf.Value.ToString());
-                    }                 
-                }
-            }
-            else
-            {
-                return this.ObjectName.Text;
-            }
-           
-            this.Object.Name = name;
-            return name;
         }
 
         private void Tf_OnInsert(Guid tag, string text)

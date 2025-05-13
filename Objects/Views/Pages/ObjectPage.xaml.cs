@@ -98,8 +98,16 @@ namespace Incas.Objects.Views.Pages
             this.PlaceButtons();
             this.PermissionSettings = ProgramState.CurrentWorkspace.CurrentGroup.GetClassPermissions(source.Id);
             this.AddObjectCreator();
-            
+            if (source.Type == IncasEngine.ObjectiveEngine.Classes.ClassType.Document)
+            {
+                this.RenderButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                this.RenderButton.Visibility = Visibility.Collapsed;
+            }
             DialogsManager.ShowWaitCursor(false);
+            this.Class.OnUpdated += this.EngineEvents_OnUpdateClassRequested;
         }
 
         private void EngineEvents_OnUpdateClassRequested()
@@ -117,14 +125,50 @@ namespace Incas.Objects.Views.Pages
             this.Creator.PermissionSettings = this.PermissionSettings;
             this.Creator.HideNCA();
             this.ContentPanel.Children.Add(this.Creator);
+            this.Creator.OnSaveRequested += this.Creator_OnSaveRequested;
             this.vm.Source = this.Creator.Object;
             return this.Creator;
         }
 
+        private Task<bool> Creator_OnSaveRequested(ObjectCreator creator)
+        {
+            return this.Save();
+        }
+
+        public async Task<bool> Save()
+        {
+            try
+            {
+                IObject obj = this.Creator.PullObject();
+                await Processor.WriteObjects(this.Class, obj);
+                this.vm.SetUpdated();
+                return true;
+            }
+            catch (FieldDataFailed fdf)
+            {
+                DialogsManager.ShowExclamationDialog(fdf.Message, "Сохранение прервано");
+                return false;
+            }
+            catch (NotNullFailed nnex)
+            {
+                DialogsManager.ShowExclamationDialog(nnex.Message, "Сохранение прервано");
+                return false;
+            }
+            catch (AuthorFailed af)
+            {
+                DialogsManager.ShowAccessErrorDialog(af.Message);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+                return false;
+            }
+        }
+
         private async void CreateObjectsClick(object sender, RoutedEventArgs e)
         {
-            await Processor.WriteObjects(this.Class, this.Creator.PullObject());
-            this.vm.SetUpdated();
+            await this.Save();
         }
 
         private void PlaceButtons()
