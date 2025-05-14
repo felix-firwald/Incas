@@ -338,6 +338,7 @@
     <PackageReference Include="System.Data.SQLite" Version="1.0.119.0" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119.0" />
     <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.119.0" />
+    <PackageReference Include="unvell.ReoGridWPF.dll" Version="3.2.0" />
     <PackageReference Include="XLParser" Version="1.5.2" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="System.IO.Packaging" Version="8.0.1" />

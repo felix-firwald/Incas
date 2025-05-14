@@ -350,7 +350,7 @@ namespace Incas.Objects.Views.Pages
             {
                 this.Object = this.serviceFiller.GetResult();
             }
-            this.ObjectName.Text = this.ClassData.NameTemplate;
+            this.Object.Name = this.ClassData.NameTemplate;
             foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
             {
                 string value = tf.Value.GetData();
@@ -359,10 +359,19 @@ namespace Incas.Objects.Views.Pages
                     ClassField = tf.Key,
                     Value = value
                 };
-                this.ObjectName.Text.Replace("[" + tf.Key.Name + "]", value);
+                if (tf.Key.Type == FieldType.Object)
+                {
+                    string replacement = ((FieldFiller)tf.Value).GetValue();
+                    this.Object.Name = this.Object.Name.Replace("[" + tf.Key.Name + "]", replacement);
+                }
+                else
+                {
+                    this.Object.Name = this.Object.Name.Replace("[" + tf.Key.Name + "]", value);
+                }
+                
                 this.Object.Fields.Add(data);
             }
-            //this.ObjectName.Text = this.UpdateName();
+            this.ObjectName.Text = this.Object.Name;
             if (this.Object.Tables is not null)
             {
                 this.Object.Tables.Clear();

@@ -23,6 +23,7 @@ namespace Incas.Objects.Documents.ViewModels
         public TemplateViewModel(ClassViewModel cvm, Template field)
         {
             this.Source = field;
+            this.Source.SetId();
             this.ClassViewModel = cvm;
             this.Properties = new();
             if (field.Properties is not null)

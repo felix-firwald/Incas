@@ -6,37 +6,36 @@
         xmlns:local="clr-namespace:Incas.Tests" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="CheckerWindow" Height="450" Width="800" Style="{StaticResource WindowBase}" Background="{StaticResource Black}" WindowStartupLocation="CenterScreen">
-    <ScrollViewer>
-        <UniformGrid Margin="12" Columns="2">
+    <Grid x:Name="MainGrid">
+        <ScrollViewer>
+            <UniformGrid Margin="12" Columns="2">
 
-            <Label Style="{StaticResource LabelElement}" Content="Calendar" VerticalAlignment="Center"/>
-            <Calendar Style="{StaticResource CalendarMain}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle}" CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" />
-            <Label Style="{StaticResource LabelElement}" Content="DatePicker standart" VerticalAlignment="Center"/>
-            <DatePicker Style="{StaticResource DatePickerMain}" />
-            
-            
-            
-            
+                <Label Style="{StaticResource LabelElement}" Content="Calendar" VerticalAlignment="Center"/>
+                <Calendar Style="{StaticResource CalendarMain}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle}" CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" />
+                <Label Style="{StaticResource LabelElement}" Content="DatePicker standart" VerticalAlignment="Center"/>
+                <DatePicker Style="{StaticResource DatePickerMain}" />
 
-            <Label Style="{StaticResource LabelElement}" Content="Integer TextBox - не сделан" VerticalAlignment="Center"/>
-            <xctk:IntegerUpDown Style="{StaticResource NumericUpDown}" Watermark="123">
-            </xctk:IntegerUpDown>
-            <Label Style="{StaticResource LabelElement}" Content="Single TextBox - не сделан" VerticalAlignment="Center"/>
-            <xctk:SingleUpDown Style="{StaticResource NumericUpDown}"/>
+                <Label Style="{StaticResource LabelElement}" Content="Integer TextBox - не сделан" VerticalAlignment="Center"/>
+                <xctk:IntegerUpDown Style="{StaticResource NumericUpDown}" Watermark="123">
+                </xctk:IntegerUpDown>
+                <Label Style="{StaticResource LabelElement}" Content="Single TextBox - не сделан" VerticalAlignment="Center"/>
+                <xctk:SingleUpDown Style="{StaticResource NumericUpDown}"/>
 
-            <Label Style="{StaticResource LabelElement}" Content="Decimal TextBox - не сделан" VerticalAlignment="Center"/>
-            <xctk:DecimalUpDown Style="{StaticResource NumericUpDown}" Increment=".01"/>
-            <Label Style="{StaticResource LabelElement}" Content="Masked TextBox" VerticalAlignment="Center"/>
-            <xctk:MaskedTextBox Mask="0 (000) 000-00-00" Text="5553535"/>
-            <!--<xctk:ButtonSpinner SpinnerUpContentTemplate="{DynamicResource ButtonSpinnerSpinnerUpContentTemplate}" Content="Привет" Style="{StaticResource RepeatButtonTextBox}"/>-->
-            <Label Style="{StaticResource LabelElement}" Content="Watermark TextBox - не сделан" VerticalAlignment="Center"/>
-            <xctk:WatermarkTextBox Watermark="sdf" Text=""/>
-            <Label Style="{StaticResource LabelElement}" Content="DatePicker - не сделан" VerticalAlignment="Center"/>
-            <xctk:DateTimePicker />
-            <Label Style="{StaticResource LabelElement}" Content="DropDownButton - не сделан" VerticalAlignment="Center"/>
-            <xctk:DropDownButton />
-            <Label Style="{StaticResource LabelElement}" Content="TextBox" VerticalAlignment="Center"/>
-            <TextBox Style="{StaticResource TextBoxMain}"/>
-        </UniformGrid>
-    </ScrollViewer>
+                <Label Style="{StaticResource LabelElement}" Content="Decimal TextBox - не сделан" VerticalAlignment="Center"/>
+                <xctk:DecimalUpDown Style="{StaticResource NumericUpDown}" Increment=".01"/>
+                <Label Style="{StaticResource LabelElement}" Content="Masked TextBox" VerticalAlignment="Center"/>
+                <xctk:MaskedTextBox Mask="0 (000) 000-00-00" Text="5553535"/>
+                <!--<xctk:ButtonSpinner SpinnerUpContentTemplate="{DynamicResource ButtonSpinnerSpinnerUpContentTemplate}" Content="Привет" Style="{StaticResource RepeatButtonTextBox}"/>-->
+                <Label Style="{StaticResource LabelElement}" Content="Watermark TextBox - не сделан" VerticalAlignment="Center"/>
+                <xctk:WatermarkTextBox Watermark="sdf" Text=""/>
+                <Label Style="{StaticResource LabelElement}" Content="DatePicker - не сделан" VerticalAlignment="Center"/>
+                <xctk:DateTimePicker />
+                <Label Style="{StaticResource LabelElement}" Content="DropDownButton - не сделан" VerticalAlignment="Center"/>
+                <xctk:DropDownButton />
+                <Label Style="{StaticResource LabelElement}" Content="TextBox" VerticalAlignment="Center"/>
+                <TextBox Style="{StaticResource TextBoxMain}"/>
+            </UniformGrid>
+        </ScrollViewer>
+    </Grid>
+    
 </Window>

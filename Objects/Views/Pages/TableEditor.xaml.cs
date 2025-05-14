@@ -43,7 +43,7 @@ namespace Incas.Objects.Views.Pages
         {
             Field field = new();
             field.SetId();
-            field.Name = $"Колонка_{this.vm.Fields.Count+1}";
+            field.Name = $"";
             this.vm.AddField(field);
         }
         private void MinimizeAllClick(object sender, RoutedEventArgs e)

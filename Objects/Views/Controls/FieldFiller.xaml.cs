@@ -1,4 +1,5 @@
 ﻿using Incas.Core.Classes;
+using Incas.Core.Extensions;
 using Incas.Core.Views.Controls;
 using Incas.DialogSimpleForm.Components;
 using Incas.Objects.Components;
@@ -22,6 +23,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Windows.ApplicationModel.Background;
+using Windows.Media.Protection.PlayReady;
 using Xceed.Wpf.Toolkit;
 using static Incas.Objects.Interfaces.IFillerBase;
 using static IncasEngine.ObjectiveEngine.Models.State;
@@ -137,13 +139,15 @@ namespace Incas.Objects.Views.Controls
                     numeric.Style = ResourceStyleManager.FindStyle(ResourceStyleManager.IntegerUpDownStyle);
                     numeric.ToolTip = description;
                     numeric.ValueChanged += this.Numeric_ValueChanged;
-                    numeric.Minimum = this.Field.GetNumberFieldData().MinValue;
-                    numeric.Maximum = this.Field.GetNumberFieldData().GetMaxValue();
-                    int integerValue = 0;
-                    if (int.TryParse(value, out integerValue))
+                    NumberFieldData intData = this.Field.GetNumberFieldData();
+                    if (intData is null)
                     {
-                        numeric.Value = integerValue;
-                    }                   
+                        this.PlaceUIControl(this.GenerateErrorLabel());
+                        return;
+                    }
+                    numeric.Minimum = intData.MinValue;
+                    numeric.Value = intData.DefaultValue;
+                    numeric.Maximum = intData.GetMaxValue();                 
                     this.PlaceUIControl(numeric);
                     break;
                 case FieldType.Float:
@@ -151,15 +155,17 @@ namespace Incas.Objects.Views.Controls
                     numericFloat.Style = ResourceStyleManager.FindStyle(ResourceStyleManager.IntegerUpDownStyle);
                     numericFloat.ToolTip = description;
                     numericFloat.ValueChanged += this.Numeric_ValueChanged;
-                    numericFloat.Minimum = this.Field.GetNumberFieldData().MinValue;
-                    numericFloat.Maximum = this.Field.GetNumberFieldData().GetMaxValue();
-                    numericFloat.Increment = 0.100;
-                    numericFloat.FormatString = "C2";
-                    double doubleValue = 0;
-                    if (double.TryParse(value, out doubleValue))
+                    NumberFieldData floatData = this.Field.GetNumberFieldData();
+                    if (floatData is null)
                     {
-                        numericFloat.Value = doubleValue;
+                        this.PlaceUIControl(this.GenerateErrorLabel());
+                        return;
                     }
+                    numericFloat.Minimum = floatData.MinValue;
+                    numericFloat.Value = floatData.DefaultValue;
+                    numericFloat.Maximum = floatData.GetMaxValue();
+                    numericFloat.Increment = 0.100;
+                    numericFloat.FormatString = floatData.GetFormat();
                     this.PlaceUIControl(numericFloat);
                     break;
                 case FieldType.Object:
@@ -197,6 +203,14 @@ namespace Incas.Objects.Views.Controls
                     this.PlaceUIControl(checkBox, true);
                     break;
             }
+        }
+        private Label GenerateErrorLabel()
+        {
+            Label l = new();
+            l.Content = "<поле класса не настроено>";
+            l.FontFamily = ResourceStyleManager.FindFontFamily(ResourceStyleManager.FontRubik);
+            l.Foreground = (new IncasEngine.Core.Color() { R = 255, G = 120, B = 120 }).AsBrush();
+            return l;
         }
         private void PlaceUIControl(Control control, bool withoutLabel = false)
         {

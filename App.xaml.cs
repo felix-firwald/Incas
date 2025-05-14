@@ -47,7 +47,7 @@ namespace Incas
                 splashScreen.Close(new(1000));
             }
 #if DEBUG
-            //this.RunTest();
+            this.RunTest();
 #endif
             ProgramState.CheckoutWorkspaces();
 
@@ -59,8 +59,9 @@ namespace Incas
         }
         private void RunTest()
         {
-            CheckerWindow cw = new();
-            cw.ShowDialog();
+            //throw new NullReferenceException("Obj is not defined!");
+            //CheckerWindow cw = new(new Checker());
+            //cw.ShowDialog();
         }
 
         private void FastEnter(string[] args)
@@ -78,15 +79,13 @@ namespace Incas
                 this.criticalErrorOccured = true;
                 if (e.Exception is LicenseShutdownException)
                 {
-                    this.Shutdown();
+                    this.Shutdown(); 
                 }
                 else
                 {
                     ProgramState.OpenWebPage(FormError + "?version=" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + "&description=" + e.Exception.Message);
                     StatisticsManager.SaveStatistics();
-                    DialogsManager.ShowCriticalErrorDialog($"Возникла ошибка, не позволяющая INCAS продолжать свою работу.\n" +
-                        $"Описание: {e.Exception.Message}\nПриложение будет немедленно закрыто.");
-                    BackupProcessor.WriteBackup(e.Exception);
+                    DialogsManager.ShowCriticalErrorDialog(e.Exception);                    
                     this.Shutdown();
                 }               
             }           

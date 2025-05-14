@@ -300,13 +300,13 @@ namespace Incas.Core.Classes
                 d.ShowDialog();
             });
         }
-        public static void ShowCriticalErrorDialog(string message)
+        public static void ShowCriticalErrorDialog(Exception except)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 ProgramState.PlaySound("UI-Exclamation");
                 ShowWaitCursor(false);
-                CriticalError d = new(message);
+                CriticalError d = new(except);
                 d.ShowDialog();
             });
         }

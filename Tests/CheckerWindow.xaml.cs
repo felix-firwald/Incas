@@ -21,7 +21,13 @@ namespace Incas.Tests
     {
         public CheckerWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+        }
+        public CheckerWindow(Control c)
+        {
+            this.InitializeComponent();
+            this.MainGrid.Children.Clear();
+            this.MainGrid.Children.Add(c);
         }
     }
 }

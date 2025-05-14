@@ -73,7 +73,6 @@ namespace Incas.Core.Classes
 #endif
             if (Edition != EngineGlobals.Edition)
             {
-                DialogsManager.ShowCriticalErrorDialog("Редакция IncasEngine не совпадает с редакцией Incas. Запуск программы невозможен.");
                 throw new Exception("IncasEngine edition is incompatible with the Incas edition! The program is compromised.");
             }
             IncasEngine.Core.EngineEvents.OnUpdateAllRequested += EngineEvents_OnUpdateAllRequested;

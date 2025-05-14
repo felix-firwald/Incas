@@ -3,36 +3,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Incas.Tests" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:local="clr-namespace:Incas.Tests" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:reogrid="clr-namespace:unvell.ReoGrid;assembly=unvell.ReoGrid"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="600">
-    <Grid >
-        <StackPanel>
-            <CheckBox Style="{StaticResource Toggle}" Content="Привет пока привет пока привет пока привет пока привет пока привет пока привет" 
-                      IsChecked="False" HorizontalAlignment="Center"/>
-            <ContentControl Style="{StaticResource BoxWarning}">
-                <TextBlock Text="Этот элемент содержит предупреждения"/>
-            </ContentControl>
-            <ContentControl Style="{StaticResource BoxError}">
-                <TextBlock Text="Этот элемент содержит информацию об ошибке или иную критерически важную информацию"/>
-            </ContentControl>
-            <ContentControl Style="{StaticResource BoxInfo}">
-                <TextBlock Text="Этот элемент содержит полезную информацию"/>
-            </ContentControl>
-            <!--<Button Style="{StaticResource ButtonMainFinish}" Content="Да"/>
-            <Border Margin="5" CornerRadius="8" MinHeight="30" Background="#BF34C924">
-                <Label Content="Проверка слизней" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#1A6512"/>
-            </Border>
-            <Border Margin="5" CornerRadius="8" MinHeight="30" Background="#4C34C924">
-                <Label Content="Проверка слизней" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#1A6512"/>
-            </Border>
-            <Border Margin="5" CornerRadius="8" MinHeight="30" Background="#3334C924">
-                <Label Content="Проверка слизней" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource Success}"/>
-            </Border>-->
-            <xctk:MaskedTextBox x:Name="_maskedTextBox"
-                             Mask="(000) 000-0000"
-                              />
-        </StackPanel>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="_New" Click="File_New_Click" />
+                <MenuItem Header="_Open..." Click="File_Open_Click" />
+                <MenuItem Header="_Save..." Click="File_Save_Click" />
+                <Separator />
+                <MenuItem Header="_Exit" Click="File_Exit_Click" />
+            </MenuItem>
+            <!--<MenuItem Header="Внешний вид">
+                <MenuItem x:Name="viewSheetTabVisible" IsCheckable="true" IsChecked="true" Header="Sheet Tab" Click="View_SheetTab_Click"/>
+                <MenuItem x:Name="viewSheetTabNewButtonVisible" IsCheckable="true" IsChecked="true" Header="Sheet Tab New Button" Click="View_SheetTabNewButton_Click"/>
+                <MenuItem x:Name="viewGuideLineVisible" IsCheckable="true" IsChecked="true" Header="Grid Line" Click="View_GuideLine_Click"/>
+                <MenuItem x:Name="viewHorizontalScrollbarVisible" IsCheckable="true" IsChecked="true" Header="Horizontal Scrollbar" Click="View_HorizontalScrollbar_Click"/>
+                <MenuItem x:Name="viewVerticalScrollbarVisible" IsCheckable="true" IsChecked="true" Header="Vertical Scrollbar" Click="View_VerticalScrollbar_Click"/>
+                <MenuItem x:Name="viewPageBreaksVisible" IsCheckable="true" IsChecked="true" Header="Print Page Breakes" Click="View_PageBreaks_Click"/>
+            </MenuItem>-->
+            <MenuItem Header="Этот лист">
+                <MenuItem x:Name="freezeToCell" Header="Freeze To Cell" Click="freezeToCell_Click"/>
+                <MenuItem x:Name="append100Rows" Header="Append 100 Rows" Click="Sheet_Append_100_Rows_Click"/>
 
-    </Grid>
+            </MenuItem>
+
+        </Menu>
+
+        <Border x:Name="border" Background="{DynamicResource Black}" BorderBrush="Black" Padding="8">
+
+            <reogrid:ReoGridControl x:Name="grid" >
+            </reogrid:ReoGridControl>
+
+        </Border>
+
+    </DockPanel>
 </UserControl>

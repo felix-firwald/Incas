@@ -123,6 +123,10 @@ namespace Incas.Objects.ViewModels
                     NumberFieldSettings n = new(this.Source);
                     n.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
                     break;
+                case FieldType.Float:
+                    FloatFieldSettings nf = new(this.Source);
+                    nf.ShowDialog(name, Icon.Sliders, DialogSimpleForm.Components.IconColor.Yellow);
+                    break;
                 case FieldType.Object:
                     BindingData db = new();
                     DialogBinding dialog = new(this.Owner, this.Source);

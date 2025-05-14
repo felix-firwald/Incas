@@ -22,7 +22,37 @@ namespace Incas.Tests
     {
         public Checker()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+        }
+
+        private void File_New_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void File_Open_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void File_Save_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void File_Exit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void freezeToCell_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Sheet_Append_100_Rows_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

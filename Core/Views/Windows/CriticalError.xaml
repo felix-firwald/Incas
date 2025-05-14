@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Incas.Core.Views.Windows"
         mc:Ignorable="d"
-        Title="Критическая ошибка" MinWidth="450" Width="450" MinHeight="250" Height="500" Style="{StaticResource WindowBase}" ResizeMode="NoResize"  Topmost="True" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height" >
+        Title="Критическая ошибка" MinWidth="450" Width="450" MinHeight="250" Height="500" Background="{StaticResource Black}" Style="{StaticResource WindowBaseCritical}" ResizeMode="NoResize"  Topmost="True" WindowStartupLocation="CenterScreen" AllowsTransparency="True" SizeToContent="Height" >
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
             <BeginStoryboard>
@@ -31,7 +31,10 @@
         <Label x:Name="TitleText" Content="Возникла критическая ошибка" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource Light}" FontWeight="Bold" FontFamily="{StaticResource JetBrains}" Grid.Row="2"/>
 
         <ScrollViewer Grid.Row="3" Margin="8" MaxHeight="400" >
-            <TextBlock x:Name="Description" TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" FontFamily="{StaticResource JetBrains}" Text="По умолчанию, такой текст обозначает критическую неисправность в работе программы." Margin="5,0,10,10" Foreground="{DynamicResource Light}"/>
+            <TextBlock TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" FontFamily="{StaticResource JetBrains}" Margin="5,0,10,10" Foreground="{DynamicResource Light}">
+                <Run x:Name="Description">По умолчанию, такой текст обозначает критическую неисправность в работе программы.</Run>
+                <Hyperlink Style="{StaticResource HyperlinkRed}" Click="OpenLogClick">Открыть файл логов</Hyperlink>
+            </TextBlock>
         </ScrollViewer>
     </Grid>
 </Window>
