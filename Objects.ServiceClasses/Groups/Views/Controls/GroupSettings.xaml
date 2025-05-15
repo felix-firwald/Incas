@@ -140,6 +140,18 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Вызов методов" MaxWidth="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGridUsual}" IsChecked="{Binding RunMethods, Mode=TwoWay}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <CheckBox Style="{StaticResource CheckBoxDataGrid}" IsChecked="{Binding RunMethods, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Удаление объектов" MaxWidth="80">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

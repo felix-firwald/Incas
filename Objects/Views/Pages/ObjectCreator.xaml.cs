@@ -167,15 +167,26 @@ namespace Incas.Objects.Views.Pages
         }
         public void ApplyMethod(Method method)
         {
-            DialogsManager.ShowWaitCursor();
-            IObject obj = this.PullObjectForScript();
-            CodeOutputArgs output = obj.RunMethod(method);
-            this.ApplyObject(obj, output.StateUpdated);
-            if (method.AutoSave)
+            try
             {
-                this.OnSaveRequested?.Invoke(this);
+                DialogsManager.ShowWaitCursor();
+                IObject obj = this.PullObjectForScript();
+                CodeOutputArgs output = obj.RunMethod(method);
+                this.ApplyObject(obj, output.StateUpdated);
+                if (method.AutoSave)
+                {
+                    this.OnSaveRequested?.Invoke(this);
+                }
+                DialogsManager.ShowWaitCursor(false);
+            }            
+            catch (AccessException)
+            {
+                DialogsManager.ShowAccessErrorDialog("У вас нет доступа на вызов методов этого класса.");
             }
-            DialogsManager.ShowWaitCursor(false);
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+            }
         }
         private void ButtonWithMethodClicked(object sender, RoutedEventArgs e)
         {           
@@ -202,7 +213,7 @@ namespace Incas.Objects.Views.Pages
                         foreach (KeyValuePair<Table, FieldTableFiller> filler in this.tables)
                         {
                             filler.Value.ApplyState(state);
-                        }
+                        }                       
                         foreach (KeyValuePair<Button, Method> button in this.buttons)
                         {
                             try
@@ -215,7 +226,7 @@ namespace Incas.Objects.Views.Pages
                             {
 
                             }
-                        }
+                        }                        
                         return;
                     }
                 }

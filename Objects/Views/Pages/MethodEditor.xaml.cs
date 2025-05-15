@@ -1,12 +1,13 @@
 ﻿using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using Incas.Admin.ViewModels;
 using Incas.Core.Views.Windows;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
+using Incas.Scripting.AutoUI;
 using IncasEngine.Scripting;
-using Microsoft.Scripting.Utils;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -74,7 +75,7 @@ namespace Incas.Objects.Views.Pages
                 thisRule.Color = thisColor;
                 ruleSet.Rules.Add(thisRule);
             }
-            
+
             this.Code.SyntaxHighlighting = highlightingDefinition;
         }
 
@@ -112,7 +113,7 @@ namespace Incas.Objects.Views.Pages
                         else
                         {
                             item1.Click += (sender, e) => this.InsertText(member.Name);
-                        }                       
+                        }
                         contextMenu.Items.Add(item1);
                     }
                     break;
@@ -195,6 +196,74 @@ namespace Incas.Objects.Views.Pages
             if (selector.IsSelected)
             {
                 this.vm.Icon = selector.SelectedIconPath;
+            }
+        }
+        private void InsertTextAtCaret(string textToInsert)
+        {
+            if (!this.Dispatcher.CheckAccess())
+            {
+                this.Dispatcher.Invoke(() => this.InsertTextAtCaret(textToInsert));
+                return;
+            }
+
+            TextArea textArea = this.Code.TextArea;
+            TextDocument document = this.Code.Document;
+            int caretOffset = textArea.Caret.Offset;
+            document.Insert(caretOffset, textToInsert);
+            textArea.Caret.Offset = caretOffset + textToInsert.Length;
+        }
+        private void ScriptHelperCreateObjectClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ScriptHelperCreateObject form = new();
+            if (form.ShowDialog("Создание объекта", Core.Classes.Icon.Magic, DialogSimpleForm.Components.IconColor.Yellow) == true)
+            {
+                this.InsertTextAtCaret(form.GetScript());
+            }
+        }
+
+        private void ScriptHelperCreateFormClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ScriptHelperCreateForm form = new();
+            if (form.ShowDialog("Создание формы DSF", Core.Classes.Icon.Magic, DialogSimpleForm.Components.IconColor.Yellow) == true)
+            {
+                this.InsertTextAtCaret(form.GetScript());
+            }
+        }
+        private void ScriptHelperCreateDialogClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ScriptHelperCreateDialog form = new();
+            if (form.ShowDialog("Создание диалога", Core.Classes.Icon.Magic, DialogSimpleForm.Components.IconColor.Yellow) == true)
+            {
+                this.InsertTextAtCaret(form.GetScript());
+            }
+        }
+
+        private void ScriptHelperCreateLoopClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
+
+        private void ScriptHelperReplaceClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ScriptHelperReplace form = new(this.Code);
+            form.ShowDialog("Создание объекта", Core.Classes.Icon.Magic, DialogSimpleForm.Components.IconColor.Yellow);
+        }
+
+        private void ScriptHelpersGetConstantClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ScriptHelperGetConstant form = new();
+            if (form.ShowDialog("Получение константы", Core.Classes.Icon.Magic, DialogSimpleForm.Components.IconColor.Yellow) == true)
+            {
+                this.InsertTextAtCaret(form.GetScript());
+            }
+        }
+
+        private void ScriptHelperCreateIfClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ScriptHelperCreateIf form = new(this.Class);
+            if (form.ShowDialog("Генерация ветвления", Core.Classes.Icon.Magic, DialogSimpleForm.Components.IconColor.Yellow) == true)
+            {
+                this.InsertTextAtCaret(form.GetScript());
             }
         }
     }

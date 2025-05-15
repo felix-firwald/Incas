@@ -7,8 +7,8 @@ using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
 using IncasEngine.ObjectiveEngine;
-using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
+using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
@@ -115,11 +115,22 @@ namespace Incas.Objects.Views.Pages
 
         private async void ButtonWithMethodClicked(object sender, RoutedEventArgs e)
         {
-            Method method = this.buttons[(Button)sender];
-            IObject obj = Processor.GetObject(this.Class, this.id);
-            CodeOutputArgs output = obj.RunMethod(method);
-            await Processor.WriteObjects(this.Class, obj);
-            this.UpdateFor(obj);
+            try
+            {
+                Method method = this.buttons[(Button)sender];
+                IObject obj = Processor.GetObject(this.Class, this.id);
+                CodeOutputArgs output = obj.RunMethod(method);
+                await Processor.WriteObjects(this.Class, obj);
+                this.UpdateFor(obj);
+            }
+            catch (AccessException)
+            {
+                DialogsManager.ShowAccessErrorDialog("У вас нет доступа на вызов методов этого класса.");
+            }
+            catch (Exception ex)
+            {
+                DialogsManager.ShowErrorDialog(ex);
+            }
         }
 
         public void SetEmpty()

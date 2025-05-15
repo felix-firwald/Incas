@@ -281,7 +281,7 @@ namespace Incas.Rendering.Components
                 ObjectReference reference = new(doc.Class.Id, doc.TargetDocument.Id);
                 d.PackageProperties.Identifier = reference.ToString();
                 d.PackageProperties.LastModifiedBy = $"{ProgramState.CurrentWorkspace.CurrentUser.Name} (через Incas)";
-                d.PackageProperties.Description = $"Этот документ создан с использованием программы Incas {ProgramState.Edition}, версия: {ProgramState.Version}.\nРазработчик программы: ";
+                d.PackageProperties.Description = $"Этот документ создан с использованием программы по автоматизации бизнес-процессов — Incas {ProgramState.Edition}, версия: {ProgramState.Version}.\nРазработчик программы: @felixfirwald";
             }
         }
         public async static Task<string> GetMetaDataIdentifier(string path)

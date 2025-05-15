@@ -540,6 +540,7 @@ namespace Incas.DialogSimpleForm.Components
         }
         public bool SaveDynamic()
         {
+            this.DynamicResult.Result = false;
             try
             {
                 foreach (DynamicAutoUIMember field in this.DynamicResult.GetAllMembers())
@@ -599,6 +600,7 @@ namespace Incas.DialogSimpleForm.Components
                 DialogsManager.ShowExclamationDialog(ex.InnerException.Message, "Сохранение прервано");
                 return false;
             }
+            this.DynamicResult.Result = true;
             return true;
         }
     }

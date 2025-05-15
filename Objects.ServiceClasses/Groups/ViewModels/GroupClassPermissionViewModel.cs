@@ -139,6 +139,18 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
                 this.OnPropertyChanged(nameof(this.ConfidentialAccess));
             }
         }
+        public bool RunMethods
+        {
+            get
+            {
+                return this.settings.RunMethods;
+            }
+            set
+            {
+                this.settings.RunMethods = value;
+                this.OnPropertyChanged(nameof(this.RunMethods));
+            }
+        }
         public GroupClassPermissionSettings GetResult()
         {
             GroupClassPermissionSettings result = new()
@@ -148,7 +160,8 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
                 ReadOperations = this.settings.ReadOperations,
                 UpdateOperations = this.settings.UpdateOperations,
                 DeleteOperations = this.settings.DeleteOperations,
-                ConfidentialAccess = this.settings.ConfidentialAccess
+                ConfidentialAccess = this.settings.ConfidentialAccess,
+                RunMethods = this.settings.RunMethods
             };
             return result;
         }
