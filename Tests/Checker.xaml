@@ -6,6 +6,11 @@
              xmlns:local="clr-namespace:Incas.Tests" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:reogrid="clr-namespace:unvell.ReoGrid;assembly=unvell.ReoGrid"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="600">
+    <UserControl.Resources>
+        <Style x:Key="gridStyle" TargetType="{x:Type reogrid:ReoGridControl}">
+            <Setter Property="Grid.ShowGridLines" Value="False"/>
+        </Style>
+    </UserControl.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Файл">
@@ -33,7 +38,7 @@
 
         <Border x:Name="border" Background="{DynamicResource Black}" BorderBrush="Black" Padding="8">
 
-            <reogrid:ReoGridControl x:Name="grid" >
+            <reogrid:ReoGridControl x:Name="grid" Style="{StaticResource gridStyle}" >
             </reogrid:ReoGridControl>
 
         </Border>

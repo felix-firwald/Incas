@@ -60,8 +60,8 @@ namespace Incas
         private void RunTest()
         {
             //throw new NullReferenceException("Obj is not defined!");
-            //CheckerWindow cw = new(new Checker());
-            //cw.ShowDialog();
+            CheckerWindow cw = new(new Checker());
+            cw.ShowDialog();
         }
 
         private void FastEnter(string[] args)

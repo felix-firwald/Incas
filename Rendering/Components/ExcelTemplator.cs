@@ -114,16 +114,20 @@ namespace Incas.Rendering.Components
                 }
                 catch { }
             }
+            double rowHeight = 15;
             if (dt.Rows.Count > 1)
             {
-                this.worksheet.Row(rowIndex).InsertRowsBelow(dt.Rows.Count - 1);
+                IXLRow firstRowInstance = this.worksheet.Row(rowIndex); // добавлена переменная
+                rowHeight = firstRowInstance.Height;
+                firstRowInstance.InsertRowsBelow(dt.Rows.Count - 1);
             }
             foreach (DataRow dr in dt.Rows)
             {
+                this.worksheet.Row(rowIndex).Height = rowHeight;
                 foreach (DataColumn dc in dt.Columns)
                 {
                     try
-                    {
+                    {                       
                         string value = dr[dc.ColumnName].ToString();
                         int currentCol = columns[dc.ColumnName].WorksheetColumn().ColumnNumber();
                         this.worksheet.Cell(rowIndex, currentCol).SetValue(value);

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using unvell.ReoGrid;
 
 namespace Incas.Tests
 {
@@ -23,6 +24,12 @@ namespace Incas.Tests
         public Checker()
         {
             this.InitializeComponent();
+            //this.grid.Load("C:\\Users\\1\\Documents\\1 потом удалить\\Карточка студента по форме 13.xlsx");
+            //this.grid.CurrentWorksheet.SetSettings(WorksheetSettings.View_ShowColumnHeader, false);
+            //this.grid.CurrentWorksheet.SetSettings(WorksheetSettings.View_ShowGridLine, false);
+            //this.grid.CurrentWorksheet.SetSettings(WorksheetSettings.View_ShowRowHeader, false);
+            //this.grid.CurrentWorksheet.CreatePrintSession();
+            
         }
 
         private void File_New_Click(object sender, RoutedEventArgs e)
