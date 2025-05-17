@@ -363,6 +363,44 @@ namespace Incas.Objects.ViewModels
                 return 600;
             }
         }
+        public bool FiltersEnabled
+        {
+            get
+            {
+                return this.SourceData.FiltersEnabled;
+            }
+            set
+            {
+                this.SourceData.FiltersEnabled = value;
+                this.OnPropertyChanged(nameof(this.FiltersEnabled));
+            }
+        }
+
+        public int FiltersColumns
+        {
+            get
+            {
+                return this.SourceData.FiltersColumns;
+            }
+            set
+            {
+                this.SourceData.FiltersColumns = value;
+                this.OnPropertyChanged(nameof(this.FiltersColumns));
+            }
+        }
+
+        public int FiltersRows
+        {
+            get
+            {
+                return this.SourceData.FiltersRows;
+            }
+            set
+            {
+                this.SourceData.FiltersRows = value;
+                this.OnPropertyChanged(nameof(this.FiltersRows));
+            }
+        }
         public Visibility EditorToolbarVisibility
         {
             get

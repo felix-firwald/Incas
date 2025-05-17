@@ -165,7 +165,8 @@ namespace Incas.Objects.Views.Controls
                             {
                                 Header = col.VisibleName,
                                 Binding = new System.Windows.Data.Binding(colHeader),
-                                EditingElementStyle = this.FindResource("TextBoxGrid") as Style,
+                                EditingElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.TextBoxGridStyle),
+                                ElementStyle = ResourceStyleManager.FindStyle(ResourceStyleManager.TextBlockWrappingStyle)
                             };
                             e.Column = dgt1;
                             break;

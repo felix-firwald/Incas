@@ -51,6 +51,8 @@ namespace Incas.Objects.Views.Controls
         public event StringAction OnInsert;  
         public event CommandScript OnScriptRequested;
         public event AutoRunMethod OnFillerUpdate;
+        public delegate void FieldUpdated(Field f);
+        public event FieldUpdated OnFieldValueUpdated;
         public event FillerUpdate OnDatabaseObjectCopyRequested;
         public FieldFiller(Field f)
         {
@@ -560,9 +562,9 @@ namespace Incas.Objects.Views.Controls
             this.MarkAsValidated();
             if (this.Field.OnUpdated != Guid.Empty)
             {
-                
                 this.OnFillerUpdate?.Invoke(this.Field.OnUpdated);
-            }            
+            }           
+            this.OnFieldValueUpdated?.Invoke(this.Field);
         }
 
         private void Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)

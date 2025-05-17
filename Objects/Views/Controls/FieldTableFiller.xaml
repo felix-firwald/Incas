@@ -47,19 +47,19 @@
                 </Button>
             </WrapPanel>
             <Border CornerRadius="8,8,0,0" MinWidth="80" HorizontalAlignment="Right" Grid.Column="1">
-                <Label Style="{StaticResource LabelElement}" FontFamily="{StaticResource Rubik}" Cursor="Hand" Content="{Binding TableName}" Foreground="{DynamicResource Light}" ToolTip="Нажать правой кнопкой мышки для дополнительных функций" ToolTipService.InitialShowDelay="160" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0">
-                    <Label.ContextMenu>
+                <Label Style="{StaticResource LabelElement}" FontFamily="{StaticResource Rubik}" Cursor="Hand" Content="{Binding TableName}" Foreground="{DynamicResource Light}" ToolTipService.InitialShowDelay="160" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,5,0">
+                    <!--<Label.ContextMenu>
                         <ContextMenu FontFamily="{StaticResource Rubik}" FontWeight="Normal">
                             <MenuItem Header="Скопировать значение в остальные редактируемые объекты" Click="InsertToOther" Tag="Значение этого поля будет скопировано в поля других объектов" />
                             <Separator Background="{DynamicResource LightBlack}"/>
                             <MenuItem Header="Вставить значение из существующего объекта" Click="ObjectCopyRequestClick"/>
                         </ContextMenu>
-                    </Label.ContextMenu>
+                    </Label.ContextMenu>-->
                 </Label>
             </Border>
         </Grid>
 
-        <DataGrid x:Name="Table" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" SelectedIndex="{Binding SelectedRow}" IsReadOnly="{Binding IsReadOnly}" CanUserDeleteRows="False" MinHeight="80" MaxHeight="400" RowHeight="30" CellEditEnding="Table_CellEditEnding" CanUserSortColumns="False" AutoGenerateColumns="True" CanUserAddRows="False" Grid.Row="1" Margin="5,5,5,5" AutoGeneratingColumn="ColumnGenerating">
+        <DataGrid x:Name="Table" Style="{DynamicResource DataGridMain}" ItemsSource="{Binding Grid, Mode=TwoWay}" SelectedIndex="{Binding SelectedRow}" IsReadOnly="{Binding IsReadOnly}" EnableColumnVirtualization="True" EnableRowVirtualization="True" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" CanUserDeleteRows="False" MinHeight="80" MaxHeight="400" MinRowHeight="30" CellEditEnding="Table_CellEditEnding" CanUserSortColumns="False" AutoGenerateColumns="True" CanUserAddRows="False" Grid.Row="1" Margin="5,5,5,5" AutoGeneratingColumn="ColumnGenerating">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource ColumnHeaderMain}">
                     <EventSetter Event="Click" Handler="ColumnHeaderClick" />

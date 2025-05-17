@@ -222,7 +222,9 @@
         <Setter Property="Background" Value="{StaticResource Icon}"/>
         <Setter Property="Foreground" Value="{StaticResource DarkLight}"/>
     </Style>
-
+    <Style x:Key="TextWrappingStyle" TargetType="{x:Type TextBlock}">
+        <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
     <Style x:Key="DataGridMain" TargetType="{x:Type DataGrid}">
         <Setter Property="Background" Value="{StaticResource Black}"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>

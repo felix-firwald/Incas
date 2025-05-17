@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Incas.DialogSimpleForm.Views.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="400">
-    <Border Background="{StaticResource Black}" BorderThickness="1" BorderBrush="{StaticResource Dark}" Margin="5" CornerRadius="8">
+    <Border Background="{StaticResource Black}" BorderThickness="1" BorderBrush="{StaticResource Dark}" Margin="5" CornerRadius="2">
         <StackPanel x:Name="ContentPanel">
             
         </StackPanel>

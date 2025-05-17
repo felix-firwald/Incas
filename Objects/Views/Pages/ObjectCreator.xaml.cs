@@ -272,6 +272,10 @@ namespace Incas.Objects.Views.Pages
 
         private void Tf_OnFieldUpdate(Guid sender)
         {
+            if (sender == Guid.Empty)
+            {
+                return;
+            }
             foreach (Method m in this.ClassData.Methods)
             {
                 if (m.Id == sender)

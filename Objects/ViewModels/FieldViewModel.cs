@@ -310,6 +310,18 @@ namespace Incas.Objects.ViewModels
                 this.OnPropertyChanged(nameof(this.IsUnique));
             }
         }
+        public bool FilterOn
+        {
+            get
+            {
+                return this.Source.FilterOn;
+            }
+            set
+            {
+                this.Source.FilterOn = value;
+                this.OnPropertyChanged(nameof(this.FilterOn));
+            }
+        }
         public bool ActionBindingEnabled
         {
             get

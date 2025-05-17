@@ -35,6 +35,7 @@ namespace Incas.Miniservices.UserStatistics
             public byte ReadingOperationsCount { get; set; }
             public byte SearchingOperationsCount { get; set; }
             public Guid DefaultSearchField { get; set; }
+            public Dictionary<Guid, object> GroupFiltersLast { get; set; }
             public DateTime LastClassInteraction { get; set; }
             public void AddClassInteractionRead()
             {
@@ -70,7 +71,7 @@ namespace Incas.Miniservices.UserStatistics
             public string Name { get; set; }
             public DateTime DateTime { get; set; }
         }
-        public List<ClassInfo> ClassesStatistics { get; set; }
+        public Dictionary<Guid, ClassInfo> Classes { get; set; }
         public List<ObjectInfo> PreviouslyObjectsWorked { get; set; }
         public DefaultMenuView DefaultMenuViewMode { get; set; }
         public delegate void ObjectsInfoUpdated();
@@ -78,79 +79,123 @@ namespace Incas.Miniservices.UserStatistics
 
         public StatisticsInfo()
         {
-            this.ClassesStatistics = new();
+            this.Classes = new();
             this.PreviouslyObjectsWorked = new();
         }
         public async void AddClassInteractionRead(IClass cl)
         {
             await Task.Run(() =>
             {
-                foreach (ClassInfo classInfo in this.ClassesStatistics)
+                if (this.Classes.ContainsKey(cl.Id))
                 {
-                    if (classInfo.Class == cl.Id)
-                    {
-                        classInfo.AddClassInteractionRead();
-                        return;
-                    }
+                    this.Classes[cl.Id].AddClassInteractionRead();
+                    return;
                 }
-                ClassInfo ci = new()
+                else
                 {
-                    Class = cl.Id
-                };
-                ci.AddClassInteractionRead();
-                this.ClassesStatistics.Add(ci);
+                    ClassInfo ci = new()
+                    {
+                        Class = cl.Id
+                    };
+                    ci.AddClassInteractionRead();
+                    this.Classes.Add(cl.Id, ci);
+                }                
             });
         }
         public async void AddClassInteractionWrite(IClass cl)
         {
             await Task.Run(() =>
             {
-                foreach (ClassInfo classInfo in this.ClassesStatistics)
+                if (this.Classes.ContainsKey(cl.Id))
                 {
-                    if (classInfo.Class == cl.Id)
-                    {
-                        classInfo.AddClassInteractionWrite();
-                        return;
-                    }
+                    this.Classes[cl.Id].AddClassInteractionRead();
+                    return;
                 }
-                ClassInfo ci = new()
+                else
                 {
-                    Class = cl.Id
-                };
-                ci.AddClassInteractionWrite();
-                this.ClassesStatistics.Add(ci);
+                    ClassInfo ci = new()
+                    {
+                        Class = cl.Id
+                    };
+                    ci.AddClassInteractionWrite();
+                    this.Classes.Add(cl.Id, ci);
+                }
             });
         }
         public async void AddClassInteractionSearch(IClass cl, Field searchField)
         {
             await Task.Run(() =>
             {
-                foreach (ClassInfo classInfo in this.ClassesStatistics)
+                if (this.Classes.ContainsKey(cl.Id))
                 {
-                    if (classInfo.Class == cl.Id)
-                    {
-                        classInfo.AddClassInteractionSearch(searchField.Id);
-                        return;
-                    }
+                    this.Classes[cl.Id].AddClassInteractionRead();
+                    return;
                 }
-                ClassInfo ci = new()
+                else
                 {
-                    Class = cl.Id
-                };
-                ci.AddClassInteractionSearch(searchField.Id);
-                this.ClassesStatistics.Add(ci);
+                    ClassInfo ci = new()
+                    {
+                        Class = cl.Id
+                    };
+                    ci.AddClassInteractionSearch(searchField.Id);
+                    this.Classes.Add(cl.Id, ci);
+                }
             });
         }
         public Guid GetSearchTargetFor(IClass cl)
         {
-            foreach (ClassInfo classInfo in this.ClassesStatistics)
+            if (this.Classes.ContainsKey(cl.Id))
             {
-                if (classInfo.Class == cl.Id)
-                {
-                    return classInfo.DefaultSearchField;
-                }
+                return this.Classes[cl.Id].DefaultSearchField;
             }
             return Guid.Empty;
+        }
+        public string GetFilterValueFor(IClass cl, Field f)
+        {
+            try
+            {
+                if (this.Classes.ContainsKey(cl.Id))
+                {
+                    ClassInfo ci = this.Classes[cl.Id];
+                    if (ci.GroupFiltersLast is null)
+                    {
+                        ci.GroupFiltersLast = new();
+                        return "";
+                    }
+                    if (ci.GroupFiltersLast.ContainsKey(f.Id))
+                    {
+                        return ci.GroupFiltersLast[f.Id].ToString();
+                    }                   
+                }
+                return "";
+            }
+            catch
+            {
+                return "";
+            }
+        }
+        public void SetFilterValueFor(IClass cl, Field f, string value)
+        {
+            try
+            {
+                if (this.Classes.ContainsKey(cl.Id))
+                {
+                    this.Classes[cl.Id].GroupFiltersLast[f.Id] = value;
+                }
+                else
+                {
+                    ClassInfo ci = new()
+                    {
+                        Class = cl.Id
+                    };
+                    ci.GroupFiltersLast[f.Id] = value;
+                    this.Classes.Add(cl.Id, ci);
+                }
+            }
+            catch
+            {
+                
+            }
         }
         private static string GetFileName()
         {
@@ -166,9 +211,14 @@ namespace Incas.Miniservices.UserStatistics
                 {
                     return new();
                 }
-                foreach (ClassInfo classInfo in info.ClassesStatistics)
+
+                foreach (KeyValuePair<Guid, ClassInfo> classInfo in info.Classes)
                 {
-                    classInfo.Clamp(15);
+                    if (classInfo.Value.GroupFiltersLast is null)
+                    {
+                        classInfo.Value.GroupFiltersLast = new();
+                    }
+                    classInfo.Value.Clamp(15);
                 }
             }
             catch (System.Exception)
@@ -179,15 +229,10 @@ namespace Incas.Miniservices.UserStatistics
         }
         public void Save()
         {
-            foreach (ClassInfo classInfo in this.ClassesStatistics)
+            foreach (KeyValuePair<Guid, ClassInfo> classInfo in this.Classes)
             {
-                classInfo.Clamp(30);
+                classInfo.Value.Clamp(15);
             }
-            this.ClassesStatistics = this.ClassesStatistics
-                .OrderByDescending(x => x.CommonInteractionsCount)
-                .ThenByDescending(x => x.LastClassInteraction)
-                .Take(8)
-                .ToList();
             string result = JsonConvert.SerializeObject(this, Formatting.Indented);
             File.WriteAllText(GetFileName(), result);         
         }

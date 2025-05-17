@@ -264,12 +264,12 @@
             IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
             Template="{StaticResource ComboBoxToggleButtonTemplateGrid}"/>
 
-                        <ContentPresenter Name="ContentSite" Margin="10, 3, 23, 3" IsHitTestVisible="False"
+                        <ContentPresenter Name="ContentSite" Margin="10, 3, 40, 3" IsHitTestVisible="False"
                           HorizontalAlignment="Left" VerticalAlignment="Center"                              
                           Content="{TemplateBinding ComboBox.SelectionBoxItem}" 
                           ContentTemplate="{TemplateBinding ComboBox.SelectionBoxItemTemplate}"
                           ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
-                        <TextBox Name="PART_EditableTextBox" Margin="3, 3, 23, 3"                     
+                        <TextBox Name="PART_EditableTextBox" Margin="3, 3, 40, 3"                     
                         IsReadOnly="{TemplateBinding IsReadOnly}"
                         Visibility="Hidden" Foreground="{TemplateBinding Foreground}" Background="Transparent"
                         HorizontalAlignment="Left" VerticalAlignment="Center"

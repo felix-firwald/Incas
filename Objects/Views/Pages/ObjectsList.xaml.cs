@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using Incas.Core.Classes;
+﻿using Incas.Core.Classes;
 using Incas.Core.Extensions;
 using Incas.Core.Interfaces;
 using Incas.Core.Views.Controls;
@@ -12,6 +11,7 @@ using Incas.Objects.Views.Windows;
 using Incas.Rendering.AutoUI;
 using Incas.Rendering.Components;
 using IncasEngine.Core;
+using IncasEngine.Core.DatabaseQueries.RequestsUtils.Where;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Classes;
 using IncasEngine.ObjectiveEngine.Common;
@@ -22,16 +22,13 @@ using IncasEngine.ObjectiveEngine.Types.Processes;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using IncasEngine.Scripting;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using static Incas.Core.Interfaces.ITabItem;
-using static IncasEngine.ObjectiveEngine.Models.State;
 
 namespace Incas.Objects.Views.Pages
 {
@@ -55,6 +52,8 @@ namespace Incas.Objects.Views.Pages
         public string Id { get; set; }
         public OpenType ShowTypeButtonAction { get; set; }
         private DataView View { get; set; }
+        private WhereInstruction where { get; set; } = new();
+        public List<FieldFiller> fillers { get; private set; }
 
         private ObjectsListLoading loading;
         private Dictionary<Button, Method> buttons = new();
@@ -83,6 +82,7 @@ namespace Incas.Objects.Views.Pages
             {
                 this.PlaceCard();
             }
+            this.PlaceGroupFilters();
             this.ExternalOptions.Visibility = this.ClassData.StaticMethods?.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
             this.UpdateView();
         }
@@ -169,6 +169,61 @@ namespace Incas.Objects.Views.Pages
                 this.ObjectCard.SetEmpty();
             }
         }
+        private void PlaceGroupFilters()
+        {
+            this.fillers = new();
+            if (this.ClassData.FiltersEnabled)
+            {
+                foreach (Field f in this.ClassData.Fields)
+                {
+                    if (f.FilterOn)
+                    {
+                        FieldFiller ff = new(f);
+                        string value = StatisticsManager.Info.GetFilterValueFor(this.sourceClass, f);
+                        ff.SetValue(value);
+                        ff.OnFieldValueUpdated += this.Ff_OnFieldValueUpdated;
+                        this.fillers.Add(ff);
+                        this.FiltersGrid.Children.Add(ff);
+                    }
+                }
+                if (this.FiltersGrid.Children.Count == 0)
+                {
+                    this.FiltersGrid.Visibility = Visibility.Collapsed;
+                }
+                this.FiltersGrid.Columns = this.ClassData.FiltersColumns;
+                this.FiltersGrid.Rows = this.ClassData.FiltersRows;
+            }            
+        }
+
+        private void Ff_OnFieldValueUpdated(Field field)
+        {
+            try
+            {                
+                this.where = new();
+                foreach (FieldFiller ff in this.fillers)
+                {
+                    string value = ff.GetValue();                   
+                    if (ff.Field == field)
+                    {
+                        if (field.Type is FieldType.Object)
+                        {
+                            StatisticsManager.Info.SetFilterValueFor(this.sourceClass, field, ff.GetData().ToString());
+                        }
+                        else
+                        {
+                            StatisticsManager.Info.SetFilterValueFor(this.sourceClass, field, ff.GetDataForScript().ToString());
+                        }
+                    }
+                    this.where.AndWhereEqual(ff.Field.VisibleName, value);
+                }
+                this.UpdateView();
+                this.CancelSearchButton.Visibility = Visibility.Collapsed;
+            }
+            catch
+            {
+
+            }
+        }
 
         private void ObjectCard_OnFilterRequested(IncasEngine.ObjectiveEngine.Common.FieldData data)
         {
@@ -177,7 +232,7 @@ namespace Incas.Objects.Views.Pages
 
         private async void UpdateView()
         {
-            DataTable dt = await Processor.GetObjectsList(this.sourceClass);                
+            DataTable dt = await Processor.GetObjectsList(this.sourceClass, this.where);                
             if (this.sourceClass.Type == ClassType.Model)
             {
                 this.View = dt.AsDataView();
@@ -220,7 +275,8 @@ namespace Incas.Objects.Views.Pages
         public async void UpdateViewWithFilter(FieldData data)
         {
             StatisticsManager.AddInteractionSearch(this.sourceClass, data.ClassField);
-            DataTable dt = await Processor.GetObjectsListWhereEqual(this.sourceClass, data.ClassField.VisibleName, data.Value.ToString());
+            WhereInstruction where = WhereInstruction.Start().AndWhereEqual(data.ClassField.VisibleName, data.Value.ToString());
+            DataTable dt = await Processor.GetObjectsList(this.sourceClass, WhereInstruction.Combine(this.where, where));
             this.Data.Columns.Clear();
             this.CancelSearchButton.Visibility = Visibility.Visible;
             if (this.sourceClass.Type == ClassType.Model)

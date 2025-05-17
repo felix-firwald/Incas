@@ -711,5 +711,28 @@ namespace Incas.Objects.Views.Windows
 
             base.OnClosing(e);
         }
+
+        private void OpenFieldsGroupFilterClick(object sender, RoutedEventArgs e)
+        {
+            FieldsGroupFilterSettings form = new(this.vm.Fields);
+            if (form.ShowDialog("Настройка групповых фильтраций", Core.Classes.Icon.GroupSearchFields, DialogSimpleForm.Components.IconColor.Yellow) == true)
+            {
+                this.vm.FiltersEnabled = form.GroupFilterEnabled;
+                this.vm.FiltersColumns = form.ColumnsCount;
+                this.vm.FiltersRows = form.RowsCount;
+            }
+        }
+
+        private void OpenFieldsGroupListVisibilityClick(object sender, RoutedEventArgs e)
+        {
+            FieldsGroupListVisibilitySettings form = new(this.vm.Fields);
+            form.ShowDialog("Настройка видимых полей", Core.Classes.Icon.GroupSearchFields, DialogSimpleForm.Components.IconColor.Yellow);
+        }
+
+        private void OpenFieldsGroupUniqueClick(object sender, RoutedEventArgs e)
+        {
+            FieldsGroupUniqueSettings form = new(this.vm.Fields);
+            form.ShowDialog("Настройка пары уникальности", Core.Classes.Icon.GroupSearchFields, DialogSimpleForm.Components.IconColor.Yellow);
+        }
     }
 }

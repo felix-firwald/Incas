@@ -53,8 +53,7 @@ namespace Incas.Core.Classes
             TableViewer tv = new(viewer);
             tv.Show();
         }
-
-        private static void EngineEvents_OnEditorRequested(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, IncasEngine.ObjectiveEngine.Interfaces.IObject obj)
+        public static void ShowEditor(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, IncasEngine.ObjectiveEngine.Interfaces.IObject obj)
         {
             if (cl.GetClassData().PreferPage)
             {
@@ -80,6 +79,10 @@ namespace Incas.Core.Classes
                         break;
                 }
             }
+        }
+        private static void EngineEvents_OnEditorRequested(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, IncasEngine.ObjectiveEngine.Interfaces.IObject obj)
+        {
+            ShowEditor(cl, obj);
         }
 
         private static bool EngineEvents_OnFileDialogRequested(ref string file, string filter, string root)

@@ -281,7 +281,6 @@ namespace Incas.Objects.Views.Pages
                     foreach (KeyValuePair<Guid, UIElement> element in this.elements)
                     {
                         MemberState memberState = state.Settings[element.Key];
-                        element.Value.IsEnabled = memberState.IsEnabled;
                         element.Value.Visibility = memberState.CardVisibility? Visibility.Visible : Visibility.Collapsed;
                     }
                     break;
@@ -301,10 +300,9 @@ namespace Incas.Objects.Views.Pages
                 DialogsManager.ShowExclamationDialog("Объект не выбран!", "Действие невозможно");
                 return;
             }
-            List<IObject> objects = [Processor.GetObject(this.Class, this.id)];
-            ObjectsEditor oe = new(this.Class, objects);
-            oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
-            oe.ShowDialog();
+            DialogsManager.ShowEditor(this.Class, Processor.GetObject(this.Class, this.id));
+            //oe.OnUpdateRequested += this.Oe_OnUpdateRequested;
+            //oe.ShowDialog();
         }
         private void Oe_OnUpdateRequested()
         {
