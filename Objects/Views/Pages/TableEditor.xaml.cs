@@ -1,4 +1,5 @@
 ﻿using Incas.Admin.ViewModels;
+using Incas.Objects.AutoUI;
 using Incas.Objects.Interfaces;
 using Incas.Objects.ViewModels;
 using IncasEngine.ObjectiveEngine.Models;
@@ -65,6 +66,12 @@ namespace Incas.Objects.Views.Pages
         public void SetUpContext(GeneralizatorViewModel vm)
         {
             throw new NotImplementedException();
+        }
+
+        private void OpenFieldsGroupListVisibilityClick(object sender, RoutedEventArgs e)
+        {
+            FieldsGroupListVisibilitySettings form = new(this.vm.Fields);
+            form.ShowDialog("Настройка видимых полей", Core.Classes.Icon.GroupSearchFields, DialogSimpleForm.Components.IconColor.Yellow);
         }
     }
 }

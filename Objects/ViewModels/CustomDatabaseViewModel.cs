@@ -18,6 +18,9 @@ namespace Incas.Objects.ViewModels
         public delegate void SelectedClassDelegate(Class selectedClass);
         public event SelectedClassDelegate OnClassSelected;
 
+        public delegate void OpenTable(Class selectedClass, Table table);
+        public event OpenTable OnShowTableRequested;
+
         public CustomDatabaseViewModel()
         {
             ProgramState.DatabasePage = this;
@@ -96,17 +99,30 @@ namespace Incas.Objects.ViewModels
                 return Visibility.Visible;
             }
         }
-        public List<Table> Tables
+        public List<TableUserItemViewModel> Tables
         {
             get
             {
                 if (this.ClassData is not null)
                 {
-                    return this.ClassData.Tables;
-                }        
+                    List<TableUserItemViewModel> result = new();
+                    foreach (Table table in this.ClassData.Tables)
+                    {
+                        TableUserItemViewModel item = new(table);
+                        item.OnOpenTableRequested += this.Item_OnOpenTableRequested;
+                        result.Add(item);
+                    }
+                    return result;
+                }
                 return null;
             }
         }
+
+        private void Item_OnOpenTableRequested(Table tab)
+        {
+            this.OnShowTableRequested?.Invoke(this.SelectedClass, tab);
+        }
+
         private IClassData classData;
         public IClassData ClassData
         {

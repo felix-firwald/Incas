@@ -6,7 +6,113 @@
              xmlns:local="clr-namespace:Incas.Objects.Views.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" MinHeight="40"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Border x:Name="Tools" Grid.ColumnSpan="2" >
+            <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="2" Cursor="">
+                <Button Style="{StaticResource ButtonSquare}" ToolTip="Обновить список записей" Click="RefreshClick">
+                    <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M6.1421,15.9157a7.44,7.44,0,0,1-.546-1.5365,7.01,7.01,0,0,1-.1885-1.6172,7.3041,7.3041,0,0,1,2.19-5.3443,7.2049,7.2049,0,0,1,5.31-2.2057h1.3865l-2.1-2.1.7078-.7078L16.21,5.712,12.9019,9.02l-.7078-.7077,2.1-2.1H12.9076A6.2484,6.2484,0,0,0,8.3019,8.1187,6.34,6.34,0,0,0,6.4076,12.762a6.3361,6.3361,0,0,0,.4845,2.4037Zm6.7713,7.104L9.6056,19.712l3.3078-3.3078.7077.7078-2.1,2.1h1.3865a6.2488,6.2488,0,0,0,4.6058-1.9068,6.3406,6.3406,0,0,0,1.8942-4.6432,6.331,6.331,0,0,0-.4845-2.4038l.75-.75a7.44,7.44,0,0,1,.546,1.5365,7.01,7.01,0,0,1,.1885,1.6173,7.3041,7.3041,0,0,1-2.19,5.3442,7.205,7.205,0,0,1-5.3095,2.2058H11.5211l2.1,2.1Z"/>
+                </Button>
+                <Button Style="{StaticResource ButtonSquare}" Click="SearchClick" ToolTip="Найти список записей по критерию (F)">
+                    <Path Fill="{StaticResource PrimaryMain}" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" VerticalAlignment="Center"/>
+                </Button>
+                <Button x:Name="CancelSearchButton" Style="{StaticResource ButtonSquare}" Visibility="Collapsed" Click="CancelSearchClick" ToolTip="Отменить результат поиска объектов" Cursor="Hand">
+                    <Path Fill="#FFFF7878" Data="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0 M 3.146 3.146 a 0.5 0.5 0 0 1 0.708 0 L 6.5 5.793 l 2.646 -2.647 a 0.5 0.5 0 0 1 0.708 0.708 L 7.207 6.5 l 2.647 2.646 a 0.5 0.5 0 0 1 -0.708 0.708 L 6.5 7.207 l -2.646 2.647 a 0.5 0.5 0 0 1 -0.708 -0.708 L 5.793 6.5 L 3.146 3.854 a 0.5 0.5 0 0 1 0 -0.708" VerticalAlignment="Center"/>
+                </Button>
+                <!--<Button Style="{StaticResource ButtonSquare}" ToolTip="Агрегация и анализ данных" Click="AggregateClick">
+                    <Path Fill="{StaticResource PrimaryMain}" VerticalAlignment="Center" Stretch="Uniform" Data="M4.7441,14.4677l-.8172-.5787,4.25-6.827,2.8845,3.3845L14.8691,4.235l2.8848,4.3462L21.11,3.212l.7788.598-4.123,6.6-2.86-4.321-3.7037,6.04-2.89-3.39ZM16.0426,19.212a2.8773,2.8773,0,0,0,2.034-4.9,2.8772,2.8772,0,0,0-4.0687,4.0692A2.7677,2.7677,0,0,0,16.0426,19.212Zm5.1573,3-2.8153-2.8155a3.757,3.757,0,0,1-1.08.602,3.8758,3.8758,0,0,1-4.0005-.913,3.8876,3.8876,0,0,1-.001-5.4745,3.8836,3.8836,0,0,1,5.4745-.0023,3.7234,3.7234,0,0,1,1.13,2.7378,3.7843,3.7843,0,0,1-.2135,1.2722,3.7313,3.7313,0,0,1-.6017,1.09l2.796,2.8153Z"/>
+                </Button>-->
+
+                <Button Style="{StaticResource ButtonSquare}" ToolTip="Экспорт списка записей (отчета)" Click="ExportClick">
+                    <Path Fill="{StaticResource LightPurple}" VerticalAlignment="Center" Stretch="Uniform" Data="M16.4731,19.7505,19.0039,17.22v2.069h.7692V15.9042H16.3884v.7693h2.0692l-2.5307,2.5307Zm-10.95-.0963a1.6115,1.6115,0,0,1-1.6155-1.6155V5.27A1.6115,1.6115,0,0,1,5.5231,3.6542h12.769A1.6115,1.6115,0,0,1,19.9076,5.27v5.95q-.2635-.09-.5037-.1472t-.4963-.1125V5.27a.6615.6615,0,0,0-.6155-.6155H5.5231a.6617.6617,0,0,0-.6155.6155v12.769a.6615.6615,0,0,0,.6155.6155h5.6653a5.189,5.189,0,0,0,.0932.5213,3.8178,3.8178,0,0,0,.1473.4787Zm-.6155-2v0Zm2.5-1.7307h3.96a3.227,3.227,0,0,1,.151-.4963q.0953-.24.199-.5037H7.4076Zm0-3.7693h6.5808a7.7154,7.7154,0,0,1,.97-.5865,4.9156,4.9156,0,0,1,1.026-.377v-.0365H7.4076Zm0-3.7692h9v-1h-9Zm10.5,13.3847a3.9761,3.9761,0,0,1-4-4,3.9758,3.9758,0,0,1,4-4,3.9758,3.9758,0,0,1,4,4,3.9761,3.9761,0,0,1-4,4Z"/>
+                </Button>
+                <!--<Button x:Name="RemoveButton" Style="{StaticResource ButtonSquare}" Click="RemoveClick" ToolTip="Удалить выбранный объект (R, Delete)">
+                    <Path Fill="{StaticResource Buttons.Red}" Data="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" VerticalAlignment="Center"/>
+                </Button>-->
+                
+                <Button x:Name="OpenInNewTabButton" Style="{StaticResource ButtonSquare}" Click="OpenInAnotherWindowClick" ToolTip="Открыть список в другой вкладке">
+                    <Path Fill="{StaticResource PrimaryMain}" Margin="2" Stretch="Uniform" Data="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5 M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" VerticalAlignment="Center"/>
+                </Button>
+            </WrapPanel>
+        </Border>
+        <Border Grid.Row="1">
+            <UniformGrid x:Name="FiltersGrid">
+
+            </UniformGrid>
+        </Border>
+        <DataGrid x:Name="Data" Style="{StaticResource DataGridMain}" EnableColumnVirtualization="True" EnableRowVirtualization="True" RowHeight="30" VirtualizingStackPanel.VirtualizationMode="Recycling" VirtualizingStackPanel.IsVirtualizing="true" VirtualizingPanel.IsVirtualizingWhenGrouping="True" SelectionChanged="Data_SelectionChanged" PreviewKeyDown="Data_PreviewKeyDown" LoadingRow="Data_LoadingRow" AutoGeneratingColumn="Data_AutoGeneratingColumn" IsReadOnly="True" Grid.Row="2" >
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RowMain}">
+                    <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick"/>
+                    <!--<Setter Property="ContextMenu">
+                    <Setter.Value>
+                        <ContextMenu>
+                            <MenuItem Header="Открыть объект" Click="CMOpenObjectClick" />
+                            <MenuItem Header="Скопировать объект" Click="CopyClick"/>
+                        </ContextMenu>
+                    </Setter.Value>
+                </Setter>-->
+                </Style>
+            </DataGrid.RowStyle>
+            <!--<DataGrid.GroupStyle>
+            <GroupStyle>
+                <GroupStyle.ContainerStyle>
+                    <Style TargetType="{x:Type GroupItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type GroupItem}">
+                                    <Expander IsExpanded="False" >
+                                        <Expander.HeaderTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Path x:Name="ExpandIndicator" Fill="{StaticResource Icon}"
+                                                       Data="{Binding RelativeSource={RelativeSource AncestorType=Expander}, 
+                                                                  Path=IsExpanded, 
+                                                                  Converter={StaticResource BooleanToExpandIconConverter}}"
+                                                       Width="16" Height="16" Margin="0,0,5,0"/>
+                                                    <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=Expander}, Path=Header}"
+                                                        VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                                <DataTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Expander}, Path=IsMouseOver}" Value="True">
+                                                        <Setter TargetName="ExpandIndicator" Property="Opacity" Value="0.8"/>
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
+                                            </DataTemplate>
+                                        </Expander.HeaderTemplate>
+                                        <Expander.Header>
+                                            <DockPanel>
+                                                <TextBlock FontWeight="Bold" MinHeight="30" VerticalAlignment="Center" Foreground="{StaticResource DarkYellow}" Text="{Binding Path=Name}" />
+                                            </DockPanel>
+                                        </Expander.Header>
+                                        <Expander.Content>
+                                            <ItemsPresenter />
+                                        </Expander.Content>
+                                    </Expander>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </GroupStyle.ContainerStyle>
+            </GroupStyle>
+        </DataGrid.GroupStyle>-->
+        </DataGrid>
+
+        <StackPanel x:Name="RightPanel" Grid.Row="1" Grid.Column="1">
+
+        </StackPanel>
+        <WrapPanel x:Name="DownPanel" Grid.Row="2" Grid.ColumnSpan="2">
+
+        </WrapPanel>
     </Grid>
 </UserControl>

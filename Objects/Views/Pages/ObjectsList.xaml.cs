@@ -179,9 +179,11 @@ namespace Incas.Objects.Views.Pages
                     if (f.FilterOn)
                     {
                         FieldFiller ff = new(f);
+                        ff.CopyToOtherButton.Visibility = Visibility.Collapsed;
                         string value = StatisticsManager.Info.GetFilterValueFor(this.sourceClass, f);
                         ff.SetValue(value);
                         ff.OnFieldValueUpdated += this.Ff_OnFieldValueUpdated;
+                        ff.OnDatabaseObjectCopyRequested += this.Ff_OnDatabaseObjectCopyRequested;
                         this.fillers.Add(ff);
                         this.FiltersGrid.Children.Add(ff);
                     }
@@ -193,6 +195,15 @@ namespace Incas.Objects.Views.Pages
                 this.FiltersGrid.Columns = this.ClassData.FiltersColumns;
                 this.FiltersGrid.Rows = this.ClassData.FiltersRows;
             }            
+        }
+
+        private void Ff_OnDatabaseObjectCopyRequested(Interfaces.IFillerBase filler)
+        {
+            Guid id = this.GetSelectedObjectGuid();
+            if (id != Guid.Empty)
+            {
+                filler.SetValue(Processor.GetObjectFieldValue(this.sourceClass, id, filler.Field));
+            }
         }
 
         private void Ff_OnFieldValueUpdated(Field field)
@@ -747,24 +758,24 @@ namespace Incas.Objects.Views.Pages
             }
         }
 
-        private void JumpToChildClick(object sender, RoutedEventArgs e)
-        {
-            Guid id = this.GetSelectedObjectGuid();
-            if (id == Guid.Empty)
-            {
-                DialogsManager.ShowExclamationDialog("Не выбран объект для просмотра наследника.", "Действие невозможно");
-                return;
-            }
+        //private void JumpToChildClick(object sender, RoutedEventArgs e)
+        //{
+        //    Guid id = this.GetSelectedObjectGuid();
+        //    if (id == Guid.Empty)
+        //    {
+        //        DialogsManager.ShowExclamationDialog("Не выбран объект для просмотра наследника.", "Действие невозможно");
+        //        return;
+        //    }
 
-            IObject target = Processor.GetObject(this.sourceClass, id);
-            if (target is IHierarchical objHierarchical && objHierarchical.Child != Guid.Empty)
-            {
-                IClass targetClass = EngineGlobals.GetClass(objHierarchical.Child);
-                ObjectsList oc = new(targetClass);
-                DialogsManager.ShowPageWithGroupBox(oc, "Поиск наследника", target.Id.ToString());
-                oc.TrySelectObject(target.Id);
-            }
-        }
+        //    IObject target = Processor.GetObject(this.sourceClass, id);
+        //    if (target is IHierarchical objHierarchical && objHierarchical.Child != Guid.Empty)
+        //    {
+        //        IClass targetClass = EngineGlobals.GetClass(objHierarchical.Child);
+        //        ObjectsList oc = new(targetClass);
+        //        DialogsManager.ShowPageWithGroupBox(oc, "Поиск наследника", target.Id.ToString());
+        //        oc.TrySelectObject(target.Id);
+        //    }
+        //}
         private void PlaceExternalButtons()
         {
             this.AllButtonsPanel.Items.Clear();

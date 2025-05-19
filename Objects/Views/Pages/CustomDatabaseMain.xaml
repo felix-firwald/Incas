@@ -49,10 +49,20 @@
                                 <Path Margin="0,0,10,0" Fill="{StaticResource Buttons.Green}" Stretch="Uniform" Height="15" Width="15" VerticalAlignment="Center" Data="M235.38-340h149.24q8.5 0 14.25-5.76t5.75-14.27q0-8.51-5.75-14.24T384.62-380H235.38q-8.5 0-14.25 5.76t-5.75 14.27q0 8.51 5.75 14.24t14.25 5.73Zm0-120h149.24q8.5 0 14.25-5.76t5.75-14.27q0-8.51-5.75-14.24T384.62-500H235.38q-8.5 0-14.25 5.76t-5.75 14.27q0 8.51 5.75 14.24t14.25 5.73Zm0-120h149.24q8.5 0 14.25-5.76t5.75-14.27q0-8.51-5.75-14.24T384.62-620H235.38q-8.5 0-14.25 5.76t-5.75 14.27q0 8.51 5.75 14.24t14.25 5.73Zm340 0q-8.5 0-14.25-5.76t-5.75-14.27q0-8.51 5.75-14.24t14.25-5.73h149.24q8.5 0 14.25 5.76t5.75 14.27q0 8.51-5.75 14.24T724.62-580H575.38ZM184.62-200q-27.62 0-46.12-18.5Q120-237 120-264.62v-430.76q0-27.62 18.5-46.12Q157-760 184.62-760h590.76q27.62 0 46.12 18.5Q840-723 840-695.38v160q0 8.5-5.76 14.25t-14.27 5.75q-8.51 0-14.24-5.75T800-535.38v-160q0-9.24-7.69-16.93-7.69-7.69-16.93-7.69H500v211.54q-17.62 6.15-28.81 21.96Q460-470.69 460-450.77v218.46q0 13.73-9.29 23.02T427.69-200H184.62ZM563-260q-18.62 0-29.93-14.69-11.3-14.69-7.84-33.46l16-80q2.69-14.08 13.58-22.97Q565.71-420 580-420h240q14.29 0 25.19 8.88 10.89 8.89 13.58 22.97l16 80q3.46 18.77-7.84 33.46Q855.62-260 837-260H563Zm37 140q-16.67 0-28.33-11.67Q560-143.33 560-160v-36.92q0-13.73 9.29-23.02t23.02-9.29h215.38q13.73 0 23.02 9.29t9.29 23.02V-160q0 16.67-11.67 28.33Q816.67-120 800-120H600Z"/>
                                 <TextBlock FontFamily="{StaticResource JetBrains}" Foreground="White" Text="Сводные таблицы" MaxWidth="250"/>
                             </StackPanel>
-                            <ListBox Margin="0" Style="{StaticResource ListBoxMain}" ItemsSource="{Binding Tables}">
+                            <ListBox Margin="0" Style="{StaticResource ListBoxMain}" ItemContainerStyle="{StaticResource ListBoxItemUnvisibleBorders}" ItemsSource="{Binding Tables}" >
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Foreground="White" Text="{Binding ConsolidatedName}"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="40"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="{Binding ConsolidatedName}"/>
+                                            <Button Grid.Column="1" Style="{StaticResource ButtonSquare}" Command="{Binding OpenTableView}" ToolTip="Открыть сводную таблицу">
+                                                <Path Fill="{StaticResource Buttons.Green}" Height="14" Stretch="Uniform" Data="M212.31-140Q182-140 161-161q-21-21-21-51.31v-535.38Q140-778 161-799q21-21 51.31-21h222.3q12.77 0 21.39 8.62 8.61 8.61 8.61 21.38T456-768.62q-8.62 8.62-21.39 8.62h-222.3q-4.62 0-8.46 3.85-3.85 3.84-3.85 8.46v535.38q0 4.62 3.85 8.46 3.84 3.85 8.46 3.85h535.38q4.62 0 8.46-3.85 3.85-3.84 3.85-8.46v-222.3q0-12.77 8.62-21.39 8.61-8.61 21.38-8.61t21.38 8.61q8.62 8.62 8.62 21.39v222.3Q820-182 799-161q-21 21-51.31 21H212.31ZM760-717.85 409.85-367.69q-8.31 8.3-20.89 8.5-12.57.19-21.27-8.5-8.69-8.7-8.69-21.08 0-12.38 8.69-21.08L717.85-760H590q-12.77 0-21.38-8.62Q560-777.23 560-790t8.62-21.38Q577.23-820 590-820h193.84q15.47 0 25.81 10.35Q820-799.31 820-783.84V-590q0 12.77-8.62 21.38Q802.77-560 790-560t-21.38-8.62Q760-577.23 760-590v-127.85Z"/>
+                                            </Button>
+                                        </Grid>
+                                        
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>

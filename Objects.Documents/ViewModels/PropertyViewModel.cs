@@ -67,7 +67,7 @@ namespace Incas.Objects.Documents.ViewModels
                     AutoUI.PropertySwitcherSettings settings2 = new(this.Source, this.OnFieldsRequested?.Invoke());
                     settings2.ShowDialog($"Настройки свойства [{this.Source.Name}]");
                     break;
-                case TemplateProperty.CalculationType.Replication:
+                case TemplateProperty.CalculationType.ScriptQRCode:
                     PropertyReplicationSettings settings4 = new(this.Source);
                     settings4.ShowDialog();
                     break;
@@ -142,7 +142,7 @@ namespace Incas.Objects.Documents.ViewModels
                     TemplateProperty.CalculationType.Script,
                     TemplateProperty.CalculationType.ScriptTable,
                     TemplateProperty.CalculationType.ScriptPattern,
-                    TemplateProperty.CalculationType.Replication 
+                    TemplateProperty.CalculationType.ScriptQRCode 
                 };
             }
         }

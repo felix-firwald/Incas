@@ -24,7 +24,7 @@ namespace Incas.Objects.Documents.Converters
                     case CalculationType.ScriptTable:
                     case CalculationType.ScriptPattern:
                     case CalculationType.Switch:
-                    case CalculationType.Replication:
+                    case CalculationType.ScriptQRCode:
                         return IncasEngine.Core.Color.FromRGB(51, 255, 0).AsBrush();
                 }
             }

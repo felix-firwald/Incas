@@ -20,8 +20,7 @@
         <TextBlock x:Name="MainLabel" FontFamily="{StaticResource Rubik}" FontWeight="Normal" Style="{DynamicResource TextBlockImportant}" Text="Имя тега:" VerticalAlignment="Top" Grid.Column="0" Margin="8,12,5,5" MaxHeight="30" Foreground="{DynamicResource Light}" TextWrapping="Wrap" Cursor="Hand">
             <TextBlock.ContextMenu>
                 <ContextMenu FontFamily="Segoe UI" FontWeight="Normal">
-                    <MenuItem Header="Скопировать значение в остальные редактируемые объекты" Click="InsertToOther" Tag="Значение этого поля будет скопировано в поля других объектов" />
-                    <Separator Background="{DynamicResource LightBlack}"/>
+                    <MenuItem x:Name="CopyToOtherButton" Header="Скопировать значение в остальные редактируемые объекты" Click="InsertToOther" Tag="Значение этого поля будет скопировано в поля других объектов" />
                     <MenuItem Header="Вставить значение из существующего объекта" Click="ObjectCopyRequestClick"/>
                 </ContextMenu>
             </TextBlock.ContextMenu>

@@ -27,8 +27,10 @@ namespace Incas.Objects.Views.Pages
             this.vm = new();
             this.ContentPanel.Content = new Core.Views.Controls.NoContent();
             this.vm.OnClassSelected += this.OnClassSelected;
+            this.vm.OnShowTableRequested += this.Vm_OnShowTableRequested;
             this.DataContext = this.vm;
         }
+
         public CustomDatabaseMain(WorkspaceComponent component)
         {
             this.InitializeComponent();
@@ -36,11 +38,9 @@ namespace Incas.Objects.Views.Pages
             {
                 SelectedCategory = component
             };
-            //this.CategoriesList.IsEnabled = false;
-            //this.CategoriesList.Visibility = System.Windows.Visibility.Collapsed;
             this.vm.OnClassSelected += this.OnClassSelected;
-            this.DataContext = this.vm;
-            
+            this.vm.OnShowTableRequested += this.Vm_OnShowTableRequested;
+            this.DataContext = this.vm;           
         }
 
         private void OnClassSelected(Class selectedClass)
@@ -61,6 +61,12 @@ namespace Incas.Objects.Views.Pages
                 ObjectsList ol = new(selectedClass);
                 this.ContentPanel.Content = ol;
             }            
+        }
+
+        private void Vm_OnShowTableRequested(Class selectedClass, Table table)
+        {
+            ClassTableObjectsViewer viewer = new(selectedClass, table);
+            DialogsManager.ShowPageWithGroupBox(viewer, table.ConsolidatedName, "VIEWER" + table.Id.ToString());
         }
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)

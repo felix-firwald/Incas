@@ -25,7 +25,7 @@ namespace Incas.Objects.Documents.Converters
                         return "Переменная скрипта (таблица)";
                     case TemplateProperty.CalculationType.ScriptPattern:
                         return "Переменная скрипта (коллекция паттернов)";
-                    case TemplateProperty.CalculationType.Replication:
+                    case TemplateProperty.CalculationType.ScriptQRCode:
                         return "Репликация";
                 }
             }
