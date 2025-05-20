@@ -46,3 +46,6 @@ You can also manage the states of your objects (declaratively describe Incas at 
 
 Using authorization groups (service class, class elements can also be overridden in a separate window), you can restrict access of users of a certain group to a certain class or vice versa, grant restricted access. The number of authorization groups is not limited. Customizing access to classes looks like this:
 ![image](https://github.com/user-attachments/assets/82a2a0e1-074d-40f1-9182-74e04119e142)
+
+## Warning
+This repository no longer contains Domain, Persistence, Data-Access layers as they are now moved to IncasEngine.
