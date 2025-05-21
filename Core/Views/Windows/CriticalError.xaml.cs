@@ -1,4 +1,5 @@
-﻿using IncasEngine.Backups;
+﻿using Incas.Core.Classes;
+using IncasEngine.Backups;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,13 +22,13 @@ namespace Incas.Core.Views.Windows
     /// </summary>
     public partial class CriticalError : Window
     {
-        private string logFile = "";
+        private Exception ex;
         public CriticalError(Exception except)
         {
             this.InitializeComponent();
-            this.logFile = BackupProcessor.WriteBackup(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(), except);
-            this.Description.Text = $"Возникла ошибка, не позволяющая INCAS продолжать свою работу.\n" +
-                        $"Описание: {except.Message}\nПриложение будет немедленно закрыто.";
+            this.ex = except;           
+            this.Description.Text = $"Возникла ошибка, не позволяющая INCAS продолжать свою работу (после закрытия этого окна работа приложения будет принудительно завершена).\n" +
+                        $"Описание: {except.Message}";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -37,7 +38,20 @@ namespace Incas.Core.Views.Windows
 
         private void OpenLogClick(object sender, RoutedEventArgs e)
         {
-            Process.Start("explorer.exe", string.Format("/select,\"{0}\"", this.logFile));
+            string logFile = BackupProcessor.WriteBackup(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(), this.ex);
+            Process.Start("explorer.exe", string.Format("/select,\"{0}\"", logFile));
+        }
+
+        private void CopyLogClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText(this.ex.StackTrace);
+            }
+            catch (Exception exception)
+            {
+                DialogsManager.ShowErrorDialog(exception);
+            }
         }
     }
 }

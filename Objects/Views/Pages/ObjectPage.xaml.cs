@@ -277,12 +277,13 @@ namespace Incas.Objects.Views.Pages
                 DialogsManager.ShowExclamationDialog("Не найдены привязанные шаблоны к этому классу.", "Рендеринг невозможен");
                 return;
             }
-            string path = RegistryData.GetClassTemplatePrefferedPath(this.Class.Id, templateFile);
+            //string path = RegistryData.GetClassTemplatePrefferedPath(this.Class.Id, templateFile);
+            string path = "";
             if (DialogsManager.ShowFolderBrowserDialog(ref path) == true)
             {
                 try
                 {
-                    RegistryData.SetClassTemplatePrefferedPath(this.Class.Id, templateFile, path);
+                    //RegistryData.SetClassTemplatePrefferedPath(this.Class.Id, templateFile, path);
                     ProgramStatusBar.SetText("Выполняется рендеринг объектов...");
                     foreach (ObjectCreator c in this.ContentPanel.Children)
                     {

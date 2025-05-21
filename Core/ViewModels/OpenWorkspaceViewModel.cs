@@ -4,6 +4,7 @@ using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Models;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Users.Components;
 using IncasEngine.Workspace;
+using IncasEngine.Workspace.WorkspaceConnectionPaths;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,17 +13,15 @@ namespace Incas.Core.ViewModels
 {
     internal class OpenWorkspaceViewModel : BaseViewModel
     {
-        private List<string> _workspaces = RegistryData.GetWorkspaces();
+        private List<WorkspaceConnection> _workspaces = WorkspacePaths.GetWorkspaces();
         public OpenWorkspaceViewModel()
         {
-            //this.UpdateUsers();
-            //this.UpdateSelectedUser();
-            this.SelectedWorkspace = RegistryData.GetSelectedWorkspace();
+            this.SelectedWorkspace = WorkspacePaths.GetSelectedConnection();
         }
 
         private void UpdateUsers()
         {
-            if (RegistryData.IsWorkspaceExists(this.SelectedWorkspace))
+            if (this.SelectedWorkspace is not null)
             {                
                 this._users.Clear();
                 ServiceClass userClass = ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers;
@@ -33,40 +32,34 @@ namespace Incas.Core.ViewModels
 
         public void Refresh()
         {
-            this._workspaces = RegistryData.GetWorkspaces();
             this.OnPropertyChanged(nameof(this.Workspaces));
             this.OnPropertyChanged(nameof(this.SelectedWorkspace));
-            this.OnPropertyChanged(nameof(this.Path));
             this.UpdateUsers();
         }
 
         public void RemoveSelected()
         {
-            RegistryData.RemoveWorkspace(this.SelectedWorkspace);
-            RegistryData.SetSelectedWorkspace("");
+            WorkspacePaths.RemoveWorkspaceConnection(this.SelectedWorkspace);
             this.Refresh();
         }
 
         #region Public Properties
-        public List<string> Workspaces
+        public List<WorkspaceConnection> Workspaces
         {
-            get => this._workspaces;
-            set
-            {
-                this._workspaces = value;
-                this.OnPropertyChanged(nameof(this.Workspaces));
-            }
+            get => WorkspacePaths.GetWorkspaces();
         }
-        public string SelectedWorkspace
+        private WorkspaceConnection selectedWorkspace = null;
+        public WorkspaceConnection SelectedWorkspace
         {
-            get => RegistryData.GetSelectedWorkspace();
+            get => selectedWorkspace;
             set
             {
-                RegistryData.SetSelectedWorkspace(value);
+                this.selectedWorkspace = value;
+                WorkspacePaths.SetSelectedConnection(value);
                 if (this.SetPath())
                 {
                     this.OnPropertyChanged(nameof(this.SelectedWorkspace));
-                    this.OnPropertyChanged(nameof(this.Path));
+                    //this.OnPropertyChanged(nameof(this.Path));
                     this.UpdateUsers();
                     this.OnPropertyChanged(nameof(this.Users));
                 }
@@ -74,32 +67,36 @@ namespace Incas.Core.ViewModels
         }
         public bool SetPath()
         {
-            WorkspacePaths.SetCommonPath(this.Path);
-            return true;
-        }
-        public string Path
-        {
-            get
+            if (this.SelectedWorkspace is not null)
             {
-                try
-                {
-                    return RegistryData.GetWorkspacePath(this.SelectedWorkspace);
-                }
-                catch (Exception)
-                {
-                    return "";
-                }
+                WorkspacePaths.SetCommonPath(this.SelectedWorkspace.Path);
+                return true;
             }
-            set
-            {
-                RegistryData.SetWorkspacePath(this.SelectedWorkspace, value);
-                if (RegistryData.IsWorkspaceExists(this.SelectedWorkspace))
-                {
-                    this.OnPropertyChanged(nameof(this.Path));
-                    this.OnPropertyChanged(nameof(this.Users));
-                }
-            }
+            return false;
         }
+        //public string Path
+        //{
+        //    get
+        //    {
+        //        try
+        //        {
+        //            return this.SelectedWorkspace);
+        //        }
+        //        catch (Exception)
+        //        {
+        //            return "";
+        //        }
+        //    }
+        //    set
+        //    {
+        //        WorkspacePaths.SetWorkspacePath(this.SelectedWorkspace, value);
+        //        if (WorkspacePaths.IsWorkspaceExists(this.SelectedWorkspace))
+        //        {
+        //            this.OnPropertyChanged(nameof(this.Path));
+        //            this.OnPropertyChanged(nameof(this.Users));
+        //        }
+        //    }
+        //}
         private List<UserItem> _users = [];
         public ObservableCollection<UserItem> Users
         {
@@ -114,12 +111,11 @@ namespace Incas.Core.ViewModels
         {
             try
             {
-                string selected = RegistryData.GetWorkspaceSelectedUser(this.SelectedWorkspace);
+                Guid selected = this.SelectedWorkspace.DefaultSelectedUser;
                 foreach (UserItem user in this._users)
                 {
-                    if (user.Id.ToString() == selected)
+                    if (user.Id == selected)
                     {
-
                         this.SelectedUser = user;
                         this.OnPropertyChanged(nameof(this.SelectedUser));
                         break;
@@ -144,7 +140,8 @@ namespace Incas.Core.ViewModels
                 this.OnPropertyChanged(nameof(this.SelectedUser));
                 try
                 {
-                    RegistryData.SetWorkspaceSelectedUser(this.SelectedWorkspace, value.Id.ToString());
+                    this.SelectedWorkspace.DefaultSelectedUser = value.Id;
+                    //WorkspacePaths.SaveConfig();
                 }
                 catch (Exception) { }
             }

@@ -33,7 +33,11 @@
         <ScrollViewer Grid.Row="3" Margin="8" MaxHeight="400" >
             <TextBlock TextWrapping="Wrap" Style="{DynamicResource TextBlockImportant}" FontFamily="{StaticResource JetBrains}" Margin="5,0,10,10" Foreground="{DynamicResource Light}">
                 <Run x:Name="Description">По умолчанию, такой текст обозначает критическую неисправность в работе программы.</Run>
-                <Hyperlink Style="{StaticResource HyperlinkRed}" Click="OpenLogClick">Открыть файл логов</Hyperlink>
+                <LineBreak/>
+                <Run>Вы можете</Run>
+                <Hyperlink Style="{StaticResource HyperlinkRed}" Click="OpenLogClick">открыть файл логов</Hyperlink>
+                <Run>или</Run>
+                <Hyperlink Style="{StaticResource HyperlinkRed}" Click="CopyLogClick">скопировать в буфер обмена</Hyperlink>
             </TextBlock>
         </ScrollViewer>
     </Grid>

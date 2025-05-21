@@ -25,7 +25,7 @@ namespace Incas.Core.Views.Windows
 
         private void LogInClicked(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(this.cpath.Text) || string.IsNullOrEmpty(this.pwd.Password))
+            if (this.vm.SelectedWorkspace is null || string.IsNullOrEmpty(this.pwd.Password))
             {
                 DialogsManager.ShowErrorDialog("Одно из обязательных полей не заполнено!", "Вход невозможен");
             }
@@ -87,13 +87,13 @@ namespace Incas.Core.Views.Windows
 
         private void EditClick(object sender, RoutedEventArgs e)
         {
-            DefineExistingWorkspace dew = new()
-            {
-                Name = this.vm.SelectedWorkspace,
-                Path = this.vm.Path
-            };
-            dew.ShowDialog("Редактирование элемента", Classes.Icon.Work);
-            this.vm.Refresh();
+            //DefineExistingWorkspace dew = new()
+            //{
+            //    Name = this.vm.SelectedWorkspace,
+            //    Path = this.vm.Path
+            //};
+            //dew.ShowDialog("Редактирование элемента", Classes.Icon.Work);
+            //this.vm.Refresh();
         }
 
         private void AddClick(object sender, RoutedEventArgs e)

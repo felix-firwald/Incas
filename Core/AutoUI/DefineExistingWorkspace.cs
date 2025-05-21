@@ -1,6 +1,7 @@
 ﻿using Incas.Core.Attributes;
 using Incas.DialogSimpleForm.Components;
 using IncasEngine.Core.Registry;
+using IncasEngine.Workspace;
 using System.ComponentModel;
 
 namespace Incas.Core.AutoUI
@@ -24,7 +25,7 @@ namespace Incas.Core.AutoUI
         #region Functionality
         public override void Save()
         {
-            RegistryData.SetWorkspacePath(this.Name, this.Path);
+            WorkspacePaths.AddWorkspaceConnection(new() { Name = this.Name, Path = this.Path });
         }
         #endregion
     }

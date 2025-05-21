@@ -6,6 +6,7 @@ using IncasEngine.Core;
 using IncasEngine.Core.Registry;
 using IncasEngine.Models;
 using IncasEngine.Workspace;
+using IncasEngine.Workspace.WorkspaceConnectionPaths;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -128,23 +129,14 @@ namespace Incas.Core.Classes
 
         internal static void CheckoutWorkspaces()
         {
-            List<string> workspaces = RegistryData.GetWorkspaces();
-            if (!workspaces.Contains(RegistryData.GetSelectedWorkspace()))
+            List<WorkspaceConnection> workspaces = WorkspacePaths.GetWorkspaces();
+            foreach (WorkspaceConnection ws in workspaces)
             {
-                RegistryData.SetSelectedWorkspace("");
-            }
-            foreach (string ws in workspaces)
-            {
-                string path = RegistryData.GetWorkspacePath(ws);
-                if (string.IsNullOrEmpty(path) || !File.Exists(path + @"\service.incas"))
+                if (string.IsNullOrEmpty(ws.Path) || !File.Exists(ws.Path + @"\service.incas"))
                 {
                     DialogsManager.ShowErrorDialog($"Рабочее пространство, записанное под именем \"{ws}\", " +
-                        $"повреждено или не существует по пути:\n\"{path}\", в связи с чем оно будет удалено из списка доступных рабочих пространств.");
-                    RegistryData.RemoveWorkspace(ws);
-                    if (RegistryData.GetSelectedWorkspace() == ws)
-                    {
-                        RegistryData.SetSelectedWorkspace("");
-                    }
+                        $"повреждено или не существует по пути:\n\"{ws.Path}\", в связи с чем оно будет удалено из списка доступных рабочих пространств.");
+                    WorkspacePaths.RemoveWorkspaceConnection(ws);
                 }
             }
         }
@@ -167,14 +159,13 @@ namespace Incas.Core.Classes
         #endregion
 
         #region UserData
-        internal static bool LoadUserData()
+        internal static void LoadUserData()
         {
-            if (IsRegistryContainsData())
+            WorkspaceConnection wc = WorkspacePaths.GetSelectedConnection();
+            if (wc is not null)
             {
-                WorkspacePaths.SetCommonPath(RegistryData.GetSelectedWorkspacePath());
-                return true;
-            }
-            return false;
+                WorkspacePaths.SetCommonPath(wc.Path);
+            }           
         }
         #endregion
 
