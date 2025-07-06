@@ -28,6 +28,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static Incas.Objects.Components.FormDrawingManager;
+using static Incas.Objects.Interfaces.IObjectEditorForm;
 using static IncasEngine.ObjectiveEngine.Models.State;
 using static System.Windows.Forms.AxHost;
 
@@ -56,12 +57,13 @@ namespace Incas.Objects.Views.Pages
     /// <summary>
     /// Логика взаимодействия для ObjectPage.xaml
     /// </summary>
-    public partial class ObjectPage : UserControl
+    public partial class ObjectPage : UserControl, IObjectEditorForm
     {
         public readonly IClass Class;
         public readonly IClassData ClassData;
         public ObjectCreator Creator { get; set; }
         public ObjectPageViewModel vm { get; set; }
+        public event UpdateRequested OnUpdateRequested;
         public GroupClassPermissionSettings PermissionSettings { get; set; }
         private Dictionary<Button, Method> buttons;
         public ObjectPage(IClass source, IObject obj)

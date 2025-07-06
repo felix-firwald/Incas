@@ -1,4 +1,5 @@
 ﻿using Incas.Objects.ServiceClasses.Groups.ViewModels;
+using Incas.Objects.ServiceClasses.Groups.Views.Windows;
 using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Users.Components;
@@ -29,11 +30,20 @@ namespace Incas.Objects.ServiceClasses.Groups.Views.Controls
             {
                 group.Data = new();
             }
-            this.ViewModel = new GroupSettingsViewModel(group.Data);
+            GroupSettingsViewModel gs = new(group.Data);
+            gs.OnOpenMethodsSettingsRequested += this.Gs_OnOpenMethodsSettingsRequested;
+            this.ViewModel = gs;           
             this.DataContext = this.ViewModel;
 #endif
             return this;
         }
+
+        private void Gs_OnOpenMethodsSettingsRequested(IncasEngine.ObjectiveEngine.Models.Class cl, GroupClassPermissionSettings settings)
+        {
+            MethodsRestrictions window = new(cl, settings);
+            window.ShowDialog();
+        }
+
         public IObject GetResult()
         {
             ((GroupSettingsViewModel)this.ViewModel).ApplyCustomPermissions().ApplyComponents();

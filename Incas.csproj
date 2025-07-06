@@ -379,6 +379,7 @@
     <Folder Include="Objects.Processes\Views\Controls\" />
     <Folder Include="Objects.Processes\Views\Windows\" />
     <Folder Include="Objects.ServiceClasses\Groups\Components\" />
+    <Folder Include="Objects.ServiceClasses\Groups\Converters\" />
     <Folder Include="Objects.ServiceClasses\Users\Components\" />
     <Folder Include="Objects.StaticModels\Components\" />
     <Folder Include="Objects\Handlers\" />

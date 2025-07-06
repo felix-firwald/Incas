@@ -2,6 +2,7 @@
 using Incas.DialogSimpleForm.Views.Windows;
 using Incas.Help.Components;
 using Incas.Help.Windows;
+using Incas.Objects.Interfaces;
 using Incas.Objects.Processes.Views.Pages;
 using Incas.Objects.Views.Pages;
 using Incas.Objects.Views.Windows;
@@ -10,6 +11,7 @@ using IncasEngine.ObjectiveEngine.Exceptions;
 using IncasEngine.ObjectiveEngine.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -53,12 +55,13 @@ namespace Incas.Core.Classes
             TableViewer tv = new(viewer);
             tv.Show();
         }
-        public static void ShowEditor(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, IncasEngine.ObjectiveEngine.Interfaces.IObject obj)
+        public static IObjectEditorForm ShowEditor(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, IncasEngine.ObjectiveEngine.Interfaces.IObject obj)
         {
             if (cl.GetClassData().PreferPage)
             {
                 ObjectPage page = new(cl, obj);
                 DialogsManager.ShowPageWithGroupBox(page, obj.Name, "EDITOR" + obj.Id.ToString());
+                return page;
             }
             else
             {
@@ -70,16 +73,34 @@ namespace Incas.Core.Classes
                     case ClassType.ServiceClassGroup:
                     case ClassType.ServiceClassUser:
                     case ClassType.ServiceClassTask:
-                        ObjectsEditor oc = new(cl, [obj]);
-                        oc.Show();
-                        break;
+                        return ObjectsEditor.Open(cl, [obj]);
                     case ClassType.Process:
                         ProcessViewer pv = new(cl as Class, obj as IncasEngine.ObjectiveEngine.Types.Processes.Process);
                         DialogsManager.ShowPageWithGroupBox(pv, obj.Name, obj.Id.ToString());
-                        break;
+                        return pv;
                 }
             }
+            return null;
         }
+        public static IObjectEditorForm ShowEditor(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, List<IncasEngine.ObjectiveEngine.Interfaces.IObject> objs)
+        {
+            switch (objs[0].Class.Type)
+            {
+                case ClassType.Model:
+                case ClassType.Document:
+                case ClassType.Event:
+                case ClassType.ServiceClassGroup:
+                case ClassType.ServiceClassUser:
+                case ClassType.ServiceClassTask:
+                    return ObjectsEditor.Open(cl, objs);
+                case ClassType.Process:
+                    ProcessViewer pv = new(cl as Class, objs[0] as IncasEngine.ObjectiveEngine.Types.Processes.Process);
+                    DialogsManager.ShowPageWithGroupBox(pv, objs[0].Name, objs[0].Id.ToString());
+                    return pv;
+            }
+            return null;
+        }
+
         private static void EngineEvents_OnEditorRequested(IncasEngine.ObjectiveEngine.Interfaces.IClass cl, IncasEngine.ObjectiveEngine.Interfaces.IObject obj)
         {
             ShowEditor(cl, obj);

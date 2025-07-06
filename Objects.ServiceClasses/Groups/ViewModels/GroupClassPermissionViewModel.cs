@@ -13,6 +13,8 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
     public class GroupClassPermissionViewModel : BaseViewModel
     {
         private ClassItem item;
+        public delegate void ClassArgs(Class cl, GroupClassPermissionSettings settings);
+        public event ClassArgs OnOpenMethodSettingsRequested;
         private GroupClassPermissionSettings settings;
         public GroupClassPermissionSettings Settings
         {
@@ -31,6 +33,7 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
             this.item = target;
             this.AcceptAll = new Command(this.DoAcceptAll);
             this.RejectAll = new Command(this.DoRejectAll);
+            this.OpenMethodsSettings = new Command(this.DoOpenMethodsSettings);
         }
 
         private void DoRejectAll(object obj)
@@ -52,9 +55,17 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
             this.DeleteOperations = true;
             this.ConfidentialAccess = true;
         }
+        private void DoOpenMethodsSettings(object obj)
+        {
+            using (Class cl = new(this.Item))
+            {
+                this.OnOpenMethodSettingsRequested?.Invoke(cl, this.settings);
+            }
+        }
 
         public ICommand AcceptAll { get; set; }
         public ICommand RejectAll { get; set; }
+        public ICommand OpenMethodsSettings { get; set; }
         public ClassItem Item
         {
             get
@@ -139,18 +150,6 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
                 this.OnPropertyChanged(nameof(this.ConfidentialAccess));
             }
         }
-        public bool RunMethods
-        {
-            get
-            {
-                return this.settings.RunMethods;
-            }
-            set
-            {
-                this.settings.RunMethods = value;
-                this.OnPropertyChanged(nameof(this.RunMethods));
-            }
-        }
         public GroupClassPermissionSettings GetResult()
         {
             GroupClassPermissionSettings result = new()
@@ -161,7 +160,6 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
                 UpdateOperations = this.settings.UpdateOperations,
                 DeleteOperations = this.settings.DeleteOperations,
                 ConfidentialAccess = this.settings.ConfidentialAccess,
-                RunMethods = this.settings.RunMethods
             };
             return result;
         }

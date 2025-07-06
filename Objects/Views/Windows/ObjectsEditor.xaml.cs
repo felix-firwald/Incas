@@ -1,8 +1,10 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Bibliography;
 using Incas.Core.Classes;
 using Incas.Core.Views.Controls;
 using Incas.Miniservices.UserStatistics;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Interfaces;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Pages;
 using Incas.Rendering.AutoUI;
@@ -15,6 +17,7 @@ using IncasEngine.ObjectiveEngine.Interfaces;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using IncasEngine.ObjectiveEngine.Types.ServiceClasses.Groups.Components;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,17 +25,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using static Incas.Objects.Interfaces.IObjectEditorForm;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Incas.Objects.Views.Windows
 {
     /// <summary>
     /// Логика взаимодействия для ObjectsEditor.xaml
     /// </summary>
-    public partial class ObjectsEditor : Window
+    public partial class ObjectsEditor : System.Windows.Window, IObjectEditorForm
     {
         public readonly IClass Class;
         public readonly IClassData ClassData;
-        public delegate void UpdateRequested();
+        
         public delegate void CreateRequested(Guid id);
         public event UpdateRequested OnUpdateRequested;
         public GroupClassPermissionSettings PermissionSettings { get; set; }
@@ -55,7 +60,6 @@ namespace Incas.Objects.Views.Windows
                 {
                     foreach (IObject obj in objects)
                     {
-
                         this.AddObjectCreator(obj);
                     }
                 }
@@ -69,7 +73,20 @@ namespace Incas.Objects.Views.Windows
             }
             DialogsManager.ShowWaitCursor(false);
         }
-
+        public ObjectsEditor(IClass source, ClassData data) // dev
+        {
+            this.InitializeComponent();
+            this.Title = "Режим предпросмотра: " + source.Name;
+            this.Class = source;
+            this.ClassData = data;
+            this.GenerateButton.IsEnabled = false;
+            this.RenderButton.IsEnabled = false;
+            this.ToolBar.IsEnabled = false;
+            ObjectCreator creator = new(this.ClassData);
+            this.ContentPanel.Children.Add(creator);
+            this.RenderButton.Visibility = source.Type == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
+            DialogsManager.ShowWaitCursor(false);
+        }
         private void Class_OnRemoved()
         {
             this.Close();
@@ -97,20 +114,6 @@ namespace Incas.Objects.Views.Windows
             this.SetOtherContent(na);
         }
 
-        public ObjectsEditor(IClass source, ClassData data) // dev
-        {
-            this.InitializeComponent();
-            this.Title = "Режим предпросмотра: " + source.Name;
-            this.Class = source;
-            this.ClassData = data;
-            this.GenerateButton.IsEnabled = false;
-            this.RenderButton.IsEnabled = false;
-            this.ToolBar.IsEnabled = false;
-            ObjectCreator creator = new(this.ClassData);
-            this.ContentPanel.Children.Add(creator);
-            this.RenderButton.Visibility = source.Type == ClassType.Document ? Visibility.Visible : Visibility.Collapsed;
-            DialogsManager.ShowWaitCursor(false);
-        }
         public void SetSingleObjectMode()
         {
             this.GenerateButton.IsEnabled = false;
@@ -218,10 +221,10 @@ namespace Incas.Objects.Views.Windows
             XLWorkbook wb = new();
             try
             {
-                IXLWorksheet ws = wb.AddWorksheet("Из INCAS");
+                IXLWorksheet ws = wb.AddWorksheet(this.ClassData.ListName);
                 for (int i = 0; i < this.ClassData.Fields.Count; i++) // columns
                 {
-                    IXLCell c = ws.Cell(1, i + 1).SetValue(this.ClassData.Fields[i].Name);
+                    IXLCell c = ws.Cell(1, i + 1).SetValue(this.ClassData.Fields[i].VisibleName);
                     c.Style.Font.Bold = true;
                 }
                 int row = 2;
@@ -239,7 +242,7 @@ namespace Incas.Objects.Views.Windows
                 string path = "";
                 if (DialogsManager.ShowFolderBrowserDialog(ref path))
                 {
-                    wb.SaveAs(path + $"\\{this.Class.Name} {DateTime.Now.ToString("d")}.xlsx");
+                    wb.SaveAs(path + $"\\{this.ClassData.ListName} {DateTime.Now.ToString("d")}.xlsx");
                     ProgramState.OpenFolder(path);
                 }
             }
@@ -382,5 +385,31 @@ namespace Incas.Objects.Views.Windows
                 }
             }
         }
+
+        #region Static
+        private static Dictionary<IClass, ObjectsEditor> editorsOpened = new();
+        public static ObjectsEditor Open(IClass source, List<IObject> objects)
+        {
+            if (editorsOpened.ContainsKey(source) && PresentationSource.FromVisual(editorsOpened[source]) != null)
+            {
+                ObjectsEditor targetEditor = editorsOpened[source];
+                targetEditor.MinimizeAll(null, null);
+                foreach (IObject obj in objects)
+                {
+                    targetEditor.AddObjectCreator(obj);
+                }
+                DialogsManager.ShowWaitCursor(false);
+                return targetEditor;
+            }
+            else
+            {
+                ObjectsEditor oe = new(source, objects);
+                editorsOpened[source] = oe;
+                oe.Show();
+                DialogsManager.ShowWaitCursor(false);
+                return oe;
+            }          
+        }
+        #endregion
     }
 }

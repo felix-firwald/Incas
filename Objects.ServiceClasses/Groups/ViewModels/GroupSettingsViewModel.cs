@@ -12,6 +12,8 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
 {
     public class GroupSettingsViewModel : BaseViewModel, IViewModel
     {
+        public delegate void ClassArgs(Class cl, GroupClassPermissionSettings settings);
+        public event ClassArgs OnOpenMethodsSettingsRequested;
         public GroupData GroupData { get; set; }
         public GroupSettingsViewModel(GroupData data)
         {
@@ -28,7 +30,8 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
                 foreach (ClassItem item in classes)
                 {
                     GroupClassPermissionSettings settingsInitState = new();
-                    GroupClassPermissionViewModel ps = new(item);                   
+                    GroupClassPermissionViewModel ps = new(item);
+                    ps.OnOpenMethodSettingsRequested += this.ClassPermission_OnOpenMethodSettingsRequested;
                     if (this.GroupData.ClassesPermissions.TryGetValue(item.Id, out settingsInitState)) // if already exists
                     {
                         ps.Settings = settingsInitState;                        
@@ -42,6 +45,12 @@ namespace Incas.Objects.ServiceClasses.Groups.ViewModels
             }
             this.OnPropertyChanged(nameof(this.CustomPermissions));
         }
+
+        private void ClassPermission_OnOpenMethodSettingsRequested(Class cl, GroupClassPermissionSettings settings)
+        {
+            this.OnOpenMethodsSettingsRequested?.Invoke(cl, settings);
+        }
+
         private void LoadComponents()
         {
             ObservableCollection<GroupComponentViewModel> result = new();

@@ -288,11 +288,11 @@ namespace Incas.Objects.Views.Pages
         {
             foreach (KeyValuePair<string, string> pair in pairs)
             {
-                foreach (IFillerBase tf in this.ContentPanel.Children)
+                foreach (KeyValuePair<Field, IFillerBase> tf in this.fillers)
                 {
-                    if (tf.Field.Name == pair.Key)
+                    if (tf.Value.Field.Name == pair.Key)
                     {
-                        tf.SetValue(pair.Value);
+                        tf.Value.SetValue(pair.Value);
                         break;
                     }
                 }
@@ -581,8 +581,7 @@ namespace Incas.Objects.Views.Pages
             List<string> output = [];
             foreach (KeyValuePair<Field,IFillerBase> tf in this.fillers)
             {              
-                output.Add(((ISimpleFiller)tf.Value).GetValue());
-                break;                                
+                output.Add(((ISimpleFiller)tf.Value).GetValue());                               
             }
             return output;
         }

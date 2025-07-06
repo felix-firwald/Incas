@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using Incas.Core.Classes;
+using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using Microsoft.Scripting.Utils;
@@ -245,7 +246,7 @@ namespace Incas.Rendering.Components
             {
                 result.Add(match.Value.TrimStart('[').TrimEnd(']'));
             }
-            return result;
+            return result.ReturnUnique();
         }
         public List<string> FindTableTags(string tableName) 
         {

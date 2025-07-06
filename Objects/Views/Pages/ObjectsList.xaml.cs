@@ -5,6 +5,7 @@ using Incas.Core.Views.Controls;
 using Incas.DialogSimpleForm.Components;
 using Incas.Miniservices.UserStatistics;
 using Incas.Objects.AutoUI;
+using Incas.Objects.Interfaces;
 using Incas.Objects.Processes.Views.Pages;
 using Incas.Objects.Views.Controls;
 using Incas.Objects.Views.Windows;
@@ -456,31 +457,8 @@ namespace Incas.Objects.Views.Pages
                     return;
                 }
                 IObject obj = Processor.GetObject(this.sourceClass, id);
-                if (this.ClassData.PreferPage)
-                {
-                    ObjectPage page = new(this.sourceClass, obj);
-                    DialogsManager.ShowPageWithGroupBox(page, obj.Name, "EDITOR" + obj.Id.ToString());
-                }
-                else
-                {
-                    switch (obj.Class.Type)
-                    {
-                        case ClassType.Model:
-                        case ClassType.Document:
-                        case ClassType.Event:
-                        case ClassType.ServiceClassGroup:
-                        case ClassType.ServiceClassUser:
-                        case ClassType.ServiceClassTask:
-                            ObjectsEditor oc = new(this.sourceClass, [obj]);
-                            oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-                            oc.Show();
-                            break;
-                        case ClassType.Process:
-                            ProcessViewer pv = new(this.sourceClass as Class, obj as Process);
-                            DialogsManager.ShowPageWithGroupBox(pv, obj.Name, obj.Id.ToString());
-                            break;
-                    }
-                }                                   
+                IObjectEditorForm form = DialogsManager.ShowEditor(this.sourceClass, obj);
+                form.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;                                 
             }
             catch (Exception ex)
             {
@@ -498,9 +476,8 @@ namespace Incas.Objects.Views.Pages
             try
             {
                 List<IObject> objects = await Processor.GetObjects(this.sourceClass, this.GetSelectedObjectsGuids());
-                ObjectsEditor oc = new(this.sourceClass, objects);
-                oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-                oc.Show();
+                IObjectEditorForm form = DialogsManager.ShowEditor(this.sourceClass, objects);
+                form.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
             }
             catch (Exception ex)
             {
@@ -521,11 +498,8 @@ namespace Incas.Objects.Views.Pages
                 return;
             }
             IObject obj = Processor.GetObject(this.sourceClass, id);
-            List<IObject> objects = new();
-            objects.Add(obj.Copy());
-            ObjectsEditor oc = new(this.sourceClass, objects);
-            oc.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
-            oc.Show();
+            IObjectEditorForm form = DialogsManager.ShowEditor(this.sourceClass, obj);
+            form.OnUpdateRequested += this.ObjectsEditor_OnUpdateRequested;
         }
         private void ObjectsEditor_OnUpdateRequested()
         {

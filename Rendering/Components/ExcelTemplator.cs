@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using Incas.Core.Classes;
+using IncasEngine.Core.ExtensionMethods;
 using IncasEngine.ObjectiveEngine;
 using IncasEngine.ObjectiveEngine.Types.Documents;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
@@ -222,7 +223,7 @@ namespace Incas.Rendering.Components
             {
                 result.Add(match.Value.TrimStart('[').TrimEnd(']'));
             }
-            return result;
+            return result.ReturnUnique();
         }
         public List<string> FindTableTags(string tableName)
         {

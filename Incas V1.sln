@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncasTests", "..\IncasTests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncasInterfaceProvider", "..\IncasInterfaceProvider\IncasInterfaceProvider.csproj", "{BE21262E-E8A0-4241-830F-77761CC36848}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IETest", "..\..\IETest\IETest.csproj", "{18431093-62C4-4B18-BD60-A84E0FC66860}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BusinessPro|Any CPU = BusinessPro|Any CPU
@@ -71,6 +73,16 @@ Global
 		{BE21262E-E8A0-4241-830F-77761CC36848}.Extended|Any CPU.Build.0 = Debug|Any CPU
 		{BE21262E-E8A0-4241-830F-77761CC36848}.Free|Any CPU.ActiveCfg = Debug|Any CPU
 		{BE21262E-E8A0-4241-830F-77761CC36848}.Free|Any CPU.Build.0 = Debug|Any CPU
+		{18431093-62C4-4B18-BD60-A84E0FC66860}.BusinessPro|Any CPU.ActiveCfg = Debug|Any CPU
+		{18431093-62C4-4B18-BD60-A84E0FC66860}.BusinessPro|Any CPU.Build.0 = Debug|Any CPU
+		{18431093-62C4-4B18-BD60-A84E0FC66860}.Community|Any CPU.ActiveCfg = Debug|Any CPU
+		{18431093-62C4-4B18-BD60-A84E0FC66860}.Community|Any CPU.Build.0 = Debug|Any CPU
+		{18431093-62C4-4B18-BD60-A84E0FC66860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18431093-62C4-4B18-BD60-A84E0FC66860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18431093-62C4-4B18-BD60-A84E0FC66860}.Extended|Any CPU.ActiveCfg = Debug|Any CPU
+		{18431093-62C4-4B18-BD60-A84E0FC66860}.Extended|Any CPU.Build.0 = Debug|Any CPU
+		{18431093-62C4-4B18-BD60-A84E0FC66860}.Free|Any CPU.ActiveCfg = Debug|Any CPU
+		{18431093-62C4-4B18-BD60-A84E0FC66860}.Free|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

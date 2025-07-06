@@ -9,6 +9,7 @@ using Incas.Rendering.Components;
 using IncasEngine.ObjectiveEngine.Models;
 using IncasEngine.ObjectiveEngine.Types.Documents.ClassComponents;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -59,15 +60,19 @@ namespace Incas.Objects.Documents.Views.Pages
 
         private void FindTagsInFileClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            bool CheckNameUniqueness(string tagname)
+            bool CheckNameExistsInFields(string tagname)
             {
-                foreach (Field f in this.vm.SourceData.Fields)
+                foreach (FieldViewModel f in this.vm.BaseViewModel.Fields)
                 {
                     if (f.Name == tagname)
                     {
                         return false;
                     }
                 }
+                return true;
+            }
+            bool CheckNameExistsInProperties(string tagname)
+            {
                 foreach (PropertyViewModel pvm in this.vm.SelectedTemplate.Properties)
                 {
                     if (pvm.PropertyName == tagname)
@@ -80,17 +85,42 @@ namespace Incas.Objects.Documents.Views.Pages
             try
             {
                 FileTemplator templator = new(ProgramState.CurrentWorkspace.GetFullnameOfDocumentFile(this.vm.SelectedTemplate.FilePath));
-                foreach (string tagname in templator.FindAllTags())
+                List<string> itemsFound = templator.FindAllTags();
+                TemplateFileTagsImporter importer = new(itemsFound);
+                if (importer.ShowDialog() == true)
                 {
-                    if (!CheckNameUniqueness(tagname))
+                    foreach (FoundTemplateTagViewModel tag in importer.vm.FoundItems)
                     {
-                        continue;
+                        switch (tag.Target)
+                        {
+                            case Components.TagTarget.Property:
+                                if (!CheckNameExistsInProperties(tag.Name))
+                                {
+                                    continue;
+                                }
+                                TemplateProperty prop = new()
+                                {
+                                    Name = tag.Name,
+                                };
+                                this.vm.SelectedTemplate.AddProperty(prop);
+                                break;
+                            case Components.TagTarget.Field:
+                                if (!CheckNameExistsInFields(tag.Name))
+                                {
+                                    continue;
+                                }
+                                Field f = new()
+                                {
+                                    Name = tag.Name,
+                                    VisibleName = ClassDataBase.HandleVisibleName(tag.Name)
+                                };
+                                f.SetId();
+                                this.vm.BaseViewModel.AddField(f);
+                                break;
+                            case Components.TagTarget.Useless:
+                                break;
+                        }
                     }
-                    TemplateProperty prop = new()
-                    {
-                        Name = tagname,
-                    };
-                    this.vm.SelectedTemplate.AddProperty(prop);
                 }
             }
             catch (IOException ex)
