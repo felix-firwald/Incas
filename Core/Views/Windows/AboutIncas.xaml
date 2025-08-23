@@ -44,7 +44,7 @@
                         <Button Style="{StaticResource ButtonMain}" Content="Открыть service" ToolTip="Открыть service.incas" Click="OpenServiceClick"/>
                         <Button Style="{StaticResource ButtonMain}" Content="Исправление инициализации" ToolTip="Запуск проверки инициализации служебных классов рабочего пространства" Click="CheckInitDefinitionClick"/>
                         <Button Style="{StaticResource ButtonMain}" Content="SQL транзакция" IsEnabled="False" ToolTip="Написать и выполнить кастомную транзакцию к service.incas"/>
-                        <Button Style="{StaticResource ButtonMain}" Content="Тестовый .dll" IsEnabled="False" ToolTip="Компиляция service.incas в .dll библиотеку" Click="DLLExportClick"/>
+                        <Button Style="{StaticResource ButtonMain}" Content="Тестовый .dll" ToolTip="Компиляция service.incas в .dll библиотеку" Click="DLLExportClick"/>
                     </UniformGrid>
                 </StackPanel>
             </Border>

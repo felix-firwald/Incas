@@ -107,14 +107,14 @@ namespace Incas.Core.Views.Windows
 
         private void DLLExportClick(object sender, RoutedEventArgs e)
         {
-            //FinalAssembler fa = new();
-            //string path = "";
-            //if (DialogsManager.ShowSaveFileDialog(ref path, "DLL библиотеки|.dll"))
-            //{
-            //    DialogsManager.ShowWaitCursor();
-            //    fa.CompileWorkspace(path);
-            //    DialogsManager.ShowWaitCursor(false);
-            //}           
+            FinalAssembler fa = new();
+            string path = "";
+            if (DialogsManager.ShowSaveFileDialog(ref path, "DLL библиотеки|.dll"))
+            {
+                DialogsManager.ShowWaitCursor();
+                fa.CompileWorkspace(path);
+                DialogsManager.ShowWaitCursor(false);
+            }
         }
 
         private void CheckInitDefinitionClick(object sender, RoutedEventArgs e)

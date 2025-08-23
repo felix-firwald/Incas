@@ -23,9 +23,10 @@ namespace Incas.Core.ViewModels
         {
             if (this.SelectedWorkspace is not null)
             {                
-                this._users.Clear();
+                this.Users.Clear();
                 ServiceClass userClass = ProgramState.CurrentWorkspace.GetDefinition().ServiceUsers;
                 this._users = User.GetItems(Processor.GetSimpleObjectsList(userClass));
+                this.OnPropertyChanged(nameof(this.Users));
                 this.UpdateSelectedUser();
             }
         }

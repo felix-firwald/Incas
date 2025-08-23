@@ -49,6 +49,9 @@ namespace Incas.Admin.AutoUI
             }
         }
 
+        [Description("Тип рабочего пространства")]
+        public Selector WorkspaceType { get; private set; }
+
         [Description("Режим работы")]
         public Selector WorkspaceMode { get; set; }
 
@@ -67,23 +70,35 @@ namespace Incas.Admin.AutoUI
             this.data = ProgramState.CurrentWorkspace.GetDefinition(true);
             this.WorkspaceMode = new(new()
             {
-                { WorkspaceDefinition.WorkspaceMode.DesktopUsual, "Десктоп-клиент (SQLite)" },
-                { WorkspaceDefinition.WorkspaceMode.DesktopWithPostgres, "Десктоп-клиент (PostgreSQL)" },
-                { WorkspaceDefinition.WorkspaceMode.Server, "Клиент-сервер (IncasServer + SQLite)" },
-                { WorkspaceDefinition.WorkspaceMode.ServerWithPostgres, "Клиент-сервер (IncasServer + PostgreSQL)" }
+                { IncasEngine.Workspace.Enums.WorkspaceMode.DesktopUsual, "Десктоп-клиент (SQLite)" },
+                { IncasEngine.Workspace.Enums.WorkspaceMode.DesktopWithPostgres, "Десктоп-клиент (PostgreSQL)" },
+                { IncasEngine.Workspace.Enums.WorkspaceMode.DesktopWithMySQL, "Десктоп-клиент (MySQL)" },
+                { IncasEngine.Workspace.Enums.WorkspaceMode.DesktopWithTSQL, "Десктоп-клиент (T-SQL)" },
+                { IncasEngine.Workspace.Enums.WorkspaceMode.Server, "Клиент-сервер (IncasServer + SQLite)" },
+                { IncasEngine.Workspace.Enums.WorkspaceMode.ServerWithPostgres, "Клиент-сервер (IncasServer + PostgreSQL)" },
+                { IncasEngine.Workspace.Enums.WorkspaceMode.ServerWithMySQL, "Клиент-сервер (IncasServer + MySQL)" },
+                { IncasEngine.Workspace.Enums.WorkspaceMode.ServerWithTSQL, "Клиент-сервер (IncasServer + TSQL)" }
             });
             this.WorkspaceMode.SetSelection(this.data.Mode);
+
+            this.WorkspaceType = new(new()
+            {
+                { IncasEngine.Workspace.Enums.WorkspaceType.Dynamic, "DWS (динамическое)" },
+                { IncasEngine.Workspace.Enums.WorkspaceType.Static, "CWS (статическое)" },
+                { IncasEngine.Workspace.Enums.WorkspaceType.Project, "WSP (проект)" },
+            });
+            this.WorkspaceType.SetSelection(this.data.Type);
             this.FixationMode = new(new()
             {
-                { WorkspaceDefinition.FixationMode.Instant, "Мгновенная фиксация" },
-                { WorkspaceDefinition.FixationMode.Manual, "Ручная фиксация" },
+                { IncasEngine.Workspace.Enums.FixationMode.Instant, "Мгновенная фиксация" },
+                { IncasEngine.Workspace.Enums.FixationMode.Manual, "Ручная фиксация" },
             });
             this.FixationMode.SetSelection(this.data.FixationType);
         }
         public override void Save()
         {
-            this.data.Mode = (WorkspaceDefinition.WorkspaceMode)this.WorkspaceMode.SelectedObject;
-            this.data.FixationType = (WorkspaceDefinition.FixationMode)this.FixationMode.SelectedObject;
+            this.data.Mode = (IncasEngine.Workspace.Enums.WorkspaceMode)this.WorkspaceMode.SelectedObject;
+            this.data.FixationType = (IncasEngine.Workspace.Enums.FixationMode)this.FixationMode.SelectedObject;
             ProgramState.CurrentWorkspace.UpdateDefinition(this.data);
         }
     }
